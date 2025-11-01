@@ -1,13 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
+import { PaymentModal } from "@/components/PaymentModal";
 
 const Hero = () => {
   const [statsCount, setStatsCount] = useState(0);
-  
-  const handleCTAClick = () => {
-    console.log("CTA clicked");
-  };
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
 
   // Counter animation for stats
   useEffect(() => {
@@ -104,13 +102,19 @@ const Hero = () => {
         {/* WHITE CTA Button with Pulsing Glow */}
         <div className="mb-6 opacity-0 animate-fade-in-scale delay-2000">
           <Button 
-            onClick={handleCTAClick}
+            onClick={() => setIsPaymentModalOpen(true)}
             size="lg"
             className="w-full max-w-[380px] h-[80px] bg-white hover:bg-white/95 text-primary font-body font-bold text-[22px] rounded-xl transition-all duration-300 ease-out hover:scale-105 hover:-translate-y-1 animate-pulse-glow"
           >
             🔴 Check His Record Now - R50
           </Button>
         </div>
+        
+        <PaymentModal 
+          isOpen={isPaymentModalOpen} 
+          onClose={() => setIsPaymentModalOpen(false)}
+          packageType="single"
+        />
 
         {/* Used By Text */}
         <div className="mb-8 opacity-0 animate-fade-in delay-2500">

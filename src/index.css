@@ -8,14 +8,14 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* RedFlaq Full Red Palette - Vibrant UI Kit Colors */
-    --red-primary: 0 78% 59%;         /* #EF4444 - Vibrant main red */
-    --red-medium: 0 72% 69%;          /* #F87171 - Bright lighter red */
-    --red-dark: 0 74% 42%;            /* #B91C1C - Dark contrast red */
-    --red-ultra-dark: 0 74% 35%;      /* #991B1B - Darkest red */
-    --red-light: 0 91% 71%;           /* #FF6B6B - Coral accent */
-    --red-lightest: 0 93% 94%;        /* #FECACA - Very light pink */
-    --red-cream: 0 100% 97%;          /* #FEE2E2 - Pale cream */
+    /* RedFlaq Color Palette - Warm Feminine Coral-Reds */
+    --red-primary: 0 67% 58%;         /* #E05050 - Warm coral-red (MAIN) */
+    --red-medium: 0 62% 54%;          /* #D14444 - Medium bright red */
+    --red-dark: 0 58% 48%;            /* #C43535 - Rich red for contrast */
+    --red-ultra-dark: 0 50% 40%;      /* #A72828 - Dark burgundy for nav/footer */
+    --red-light: 0 72% 68%;           /* #ED7171 - Light coral for hover states */
+    --red-lightest: 0 85% 90%;        /* #F9CFCF - Very light pink for subtle sections */
+    --red-cream: 0 78% 95%;           /* #FADADA - Soft pink background */
     
     /* Accent Colors */
     --brand-gold: 38 92% 50%;         /* #FCD34D - stars, accents */
@@ -29,7 +29,7 @@ All colors MUST be HSL.
     --card: 0 0% 100%;
     --card-foreground: 217 19% 27%;
     
-    --primary: 0 78% 59%;
+    --primary: 0 67% 58%;
     --primary-foreground: 0 0% 100%;
     
     --secondary: 220 14% 98%;
@@ -44,12 +44,12 @@ All colors MUST be HSL.
     --success: 160 95% 30%;
     --success-foreground: 0 0% 100%;
     
-    --destructive: 0 78% 59%;
+    --destructive: 0 67% 58%;
     --destructive-foreground: 0 0% 100%;
     
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 0 78% 59%;
+    --ring: 0 67% 58%;
     
     --radius: 0.5rem;
     

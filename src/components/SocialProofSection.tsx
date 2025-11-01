@@ -147,21 +147,22 @@ const SocialProofSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative py-24 px-6 overflow-hidden animate-gradient"
+      className="relative py-24 px-6 overflow-hidden"
       style={{
-        background: 'linear-gradient(135deg, hsl(var(--red-primary)) 0%, hsl(var(--red-medium)) 50%, hsl(var(--red-primary)) 100%)'
+        background: 'linear-gradient(135deg, #F9CFCF 0%, #FADADA 50%, #F9CFCF 100%)'
       }}
     >
       {/* Heading */}
       <div className="max-w-7xl mx-auto mb-16 text-center">
         <h2 
-          className={`text-5xl md:text-6xl font-bold mb-6 text-white transition-all duration-1000 ${
+          className={`text-5xl md:text-6xl font-bold mb-6 transition-all duration-1000 ${
             isVisible ? 'opacity-100 tracking-normal' : 'opacity-0 tracking-[0.5em]'
           }`}
+          style={{ color: '#A72828' }}
         >
           DON'T JUST TAKE OUR WORD FOR IT
         </h2>
-        <p className="text-2xl font-medium text-white">
+        <p className="text-2xl font-medium" style={{ color: '#C43535' }}>
           Here's What 15,247 Women Are Saying:
         </p>
       </div>
@@ -247,7 +248,7 @@ const SocialProofSection = () => {
         ref={statsRef}
         className="max-w-6xl mx-auto mb-16 rounded-3xl p-12 shadow-2xl transition-transform duration-200 relative overflow-hidden"
         style={{
-          backgroundColor: 'hsl(var(--red-dark))',
+          backgroundColor: '#A72828',
           transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`
         }}
         onMouseMove={handleMouseMove}
@@ -291,17 +292,17 @@ const SocialProofSection = () => {
         <div 
           className="rounded-2xl p-8 shadow-lg border transition-all duration-500"
           style={{
-            background: 'rgba(185, 28, 28, 0.85)',
+            background: 'rgba(209, 68, 68, 0.15)',
             backdropFilter: 'blur(10px)',
-            borderColor: 'rgba(239, 68, 68, 0.3)'
+            border: '1px solid rgba(209, 68, 68, 0.3)'
           }}
         >
           <div className="flex items-center gap-2 mb-6">
             <div 
               className="w-3 h-3 rounded-full animate-pulse"
-              style={{ backgroundColor: '#FFFFFF' }}
+              style={{ backgroundColor: '#D14444' }}
             />
-            <h3 className="text-2xl font-bold text-white">
+            <h3 className="text-2xl font-bold" style={{ color: '#A72828' }}>
               🚨 LIVE ACTIVITY (Last 24 Hours)
             </h3>
           </div>
@@ -310,21 +311,24 @@ const SocialProofSection = () => {
             {activities.map((activity, index) => (
               <div
                 key={`${activity}-${index}`}
-                className="flex items-start gap-3 py-3 transition-all duration-500 animate-slide-in-right"
+                className="flex items-start gap-3 py-3 rounded-xl transition-all duration-500 animate-slide-in-right"
                 style={{ 
                   animationDelay: `${index * 0.1}s`,
-                  opacity: index === 0 ? 1 : 0.7
+                  opacity: index === 0 ? 1 : 0.7,
+                  background: index === 0 ? 'rgba(255, 255, 255, 0.8)' : 'rgba(255, 255, 255, 0.6)',
+                  backdropFilter: 'blur(4px)',
+                  padding: '12px 16px'
                 }}
               >
                 <div 
                   className="w-2 h-2 rounded-full mt-1.5"
                   style={{ 
-                    backgroundColor: '#FFFFFF',
+                    backgroundColor: '#D14444',
                     animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    opacity: 0.4
+                    opacity: 0.6
                   }}
                 />
-                <p className="text-sm font-medium flex-1 text-white">
+                <p className="text-sm font-medium flex-1" style={{ color: '#A72828' }}>
                   {activity}
                 </p>
               </div>
@@ -334,9 +338,12 @@ const SocialProofSection = () => {
 
         {/* CTA Button */}
         <div className="mt-16 text-center">
+          <p className="text-2xl font-bold mb-6" style={{ color: '#A72828' }}>
+            Ready to Check His Record?
+          </p>
           <button 
             className="text-white font-bold text-lg px-12 py-5 rounded-full shadow-2xl transition-all duration-300 hover:scale-105 animate-pulse-glow"
-            style={{ backgroundColor: 'hsl(var(--red-primary))' }}
+            style={{ backgroundColor: '#D14444' }}
           >
             🔴 Join 15,247 Women - Check Now
           </button>

@@ -94,7 +94,7 @@ const SolutionSection = () => {
       ref={sectionRef}
       className="py-24 md:py-28 px-8 relative overflow-hidden"
       style={{
-        backgroundColor: "#C93C3C",
+        backgroundColor: "#E05050",
         backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")"
       }}
     >
@@ -102,8 +102,8 @@ const SolutionSection = () => {
         {/* INTRODUCING Badge */}
         <div className={`flex justify-center mb-8 ${isVisible ? 'animate-slide-in-down' : 'opacity-0'}`}>
           <div
-            className="bg-white px-6 py-2 rounded-full font-heading font-bold text-[#C93C3C] text-sm tracking-wide hover:rotate-2 transition-transform duration-300 cursor-default"
-            style={{ boxShadow: "0 8px 20px rgba(0,0,0,0.2)" }}
+            className="bg-white px-6 py-2 rounded-full font-heading font-bold text-[#D14444] text-sm tracking-wide hover:rotate-2 transition-transform duration-300 cursor-default"
+            style={{ boxShadow: "0 8px 20px rgba(167,40,40,0.25)" }}
           >
             INTRODUCING
           </div>
@@ -156,15 +156,15 @@ const SolutionSection = () => {
                 key={index}
                 className={`bg-white rounded-2xl p-8 hover:-translate-y-3 transition-all duration-300 ${isVisible ? 'animate-slide-up' : 'opacity-0'}`}
                 style={{
-                  boxShadow: "0 20px 50px rgba(0,0,0,0.3)",
+                  boxShadow: "0 20px 50px rgba(167,40,40,0.25)",
                   animationDelay: `${1.2 + index * 0.3}s`
                 }}
               >
                 {/* Number Badge */}
                 <div className="flex justify-center mb-6">
                   <div
-                    className="w-16 h-16 rounded-full bg-[#C93C3C] flex items-center justify-center font-heading font-black text-white text-2xl"
-                    style={{ boxShadow: "0 4px 15px rgba(201,60,60,0.4)" }}
+                    className="w-16 h-16 rounded-full bg-[#D14444] flex items-center justify-center font-heading font-black text-white text-2xl"
+                    style={{ boxShadow: "0 4px 15px rgba(209,68,68,0.4)" }}
                   >
                     {step.number}
                   </div>
@@ -223,9 +223,9 @@ const SolutionSection = () => {
 
         {/* WHAT YOU GET - Feature List */}
         <div className={`bg-white rounded-2xl p-8 md:p-10 max-w-[700px] mx-auto ${isVisible ? 'animate-slide-up delay-2000' : 'opacity-0'}`}
-          style={{ boxShadow: "0 20px 60px rgba(0,0,0,0.3)" }}>
+          style={{ boxShadow: "0 20px 60px rgba(167,40,40,0.25)" }}>
           <div className="flex items-center justify-center gap-3 mb-8">
-            <Shield className="w-10 h-10 text-[#C93C3C]" />
+            <Shield className="w-10 h-10 text-[#D14444]" />
             <h3 className="font-heading font-bold text-3xl text-[#9E2B2B] text-center">
               What You Get
             </h3>
@@ -243,13 +243,13 @@ const SolutionSection = () => {
             ))}
           </div>
           
-          <div className="mt-8 pt-6 border-t-2 border-[#F5ADAD]">
-            <p className="font-heading font-bold text-2xl text-center text-[#C93C3C] mb-4">
+          <div className="mt-8 pt-6 border-t-2 border-[#F9CFCF]">
+            <p className="font-heading font-bold text-2xl text-center text-[#D14444] mb-4">
               All This. Just R50.
             </p>
             <Button
               size="lg"
-              className="w-full h-[70px] bg-[#C93C3C] hover:bg-[#B63434] text-white font-body font-bold text-xl rounded-xl transition-all duration-300 ease-out hover:scale-105 animate-pulse-glow"
+              className="w-full h-[70px] bg-[#D14444] hover:bg-[#C43535] text-white font-body font-bold text-xl rounded-xl transition-all duration-300 ease-out hover:scale-105 animate-pulse-glow"
             >
               🔴 Get Your Report Now - R50
             </Button>

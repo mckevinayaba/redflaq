@@ -9,54 +9,57 @@ const Hero = () => {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Gradient Background */}
+      {/* Full Red Background */}
       <div 
         className="absolute inset-0 z-0"
         style={{
-          background: "linear-gradient(180deg, #000000 0%, #1a1a1a 50%, #FFFFFF 100%)"
+          background: "linear-gradient(180deg, #DC2626 0%, #B91C1C 100%)"
         }}
       />
       
       {/* Content Container */}
-      <div className="relative z-10 w-full max-w-[1200px] px-8 md:px-10 py-20 text-center animate-fade-in-up">
+      <div className="relative z-10 w-full max-w-[1000px] px-8 md:px-10 py-20 text-center animate-fade-in-up">
         {/* Logo */}
-        <div className="mb-8">
-          <h2 className="text-2xl md:text-3xl font-heading font-bold text-primary inline-flex items-center gap-2">
-            <span className="text-primary">🔴</span>
-            <span className="text-primary">REDFLAQ</span>
+        <div className="mb-14">
+          <h2 className="text-2xl md:text-3xl font-heading font-bold text-white inline-flex items-center gap-2">
+            <span>🔴</span>
+            <span>REDFLAQ</span>
           </h2>
         </div>
 
         {/* Main Headline */}
-        <h1 className="font-heading font-black text-4xl md:text-5xl lg:text-[56px] leading-[1.2] text-white mb-8 text-balance tracking-tight">
+        <h1 
+          className="font-heading font-black text-4xl md:text-5xl lg:text-[56px] leading-[1.2] text-white mb-8 text-balance tracking-tight"
+          style={{ textShadow: "0 2px 4px rgba(0,0,0,0.1)" }}
+        >
           15,247 South African Women Checked<br />
           Their Date's Criminal Record<br />
           Before Meeting Him.
           <br /><br />
-          <span className="text-white">You Can Too.</span><br />
-          <span className="text-white">In Under 60 Seconds.</span>
+          You Can Too.<br />
+          In Under 60 Seconds.
         </h1>
 
         {/* Star Rating */}
         <div className="mb-4">
-          <p className="text-lg md:text-xl text-accent font-body">
-            ⭐⭐⭐⭐⭐ Rated 4.9/5 by 847 Women
+          <p className="text-lg md:text-xl text-white font-body">
+            <span className="text-[#FCD34D]">⭐⭐⭐⭐⭐</span> Rated 4.9/5 by 847 Women
           </p>
         </div>
 
         {/* Testimonial Quote */}
         <div className="mb-10">
-          <p className="text-base md:text-lg text-white/80 italic font-body">
+          <p className="text-base md:text-lg text-white/90 italic font-body">
             "RedFlaq saved my life" - Thandi M., Johannesburg
           </p>
         </div>
 
-        {/* CTA Button */}
+        {/* WHITE CTA Button with RED Text */}
         <div className="mb-6">
           <Button 
             onClick={handleCTAClick}
             size="lg"
-            className="w-full max-w-[340px] h-[70px] bg-primary hover:bg-brand-red-dark text-white font-body font-bold text-xl rounded-lg transition-all duration-300 hover:scale-105 shadow-[0_8px_20px_rgba(220,38,38,0.3)]"
+            className="w-full max-w-[360px] h-[75px] bg-white hover:bg-white/95 text-primary font-body font-bold text-xl rounded-xl transition-all duration-300 hover:scale-105 shadow-[0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.25)]"
           >
             🔴 Check His Record Now - R50
           </Button>
@@ -64,14 +67,14 @@ const Hero = () => {
 
         {/* Used By Text */}
         <div className="mb-8">
-          <p className="text-sm md:text-base text-white/60 font-body">
+          <p className="text-sm md:text-base text-white/80 font-body">
             Used By Women In: Johannesburg • Cape Town • Durban • Pretoria
           </p>
         </div>
 
         {/* Trust Indicators */}
         <div className="mb-16">
-          <p className="text-sm md:text-base text-white/80 font-body">
+          <p className="text-sm md:text-base text-white/90 font-body">
             15,247+ Searches • 2,847 Records • 100% Confidential
           </p>
         </div>
@@ -79,11 +82,10 @@ const Hero = () => {
         {/* Scroll Down Arrow */}
         <div className="animate-bounce-slow">
           <div className="flex flex-col items-center gap-2">
-            <ChevronDown className="w-8 h-8 text-accent" />
-            <p className="text-xs md:text-sm text-accent font-body font-semibold tracking-wide">
-              SCROLL TO DISCOVER WHY 15,247 WOMEN TRUST REDFLAQ
+            <ChevronDown className="w-8 h-8 text-white/80" />
+            <p className="text-xs md:text-sm text-white/80 font-body font-semibold tracking-wide">
+              SCROLL DOWN
             </p>
-            <ChevronDown className="w-8 h-8 text-accent" />
           </div>
         </div>
       </div>

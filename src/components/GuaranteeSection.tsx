@@ -64,7 +64,7 @@ const GuaranteeSection = () => {
       ref={sectionRef}
       className="relative py-24 md:py-32 px-8 overflow-hidden"
       style={{
-        backgroundColor: "#DC2626"
+        backgroundColor: "#C9504D"
       }}
       onMouseMove={handleMouseMove}
     >

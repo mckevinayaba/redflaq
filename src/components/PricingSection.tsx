@@ -83,9 +83,9 @@ const PricingSection = () => {
   return (
     <section 
       ref={sectionRef}
-      className="relative py-24 md:py-32 px-8 overflow-hidden"
+      className="py-24 md:py-28 px-8 relative overflow-hidden"
       style={{
-        backgroundColor: "#7F1D1D",
+        backgroundColor: "#993D3B",
         backgroundImage: `
           repeating-linear-gradient(
             0deg,

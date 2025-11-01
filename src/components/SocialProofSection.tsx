@@ -149,7 +149,7 @@ const SocialProofSection = () => {
       ref={sectionRef}
       className="relative py-24 px-6 overflow-hidden"
       style={{
-        background: 'linear-gradient(135deg, #F9CFCF 0%, #FADADA 50%, #F9CFCF 100%)'
+        background: 'linear-gradient(135deg, #E8C5C4 0%, #F2E3E2 50%, #E8C5C4 100%)'
       }}
     >
       {/* Heading */}
@@ -158,11 +158,11 @@ const SocialProofSection = () => {
           className={`text-5xl md:text-6xl font-bold mb-6 transition-all duration-1000 ${
             isVisible ? 'opacity-100 tracking-normal' : 'opacity-0 tracking-[0.5em]'
           }`}
-          style={{ color: '#A72828' }}
+          style={{ color: '#993D3B' }}
         >
           DON'T JUST TAKE OUR WORD FOR IT
         </h2>
-        <p className="text-2xl font-medium" style={{ color: '#C43535' }}>
+        <p className="text-2xl font-medium" style={{ color: '#A94442' }}>
           Here's What 15,247 Women Are Saying:
         </p>
       </div>
@@ -300,9 +300,9 @@ const SocialProofSection = () => {
           <div className="flex items-center gap-2 mb-6">
             <div 
               className="w-3 h-3 rounded-full animate-pulse"
-              style={{ backgroundColor: '#D14444' }}
+              style={{ backgroundColor: '#C9504D' }}
             />
-            <h3 className="text-2xl font-bold" style={{ color: '#A72828' }}>
+            <h3 className="text-2xl font-bold" style={{ color: '#993D3B' }}>
               🚨 LIVE ACTIVITY (Last 24 Hours)
             </h3>
           </div>
@@ -323,12 +323,12 @@ const SocialProofSection = () => {
                 <div 
                   className="w-2 h-2 rounded-full mt-1.5"
                   style={{ 
-                    backgroundColor: '#D14444',
+                    backgroundColor: '#C9504D',
                     animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     opacity: 0.6
                   }}
                 />
-                <p className="text-sm font-medium flex-1" style={{ color: '#A72828' }}>
+                <p className="text-sm font-medium flex-1" style={{ color: '#993D3B' }}>
                   {activity}
                 </p>
               </div>

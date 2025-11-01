@@ -78,16 +78,16 @@ const FAQSection = () => {
       ref={sectionRef}
       className="py-24 md:py-28 px-8 relative overflow-hidden"
       style={{
-        backgroundColor: "#FEE2E2"
+        backgroundColor: "#F2E3E2"
       }}
     >
       <div className="max-w-[900px] mx-auto">
         {/* Heading */}
         <div className="text-center mb-16">
-          <h2 className={`font-heading font-black text-4xl md:text-5xl mb-6 ${isVisible ? 'animate-slide-up' : 'opacity-0'}`} style={{ color: '#7F1D1D' }}>
+          <h2 className={`font-heading font-black text-4xl md:text-5xl mb-6 ${isVisible ? 'animate-slide-up' : 'opacity-0'}`} style={{ color: '#993D3B' }}>
             You Have Questions. We Have Answers.
           </h2>
-          <p className={`font-body text-lg md:text-xl max-w-[600px] mx-auto ${isVisible ? 'animate-fade-in delay-200' : 'opacity-0'}`} style={{ color: '#991B1B' }}>
+          <p className={`font-body text-lg md:text-xl max-w-[600px] mx-auto ${isVisible ? 'animate-fade-in delay-200' : 'opacity-0'}`} style={{ color: '#A94442' }}>
             Real questions from South African women just like you.
           </p>
         </div>
@@ -99,12 +99,12 @@ const FAQSection = () => {
               key={index}
               className="bg-white rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-white/80 transition-all duration-300"
               style={{ 
-                border: '2px solid #FEE2E2',
-                boxShadow: '0 10px 30px rgba(127, 29, 29, 0.1)'
+                border: '2px solid #E8C5C4',
+                boxShadow: '0 10px 30px rgba(153, 61, 59, 0.1)'
               }}
             >
-              <badge.icon className="w-8 h-8" style={{ color: '#DC2626' }} />
-              <p className="text-xs md:text-sm text-center font-medium" style={{ color: '#7F1D1D' }}>{badge.text}</p>
+              <badge.icon className="w-8 h-8" style={{ color: '#C9504D' }} />
+              <p className="text-xs md:text-sm text-center font-medium" style={{ color: '#993D3B' }}>{badge.text}</p>
             </div>
           ))}
         </div>

@@ -28,7 +28,7 @@ const Footer = () => {
     <footer 
       className="relative py-16 md:py-20 px-8"
       style={{
-        background: "linear-gradient(180deg, #A72828 0%, #8B1F1F 100%)"
+        background: "linear-gradient(180deg, #993D3B 0%, #8B3836 100%)"
       }}
     >
       <div className="max-w-7xl mx-auto">

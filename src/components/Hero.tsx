@@ -33,7 +33,7 @@ const Hero = () => {
       <div 
         className="absolute inset-0 z-0 animate-gradient"
         style={{
-          background: "linear-gradient(180deg, #ED7171 0%, #E05050 50%, #D14444 100%)",
+          background: "linear-gradient(180deg, #D35D5A 0%, #C9504D 50%, #B84542 100%)",
           backgroundSize: "200% 200%"
         }}
       />

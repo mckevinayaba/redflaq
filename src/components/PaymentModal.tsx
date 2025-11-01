@@ -14,7 +14,7 @@ export const PaymentModal = ({ isOpen, onClose, packageType = "single" }: Paymen
   const [emailError, setEmailError] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
-  const paypalRef = useRef<HTMLDivElement>(null);
+  const [cardError, setCardError] = useState("");
 
   const packageDetails = {
     single: { price: 3.00, searches: 1, title: "One-time payment • 1 background check" },
@@ -39,14 +39,25 @@ export const PaymentModal = ({ isOpen, onClose, packageType = "single" }: Paymen
     }
   };
 
-  useEffect(() => {
-    if (!isOpen || !paypalRef.current || isProcessing) return;
-
-    // PayPal SDK would be loaded here
-    // For now, showing placeholder button
-    // In production, you'd render PayPal Smart Payment Buttons here
+  const handleCardPayment = (e: React.FormEvent) => {
+    e.preventDefault();
     
-  }, [isOpen, email, emailError, isProcessing]);
+    if (!email || emailError) {
+      setEmailError("Please enter a valid email address");
+      return;
+    }
+    
+    setIsProcessing(true);
+    setCardError("");
+    
+    // Simulate card payment (in production, PayPal Hosted Fields handles this)
+    setTimeout(() => {
+      setPaymentSuccess(true);
+      setTimeout(() => {
+        window.location.href = `/search-form?payment_id=demo-${Date.now()}`;
+      }, 2000);
+    }, 2000);
+  };
 
   const handlePayPalClick = () => {
     if (!email || emailError) {
@@ -54,10 +65,9 @@ export const PaymentModal = ({ isOpen, onClose, packageType = "single" }: Paymen
       return;
     }
     
-    // This would trigger PayPal checkout
     setIsProcessing(true);
     
-    // Simulate payment (in production, PayPal SDK handles this)
+    // Simulate PayPal payment
     setTimeout(() => {
       setPaymentSuccess(true);
       setTimeout(() => {
@@ -152,7 +162,7 @@ export const PaymentModal = ({ isOpen, onClose, packageType = "single" }: Paymen
         <div className="border-t border-gray-200 my-6"></div>
 
         {/* Email Input */}
-        <div className="mb-6">
+        <div className="mb-8">
           <label htmlFor="email" className="block text-sm font-bold text-gray-900 mb-2">
             Your Email Address
           </label>
@@ -177,43 +187,114 @@ export const PaymentModal = ({ isOpen, onClose, packageType = "single" }: Paymen
           </p>
         </div>
 
-        {/* PayPal Button Container */}
-        <div className="mb-4">
-          <div 
-            ref={paypalRef}
-            className="min-h-[60px] rounded-xl overflow-hidden"
-          >
-            {/* PayPal Smart Payment Buttons will render here */}
-            {/* For demo purposes, showing a styled button */}
-            <Button
-              onClick={handlePayPalClick}
-              disabled={!email || !!emailError}
-              className="w-full h-14 bg-[#FFC439] hover:bg-[#FFB01F] text-gray-900 font-semibold text-base rounded-xl shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+        {/* Card Payment Section (Primary) */}
+        <form onSubmit={handleCardPayment} className="mb-8">
+          <h3 className="text-base font-bold text-gray-900 mb-4">
+            Payment Method
+          </h3>
+
+          {/* Card Number */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Card Number
+            </label>
+            <div 
+              id="card-number"
+              className="card-field w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl bg-gray-50 flex items-center text-gray-400 text-base"
             >
-              <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 3.72a.77.77 0 0 1 .76-.633h8.42c2.82 0 4.78.657 5.835 1.955.78.962 1.097 2.14 1.016 3.456-.213 3.425-2.787 5.513-6.785 5.513H10.32a.77.77 0 0 0-.76.633l-.474 3.01a.77.77 0 0 1-.76.633H7.076z"/>
-              </svg>
-              Pay with PayPal
-            </Button>
+              <span>4111 1111 1111 1111</span>
+            </div>
           </div>
+
+          {/* Expiry and CVV Row */}
+          <div className="grid grid-cols-2 gap-4 mb-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Expiry Date
+              </label>
+              <div 
+                id="expiration-date"
+                className="card-field w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl bg-gray-50 flex items-center text-gray-400 text-base"
+              >
+                <span>MM/YY</span>
+              </div>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                CVV
+              </label>
+              <div 
+                id="cvv"
+                className="card-field w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl bg-gray-50 flex items-center text-gray-400 text-base"
+              >
+                <span>123</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Accepted Cards */}
+          <div className="mb-6">
+            <p className="text-xs text-gray-500">
+              We accept all major cards: 💳 Visa • Mastercard • Amex • Discover
+            </p>
+          </div>
+
+          {cardError && (
+            <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200">
+              <p className="text-sm text-red-600">{cardError}</p>
+            </div>
+          )}
+
+          {/* Primary Payment Button */}
+          <button
+            type="submit"
+            disabled={isProcessing || !email || !!emailError}
+            className="w-full h-14 bg-primary hover:bg-primary/90 text-white font-bold text-lg rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:transform hover:scale-[1.02] shadow-lg"
+          >
+            {isProcessing ? (
+              <span className="flex items-center justify-center gap-2">
+                <div className="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin" />
+                Processing...
+              </span>
+            ) : paymentSuccess ? (
+              '✓ Payment Successful!'
+            ) : (
+              `Pay $${details.price.toFixed(2)} Now`
+            )}
+          </button>
+        </form>
+
+        {/* Divider */}
+        <div className="flex items-center gap-4 mb-4">
+          <div className="flex-1 h-px bg-gray-200" />
+          <span className="text-xs text-gray-400">OR</span>
+          <div className="flex-1 h-px bg-gray-200" />
         </div>
 
-        <p className="text-center text-xs text-gray-500 mb-4">
-          Or pay with card through PayPal
-        </p>
+        {/* PayPal Alternative (Small, Secondary) */}
+        <div className="text-center mb-6">
+          <p className="text-sm text-gray-600 mb-3">
+            Already have PayPal?
+          </p>
+          <Button
+            onClick={handlePayPalClick}
+            disabled={isProcessing || !email || !!emailError}
+            className="w-3/5 h-11 bg-gray-400 hover:bg-gray-500 text-white font-medium text-sm rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed mx-auto"
+          >
+            Pay with PayPal
+          </Button>
+        </div>
 
         {/* Trust Signals */}
-        <div className="text-center pt-4 border-t border-gray-100">
-          <p className="text-xs text-gray-400 flex items-center justify-center gap-4 flex-wrap">
-            <span className="flex items-center gap-1">
-              🔒 Secure Payment
-            </span>
-            <span className="flex items-center gap-1">
-              💳 All Cards Accepted
-            </span>
-            <span className="flex items-center gap-1">
-              ✅ Money-Back Guarantee
-            </span>
+        <div className="text-center pt-6 border-t border-gray-100">
+          <p className="text-xs text-gray-400 flex items-center justify-center gap-4 flex-wrap mb-2">
+            <span>🔒 Secure Payment</span>
+            <span>💳 All Cards Accepted</span>
+            <span>✅ Money-Back Guarantee</span>
+          </p>
+          <p className="text-xs text-gray-300">
+            Payments processed securely
           </p>
         </div>
       </div>

@@ -147,19 +147,21 @@ const SocialProofSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative py-24 px-6 overflow-hidden bg-gradient-to-br from-red-lightest via-red-cream to-red-lightest animate-gradient"
+      className="relative py-24 px-6 overflow-hidden animate-gradient"
+      style={{
+        background: 'linear-gradient(135deg, hsl(var(--red-primary)) 0%, hsl(var(--red-medium)) 50%, hsl(var(--red-primary)) 100%)'
+      }}
     >
       {/* Heading */}
       <div className="max-w-7xl mx-auto mb-16 text-center">
         <h2 
-          className={`text-5xl md:text-6xl font-bold mb-6 transition-all duration-1000 ${
+          className={`text-5xl md:text-6xl font-bold mb-6 text-white transition-all duration-1000 ${
             isVisible ? 'opacity-100 tracking-normal' : 'opacity-0 tracking-[0.5em]'
           }`}
-          style={{ color: 'hsl(var(--red-ultra-dark))' }}
         >
           DON'T JUST TAKE OUR WORD FOR IT
         </h2>
-        <p className="text-2xl font-medium" style={{ color: 'hsl(var(--red-primary))' }}>
+        <p className="text-2xl font-medium text-white">
           Here's What 15,247 Women Are Saying:
         </p>
       </div>
@@ -169,7 +171,7 @@ const SocialProofSection = () => {
         {testimonials.map((testimonial, index) => (
           <div
             key={index}
-            className={`bg-white rounded-xl p-6 shadow-[0_10px_40px_rgba(201,60,60,0.15)] transition-all duration-500 hover:rotate-1 hover:scale-105 ${
+            className={`bg-white rounded-xl p-6 shadow-[0_10px_40px_rgba(139,26,26,0.3)] transition-all duration-500 hover:rotate-1 hover:scale-105 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
             }`}
             style={{
@@ -289,17 +291,17 @@ const SocialProofSection = () => {
         <div 
           className="rounded-2xl p-8 shadow-lg border transition-all duration-500"
           style={{
-            background: 'rgba(245, 173, 173, 0.6)',
+            background: 'rgba(185, 28, 28, 0.85)',
             backdropFilter: 'blur(10px)',
-            borderColor: 'rgba(201, 60, 60, 0.2)'
+            borderColor: 'rgba(239, 68, 68, 0.3)'
           }}
         >
           <div className="flex items-center gap-2 mb-6">
             <div 
               className="w-3 h-3 rounded-full animate-pulse"
-              style={{ backgroundColor: 'hsl(var(--red-primary))' }}
+              style={{ backgroundColor: '#FFFFFF' }}
             />
-            <h3 className="text-2xl font-bold" style={{ color: 'hsl(var(--red-ultra-dark))' }}>
+            <h3 className="text-2xl font-bold text-white">
               🚨 LIVE ACTIVITY (Last 24 Hours)
             </h3>
           </div>
@@ -317,12 +319,12 @@ const SocialProofSection = () => {
                 <div 
                   className="w-2 h-2 rounded-full mt-1.5"
                   style={{ 
-                    backgroundColor: 'hsl(var(--red-primary))',
+                    backgroundColor: '#FFFFFF',
                     animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     opacity: 0.4
                   }}
                 />
-                <p className="text-sm font-medium flex-1" style={{ color: 'hsl(var(--red-dark))' }}>
+                <p className="text-sm font-medium flex-1 text-white">
                   {activity}
                 </p>
               </div>

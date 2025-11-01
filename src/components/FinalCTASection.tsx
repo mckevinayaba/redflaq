@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Shield, Clock, Lock, CheckCircle2 } from "lucide-react";
+import { PaymentModal } from "@/components/PaymentModal";
 
 const FinalCTASection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -24,7 +26,7 @@ const FinalCTASection = () => {
   }, []);
 
   const handleCTAClick = () => {
-    console.log("Final CTA clicked");
+    setIsPaymentModalOpen(true);
   };
 
   const guarantees = [
@@ -147,6 +149,12 @@ const FinalCTASection = () => {
           </p>
         </div>
       </div>
+
+      <PaymentModal
+        isOpen={isPaymentModalOpen}
+        onClose={() => setIsPaymentModalOpen(false)}
+        packageType="single"
+      />
     </section>
   );
 };

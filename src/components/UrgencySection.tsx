@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Clock, Users, TrendingDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PaymentModal } from "@/components/PaymentModal";
 
 const UrgencySection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -8,6 +9,7 @@ const UrgencySection = () => {
   const [timeLeft, setTimeLeft] = useState({ minutes: 14, seconds: 59 });
   const [searchesLeft, setSearchesLeft] = useState(147);
   const [recentSearch, setRecentSearch] = useState(0);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -71,7 +73,7 @@ const UrgencySection = () => {
   }, [isVisible]);
 
   const handleUrgentCTA = () => {
-    console.log("Urgent CTA clicked");
+    setIsPaymentModalOpen(true);
   };
 
   return (
@@ -330,6 +332,12 @@ const UrgencySection = () => {
           }
         }
       `}</style>
+
+      <PaymentModal
+        isOpen={isPaymentModalOpen}
+        onClose={() => setIsPaymentModalOpen(false)}
+        packageType="single"
+      />
     </section>
   );
 };

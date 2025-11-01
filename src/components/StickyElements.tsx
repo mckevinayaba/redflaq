@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
+import { PaymentModal } from "@/components/PaymentModal";
 
 export const StickyElements = () => {
   const [showHeader, setShowHeader] = useState(false);
@@ -8,6 +9,7 @@ export const StickyElements = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [showExitIntent, setShowExitIntent] = useState(false);
   const [exitCountdown, setExitCountdown] = useState({ minutes: 5, seconds: 0 });
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
 
   // Header scroll behavior
   useEffect(() => {
@@ -70,7 +72,8 @@ export const StickyElements = () => {
   }, [showExitIntent]);
 
   const handleCTAClick = () => {
-    console.log("CTA clicked");
+    setShowExitIntent(false);
+    setIsPaymentModalOpen(true);
   };
 
   return (
@@ -183,6 +186,12 @@ export const StickyElements = () => {
           </div>
         </div>
       )}
+
+      <PaymentModal
+        isOpen={isPaymentModalOpen}
+        onClose={() => setIsPaymentModalOpen(false)}
+        packageType="single"
+      />
     </>
   );
 };

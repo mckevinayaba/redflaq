@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Check, Sparkles } from "lucide-react";
+import { PaymentModal } from "@/components/PaymentModal";
 
 const PricingSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [selectedPackage, setSelectedPackage] = useState<"single" | "3-pack" | "5-pack">("single");
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -77,7 +80,14 @@ const PricingSection = () => {
   ];
 
   const handlePurchase = (plan: string) => {
-    console.log(`Purchase clicked: ${plan}`);
+    if (plan === "Single Check") {
+      setSelectedPackage("single");
+    } else if (plan === "3-Search Pack") {
+      setSelectedPackage("3-pack");
+    } else if (plan === "5-Search Pack") {
+      setSelectedPackage("5-pack");
+    }
+    setIsPaymentModalOpen(true);
   };
 
   return (
@@ -326,6 +336,12 @@ const PricingSection = () => {
           perspective: 1000px;
         }
       `}</style>
+
+      <PaymentModal
+        isOpen={isPaymentModalOpen}
+        onClose={() => setIsPaymentModalOpen(false)}
+        packageType={selectedPackage}
+      />
     </section>
   );
 };

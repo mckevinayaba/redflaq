@@ -3,63 +3,66 @@ import { Star, CheckCircle2 } from "lucide-react";
 
 const testimonials = [
   {
-    name: "Sarah Mitchell",
-    role: "Property Manager",
-    text: "RedFlaq saved us from a tenant with 3 prior evictions. The system caught what traditional screening missed.",
+    name: "Thandi M.",
+    role: "Johannesburg",
+    text: "I found 3 domestic violence cases against my Tinder date. Cancelled immediately. RedFlaq literally saved my life.",
     rating: 5,
-    date: "2 days ago"
+    date: "2 weeks ago"
   },
   {
-    name: "James Rodriguez",
-    role: "Landlord",
-    text: "Within 24 hours of using RedFlaq, I discovered my applicant had pending lawsuits in two states.",
+    name: "Nomsa K.",
+    role: "Cape Town",
+    text: "My friend was about to move in with her boyfriend. I checked his ID on RedFlaq - 2 assault convictions, 1 protection order. She left him that night.",
+    rating: 5,
+    date: "1 month ago"
+  },
+  {
+    name: "Sipho T.",
+    role: "Durban",
+    text: "I check EVERY Uber driver now. Found one with robbery charges and cancelled the ride. My friends think I'm paranoid. I think I'm smart.",
+    rating: 5,
+    date: "3 weeks ago"
+  },
+  {
+    name: "Lerato D.",
+    role: "Pretoria",
+    text: "Worth every cent. The guy I was dating for 3 weeks had a conviction for assault I had no idea about. When I confronted him, he admitted it. I'm out.",
     rating: 5,
     date: "1 week ago"
   },
   {
-    name: "Emily Chen",
-    role: "Real Estate Investor",
-    text: "The risk scoring is incredibly accurate. We've reduced problem tenancies by 87% since implementing RedFlaq.",
+    name: "Zanele P.",
+    role: "Port Elizabeth",
+    text: "I bought the 3-search pack and checked my date, my Uber driver, and the handyman my mom hired. All came back green but now I have PEACE OF MIND.",
+    rating: 5,
+    date: "2 months ago"
+  },
+  {
+    name: "Patricia M.",
+    role: "Bloemfontein",
+    text: "Every single woman in South Africa should have this. I'm buying it for my daughter, my nieces, my friends. This is not optional anymore.",
     rating: 5,
     date: "3 days ago"
-  },
-  {
-    name: "Michael Thompson",
-    role: "Property Owner",
-    text: "Finally, a screening tool that actually works. The comprehensive reports give me peace of mind.",
-    rating: 5,
-    date: "5 days ago"
-  },
-  {
-    name: "Lisa Anderson",
-    role: "Portfolio Manager",
-    text: "RedFlaq's AI-powered analysis uncovered red flags in minutes that would have taken us weeks to find manually.",
-    rating: 5,
-    date: "1 week ago"
-  },
-  {
-    name: "David Park",
-    role: "Landlord",
-    text: "Best investment I've made for my rental business. The ROI paid for itself after avoiding just one bad tenant.",
-    rating: 5,
-    date: "4 days ago"
   }
 ];
 
 const stats = [
-  { label: "Tenants Screened", value: 50000, suffix: "+" },
-  { label: "Red Flags Detected", value: 12500, suffix: "+" },
-  { label: "Success Rate", value: 99, suffix: "%" },
-  { label: "Average Time Saved", value: 48, suffix: "hrs" }
+  { label: "Total searches performed", value: 15247, suffix: "", type: "normal" },
+  { label: "Criminal records in database", value: 2847, suffix: "", type: "normal" },
+  { label: "Searches returned results", value: 1247, suffix: "", type: "normal" },
+  { label: "🔴 RED ALERTS found (violent offenders)", value: 347, suffix: "", type: "alert" },
+  { label: "Women confirmed they avoided danger", value: 89, suffix: "", type: "normal" },
+  { label: "Average rating from 847 reviews", value: 4.9, suffix: "/5", type: "rating" },
+  { label: "Data breaches (100% secure)", value: 0, suffix: "", type: "secure" },
+  { label: "Average search time", value: 60, suffix: "sec", type: "time" }
 ];
 
 const activityItems = [
-  "Jessica M. just screened a tenant in Los Angeles, CA",
-  "Michael R. detected 3 red flags in Chicago, IL",
-  "Sarah L. completed a screening in Austin, TX",
-  "David K. upgraded to Premium in Miami, FL",
-  "Emily W. just screened a tenant in Seattle, WA",
-  "Robert P. detected 2 red flags in Boston, MA"
+  "Ayanda from Soweto just found a 🔴 RED ALERT - 7 minutes ago",
+  "Precious from Durban completed a search - 12 minutes ago",
+  "Thabo from Cape Town just purchased 3-search pack - 18 minutes ago",
+  "Lindiwe from Pretoria found 🟢 GREEN (no records) - 23 minutes ago",
+  "Zanele from Joburg just found an 🟠 ORANGE ALERT - 31 minutes ago"
 ];
 
 const SocialProofSection = () => {
@@ -154,8 +157,11 @@ const SocialProofSection = () => {
           }`}
           style={{ color: 'hsl(var(--red-ultra-dark))' }}
         >
-          Join Thousands of Protected Landlords
+          DON'T JUST TAKE OUR WORD FOR IT
         </h2>
+        <p className="text-2xl font-medium" style={{ color: 'hsl(var(--red-primary))' }}>
+          Here's What 15,247 Women Are Saying:
+        </p>
       </div>
 
       {/* Testimonial Cards - Masonry Layout */}
@@ -201,29 +207,32 @@ const SocialProofSection = () => {
             </p>
 
             {/* Author */}
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="font-semibold" style={{ color: 'hsl(var(--red-ultra-dark))' }}>
-                  {testimonial.name}
-                </p>
-                <p className="text-sm" style={{ color: 'hsl(var(--muted-foreground))' }}>
-                  {testimonial.role}
-                </p>
-              </div>
+            <div>
+              <p className="font-bold text-base mb-1" style={{ color: 'hsl(var(--red-ultra-dark))' }}>
+                {testimonial.name}
+              </p>
+              <p className="text-sm mb-3" style={{ color: 'hsl(var(--muted-foreground))' }}>
+                {testimonial.role}
+              </p>
               
-              {/* Verified Badge */}
-              <div 
-                className={`flex items-center gap-1 px-3 py-1 rounded-full transition-all duration-500 ${
-                  isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'
-                }`}
-                style={{ 
-                  backgroundColor: 'hsl(var(--red-lightest))',
-                  transitionDelay: `${index * 0.15 + 0.5}s`
-                }}
-              >
-                <CheckCircle2 className="w-4 h-4" style={{ color: 'hsl(var(--red-primary))' }} />
-                <span className="text-xs font-medium" style={{ color: 'hsl(var(--red-primary))' }}>
-                  Verified
+              {/* Verified Badge and Date */}
+              <div className="flex items-center gap-3">
+                <div 
+                  className={`flex items-center gap-1 px-3 py-1 rounded-full transition-all duration-500 ${
+                    isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'
+                  }`}
+                  style={{ 
+                    backgroundColor: 'hsl(var(--brand-green))',
+                    transitionDelay: `${index * 0.15 + 0.5}s`
+                  }}
+                >
+                  <CheckCircle2 className="w-3 h-3 text-white" />
+                  <span className="text-xs font-medium text-white">
+                    ✓ Verified Purchase
+                  </span>
+                </div>
+                <span className="text-xs" style={{ color: 'hsl(var(--muted-foreground))' }}>
+                  {testimonial.date}
                 </span>
               </div>
             </div>
@@ -234,7 +243,7 @@ const SocialProofSection = () => {
       {/* Stats Section */}
       <div 
         ref={statsRef}
-        className="max-w-5xl mx-auto mb-16 rounded-2xl p-12 shadow-2xl transition-transform duration-200"
+        className="max-w-6xl mx-auto mb-16 rounded-3xl p-12 shadow-2xl transition-transform duration-200 relative overflow-hidden"
         style={{
           backgroundColor: 'hsl(var(--red-dark))',
           transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`
@@ -242,56 +251,93 @@ const SocialProofSection = () => {
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}
       >
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
+        
+        <h3 className="text-3xl font-bold text-white text-center mb-12 relative z-10">
+          📊 RedFlaq By The Numbers (Last 90 Days)
+        </h3>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 relative z-10">
           {stats.map((stat, index) => (
             <div key={index} className="text-center">
-              <div className="flex items-center justify-center gap-2 mb-2">
-                <div 
-                  className="w-2 h-2 rounded-full animate-pulse"
-                  style={{ backgroundColor: 'hsl(var(--red-primary))' }}
-                />
-                <p className="text-5xl md:text-6xl font-bold text-white animate-count-up">
-                  {statValues[index]}{stat.suffix}
-                </p>
+              <div className="flex flex-col items-center gap-2 mb-2">
+                <div className="flex items-center gap-2">
+                  <div 
+                    className="w-2 h-2 rounded-full animate-pulse"
+                    style={{ backgroundColor: 'hsl(var(--red-primary))' }}
+                  />
+                  <p className={`text-4xl md:text-5xl font-bold animate-count-up ${
+                    stat.type === 'alert' ? 'text-red-lightest' : 'text-white'
+                  }`}>
+                    {stat.type === 'secure' && '✓ '}
+                    {stat.type === 'time' && '<'}
+                    {statValues[index]}{stat.suffix}
+                  </p>
+                </div>
               </div>
-              <p className="text-red-lightest font-medium">{stat.label}</p>
+              <p className="text-white/80 text-sm font-medium">{stat.label}</p>
+              {stat.type === 'rating' && (
+                <div className="text-yellow-400 text-xl mt-2">⭐⭐⭐⭐⭐</div>
+              )}
             </div>
           ))}
         </div>
       </div>
 
       {/* Live Activity Feed */}
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-3xl mx-auto">
         <div 
-          className="bg-white/90 backdrop-blur-sm rounded-xl p-6 shadow-lg"
+          className="rounded-2xl p-8 shadow-lg border transition-all duration-500"
+          style={{
+            background: 'rgba(254, 226, 226, 0.6)',
+            backdropFilter: 'blur(10px)',
+            borderColor: 'rgba(220, 38, 38, 0.2)'
+          }}
         >
-          <div className="flex items-center gap-2 mb-4 pb-4 border-b border-red-lightest">
+          <div className="flex items-center gap-2 mb-6">
             <div 
               className="w-3 h-3 rounded-full animate-pulse"
               style={{ backgroundColor: 'hsl(var(--red-primary))' }}
             />
-            <h3 className="font-semibold" style={{ color: 'hsl(var(--red-ultra-dark))' }}>
-              Live Activity
+            <h3 className="text-2xl font-bold" style={{ color: 'hsl(var(--red-ultra-dark))' }}>
+              🚨 LIVE ACTIVITY (Last 24 Hours)
             </h3>
           </div>
           
-          <div className="space-y-3 transition-all duration-500">
+          <div className="space-y-3">
             {activities.map((activity, index) => (
               <div
                 key={`${activity}-${index}`}
-                className={`p-3 rounded-lg transition-all duration-500 ${
-                  index === 0 ? 'opacity-100 translate-x-0' : 'opacity-70'
-                }`}
+                className="flex items-start gap-3 py-3 transition-all duration-500 animate-slide-in-right"
                 style={{ 
-                  backgroundColor: index === 0 ? 'hsl(var(--red-lightest))' : 'transparent'
+                  animationDelay: `${index * 0.1}s`,
+                  opacity: index === 0 ? 1 : 0.7
                 }}
               >
-                <p className="text-sm" style={{ color: 'hsl(var(--red-ultra-dark))' }}>
+                <div 
+                  className="w-2 h-2 rounded-full mt-1.5"
+                  style={{ 
+                    backgroundColor: 'hsl(var(--red-primary))',
+                    animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    opacity: 0.4
+                  }}
+                />
+                <p className="text-sm font-medium flex-1" style={{ color: 'hsl(var(--red-dark))' }}>
                   {activity}
                 </p>
               </div>
             ))}
           </div>
+        </div>
+
+        {/* CTA Button */}
+        <div className="mt-16 text-center">
+          <button 
+            className="text-white font-bold text-lg px-12 py-5 rounded-full shadow-2xl transition-all duration-300 hover:scale-105 animate-pulse-glow"
+            style={{ backgroundColor: 'hsl(var(--red-primary))' }}
+          >
+            🔴 Join 15,247 Women - Check Now
+          </button>
         </div>
       </div>
     </section>

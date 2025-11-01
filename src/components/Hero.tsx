@@ -30,7 +30,7 @@ const Hero = () => {
         {/* Main Headline */}
         <h1 
           className="font-heading font-black text-4xl md:text-5xl lg:text-[56px] leading-[1.2] text-white mb-8 text-balance tracking-tight"
-          style={{ textShadow: "0 2px 4px rgba(0,0,0,0.1)" }}
+          style={{ textShadow: "0 2px 8px rgba(0,0,0,0.2)" }}
         >
           15,247 South African Women Checked<br />
           Their Date's Criminal Record<br />
@@ -59,7 +59,7 @@ const Hero = () => {
           <Button 
             onClick={handleCTAClick}
             size="lg"
-            className="w-full max-w-[360px] h-[75px] bg-white hover:bg-white/95 text-primary font-body font-bold text-xl rounded-xl transition-all duration-300 hover:scale-105 shadow-[0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.25)]"
+            className="w-full max-w-[380px] h-[80px] bg-white hover:bg-white/95 text-primary font-body font-bold text-[22px] rounded-xl transition-all duration-300 ease-out hover:scale-105 shadow-[0_8px_30px_rgba(0,0,0,0.15)] hover:shadow-[0_12px_40px_rgba(0,0,0,0.25)]"
           >
             🔴 Check His Record Now - R50
           </Button>

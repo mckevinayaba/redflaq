@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -65,10 +66,12 @@ export const PaymentModal = ({ isOpen, onClose, packageType = "single" }: Paymen
     }, 2000);
   };
 
+  console.log("PaymentModal render, isOpen:", isOpen);
+  
   if (!isOpen) return null;
 
-  return (
-    <div 
+  const modalContent = (
+    <div
       className="fixed inset-0 z-[9999] flex items-center justify-center p-4 animate-fade-in"
       style={{ backgroundColor: "rgba(0, 0, 0, 0.85)" }}
       onClick={(e) => e.target === e.currentTarget && onClose()}
@@ -229,4 +232,6 @@ export const PaymentModal = ({ isOpen, onClose, packageType = "single" }: Paymen
       `}</style>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 };

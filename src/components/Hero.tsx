@@ -102,7 +102,10 @@ const Hero = () => {
         {/* WHITE CTA Button with Pulsing Glow */}
         <div className="mb-6 opacity-0 animate-fade-in-scale delay-2000">
           <Button 
-            onClick={() => setIsPaymentModalOpen(true)}
+            onClick={() => {
+              console.log("CTA button clicked, opening modal");
+              setIsPaymentModalOpen(true);
+            }}
             size="lg"
             className="w-full max-w-[380px] h-[80px] bg-white hover:bg-white/95 text-primary font-body font-bold text-[22px] rounded-xl transition-all duration-300 ease-out hover:scale-105 hover:-translate-y-1 animate-pulse-glow"
           >

@@ -82,12 +82,12 @@ export const PaymentModal = ({ isOpen, onClose, packageType = "single" }: Paymen
 
   const modalContent = (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 animate-fade-in"
+      className="fixed inset-0 z-[9999] flex items-start justify-center p-4 py-8 md:py-12 animate-fade-in"
       style={{ backgroundColor: "rgba(0, 0, 0, 0.85)" }}
       onClick={(e) => e.target === e.currentTarget && onClose()}
     >
       <div 
-        className="relative bg-white rounded-3xl p-8 md:p-12 w-full max-w-[500px] shadow-2xl animate-slide-up"
+        className="relative bg-white rounded-3xl p-6 md:p-8 w-full max-w-[500px] max-h-[90vh] overflow-y-auto scroll-smooth shadow-2xl animate-slide-up"
         style={{ 
           boxShadow: "0 20px 60px rgba(0, 0, 0, 0.4)",
           animation: "slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)"

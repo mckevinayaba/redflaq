@@ -247,4 +247,102 @@ All colors MUST be HSL.
   .delay-1800 { animation-delay: 1.8s; }
   .delay-2000 { animation-delay: 2s; }
   .delay-2500 { animation-delay: 2.5s; }
+  
+  /* Scroll-triggered animations */
+  @keyframes slide-up {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes slide-in-right {
+    from {
+      opacity: 0;
+      transform: translateX(60px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes slide-in-left {
+    from {
+      opacity: 0;
+      transform: translateX(-60px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes expand-width {
+    from {
+      width: 0;
+    }
+    to {
+      width: 100px;
+    }
+  }
+  
+  @keyframes pulse-border {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+  
+  @keyframes glow-text {
+    0%, 100% {
+      text-shadow: 0 0 20px rgba(220, 38, 38, 0.5);
+    }
+    50% {
+      text-shadow: 0 0 30px rgba(220, 38, 38, 0.8);
+    }
+  }
+  
+  @keyframes glow-white {
+    0%, 100% {
+      text-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
+    }
+    50% {
+      text-shadow: 0 0 50px rgba(255, 255, 255, 0.8);
+    }
+  }
+  
+  .animate-slide-up {
+    animation: slide-up 0.8s ease-out forwards;
+  }
+  
+  .animate-slide-in-right {
+    animation: slide-in-right 0.8s ease-out forwards;
+  }
+  
+  .animate-slide-in-left {
+    animation: slide-in-left 0.8s ease-out forwards;
+  }
+  
+  .animate-expand-width {
+    animation: expand-width 1s ease-out forwards;
+  }
+  
+  .animate-pulse-border {
+    animation: pulse-border 2s ease-in-out infinite;
+  }
+  
+  .animate-glow-text {
+    animation: glow-text 3s ease-in-out infinite;
+  }
+  
+  .animate-glow-white {
+    animation: glow-white 3s ease-in-out infinite;
+  }
 }

@@ -78,16 +78,16 @@ const FAQSection = () => {
       ref={sectionRef}
       className="py-24 md:py-28 px-8 relative overflow-hidden"
       style={{
-        background: "linear-gradient(180deg, #E05050 0%, #D14444 100%)"
+        backgroundColor: "#FEE2E2"
       }}
     >
       <div className="max-w-[900px] mx-auto">
         {/* Heading */}
         <div className="text-center mb-16">
-          <h2 className={`font-heading font-black text-4xl md:text-5xl text-white mb-6 ${isVisible ? 'animate-slide-up' : 'opacity-0'}`}>
+          <h2 className={`font-heading font-black text-4xl md:text-5xl mb-6 ${isVisible ? 'animate-slide-up' : 'opacity-0'}`} style={{ color: '#7F1D1D' }}>
             You Have Questions. We Have Answers.
           </h2>
-          <p className={`font-body text-lg md:text-xl text-white/90 max-w-[600px] mx-auto ${isVisible ? 'animate-fade-in delay-200' : 'opacity-0'}`}>
+          <p className={`font-body text-lg md:text-xl max-w-[600px] mx-auto ${isVisible ? 'animate-fade-in delay-200' : 'opacity-0'}`} style={{ color: '#991B1B' }}>
             Real questions from South African women just like you.
           </p>
         </div>
@@ -97,11 +97,14 @@ const FAQSection = () => {
           {trustBadges.map((badge, index) => (
             <div
               key={index}
-              className="bg-white/10 backdrop-blur-sm rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-white/20 transition-all duration-300"
-              style={{ border: '1px solid rgba(255, 255, 255, 0.2)' }}
+              className="bg-white rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-white/80 transition-all duration-300"
+              style={{ 
+                border: '2px solid #FEE2E2',
+                boxShadow: '0 10px 30px rgba(127, 29, 29, 0.1)'
+              }}
             >
-              <badge.icon className="w-8 h-8 text-white" />
-              <p className="text-xs md:text-sm text-white text-center font-medium">{badge.text}</p>
+              <badge.icon className="w-8 h-8" style={{ color: '#DC2626' }} />
+              <p className="text-xs md:text-sm text-center font-medium" style={{ color: '#7F1D1D' }}>{badge.text}</p>
             </div>
           ))}
         </div>
@@ -159,11 +162,11 @@ const FAQSection = () => {
 
         {/* Bottom Note */}
         <div className={`mt-16 text-center ${isVisible ? 'animate-fade-in delay-2000' : 'opacity-0'}`}>
-          <p className="font-body text-lg text-white/90 mb-4">
+          <p className="font-body text-lg mb-4" style={{ color: '#991B1B' }}>
             Still have questions?
           </p>
-          <p className="font-body text-base text-white/80">
-            Email us: <a href="mailto:support@redflaq.co.za" className="underline font-bold hover:text-white transition-colors">support@redflaq.co.za</a>
+          <p className="font-body text-base" style={{ color: '#B91C1C' }}>
+            Email us: <a href="mailto:support@redflaq.co.za" className="underline font-bold hover:text-[#7F1D1D] transition-colors">support@redflaq.co.za</a>
           </p>
         </div>
       </div>

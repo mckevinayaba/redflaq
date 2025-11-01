@@ -33,40 +33,40 @@ const ProblemSection = () => {
       ref={sectionRef}
       className="py-24 md:py-28 px-8"
       style={{
-        background: "linear-gradient(180deg, #7F1D1D 0%, #991B1B 100%)"
+        background: "linear-gradient(180deg, #B63434 0%, #9E2B2B 100%)"
       }}
     >
       <div className="max-w-[900px] mx-auto">
         {/* Animated Red Divider */}
         <div 
-          className={`h-1 bg-[#DC2626] mx-auto mb-10 ${isVisible ? 'animate-expand-width' : 'w-0'}`}
+          className={`h-1 bg-[#C93C3C] mx-auto mb-10 ${isVisible ? 'animate-expand-width' : 'w-0'}`}
           style={{
-            boxShadow: "0 0 20px rgba(220, 38, 38, 0.8)"
+            boxShadow: "0 0 20px rgba(201, 60, 60, 0.8)"
           }}
         />
 
         {/* Section Title with Glow */}
         <h2 
           className={`font-heading font-bold text-3xl md:text-[42px] text-center text-white mb-14 ${isVisible ? 'animate-slide-up' : 'opacity-0'}`}
-          style={{ textShadow: "0 0 20px rgba(220, 38, 38, 0.5)" }}
+          style={{ textShadow: "0 0 20px rgba(201, 60, 60, 0.5)" }}
         >
           THE TRUTH ABOUT DATING IN SOUTH AFRICA
         </h2>
 
         {/* Large Stat Callout - White Card */}
         <div 
-          className={`bg-white border-l-8 border-[#DC2626] p-8 md:p-10 mb-10 rounded-lg ${isVisible ? 'animate-slide-in-right delay-200' : 'opacity-0'}`}
+          className={`bg-white border-l-8 border-[#C93C3C] p-8 md:p-10 mb-10 rounded-lg ${isVisible ? 'animate-slide-in-right delay-200' : 'opacity-0'}`}
           style={{
             boxShadow: "0 20px 60px rgba(0, 0, 0, 0.3)"
           }}
         >
-          <div className="border-l-8 border-[#DC2626] animate-pulse-border absolute left-0 top-0 bottom-0" />
+          <div className="border-l-8 border-[#C93C3C] animate-pulse-border absolute left-0 top-0 bottom-0" />
           <h3 className="font-heading font-bold text-2xl md:text-4xl mb-4 leading-tight"
-            style={{ color: "#7F1D1D" }}>
+            style={{ color: "#9E2B2B" }}>
             Every 4 Hours, A South African Woman Is Murdered By Her Partner.
           </h3>
           <p className="font-body text-base md:text-lg leading-relaxed"
-            style={{ color: "#7F1D1D" }}>
+            style={{ color: "#9E2B2B" }}>
             That's 6 women. Every single day. Most of them never knew about his past.
           </p>
         </div>
@@ -118,7 +118,7 @@ const ProblemSection = () => {
               className={`font-body text-lg text-white leading-[1.8] flex items-start gap-3 ${isVisible ? 'animate-fade-in' : 'opacity-0'}`}
               style={{ animationDelay: `${1.8 + index * 0.1}s` }}
             >
-              <span className="text-[#DC2626] flex-shrink-0">•</span>
+              <span className="text-[#C93C3C] flex-shrink-0">•</span>
               <span><strong>{item.label}</strong> {item.text}</span>
             </li>
           ))}
@@ -134,19 +134,19 @@ const ProblemSection = () => {
           }}
         >
           <h4 className="font-heading font-bold text-xl md:text-2xl mb-4"
-            style={{ color: "#7F1D1D" }}>
+            style={{ color: "#9E2B2B" }}>
             Here's What's Happening Right Now:
           </h4>
           <p className="font-body text-base md:text-lg leading-[1.8] mb-4"
-            style={{ color: "#7F1D1D" }}>
+            style={{ color: "#9E2B2B" }}>
             Right now, there's a man in your DMs. Maybe you've been talking for days. Maybe weeks. He's charming. Compliments you. Asks about your day.
           </p>
           <p className="font-body text-base md:text-lg leading-[1.8] mb-4"
-            style={{ color: "#7F1D1D" }}>
+            style={{ color: "#9E2B2B" }}>
             You've already planned where you'll meet. You've told yourself "He seems nice."
           </p>
           <p className="font-body text-base md:text-lg leading-[1.8]"
-            style={{ color: "#7F1D1D" }}>
+            style={{ color: "#9E2B2B" }}>
             But you haven't checked his record. Because you didn't know you could. Because it was too expensive. Too complicated. Too hard.
           </p>
         </div>
@@ -166,7 +166,7 @@ const ProblemSection = () => {
           <Button 
             onClick={handleCTAClick}
             size="lg"
-            className="w-full max-w-[380px] h-[80px] bg-white hover:bg-white/95 text-[#DC2626] font-body font-bold text-[22px] rounded-xl transition-all duration-300 ease-out hover:scale-105 hover:-translate-y-1 animate-pulse-glow"
+            className="w-full max-w-[380px] h-[80px] bg-white hover:bg-white/95 text-[#C93C3C] font-body font-bold text-[22px] rounded-xl transition-all duration-300 ease-out hover:scale-105 hover:-translate-y-1 animate-pulse-glow"
           >
             🔴 Check His Criminal Record - R50
           </Button>

@@ -51,7 +51,7 @@ const SolutionSection = () => {
       level: "HIGH RISK",
       color: "#FEE2E2",
       border: "#DC2626",
-      icon: <AlertTriangle className="w-8 h-8" style={{ color: "#DC2626" }} />,
+      icon: <AlertTriangle className="w-8 h-8" style={{ color: "#C93C3C" }} />,
       description: "Multiple convictions, violent history, active warrants"
     },
     {
@@ -94,7 +94,7 @@ const SolutionSection = () => {
       ref={sectionRef}
       className="py-24 md:py-28 px-8 relative overflow-hidden"
       style={{
-        backgroundColor: "#DC2626",
+        backgroundColor: "#C93C3C",
         backgroundImage: "url(\"data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")"
       }}
     >
@@ -102,7 +102,7 @@ const SolutionSection = () => {
         {/* INTRODUCING Badge */}
         <div className={`flex justify-center mb-8 ${isVisible ? 'animate-slide-in-down' : 'opacity-0'}`}>
           <div
-            className="bg-white px-6 py-2 rounded-full font-heading font-bold text-[#DC2626] text-sm tracking-wide hover:rotate-2 transition-transform duration-300 cursor-default"
+            className="bg-white px-6 py-2 rounded-full font-heading font-bold text-[#C93C3C] text-sm tracking-wide hover:rotate-2 transition-transform duration-300 cursor-default"
             style={{ boxShadow: "0 8px 20px rgba(0,0,0,0.2)" }}
           >
             INTRODUCING
@@ -163,8 +163,8 @@ const SolutionSection = () => {
                 {/* Number Badge */}
                 <div className="flex justify-center mb-6">
                   <div
-                    className="w-16 h-16 rounded-full bg-[#DC2626] flex items-center justify-center font-heading font-black text-white text-2xl"
-                    style={{ boxShadow: "0 4px 15px rgba(220,38,38,0.4)" }}
+                    className="w-16 h-16 rounded-full bg-[#C93C3C] flex items-center justify-center font-heading font-black text-white text-2xl"
+                    style={{ boxShadow: "0 4px 15px rgba(201,60,60,0.4)" }}
                   >
                     {step.number}
                   </div>
@@ -174,12 +174,12 @@ const SolutionSection = () => {
                 <div className="text-5xl text-center mb-4">{step.icon}</div>
                 
                 {/* Title */}
-                <h4 className="font-heading font-bold text-xl text-[#7F1D1D] text-center mb-3">
+                <h4 className="font-heading font-bold text-xl text-[#9E2B2B] text-center mb-3">
                   {step.title}
                 </h4>
                 
                 {/* Description */}
-                <p className="font-body text-base text-[#991B1B] text-center">
+                <p className="font-body text-base text-[#B63434] text-center">
                   {step.description}
                 </p>
               </div>
@@ -212,7 +212,7 @@ const SolutionSection = () => {
                   <h4 className="font-heading font-bold text-lg text-center mb-3" style={{ color: risk.border }}>
                     {risk.level}
                   </h4>
-                  <p className="font-body text-sm text-center" style={{ color: "#7F1D1D" }}>
+                  <p className="font-body text-sm text-center" style={{ color: "#9E2B2B" }}>
                     {risk.description}
                   </p>
                 </div>
@@ -225,8 +225,8 @@ const SolutionSection = () => {
         <div className={`bg-white rounded-2xl p-8 md:p-10 max-w-[700px] mx-auto ${isVisible ? 'animate-slide-up delay-2000' : 'opacity-0'}`}
           style={{ boxShadow: "0 20px 60px rgba(0,0,0,0.3)" }}>
           <div className="flex items-center justify-center gap-3 mb-8">
-            <Shield className="w-10 h-10 text-[#DC2626]" />
-            <h3 className="font-heading font-bold text-3xl text-[#7F1D1D] text-center">
+            <Shield className="w-10 h-10 text-[#C93C3C]" />
+            <h3 className="font-heading font-bold text-3xl text-[#9E2B2B] text-center">
               What You Get
             </h3>
           </div>
@@ -235,7 +235,7 @@ const SolutionSection = () => {
             {features.map((feature, index) => (
               <div
                 key={index}
-                className={`font-body text-lg text-[#991B1B] hover:bg-[#FEE2E2] p-3 rounded-lg transition-all duration-200 ${isVisible ? 'animate-fade-in' : 'opacity-0'}`}
+                className={`font-body text-lg text-[#B63434] hover:bg-[#F5ADAD] p-3 rounded-lg transition-all duration-200 ${isVisible ? 'animate-fade-in' : 'opacity-0'}`}
                 style={{ animationDelay: `${2.2 + index * 0.1}s` }}
               >
                 {feature}
@@ -243,13 +243,13 @@ const SolutionSection = () => {
             ))}
           </div>
           
-          <div className="mt-8 pt-6 border-t-2 border-[#FEE2E2]">
-            <p className="font-heading font-bold text-2xl text-center text-[#DC2626] mb-4">
+          <div className="mt-8 pt-6 border-t-2 border-[#F5ADAD]">
+            <p className="font-heading font-bold text-2xl text-center text-[#C93C3C] mb-4">
               All This. Just R50.
             </p>
             <Button
               size="lg"
-              className="w-full h-[70px] bg-[#DC2626] hover:bg-[#991B1B] text-white font-body font-bold text-xl rounded-xl transition-all duration-300 ease-out hover:scale-105 animate-pulse-glow"
+              className="w-full h-[70px] bg-[#C93C3C] hover:bg-[#B63434] text-white font-body font-bold text-xl rounded-xl transition-all duration-300 ease-out hover:scale-105 animate-pulse-glow"
             >
               🔴 Get Your Report Now - R50
             </Button>

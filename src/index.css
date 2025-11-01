@@ -8,14 +8,14 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* RedFlaq Full Red Palette */
-    --red-ultra-dark: 0 62% 25%;      /* #7F1D1D - darkest sections */
-    --red-dark: 0 64% 30%;            /* #991B1B - dark sections */
-    --red-primary: 0 79% 50%;         /* #DC2626 - main brand */
-    --red-medium: 0 91% 60%;          /* #EF4444 - backgrounds */
-    --red-light: 0 91% 71%;           /* #F87171 - lighter sections */
-    --red-lightest: 0 93% 94%;        /* #FEE2E2 - very light */
-    --red-cream: 0 100% 97%;          /* #FEF2F2 - cream alternative */
+    /* RedFlaq Full Red Palette - Updated to match reference design */
+    --red-primary: 0 56% 51%;         /* #C93C3C - Main brand red */
+    --red-medium: 0 60% 55%;          /* #D14444 - Medium bright red */
+    --red-dark: 0 50% 45%;            /* #B63434 - Darker sections */
+    --red-ultra-dark: 0 45% 38%;      /* #9E2B2B - Darkest accents */
+    --red-light: 0 65% 65%;           /* #E36B6B - Light overlays */
+    --red-lightest: 0 70% 85%;        /* #F5ADAD - Very light sections */
+    --red-cream: 0 60% 95%;           /* #FADADA - Cream alternative */
     
     /* Accent Colors */
     --brand-gold: 38 92% 50%;         /* #FCD34D - stars, accents */
@@ -29,7 +29,7 @@ All colors MUST be HSL.
     --card: 0 0% 100%;
     --card-foreground: 217 19% 27%;
     
-    --primary: 0 79% 50%;
+    --primary: 0 56% 51%;
     --primary-foreground: 0 0% 100%;
     
     --secondary: 220 14% 98%;
@@ -44,12 +44,12 @@ All colors MUST be HSL.
     --success: 160 95% 30%;
     --success-foreground: 0 0% 100%;
     
-    --destructive: 0 79% 50%;
+    --destructive: 0 56% 51%;
     --destructive-foreground: 0 0% 100%;
     
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 0 79% 50%;
+    --ring: 0 56% 51%;
     
     --radius: 0.5rem;
     

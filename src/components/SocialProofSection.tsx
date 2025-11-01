@@ -169,7 +169,7 @@ const SocialProofSection = () => {
         {testimonials.map((testimonial, index) => (
           <div
             key={index}
-            className={`bg-white rounded-xl p-6 shadow-[0_10px_40px_rgba(220,38,38,0.15)] transition-all duration-500 hover:rotate-1 hover:scale-105 ${
+            className={`bg-white rounded-xl p-6 shadow-[0_10px_40px_rgba(201,60,60,0.15)] transition-all duration-500 hover:rotate-1 hover:scale-105 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
             }`}
             style={{
@@ -289,9 +289,9 @@ const SocialProofSection = () => {
         <div 
           className="rounded-2xl p-8 shadow-lg border transition-all duration-500"
           style={{
-            background: 'rgba(254, 226, 226, 0.6)',
+            background: 'rgba(245, 173, 173, 0.6)',
             backdropFilter: 'blur(10px)',
-            borderColor: 'rgba(220, 38, 38, 0.2)'
+            borderColor: 'rgba(201, 60, 60, 0.2)'
           }}
         >
           <div className="flex items-center gap-2 mb-6">

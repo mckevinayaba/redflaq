@@ -8,16 +8,19 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* RedFlaq Brand Colors */
-    --brand-red: 0 79% 50%;
-    --brand-red-dark: 0 74% 35%;
-    --brand-red-light: 0 86% 94%;
-    --brand-gold: 38 92% 50%;
-    --brand-gold-light: 48 90% 88%;
+    /* RedFlaq Full Red Palette */
+    --red-ultra-dark: 0 62% 25%;      /* #7F1D1D - darkest sections */
+    --red-dark: 0 64% 30%;            /* #991B1B - dark sections */
+    --red-primary: 0 79% 50%;         /* #DC2626 - main brand */
+    --red-medium: 0 91% 60%;          /* #EF4444 - backgrounds */
+    --red-light: 0 91% 71%;           /* #F87171 - lighter sections */
+    --red-lightest: 0 93% 94%;        /* #FEE2E2 - very light */
+    --red-cream: 0 100% 97%;          /* #FEF2F2 - cream alternative */
+    
+    /* Accent Colors */
+    --brand-gold: 38 92% 50%;         /* #FCD34D - stars, accents */
     --brand-orange: 21 91% 48%;
-    --brand-orange-light: 33 100% 96%;
     --brand-green: 160 95% 30%;
-    --brand-green-light: 149 80% 90%;
     
     /* Core System Colors */
     --background: 0 0% 100%;
@@ -76,20 +79,106 @@ All colors MUST be HSL.
     text-wrap: balance;
   }
   
-  @keyframes bounce-slow {
+  /* Gradient Animation */
+  @keyframes gradient-move {
     0%, 100% {
-      transform: translateY(0);
+      background-position: 0% 50%;
     }
     50% {
-      transform: translateY(-10px);
+      background-position: 100% 50%;
     }
   }
   
-  .animate-bounce-slow {
-    animation: bounce-slow 2s infinite;
+  .animate-gradient {
+    background-size: 200% 200%;
+    animation: gradient-move 20s ease infinite;
   }
   
-  @keyframes fade-in-up {
+  /* Floating Particles */
+  @keyframes float {
+    0%, 100% {
+      transform: translate(0, 0) scale(1);
+      opacity: 0.3;
+    }
+    25% {
+      transform: translate(10px, -20px) scale(1.1);
+      opacity: 0.15;
+    }
+    50% {
+      transform: translate(-5px, -40px) scale(0.9);
+      opacity: 0.25;
+    }
+    75% {
+      transform: translate(-15px, -20px) scale(1.05);
+      opacity: 0.2;
+    }
+  }
+  
+  /* Fade In Animations */
+  @keyframes fade-in-down {
+    from {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @keyframes fade-in-left {
+    from {
+      opacity: 0;
+      transform: translateX(-30px) blur(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0) blur(0);
+    }
+  }
+  
+  @keyframes fade-in-scale {
+    from {
+      opacity: 0;
+      transform: scale(0);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  /* Pulse Glow */
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15), 0 0 0 0 rgba(255, 255, 255, 0.7);
+    }
+    50% {
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25), 0 0 0 10px rgba(255, 255, 255, 0);
+    }
+  }
+  
+  /* Scale Pulse */
+  @keyframes scale-pulse {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.02);
+    }
+  }
+  
+  /* Counter Animation */
+  @keyframes count-up {
     from {
       opacity: 0;
       transform: translateY(20px);
@@ -100,7 +189,62 @@ All colors MUST be HSL.
     }
   }
   
-  .animate-fade-in-up {
-    animation: fade-in-up 0.6s ease-out;
+  /* Bounce Slow */
+  @keyframes bounce-slow {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
   }
+  
+  /* Utility Classes */
+  .animate-gradient {
+    animation: gradient-move 20s ease infinite;
+  }
+  
+  .animate-fade-in-down {
+    animation: fade-in-down 0.8s ease-out forwards;
+  }
+  
+  .animate-fade-in-left {
+    animation: fade-in-left 1s ease-out forwards;
+  }
+  
+  .animate-fade-in-scale {
+    animation: fade-in-scale 0.6s ease-out forwards;
+  }
+  
+  .animate-fade-in {
+    animation: fade-in 0.8s ease-out forwards;
+  }
+  
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+  
+  .animate-scale-pulse {
+    animation: scale-pulse 3s ease-in-out infinite;
+  }
+  
+  .animate-bounce-slow {
+    animation: bounce-slow 2s infinite;
+  }
+  
+  .animate-count-up {
+    animation: count-up 0.6s ease-out forwards;
+  }
+  
+  /* Animation Delays */
+  .delay-200 { animation-delay: 0.2s; }
+  .delay-400 { animation-delay: 0.4s; }
+  .delay-600 { animation-delay: 0.6s; }
+  .delay-800 { animation-delay: 0.8s; }
+  .delay-1000 { animation-delay: 1s; }
+  .delay-1200 { animation-delay: 1.2s; }
+  .delay-1500 { animation-delay: 1.5s; }
+  .delay-1800 { animation-delay: 1.8s; }
+  .delay-2000 { animation-delay: 2s; }
+  .delay-2500 { animation-delay: 2.5s; }
 }

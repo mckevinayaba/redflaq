@@ -2,6 +2,9 @@ import Hero from "@/components/Hero";
 import ProblemSection from "@/components/ProblemSection";
 import SolutionSection from "@/components/SolutionSection";
 import SocialProofSection from "@/components/SocialProofSection";
+import FAQSection from "@/components/FAQSection";
+import FinalCTASection from "@/components/FinalCTASection";
+import Footer from "@/components/Footer";
 
 const Index = () => {
   return (
@@ -10,7 +13,9 @@ const Index = () => {
       <ProblemSection />
       <SolutionSection />
       <SocialProofSection />
-      {/* Additional sections will be added here */}
+      <FAQSection />
+      <FinalCTASection />
+      <Footer />
     </main>
   );
 };

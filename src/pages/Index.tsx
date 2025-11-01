@@ -8,10 +8,12 @@ import UrgencySection from "@/components/UrgencySection";
 import FAQSection from "@/components/FAQSection";
 import FinalCTASection from "@/components/FinalCTASection";
 import Footer from "@/components/Footer";
+import { StickyElements } from "@/components/StickyElements";
 
 const Index = () => {
   return (
     <main className="min-h-screen">
+      <StickyElements />
       <Hero />
       <ProblemSection />
       <SolutionSection />

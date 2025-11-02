@@ -195,14 +195,14 @@ export default function SearchForm() {
       return false;
     }
     
-    if (type === "police_case" && !/^CAS\s?\d{1,4}\/\d{4}$/i.test(number)) {
-      setCaseNumberError("Format must be: CAS XXX/2024");
+    if (type === "police_case" && !/^\d{1,4}\/\d{1,2}\/\d{4}$/.test(number)) {
+      setCaseNumberError("Format must be: XXX/DD/YYYY (e.g., 106/10/2024)");
       setCaseNumberValid(false);
       return false;
     }
     
-    if (type === "protection_order" && !/^PO\s?\d{1,4}\/\d{4}$/i.test(number)) {
-      setCaseNumberError("Format must be: PO XXX/2024");
+    if (type === "protection_order" && !/^\d{1,4}\/\d{1,2}\/\d{4}$/.test(number)) {
+      setCaseNumberError("Format must be: XXX/DD/YYYY (e.g., 123/05/2024)");
       setCaseNumberValid(false);
       return false;
     }
@@ -393,7 +393,7 @@ export default function SearchForm() {
               <Shield className="w-8 h-8 text-primary flex-shrink-0 mt-1" />
               <div>
                 <div className="font-bold text-lg text-gray-900 mb-1">Police Case Number</div>
-                <div className="text-sm text-gray-600">Search using a police case number (CAS XXX/2024)</div>
+                <div className="text-sm text-gray-600">Search using a police case number (XXX/DD/YYYY)</div>
               </div>
             </Label>
           </div>
@@ -405,7 +405,7 @@ export default function SearchForm() {
               <FileText className="w-8 h-8 text-primary flex-shrink-0 mt-1" />
               <div>
                 <div className="font-bold text-lg text-gray-900 mb-1">Protection Order</div>
-                <div className="text-sm text-gray-600">Search using a protection order number (PO XXX/2024)</div>
+                <div className="text-sm text-gray-600">Search using a protection order number (XXX/DD/YYYY)</div>
               </div>
             </Label>
           </div>
@@ -546,7 +546,7 @@ export default function SearchForm() {
                       setCaseNumber(e.target.value.toUpperCase());
                       if (e.target.value) validateCaseNumber(e.target.value, "police_case");
                     }}
-                    placeholder="e.g., CAS 123/2024"
+                    placeholder="e.g., 106/10/2024"
                     className={`w-full px-4 py-4 border-2 rounded-xl text-base transition-colors ${
                       caseNumberError ? "border-red-500" : caseNumberValid ? "border-green-500" : "border-gray-200"
                     } focus:outline-none focus:border-primary`}
@@ -556,7 +556,7 @@ export default function SearchForm() {
                   {caseNumberValid && <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-green-600" />}
                 </div>
                 {caseNumberError && <p className="text-sm text-red-600 mt-1">{caseNumberError}</p>}
-                <p className="text-xs text-gray-500 mt-2">Format: CAS XXX/2024 (as shown on police report)</p>
+                <p className="text-xs text-gray-500 mt-2">Format: XXX/DD/YYYY (e.g., 106/10/2024)</p>
               </div>
 
               <div>
@@ -611,7 +611,7 @@ export default function SearchForm() {
                       setProtectionOrderNumber(e.target.value.toUpperCase());
                       if (e.target.value) validateCaseNumber(e.target.value, "protection_order");
                     }}
-                    placeholder="e.g., PO 456/2024"
+                    placeholder="e.g., 123/05/2024"
                     className={`w-full px-4 py-4 border-2 rounded-xl text-base transition-colors ${
                       caseNumberError ? "border-red-500" : caseNumberValid ? "border-green-500" : "border-gray-200"
                     } focus:outline-none focus:border-primary`}
@@ -621,7 +621,7 @@ export default function SearchForm() {
                   {caseNumberValid && <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-green-600" />}
                 </div>
                 {caseNumberError && <p className="text-sm text-red-600 mt-1">{caseNumberError}</p>}
-                <p className="text-xs text-gray-500 mt-2">Format: PO XXX/2024 (as shown on court order)</p>
+                <p className="text-xs text-gray-500 mt-2">Format: XXX/DD/YYYY (e.g., 123/05/2024)</p>
               </div>
 
               <div>

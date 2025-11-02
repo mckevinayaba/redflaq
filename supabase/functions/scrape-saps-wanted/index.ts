@@ -124,7 +124,7 @@ serve(async (req) => {
           .from('wanted_persons')
           .select('id')
           .ilike('full_name', fullName)
-          .single();
+          .maybeSingle();
 
         if (existing) {
           // Update existing record

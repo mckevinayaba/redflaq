@@ -1,0 +1,4 @@
+project_id = "gewwxdmxrwyosddczezg"
+
+[functions."scrape-saps-wanted"]
+verify_jwt = false

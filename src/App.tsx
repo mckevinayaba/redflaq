@@ -8,6 +8,8 @@ import SearchForm from "./pages/SearchForm";
 import Results from "./pages/Results";
 import NotFound from "./pages/NotFound";
 import AdminScraper from "./pages/AdminScraper";
+import AdminImport from "./pages/AdminImport";
+import AdminLogin from "./pages/AdminLogin";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +24,8 @@ const App = () => (
           <Route path="/search-form" element={<SearchForm />} />
           <Route path="/results" element={<Results />} />
           <Route path="/admin/scraper" element={<AdminScraper />} />
+          <Route path="/admin/import" element={<AdminImport />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

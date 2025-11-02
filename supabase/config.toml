@@ -5,3 +5,6 @@ verify_jwt = false
 
 [functions."search-criminal-records"]
 verify_jwt = false
+
+[functions."import-wanted-persons"]
+verify_jwt = false

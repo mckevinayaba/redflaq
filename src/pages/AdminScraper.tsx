@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
-import { Loader2, Database, CheckCircle2, AlertCircle } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { Loader2, Database, CheckCircle2, AlertCircle, Upload, Users } from "lucide-react";
 
 interface ScraperResult {
   success: boolean;
@@ -16,10 +18,29 @@ interface ScraperResult {
 }
 
 const AdminScraper = () => {
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<ScraperResult | null>(null);
   const [lastRun, setLastRun] = useState<string | null>(null);
+  const [dbStats, setDbStats] = useState({ total: 0, active: 0 });
+
+  useState(() => {
+    fetchDbStats();
+  });
+
+  const fetchDbStats = async () => {
+    const { count: total } = await supabase
+      .from("wanted_persons")
+      .select("*", { count: "exact", head: true });
+
+    const { count: active } = await supabase
+      .from("wanted_persons")
+      .select("*", { count: "exact", head: true })
+      .eq("is_active", true);
+
+    setDbStats({ total: total || 0, active: active || 0 });
+  };
 
   const runScraper = async () => {
     setIsLoading(true);
@@ -45,6 +66,7 @@ const AdminScraper = () => {
       setLastRun(new Date().toLocaleString());
 
       if (data.success) {
+        await fetchDbStats();
         toast({
           title: "✅ Scraper completed successfully!",
           description: `Scraped ${data.total_scraped} persons. ${data.new_records} new, ${data.updated_records} updated, ${data.deactivated_records} deactivated.`,
@@ -75,12 +97,43 @@ const AdminScraper = () => {
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-4xl mx-auto space-y-6">
-        <div className="space-y-2">
-          <h1 className="text-4xl font-bold text-foreground">SAPS Scraper Admin</h1>
-          <p className="text-muted-foreground">
-            Manually trigger the SAPS wanted persons scraper
-          </p>
+        <div className="flex justify-between items-center">
+          <div>
+            <h1 className="text-4xl font-bold mb-2">SAPS Data Management</h1>
+            <p className="text-muted-foreground">
+              Manage wanted persons data via automatic scraper or manual import
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <Button variant="outline" onClick={() => navigate("/admin/import")}>
+              <Upload className="h-4 w-4 mr-2" />
+              Manual Import
+            </Button>
+            <Button variant="outline" onClick={() => navigate("/")}>
+              Back to Home
+            </Button>
+          </div>
         </div>
+
+        {/* Database Statistics */}
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Users className="h-5 w-5" />
+              Database Statistics
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="grid grid-cols-2 gap-4">
+            <div>
+              <p className="text-sm text-muted-foreground">Total Records</p>
+              <p className="text-3xl font-bold">{dbStats.total}</p>
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Active Records</p>
+              <p className="text-3xl font-bold text-green-600">{dbStats.active}</p>
+            </div>
+          </CardContent>
+        </Card>
 
         <Card className="p-6 space-y-6">
           <div className="flex items-center justify-between">

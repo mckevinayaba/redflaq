@@ -124,6 +124,13 @@ export default function SearchForm() {
       // Generate search ID
       const searchId = `search-${Date.now()}-${Math.random().toString(36).substring(7)}`;
 
+      // Save search data to sessionStorage
+      sessionStorage.setItem("searchName", fullName);
+      sessionStorage.setItem("searchIdNumber", idNumber);
+      if (aliases) {
+        sessionStorage.setItem("searchAliases", aliases);
+      }
+
       // Redirect to results page
       setTimeout(() => {
         navigate(`/results?search_id=${searchId}`);

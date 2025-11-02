@@ -26,8 +26,15 @@ serve(async (req) => {
   try {
     console.log('Starting SAPS wanted persons scrape...');
     
-    // Fetch the SAPS wanted persons list page
-    const response = await fetch('https://www.saps.gov.za/crimestop/wanted/list.php');
+    // Fetch the SAPS wanted persons list page with proper headers
+    const response = await fetch('https://www.saps.gov.za/crimestop/wanted/list.php', {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.5',
+        'Connection': 'keep-alive',
+      },
+    });
     
     if (!response.ok) {
       throw new Error(`Failed to fetch SAPS page: ${response.status}`);

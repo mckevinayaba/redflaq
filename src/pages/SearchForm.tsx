@@ -10,16 +10,21 @@ export default function SearchForm() {
   const navigate = useNavigate();
   const paymentId = searchParams.get("payment_id");
 
-  const [fullName, setFullName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [middleNames, setMiddleNames] = useState("");
+  const [surname, setSurname] = useState("");
   const [idNumber, setIdNumber] = useState("");
   const [aliases, setAliases] = useState("");
   const [consent, setConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [honeypot, setHoneypot] = useState(""); // Bot detection
 
-  const [nameError, setNameError] = useState("");
+  const [firstNameError, setFirstNameError] = useState("");
+  const [surnameError, setSurnameError] = useState("");
   const [idError, setIdError] = useState("");
-  const [nameValid, setNameValid] = useState(false);
+  const [firstNameValid, setFirstNameValid] = useState(false);
+  const [surnameValid, setSurnameValid] = useState(false);
   const [idValid, setIdValid] = useState(false);
 
   // Validate payment ID
@@ -31,27 +36,84 @@ export default function SearchForm() {
     }
   }, [paymentId]);
 
-  // Validate full name
-  const validateName = (name: string) => {
-    if (!name.trim()) {
-      setNameError("Full name is required");
-      setNameValid(false);
+  // Sanitize input to prevent injection attacks
+  const sanitizeInput = (input: string): string => {
+    return input
+      .trim()
+      .replace(/[<>\"'`]/g, "") // Remove dangerous characters
+      .slice(0, 50); // Max length
+  };
+
+  // Validate name field
+  const validateNameField = (name: string, fieldName: string): boolean => {
+    const sanitized = name.trim();
+    
+    if (!sanitized) {
       return false;
     }
-    if (name.trim().length < 3) {
-      setNameError("Name must be at least 3 characters");
-      setNameValid(false);
+    
+    if (sanitized.length < 2) {
       return false;
     }
-    const words = name.trim().split(/\s+/);
-    if (words.length < 2) {
-      setNameError("Please enter both first and last name");
-      setNameValid(false);
+    
+    // Only allow letters, spaces, hyphens, apostrophes
+    if (!/^[a-zA-Z\s'-]+$/.test(sanitized)) {
       return false;
     }
-    setNameError("");
-    setNameValid(true);
+    
     return true;
+  };
+
+  // Validate first name
+  const validateFirstName = (name: string) => {
+    if (!validateNameField(name, "First name")) {
+      setFirstNameError("Please enter a valid first name (letters only)");
+      setFirstNameValid(false);
+      return false;
+    }
+    setFirstNameError("");
+    setFirstNameValid(true);
+    return true;
+  };
+
+  // Validate surname
+  const validateSurname = (name: string) => {
+    if (!validateNameField(name, "Surname")) {
+      setSurnameError("Please enter a valid surname (letters only)");
+      setSurnameValid(false);
+      return false;
+    }
+    setSurnameError("");
+    setSurnameValid(true);
+    return true;
+  };
+
+  // Luhn algorithm for SA ID checksum validation
+  const validateIdChecksum = (id: string): boolean => {
+    if (id.length !== 13) return false;
+    
+    // Extract date of birth (first 6 digits: YYMMDD)
+    const year = parseInt(id.substring(0, 2));
+    const month = parseInt(id.substring(2, 4));
+    const day = parseInt(id.substring(4, 6));
+    
+    // Validate month and day
+    if (month < 1 || month > 12 || day < 1 || day > 31) {
+      return false;
+    }
+    
+    // Luhn checksum validation
+    let sum = 0;
+    for (let i = 0; i < 13; i++) {
+      let digit = parseInt(id[i]);
+      if (i % 2 === 1) {
+        digit *= 2;
+        if (digit > 9) digit -= 9;
+      }
+      sum += digit;
+    }
+    
+    return sum % 10 === 0;
   };
 
   // Validate ID number
@@ -66,17 +128,26 @@ export default function SearchForm() {
       setIdValid(false);
       return false;
     }
+    if (!validateIdChecksum(id)) {
+      setIdError("Invalid ID number (checksum failed). Please verify the number.");
+      setIdValid(false);
+      return false;
+    }
     setIdError("");
     setIdValid(true);
     return true;
   };
 
-  const handleNameBlur = () => {
-    validateName(fullName);
+  const handleFirstNameBlur = () => {
+    if (firstName) validateFirstName(firstName);
+  };
+
+  const handleSurnameBlur = () => {
+    if (surname) validateSurname(surname);
   };
 
   const handleIdBlur = () => {
-    validateId(idNumber);
+    if (idNumber.length === 13) validateId(idNumber);
   };
 
   const handleIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,12 +160,18 @@ export default function SearchForm() {
     }
   };
 
-  const isFormValid = nameValid && idValid && consent;
+  const isFormValid = firstNameValid && surnameValid && idValid && consent && !honeypot;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!validateName(fullName) || !validateId(idNumber)) {
+    // Bot detection
+    if (honeypot) {
+      console.warn("Bot detected");
+      return;
+    }
+
+    if (!validateFirstName(firstName) || !validateSurname(surname) || !validateId(idNumber)) {
       return;
     }
 
@@ -102,6 +179,15 @@ export default function SearchForm() {
       alert("Please confirm that you have read and agree to the terms");
       return;
     }
+
+    // Sanitize inputs
+    const sanitizedFirstName = sanitizeInput(firstName);
+    const sanitizedMiddleNames = sanitizeInput(middleNames);
+    const sanitizedSurname = sanitizeInput(surname);
+    const fullName = [sanitizedFirstName, sanitizedMiddleNames, sanitizedSurname]
+      .filter(Boolean)
+      .join(' ')
+      .trim();
 
     setIsSubmitting(true);
     setProgress(0);
@@ -123,7 +209,9 @@ export default function SearchForm() {
         'search-criminal-records',
         {
           body: {
-            fullName,
+            firstName: sanitizedFirstName,
+            middleNames: sanitizedMiddleNames || undefined,
+            surname: sanitizedSurname,
             idNumber,
           },
         }
@@ -138,6 +226,9 @@ export default function SearchForm() {
         setProgress(100);
 
         // Save search data to sessionStorage
+        sessionStorage.setItem("searchFirstName", sanitizedFirstName);
+        sessionStorage.setItem("searchMiddleNames", sanitizedMiddleNames);
+        sessionStorage.setItem("searchSurname", sanitizedSurname);
         sessionStorage.setItem("searchName", fullName);
         sessionStorage.setItem("searchIdNumber", idNumber);
         sessionStorage.setItem("searchResult", JSON.stringify(searchResult));
@@ -205,32 +296,74 @@ export default function SearchForm() {
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Full Name */}
+          {/* Honeypot field for bot detection - hidden from users */}
+          <input
+            type="text"
+            name="website"
+            value={honeypot}
+            onChange={(e) => setHoneypot(e.target.value)}
+            style={{ position: 'absolute', left: '-9999px' }}
+            tabIndex={-1}
+            autoComplete="off"
+          />
+
+          {/* First Name */}
           <div>
-            <label htmlFor="fullName" className="block text-sm font-bold text-gray-900 mb-2">
-              Full Name *
+            <label htmlFor="firstName" className="block text-sm font-bold text-gray-900 mb-2">
+              Name(s) *
             </label>
             <div className="relative">
               <input
-                id="fullName"
+                id="firstName"
                 type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                onBlur={handleNameBlur}
-                placeholder="e.g., John David Smith"
+                value={firstName}
+                onChange={(e) => setFirstName(sanitizeInput(e.target.value))}
+                onBlur={handleFirstNameBlur}
+                placeholder="e.g., John or John David"
+                maxLength={50}
                 className={`w-full px-4 py-4 border-2 rounded-xl text-base transition-colors duration-200 ${
-                  nameError ? "border-red-500" : nameValid ? "border-green-500" : "border-gray-200"
+                  firstNameError ? "border-red-500" : firstNameValid ? "border-green-500" : "border-gray-200"
                 } focus:outline-none focus:border-primary`}
                 disabled={isSubmitting}
                 required
               />
-              {nameValid && (
+              {firstNameValid && (
                 <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-green-600" />
               )}
             </div>
-            {nameError && <p className="text-sm text-red-600 mt-1">{nameError}</p>}
+            {firstNameError && <p className="text-sm text-red-600 mt-1">{firstNameError}</p>}
             <p className="text-xs text-gray-500 mt-2">
-              Enter first name, middle name(s), and surname as they appear on his ID document
+              First name and middle name(s) as they appear on ID
+            </p>
+          </div>
+
+          {/* Surname */}
+          <div>
+            <label htmlFor="surname" className="block text-sm font-bold text-gray-900 mb-2">
+              Surname *
+            </label>
+            <div className="relative">
+              <input
+                id="surname"
+                type="text"
+                value={surname}
+                onChange={(e) => setSurname(sanitizeInput(e.target.value))}
+                onBlur={handleSurnameBlur}
+                placeholder="e.g., Smith"
+                maxLength={50}
+                className={`w-full px-4 py-4 border-2 rounded-xl text-base transition-colors duration-200 ${
+                  surnameError ? "border-red-500" : surnameValid ? "border-green-500" : "border-gray-200"
+                } focus:outline-none focus:border-primary`}
+                disabled={isSubmitting}
+                required
+              />
+              {surnameValid && (
+                <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-green-600" />
+              )}
+            </div>
+            {surnameError && <p className="text-sm text-red-600 mt-1">{surnameError}</p>}
+            <p className="text-xs text-gray-500 mt-2">
+              Last name / family name as it appears on ID
             </p>
           </div>
 

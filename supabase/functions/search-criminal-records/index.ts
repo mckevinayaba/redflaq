@@ -8,7 +8,9 @@ const corsHeaders = {
 };
 
 interface SearchRequest {
-  fullName: string;
+  firstName: string;
+  middleNames?: string;
+  surname: string;
   idNumber?: string;
 }
 
@@ -19,11 +21,11 @@ serve(async (req) => {
   }
 
   try {
-    const { fullName, idNumber }: SearchRequest = await req.json();
+    const { firstName, middleNames, surname, idNumber }: SearchRequest = await req.json();
     
-    if (!fullName) {
+    if (!firstName || !surname) {
       return new Response(
-        JSON.stringify({ error: 'Full name is required' }),
+        JSON.stringify({ error: 'First name and surname are required' }),
         {
           status: 400,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -31,6 +33,8 @@ serve(async (req) => {
       );
     }
 
+    // Build full name for logging and response
+    const fullName = [firstName, middleNames, surname].filter(Boolean).join(' ').trim();
     console.log(`Searching for: ${fullName}, ID: ${idNumber || 'not provided'}`);
 
     // Initialize Supabase client
@@ -38,19 +42,31 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Split full name into parts for flexible matching
-    const nameParts = fullName.trim().split(/\s+/);
-    const firstName = nameParts[0] || '';
-    const surname = nameParts.slice(-1)[0] || '';
-
-    // Search for wanted persons
+    // Search for wanted persons with comprehensive name matching
     console.log(`Checking wanted_persons table for: ${fullName}`);
+    
+    // Build search conditions for better matching
+    const searchConditions = [
+      `full_name.ilike.%${fullName}%`,
+      `first_name.ilike.%${firstName}%`,
+      `surname.ilike.%${surname}%`,
+    ];
+    
+    // Add middle names to search if provided
+    if (middleNames) {
+      searchConditions.push(`full_name.ilike.%${middleNames}%`);
+    }
+    
+    // Add ID number search if provided
+    if (idNumber) {
+      searchConditions.push(`id_number.eq.${idNumber}`);
+    }
     
     const { data: wantedPersons, error: wantedError } = await supabase
       .from('wanted_persons')
       .select('*')
       .eq('is_active', true)
-      .or(`full_name.ilike.%${fullName}%,first_name.ilike.%${firstName}%,surname.ilike.%${surname}%`)
+      .or(searchConditions.join(','))
       .limit(10);
 
     if (wantedError) {

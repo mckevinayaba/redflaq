@@ -19,6 +19,7 @@ export type Database = {
           added_at: string
           case_number: string | null
           charges: string
+          court_case_number: string | null
           date_wanted: string | null
           detail_page_url: string | null
           first_name: string | null
@@ -29,6 +30,7 @@ export type Database = {
           last_known_location: string | null
           photo_url: string | null
           police_station: string | null
+          protection_order_number: string | null
           source_url: string | null
           surname: string | null
           updated_at: string
@@ -37,6 +39,7 @@ export type Database = {
           added_at?: string
           case_number?: string | null
           charges: string
+          court_case_number?: string | null
           date_wanted?: string | null
           detail_page_url?: string | null
           first_name?: string | null
@@ -47,6 +50,7 @@ export type Database = {
           last_known_location?: string | null
           photo_url?: string | null
           police_station?: string | null
+          protection_order_number?: string | null
           source_url?: string | null
           surname?: string | null
           updated_at?: string
@@ -55,6 +59,7 @@ export type Database = {
           added_at?: string
           case_number?: string | null
           charges?: string
+          court_case_number?: string | null
           date_wanted?: string | null
           detail_page_url?: string | null
           first_name?: string | null
@@ -65,6 +70,7 @@ export type Database = {
           last_known_location?: string | null
           photo_url?: string | null
           police_station?: string | null
+          protection_order_number?: string | null
           source_url?: string | null
           surname?: string | null
           updated_at?: string

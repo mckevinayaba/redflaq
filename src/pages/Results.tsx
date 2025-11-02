@@ -19,7 +19,9 @@ interface WantedPerson {
 
 interface SearchResultData {
   searchId: string;
-  fullName: string;
+  searchType?: string;
+  searchIdentifier?: string;
+  fullName?: string;
   idNumber?: string;
   riskLevel: string;
   riskScore: number;
@@ -147,7 +149,11 @@ const Results = () => {
             <div className="flex items-center justify-between flex-wrap gap-4">
               <div>
                 <CardTitle className="text-2xl md:text-3xl mb-2">
-                  Criminal Record Search Results
+                  {results.searchType === "person" ? "Criminal Record Search Results" :
+                   results.searchType === "police_case" ? "Police Case Search Results" :
+                   results.searchType === "protection_order" ? "Protection Order Search Results" :
+                   results.searchType === "court_case" ? "Court Case Search Results" :
+                   "Search Results"}
                 </CardTitle>
                 <CardDescription className="text-base">
                   Search ID: {results.searchId}
@@ -163,8 +169,12 @@ const Results = () => {
           <CardContent className="pt-6">
             <div className="grid md:grid-cols-3 gap-6">
               <div>
-                <p className="text-sm text-gray-600 font-semibold mb-1">Full Name</p>
-                <p className="text-lg font-bold text-gray-900">{results.fullName}</p>
+                <p className="text-sm text-gray-600 font-semibold mb-1">
+                  {results.searchType === "person" ? "Full Name" : "Search Query"}
+                </p>
+                <p className="text-lg font-bold text-gray-900">
+                  {results.searchIdentifier || results.fullName || "N/A"}
+                </p>
               </div>
               {results.idNumber && (
                 <div>
@@ -214,7 +224,7 @@ const Results = () => {
                     <h2 className="text-3xl font-bold text-red-600 mb-2">
                       {person.full_name}
                     </h2>
-                    <div className="space-y-2">
+                  <div className="space-y-2">
                       <div>
                         <span className="text-sm font-bold text-gray-600">Wanted For:</span>
                         <p className="text-xl font-bold text-red-600">{person.charges}</p>
@@ -228,6 +238,20 @@ const Results = () => {
                         >
                           View Full SAPS Listing →
                         </a>
+                      )}
+                      {(results.searchType === "police_case" || results.searchType === "protection_order" || results.searchType === "court_case") && (
+                        <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                          <p className="text-sm text-blue-900 font-semibold mb-2">
+                            ℹ️ Match found through {
+                              results.searchType === "police_case" ? "police case number" :
+                              results.searchType === "protection_order" ? "protection order" :
+                              "court case number"
+                            }
+                          </p>
+                          <p className="text-sm text-blue-800">
+                            You can now search this person by name and ID to see their full criminal history.
+                          </p>
+                        </div>
                       )}
                     </div>
                   </div>

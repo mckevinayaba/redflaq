@@ -8,10 +8,24 @@ const corsHeaders = {
 };
 
 interface SearchRequest {
-  firstName: string;
+  searchType: 'person' | 'police_case' | 'protection_order' | 'court_case';
+  // Person search fields
+  firstName?: string;
   middleNames?: string;
-  surname: string;
+  surname?: string;
   idNumber?: string;
+  // Police case fields
+  caseNumber?: string;
+  policeStation?: string;
+  relationship?: string;
+  // Protection order fields
+  protectionOrderNumber?: string;
+  issuingCourt?: string;
+  orderDate?: string;
+  // Court case fields
+  courtCaseNumber?: string;
+  courtName?: string;
+  caseType?: string;
 }
 
 serve(async (req) => {
@@ -21,11 +35,40 @@ serve(async (req) => {
   }
 
   try {
-    const { firstName, middleNames, surname, idNumber }: SearchRequest = await req.json();
+    const requestBody: SearchRequest = await req.json();
+    const { searchType } = requestBody;
     
-    if (!firstName || !surname) {
+    // Validate based on search type
+    if (searchType === 'person') {
+      const { firstName, surname } = requestBody;
+      if (!firstName || !surname) {
+        return new Response(
+          JSON.stringify({ error: 'First name and surname are required for person search' }),
+          {
+            status: 400,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          }
+        );
+      }
+    } else if (searchType === 'police_case' && !requestBody.caseNumber) {
       return new Response(
-        JSON.stringify({ error: 'First name and surname are required' }),
+        JSON.stringify({ error: 'Case number is required' }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    } else if (searchType === 'protection_order' && !requestBody.protectionOrderNumber) {
+      return new Response(
+        JSON.stringify({ error: 'Protection order number is required' }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        }
+      );
+    } else if (searchType === 'court_case' && !requestBody.courtCaseNumber) {
+      return new Response(
+        JSON.stringify({ error: 'Court case number is required' }),
         {
           status: 400,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -33,48 +76,95 @@ serve(async (req) => {
       );
     }
 
-    // Build full name for logging and response
-    const fullName = [firstName, middleNames, surname].filter(Boolean).join(' ').trim();
-    console.log(`Searching for: ${fullName}, ID: ${idNumber || 'not provided'}`);
-
     // Initialize Supabase client
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Search for wanted persons with comprehensive name matching
-    console.log(`Checking wanted_persons table for: ${fullName}`);
-    
-    // Build search conditions for better matching
-    const searchConditions = [
-      `full_name.ilike.%${fullName}%`,
-      `first_name.ilike.%${firstName}%`,
-      `surname.ilike.%${surname}%`,
-    ];
-    
-    // Add middle names to search if provided
-    if (middleNames) {
-      searchConditions.push(`full_name.ilike.%${middleNames}%`);
+    let wantedPersons: any[] = [];
+    let searchQuery: any;
+    let searchIdentifier = '';
+
+    // Build search based on type
+    if (searchType === 'person') {
+      const { firstName, middleNames, surname, idNumber } = requestBody;
+      const fullName = [firstName, middleNames, surname].filter(Boolean).join(' ').trim();
+      searchIdentifier = fullName;
+      
+      console.log(`Person search: ${fullName}, ID: ${idNumber || 'not provided'}`);
+
+      const searchConditions = [
+        `full_name.ilike.%${fullName}%`,
+        `first_name.ilike.%${firstName}%`,
+        `surname.ilike.%${surname}%`,
+      ];
+      
+      if (middleNames) {
+        searchConditions.push(`full_name.ilike.%${middleNames}%`);
+      }
+      
+      // Prioritize ID number match
+      if (idNumber) {
+        searchConditions.push(`id_number.eq.${idNumber}`);
+        searchIdentifier = `${fullName} (ID: ${idNumber})`;
+      }
+      
+      searchQuery = supabase
+        .from('wanted_persons')
+        .select('*')
+        .eq('is_active', true)
+        .or(searchConditions.join(','));
+        
+    } else if (searchType === 'police_case') {
+      const { caseNumber, policeStation } = requestBody;
+      searchIdentifier = caseNumber!;
+      
+      console.log(`Police case search: ${caseNumber}, Station: ${policeStation || 'not provided'}`);
+      
+      searchQuery = supabase
+        .from('wanted_persons')
+        .select('*')
+        .eq('is_active', true)
+        .ilike('case_number', `%${caseNumber}%`);
+        
+      if (policeStation) {
+        searchQuery = searchQuery.ilike('police_station', `%${policeStation}%`);
+      }
+      
+    } else if (searchType === 'protection_order') {
+      const { protectionOrderNumber, issuingCourt } = requestBody;
+      searchIdentifier = protectionOrderNumber!;
+      
+      console.log(`Protection order search: ${protectionOrderNumber}, Court: ${issuingCourt || 'not provided'}`);
+      
+      searchQuery = supabase
+        .from('wanted_persons')
+        .select('*')
+        .eq('is_active', true)
+        .ilike('protection_order_number', `%${protectionOrderNumber}%`);
+        
+    } else if (searchType === 'court_case') {
+      const { courtCaseNumber, courtName } = requestBody;
+      searchIdentifier = courtCaseNumber!;
+      
+      console.log(`Court case search: ${courtCaseNumber}, Court: ${courtName || 'not provided'}`);
+      
+      searchQuery = supabase
+        .from('wanted_persons')
+        .select('*')
+        .eq('is_active', true)
+        .ilike('court_case_number', `%${courtCaseNumber}%`);
     }
-    
-    // Add ID number search if provided
-    if (idNumber) {
-      searchConditions.push(`id_number.eq.${idNumber}`);
-    }
-    
-    const { data: wantedPersons, error: wantedError } = await supabase
-      .from('wanted_persons')
-      .select('*')
-      .eq('is_active', true)
-      .or(searchConditions.join(','))
-      .limit(10);
+
+    const { data, error: wantedError } = await searchQuery.limit(10);
 
     if (wantedError) {
       console.error('Error searching wanted persons:', wantedError);
     }
 
-    const isWanted = wantedPersons && wantedPersons.length > 0;
-    console.log(`Found ${wantedPersons?.length || 0} wanted person matches`);
+    wantedPersons = data || [];
+    const isWanted = wantedPersons.length > 0;
+    console.log(`Found ${wantedPersons.length} wanted person matches`);
 
     // Calculate risk level
     let riskLevel = 'GREEN';
@@ -92,13 +182,14 @@ serve(async (req) => {
     const response = {
       success: true,
       searchId,
-      fullName,
-      idNumber,
+      searchType,
+      searchIdentifier,
+      idNumber: searchType === 'person' ? requestBody.idNumber : undefined,
       riskLevel,
       riskScore,
       isWanted,
-      wantedPersonsCount: wantedPersons?.length || 0,
-      wantedPersons: wantedPersons || [],
+      wantedPersonsCount: wantedPersons.length,
+      wantedPersons,
       searchedAt: new Date().toISOString(),
     };
 

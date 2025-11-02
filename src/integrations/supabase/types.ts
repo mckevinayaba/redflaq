@@ -14,7 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      wanted_persons: {
+        Row: {
+          added_at: string
+          case_number: string | null
+          charges: string
+          date_wanted: string | null
+          detail_page_url: string | null
+          first_name: string | null
+          full_name: string
+          id: string
+          id_number: string | null
+          is_active: boolean | null
+          last_known_location: string | null
+          photo_url: string | null
+          police_station: string | null
+          source_url: string | null
+          surname: string | null
+          updated_at: string
+        }
+        Insert: {
+          added_at?: string
+          case_number?: string | null
+          charges: string
+          date_wanted?: string | null
+          detail_page_url?: string | null
+          first_name?: string | null
+          full_name: string
+          id?: string
+          id_number?: string | null
+          is_active?: boolean | null
+          last_known_location?: string | null
+          photo_url?: string | null
+          police_station?: string | null
+          source_url?: string | null
+          surname?: string | null
+          updated_at?: string
+        }
+        Update: {
+          added_at?: string
+          case_number?: string | null
+          charges?: string
+          date_wanted?: string | null
+          detail_page_url?: string | null
+          first_name?: string | null
+          full_name?: string
+          id?: string
+          id_number?: string | null
+          is_active?: boolean | null
+          last_known_location?: string | null
+          photo_url?: string | null
+          police_station?: string | null
+          source_url?: string | null
+          surname?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { CheckCircle2, XCircle, AlertCircle } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function SearchForm() {
   const [searchParams] = useSearchParams();
@@ -118,23 +119,21 @@ export default function SearchForm() {
 
     // Call backend search API
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/search-criminal-records`,
+      const { data: searchResult, error } = await supabase.functions.invoke(
+        'search-criminal-records',
         {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
+          body: {
             fullName,
             idNumber,
-          }),
+          },
         }
       );
 
-      const searchResult = await response.json();
+      if (error) {
+        throw new Error(error.message || "Search failed");
+      }
       
-      if (searchResult.success) {
+      if (searchResult?.success) {
         clearInterval(progressInterval);
         setProgress(100);
 

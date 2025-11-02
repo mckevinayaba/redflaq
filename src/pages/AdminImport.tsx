@@ -51,6 +51,7 @@ const AdminImport = () => {
   const [dbStats, setDbStats] = useState({ total: 0, active: 0 });
   const [searchTerm, setSearchTerm] = useState("");
   const [persons, setPersons] = useState<WantedPerson[]>([]);
+  const [quickImportData, setQuickImportData] = useState("");
 
   // Manual entry form
   const [manualForm, setManualForm] = useState({
@@ -168,6 +169,86 @@ const AdminImport = () => {
         description: `Successfully imported ${data.inserted} records, updated ${data.updated} records`,
       });
     } catch (error: any) {
+      toast({
+        title: "Import failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
+  const handleQuickImport = async () => {
+    if (!quickImportData.trim()) {
+      toast({
+        title: "No data",
+        description: "Please paste the table data first",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsProcessing(true);
+    try {
+      // Parse the table format data (tab-separated or line-separated)
+      const lines = quickImportData.trim().split('\n').filter(line => line.trim());
+      const records: any[] = [];
+      
+      for (const line of lines) {
+        // Try tab-separated first
+        let parts = line.split('\t');
+        if (parts.length < 3) {
+          // Try multiple spaces
+          parts = line.split(/\s{2,}/).filter(p => p.trim());
+        }
+        
+        if (parts.length < 3) continue;
+        
+        const surname = parts[0]?.trim();
+        const firstName = parts[1]?.trim();
+        const charges = parts[2]?.trim();
+        
+        // Skip header or invalid rows
+        if (!surname || !firstName || !charges || 
+            surname === 'Surname' || surname === 'Suspect Image') continue;
+        
+        records.push({
+          surname: surname.toUpperCase(),
+          first_name: firstName.toUpperCase(),
+          full_name: `${firstName.toUpperCase()} ${surname.toUpperCase()}`,
+          charges: charges,
+          is_active: true
+        });
+      }
+      
+      if (records.length === 0) {
+        toast({
+          title: "No valid records",
+          description: "Could not parse any valid records from the data",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      console.log(`Importing ${records.length} records...`);
+
+      const { data, error } = await supabase.functions.invoke("import-wanted-persons", {
+        body: { records }
+      });
+
+      if (error) throw error;
+
+      setImportResult(data);
+      await fetchDbStats();
+      setQuickImportData(""); // Clear the textarea
+      
+      toast({
+        title: "Import completed",
+        description: `Successfully imported ${data.inserted} new records, updated ${data.updated} existing records`,
+      });
+    } catch (error: any) {
+      console.error('Import error:', error);
       toast({
         title: "Import failed",
         description: error.message,
@@ -385,8 +466,9 @@ const AdminImport = () => {
         </Card>
 
         <Tabs defaultValue="import" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="import">CSV Import</TabsTrigger>
+            <TabsTrigger value="quick">Quick Import</TabsTrigger>
             <TabsTrigger value="manual">Manual Entry</TabsTrigger>
             <TabsTrigger value="manage">Manage Data</TabsTrigger>
           </TabsList>
@@ -439,6 +521,75 @@ const AdminImport = () => {
                   >
                     <Download className="h-4 w-4 mr-2" />
                     Download Template
+                  </Button>
+                </div>
+
+                {importResult && (
+                  <div className="p-4 bg-muted rounded-lg space-y-2">
+                    <h3 className="font-semibold">Import Results</h3>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                      <div>Total: {importResult.total}</div>
+                      <div>Inserted: {importResult.inserted}</div>
+                      <div>Updated: {importResult.updated}</div>
+                      <div>Errors: {importResult.errors}</div>
+                    </div>
+                    {importResult.errorDetails.length > 0 && (
+                      <div className="mt-2">
+                        <p className="text-sm font-semibold text-destructive">Errors:</p>
+                        <ul className="text-xs list-disc list-inside">
+                          {importResult.errorDetails.map((err, i) => (
+                            <li key={i}>{err}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Quick Import Tab */}
+          <TabsContent value="quick" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Upload className="h-5 w-5" />
+                  Quick Import from Table
+                </CardTitle>
+                <CardDescription>
+                  Paste table data directly from SAPS website or spreadsheet
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="quick-import">Paste Table Data</Label>
+                  <Textarea
+                    id="quick-import"
+                    placeholder="Paste table data here (Surname, Name, Crime format)..."
+                    value={quickImportData}
+                    onChange={(e) => setQuickImportData(e.target.value)}
+                    className="font-mono text-sm h-64"
+                    disabled={isProcessing}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Paste data with columns: Surname, Name, Crime (tab or space separated)
+                  </p>
+                </div>
+
+                <div className="flex gap-2">
+                  <Button
+                    onClick={handleQuickImport}
+                    disabled={!quickImportData.trim() || isProcessing}
+                  >
+                    {isProcessing ? "Importing..." : "Import Data"}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => setQuickImportData("")}
+                    disabled={isProcessing}
+                  >
+                    Clear
                   </Button>
                 </div>
 

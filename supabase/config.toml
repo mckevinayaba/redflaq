@@ -2,3 +2,6 @@ project_id = "gewwxdmxrwyosddczezg"
 
 [functions."scrape-saps-wanted"]
 verify_jwt = false
+
+[functions."search-criminal-records"]
+verify_jwt = false

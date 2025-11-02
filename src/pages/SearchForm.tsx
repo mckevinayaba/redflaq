@@ -116,26 +116,50 @@ export default function SearchForm() {
       });
     }, 500);
 
-    // Simulate search process (in production, call backend API)
-    setTimeout(() => {
-      clearInterval(progressInterval);
-      setProgress(100);
+    // Call backend search API
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/search-criminal-records`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            fullName,
+            idNumber,
+          }),
+        }
+      );
 
-      // Generate search ID
-      const searchId = `search-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+      const searchResult = await response.json();
+      
+      if (searchResult.success) {
+        clearInterval(progressInterval);
+        setProgress(100);
 
-      // Save search data to sessionStorage
-      sessionStorage.setItem("searchName", fullName);
-      sessionStorage.setItem("searchIdNumber", idNumber);
-      if (aliases) {
-        sessionStorage.setItem("searchAliases", aliases);
+        // Save search data to sessionStorage
+        sessionStorage.setItem("searchName", fullName);
+        sessionStorage.setItem("searchIdNumber", idNumber);
+        sessionStorage.setItem("searchResult", JSON.stringify(searchResult));
+        if (aliases) {
+          sessionStorage.setItem("searchAliases", aliases);
+        }
+
+        // Redirect to results page
+        setTimeout(() => {
+          navigate(`/results?search_id=${searchResult.searchId}`);
+        }, 1000);
+      } else {
+        throw new Error(searchResult.error || "Search failed");
       }
-
-      // Redirect to results page
-      setTimeout(() => {
-        navigate(`/results?search_id=${searchId}`);
-      }, 1000);
-    }, 5000);
+    } catch (error) {
+      clearInterval(progressInterval);
+      setProgress(0);
+      setIsSubmitting(false);
+      console.error("Search error:", error);
+      alert("Search failed. Please try again.");
+    }
   };
 
   if (!paymentValid) {

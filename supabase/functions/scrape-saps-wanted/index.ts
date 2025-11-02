@@ -1,6 +1,7 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { DOMParser, Element } from "https://deno.land/x/deno_dom@v0.1.38/deno-dom-wasm.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.7';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -104,11 +105,103 @@ serve(async (req) => {
 
     console.log(`Successfully parsed ${wantedPersons.length} wanted persons`);
 
+    // Save to database
+    console.log('Saving to database...');
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    let newRecords = 0;
+    let updatedRecords = 0;
+    const errors: string[] = [];
+
+    for (const person of wantedPersons) {
+      try {
+        const fullName = `${person.firstName} ${person.surname}`.trim();
+        
+        // Check if person exists
+        const { data: existing } = await supabase
+          .from('wanted_persons')
+          .select('id')
+          .ilike('full_name', fullName)
+          .single();
+
+        if (existing) {
+          // Update existing record
+          const { error } = await supabase
+            .from('wanted_persons')
+            .update({
+              first_name: person.firstName,
+              surname: person.surname,
+              charges: person.crime,
+              photo_url: person.photoUrl,
+              detail_page_url: person.detailUrl,
+              is_active: true,
+              updated_at: new Date().toISOString(),
+            })
+            .eq('id', existing.id);
+
+          if (error) {
+            console.error(`Error updating ${fullName}:`, error);
+            errors.push(`Update error for ${fullName}: ${error.message}`);
+          } else {
+            updatedRecords++;
+          }
+        } else {
+          // Insert new record
+          const { error } = await supabase
+            .from('wanted_persons')
+            .insert({
+              full_name: fullName,
+              first_name: person.firstName,
+              surname: person.surname,
+              charges: person.crime,
+              photo_url: person.photoUrl,
+              detail_page_url: person.detailUrl,
+              is_active: true,
+            });
+
+          if (error) {
+            console.error(`Error inserting ${fullName}:`, error);
+            errors.push(`Insert error for ${fullName}: ${error.message}`);
+          } else {
+            newRecords++;
+          }
+        }
+      } catch (error) {
+        console.error('Database error:', error);
+        errors.push(`Exception: ${error instanceof Error ? error.message : 'Unknown'}`);
+      }
+    }
+
+    // Mark persons as inactive if not updated in last 48 hours
+    const fortyEightHoursAgo = new Date();
+    fortyEightHoursAgo.setHours(fortyEightHoursAgo.getHours() - 48);
+
+    const { data: deactivated, error: deactivateError } = await supabase
+      .from('wanted_persons')
+      .update({ is_active: false })
+      .eq('is_active', true)
+      .lt('updated_at', fortyEightHoursAgo.toISOString())
+      .select();
+
+    const deactivatedCount = deactivated?.length || 0;
+
+    if (deactivateError) {
+      console.error('Error deactivating old records:', deactivateError);
+      errors.push(`Deactivation error: ${deactivateError.message}`);
+    }
+
+    console.log(`Database update complete: ${newRecords} new, ${updatedRecords} updated, ${deactivatedCount} deactivated`);
+
     return new Response(
       JSON.stringify({
         success: true,
-        count: wantedPersons.length,
-        data: wantedPersons,
+        total_scraped: wantedPersons.length,
+        new_records: newRecords,
+        updated_records: updatedRecords,
+        deactivated_records: deactivatedCount,
+        errors: errors.length > 0 ? errors : undefined,
         scrapedAt: new Date().toISOString(),
       }),
       {

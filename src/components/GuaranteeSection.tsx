@@ -136,8 +136,8 @@ const GuaranteeSection = () => {
                   <div 
                     className="w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center relative group cursor-pointer"
                     style={{
-                      background: 'linear-gradient(135deg, #DC2626 0%, #7F1D1D 100%)',
-                      boxShadow: '0 10px 30px rgba(220, 38, 38, 0.4)',
+                      background: 'linear-gradient(135deg, #8B5CF6 0%, #6D28D9 100%)',
+                      boxShadow: '0 10px 30px rgba(139, 92, 246, 0.4)',
                       transition: 'transform 0.3s ease'
                     }}
                     onMouseEnter={(e) => {

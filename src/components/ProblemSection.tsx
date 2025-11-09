@@ -39,9 +39,9 @@ const ProblemSection = () => {
       <div className="max-w-[900px] mx-auto">
         {/* Animated Red Divider */}
         <div 
-          className={`h-1 bg-[#C9504D] mx-auto mb-10 ${isVisible ? 'animate-expand-width' : 'w-0'}`}
+          className={`h-1 bg-[#8B5CF6] mx-auto mb-10 ${isVisible ? 'animate-expand-width' : 'w-0'}`}
           style={{
-            boxShadow: "0 0 20px rgba(201, 80, 77, 0.8)"
+            boxShadow: "0 0 20px rgba(139, 92, 246, 0.8)"
           }}
         />
 
@@ -55,12 +55,12 @@ const ProblemSection = () => {
 
         {/* Large Stat Callout - White Card */}
         <div 
-          className={`bg-white border-l-8 border-[#C9504D] p-8 md:p-10 mb-10 rounded-lg ${isVisible ? 'animate-slide-in-right delay-200' : 'opacity-0'}`}
+          className={`bg-white border-l-8 border-[#8B5CF6] p-8 md:p-10 mb-10 rounded-lg ${isVisible ? 'animate-slide-in-right delay-200' : 'opacity-0'}`}
           style={{
-            boxShadow: "0 20px 60px rgba(153, 61, 59, 0.25)"
+            boxShadow: "0 20px 60px rgba(139, 92, 246, 0.25)"
           }}
         >
-          <div className="border-l-8 border-[#C9504D] animate-pulse-border absolute left-0 top-0 bottom-0" />
+          <div className="border-l-8 border-[#8B5CF6] animate-pulse-border absolute left-0 top-0 bottom-0" />
           <h3 className="font-heading font-bold text-2xl md:text-4xl mb-4 leading-tight"
             style={{ color: "#9E2B2B" }}>
             Every 4 Hours, A South African Woman Is Murdered By Her Partner.
@@ -93,7 +93,7 @@ const ProblemSection = () => {
               className={`font-body text-lg text-white font-medium flex items-start gap-3 ${isVisible ? 'animate-fade-in' : 'opacity-0'}`}
               style={{ animationDelay: `${0.8 + index * 0.2}s` }}
             >
-              <span className="flex-shrink-0 hover:animate-scale-pulse transition-transform cursor-default">🔴</span>
+              <span className="flex-shrink-0 hover:animate-scale-pulse transition-transform cursor-default">💜</span>
               <span>{text}</span>
             </p>
           ))}
@@ -118,7 +118,7 @@ const ProblemSection = () => {
               className={`font-body text-lg text-white leading-[1.8] flex items-start gap-3 ${isVisible ? 'animate-fade-in' : 'opacity-0'}`}
               style={{ animationDelay: `${1.8 + index * 0.1}s` }}
             >
-              <span className="text-[#C9504D] flex-shrink-0">•</span>
+              <span className="text-[#8B5CF6] flex-shrink-0">•</span>
               <span><strong>{item.label}</strong> {item.text}</span>
             </li>
           ))}
@@ -166,9 +166,9 @@ const ProblemSection = () => {
           <Button 
             onClick={handleCTAClick}
             size="lg"
-            className="w-full max-w-[380px] h-[80px] bg-white hover:bg-white/95 text-primary font-body font-bold text-[22px] rounded-xl transition-all duration-300 ease-out hover:scale-105 hover:-translate-y-1 animate-pulse-glow"
+            className="w-full max-w-[380px] h-[80px] bg-white hover:bg-white/95 text-[#8B5CF6] font-body font-bold text-[22px] rounded-xl transition-all duration-300 ease-out hover:scale-105 hover:-translate-y-1 animate-pulse-glow"
           >
-            🔴 Check His Criminal Record - R50
+            💜 Check His Criminal Record - R50
           </Button>
         </div>
       </div>

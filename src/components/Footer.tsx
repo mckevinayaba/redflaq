@@ -28,7 +28,7 @@ const Footer = () => {
     <footer 
       className="relative py-16 md:py-20 px-8"
       style={{
-        background: "linear-gradient(180deg, #993D3B 0%, #8B3836 100%)"
+        background: "linear-gradient(180deg, #6D28D9 0%, #5B21B6 100%)"
       }}
     >
       <div className="max-w-7xl mx-auto">
@@ -37,7 +37,7 @@ const Footer = () => {
           {/* Brand Column */}
           <div className="lg:col-span-1">
             <div className="flex items-center gap-2 mb-6">
-              <span className="text-3xl">🔴</span>
+              <span className="text-3xl">💜</span>
               <h3 className="font-heading font-bold text-2xl text-white">REDFLAQ</h3>
             </div>
             <p className="font-body text-white/80 text-sm leading-relaxed mb-6">
@@ -57,7 +57,7 @@ const Footer = () => {
                 <li key={index}>
                   <a 
                     href={link.href}
-                    className="font-body text-white/70 text-sm hover:text-white transition-colors duration-300"
+                    className="font-body text-white/70 text-sm hover:text-[#DDD6FE] transition-colors duration-300"
                   >
                     {link.name}
                   </a>
@@ -74,7 +74,7 @@ const Footer = () => {
                 <li key={index}>
                   <a 
                     href={link.href}
-                    className="font-body text-white/70 text-sm hover:text-white transition-colors duration-300"
+                    className="font-body text-white/70 text-sm hover:text-[#DDD6FE] transition-colors duration-300"
                   >
                     {link.name}
                   </a>
@@ -91,7 +91,7 @@ const Footer = () => {
                 <li key={index}>
                   <a 
                     href={link.href}
-                    className="font-body text-white/70 text-sm hover:text-white transition-colors duration-300"
+                    className="font-body text-white/70 text-sm hover:text-[#DDD6FE] transition-colors duration-300"
                   >
                     {link.name}
                   </a>
@@ -207,6 +207,16 @@ const Footer = () => {
             <strong>Disclaimer:</strong> RedFlaq provides access to public criminal records sourced from official South African government databases. 
             While we strive for accuracy, we cannot guarantee that all records are complete or up-to-date. RedFlaq is a tool to help you make 
             informed decisions about your safety, but it should not replace your own judgment and intuition. Always prioritize your personal safety.
+          </p>
+        </div>
+
+        {/* GBV Solidarity Message */}
+        <div className="mt-8 pt-8 border-t" style={{ borderColor: 'rgba(255, 255, 255, 0.2)' }}>
+          <p className="font-body text-white text-base text-center leading-relaxed max-w-3xl mx-auto font-semibold">
+            💜 <strong>RedFlaq stands with South African women against Gender-Based Violence</strong>
+          </p>
+          <p className="font-body text-white/70 text-sm text-center mt-2">
+            Launching November 21st during South Africa's National Shutdown. Purple represents our solidarity.
           </p>
         </div>
       </div>

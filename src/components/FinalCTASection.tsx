@@ -88,11 +88,11 @@ const FinalCTASection = () => {
             size="lg"
             className="w-full max-w-[420px] h-[90px] bg-white hover:bg-white/95 font-body font-bold text-[24px] rounded-2xl transition-all duration-300 ease-out hover:scale-105 hover:-translate-y-2 animate-pulse-glow"
             style={{ 
-              color: '#C9504D',
-              boxShadow: '0 20px 60px rgba(153,61,59,0.3)'
+              color: '#8B5CF6',
+              boxShadow: '0 20px 60px rgba(139,92,246,0.3)'
             }}
           >
-            🔴 Check His Record Now - R50
+            💜 Check His Record Now - R50
           </Button>
         </div>
 
@@ -111,7 +111,7 @@ const FinalCTASection = () => {
                 className="w-14 h-14 rounded-full flex items-center justify-center"
                 style={{ backgroundColor: '#E8C5C4' }}
               >
-                <item.icon className="w-7 h-7" style={{ color: '#C9504D' }} />
+                <item.icon className="w-7 h-7" style={{ color: '#8B5CF6' }} />
               </div>
               <p className="font-body font-bold text-sm md:text-base text-center" style={{ color: '#993D3B' }}>
                 {item.text}
@@ -123,11 +123,11 @@ const FinalCTASection = () => {
         {/* Urgency Message */}
         <div className={`bg-white rounded-2xl p-8 md:p-10 max-w-[700px] mx-auto ${isVisible ? 'animate-fade-in delay-800' : 'opacity-0'}`}
           style={{ 
-            boxShadow: '0 20px 60px rgba(153,61,59,0.25)',
-            border: '3px solid #C9504D'
+            boxShadow: '0 20px 60px rgba(139,92,246,0.25)',
+            border: '3px solid #8B5CF6'
           }}
         >
-          <p className="font-heading font-bold text-2xl md:text-3xl mb-4" style={{ color: '#C9504D' }}>
+          <p className="font-heading font-bold text-2xl md:text-3xl mb-4" style={{ color: '#8B5CF6' }}>
             ⚠️ Don't Wait Until It's Too Late
           </p>
           <p className="font-body text-lg leading-relaxed" style={{ color: '#A94442' }}>

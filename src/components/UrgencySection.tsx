@@ -154,8 +154,8 @@ const UrgencySection = () => {
                 <div 
                   className="font-heading font-black text-5xl md:text-7xl text-center"
                   style={{ 
-                    color: '#DC2626',
-                    textShadow: '0 0 30px rgba(220, 38, 38, 0.5)',
+                    color: '#8B5CF6',
+                    textShadow: '0 0 30px rgba(139, 92, 246, 0.5)',
                     transform: timeLeft.minutes !== Math.floor(timeLeft.minutes) ? 'rotateX(90deg)' : 'rotateX(0deg)',
                     transition: 'transform 0.3s ease'
                   }}
@@ -180,8 +180,8 @@ const UrgencySection = () => {
                 <div 
                   className="font-heading font-black text-5xl md:text-7xl text-center"
                   style={{ 
-                    color: '#DC2626',
-                    textShadow: '0 0 30px rgba(220, 38, 38, 0.5)',
+                    color: '#8B5CF6',
+                    textShadow: '0 0 30px rgba(139, 92, 246, 0.5)',
                     animation: 'flipDigit 0.6s ease-in-out'
                   }}
                   key={timeLeft.seconds}
@@ -219,9 +219,9 @@ const UrgencySection = () => {
                 style={{
                   width: `${(searchesLeft / 147) * 100}%`,
                   background: searchesLeft < 100 
-                    ? 'linear-gradient(90deg, #F59E0B 0%, #DC2626 100%)' 
-                    : 'linear-gradient(90deg, #DC2626 0%, #EF4444 100%)',
-                  boxShadow: '0 0 20px rgba(220, 38, 38, 0.6)',
+                    ? 'linear-gradient(90deg, #F59E0B 0%, #8B5CF6 100%)' 
+                    : 'linear-gradient(90deg, #8B5CF6 0%, #A78BFA 100%)',
+                  boxShadow: '0 0 20px rgba(139, 92, 246, 0.6)',
                   animation: searchesLeft < 100 ? 'pulse 1.5s ease-in-out infinite' : 'none'
                 }}
               />
@@ -251,12 +251,12 @@ const UrgencySection = () => {
             size="lg"
             className="w-full max-w-[500px] h-[90px] bg-white hover:bg-white/95 font-body font-bold text-[24px] rounded-2xl transition-all duration-300 hover:scale-105"
             style={{
-              color: '#DC2626',
+              color: '#8B5CF6',
               boxShadow: '0 0 0 0 rgba(255, 255, 255, 0.7)',
               animation: 'ripplePulse 2s ease-in-out infinite'
             }}
           >
-            🔴 Secure My Spot - Check Now
+            💜 Secure My Spot - Check Now
           </Button>
           <p className="font-body text-base text-white/80 mt-6">
             ⚡ Instant access • 🔒 100% secure • ✅ Money-back guarantee

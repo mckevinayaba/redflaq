@@ -188,10 +188,10 @@ const SocialProofSection = () => {
                   className={`w-5 h-5 transition-all duration-300 ${
                     isVisible ? 'fill-current opacity-100 scale-100' : 'fill-none opacity-0 scale-0'
                   }`}
-                  style={{ 
-                    color: 'hsl(var(--brand-gold))',
-                    transitionDelay: `${index * 0.15 + i * 0.1}s`
-                  }}
+              style={{ 
+                color: '#FCD34D',
+                transitionDelay: `${index * 0.15 + i * 0.1}s`
+              }}
                 />
               ))}
             </div>
@@ -225,7 +225,7 @@ const SocialProofSection = () => {
                     isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-8'
                   }`}
                   style={{ 
-                    backgroundColor: 'hsl(var(--brand-green))',
+                    backgroundColor: '#059669',
                     transitionDelay: `${index * 0.15 + 0.5}s`
                   }}
                 >
@@ -265,10 +265,10 @@ const SocialProofSection = () => {
             <div key={index} className="text-center">
               <div className="flex flex-col items-center gap-2 mb-2">
                 <div className="flex items-center gap-2">
-                  <div 
-                    className="w-2 h-2 rounded-full animate-pulse"
-                    style={{ backgroundColor: 'hsl(var(--red-primary))' }}
-                  />
+                <div 
+                  className="w-2 h-2 rounded-full animate-pulse"
+                  style={{ backgroundColor: '#8B5CF6' }}
+                />
                   <p className={`text-4xl md:text-5xl font-bold animate-count-up ${
                     stat.type === 'alert' ? 'text-red-lightest' : 'text-white'
                   }`}>
@@ -343,9 +343,9 @@ const SocialProofSection = () => {
           </p>
           <button 
             className="text-white font-bold text-lg px-12 py-5 rounded-full shadow-2xl transition-all duration-300 hover:scale-105 animate-pulse-glow"
-            style={{ backgroundColor: '#D14444' }}
+            style={{ backgroundColor: '#8B5CF6' }}
           >
-            🔴 Join 15,247 Women - Check Now
+            💜 Join 15,247 Women - Check Now
           </button>
         </div>
       </div>

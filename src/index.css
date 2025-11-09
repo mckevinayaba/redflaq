@@ -8,14 +8,14 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* RedFlaq Color Palette - Sophisticated Brick Red */
-    --red-primary: 3 50% 53%;         /* #C9504D - Main brick red */
-    --red-medium: 3 48% 48%;          /* #B84542 - Medium brick red */
-    --red-dark: 3 46% 43%;            /* #A94442 - Dark brick red */
-    --red-ultra-dark: 3 44% 38%;      /* #993D3B - Ultra dark brick red */
-    --red-light: 3 52% 58%;           /* #D35D5A - Light brick red */
-    --red-lightest: 3 40% 85%;        /* #E8C5C4 - Very light rose */
-    --red-cream: 3 35% 92%;           /* #F2E3E2 - Soft rose cream */
+    /* Purple Color Palette - GBV Awareness Solidarity */
+    --purple-primary: 266 77% 62%;    /* #8B5CF6 - Main purple */
+    --purple-medium: 262 72% 56%;     /* #7C3AED - Medium purple */
+    --purple-dark: 262 68% 50%;       /* #6D28D9 - Dark purple */
+    --purple-ultra-dark: 262 64% 44%; /* #5B21B6 - Ultra dark purple */
+    --purple-light: 266 77% 70%;      /* #A78BFA - Light purple */
+    --purple-lightest: 266 100% 91%;  /* #DDD6FE - Very light purple */
+    --purple-cream: 266 50% 96%;      /* #FAF8FF - Soft purple cream */
     
     /* Accent Colors */
     --brand-gold: 38 92% 50%;         /* #FCD34D - stars, accents */
@@ -29,7 +29,7 @@ All colors MUST be HSL.
     --card: 0 0% 100%;
     --card-foreground: 217 19% 27%;
     
-    --primary: 3 50% 53%;
+    --primary: 266 77% 62%;
     --primary-foreground: 0 0% 100%;
     
     --secondary: 220 14% 98%;
@@ -44,12 +44,12 @@ All colors MUST be HSL.
     --success: 160 95% 30%;
     --success-foreground: 0 0% 100%;
     
-    --destructive: 3 50% 53%;
+    --destructive: 266 77% 62%;
     --destructive-foreground: 0 0% 100%;
     
     --border: 220 13% 91%;
     --input: 220 13% 91%;
-    --ring: 3 50% 53%;
+    --ring: 266 77% 62%;
     
     --radius: 0.5rem;
     

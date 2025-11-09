@@ -57,8 +57,8 @@ const SolutionSection = () => {
     {
       level: "MODERATE RISK",
       color: "#FFF7ED",
-      border: "#EA580C",
-      icon: <AlertTriangle className="w-8 h-8" style={{ color: "#EA580C" }} />,
+      border: "#8B5CF6",
+      icon: <AlertTriangle className="w-8 h-8" style={{ color: "#8B5CF6" }} />,
       description: "Past convictions, protection orders, suspicious patterns"
     },
     {
@@ -249,9 +249,9 @@ const SolutionSection = () => {
             </p>
             <Button
               size="lg"
-              className="w-full h-[70px] bg-primary hover:bg-[#A94442] text-white font-body font-bold text-xl rounded-xl transition-all duration-300 ease-out hover:scale-105 animate-pulse-glow"
+              className="w-full h-[70px] bg-[#8B5CF6] hover:bg-[#7C3AED] text-white font-body font-bold text-xl rounded-xl transition-all duration-300 ease-out hover:scale-105 animate-pulse-glow"
             >
-              🔴 Get Your Report Now - R50
+              💜 Get Your Report Now - R50
             </Button>
           </div>
         </div>

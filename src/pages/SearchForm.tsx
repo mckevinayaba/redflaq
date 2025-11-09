@@ -434,10 +434,10 @@ export default function SearchForm() {
         {/* Search Type Selector */}
         <RadioGroup value={searchType} onValueChange={(value) => setSearchType(value as SearchType)} className="grid md:grid-cols-2 gap-4 mb-8">
           {/* Option 1: Person Search */}
-          <div className={`relative border-2 rounded-2xl p-5 cursor-pointer transition-all ${searchType === "person" ? "border-primary bg-red-50" : "border-gray-200 hover:border-gray-300"}`}>
+          <div className={`relative border-2 rounded-2xl p-5 cursor-pointer transition-all ${searchType === "person" ? "border-[#8B5CF6] bg-purple-50" : "border-gray-200 hover:border-[#8B5CF6]/50"}`}>
             <RadioGroupItem value="person" id="person" className="absolute top-4 right-4" />
             <Label htmlFor="person" className="cursor-pointer flex items-start gap-3">
-              <User className="w-8 h-8 text-primary flex-shrink-0 mt-1" />
+              <User className="w-8 h-8 text-[#8B5CF6] flex-shrink-0 mt-1" />
               <div>
                 <div className="font-bold text-lg text-gray-900 mb-1">Search by Person ⭐</div>
                 <div className="text-sm text-gray-600">Search using full name and ID number</div>
@@ -446,10 +446,10 @@ export default function SearchForm() {
           </div>
 
           {/* Option 2: Police Case */}
-          <div className={`relative border-2 rounded-2xl p-5 cursor-pointer transition-all ${searchType === "police_case" ? "border-primary bg-red-50" : "border-gray-200 hover:border-gray-300"}`}>
+          <div className={`relative border-2 rounded-2xl p-5 cursor-pointer transition-all ${searchType === "police_case" ? "border-[#8B5CF6] bg-purple-50" : "border-gray-200 hover:border-[#8B5CF6]/50"}`}>
             <RadioGroupItem value="police_case" id="police_case" className="absolute top-4 right-4" />
             <Label htmlFor="police_case" className="cursor-pointer flex items-start gap-3">
-              <Shield className="w-8 h-8 text-primary flex-shrink-0 mt-1" />
+              <Shield className="w-8 h-8 text-[#8B5CF6] flex-shrink-0 mt-1" />
               <div>
                 <div className="font-bold text-lg text-gray-900 mb-1">Police Case Number</div>
                 <div className="text-sm text-gray-600">Search using a police case number (XXX/DD/YYYY)</div>
@@ -458,10 +458,10 @@ export default function SearchForm() {
           </div>
 
           {/* Option 3: Protection Order */}
-          <div className={`relative border-2 rounded-2xl p-5 cursor-pointer transition-all ${searchType === "protection_order" ? "border-primary bg-red-50" : "border-gray-200 hover:border-gray-300"}`}>
+          <div className={`relative border-2 rounded-2xl p-5 cursor-pointer transition-all ${searchType === "protection_order" ? "border-[#8B5CF6] bg-purple-50" : "border-gray-200 hover:border-[#8B5CF6]/50"}`}>
             <RadioGroupItem value="protection_order" id="protection_order" className="absolute top-4 right-4" />
             <Label htmlFor="protection_order" className="cursor-pointer flex items-start gap-3">
-              <FileText className="w-8 h-8 text-primary flex-shrink-0 mt-1" />
+              <FileText className="w-8 h-8 text-[#8B5CF6] flex-shrink-0 mt-1" />
               <div>
                 <div className="font-bold text-lg text-gray-900 mb-1">Protection Order</div>
                 <div className="text-sm text-gray-600">Search using a protection order number (XXX/DD/YYYY)</div>
@@ -470,10 +470,10 @@ export default function SearchForm() {
           </div>
 
           {/* Option 4: Court Case */}
-          <div className={`relative border-2 rounded-2xl p-5 cursor-pointer transition-all ${searchType === "court_case" ? "border-primary bg-red-50" : "border-gray-200 hover:border-gray-300"}`}>
+          <div className={`relative border-2 rounded-2xl p-5 cursor-pointer transition-all ${searchType === "court_case" ? "border-[#8B5CF6] bg-purple-50" : "border-gray-200 hover:border-[#8B5CF6]/50"}`}>
             <RadioGroupItem value="court_case" id="court_case" className="absolute top-4 right-4" />
             <Label htmlFor="court_case" className="cursor-pointer flex items-start gap-3">
-              <Gavel className="w-8 h-8 text-primary flex-shrink-0 mt-1" />
+              <Gavel className="w-8 h-8 text-[#8B5CF6] flex-shrink-0 mt-1" />
               <div>
                 <div className="font-bold text-lg text-gray-900 mb-1">Court Case Number</div>
                 <div className="text-sm text-gray-600">Search using a court case number (A XXX/2024)</div>

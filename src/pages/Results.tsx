@@ -80,9 +80,9 @@ const Results = () => {
       case "RED":
         return "bg-red-600 text-white";
       case "ORANGE":
-        return "bg-orange-500 text-white";
+        return "bg-[#A78BFA] text-white";
       case "YELLOW":
-        return "bg-yellow-500 text-white";
+        return "bg-[#DDD6FE] text-[#6D28D9]";
       default:
         return "bg-green-600 text-white";
     }
@@ -145,7 +145,7 @@ const Results = () => {
 
         {/* Search Summary Card */}
         <Card className="mb-8 shadow-lg">
-          <CardHeader className="border-b bg-gradient-to-r from-primary/5 to-primary/10">
+          <CardHeader className="border-b bg-gradient-to-r from-[#8B5CF6]/5 to-[#8B5CF6]/10">
             <div className="flex items-center justify-between flex-wrap gap-4">
               <div>
                 <CardTitle className="text-2xl md:text-3xl mb-2">
@@ -357,7 +357,7 @@ const Results = () => {
             variant="default"
             size="lg"
             onClick={() => navigate("/")}
-            className="w-full"
+            className="w-full bg-[#8B5CF6] hover:bg-[#7C3AED]"
           >
             <Home className="mr-2 h-5 w-5" />
             Return to Homepage

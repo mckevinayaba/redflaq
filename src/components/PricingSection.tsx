@@ -283,8 +283,8 @@ const PricingSection = () => {
                   onClick={() => handlePurchase(plan.name)}
                   className={`w-full h-14 font-body font-bold text-lg rounded-xl transition-all duration-300 ${
                     plan.popular 
-                      ? 'bg-[#DC2626] hover:bg-[#B91C1C] text-white' 
-                      : 'bg-white hover:bg-[#FEE2E2] text-[#DC2626] border-2 border-[#DC2626]'
+                      ? 'bg-[#8B5CF6] hover:bg-[#7C3AED] text-white' 
+                      : 'bg-white hover:bg-[#DDD6FE] text-[#8B5CF6] border-2 border-[#8B5CF6]'
                   }`}
                   style={{
                     boxShadow: hoveredCard === index 
@@ -293,7 +293,7 @@ const PricingSection = () => {
                     transform: hoveredCard === index ? 'scale(1.05)' : 'scale(1)'
                   }}
                 >
-                  {plan.popular ? '🔴 Get This Pack Now' : 'Select This Plan'}
+                  {plan.popular ? '💜 Get This Pack Now' : 'Select This Plan'}
                 </Button>
               </div>
             </div>

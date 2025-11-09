@@ -31,7 +31,7 @@ const Hero = () => {
       <div 
         className="absolute inset-0 z-0 animate-gradient"
         style={{
-          background: "linear-gradient(180deg, #D35D5A 0%, #C9504D 50%, #B84542 100%)",
+          background: "linear-gradient(180deg, #A78BFA 0%, #8B5CF6 50%, #7C3AED 100%)",
           backgroundSize: "200% 200%"
         }}
       />
@@ -58,7 +58,7 @@ const Hero = () => {
         {/* Logo - Fade in from top */}
         <div className="mb-14 opacity-0 animate-fade-in-down delay-800">
           <h2 className="text-2xl md:text-3xl font-heading font-bold text-white inline-flex items-center gap-2">
-            <span>🔴</span>
+            <span>💜</span>
             <span>REDFLAQ</span>
           </h2>
         </div>
@@ -107,9 +107,9 @@ const Hero = () => {
               setIsPaymentModalOpen(true);
             }}
             size="lg"
-            className="w-full max-w-[380px] h-[80px] bg-white hover:bg-white/95 text-primary font-body font-bold text-[22px] rounded-xl transition-all duration-300 ease-out hover:scale-105 hover:-translate-y-1 animate-pulse-glow"
+            className="w-full max-w-[380px] h-[80px] bg-white hover:bg-white/95 text-[#8B5CF6] font-body font-bold text-[22px] rounded-xl transition-all duration-300 ease-out hover:scale-105 hover:-translate-y-1 animate-pulse-glow"
           >
-            🔴 Check His Record Now - R50
+            💜 Check His Record Now - R50
           </Button>
         </div>
         

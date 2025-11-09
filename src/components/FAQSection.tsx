@@ -103,7 +103,7 @@ const FAQSection = () => {
                 boxShadow: '0 10px 30px rgba(153, 61, 59, 0.1)'
               }}
             >
-              <badge.icon className="w-8 h-8" style={{ color: '#C9504D' }} />
+              <badge.icon className="w-8 h-8" style={{ color: '#8B5CF6' }} />
               <p className="text-xs md:text-sm text-center font-medium" style={{ color: '#993D3B' }}>{badge.text}</p>
             </div>
           ))}

@@ -14,6 +14,60 @@ export type Database = {
   }
   public: {
     Tables: {
+      manual_payments: {
+        Row: {
+          amount: number
+          created_at: string | null
+          credits_used: number | null
+          email: string
+          id: string
+          notes: string | null
+          package_type: string | null
+          payment_id: string
+          payment_method: string | null
+          proof_url: string | null
+          reference: string | null
+          search_credits: number | null
+          status: string | null
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          credits_used?: number | null
+          email: string
+          id?: string
+          notes?: string | null
+          package_type?: string | null
+          payment_id: string
+          payment_method?: string | null
+          proof_url?: string | null
+          reference?: string | null
+          search_credits?: number | null
+          status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          credits_used?: number | null
+          email?: string
+          id?: string
+          notes?: string | null
+          package_type?: string | null
+          payment_id?: string
+          payment_method?: string | null
+          proof_url?: string | null
+          reference?: string | null
+          search_credits?: number | null
+          status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: []
+      }
       purchases: {
         Row: {
           amount: number

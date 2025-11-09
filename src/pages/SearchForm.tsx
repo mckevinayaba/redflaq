@@ -12,7 +12,7 @@ type SearchType = "person" | "police_case" | "protection_order" | "court_case";
 export default function SearchForm() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const purchaseId = searchParams.get("purchase_id");
+  const paymentId = searchParams.get("payment_id");
 
   // Search type state
   const [searchType, setSearchType] = useState<SearchType>("person");
@@ -62,40 +62,53 @@ export default function SearchForm() {
   const [paymentValid, setPaymentValid] = useState(false);
 
   useEffect(() => {
-    const validatePurchase = async () => {
-      if (!purchaseId) {
+    const validatePayment = async () => {
+      const paymentId = searchParams.get("payment_id");
+      
+      if (!paymentId) {
         setPaymentValid(false);
         setIsValidatingPurchase(false);
         return;
       }
 
       try {
-        const { data, error } = await supabase.functions.invoke('process-payment', {
-          body: {
-            action: 'validate-purchase',
-            data: { purchaseId }
-          }
-        });
+        const { data, error } = await supabase
+          .from('manual_payments')
+          .select('*')
+          .eq('payment_id', paymentId)
+          .eq('status', 'verified')
+          .maybeSingle();
 
         if (error) throw error;
 
-        if (data.valid) {
-          setPaymentValid(true);
-          setPurchaseData(data.purchase);
-        } else {
+        if (!data) {
           setPaymentValid(false);
-          alert(data.error || 'Invalid purchase');
+          alert('Payment not verified yet. Please wait for confirmation email.');
+          return;
         }
+
+        if (data.credits_used >= data.search_credits) {
+          setPaymentValid(false);
+          alert('No credits remaining on this payment.');
+          return;
+        }
+
+        setPaymentValid(true);
+        setPurchaseData({
+          credits_remaining: data.search_credits - data.credits_used,
+          email: data.email,
+          payment_id: data.payment_id
+        });
       } catch (error: any) {
-        console.error('Purchase validation error:', error);
+        console.error('Payment validation error:', error);
         setPaymentValid(false);
       } finally {
         setIsValidatingPurchase(false);
       }
     };
 
-    validatePurchase();
-  }, [purchaseId]);
+    validatePayment();
+  }, [searchParams]);
 
   // Sanitize input to prevent injection attacks
   const sanitizeInput = (input: string): string => {
@@ -333,16 +346,20 @@ export default function SearchForm() {
     }, 500);
 
     try {
+      const paymentId = searchParams.get("payment_id");
+      
       // First, deduct a credit
-      const { data: creditData, error: creditError } = await supabase.functions.invoke('process-payment', {
-        body: {
-          action: 'use-credit',
-          data: { purchaseId }
-        }
-      });
+      const { error: updateError } = await supabase
+        .from('manual_payments')
+        .update({
+          credits_used: (purchaseData.email ? 
+            (await supabase.from('manual_payments').select('credits_used').eq('payment_id', paymentId).single()).data?.credits_used || 0
+            : 0) + 1
+        })
+        .eq('payment_id', paymentId);
 
-      if (creditError || !creditData.success) {
-        throw new Error(creditData?.error || 'Failed to use credit');
+      if (updateError) {
+        throw new Error('Failed to use credit');
       }
 
       // Then perform the search

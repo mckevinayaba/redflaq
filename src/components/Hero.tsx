@@ -99,6 +99,17 @@ const Hero = () => {
           </p>
         </div>
 
+        {/* Payment Trust Section */}
+        <div className="mb-10 opacity-0 animate-fade-in delay-2000 bg-white/10 backdrop-blur-sm rounded-2xl p-6 max-w-md mx-auto">
+          <p className="text-white font-semibold mb-3">💳 PAYMENT OPTIONS</p>
+          <div className="text-white/90 text-sm space-y-1">
+            <p>✓ Bank Transfer (EFT)</p>
+            <p>✓ Instant EFT (Zapper, SnapScan)</p>
+            <p>✓ WhatsApp Payment</p>
+          </div>
+          <p className="text-white font-semibold mt-4 text-sm">💜 Fast verification - Get your search link within 5 minutes</p>
+        </div>
+
         {/* WHITE CTA Button with Pulsing Glow */}
         <div className="mb-6 opacity-0 animate-fade-in-scale delay-2000">
           <Button 

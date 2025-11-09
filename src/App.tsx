@@ -10,6 +10,7 @@ import NotFound from "./pages/NotFound";
 import AdminScraper from "./pages/AdminScraper";
 import AdminImport from "./pages/AdminImport";
 import AdminLogin from "./pages/AdminLogin";
+import AdminVerifyPayments from "./pages/AdminVerifyPayments";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +27,7 @@ const App = () => (
           <Route path="/admin/scraper" element={<AdminScraper />} />
           <Route path="/admin/import" element={<AdminImport />} />
           <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/verify-payments" element={<AdminVerifyPayments />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

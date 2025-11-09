@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -15,14 +16,30 @@ export const PaymentModal = ({ isOpen, onClose, packageType = "single" }: Paymen
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [cardError, setCardError] = useState("");
+  const [currentPurchaseId, setCurrentPurchaseId] = useState<string | null>(null);
+  const paypalButtonRef = useRef<HTMLDivElement>(null);
 
   const packageDetails = {
-    single: { price: 3.00, searches: 1, title: "One-time payment • 1 background check" },
-    "3-pack": { price: 8.00, searches: 3, title: "3 background checks (Save 11%)" },
-    "5-pack": { price: 12.00, searches: 5, title: "5 background checks (Save 20%)" }
+    single: { price: 50, searches: 1, title: "One-time payment • 1 background check", type: "single" },
+    "3-pack": { price: 120, searches: 3, title: "3 background checks (Save 20%)", type: "triple" },
+    "5-pack": { price: 180, searches: 5, title: "5 background checks (Save 25%)", type: "five" }
   };
 
   const details = packageDetails[packageType];
+
+  // Load PayPal SDK
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const script = document.createElement('script');
+    script.src = "https://www.paypal.com/sdk/js?client-id=test&currency=USD";
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, [isOpen]);
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -39,7 +56,7 @@ export const PaymentModal = ({ isOpen, onClose, packageType = "single" }: Paymen
     }
   };
 
-  const handleCardPayment = (e: React.FormEvent) => {
+  const handleCardPayment = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!email || emailError) {
@@ -50,30 +67,90 @@ export const PaymentModal = ({ isOpen, onClose, packageType = "single" }: Paymen
     setIsProcessing(true);
     setCardError("");
     
-    // Simulate card payment (in production, PayPal Hosted Fields handles this)
-    setTimeout(() => {
+    try {
+      // Create order via edge function
+      const { data, error } = await supabase.functions.invoke('process-payment', {
+        body: {
+          action: 'create-order',
+          data: {
+            email: email,
+            packageType: details.type
+          }
+        }
+      });
+
+      if (error) throw error;
+      if (!data.success) throw new Error(data.error || 'Payment failed');
+
+      setCurrentPurchaseId(data.purchaseId);
+      
+      // For card payments via PayPal, simulate approval
+      // In production, this would use PayPal Hosted Fields
+      const captureResponse = await supabase.functions.invoke('process-payment', {
+        body: {
+          action: 'capture-order',
+          data: {
+            orderID: data.orderID
+          }
+        }
+      });
+
+      if (captureResponse.error) throw captureResponse.error;
+      if (!captureResponse.data.success) throw new Error('Payment capture failed');
+
       setPaymentSuccess(true);
       setTimeout(() => {
-        window.location.href = `/search-form?payment_id=demo-${Date.now()}`;
+        window.location.href = `/search-form?purchase_id=${captureResponse.data.purchaseId}`;
       }, 2000);
-    }, 2000);
+
+    } catch (error: any) {
+      console.error('Payment error:', error);
+      setCardError(error.message || 'Payment failed. Please try again.');
+      setIsProcessing(false);
+    }
   };
 
-  const handlePayPalClick = () => {
+  const handlePayPalClick = async () => {
     if (!email || emailError) {
       setEmailError("Please enter a valid email address");
       return;
     }
     
     setIsProcessing(true);
+    setCardError("");
     
-    // Simulate PayPal payment
-    setTimeout(() => {
-      setPaymentSuccess(true);
+    try {
+      // Create order via edge function
+      const { data, error } = await supabase.functions.invoke('process-payment', {
+        body: {
+          action: 'create-order',
+          data: {
+            email: email,
+            packageType: details.type
+          }
+        }
+      });
+
+      if (error) throw error;
+      if (!data.success) throw new Error(data.error || 'Payment failed');
+
+      setCurrentPurchaseId(data.purchaseId);
+
+      // Open PayPal in a new window
+      window.open(`https://www.paypal.com/checkoutnow?token=${data.orderID}`, '_blank');
+      
+      // Note: In production, you'd use PayPal SDK buttons for proper integration
+      alert('PayPal integration in progress. This is a demo - redirecting to search form.');
+      
       setTimeout(() => {
-        window.location.href = `/search-form?payment_id=demo-${Date.now()}`;
+        window.location.href = `/search-form?purchase_id=${data.purchaseId}`;
       }, 2000);
-    }, 2000);
+
+    } catch (error: any) {
+      console.error('PayPal error:', error);
+      setCardError(error.message || 'PayPal payment failed. Please try again.');
+      setIsProcessing(false);
+    }
   };
 
   console.log("PaymentModal render, isOpen:", isOpen);
@@ -127,7 +204,7 @@ export const PaymentModal = ({ isOpen, onClose, packageType = "single" }: Paymen
             🔴 Complete Your Payment
           </h2>
           <div className="text-6xl font-bold text-gray-900 my-4 font-heading">
-            ${details.price.toFixed(2)}
+            R{details.price.toFixed(2)}
           </div>
           <p className="text-sm text-gray-500">
             {details.title}
@@ -260,7 +337,7 @@ export const PaymentModal = ({ isOpen, onClose, packageType = "single" }: Paymen
             ) : paymentSuccess ? (
               '✓ Payment Successful!'
             ) : (
-              `Pay $${details.price.toFixed(2)} Now`
+              `Pay R${details.price.toFixed(2)} Now`
             )}
           </button>
         </form>

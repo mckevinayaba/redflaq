@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      purchases: {
+        Row: {
+          amount: number
+          credits_purchased: number
+          credits_remaining: number
+          currency: string | null
+          email: string
+          expires_at: string | null
+          id: string
+          package_type: string
+          paypal_order_id: string | null
+          paypal_transaction_id: string | null
+          purchase_id: string
+          purchased_at: string | null
+          status: string | null
+        }
+        Insert: {
+          amount: number
+          credits_purchased: number
+          credits_remaining: number
+          currency?: string | null
+          email: string
+          expires_at?: string | null
+          id?: string
+          package_type: string
+          paypal_order_id?: string | null
+          paypal_transaction_id?: string | null
+          purchase_id: string
+          purchased_at?: string | null
+          status?: string | null
+        }
+        Update: {
+          amount?: number
+          credits_purchased?: number
+          credits_remaining?: number
+          currency?: string | null
+          email?: string
+          expires_at?: string | null
+          id?: string
+          package_type?: string
+          paypal_order_id?: string | null
+          paypal_transaction_id?: string | null
+          purchase_id?: string
+          purchased_at?: string | null
+          status?: string | null
+        }
+        Relationships: []
+      }
       wanted_persons: {
         Row: {
           added_at: string

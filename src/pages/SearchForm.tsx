@@ -12,10 +12,14 @@ type SearchType = "person" | "police_case" | "protection_order" | "court_case";
 export default function SearchForm() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const paymentId = searchParams.get("payment_id");
+  const purchaseId = searchParams.get("purchase_id");
 
   // Search type state
   const [searchType, setSearchType] = useState<SearchType>("person");
+  
+  // Purchase validation state
+  const [purchaseData, setPurchaseData] = useState<any>(null);
+  const [isValidatingPurchase, setIsValidatingPurchase] = useState(true);
 
   // Person search fields
   const [firstName, setFirstName] = useState("");
@@ -54,14 +58,44 @@ export default function SearchForm() {
   const [idValid, setIdValid] = useState(false);
   const [caseNumberValid, setCaseNumberValid] = useState(false);
 
-  // Validate payment ID
-  const [paymentValid, setPaymentValid] = useState(true);
+  // Validate purchase ID
+  const [paymentValid, setPaymentValid] = useState(false);
 
   useEffect(() => {
-    if (!paymentId) {
-      setPaymentValid(false);
-    }
-  }, [paymentId]);
+    const validatePurchase = async () => {
+      if (!purchaseId) {
+        setPaymentValid(false);
+        setIsValidatingPurchase(false);
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase.functions.invoke('process-payment', {
+          body: {
+            action: 'validate-purchase',
+            data: { purchaseId }
+          }
+        });
+
+        if (error) throw error;
+
+        if (data.valid) {
+          setPaymentValid(true);
+          setPurchaseData(data.purchase);
+        } else {
+          setPaymentValid(false);
+          alert(data.error || 'Invalid purchase');
+        }
+      } catch (error: any) {
+        console.error('Purchase validation error:', error);
+        setPaymentValid(false);
+      } finally {
+        setIsValidatingPurchase(false);
+      }
+    };
+
+    validatePurchase();
+  }, [purchaseId]);
 
   // Sanitize input to prevent injection attacks
   const sanitizeInput = (input: string): string => {
@@ -299,6 +333,19 @@ export default function SearchForm() {
     }, 500);
 
     try {
+      // First, deduct a credit
+      const { data: creditData, error: creditError } = await supabase.functions.invoke('process-payment', {
+        body: {
+          action: 'use-credit',
+          data: { purchaseId }
+        }
+      });
+
+      if (creditError || !creditData.success) {
+        throw new Error(creditData?.error || 'Failed to use credit');
+      }
+
+      // Then perform the search
       const { data: searchResult, error } = await supabase.functions.invoke(
         'search-criminal-records',
         { body: searchBody }
@@ -321,21 +368,33 @@ export default function SearchForm() {
       } else {
         throw new Error(searchResult.error || "Search failed");
       }
-    } catch (error) {
+    } catch (error: any) {
       clearInterval(progressInterval);
       setProgress(0);
       setIsSubmitting(false);
       console.error("Search error:", error);
-      alert("Search failed. Please try again.");
+      alert(error.message || "Search failed. Please try again.");
     }
   };
+
+  if (isValidatingPurchase) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: "linear-gradient(180deg, #E06055 0%, #C94A47 100%)" }}>
+        <div className="bg-white rounded-3xl p-12 max-w-md text-center shadow-2xl">
+          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <h1 className="text-2xl font-bold text-gray-900 mb-4 font-heading">Validating Purchase</h1>
+          <p className="text-gray-600">Please wait while we verify your payment...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!paymentValid) {
     return (
       <div className="min-h-screen flex items-center justify-center p-4" style={{ background: "linear-gradient(180deg, #E06055 0%, #C94A47 100%)" }}>
         <div className="bg-white rounded-3xl p-12 max-w-md text-center shadow-2xl">
           <XCircle className="w-16 h-16 text-red-600 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-gray-900 mb-4 font-heading">Invalid Payment</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-4 font-heading">Invalid or Expired Purchase</h1>
           <p className="text-gray-600 mb-6">Please complete your payment first to access the search form.</p>
           <Button onClick={() => navigate("/")} className="w-full bg-primary hover:bg-primary/90">
             Return to Homepage
@@ -360,7 +419,7 @@ export default function SearchForm() {
         <div className="mb-6">
           <span className="inline-flex items-center gap-2 bg-green-50 text-green-700 px-6 py-3 rounded-full font-bold text-sm">
             <CheckCircle2 className="w-5 h-5" />
-            Payment Successful - 1 Search Credit Available
+            Payment Successful - {purchaseData?.credits_remaining || 0} Search Credit{purchaseData?.credits_remaining !== 1 ? 's' : ''} Available
           </span>
         </div>
 

@@ -76,14 +76,13 @@ export default function SearchForm() {
           .from('manual_payments')
           .select('*')
           .eq('payment_id', paymentId)
-          .eq('status', 'verified')
           .maybeSingle();
 
         if (error) throw error;
 
         if (!data) {
           setPaymentValid(false);
-          alert('Payment not verified yet. Please wait for confirmation email.');
+          alert('Invalid payment ID. Please check your link or contact support.');
           return;
         }
 

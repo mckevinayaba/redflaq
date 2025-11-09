@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { X, Building2, Smartphone, MessageCircle, CheckCircle2, Copy } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -16,6 +17,7 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const packages = {
     single: { price: 50, credits: 1, label: 'R50 - 1 Search', type: 'single', savings: undefined },
@@ -51,13 +53,11 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
 
       if (error) throw error;
 
-      if (data?.success) {
-        setShowSuccess(true);
-        setTimeout(() => {
-          onClose();
-          setShowSuccess(false);
-          setEmail('');
-        }, 5000);
+      if (data?.success && data?.payment_id) {
+        // Redirect to search form immediately
+        navigate(`/search-form?payment_id=${data.payment_id}`);
+        onClose();
+        setEmail('');
       }
     } catch (error: any) {
       console.error('Submission error:', error);

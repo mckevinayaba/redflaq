@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { X, Building2, Smartphone, MessageCircle, CheckCircle2 } from 'lucide-react';
+import { X, Building2, Smartphone, MessageCircle, CheckCircle2, Copy } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -14,11 +15,20 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
   const [selectedPackage, setSelectedPackage] = useState(packageType);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const { toast } = useToast();
 
   const packages = {
     single: { price: 50, credits: 1, label: 'R50 - 1 Search', type: 'single', savings: undefined },
     '3-pack': { price: 120, credits: 3, label: 'R120 - 3 Searches', savings: 'Save R30!', type: 'triple' },
-    '5-pack': { price: 180, credits: 5, label: 'R180 - 5 Searches', savings: 'Save R70!', type: 'five' }
+    '5-pack': { price: 180, credits: 5, label: 'R180 - 5 Searches', savings: 'Best Value!', type: 'five' }
+  };
+
+  const copyAccountNumber = async () => {
+    await navigator.clipboard.writeText('62821074432');
+    toast({
+      title: 'Copied!',
+      description: 'Account number copied to clipboard',
+    });
   };
 
   const currentPackage = packages[selectedPackage];
@@ -71,13 +81,39 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
 
         <div className="p-8">
           {showSuccess ? (
-            <div className="text-center py-12">
+            <div className="text-center py-12 px-6">
               <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-foreground mb-4">Payment Submission Received!</h2>
+              <h2 className="text-2xl font-bold text-foreground mb-4">✅ PAYMENT SUBMITTED</h2>
               <p className="text-muted-foreground mb-6">
-                Thank you! We'll verify your payment and email your search link to <strong>{email}</strong> within 5 minutes.
+                Thank you for choosing RedFlaq!
               </p>
-              <p className="text-sm text-muted-foreground">Check your inbox (and spam folder)</p>
+              
+              <div className="bg-muted/50 rounded-lg p-4 mb-6 text-left">
+                <p className="font-semibold text-foreground mb-3">PAYMENT DETAILS:</p>
+                <div className="space-y-1 text-sm text-muted-foreground">
+                  <p>Amount: <span className="text-foreground font-semibold">R{currentPackage.price}.00</span></p>
+                  <p>Reference: <span className="text-foreground font-semibold">{email}</span></p>
+                  <p>Account: <span className="text-foreground font-semibold">Setup A Startup (62821074432)</span></p>
+                </div>
+              </div>
+
+              <div className="bg-primary/5 rounded-lg p-4 mb-6 text-left">
+                <p className="font-semibold text-foreground mb-3">NEXT STEPS:</p>
+                <div className="space-y-2 text-sm text-muted-foreground">
+                  <p>1. We verify your payment (usually 2-5 minutes)</p>
+                  <p>2. We email your search link to: <strong className="text-foreground">{email}</strong></p>
+                  <p>3. Click the link to perform your background check</p>
+                </div>
+              </div>
+
+              <p className="text-sm text-muted-foreground mb-4">
+                Questions? WhatsApp us: <a href="https://wa.me/27663365296" className="text-primary hover:underline font-semibold">+27 66 336 5296</a>
+              </p>
+
+              <div className="text-xs text-muted-foreground border-t border-border pt-4">
+                <p>🏢 Setup A Startup (Pty) Ltd</p>
+                <p className="mt-1">💜 A RedFlaq Initiative</p>
+              </div>
             </div>
           ) : (
             <>
@@ -93,55 +129,89 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
               <div className="border-t border-border my-6" />
 
               <div className="space-y-4 mb-6">
-                <h3 className="font-semibold text-foreground mb-3">Choose your payment method:</h3>
+                <h3 className="font-semibold text-foreground mb-3">💳 BANK TRANSFER (EFT)</h3>
 
-                <div className="border-2 border-primary rounded-lg p-4 bg-primary/5">
-                  <div className="flex items-start gap-3">
-                    <Building2 className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-foreground mb-2">Bank Transfer (EFT)</h4>
-                      <div className="text-sm text-muted-foreground space-y-1">
-                        <p><strong>Bank:</strong> FNB</p>
-                        <p><strong>Account:</strong> 62XXXXXXXX</p>
-                        <p><strong>Account Name:</strong> RedFlaq</p>
-                        <p><strong>Branch Code:</strong> 250655</p>
-                        <p className="text-primary font-semibold mt-2">Reference: Use your EMAIL as reference</p>
+                <div className="border-2 border-primary rounded-lg p-5 bg-primary/5">
+                  <div className="space-y-3 text-sm">
+                    <div className="flex justify-between items-center">
+                      <span className="text-muted-foreground">Bank:</span>
+                      <span className="font-semibold text-foreground">FNB</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-muted-foreground">Account Name:</span>
+                      <span className="font-semibold text-foreground">Setup A Startup</span>
+                    </div>
+                    <div className="flex justify-between items-center gap-3">
+                      <span className="text-muted-foreground">Account Number:</span>
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-foreground text-lg">62821074432</span>
+                        <button
+                          onClick={copyAccountNumber}
+                          className="p-1 hover:bg-secondary rounded transition-colors"
+                          title="Copy account number"
+                        >
+                          <Copy className="w-4 h-4 text-primary" />
+                        </button>
                       </div>
                     </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-muted-foreground">Account Type:</span>
+                      <span className="font-semibold text-foreground">Cheque</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-muted-foreground">Branch Code:</span>
+                      <span className="font-semibold text-foreground">254005</span>
+                    </div>
+                  </div>
+                  
+                  <div className="mt-4 p-3 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+                    <p className="text-sm font-semibold text-foreground mb-1">⚠️ IMPORTANT:</p>
+                    <p className="text-sm text-muted-foreground">Reference: <span className="font-bold text-foreground">USE YOUR EMAIL ADDRESS</span></p>
+                    <p className="text-xs text-muted-foreground mt-1">Example: yourname@gmail.com</p>
                   </div>
                 </div>
 
-                <div className="border-2 border-border hover:border-primary rounded-lg p-4 transition-colors cursor-pointer">
-                  <div className="flex items-start gap-3">
-                    <Smartphone className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-foreground mb-2">Instant EFT</h4>
-                      <p className="text-sm text-muted-foreground mb-2">Pay instantly with:</p>
-                      <div className="flex gap-2">
-                        <span className="px-3 py-1 bg-secondary rounded text-xs font-semibold">Zapper</span>
-                        <span className="px-3 py-1 bg-secondary rounded text-xs font-semibold">SnapScan</span>
-                      </div>
-                    </div>
-                  </div>
+                <div className="border-2 border-border hover:border-primary rounded-lg p-4 transition-colors">
+                  <h4 className="font-semibold text-foreground mb-2 flex items-center gap-2">
+                    <Smartphone className="w-5 h-5 text-primary" />
+                    ⚡ INSTANT EFT OPTIONS
+                  </h4>
+                  <p className="text-sm text-muted-foreground mb-3">Pay instantly with:</p>
+                  <ul className="text-sm text-muted-foreground space-y-1 ml-4">
+                    <li>• Zapper</li>
+                    <li>• SnapScan</li>
+                    <li>• Bank app instant payment</li>
+                  </ul>
+                  <p className="text-xs text-muted-foreground mt-3 italic">Same details apply (use email as reference)</p>
                 </div>
 
-                <div className="border-2 border-border hover:border-primary rounded-lg p-4 transition-colors cursor-pointer">
-                  <div className="flex items-start gap-3">
-                    <MessageCircle className="w-6 h-6 text-primary flex-shrink-0 mt-1" />
-                    <div className="flex-1">
-                      <h4 className="font-semibold text-foreground mb-2">WhatsApp Payment</h4>
-                      <p className="text-sm text-muted-foreground mb-2">Send proof of payment</p>
-                      <a
-                        href="https://wa.me/27721234567"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-[#25D366] text-white rounded-lg hover:bg-[#20BA5A] transition-colors text-sm font-semibold"
-                      >
-                        <MessageCircle className="w-4 h-4" />
-                        072 123 4567
-                      </a>
-                    </div>
+                <div className="border-2 border-border hover:border-primary rounded-lg p-4 transition-colors bg-[#25D366]/5">
+                  <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                    <MessageCircle className="w-5 h-5 text-[#25D366]" />
+                    📱 WHATSAPP PAYMENT
+                  </h4>
+                  <p className="text-sm text-muted-foreground mb-3">Send proof of payment to:</p>
+                  <a
+                    href="https://wa.me/27663365296?text=Hi%20RedFlaq!%20I%27ve%20made%20a%20payment%20for%20a%20background%20check.%20Here%27s%20my%20proof%20of%20payment%20and%20email%20address."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 w-full px-4 py-3 bg-[#25D366] text-white rounded-lg hover:bg-[#20BA5A] transition-colors font-semibold shadow-lg"
+                  >
+                    <MessageCircle className="w-5 h-5" />
+                    Send Proof via WhatsApp
+                  </a>
+                  <div className="mt-3 space-y-1 text-xs text-muted-foreground">
+                    <p className="font-semibold text-foreground">Include:</p>
+                    <p>✓ Proof of payment screenshot</p>
+                    <p>✓ Your email address</p>
+                    <p>✓ Package selected (R50/R120/R180)</p>
                   </div>
+                </div>
+                
+                <div className="p-3 bg-secondary/50 rounded-lg text-center">
+                  <p className="text-xs text-muted-foreground">
+                    📱 After payment, contact us: <a href="https://wa.me/27663365296" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline font-semibold">+27 66 336 5296</a>
+                  </p>
                 </div>
               </div>
 
@@ -202,15 +272,19 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
               <button
                 onClick={handleSubmit}
                 disabled={isSubmitting || !email}
-                className="w-full py-4 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+                className="w-full py-4 bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg text-lg"
               >
-                {isSubmitting ? 'Submitting...' : "I've Paid - Send Search Link"}
+                {isSubmitting ? 'Submitting...' : "I've Paid - Send Me Link"}
               </button>
 
-              <div className="mt-6 p-4 bg-secondary/50 rounded-lg">
-                <p className="text-sm text-muted-foreground text-center">
-                  ℹ️ We'll verify your payment and email your search link within <strong>5 minutes</strong>
+              <div className="mt-6 p-4 bg-primary/5 border border-primary/20 rounded-lg">
+                <p className="text-sm text-muted-foreground text-center mb-3">
+                  ✅ We verify payments within <strong className="text-foreground">5 minutes</strong> and email your search link
                 </p>
+                <div className="text-xs text-muted-foreground text-center border-t border-border pt-3">
+                  <p className="font-semibold text-foreground">🏢 Setup A Startup (Pty) Ltd</p>
+                  <p className="mt-1">Registered Business | Secure Processing</p>
+                </div>
               </div>
             </>
           )}

@@ -1,4 +1,6 @@
 import Hero from "@/components/Hero";
+import AboutSection from "@/components/AboutSection";
+import TrustBadgesSection from "@/components/TrustBadgesSection";
 import ProblemSection from "@/components/ProblemSection";
 import SolutionSection from "@/components/SolutionSection";
 import SocialProofSection from "@/components/SocialProofSection";
@@ -15,6 +17,8 @@ const Index = () => {
     <main className="min-h-screen">
       <StickyElements />
       <Hero />
+      <AboutSection />
+      <TrustBadgesSection />
       <ProblemSection />
       <SolutionSection />
       <SocialProofSection />

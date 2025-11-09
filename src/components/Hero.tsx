@@ -55,6 +55,13 @@ const Hero = () => {
       
       {/* Content Container */}
       <div className="relative z-10 w-full max-w-[1000px] px-8 md:px-10 py-20 text-center">
+        {/* Setup A Startup Badge */}
+        <div className="mb-4 opacity-0 animate-fade-in-down delay-600">
+          <span className="inline-block bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-semibold">
+            🏢 A Setup A Startup Initiative
+          </span>
+        </div>
+
         {/* Logo - Fade in from top */}
         <div className="mb-14 opacity-0 animate-fade-in-down delay-800">
           <h2 className="text-2xl md:text-3xl font-heading font-bold text-white inline-flex items-center gap-2">

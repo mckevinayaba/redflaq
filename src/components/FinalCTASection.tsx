@@ -65,19 +65,14 @@ const FinalCTASection = () => {
       <div className="max-w-[1000px] mx-auto text-center relative z-10">
         {/* Main Headline */}
         <div className={`mb-12 ${isVisible ? 'animate-slide-up' : 'opacity-0'}`}>
-          <h2 className="font-heading font-black text-4xl md:text-5xl lg:text-[56px] leading-[1.1] mb-6" style={{ color: '#993D3B' }}>
-            <span className="block">Don't Meet Him</span>
-            <span className="block">Until You Know</span>
-            <span className="block">Who He Really Is.</span>
+          <h2 className="font-heading font-black text-4xl md:text-5xl lg:text-[56px] leading-[1.1] mb-6" style={{ color: '#6D28D9' }}>
+            The Choice Is Yours:<br />
+            Stay Safe Or Stay Wondering
           </h2>
-        </div>
-
-        {/* Subheading */}
-        <div className={`mb-10 ${isVisible ? 'animate-fade-in delay-200' : 'opacity-0'}`}>
-          <p className="font-body text-xl md:text-2xl leading-relaxed max-w-[700px] mx-auto" style={{ color: '#A94442' }}>
-            15,247 South African women have already checked their date's criminal record.
-            <br />
-            <strong style={{ color: '#993D3B' }}>You're 60 seconds away from peace of mind.</strong>
+          <p className="font-body text-xl md:text-2xl leading-relaxed max-w-[700px] mx-auto" style={{ color: '#8B5CF6' }}>
+            <span className="block mb-3">
+              <strong style={{ color: '#6D28D9' }}>You're 60 seconds away from peace of mind.</strong>
+            </span>
           </p>
         </div>
 
@@ -109,11 +104,11 @@ const FinalCTASection = () => {
             >
               <div 
                 className="w-14 h-14 rounded-full flex items-center justify-center"
-                style={{ backgroundColor: '#E8C5C4' }}
+                style={{ backgroundColor: '#EDE9FE' }}
               >
                 <item.icon className="w-7 h-7" style={{ color: '#8B5CF6' }} />
               </div>
-              <p className="font-body font-bold text-sm md:text-base text-center" style={{ color: '#993D3B' }}>
+              <p className="font-body font-bold text-sm md:text-base text-center" style={{ color: '#6D28D9' }}>
                 {item.text}
               </p>
             </div>
@@ -130,20 +125,16 @@ const FinalCTASection = () => {
           <p className="font-heading font-bold text-2xl md:text-3xl mb-4" style={{ color: '#8B5CF6' }}>
             ⚠️ Don't Wait Until It's Too Late
           </p>
-          <p className="font-body text-lg leading-relaxed" style={{ color: '#A94442' }}>
-            Every day you wait is another day you're taking a risk. In the time it takes you to read this, 
-            you could have already checked his record and made an informed decision about your safety. 
-            <br /><br />
-            <strong style={{ color: '#993D3B' }}>
-              The best time to check was before your first date. The second best time is right now.
+          <p className="font-body text-lg leading-relaxed" style={{ color: '#8B5CF6' }}>
+            <span className="block mb-3">
+            <strong style={{ color: '#6D28D9' }}>
+              The women who act today will sleep soundly tonight.
             </strong>
+            </span>
+            Those who wait? They'll be awake wondering... "Did I ignore the warning signs?"
           </p>
-        </div>
-
-        {/* Final Stats */}
-        <div className={`mt-16 ${isVisible ? 'animate-fade-in delay-1000' : 'opacity-0'}`}>
-          <p className="font-body text-base text-center" style={{ color: '#A94442' }}>
-            <strong style={{ color: '#993D3B' }}>Trusted by 15,247+ women</strong> across South Africa
+          <p className="font-body text-base text-center" style={{ color: '#8B5CF6' }}>
+            <strong style={{ color: '#6D28D9' }}>Trusted by 15,247+ women</strong> across South Africa
             <br />
             ⭐⭐⭐⭐⭐ Rated 4.9/5 by 847 verified users
           </p>

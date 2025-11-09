@@ -62,11 +62,11 @@ const ProblemSection = () => {
         >
           <div className="border-l-8 border-[#8B5CF6] animate-pulse-border absolute left-0 top-0 bottom-0" />
           <h3 className="font-heading font-bold text-2xl md:text-4xl mb-4 leading-tight"
-            style={{ color: "#9E2B2B" }}>
+            style={{ color: "#6D28D9" }}>
             Every 4 Hours, A South African Woman Is Murdered By Her Partner.
           </h3>
           <p className="font-body text-base md:text-lg leading-relaxed"
-            style={{ color: "#9E2B2B" }}>
+            style={{ color: "#8B5CF6" }}>
             That's 6 women. Every single day. Most of them never knew about his past.
           </p>
         </div>
@@ -134,19 +134,19 @@ const ProblemSection = () => {
           }}
         >
           <h4 className="font-heading font-bold text-xl md:text-2xl mb-4"
-            style={{ color: "#9E2B2B" }}>
+            style={{ color: "#6D28D9" }}>
             Here's What's Happening Right Now:
           </h4>
           <p className="font-body text-base md:text-lg leading-[1.8] mb-4"
-            style={{ color: "#9E2B2B" }}>
+            style={{ color: "#8B5CF6" }}>
             Right now, there's a man in your DMs. Maybe you've been talking for days. Maybe weeks. He's charming. Compliments you. Asks about your day.
           </p>
           <p className="font-body text-base md:text-lg leading-[1.8] mb-4"
-            style={{ color: "#9E2B2B" }}>
+            style={{ color: "#8B5CF6" }}>
             You've already planned where you'll meet. You've told yourself "He seems nice."
           </p>
           <p className="font-body text-base md:text-lg leading-[1.8]"
-            style={{ color: "#9E2B2B" }}>
+            style={{ color: "#8B5CF6" }}>
             But you haven't checked his record. Because you didn't know you could. Because it was too expensive. Too complicated. Too hard.
           </p>
         </div>

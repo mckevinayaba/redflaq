@@ -84,10 +84,10 @@ const FAQSection = () => {
       <div className="max-w-[900px] mx-auto">
         {/* Heading */}
         <div className="text-center mb-16">
-          <h2 className={`font-heading font-black text-4xl md:text-5xl mb-6 ${isVisible ? 'animate-slide-up' : 'opacity-0'}`} style={{ color: '#993D3B' }}>
+          <h2 className={`font-heading font-black text-4xl md:text-5xl mb-6 ${isVisible ? 'animate-slide-up' : 'opacity-0'}`} style={{ color: '#6D28D9' }}>
             You Have Questions. We Have Answers.
           </h2>
-          <p className={`font-body text-lg md:text-xl max-w-[600px] mx-auto ${isVisible ? 'animate-fade-in delay-200' : 'opacity-0'}`} style={{ color: '#A94442' }}>
+          <p className={`font-body text-lg md:text-xl max-w-[600px] mx-auto ${isVisible ? 'animate-fade-in delay-200' : 'opacity-0'}`} style={{ color: '#8B5CF6' }}>
             Real questions from South African women just like you.
           </p>
         </div>
@@ -104,7 +104,7 @@ const FAQSection = () => {
               }}
             >
               <badge.icon className="w-8 h-8" style={{ color: '#8B5CF6' }} />
-              <p className="text-xs md:text-sm text-center font-medium" style={{ color: '#993D3B' }}>{badge.text}</p>
+              <p className="text-xs md:text-sm text-center font-medium" style={{ color: '#6D28D9' }}>{badge.text}</p>
             </div>
           ))}
         </div>
@@ -125,19 +125,19 @@ const FAQSection = () => {
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
                 className="w-full flex items-center justify-between p-6 md:p-8 text-left hover:bg-[#F9CFCF] transition-colors duration-300"
               >
-                <h3 className="font-heading font-bold text-lg md:text-xl pr-4" style={{ color: '#A72828' }}>
+                <h3 className="font-heading font-bold text-lg md:text-xl pr-4" style={{ color: '#6D28D9' }}>
                   {faq.question}
                 </h3>
                 <div
                   className="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300"
                   style={{
-                    backgroundColor: openIndex === index ? '#D14444' : '#F9CFCF'
+                    backgroundColor: openIndex === index ? '#8B5CF6' : '#F5F3FF'
                   }}
                 >
                   {openIndex === index ? (
                     <Minus className="w-5 h-5 text-white" />
                   ) : (
-                    <Plus className="w-5 h-5" style={{ color: '#D14444' }} />
+                    <Plus className="w-5 h-5" style={{ color: '#8B5CF6' }} />
                   )}
                 </div>
               </button>
@@ -151,7 +151,7 @@ const FAQSection = () => {
                 }}
               >
                 <div className="px-6 md:px-8 pb-6 md:pb-8 pt-2">
-                  <p className="font-body text-base md:text-lg leading-relaxed" style={{ color: '#C43535' }}>
+                  <p className="font-body text-base md:text-lg leading-relaxed" style={{ color: '#6D28D9' }}>
                     {faq.answer}
                   </p>
                 </div>

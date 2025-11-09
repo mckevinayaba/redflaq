@@ -95,7 +95,7 @@ const PricingSection = () => {
       ref={sectionRef}
       className="py-24 md:py-28 px-8 relative overflow-hidden"
       style={{
-        backgroundColor: "#993D3B",
+        backgroundColor: "#6D28D9",
         backgroundImage: `
           repeating-linear-gradient(
             0deg,
@@ -194,12 +194,12 @@ const PricingSection = () => {
                 }}
               >
                 {/* Plan Name */}
-                <h3 className="font-heading font-bold text-2xl md:text-3xl mb-2" style={{ color: '#7F1D1D' }}>
+                <h3 className="font-heading font-bold text-2xl md:text-3xl mb-2" style={{ color: '#6D28D9' }}>
                   {plan.name}
                 </h3>
 
                 {/* Description */}
-                <p className="font-body text-base mb-6" style={{ color: '#991B1B' }}>
+                <p className="font-body text-base mb-6" style={{ color: '#8B5CF6' }}>
                   {plan.description}
                 </p>
 
@@ -209,7 +209,7 @@ const PricingSection = () => {
                     <div className="flex items-center gap-3 mb-2">
                       <span 
                         className="font-heading text-2xl line-through"
-                        style={{ color: '#DC2626', opacity: 0.5 }}
+                        style={{ color: '#A78BFA', opacity: 0.5 }}
                       >
                         R{plan.originalPrice}
                       </span>
@@ -225,7 +225,7 @@ const PricingSection = () => {
                   )}
                   <div className="flex items-baseline gap-2">
                     <span className="font-heading font-black text-5xl md:text-6xl" style={{ 
-                      color: '#DC2626',
+                      color: '#8B5CF6',
                       transform: hoveredCard === index ? 'scale(1.1)' : 'scale(1)',
                       transition: 'transform 0.3s ease',
                       display: 'inline-block'
@@ -233,7 +233,7 @@ const PricingSection = () => {
                       R{plan.price}
                     </span>
                     {plan.name !== "Single Check" && (
-                      <span className="font-body text-lg" style={{ color: '#991B1B' }}>
+                      <span className="font-body text-lg" style={{ color: '#6D28D9' }}>
                         / {plan.name.includes("3") ? "3" : "5"} checks
                       </span>
                     )}
@@ -288,8 +288,8 @@ const PricingSection = () => {
                   }`}
                   style={{
                     boxShadow: hoveredCard === index 
-                      ? `0 20px 40px ${plan.popular ? 'rgba(220, 38, 38, 0.5)' : 'rgba(220, 38, 38, 0.3)'}` 
-                      : `0 8px 20px ${plan.popular ? 'rgba(220, 38, 38, 0.3)' : 'rgba(220, 38, 38, 0.2)'}`,
+                      ? `0 20px 40px ${plan.popular ? 'rgba(139, 92, 246, 0.5)' : 'rgba(139, 92, 246, 0.3)'}` 
+                      : `0 8px 20px ${plan.popular ? 'rgba(139, 92, 246, 0.3)' : 'rgba(139, 92, 246, 0.2)'}`,
                     transform: hoveredCard === index ? 'scale(1.05)' : 'scale(1)'
                   }}
                 >

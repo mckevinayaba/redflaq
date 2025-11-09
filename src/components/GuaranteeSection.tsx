@@ -164,11 +164,11 @@ const GuaranteeSection = () => {
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-4">
                     <guarantee.icon className="w-8 h-8" style={{ color: guarantee.border }} />
-                    <h3 className="font-heading font-bold text-2xl md:text-3xl" style={{ color: '#7F1D1D' }}>
+                    <h3 className="font-heading font-bold text-2xl md:text-3xl" style={{ color: '#6D28D9' }}>
                       {guarantee.title}
                     </h3>
                   </div>
-                  <p className="font-body text-lg leading-relaxed" style={{ color: '#991B1B' }}>
+                  <p className="font-body text-lg leading-relaxed" style={{ color: '#8B5CF6' }}>
                     {guarantee.description}
                   </p>
                 </div>

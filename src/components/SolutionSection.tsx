@@ -174,12 +174,12 @@ const SolutionSection = () => {
                 <div className="text-5xl text-center mb-4">{step.icon}</div>
                 
                 {/* Title */}
-                <h4 className="font-heading font-bold text-xl text-[#9E2B2B] text-center mb-3">
+                <h4 className="font-heading font-bold text-xl text-[#6D28D9] text-center mb-3">
                   {step.title}
                 </h4>
                 
                 {/* Description */}
-                <p className="font-body text-base text-[#B63434] text-center">
+                <p className="font-body text-base text-[#8B5CF6] text-center">
                   {step.description}
                 </p>
               </div>
@@ -212,7 +212,7 @@ const SolutionSection = () => {
                   <h4 className="font-heading font-bold text-lg text-center mb-3" style={{ color: risk.border }}>
                     {risk.level}
                   </h4>
-                  <p className="font-body text-sm text-center" style={{ color: "#9E2B2B" }}>
+                  <p className="font-body text-sm text-center" style={{ color: "#6D28D9" }}>
                     {risk.description}
                   </p>
                 </div>
@@ -226,7 +226,7 @@ const SolutionSection = () => {
           style={{ boxShadow: "0 20px 60px rgba(153,61,59,0.25)" }}>
           <div className="flex items-center justify-center gap-3 mb-8">
             <Shield className="w-10 h-10 text-primary" />
-            <h3 className="font-heading font-bold text-3xl text-[#9E2B2B] text-center">
+            <h3 className="font-heading font-bold text-3xl text-[#6D28D9] text-center">
               What You Get
             </h3>
           </div>
@@ -235,7 +235,7 @@ const SolutionSection = () => {
             {features.map((feature, index) => (
               <div
                 key={index}
-                className={`font-body text-lg text-[#B63434] hover:bg-[#F5ADAD] p-3 rounded-lg transition-all duration-200 ${isVisible ? 'animate-fade-in' : 'opacity-0'}`}
+                className={`font-body text-lg text-[#8B5CF6] hover:bg-[#F5F3FF] p-3 rounded-lg transition-all duration-200 ${isVisible ? 'animate-fade-in' : 'opacity-0'}`}
                 style={{ animationDelay: `${2.2 + index * 0.1}s` }}
               >
                 {feature}

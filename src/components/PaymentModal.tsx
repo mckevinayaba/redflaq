@@ -4,6 +4,12 @@ import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 
+declare global {
+  interface Window {
+    paypal?: any;
+  }
+}
+
 interface PaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -17,7 +23,9 @@ export const PaymentModal = ({ isOpen, onClose, packageType = "single" }: Paymen
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [cardError, setCardError] = useState("");
   const [currentPurchaseId, setCurrentPurchaseId] = useState<string | null>(null);
-  const paypalButtonRef = useRef<HTMLDivElement>(null);
+  const [sdkLoaded, setSdkLoaded] = useState(false);
+  const [cardFieldsReady, setCardFieldsReady] = useState(false);
+  const cardFieldsRef = useRef<any>(null);
 
   const packageDetails = {
     single: { price: 50, searches: 1, title: "One-time payment • 1 background check", type: "single" },
@@ -27,19 +35,132 @@ export const PaymentModal = ({ isOpen, onClose, packageType = "single" }: Paymen
 
   const details = packageDetails[packageType];
 
-  // Load PayPal SDK
+  // Load PayPal SDK with Hosted Fields
   useEffect(() => {
     if (!isOpen) return;
 
+    const existingScript = document.querySelector('script[src*="paypal.com/sdk"]');
+    if (existingScript) {
+      existingScript.remove();
+    }
+
     const script = document.createElement('script');
-    script.src = "https://www.paypal.com/sdk/js?client-id=test&currency=USD";
+    const clientId = import.meta.env.VITE_PAYPAL_CLIENT_ID || 'test';
+    script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}&components=buttons,hosted-fields&currency=ZAR`;
     script.async = true;
+    
+    script.onload = () => {
+      console.log('PayPal SDK loaded');
+      setSdkLoaded(true);
+    };
+    
+    script.onerror = () => {
+      console.error('Failed to load PayPal SDK');
+      setCardError('Failed to load payment system. Please refresh and try again.');
+    };
+
     document.body.appendChild(script);
 
     return () => {
-      document.body.removeChild(script);
+      const scriptToRemove = document.querySelector('script[src*="paypal.com/sdk"]');
+      if (scriptToRemove) {
+        scriptToRemove.remove();
+      }
+      setSdkLoaded(false);
+      setCardFieldsReady(false);
+      if (cardFieldsRef.current) {
+        cardFieldsRef.current = null;
+      }
     };
   }, [isOpen]);
+
+  // Initialize PayPal Hosted Fields
+  useEffect(() => {
+    if (!sdkLoaded || !window.paypal || cardFieldsReady) return;
+
+    const initializeHostedFields = async () => {
+      try {
+        console.log('Initializing PayPal Hosted Fields...');
+        
+        const cardFields = window.paypal.HostedFields.render({
+          createOrder: async () => {
+            // This will be called when user submits the form
+            try {
+              const { data, error } = await supabase.functions.invoke('process-payment', {
+                body: {
+                  action: 'create-order',
+                  data: {
+                    email: email,
+                    packageType: details.type
+                  }
+                }
+              });
+
+              if (error) throw error;
+              if (!data.success) throw new Error(data.error || 'Failed to create order');
+
+              setCurrentPurchaseId(data.purchaseId);
+              return data.orderID;
+            } catch (err: any) {
+              console.error('Create order error:', err);
+              throw err;
+            }
+          },
+          styles: {
+            'input': {
+              'font-size': '16px',
+              'color': '#1f2937',
+              'font-family': 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
+            },
+            '.invalid': {
+              'color': '#ef4444'
+            },
+            '.valid': {
+              'color': '#10b981'
+            }
+          },
+          fields: {
+            number: {
+              selector: '#card-number',
+              placeholder: '4111 1111 1111 1111'
+            },
+            cvv: {
+              selector: '#cvv',
+              placeholder: '123'
+            },
+            expirationDate: {
+              selector: '#expiration-date',
+              placeholder: 'MM/YY'
+            }
+          }
+        });
+
+        cardFields.on('cardTypeChange', (event: any) => {
+          if (event.cards.length === 1) {
+            console.log('Card type:', event.cards[0].type);
+          }
+        });
+
+        cardFields.on('validityChange', (event: any) => {
+          const field = event.fields[event.emittedBy];
+          if (field && !field.isPotentiallyValid) {
+            setCardError('Please check your card details');
+          } else {
+            setCardError('');
+          }
+        });
+
+        cardFieldsRef.current = cardFields;
+        setCardFieldsReady(true);
+        console.log('PayPal Hosted Fields initialized successfully');
+      } catch (error) {
+        console.error('Failed to initialize PayPal Hosted Fields:', error);
+        setCardError('Failed to initialize payment fields. Please refresh the page.');
+      }
+    };
+
+    initializeHostedFields();
+  }, [sdkLoaded, email, details.type]);
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -63,49 +184,60 @@ export const PaymentModal = ({ isOpen, onClose, packageType = "single" }: Paymen
       setEmailError("Please enter a valid email address");
       return;
     }
+
+    if (!cardFieldsRef.current) {
+      setCardError('Payment system not ready. Please wait a moment and try again.');
+      return;
+    }
     
     setIsProcessing(true);
     setCardError("");
     
     try {
-      // Create order via edge function
-      const { data, error } = await supabase.functions.invoke('process-payment', {
-        body: {
-          action: 'create-order',
-          data: {
-            email: email,
-            packageType: details.type
-          }
-        }
+      console.log('Submitting card payment...');
+      
+      // Submit the card fields - this triggers createOrder and tokenizes the card
+      const { orderId } = await cardFieldsRef.current.submit({
+        contingencies: ['SCA_WHEN_REQUIRED']
       });
 
-      if (error) throw error;
-      if (!data.success) throw new Error(data.error || 'Payment failed');
+      console.log('Order created:', orderId);
 
-      setCurrentPurchaseId(data.purchaseId);
-      
-      // For card payments via PayPal, simulate approval
-      // In production, this would use PayPal Hosted Fields
+      // Now capture the payment
       const captureResponse = await supabase.functions.invoke('process-payment', {
         body: {
           action: 'capture-order',
           data: {
-            orderID: data.orderID
+            orderID: orderId
           }
         }
       });
 
       if (captureResponse.error) throw captureResponse.error;
-      if (!captureResponse.data.success) throw new Error('Payment capture failed');
+      if (!captureResponse.data.success) throw new Error(captureResponse.data.error || 'Payment capture failed');
 
+      console.log('Payment captured successfully');
       setPaymentSuccess(true);
+      
       setTimeout(() => {
         window.location.href = `/search-form?purchase_id=${captureResponse.data.purchaseId}`;
       }, 2000);
 
     } catch (error: any) {
       console.error('Payment error:', error);
-      setCardError(error.message || 'Payment failed. Please try again.');
+      
+      let errorMessage = 'Payment failed. Please try again.';
+      if (error.message) {
+        if (error.message.includes('INSTRUMENT_DECLINED')) {
+          errorMessage = 'Your card was declined. Please try a different card.';
+        } else if (error.message.includes('invalid')) {
+          errorMessage = 'Please check your card details and try again.';
+        } else {
+          errorMessage = error.message;
+        }
+      }
+      
+      setCardError(errorMessage);
       setIsProcessing(false);
     }
   };
@@ -277,10 +409,12 @@ export const PaymentModal = ({ isOpen, onClose, packageType = "single" }: Paymen
             </label>
             <div 
               id="card-number"
-              className="card-field w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl bg-gray-50 flex items-center text-gray-400 text-base"
-            >
-              <span>4111 1111 1111 1111</span>
-            </div>
+              className="w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl bg-white transition-colors duration-200 hover:border-gray-300 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20"
+              style={{ minHeight: '50px' }}
+            />
+            {!cardFieldsReady && (
+              <div className="text-xs text-gray-400 mt-1">Loading payment fields...</div>
+            )}
           </div>
 
           {/* Expiry and CVV Row */}
@@ -291,10 +425,9 @@ export const PaymentModal = ({ isOpen, onClose, packageType = "single" }: Paymen
               </label>
               <div 
                 id="expiration-date"
-                className="card-field w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl bg-gray-50 flex items-center text-gray-400 text-base"
-              >
-                <span>MM/YY</span>
-              </div>
+                className="w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl bg-white transition-colors duration-200 hover:border-gray-300 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20"
+                style={{ minHeight: '50px' }}
+              />
             </div>
             
             <div>
@@ -303,17 +436,19 @@ export const PaymentModal = ({ isOpen, onClose, packageType = "single" }: Paymen
               </label>
               <div 
                 id="cvv"
-                className="card-field w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl bg-gray-50 flex items-center text-gray-400 text-base"
-              >
-                <span>123</span>
-              </div>
+                className="w-full px-4 py-3.5 border-2 border-gray-200 rounded-xl bg-white transition-colors duration-200 hover:border-gray-300 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20"
+                style={{ minHeight: '50px' }}
+              />
             </div>
           </div>
 
-          {/* Accepted Cards */}
+          {/* Accepted Cards & Security */}
           <div className="mb-6">
-            <p className="text-xs text-gray-500">
-              We accept all major cards: 💳 Visa • Mastercard • Amex • Discover
+            <p className="text-xs text-gray-500 flex items-center justify-center gap-2 mb-1">
+              💳 Visa • Mastercard • Amex • Discover
+            </p>
+            <p className="text-xs text-gray-400 text-center">
+              🔒 Secure payment • Card details encrypted
             </p>
           </div>
 
@@ -326,7 +461,7 @@ export const PaymentModal = ({ isOpen, onClose, packageType = "single" }: Paymen
           {/* Primary Payment Button */}
           <button
             type="submit"
-            disabled={isProcessing || !email || !!emailError}
+            disabled={isProcessing || !email || !!emailError || !cardFieldsReady}
             className="w-full h-14 bg-primary hover:bg-primary/90 text-white font-bold text-lg rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:transform hover:scale-[1.02] shadow-lg"
           >
             {isProcessing ? (
@@ -342,36 +477,16 @@ export const PaymentModal = ({ isOpen, onClose, packageType = "single" }: Paymen
           </button>
         </form>
 
-        {/* Divider */}
-        <div className="flex items-center gap-4 mb-4">
-          <div className="flex-1 h-px bg-gray-200" />
-          <span className="text-xs text-gray-400">OR</span>
-          <div className="flex-1 h-px bg-gray-200" />
-        </div>
-
-        {/* PayPal Alternative (Small, Secondary) */}
-        <div className="text-center mb-6">
-          <p className="text-sm text-gray-600 mb-3">
-            Already have PayPal?
-          </p>
-          <Button
-            onClick={handlePayPalClick}
-            disabled={isProcessing || !email || !!emailError}
-            className="w-3/5 h-11 bg-gray-400 hover:bg-gray-500 text-white font-medium text-sm rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed mx-auto"
-          >
-            Pay with PayPal
-          </Button>
-        </div>
 
         {/* Trust Signals */}
         <div className="text-center pt-6 border-t border-gray-100">
           <p className="text-xs text-gray-400 flex items-center justify-center gap-4 flex-wrap mb-2">
-            <span>🔒 Secure Payment</span>
+            <span>🔒 Bank-Level Security</span>
             <span>💳 All Cards Accepted</span>
             <span>✅ Money-Back Guarantee</span>
           </p>
           <p className="text-xs text-gray-300">
-            Payments processed securely
+            Powered by PayPal • PCI-DSS Compliant
           </p>
         </div>
       </div>

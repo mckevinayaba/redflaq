@@ -99,12 +99,12 @@ const FAQSection = () => {
               key={index}
               className="bg-white rounded-2xl p-4 flex flex-col items-center gap-2 hover:bg-white/80 transition-all duration-300"
               style={{ 
-                border: '2px solid #E8C5C4',
-                boxShadow: '0 10px 30px rgba(153, 61, 59, 0.1)'
+                border: '2px solid hsl(var(--purple-light))',
+                boxShadow: '0 10px 30px rgba(139, 92, 246, 0.15)'
               }}
             >
-              <badge.icon className="w-8 h-8" style={{ color: '#8B5CF6' }} />
-              <p className="text-xs md:text-sm text-center font-medium" style={{ color: '#6D28D9' }}>{badge.text}</p>
+              <badge.icon className="w-8 h-8 text-primary" />
+              <p className="text-xs md:text-sm text-center font-medium text-primary">{badge.text}</p>
             </div>
           ))}
         </div>
@@ -117,15 +117,15 @@ const FAQSection = () => {
               className={`bg-white rounded-2xl overflow-hidden transition-all duration-500 hover:shadow-2xl ${isVisible ? 'animate-slide-up' : 'opacity-0'}`}
               style={{
                 animationDelay: `${0.6 + index * 0.1}s`,
-                boxShadow: openIndex === index ? '0 20px 60px rgba(167,40,40,0.3)' : '0 10px 30px rgba(167,40,40,0.15)'
+                boxShadow: openIndex === index ? '0 20px 60px rgba(139,92,246,0.3)' : '0 10px 30px rgba(139,92,246,0.15)'
               }}
             >
               {/* Question */}
               <button
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                className="w-full flex items-center justify-between p-6 md:p-8 text-left hover:bg-[#F9CFCF] transition-colors duration-300"
+                className="w-full flex items-center justify-between p-6 md:p-8 text-left hover:bg-purple-50 transition-colors duration-300"
               >
-                <h3 className="font-heading font-bold text-lg md:text-xl pr-4" style={{ color: '#6D28D9' }}>
+                <h3 className="font-heading font-bold text-lg md:text-xl pr-4 text-primary">
                   {faq.question}
                 </h3>
                 <div

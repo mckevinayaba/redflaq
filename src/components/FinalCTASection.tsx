@@ -98,17 +98,17 @@ const FinalCTASection = () => {
               key={index}
               className="bg-white rounded-2xl p-6 flex flex-col items-center gap-3 hover:-translate-y-2 transition-all duration-300"
               style={{ 
-                boxShadow: '0 10px 30px rgba(153,61,59,0.15)',
-                border: '2px solid #E8C5C4'
+                boxShadow: '0 10px 30px rgba(139,92,246,0.2)',
+                border: '2px solid hsl(var(--purple-light))'
               }}
             >
               <div 
                 className="w-14 h-14 rounded-full flex items-center justify-center"
                 style={{ backgroundColor: '#EDE9FE' }}
               >
-                <item.icon className="w-7 h-7" style={{ color: '#8B5CF6' }} />
+                <item.icon className="w-7 h-7 text-primary" />
               </div>
-              <p className="font-body font-bold text-sm md:text-base text-center" style={{ color: '#6D28D9' }}>
+              <p className="font-body font-bold text-sm md:text-base text-center text-primary">
                 {item.text}
               </p>
             </div>

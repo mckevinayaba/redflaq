@@ -1,10 +1,10 @@
 const AboutSection = () => {
   return (
-    <section className="py-16 bg-[#F5F3FF]">
+    <section className="py-16 bg-purple-50">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center">
           
-          <h2 className="text-3xl font-bold text-[#6D28D9] mb-6">
+          <h2 className="text-3xl font-bold text-primary mb-6">
             About RedFlaq
           </h2>
           

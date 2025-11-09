@@ -407,7 +407,7 @@ export default function SearchForm() {
 
   if (isValidatingPurchase) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: "linear-gradient(180deg, #E06055 0%, #C94A47 100%)" }}>
+      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: "linear-gradient(180deg, #8B5CF6 0%, #6D28D9 100%)" }}>
         <div className="bg-white rounded-3xl p-12 max-w-md text-center shadow-2xl">
           <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <h1 className="text-2xl font-bold text-gray-900 mb-4 font-heading">Validating Purchase</h1>
@@ -419,7 +419,7 @@ export default function SearchForm() {
 
   if (!paymentValid) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: "linear-gradient(180deg, #E06055 0%, #C94A47 100%)" }}>
+      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: "linear-gradient(180deg, #8B5CF6 0%, #6D28D9 100%)" }}>
         <div className="bg-white rounded-3xl p-12 max-w-md text-center shadow-2xl">
           <XCircle className="w-16 h-16 text-red-600 mx-auto mb-4" />
           <h1 className="text-2xl font-bold text-gray-900 mb-4 font-heading">Invalid or Expired Purchase</h1>
@@ -433,11 +433,11 @@ export default function SearchForm() {
   }
 
   return (
-    <div className="min-h-screen p-8 md:p-12" style={{ background: "linear-gradient(180deg, #E06055 0%, #C94A47 100%)" }}>
+    <div className="min-h-screen p-8 md:p-12" style={{ background: "linear-gradient(180deg, #8B5CF6 0%, #6D28D9 100%)" }}>
       {/* Header */}
       <div className="text-center mb-8">
         <button onClick={() => navigate("/")} className="inline-block">
-          <h1 className="text-3xl font-bold text-white font-heading">🔴 REDFLAQ</h1>
+          <h1 className="text-3xl font-bold text-white font-heading">💜 REDFLAQ</h1>
         </button>
       </div>
 

@@ -223,10 +223,10 @@ const SolutionSection = () => {
 
         {/* WHAT YOU GET - Feature List */}
         <div className={`bg-white rounded-2xl p-8 md:p-10 max-w-[700px] mx-auto ${isVisible ? 'animate-slide-up delay-2000' : 'opacity-0'}`}
-          style={{ boxShadow: "0 20px 60px rgba(153,61,59,0.25)" }}>
+          style={{ boxShadow: "0 20px 60px rgba(139,92,246,0.25)" }}>
           <div className="flex items-center justify-center gap-3 mb-8">
             <Shield className="w-10 h-10 text-primary" />
-            <h3 className="font-heading font-bold text-3xl text-[#6D28D9] text-center">
+            <h3 className="font-heading font-bold text-3xl text-primary text-center">
               What You Get
             </h3>
           </div>
@@ -235,7 +235,7 @@ const SolutionSection = () => {
             {features.map((feature, index) => (
               <div
                 key={index}
-                className={`font-body text-lg text-[#8B5CF6] hover:bg-[#F5F3FF] p-3 rounded-lg transition-all duration-200 ${isVisible ? 'animate-fade-in' : 'opacity-0'}`}
+                className={`font-body text-lg text-primary hover:bg-purple-50 p-3 rounded-lg transition-all duration-200 ${isVisible ? 'animate-fade-in' : 'opacity-0'}`}
                 style={{ animationDelay: `${2.2 + index * 0.1}s` }}
               >
                 {feature}
@@ -243,7 +243,7 @@ const SolutionSection = () => {
             ))}
           </div>
           
-          <div className="mt-8 pt-6 border-t-2 border-[#E8C5C4]">
+          <div className="mt-8 pt-6 border-t-2 border-purple-200">
             <p className="font-heading font-bold text-2xl text-center text-primary mb-4">
               All This. Just R50.
             </p>

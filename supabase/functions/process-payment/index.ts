@@ -25,6 +25,50 @@ serve(async (req) => {
     
     console.log(`Processing payment action: ${action}`);
     
+    if (action === 'generate-client-token') {
+      // Generate OAuth access token
+      const clientId = Deno.env.get('PAYPAL_CLIENT_ID');
+      const clientSecret = Deno.env.get('PAYPAL_CLIENT_SECRET');
+      if (!clientId || !clientSecret) {
+        throw new Error('PayPal credentials not configured');
+      }
+
+      const oauthRes = await fetch(`${PAYPAL_API}/v1/oauth2/token`, {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Basic ' + btoa(`${clientId}:${clientSecret}`),
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'grant_type=client_credentials'
+      });
+
+      if (!oauthRes.ok) {
+        const txt = await oauthRes.text();
+        console.error('PayPal oAuth failed:', txt);
+        throw new Error('Failed to authenticate with PayPal');
+      }
+      const { access_token } = await oauthRes.json();
+
+      const tokenRes = await fetch(`${PAYPAL_API}/v1/identity/generate-token`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${access_token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!tokenRes.ok) {
+        const txt = await tokenRes.text();
+        console.error('Client token generation failed:', txt);
+        throw new Error('Failed to generate client token');
+      }
+
+      const tokenData = await tokenRes.json();
+      return new Response(JSON.stringify({ success: true, clientToken: tokenData.client_token }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
+    }
+
     if (action === 'create-order') {
       const { email, packageType } = data;
       

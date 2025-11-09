@@ -44,22 +44,50 @@ export const PaymentModal = ({ isOpen, onClose, packageType = "single" }: Paymen
       existingScript.remove();
     }
 
-    const script = document.createElement('script');
-    const clientId = import.meta.env.VITE_PAYPAL_CLIENT_ID || 'test';
-    script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}&components=buttons,hosted-fields&currency=ZAR`;
-    script.async = true;
-    
-    script.onload = () => {
-      console.log('PayPal SDK loaded');
-      setSdkLoaded(true);
-    };
-    
-    script.onerror = () => {
-      console.error('Failed to load PayPal SDK');
-      setCardError('Failed to load payment system. Please refresh and try again.');
-    };
+    // Load PayPal SDK after fetching a client token from backend
+    (async () => {
+      try {
+        const clientId = import.meta.env.VITE_PAYPAL_CLIENT_ID;
+        if (!clientId) {
+          console.error('Missing VITE_PAYPAL_CLIENT_ID');
+          setCardError('Payment system not configured. Please try again later.');
+          return;
+        }
+        console.log('Loading PayPal SDK, client-id starts with:', String(clientId).slice(0, 6));
 
-    document.body.appendChild(script);
+        // Get client token for Advanced Card Fields
+        const { data, error } = await supabase.functions.invoke('process-payment', {
+          body: { action: 'generate-client-token' }
+        });
+        if (error) throw error;
+        const clientToken = data?.clientToken;
+        if (!clientToken) throw new Error('No client token received');
+
+        const script = document.createElement('script');
+        const params = new URLSearchParams({
+          'client-id': clientId,
+          components: 'hosted-fields'
+        });
+        script.src = `https://www.paypal.com/sdk/js?${params.toString()}`;
+        script.async = true;
+        script.setAttribute('data-client-token', clientToken);
+
+        script.onload = () => {
+          console.log('PayPal SDK loaded');
+          setSdkLoaded(true);
+        };
+        
+        script.onerror = () => {
+          console.error('Failed to load PayPal SDK');
+          setCardError('Failed to load payment system. Please refresh and try again.');
+        };
+
+        document.body.appendChild(script);
+      } catch (err) {
+        console.error('Error setting up PayPal SDK:', err);
+        setCardError('Failed to initialize payment system. Please try again later.');
+      }
+    })();
 
     return () => {
       const scriptToRemove = document.querySelector('script[src*="paypal.com/sdk"]');
@@ -81,8 +109,14 @@ export const PaymentModal = ({ isOpen, onClose, packageType = "single" }: Paymen
     const initializeHostedFields = async () => {
       try {
         console.log('Initializing PayPal Hosted Fields...');
+
+        if (!window.paypal?.HostedFields?.isEligible || !window.paypal.HostedFields.isEligible()) {
+          console.error('Hosted Fields not eligible in this environment');
+          setCardError('Card payments are not available right now.');
+          return;
+        }
         
-        const cardFields = window.paypal.HostedFields.render({
+        const cardFields = await window.paypal.HostedFields.render({
           createOrder: async () => {
             // This will be called when user submits the form
             try {
@@ -120,18 +154,9 @@ export const PaymentModal = ({ isOpen, onClose, packageType = "single" }: Paymen
             }
           },
           fields: {
-            number: {
-              selector: '#card-number',
-              placeholder: '4111 1111 1111 1111'
-            },
-            cvv: {
-              selector: '#cvv',
-              placeholder: '123'
-            },
-            expirationDate: {
-              selector: '#expiration-date',
-              placeholder: 'MM/YY'
-            }
+            number: { selector: '#card-number', placeholder: '4111 1111 1111 1111' },
+            cvv: { selector: '#cvv', placeholder: '123' },
+            expirationDate: { selector: '#expiration-date', placeholder: 'MM/YY' }
           }
         });
 

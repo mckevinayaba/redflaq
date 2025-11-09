@@ -78,7 +78,7 @@ const FAQSection = () => {
       ref={sectionRef}
       className="py-24 md:py-28 px-8 relative overflow-hidden"
       style={{
-        backgroundColor: "#F2E3E2"
+        backgroundColor: "#F5F3FF"
       }}
     >
       <div className="max-w-[900px] mx-auto">

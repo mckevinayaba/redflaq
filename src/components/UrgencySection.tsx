@@ -81,7 +81,7 @@ const UrgencySection = () => {
       ref={sectionRef}
       className="relative py-24 md:py-32 px-8 overflow-hidden"
       style={{
-        background: 'linear-gradient(180deg, #B84542 0%, #993D3B 100%)',
+        background: 'linear-gradient(180deg, #8B5CF6 0%, #6D28D9 100%)',
         animation: isVisible ? 'pulseOpacity 4s ease-in-out infinite' : 'none'
       }}
     >

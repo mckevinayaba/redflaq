@@ -149,7 +149,7 @@ const SocialProofSection = () => {
       ref={sectionRef}
       className="relative py-24 px-6 overflow-hidden"
       style={{
-        background: 'linear-gradient(135deg, #E8C5C4 0%, #F2E3E2 50%, #E8C5C4 100%)'
+        background: 'linear-gradient(135deg, #EDE9FE 0%, #F5F3FF 50%, #EDE9FE 100%)'
       }}
     >
       {/* Heading */}
@@ -248,7 +248,7 @@ const SocialProofSection = () => {
         ref={statsRef}
         className="max-w-6xl mx-auto mb-16 rounded-3xl p-12 shadow-2xl transition-transform duration-200 relative overflow-hidden"
         style={{
-          backgroundColor: '#A72828',
+          backgroundColor: '#6D28D9',
           transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`
         }}
         onMouseMove={handleMouseMove}
@@ -292,15 +292,15 @@ const SocialProofSection = () => {
         <div 
           className="rounded-2xl p-8 shadow-lg border transition-all duration-500"
           style={{
-            background: 'rgba(209, 68, 68, 0.15)',
+            background: 'rgba(139, 92, 246, 0.15)',
             backdropFilter: 'blur(10px)',
-            border: '1px solid rgba(209, 68, 68, 0.3)'
+            border: '1px solid rgba(139, 92, 246, 0.3)'
           }}
         >
           <div className="flex items-center gap-2 mb-6">
             <div 
               className="w-3 h-3 rounded-full animate-pulse"
-              style={{ backgroundColor: '#C9504D' }}
+              style={{ backgroundColor: '#8B5CF6' }}
             />
             <h3 className="text-2xl font-bold" style={{ color: '#993D3B' }}>
               🚨 LIVE ACTIVITY (Last 24 Hours)
@@ -323,7 +323,7 @@ const SocialProofSection = () => {
                 <div 
                   className="w-2 h-2 rounded-full mt-1.5"
                   style={{ 
-                    backgroundColor: '#C9504D',
+                    backgroundColor: '#8B5CF6',
                     animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     opacity: 0.6
                   }}

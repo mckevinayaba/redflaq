@@ -33,7 +33,7 @@ const ProblemSection = () => {
       ref={sectionRef}
       className="py-24 md:py-28 px-8"
       style={{
-        background: "linear-gradient(180deg, #B84542 0%, #A94442 100%)"
+        background: "linear-gradient(180deg, #8B5CF6 0%, #7C3AED 100%)"
       }}
     >
       <div className="max-w-[900px] mx-auto">

@@ -41,7 +41,7 @@ const FinalCTASection = () => {
       ref={sectionRef}
       className="relative py-24 md:py-32 px-8 overflow-hidden"
       style={{
-        background: "linear-gradient(180deg, #E8C5C4 0%, #F2E3E2 100%)"
+        background: "linear-gradient(180deg, #EDE9FE 0%, #F5F3FF 100%)"
       }}
     >
       {/* Floating Particles */}
@@ -54,7 +54,7 @@ const FinalCTASection = () => {
             height: Math.random() * 8 + 4 + 'px',
             left: Math.random() * 100 + '%',
             top: Math.random() * 100 + '%',
-            backgroundColor: '#C9504D',
+            backgroundColor: '#8B5CF6',
             opacity: Math.random() * 0.2 + 0.1,
             animation: `float ${Math.random() * 20 + 20}s ease-in-out infinite`,
             animationDelay: Math.random() * 5 + 's'

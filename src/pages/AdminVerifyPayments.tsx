@@ -129,6 +129,15 @@ export default function AdminVerifyPayments() {
     });
   };
 
+  const copyReceiptUrl = async (paymentId: string) => {
+    const receiptUrl = `${window.location.origin}/receipt?payment_id=${paymentId}`;
+    await navigator.clipboard.writeText(receiptUrl);
+    toast({
+      title: 'Copied!',
+      description: 'Receipt URL copied to clipboard',
+    });
+  };
+
   return (
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-7xl mx-auto">
@@ -237,13 +246,22 @@ export default function AdminVerifyPayments() {
                     </>
                   )}
                   {payment.status === 'verified' && (
-                    <button
-                      onClick={() => copySearchUrl(payment.payment_id)}
-                      className="flex items-center gap-2 px-4 py-2 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors"
-                    >
-                      <Copy className="w-4 h-4" />
-                      Copy Search Link
-                    </button>
+                    <>
+                      <button
+                        onClick={() => copySearchUrl(payment.payment_id)}
+                        className="flex items-center gap-2 px-4 py-2 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors"
+                      >
+                        <Copy className="w-4 h-4" />
+                        Copy Search Link
+                      </button>
+                      <button
+                        onClick={() => copyReceiptUrl(payment.payment_id)}
+                        className="flex items-center gap-2 px-4 py-2 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors"
+                      >
+                        <Copy className="w-4 h-4" />
+                        Copy Receipt Link
+                      </button>
+                    </>
                   )}
                 </div>
               </div>

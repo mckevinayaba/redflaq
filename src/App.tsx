@@ -11,6 +11,7 @@ import AdminScraper from "./pages/AdminScraper";
 import AdminImport from "./pages/AdminImport";
 import AdminLogin from "./pages/AdminLogin";
 import AdminVerifyPayments from "./pages/AdminVerifyPayments";
+import Receipt from "./pages/Receipt";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/search-form" element={<SearchForm />} />
           <Route path="/results" element={<Results />} />
+          <Route path="/receipt" element={<Receipt />} />
           <Route path="/admin/scraper" element={<AdminScraper />} />
           <Route path="/admin/import" element={<AdminImport />} />
           <Route path="/admin/login" element={<AdminLogin />} />

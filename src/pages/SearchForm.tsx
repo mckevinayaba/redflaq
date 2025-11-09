@@ -348,18 +348,30 @@ export default function SearchForm() {
     try {
       const paymentId = searchParams.get("payment_id");
       
-      // First, deduct a credit
+      // First, fetch current payment data and deduct a credit
+      const { data: currentPayment, error: fetchError } = await supabase
+        .from('manual_payments')
+        .select('credits_used, search_credits')
+        .eq('payment_id', paymentId)
+        .single();
+
+      if (fetchError) {
+        throw new Error('Failed to fetch payment data');
+      }
+
+      // Double-check credits are available
+      if (currentPayment.credits_used >= currentPayment.search_credits) {
+        throw new Error('No credits remaining');
+      }
+
+      // Deduct credit
       const { error: updateError } = await supabase
         .from('manual_payments')
-        .update({
-          credits_used: (purchaseData.email ? 
-            (await supabase.from('manual_payments').select('credits_used').eq('payment_id', paymentId).single()).data?.credits_used || 0
-            : 0) + 1
-        })
+        .update({ credits_used: currentPayment.credits_used + 1 })
         .eq('payment_id', paymentId);
 
       if (updateError) {
-        throw new Error('Failed to use credit');
+        throw new Error('Failed to use credit: ' + updateError.message);
       }
 
       // Then perform the search

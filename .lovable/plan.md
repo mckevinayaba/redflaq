@@ -76,34 +76,20 @@ RedFlaq is a South African background check service targeting women for GBV (Gen
 - **Current state**: Payment modal says "We email your search link" but no edge function sends emails
 - **Required**: Need to integrate email service (Resend, SendGrid, etc.)
 
-### 2. PDF Report Generation (MAJOR)
-- **Issue**: Results page has "Download PDF Report" button that does nothing
-- **Impact**: Users can't download/print their search results
-- **Current state**: Button exists but `onClick` is empty: `onClick={() => {/* Implement PDF download */}}`
+---
 
-### 3. Sticky Elements Branding (MINOR)
-- **Issue**: Still uses red (#E06055) instead of purple
-- **Impact**: Inconsistent branding experience
-- **Location**: `src/components/StickyElements.tsx` lines 86-94, 109, 129-131
+## ✅ FIXED ISSUES (Completed)
 
-### 4. Admin Security (CRITICAL)
-- **Issue**: Admin password is hardcoded ("admin123")
-- **Impact**: Anyone who guesses this can access admin functions
-- **Location**: `src/pages/AdminLogin.tsx` line 22
+1. ~~**PDF Report Generation**~~ - Now working with html2pdf.js
+2. ~~**Sticky Elements Branding**~~ - Updated to purple (#8B5CF6)
+3. ~~**Admin Security**~~ - Password now stored in ADMIN_PASSWORD secret
+4. ~~**Receipt Page Verification**~~ - Now shows pending payments with appropriate status
+5. ~~**"Search Another Person" Flow**~~ - Now passes payment_id for remaining credits
+6. ~~**Footer Copyright Year**~~ - Now dynamic
 
-### 5. Receipt Page Verification Requirement
-- **Issue**: Receipt page requires `status = 'verified'` but flow now allows pending
-- **Impact**: Users can't see receipts until admin verifies
-- **Location**: `src/pages/Receipt.tsx` line 39
-
-### 6. Missing Footer Pages
+### Still TODO: Missing Footer Pages
 - **Issue**: Footer links to pages that don't exist
 - **Missing routes**: `/about`, `/privacy`, `/terms`, `/refund`, `/contact`
-
-### 7. "Search Another Person" Link
-- **Issue**: Results page links to `/search-form` without payment_id
-- **Impact**: Users can't use remaining credits easily
-- **Location**: `src/pages/Results.tsx` line 341
 
 ---
 

@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { Shield } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -17,19 +18,31 @@ const AdminLogin = () => {
     e.preventDefault();
     setIsChecking(true);
 
-    // Simple password check - in a real app, this would verify against a backend
-    // For now, using a hardcoded password "admin123" - should be changed
-    if (password === "admin123") {
+    try {
+      const { data, error } = await supabase.functions.invoke('verify-admin', {
+        body: { password }
+      });
+
+      if (error || !data?.success) {
+        toast({
+          title: "Login failed",
+          description: data?.error || "Invalid password",
+          variant: "destructive",
+        });
+        setIsChecking(false);
+        return;
+      }
+
       localStorage.setItem("admin_authenticated", "true");
       toast({
         title: "Login successful",
         description: "Welcome to the admin panel",
       });
       navigate("/admin/import");
-    } else {
+    } catch (error) {
       toast({
         title: "Login failed",
-        description: "Invalid password",
+        description: "Could not verify credentials",
         variant: "destructive",
       });
     }

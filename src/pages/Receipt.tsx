@@ -36,11 +36,10 @@ export default function Receipt() {
         .from('manual_payments')
         .select('*')
         .eq('payment_id', payment_id)
-        .eq('status', 'verified')
         .single();
 
       if (error || !data) {
-        setError('Payment not found or not verified');
+        setError('Payment not found');
         setLoading(false);
         return;
       }
@@ -181,8 +180,17 @@ export default function Receipt() {
             </div>
 
             <div className="flex items-center gap-2 mb-6">
-              <CheckCircle2 className="w-5 h-5 text-green-600" />
-              <span className="font-semibold text-green-600">Status: PAID ✅</span>
+              {payment.status === 'verified' ? (
+                <>
+                  <CheckCircle2 className="w-5 h-5 text-green-600" />
+                  <span className="font-semibold text-green-600">Status: VERIFIED ✅</span>
+                </>
+              ) : (
+                <>
+                  <CheckCircle2 className="w-5 h-5 text-yellow-600" />
+                  <span className="font-semibold text-yellow-600">Status: PENDING VERIFICATION ⏳</span>
+                </>
+              )}
             </div>
 
             <div className="bg-primary/5 border border-primary/20 rounded-lg p-4">

@@ -84,18 +84,18 @@ export const StickyElements = () => {
           showHeader ? 'translate-y-0' : '-translate-y-full'
         }`}
         style={{
-          backgroundColor: 'rgba(224, 96, 85, 0.95)',
+          backgroundColor: 'rgba(139, 92, 246, 0.95)',
           backdropFilter: 'blur(10px)',
         }}
       >
         <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
           <h2 className="text-xl font-heading font-bold text-white flex items-center gap-2">
-            <span>🔴</span>
+            <span>💜</span>
             <span>REDFLAQ</span>
           </h2>
           <Button
             onClick={handleCTAClick}
-            className="bg-white hover:bg-white/90 text-primary font-bold"
+            className="bg-white hover:bg-white/90 text-[#8B5CF6] font-bold"
           >
             Check Now - R50
           </Button>
@@ -105,7 +105,7 @@ export const StickyElements = () => {
       {/* Sticky Bottom Bar (Mobile) */}
       <div
         className="md:hidden fixed bottom-0 left-0 right-0 z-50 animate-slide-up"
-        style={{ backgroundColor: 'var(--red-dark)' }}
+        style={{ backgroundColor: '#6D28D9' }}
       >
         <div className="px-4 py-3 flex items-center justify-between gap-3">
           <div className="flex-1 text-white text-sm font-body">
@@ -115,9 +115,9 @@ export const StickyElements = () => {
           </div>
           <Button
             onClick={handleCTAClick}
-            className="bg-white hover:bg-white/90 text-primary font-bold whitespace-nowrap text-sm px-4"
+            className="bg-white hover:bg-white/90 text-[#8B5CF6] font-bold whitespace-nowrap text-sm px-4"
           >
-            🔴 Get Your Report Now - R50
+            💜 Get Your Report Now - R50
           </Button>
         </div>
       </div>
@@ -127,7 +127,7 @@ export const StickyElements = () => {
         <button
           onClick={handleCTAClick}
           className="hidden md:flex fixed right-6 bottom-6 z-50 w-20 h-20 rounded-full items-center justify-center text-white font-bold text-sm shadow-2xl animate-pulse-glow hover:scale-110 transition-transform"
-          style={{ backgroundColor: 'var(--red-primary)' }}
+          style={{ backgroundColor: '#8B5CF6' }}
         >
           Check Now
         </button>
@@ -137,7 +137,7 @@ export const StickyElements = () => {
       {showExitIntent && (
         <div
           className="fixed inset-0 z-[100] flex items-center justify-center animate-fade-in"
-          style={{ backgroundColor: 'rgba(201, 74, 71, 0.95)' }}
+          style={{ backgroundColor: 'rgba(109, 40, 217, 0.95)' }}
           onClick={() => setShowExitIntent(false)}
         >
           <div
@@ -152,7 +152,7 @@ export const StickyElements = () => {
             </button>
 
             <div className="text-center">
-              <h3 className="font-heading font-black text-3xl mb-4" style={{ color: 'var(--red-primary)' }}>
+              <h3 className="font-heading font-black text-3xl mb-4 text-[#8B5CF6]">
                 WAIT! Get R10 OFF
               </h3>
               <p className="text-gray-700 mb-6">
@@ -161,14 +161,14 @@ export const StickyElements = () => {
 
               <div className="flex justify-center gap-2 mb-6">
                 <div className="bg-gray-100 rounded-lg p-4">
-                  <div className="text-4xl font-black" style={{ color: 'var(--red-primary)' }}>
+                  <div className="text-4xl font-black text-[#8B5CF6]">
                     {String(exitCountdown.minutes).padStart(2, '0')}
                   </div>
                   <div className="text-xs text-gray-500 mt-1">MINUTES</div>
                 </div>
-                <div className="flex items-center text-3xl font-black" style={{ color: 'var(--red-primary)' }}>:</div>
+                <div className="flex items-center text-3xl font-black text-[#8B5CF6]">:</div>
                 <div className="bg-gray-100 rounded-lg p-4">
-                  <div className="text-4xl font-black" style={{ color: 'var(--red-primary)' }}>
+                  <div className="text-4xl font-black text-[#8B5CF6]">
                     {String(exitCountdown.seconds).padStart(2, '0')}
                   </div>
                   <div className="text-xs text-gray-500 mt-1">SECONDS</div>
@@ -177,8 +177,7 @@ export const StickyElements = () => {
 
               <Button
                 onClick={handleCTAClick}
-                className="w-full h-14 text-lg"
-                style={{ backgroundColor: 'var(--red-primary)' }}
+                className="w-full h-14 text-lg bg-[#8B5CF6] hover:bg-[#7C3AED]"
               >
                 Claim My Discount
               </Button>

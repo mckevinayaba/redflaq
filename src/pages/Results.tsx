@@ -338,7 +338,14 @@ const Results = () => {
           <Button
             variant="outline"
             size="lg"
-            onClick={() => navigate("/search-form")}
+            onClick={() => {
+              const paymentId = sessionStorage.getItem("currentPaymentId");
+              if (paymentId) {
+                navigate(`/search-form?payment_id=${paymentId}`);
+              } else {
+                navigate("/");
+              }
+            }}
             className="w-full"
           >
             <Search className="mr-2 h-5 w-5" />
@@ -347,7 +354,20 @@ const Results = () => {
           <Button
             variant="outline"
             size="lg"
-            onClick={() => {/* Implement PDF download */}}
+            onClick={async () => {
+              const element = document.querySelector('.max-w-5xl') as HTMLElement;
+              if (element) {
+                const html2pdf = (await import('html2pdf.js')).default;
+                const opt = {
+                  margin: 10,
+                  filename: `redflaq-report-${results.searchId}.pdf`,
+                  image: { type: 'jpeg' as const, quality: 0.98 },
+                  html2canvas: { scale: 2 },
+                  jsPDF: { unit: 'mm' as const, format: 'a4' as const, orientation: 'portrait' as const }
+                };
+                html2pdf().set(opt).from(element).save();
+              }
+            }}
             className="w-full"
           >
             <Download className="mr-2 h-5 w-5" />

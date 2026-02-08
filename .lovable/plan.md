@@ -1,190 +1,125 @@
 
-# RedFlaq Application - Full Audit Report
+# Fix Non-Working Search Features - Implementation Plan
 
-## Application Overview
-RedFlaq is a South African background check service targeting women for GBV (Gender-Based Violence) prevention. It allows users to check if a person is on the SAPS (South African Police Service) wanted persons list. The service is powered by "Setup A Startup (Pty) Ltd".
+## Problem Analysis
 
----
+After thorough investigation, I found the root causes of why protection order and court case searches return "green" (no match):
 
-## WORKING FEATURES
+### Issue 1: Firecrawl Timeout (408 Error)
+The SAPS website is blocking even Firecrawl requests, causing the scraper to fail when fetching individual detail pages. The edge function logs show:
+- "Firecrawl error for https://www.saps.gov.za/crimestop/wanted/list.php: 408"
 
-### 1. Landing Page (Marketing)
-| Component | Status | Notes |
-|-----------|--------|-------|
-| Hero Section | Working | Purple branding, animated stats counter, CTA button |
-| About Section | Working | Company information |
-| Trust Badges | Working | Business credentials display |
-| Problem Section | Working | Pain points articulation |
-| Solution Section | Working | Service benefits |
-| Social Proof | Working | Testimonials & stats |
-| Pricing Section | Working | 3 tiers (R50/R120/R180) |
-| Guarantee Section | Working | Money-back guarantees |
-| Urgency Section | Working | Scarcity messaging |
-| FAQ Section | Working | Common questions |
-| Final CTA | Working | Closing conversion |
-| Footer | Working | Contact info, legal links |
-| Sticky Elements | Partial | Exit intent modal, floating CTA |
+### Issue 2: Data Structure Mismatch
+Looking at your screenshot, the SAPS website shows "CONTRAVENTION OF PROTECTION ORDER" as a **crime/charge type**, NOT as a separate protection order number field. The database is searching for:
+- `protection_order_number` - expects "PO-2025-001"
+- `court_case_number` - expects "CC-2025-001"
 
-### 2. Payment System
-| Feature | Status | Notes |
-|---------|--------|-------|
-| Payment Modal | Working | Bank transfer details, package selection |
-| Submit Payment | Working | Edge function saves to database |
-| Manual Payments Table | Working | Stores payment records |
-| Instant Access | Working | Users redirected immediately after submission |
-| Admin Verification | Working | `/admin/verify-payments` for manual review |
+But these specific numbers don't exist in SAPS data - only the charge descriptions like "FAILED TO COMPLY WITH A COURT ORDER".
 
-### 3. Search System
-| Feature | Status | Notes |
-|---------|--------|-------|
-| Search Form | Working | Person, Police Case, Protection Order, Court Case types |
-| SA ID Validation | Working | Luhn checksum, date validation |
-| Credit Deduction | Working | Recently fixed with RLS policy |
-| Criminal Records Search | Working | Edge function queries `wanted_persons` table |
-| Results Display | Working | Risk levels (RED/ORANGE/GREEN) |
-
-### 4. Database
-| Table | Records | Status |
-|-------|---------|--------|
-| `wanted_persons` | 69 active | Working - scraped from SAPS |
-| `manual_payments` | 3 records | Working - payment tracking |
-| `purchases` | 0 records | Legacy/unused (PayPal) |
-
-### 5. Admin Tools
-| Tool | Status | Notes |
-|------|--------|-------|
-| Admin Login | Working | Basic password auth (hardcoded: "admin123") |
-| Admin Scraper | Working | Scrapes SAPS wanted persons list |
-| Admin Import | Working | CSV/manual import of records |
-| Admin Verify Payments | Working | Approve/reject payments |
-
-### 6. Edge Functions
-| Function | Status | Purpose |
-|----------|--------|---------|
-| `search-criminal-records` | Working | Searches wanted_persons table |
-| `scrape-saps-wanted` | Working | Scrapes SAPS website |
-| `import-wanted-persons` | Working | Bulk import records |
-| `submit-payment` | Working | Creates payment records |
+### Current Database State
+| Field | Records with Data |
+|-------|------------------|
+| charges | 69 (100%) |
+| case_number | 1 (1.4%) |
+| police_station | 1 (1.4%) |
+| protection_order_number | 0 (0%) |
+| court_case_number | 0 (0%) |
 
 ---
 
-## NOT WORKING / MISSING FEATURES
+## Proposed Solution
 
-### 1. Email Notifications (CRITICAL)
-- **Issue**: No email sending functionality exists
-- **Impact**: Users expect to receive search links via email after payment
-- **Current state**: Payment modal says "We email your search link" but no edge function sends emails
-- **Required**: Need to integrate email service (Resend, SendGrid, etc.)
+### Option A: Change Search to Match Charges (Recommended)
 
----
+Transform the "Protection Order" and "Court Case" search types to search the `charges` field for relevant keywords instead of non-existent number fields.
 
-## ✅ FIXED ISSUES (Completed)
+**How it works:**
+- Protection Order search → searches for "PROTECTION ORDER" in charges
+- Court Case search → searches for "COURT" in charges
 
-1. ~~**PDF Report Generation**~~ - Now working with html2pdf.js
-2. ~~**Sticky Elements Branding**~~ - Updated to purple (#8B5CF6)
-3. ~~**Admin Security**~~ - Password now stored in ADMIN_PASSWORD secret
-4. ~~**Receipt Page Verification**~~ - Now shows pending payments with appropriate status
-5. ~~**"Search Another Person" Flow**~~ - Now passes payment_id for remaining credits
-6. ~~**Footer Copyright Year**~~ - Now dynamic
+This will immediately return matches for entries like:
+- "CONTRAVENTION OF PROTECTION ORDER" (matches protection order search)
+- "FAILED TO COMPLY WITH A COURT ORDER" (matches court case search)
 
-### Still TODO: Missing Footer Pages
-- **Issue**: Footer links to pages that don't exist
-- **Missing routes**: `/about`, `/privacy`, `/terms`, `/refund`, `/contact`
+**Benefits:**
+- Works immediately with existing data
+- No manual data entry required
+- Matches what SAPS actually provides
 
 ---
 
-## SECURITY WARNINGS
+### Option B: Add All Data Entry Fields + Keep Current Logic
 
-### Database Linter Findings
-1. **Extension in Public** (WARN) - Extensions should be in separate schema
-2. **RLS Policy Always True** (3x WARN) - Overly permissive policies:
-   - `purchases` table: INSERT, UPDATE allow `true`
-   - `manual_payments` table: INSERT allows `true`
+If you need to search by actual order NUMBERS (from court documents, not SAPS):
+1. Expand manual entry form to include protection_order_number, court_case_number
+2. Expand CSV import to support all fields
+3. Manually enter data from court documents
 
-### RLS Policy Analysis
-| Table | SELECT | INSERT | UPDATE | DELETE |
-|-------|--------|--------|--------|--------|
-| `wanted_persons` | Public READ | Blocked | Blocked | Blocked |
-| `manual_payments` | Public READ | Public | When verified | Blocked |
-| `purchases` | Public READ | Public | Public | Blocked |
+**Benefits:**
+- Precise number-based search
+- Supports external data sources
 
----
-
-## RECOMMENDED FIXES (Priority Order)
-
-### High Priority
-1. **Implement Email Notifications**
-   - Create `send-email` edge function
-   - Integrate Resend or similar service
-   - Send search link after payment submission
-
-2. **Implement PDF Report Generation**
-   - Add client-side PDF generation (html2pdf.js or similar)
-   - Include search results, timestamp, disclaimer
-
-3. **Fix Admin Security**
-   - Move password to environment variable/secret
-   - Or implement proper Supabase Auth for admin
-
-4. **Fix StickyElements Branding**
-   - Change all red references to purple (#8B5CF6)
-
-### Medium Priority
-5. **Create Missing Legal Pages**
-   - Privacy Policy
-   - Terms of Service
-   - Refund Policy
-   - About page
-   - Contact page
-
-6. **Fix "Search Another Person" Flow**
-   - Pass payment_id to allow using remaining credits
-
-7. **Fix Receipt Page**
-   - Allow viewing receipt for pending payments
-   - Or show different status message
-
-### Low Priority
-8. **Tighten RLS Policies**
-   - Add email validation on insert
-   - Add rate limiting consideration
-
-9. **Update Footer Copyright Year**
-   - Currently shows 2024, should be dynamic
+**Drawbacks:**
+- Requires manual data entry
+- SAPS data won't populate these fields
 
 ---
 
-## DATA STATISTICS
+## Implementation Details (Option A)
+
+### Phase 1: Update Search Edge Function
+
+Modify `supabase/functions/search-criminal-records/index.ts` to search the `charges` field:
 
 ```text
-Database Summary:
-- Wanted Persons: 69 active records
-- Manual Payments: 3 pending payments
-- Purchases (legacy): 0 records
+Protection Order Search:
+- Instead of: .ilike('protection_order_number', '%value%')
+- Change to:  .ilike('charges', '%protection%')
 
-Payment Records (Recent):
-1. tg@gmail.com - R50 (pending) - 2025-11-09
-2. vc@gmail.com - R50 (pending) - 2025-11-09
-3. mckevin.ayaba@gmail.com - R50 (pending) - 2025-11-09
+Court Case Search:
+- Instead of: .ilike('court_case_number', '%value%')
+- Change to:  .ilike('charges', '%court%')
 ```
 
+### Phase 2: Update Search Form UI
+
+Change the search form to accept descriptive keywords instead of case number format:
+- Protection Order: "Enter keyword (e.g., 'protection order')"
+- Court Case: "Enter keyword (e.g., 'court order', 'failed to comply')"
+
+### Phase 3: Fix Scraper Timeout Issue
+
+Modify scraper to handle Firecrawl failures gracefully:
+1. Increase timeout from 2000ms to 10000ms
+2. Add retry logic (3 attempts with exponential backoff)
+3. Return partial results if list page succeeds but detail pages fail
+
 ---
 
-## TECHNICAL DEBT
+## Files to Modify
 
-1. **Duplicate payment tables**: `purchases` (PayPal) vs `manual_payments` (EFT) - consider consolidation
-2. **CSS Variables**: Some components still use hardcoded hex colors instead of CSS variables
-3. **Unused PayPal integration**: PayPal secrets exist but not used
-4. **No error tracking**: No Sentry or similar for production monitoring
+| File | Changes |
+|------|---------|
+| supabase/functions/search-criminal-records/index.ts | Change protection_order and court_case search to query charges field |
+| src/pages/SearchForm.tsx | Update validation and placeholder text for new search behavior |
+| supabase/functions/scrape-saps-wanted/index.ts | Add retry logic and increase timeout to prevent 408 errors |
 
 ---
 
-## SUMMARY
+## Expected Outcome
 
-**Working Well**: Core payment flow, search functionality, SAPS scraper, admin tools
+After implementation:
+- Protection Order search for "protection" will return "DAMIAN CLOETE - CONTRAVENTION OF PROTECTION ORDER"
+- Court Case search for "court" will return "PATRICK MAHLAULE - FAILED TO COMPLY WITH A COURT ORDER"
+- Scraper will be more resilient to SAPS blocking
 
-**Critical Gaps**: Email notifications, PDF generation, admin security
+---
 
-**Branding**: 90% converted to purple, StickyElements still needs update
+## Alternative: Hybrid Approach
 
-The application is functional for the core use case but lacks the transactional email capability that users expect based on the UI messaging.
+Combine both options:
+1. Search charges field for matches (immediate results)
+2. Also search specific number fields if they exist (future-proofing)
+3. Add manual entry for specific case numbers when available from court documents
+
+This gives the best of both worlds - immediate functionality with existing SAPS data, plus support for precise number searches when that data is manually entered.

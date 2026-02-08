@@ -1,76 +1,82 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Space+Grotesk:wght@300..700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* South African Minimalism Design System */
+/* Plinq-Inspired Purple Design System */
 
 @layer base {
   :root {
-    /* Warmer, more human color palette */
-    --background: 30 14% 99%;
+    /* Pure white background for Plinq feel */
+    --background: 0 0% 100%;
     --foreground: 20 14% 15%;
-    
-    --card: 30 14% 99%;
+
+    --card: 0 0% 100%;
     --card-foreground: 20 14% 15%;
-    
-    --popover: 30 14% 99%;
+
+    --popover: 0 0% 100%;
     --popover-foreground: 20 14% 15%;
-    
-    /* Deeper, sophisticated purple */
-    --primary: 263 70% 50%;
+
+    /* Primary Purple */
+    --primary: 262 83% 58%;
     --primary-foreground: 0 0% 100%;
-    --primary-light: 263 70% 95%;
-    
-    /* Warm grays - more human feel */
+
+    /* Light purple for backgrounds */
+    --purple-50: 270 100% 98%;
+    --purple-100: 269 100% 95%;
+    --purple-600: 262 83% 58%;
+    --purple-700: 263 70% 50%;
+    --purple-800: 263 70% 42%;
+
     --secondary: 30 6% 96%;
     --secondary-foreground: 20 14% 15%;
-    
-    --muted: 30 6% 94%;
-    --muted-foreground: 20 6% 44%;
-    
-    --accent: 30 6% 90%;
-    --accent-foreground: 20 14% 15%;
-    
-    --destructive: 0 72% 51%;
+
+    --muted: 30 6% 96%;
+    --muted-foreground: 20 9% 46%;
+
+    --accent: 270 100% 98%;
+    --accent-foreground: 262 83% 58%;
+
+    --destructive: 0 84% 50%;
     --destructive-foreground: 0 0% 100%;
-    
-    --border: 30 10% 88%;
-    --input: 30 10% 88%;
-    --ring: 263 70% 50%;
 
-    /* Risk signal colors - clear and distinct */
-    --risk-red: 0 72% 51%;
-    --risk-red-light: 0 72% 96%;
-    --risk-amber: 24 95% 53%;
-    --risk-amber-light: 24 95% 96%;
-    --risk-yellow: 45 93% 47%;
-    --risk-yellow-light: 45 93% 96%;
-    --risk-green: 142 71% 45%;
-    --risk-green-light: 142 71% 96%;
+    --border: 20 6% 90%;
+    --input: 20 6% 90%;
+    --ring: 262 83% 58%;
 
-    /* South African accent colors */
+    --radius: 0.75rem;
+
+    /* South African Accent Colors */
     --sa-blue: 230 100% 27%;
-    --sa-gold: 43 100% 54%;
-    --sa-green: 160 100% 24%;
-    --sa-red: 4 77% 54%;
+    --sa-gold: 44 100% 54%;
+    --sa-green: 156 100% 24%;
+    --sa-red: 4 73% 54%;
 
-    --radius: 0.625rem;
+    /* Risk Colors */
+    --risk-danger: 0 72% 51%;
+    --risk-warning: 25 95% 53%;
+    --risk-caution: 43 96% 41%;
+    --risk-safe: 142 76% 36%;
+
+    --chart-1: 262 83% 58%;
+    --chart-2: 156 100% 24%;
+    --chart-3: 44 100% 54%;
+    --chart-4: 230 100% 27%;
+    --chart-5: 4 73% 54%;
     
     /* Typography - Modern, unique fonts */
     --font-heading: 'Space Grotesk', system-ui, sans-serif;
     --font-body: 'DM Sans', system-ui, sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
-    
-    --sidebar-background: 30 6% 97%;
-    --sidebar-foreground: 20 14% 26%;
-    --sidebar-primary: 20 14% 10%;
-    --sidebar-primary-foreground: 30 6% 98%;
-    --sidebar-accent: 30 6% 94%;
-    --sidebar-accent-foreground: 20 14% 10%;
-    --sidebar-border: 30 10% 88%;
-    --sidebar-ring: 263 70% 50%;
+
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 20 14% 15%;
+    --sidebar-primary: 262 83% 58%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 262 83% 95%;
+    --sidebar-accent-foreground: 262 83% 40%;
+    --sidebar-border: 20 6% 90%;
+    --sidebar-ring: 262 83% 58%;
   }
 }
 

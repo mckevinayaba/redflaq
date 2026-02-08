@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Database, CheckCircle2, AlertCircle, Upload, Users } from "lucide-react";
+import { Loader2, Database, CheckCircle2, AlertCircle, Upload, Users, FileSearch } from "lucide-react";
 
 interface ScraperResult {
   success: boolean;
@@ -18,17 +19,29 @@ interface ScraperResult {
   error?: string;
 }
 
+interface DetailScraperResult {
+  success: boolean;
+  processed?: number;
+  failed?: number;
+  remaining?: number;
+  message?: string;
+  errors?: string[];
+  error?: string;
+}
+
 const AdminScraper = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingDetails, setIsLoadingDetails] = useState(false);
   const [result, setResult] = useState<ScraperResult | null>(null);
+  const [detailResult, setDetailResult] = useState<DetailScraperResult | null>(null);
   const [lastRun, setLastRun] = useState<string | null>(null);
-  const [dbStats, setDbStats] = useState({ total: 0, active: 0 });
+  const [dbStats, setDbStats] = useState({ total: 0, active: 0, withDetails: 0, needingDetails: 0 });
 
-  useState(() => {
+  useEffect(() => {
     fetchDbStats();
-  });
+  }, []);
 
   const fetchDbStats = async () => {
     const { count: total } = await supabase
@@ -40,7 +53,26 @@ const AdminScraper = () => {
       .select("*", { count: "exact", head: true })
       .eq("is_active", true);
 
-    setDbStats({ total: total || 0, active: active || 0 });
+    const { count: withDetails } = await supabase
+      .from("wanted_persons")
+      .select("*", { count: "exact", head: true })
+      .eq("is_active", true)
+      .not("case_number", "is", null)
+      .neq("case_number", "NOT_FOUND");
+
+    const { count: needingDetails } = await supabase
+      .from("wanted_persons")
+      .select("*", { count: "exact", head: true })
+      .eq("is_active", true)
+      .is("case_number", null)
+      .not("detail_page_url", "is", null);
+
+    setDbStats({ 
+      total: total || 0, 
+      active: active || 0, 
+      withDetails: withDetails || 0,
+      needingDetails: needingDetails || 0,
+    });
   };
 
   const runScraper = async () => {
@@ -95,6 +127,68 @@ const AdminScraper = () => {
     }
   };
 
+  const runDetailScraper = async () => {
+    setIsLoadingDetails(true);
+    setDetailResult(null);
+
+    try {
+      console.log("Starting detail scraper...");
+      
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/scrape-saps-details`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const data: DetailScraperResult = await response.json();
+      console.log("Detail scraper result:", data);
+
+      setDetailResult(data);
+
+      if (data.success) {
+        await fetchDbStats();
+        if (data.message) {
+          toast({
+            title: "✅ All records processed!",
+            description: data.message,
+          });
+        } else {
+          toast({
+            title: "✅ Detail scrape completed!",
+            description: `Processed ${data.processed} records. ${data.remaining} remaining.`,
+          });
+        }
+      } else {
+        toast({
+          title: "❌ Detail scraper failed",
+          description: data.error || "Unknown error occurred",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error("Error running detail scraper:", error);
+      toast({
+        title: "❌ Request failed",
+        description: error instanceof Error ? error.message : "Failed to connect to detail scraper",
+        variant: "destructive",
+      });
+      setDetailResult({
+        success: false,
+        error: error instanceof Error ? error.message : "Unknown error",
+      });
+    } finally {
+      setIsLoadingDetails(false);
+    }
+  };
+
+  const detailProgress = dbStats.active > 0 
+    ? ((dbStats.withDetails / dbStats.active) * 100) 
+    : 0;
+
   return (
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-4xl mx-auto space-y-6">
@@ -124,31 +218,54 @@ const AdminScraper = () => {
               Database Statistics
             </CardTitle>
           </CardHeader>
-          <CardContent className="grid grid-cols-2 gap-4">
-            <div>
-              <p className="text-sm text-muted-foreground">Total Records</p>
-              <p className="text-3xl font-bold">{dbStats.total}</p>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div>
+                <p className="text-sm text-muted-foreground">Total Records</p>
+                <p className="text-3xl font-bold">{dbStats.total}</p>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Active Records</p>
+                <p className="text-3xl font-bold text-primary">{dbStats.active}</p>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">With Case Numbers</p>
+                <p className="text-3xl font-bold text-primary">{dbStats.withDetails}</p>
+              </div>
+              <div>
+                <p className="text-sm text-muted-foreground">Needing Details</p>
+                <p className="text-3xl font-bold text-muted-foreground">{dbStats.needingDetails}</p>
+              </div>
             </div>
-            <div>
-              <p className="text-sm text-muted-foreground">Active Records</p>
-              <p className="text-3xl font-bold text-green-600">{dbStats.active}</p>
+            
+            {/* Detail Progress Bar */}
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm">
+                <span className="text-muted-foreground">Detail Scraping Progress</span>
+                <span className="font-medium">{dbStats.withDetails} / {dbStats.active} ({detailProgress.toFixed(0)}%)</span>
+              </div>
+              <Progress value={detailProgress} className="h-2" />
             </div>
           </CardContent>
         </Card>
 
+        {/* Main Scraper Control */}
         <Card className="p-6 space-y-6">
           <div className="flex items-center justify-between">
             <div className="space-y-1">
-              <h2 className="text-2xl font-semibold">Scraper Control</h2>
+              <h2 className="text-2xl font-semibold">Main Scraper</h2>
+              <p className="text-sm text-muted-foreground">
+                Fetches the list of wanted persons from SAPS website
+              </p>
               {lastRun && (
-                <p className="text-sm text-muted-foreground">
+                <p className="text-xs text-muted-foreground">
                   Last run: {lastRun}
                 </p>
               )}
             </div>
             <Button
               onClick={runScraper}
-              disabled={isLoading}
+              disabled={isLoading || isLoadingDetails}
               size="lg"
               className="min-w-[200px]"
             >
@@ -171,8 +288,8 @@ const AdminScraper = () => {
               <div className="flex items-center gap-2">
                 {result.success ? (
                   <>
-                    <CheckCircle2 className="h-6 w-6 text-green-600" />
-                    <h3 className="text-xl font-semibold text-green-600">
+                    <CheckCircle2 className="h-6 w-6 text-primary" />
+                    <h3 className="text-xl font-semibold text-primary">
                       Scraper Completed Successfully
                     </h3>
                   </>
@@ -194,27 +311,27 @@ const AdminScraper = () => {
                       {result.total_scraped}
                     </p>
                   </div>
-                  <div className="bg-purple-500/10 p-4 rounded-lg">
+                  <div className="bg-secondary p-4 rounded-lg">
                     <p className="text-sm text-muted-foreground">Details Fetched</p>
-                    <p className="text-3xl font-bold text-purple-600">
+                    <p className="text-3xl font-bold text-secondary-foreground">
                       {result.details_fetched || 0}
                     </p>
                   </div>
-                  <div className="bg-green-500/10 p-4 rounded-lg">
+                  <div className="bg-primary/10 p-4 rounded-lg">
                     <p className="text-sm text-muted-foreground">New Records</p>
-                    <p className="text-3xl font-bold text-green-600">
+                    <p className="text-3xl font-bold text-primary">
                       {result.new_records}
                     </p>
                   </div>
-                  <div className="bg-blue-500/10 p-4 rounded-lg">
+                  <div className="bg-accent p-4 rounded-lg">
                     <p className="text-sm text-muted-foreground">Updated</p>
-                    <p className="text-3xl font-bold text-blue-600">
+                    <p className="text-3xl font-bold text-accent-foreground">
                       {result.updated_records}
                     </p>
                   </div>
-                  <div className="bg-orange-500/10 p-4 rounded-lg">
+                  <div className="bg-muted p-4 rounded-lg">
                     <p className="text-sm text-muted-foreground">Deactivated</p>
-                    <p className="text-3xl font-bold text-orange-600">
+                    <p className="text-3xl font-bold text-muted-foreground">
                       {result.deactivated_records}
                     </p>
                   </div>
@@ -231,22 +348,114 @@ const AdminScraper = () => {
               )}
 
               {result.errors && result.errors.length > 0 && (
-                <div className="bg-orange-500/10 p-4 rounded-lg">
-                  <p className="text-sm font-semibold text-orange-600 mb-2">
+                <div className="bg-muted p-4 rounded-lg">
+                  <p className="text-sm font-semibold text-muted-foreground mb-2">
                     Partial Errors ({result.errors.length}):
                   </p>
-                  <ul className="text-xs text-orange-600/90 space-y-1 max-h-40 overflow-auto">
+                  <ul className="text-xs text-muted-foreground space-y-1 max-h-40 overflow-auto">
                     {result.errors.map((error, i) => (
                       <li key={i}>• {error}</li>
                     ))}
                   </ul>
                 </div>
               )}
+            </div>
+          )}
+        </Card>
 
-              {result.scrapedAt && (
-                <p className="text-xs text-muted-foreground">
-                  Completed at: {new Date(result.scrapedAt).toLocaleString()}
-                </p>
+        {/* Detail Scraper Control */}
+        <Card className="p-6 space-y-6">
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <h2 className="text-2xl font-semibold">Detail Scraper</h2>
+              <p className="text-sm text-muted-foreground">
+                Fetches case numbers, police stations from individual detail pages (5 at a time)
+              </p>
+            </div>
+            <Button
+              onClick={runDetailScraper}
+              disabled={isLoading || isLoadingDetails || dbStats.needingDetails === 0}
+              size="lg"
+              variant="secondary"
+              className="min-w-[200px]"
+            >
+              {isLoadingDetails ? (
+                <>
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  Fetching Details...
+                </>
+              ) : (
+                <>
+                  <FileSearch className="mr-2 h-5 w-5" />
+                  Fetch Missing Details
+                </>
+              )}
+            </Button>
+          </div>
+
+          {detailResult && (
+            <div className="space-y-4 border-t pt-6">
+              <div className="flex items-center gap-2">
+                {detailResult.success ? (
+                  <>
+                    <CheckCircle2 className="h-6 w-6 text-primary" />
+                    <h3 className="text-xl font-semibold text-primary">
+                      {detailResult.message || `Processed ${detailResult.processed} records`}
+                    </h3>
+                  </>
+                ) : (
+                  <>
+                    <AlertCircle className="h-6 w-6 text-destructive" />
+                    <h3 className="text-xl font-semibold text-destructive">
+                      Detail Scraper Failed
+                    </h3>
+                  </>
+                )}
+              </div>
+
+              {detailResult.success && !detailResult.message && (
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="bg-primary/10 p-4 rounded-lg">
+                    <p className="text-sm text-muted-foreground">Processed</p>
+                    <p className="text-3xl font-bold text-primary">
+                      {detailResult.processed}
+                    </p>
+                  </div>
+                  <div className="bg-destructive/10 p-4 rounded-lg">
+                    <p className="text-sm text-muted-foreground">Failed</p>
+                    <p className="text-3xl font-bold text-destructive">
+                      {detailResult.failed}
+                    </p>
+                  </div>
+                  <div className="bg-muted p-4 rounded-lg">
+                    <p className="text-sm text-muted-foreground">Remaining</p>
+                    <p className="text-3xl font-bold text-muted-foreground">
+                      {detailResult.remaining}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {detailResult.error && (
+                <div className="bg-destructive/10 p-4 rounded-lg">
+                  <p className="text-sm font-semibold text-destructive mb-2">
+                    Error Details:
+                  </p>
+                  <p className="text-sm text-destructive/90">{detailResult.error}</p>
+                </div>
+              )}
+
+              {detailResult.errors && detailResult.errors.length > 0 && (
+                <div className="bg-muted p-4 rounded-lg">
+                  <p className="text-sm font-semibold text-muted-foreground mb-2">
+                    Errors ({detailResult.errors.length}):
+                  </p>
+                  <ul className="text-xs text-muted-foreground space-y-1 max-h-40 overflow-auto">
+                    {detailResult.errors.map((error, i) => (
+                      <li key={i}>• {error}</li>
+                    ))}
+                  </ul>
+                </div>
               )}
             </div>
           )}
@@ -256,23 +465,17 @@ const AdminScraper = () => {
           <h3 className="text-lg font-semibold mb-3">About This Tool</h3>
           <ul className="space-y-2 text-sm text-muted-foreground">
             <li>
-              • Scrapes the official SAPS wanted persons list from{" "}
-              <code className="text-xs bg-background px-1 py-0.5 rounded">
-                saps.gov.za
-              </code>
+              • <strong>Main Scraper:</strong> Fetches the list of wanted persons (names, charges, photos)
             </li>
             <li>
-              • Extracts names, charges, photos, and detail page URLs for 300+
-              wanted persons
+              • <strong>Detail Scraper:</strong> Fetches case numbers, police stations from individual pages (run multiple times)
             </li>
             <li>
-              • Updates existing records and adds new ones to the database
+              • Uses Firecrawl to bypass anti-bot protection with 10-second wait times and retries
             </li>
             <li>
-              • Marks persons as inactive if not found in the latest scrape
-              (removed from SAPS list)
+              • Detail scraper processes 5 records per run to avoid timeouts - click repeatedly until complete
             </li>
-            <li>• Can be scheduled to run automatically daily at 2:00 AM</li>
           </ul>
         </Card>
       </div>

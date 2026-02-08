@@ -33,45 +33,69 @@ interface FirecrawlResponse {
   error?: string;
 }
 
-// Fetch page using Firecrawl API (handles anti-bot measures)
-async function fetchWithFirecrawl(url: string): Promise<string | null> {
+// Fetch page using Firecrawl API with retry logic
+async function fetchWithFirecrawl(url: string, retries = 3): Promise<string | null> {
   const apiKey = Deno.env.get('FIRECRAWL_API_KEY');
   if (!apiKey) {
     console.error('FIRECRAWL_API_KEY not configured');
     return null;
   }
 
-  try {
-    const response = await fetch('https://api.firecrawl.dev/v1/scrape', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        url,
-        formats: ['html'],
-        onlyMainContent: false,
-        waitFor: 2000,
-      }),
-    });
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      console.log(`Fetching ${url} (attempt ${attempt}/${retries})`);
+      
+      const response = await fetch('https://api.firecrawl.dev/v1/scrape', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          url,
+          formats: ['html'],
+          onlyMainContent: false,
+          waitFor: 10000, // Increased from 2000ms to 10000ms
+        }),
+      });
 
-    if (!response.ok) {
-      console.error(`Firecrawl error for ${url}: ${response.status}`);
+      if (!response.ok) {
+        console.error(`Firecrawl error for ${url}: ${response.status}`);
+        if (attempt < retries) {
+          // Exponential backoff: 2s, 4s, 8s
+          const delay = Math.pow(2, attempt) * 1000;
+          console.log(`Retrying in ${delay}ms...`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+          continue;
+        }
+        return null;
+      }
+
+      const data = await response.json();
+      if (data.success && data.data?.html) {
+        console.log(`Successfully fetched ${url}`);
+        return data.data.html;
+      }
+      
+      console.error(`Firecrawl no content for ${url}:`, data.error);
+      if (attempt < retries) {
+        const delay = Math.pow(2, attempt) * 1000;
+        await new Promise(resolve => setTimeout(resolve, delay));
+        continue;
+      }
+      return null;
+    } catch (error) {
+      console.error(`Firecrawl fetch failed for ${url}:`, error);
+      if (attempt < retries) {
+        const delay = Math.pow(2, attempt) * 1000;
+        await new Promise(resolve => setTimeout(resolve, delay));
+        continue;
+      }
       return null;
     }
-
-    const data: FirecrawlResponse = await response.json();
-    if (data.success && data.data?.html) {
-      return data.data.html;
-    }
-    
-    console.error(`Firecrawl no content for ${url}:`, data.error);
-    return null;
-  } catch (error) {
-    console.error(`Firecrawl fetch failed for ${url}:`, error);
-    return null;
   }
+  
+  return null;
 }
 
 // Parse list page HTML to extract basic info and bid IDs
@@ -226,9 +250,9 @@ serve(async (req) => {
     const wantedPersons = parseListPage(listHtml);
     console.log(`Found ${wantedPersons.length} wanted persons on list page`);
     
-    // Step 2: Fetch detail pages (batch to avoid rate limiting)
-    const batchSize = 10;
-    const delayMs = 1000;
+    // Step 2: Fetch detail pages (reduced batch size to avoid timeouts)
+    const batchSize = 3; // Reduced from 10 to 3
+    const delayMs = 3000; // Increased from 1000ms to 3000ms
     let detailsFetched = 0;
     
     for (let i = 0; i < wantedPersons.length; i += batchSize) {

@@ -1,85 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* South African Minimalism Design System */
 
 @layer base {
   :root {
-    /* Purple Color Palette - RedFlaq Brand */
-    --purple-50: 270 100% 98%;        /* #FAF5FF - Subtle tints */
-    --purple-100: 269 100% 95%;       /* #F3E8FF - Light backgrounds */
-    --purple-200: 269 100% 92%;       /* #E9D5FF */
-    --purple-300: 269 97% 85%;        /* #D8B4FE */
-    --purple-400: 270 95% 75%;        /* #C084FC */
-    --purple-500: 271 91% 65%;        /* #A855F7 */
-    --purple-600: 271 81% 56%;        /* #9333EA - Primary brand */
-    --purple-700: 272 72% 47%;        /* #7E22CE - Hover states */
-    --purple-800: 273 67% 39%;        /* #6B21A8 */
-    --purple-900: 274 66% 32%;        /* #581C87 */
+    /* Warmer, more human color palette */
+    --background: 30 14% 99%;
+    --foreground: 20 14% 15%;
     
-    /* Gray Palette */
-    --gray-50: 210 20% 98%;           /* #F9FAFB - Section backgrounds */
-    --gray-100: 220 14% 96%;          /* #F3F4F6 - Card backgrounds */
-    --gray-200: 220 13% 91%;          /* #E5E7EB */
-    --gray-300: 216 12% 84%;          /* #D1D5DB */
-    --gray-400: 218 11% 65%;          /* #9CA3AF */
-    --gray-500: 220 9% 46%;           /* #6B7280 - Secondary text */
-    --gray-600: 215 14% 34%;          /* #4B5563 */
-    --gray-700: 217 19% 27%;          /* #374151 - Body text */
-    --gray-800: 215 28% 17%;          /* #1F2937 - Footer bg */
-    --gray-900: 221 39% 11%;          /* #111827 - Headings */
+    --card: 30 14% 99%;
+    --card-foreground: 20 14% 15%;
     
-    /* Risk Signal Colors */
-    --risk-red: 0 84% 60%;            /* #EF4444 - High risk */
-    --risk-red-light: 0 86% 97%;      /* #FEF2F2 - Red background */
-    --risk-amber: 38 92% 50%;         /* #F59E0B - Moderate risk */
-    --risk-amber-light: 48 100% 96%;  /* #FFFBEB - Amber background */
-    --risk-yellow: 45 93% 47%;        /* #EAB308 - Low risk */
-    --risk-yellow-light: 55 92% 95%;  /* #FEFCE8 - Yellow background */
-    --risk-green: 160 84% 39%;        /* #10B981 - Clear/safe */
-    --risk-green-light: 138 76% 97%;  /* #F0FDF4 - Green background */
+    --popover: 30 14% 99%;
+    --popover-foreground: 20 14% 15%;
     
-    /* Accent Colors */
-    --pink-500: 330 81% 60%;          /* #EC4899 - Secondary CTA */
-    --gold: 38 92% 50%;               /* #FCD34D - Stars, accents */
-    
-    /* Core System Colors */
-    --background: 0 0% 100%;
-    --foreground: 221 39% 11%;
-    
-    --card: 0 0% 100%;
-    --card-foreground: 217 19% 27%;
-    
-    --primary: 271 81% 56%;
+    /* Deeper, sophisticated purple */
+    --primary: 263 70% 50%;
     --primary-foreground: 0 0% 100%;
+    --primary-light: 263 70% 95%;
     
-    --secondary: 210 20% 98%;
-    --secondary-foreground: 221 39% 11%;
+    /* Warm grays - more human feel */
+    --secondary: 30 6% 96%;
+    --secondary-foreground: 20 14% 15%;
     
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 9% 46%;
+    --muted: 30 6% 94%;
+    --muted-foreground: 20 6% 44%;
     
-    --accent: 271 81% 56%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 30 6% 90%;
+    --accent-foreground: 20 14% 15%;
     
-    --success: 160 84% 39%;
-    --success-foreground: 0 0% 100%;
-    
-    --destructive: 0 84% 60%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
     
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 271 81% 56%;
+    --border: 30 10% 88%;
+    --input: 30 10% 88%;
+    --ring: 263 70% 50%;
+
+    /* Risk signal colors - clear and distinct */
+    --risk-red: 0 72% 51%;
+    --risk-red-light: 0 72% 96%;
+    --risk-amber: 24 95% 53%;
+    --risk-amber-light: 24 95% 96%;
+    --risk-yellow: 45 93% 47%;
+    --risk-yellow-light: 45 93% 96%;
+    --risk-green: 142 71% 45%;
+    --risk-green-light: 142 71% 96%;
+
+    /* South African accent colors */
+    --sa-blue: 230 100% 27%;
+    --sa-gold: 43 100% 54%;
+    --sa-green: 160 100% 24%;
+    --sa-red: 4 77% 54%;
+
+    --radius: 0.625rem;
     
-    --radius: 0.75rem;
+    /* Typography - Modern, unique fonts */
+    --font-heading: 'Space Grotesk', system-ui, sans-serif;
+    --font-body: 'DM Sans', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
     
-    /* Typography */
-    --font-heading: 'Inter', system-ui, sans-serif;
-    --font-body: 'Inter', system-ui, sans-serif;
+    --sidebar-background: 30 6% 97%;
+    --sidebar-foreground: 20 14% 26%;
+    --sidebar-primary: 20 14% 10%;
+    --sidebar-primary-foreground: 30 6% 98%;
+    --sidebar-accent: 30 6% 94%;
+    --sidebar-accent-foreground: 20 14% 10%;
+    --sidebar-border: 30 10% 88%;
+    --sidebar-ring: 263 70% 50%;
   }
 }
 
@@ -89,12 +80,13 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
     font-family: var(--font-body);
   }
   
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
+    font-weight: 600;
   }
 }
 

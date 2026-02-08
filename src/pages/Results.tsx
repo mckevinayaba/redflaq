@@ -3,9 +3,9 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { CheckCircle, Download, Home, Search, AlertTriangle, ShieldAlert, ShieldCheck, User, Phone } from "lucide-react";
+import { CheckCircle, Download, Home, Search, AlertTriangle, ShieldAlert, ShieldCheck, User, Phone, Flag, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
+import { DisputeModal } from "@/components/DisputeModal";
 
 interface WantedPerson {
   id: string;
@@ -15,6 +15,12 @@ interface WantedPerson {
   charges: string;
   photo_url?: string;
   detail_page_url?: string;
+  case_number?: string;
+  police_station?: string;
+  court_case_number?: string;
+  legal_status?: string;
+  province?: string;
+  updated_at?: string;
 }
 
 interface SearchResultData {
@@ -36,6 +42,8 @@ const Results = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [results, setResults] = useState<SearchResultData | null>(null);
+  const [disputeRecord, setDisputeRecord] = useState<WantedPerson | null>(null);
+  const [isDisputeModalOpen, setIsDisputeModalOpen] = useState(false);
   const searchId = searchParams.get("search_id");
 
   useEffect(() => {
@@ -100,6 +108,11 @@ const Results = () => {
     }
   };
 
+  const handleChallenge = (person: WantedPerson) => {
+    setDisputeRecord(person);
+    setIsDisputeModalOpen(true);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
@@ -131,6 +144,9 @@ const Results = () => {
               >
                 <div className="absolute inset-0 bg-red-600/20 backdrop-blur-sm"></div>
                 <div className="relative z-10">
+                  <Badge className="bg-white text-red-600 mb-4 text-sm px-4 py-1">
+                    ACTIVE WARRANT
+                  </Badge>
                   <h1 className="text-3xl md:text-4xl font-bold mb-4 tracking-tight">
                     🚨 EXTREME ALERT - WANTED BY SAPS
                   </h1>
@@ -145,7 +161,7 @@ const Results = () => {
 
         {/* Search Summary Card */}
         <Card className="mb-8 shadow-lg">
-          <CardHeader className="border-b bg-gradient-to-r from-[#8B5CF6]/5 to-[#8B5CF6]/10">
+          <CardHeader className="border-b bg-gradient-to-r from-primary/5 to-primary/10">
             <div className="flex items-center justify-between flex-wrap gap-4">
               <div>
                 <CardTitle className="text-2xl md:text-3xl mb-2">
@@ -153,6 +169,7 @@ const Results = () => {
                    results.searchType === "police_case" ? "Police Case Search Results" :
                    results.searchType === "protection_order" ? "Protection Order Search Results" :
                    results.searchType === "court_case" ? "Court Case Search Results" :
+                   results.searchType === "active_warrant" ? "Active Warrants Search Results" :
                    "Search Results"}
                 </CardTitle>
                 <CardDescription className="text-base">
@@ -169,22 +186,22 @@ const Results = () => {
           <CardContent className="pt-6">
             <div className="grid md:grid-cols-3 gap-6">
               <div>
-                <p className="text-sm text-gray-600 font-semibold mb-1">
+                <p className="text-sm text-muted-foreground font-semibold mb-1">
                   {results.searchType === "person" ? "Full Name" : "Search Query"}
                 </p>
-                <p className="text-lg font-bold text-gray-900">
+                <p className="text-lg font-bold text-foreground">
                   {results.searchIdentifier || results.fullName || "N/A"}
                 </p>
               </div>
               {results.idNumber && (
                 <div>
-                  <p className="text-sm text-gray-600 font-semibold mb-1">ID Number</p>
-                  <p className="text-lg font-mono text-gray-900">{results.idNumber}</p>
+                  <p className="text-sm text-muted-foreground font-semibold mb-1">ID Number</p>
+                  <p className="text-lg font-mono text-foreground">{results.idNumber}</p>
                 </div>
               )}
               <div>
-                <p className="text-sm text-gray-600 font-semibold mb-1">Search Completed</p>
-                <p className="text-lg text-gray-900">
+                <p className="text-sm text-muted-foreground font-semibold mb-1">Search Completed</p>
+                <p className="text-lg text-foreground">
                   {new Date(results.searchedAt).toLocaleString()}
                 </p>
               </div>
@@ -224,35 +241,79 @@ const Results = () => {
                     <h2 className="text-3xl font-bold text-red-600 mb-2">
                       {person.full_name}
                     </h2>
-                  <div className="space-y-2">
+                    
+                    {/* Legal Status Badge */}
+                    <div className="mb-4">
+                      <Badge className="bg-red-600 text-white">
+                        Legal Status: {person.legal_status || "Warrant Issued"}
+                      </Badge>
+                    </div>
+
+                    <div className="space-y-2">
                       <div>
-                        <span className="text-sm font-bold text-gray-600">Wanted For:</span>
+                        <span className="text-sm font-bold text-muted-foreground">Alleged Offense:</span>
                         <p className="text-xl font-bold text-red-600">{person.charges}</p>
                       </div>
-                      {person.detail_page_url && (
-                        <a
-                          href={person.detail_page_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-red-700 hover:text-red-800 underline font-semibold inline-flex items-center gap-1"
-                        >
-                          View Full SAPS Listing →
-                        </a>
-                      )}
-                      {(results.searchType === "police_case" || results.searchType === "protection_order" || results.searchType === "court_case") && (
-                        <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                          <p className="text-sm text-blue-900 font-semibold mb-2">
-                            ℹ️ Match found through {
-                              results.searchType === "police_case" ? "police case number" :
-                              results.searchType === "protection_order" ? "protection order" :
-                              "court case number"
-                            }
-                          </p>
-                          <p className="text-sm text-blue-800">
-                            You can now search this person by name and ID to see their full criminal history.
-                          </p>
+
+                      {/* Additional Details */}
+                      <div className="grid md:grid-cols-2 gap-4 mt-4 p-4 bg-gray-50 rounded-lg">
+                        {person.province && (
+                          <div>
+                            <span className="text-sm text-muted-foreground">Province:</span>
+                            <p className="font-semibold">{person.province}</p>
+                          </div>
+                        )}
+                        {person.police_station && (
+                          <div>
+                            <span className="text-sm text-muted-foreground">Police Station:</span>
+                            <p className="font-semibold">{person.police_station}</p>
+                          </div>
+                        )}
+                        {person.case_number && (
+                          <div>
+                            <span className="text-sm text-muted-foreground">Case Number:</span>
+                            <p className="font-semibold">{person.case_number}</p>
+                          </div>
+                        )}
+                        {person.court_case_number && (
+                          <div>
+                            <span className="text-sm text-muted-foreground">Court Case Number:</span>
+                            <p className="font-semibold">{person.court_case_number}</p>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* What This Means */}
+                      <div className="mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                        <h4 className="font-bold text-amber-900 mb-2">What This Means</h4>
+                        <p className="text-sm text-amber-800">
+                          An active warrant means law enforcement is actively seeking this individual. 
+                          This is not a conviction, but indicates pending legal proceedings.
+                        </p>
+                      </div>
+
+                      {/* Verification Info */}
+                      <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                        <h4 className="font-bold text-blue-900 mb-2 flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4" />
+                          Verification Info
+                        </h4>
+                        <div className="text-sm text-blue-800 space-y-1">
+                          <p><strong>Source:</strong> South African Police Service</p>
+                          <p><strong>Last Verified:</strong> {person.updated_at ? new Date(person.updated_at).toLocaleDateString() : "Recently"}</p>
+                          {person.detail_page_url && (
+                            <a
+                              href={person.detail_page_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-blue-700 hover:text-blue-900 underline font-semibold"
+                            >
+                              <ExternalLink className="w-3 h-3" />
+                              View SAPS Listing
+                            </a>
+                          )}
                         </div>
-                      )}
+                      </div>
                     </div>
                   </div>
 
@@ -290,11 +351,11 @@ const Results = () => {
                     <Button
                       size="lg"
                       variant="outline"
-                      className="border-2 border-red-600 text-red-600 hover:bg-red-50 h-14 text-base font-bold"
-                      onClick={() => window.location.href = 'tel:0860010111'}
+                      className="border-2 border-amber-600 text-amber-700 hover:bg-amber-50 h-14 text-base font-bold"
+                      onClick={() => handleChallenge(person)}
                     >
-                      <Phone className="mr-2 h-5 w-5" />
-                      Crime Stop Anonymous Tip
+                      <Flag className="mr-2 h-5 w-5" />
+                      Challenge This Result
                     </Button>
                   </div>
                 </div>
@@ -325,7 +386,7 @@ const Results = () => {
           <CardHeader>
             <CardTitle>About This Report</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3 text-sm text-gray-700">
+          <CardContent className="space-y-3 text-sm text-muted-foreground">
             <p>• This search checked the official SAPS wanted persons database</p>
             <p>• Data is updated daily from public SAPS records</p>
             <p>• This is a preliminary check and should not be considered a complete background verification</p>
@@ -377,7 +438,7 @@ const Results = () => {
             variant="default"
             size="lg"
             onClick={() => navigate("/")}
-            className="w-full bg-[#8B5CF6] hover:bg-[#7C3AED]"
+            className="w-full bg-primary hover:bg-primary/90"
           >
             <Home className="mr-2 h-5 w-5" />
             Return to Homepage
@@ -387,13 +448,23 @@ const Results = () => {
         {/* Disclaimer */}
         <Card className="mt-8 border-2 border-gray-300 bg-gray-50">
           <CardContent className="p-6">
-            <h3 className="font-bold text-gray-900 mb-2">Important Disclaimer</h3>
-            <p className="text-sm text-gray-700 leading-relaxed">
+            <h3 className="font-bold text-foreground mb-2">Important Disclaimer</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
               This report is provided for informational purposes only and should not be the sole basis for making decisions about relationships, employment, or legal matters. The information is sourced from publicly available SAPS records and may not be complete or up-to-date. RedFlaq is not responsible for any decisions made based on this information. For official criminal record checks, contact SAPS directly.
             </p>
           </CardContent>
         </Card>
       </div>
+
+      {/* Dispute Modal */}
+      <DisputeModal
+        isOpen={isDisputeModalOpen}
+        onClose={() => {
+          setIsDisputeModalOpen(false);
+          setDisputeRecord(null);
+        }}
+        record={disputeRecord}
+      />
     </div>
   );
 };

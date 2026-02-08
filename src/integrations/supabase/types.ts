@@ -14,6 +14,53 @@ export type Database = {
   }
   public: {
     Tables: {
+      disputes: {
+        Row: {
+          created_at: string | null
+          details: string | null
+          document_url: string | null
+          id: string
+          reason: string
+          record_id: string | null
+          resolution_notes: string | null
+          resolved_at: string | null
+          status: string | null
+          user_email: string
+        }
+        Insert: {
+          created_at?: string | null
+          details?: string | null
+          document_url?: string | null
+          id?: string
+          reason: string
+          record_id?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          status?: string | null
+          user_email: string
+        }
+        Update: {
+          created_at?: string | null
+          details?: string | null
+          document_url?: string | null
+          id?: string
+          reason?: string
+          record_id?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          status?: string | null
+          user_email?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "disputes_record_id_fkey"
+            columns: ["record_id"]
+            isOneToOne: false
+            referencedRelation: "wanted_persons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       manual_payments: {
         Row: {
           amount: number
@@ -122,6 +169,7 @@ export type Database = {
           case_number: string | null
           charges: string
           court_case_number: string | null
+          court_name: string | null
           date_wanted: string | null
           detail_page_url: string | null
           first_name: string | null
@@ -130,9 +178,15 @@ export type Database = {
           id_number: string | null
           is_active: boolean | null
           last_known_location: string | null
+          last_verified_at: string | null
+          legal_status: string | null
+          offense_category: string | null
           photo_url: string | null
           police_station: string | null
           protection_order_number: string | null
+          province: string | null
+          record_status: string | null
+          risk_level: string | null
           source_url: string | null
           surname: string | null
           updated_at: string
@@ -142,6 +196,7 @@ export type Database = {
           case_number?: string | null
           charges: string
           court_case_number?: string | null
+          court_name?: string | null
           date_wanted?: string | null
           detail_page_url?: string | null
           first_name?: string | null
@@ -150,9 +205,15 @@ export type Database = {
           id_number?: string | null
           is_active?: boolean | null
           last_known_location?: string | null
+          last_verified_at?: string | null
+          legal_status?: string | null
+          offense_category?: string | null
           photo_url?: string | null
           police_station?: string | null
           protection_order_number?: string | null
+          province?: string | null
+          record_status?: string | null
+          risk_level?: string | null
           source_url?: string | null
           surname?: string | null
           updated_at?: string
@@ -162,6 +223,7 @@ export type Database = {
           case_number?: string | null
           charges?: string
           court_case_number?: string | null
+          court_name?: string | null
           date_wanted?: string | null
           detail_page_url?: string | null
           first_name?: string | null
@@ -170,9 +232,15 @@ export type Database = {
           id_number?: string | null
           is_active?: boolean | null
           last_known_location?: string | null
+          last_verified_at?: string | null
+          legal_status?: string | null
+          offense_category?: string | null
           photo_url?: string | null
           police_station?: string | null
           protection_order_number?: string | null
+          province?: string | null
+          record_status?: string | null
+          risk_level?: string | null
           source_url?: string | null
           surname?: string | null
           updated_at?: string

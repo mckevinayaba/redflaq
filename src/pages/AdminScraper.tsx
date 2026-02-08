@@ -9,6 +9,7 @@ import { Loader2, Database, CheckCircle2, AlertCircle, Upload, Users } from "luc
 interface ScraperResult {
   success: boolean;
   total_scraped?: number;
+  details_fetched?: number;
   new_records?: number;
   updated_records?: number;
   deactivated_records?: number;
@@ -69,7 +70,7 @@ const AdminScraper = () => {
         await fetchDbStats();
         toast({
           title: "✅ Scraper completed successfully!",
-          description: `Scraped ${data.total_scraped} persons. ${data.new_records} new, ${data.updated_records} updated, ${data.deactivated_records} deactivated.`,
+          description: `Scraped ${data.total_scraped} persons (${data.details_fetched || 0} with details). ${data.new_records} new, ${data.updated_records} updated.`,
         });
       } else {
         toast({
@@ -186,11 +187,17 @@ const AdminScraper = () => {
               </div>
 
               {result.success && (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                   <div className="bg-primary/10 p-4 rounded-lg">
                     <p className="text-sm text-muted-foreground">Total Scraped</p>
                     <p className="text-3xl font-bold text-primary">
                       {result.total_scraped}
+                    </p>
+                  </div>
+                  <div className="bg-purple-500/10 p-4 rounded-lg">
+                    <p className="text-sm text-muted-foreground">Details Fetched</p>
+                    <p className="text-3xl font-bold text-purple-600">
+                      {result.details_fetched || 0}
                     </p>
                   </div>
                   <div className="bg-green-500/10 p-4 rounded-lg">

@@ -1,6 +1,4 @@
-import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { DOMParser, Element } from "https://deno.land/x/deno_dom@v0.1.38/deno-dom-wasm.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.7';
 
 const corsHeaders = {
@@ -15,104 +13,251 @@ interface WantedPerson {
   photoUrl: string;
   detailUrl: string;
   bidId: string;
+  // Additional fields from detail page
+  caseNumber?: string;
+  policeStation?: string;
+  protectionOrderNumber?: string;
+  courtCaseNumber?: string;
+  lastKnownLocation?: string;
+  dateWanted?: string;
+  idNumber?: string;
+}
+
+interface FirecrawlResponse {
+  success: boolean;
+  data?: {
+    markdown?: string;
+    html?: string;
+    metadata?: Record<string, unknown>;
+  };
+  error?: string;
+}
+
+// Fetch page using Firecrawl API (handles anti-bot measures)
+async function fetchWithFirecrawl(url: string): Promise<string | null> {
+  const apiKey = Deno.env.get('FIRECRAWL_API_KEY');
+  if (!apiKey) {
+    console.error('FIRECRAWL_API_KEY not configured');
+    return null;
+  }
+
+  try {
+    const response = await fetch('https://api.firecrawl.dev/v1/scrape', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        url,
+        formats: ['html'],
+        onlyMainContent: false,
+        waitFor: 2000,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error(`Firecrawl error for ${url}: ${response.status}`);
+      return null;
+    }
+
+    const data: FirecrawlResponse = await response.json();
+    if (data.success && data.data?.html) {
+      return data.data.html;
+    }
+    
+    console.error(`Firecrawl no content for ${url}:`, data.error);
+    return null;
+  } catch (error) {
+    console.error(`Firecrawl fetch failed for ${url}:`, error);
+    return null;
+  }
+}
+
+// Parse list page HTML to extract basic info and bid IDs
+function parseListPage(html: string): WantedPerson[] {
+  const wantedPersons: WantedPerson[] = [];
+  
+  // Match table rows with id="title"
+  const rowRegex = /<tr[^>]*id\s*=\s*["']title["'][^>]*>([\s\S]*?)<\/tr>/gi;
+  let rowMatch;
+  
+  while ((rowMatch = rowRegex.exec(html)) !== null) {
+    const rowHtml = rowMatch[1];
+    
+    try {
+      // Extract cells
+      const cellRegex = /<t[dh][^>]*>([\s\S]*?)<\/t[dh]>/gi;
+      const cells: string[] = [];
+      let cellMatch;
+      
+      while ((cellMatch = cellRegex.exec(rowHtml)) !== null) {
+        cells.push(cellMatch[1]);
+      }
+      
+      if (cells.length >= 4) {
+        // Extract image URL
+        const imgMatch = cells[0].match(/<img[^>]*src\s*=\s*["']([^"']+)["']/i);
+        const photoUrl = imgMatch ? imgMatch[1] : '';
+        
+        // Extract surname and detail URL
+        const surnameMatch = cells[1].match(/<a[^>]*href\s*=\s*["']([^"']+)["'][^>]*>([^<]+)<\/a>/i);
+        const detailUrl = surnameMatch ? surnameMatch[1] : '';
+        const surname = surnameMatch ? surnameMatch[2].trim() : 'Unknown';
+        
+        // Extract bid from URL
+        const bidMatch = detailUrl.match(/bid=(\d+)/);
+        const bidId = bidMatch ? bidMatch[1] : '';
+        
+        // Extract first name
+        const firstNameMatch = cells[2].match(/<a[^>]*>([^<]+)<\/a>/i);
+        const firstName = firstNameMatch ? firstNameMatch[1].trim() : 'Unknown';
+        
+        // Extract crime
+        const crimeMatch = cells[3].match(/<a[^>]*>([^<]+)<\/a>/i);
+        const crime = crimeMatch ? crimeMatch[1].trim() : 'Unknown';
+        
+        if (surname !== 'Unknown' || firstName !== 'Unknown') {
+          wantedPersons.push({
+            surname,
+            firstName,
+            crime,
+            photoUrl: photoUrl.startsWith('http') 
+              ? photoUrl 
+              : `https://www.saps.gov.za${photoUrl.startsWith('/') ? '' : '/'}${photoUrl}`,
+            detailUrl: detailUrl.startsWith('http')
+              ? detailUrl
+              : `https://www.saps.gov.za/crimestop/wanted/${detailUrl}`,
+            bidId,
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Error parsing row:', error);
+    }
+  }
+  
+  return wantedPersons;
+}
+
+// Parse detail page to extract additional information
+function parseDetailPage(html: string): Partial<WantedPerson> {
+  const details: Partial<WantedPerson> = {};
+  
+  // Common patterns for extracting data from SAPS detail pages
+  // Look for table cells with labels and values
+  
+  // Case Number / CAS Number
+  const caseMatch = html.match(/(?:case\s*(?:number|no\.?)|cas\s*(?:number|no\.?))[:\s]*<\/?\w+[^>]*>?\s*([A-Z0-9\-\/]+)/i) ||
+                   html.match(/<td[^>]*>\s*(?:case\s*(?:number|no\.?)|cas)[:\s]*<\/td>\s*<td[^>]*>\s*([^<]+)/i) ||
+                   html.match(/(\d{2,4}\/\d{2,4}\/\d{4})/); // Format: XXX/DD/YYYY
+  if (caseMatch) {
+    details.caseNumber = caseMatch[1].trim();
+  }
+  
+  // Police Station
+  const stationMatch = html.match(/(?:police\s*station|station)[:\s]*<\/?\w+[^>]*>?\s*([^<]+)/i) ||
+                       html.match(/<td[^>]*>\s*(?:police\s*)?station[:\s]*<\/td>\s*<td[^>]*>\s*([^<]+)/i);
+  if (stationMatch) {
+    details.policeStation = stationMatch[1].trim().replace(/&amp;/g, '&');
+  }
+  
+  // Protection Order Number
+  const protectionMatch = html.match(/(?:protection\s*order)[:\s]*<\/?\w+[^>]*>?\s*([A-Z0-9\-\/]+)/i) ||
+                         html.match(/<td[^>]*>\s*protection\s*order[:\s]*<\/td>\s*<td[^>]*>\s*([^<]+)/i);
+  if (protectionMatch) {
+    details.protectionOrderNumber = protectionMatch[1].trim();
+  }
+  
+  // Court Case Number
+  const courtMatch = html.match(/(?:court\s*case)[:\s]*<\/?\w+[^>]*>?\s*([A-Z]\s*[A-Z0-9\-\/]+)/i) ||
+                    html.match(/<td[^>]*>\s*court\s*case[:\s]*<\/td>\s*<td[^>]*>\s*([^<]+)/i) ||
+                    html.match(/([A-Z]\s+\d+\/\d{4})/); // Format: A XXX/2024
+  if (courtMatch) {
+    details.courtCaseNumber = courtMatch[1].trim();
+  }
+  
+  // Last Known Location / Address
+  const locationMatch = html.match(/(?:last\s*known\s*(?:location|address)|address|location)[:\s]*<\/?\w+[^>]*>?\s*([^<]+)/i) ||
+                       html.match(/<td[^>]*>\s*(?:last\s*known\s*)?(?:location|address)[:\s]*<\/td>\s*<td[^>]*>\s*([^<]+)/i);
+  if (locationMatch) {
+    details.lastKnownLocation = locationMatch[1].trim().replace(/&amp;/g, '&');
+  }
+  
+  // Date Wanted
+  const dateMatch = html.match(/(?:date\s*wanted|wanted\s*since)[:\s]*<\/?\w+[^>]*>?\s*(\d{1,2}[-\/]\d{1,2}[-\/]\d{2,4}|\d{4}[-\/]\d{1,2}[-\/]\d{1,2})/i) ||
+                   html.match(/<td[^>]*>\s*date\s*wanted[:\s]*<\/td>\s*<td[^>]*>\s*([^<]+)/i);
+  if (dateMatch) {
+    details.dateWanted = dateMatch[1].trim();
+  }
+  
+  // ID Number
+  const idMatch = html.match(/(?:id\s*(?:number|no\.?)|identity)[:\s]*<\/?\w+[^>]*>?\s*(\d{13})/i) ||
+                 html.match(/<td[^>]*>\s*id[:\s]*<\/td>\s*<td[^>]*>\s*(\d{13})/i);
+  if (idMatch) {
+    details.idNumber = idMatch[1].trim();
+  }
+  
+  return details;
 }
 
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    console.log('Starting SAPS wanted persons scrape...');
+    console.log('Starting SAPS wanted persons scrape with Firecrawl...');
     
-    // Fetch the SAPS wanted persons list page with proper headers
-    const response = await fetch('https://www.saps.gov.za/crimestop/wanted/list.php', {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-        'Accept-Language': 'en-US,en;q=0.5',
-        'Connection': 'keep-alive',
-      },
-    });
-    
-    if (!response.ok) {
-      throw new Error(`Failed to fetch SAPS page: ${response.status}`);
+    const firecrawlKey = Deno.env.get('FIRECRAWL_API_KEY');
+    if (!firecrawlKey) {
+      throw new Error('FIRECRAWL_API_KEY is not configured. Please connect Firecrawl in Settings.');
     }
-
-    const html = await response.text();
-    console.log('Successfully fetched SAPS page, parsing HTML...');
-
-    // Parse HTML
-    const doc = new DOMParser().parseFromString(html, 'text/html');
     
-    if (!doc) {
-      throw new Error('Failed to parse HTML');
+    // Step 1: Fetch the main list page
+    console.log('Fetching SAPS list page...');
+    const listHtml = await fetchWithFirecrawl('https://www.saps.gov.za/crimestop/wanted/list.php');
+    
+    if (!listHtml) {
+      throw new Error('Failed to fetch SAPS list page. The website may be blocking requests.');
     }
-
-    const wantedPersons: WantedPerson[] = [];
     
-    // Find all table rows with id="title" (these contain wanted persons)
-    const rows = doc.querySelectorAll('tr[id="title"]');
-    console.log(`Found ${rows.length} wanted persons`);
-
-    for (const row of rows) {
-      try {
-        // Cast to Element to access querySelectorAll
-        const rowElement = row as Element;
-        const cells = rowElement.querySelectorAll('td, th');
+    console.log('Successfully fetched list page, parsing...');
+    const wantedPersons = parseListPage(listHtml);
+    console.log(`Found ${wantedPersons.length} wanted persons on list page`);
+    
+    // Step 2: Fetch detail pages (batch to avoid rate limiting)
+    const batchSize = 10;
+    const delayMs = 1000;
+    let detailsFetched = 0;
+    
+    for (let i = 0; i < wantedPersons.length; i += batchSize) {
+      const batch = wantedPersons.slice(i, i + batchSize);
+      
+      console.log(`Fetching detail pages ${i + 1}-${Math.min(i + batchSize, wantedPersons.length)}...`);
+      
+      const detailPromises = batch.map(async (person) => {
+        if (!person.detailUrl || !person.bidId) return;
         
-        if (cells.length >= 4) {
-          // Extract image
-          const cell0 = cells[0] as Element;
-          const img = cell0.querySelector('img');
-          const photoUrl = img?.getAttribute('src') || '';
-          
-          // Extract surname (in 2nd cell)
-          const cell1 = cells[1] as Element;
-          const surnameLink = cell1.querySelector('a');
-          const surname = surnameLink?.textContent?.trim() || 'Unknown';
-          const detailUrl = surnameLink?.getAttribute('href') || '';
-          
-          // Extract bid from URL (e.g., detail.php?bid=21650)
-          const bidMatch = detailUrl.match(/bid=(\d+)/);
-          const bidId = bidMatch ? bidMatch[1] : '';
-          
-          // Extract first name (in 3rd cell)
-          const cell2 = cells[2] as Element;
-          const firstNameLink = cell2.querySelector('a');
-          const firstName = firstNameLink?.textContent?.trim() || 'Unknown';
-          
-          // Extract crime (in 4th cell)
-          const cell3 = cells[3] as Element;
-          const crimeLink = cell3.querySelector('a');
-          const crime = crimeLink?.textContent?.trim() || 'Unknown';
-          
-          // Only add if we have valid data
-          if (surname !== 'Unknown' || firstName !== 'Unknown') {
-            wantedPersons.push({
-              surname,
-              firstName,
-              crime,
-              photoUrl: photoUrl.startsWith('http') 
-                ? photoUrl 
-                : `https://www.saps.gov.za${photoUrl}`,
-              detailUrl: detailUrl.startsWith('http')
-                ? detailUrl
-                : `https://www.saps.gov.za/crimestop/wanted/${detailUrl}`,
-              bidId,
-            });
-          }
+        const detailHtml = await fetchWithFirecrawl(person.detailUrl);
+        if (detailHtml) {
+          const details = parseDetailPage(detailHtml);
+          Object.assign(person, details);
+          detailsFetched++;
         }
-      } catch (error) {
-        console.error('Error parsing row:', error);
-        // Continue to next row
+      });
+      
+      await Promise.all(detailPromises);
+      
+      // Rate limiting delay between batches
+      if (i + batchSize < wantedPersons.length) {
+        await new Promise(resolve => setTimeout(resolve, delayMs));
       }
     }
+    
+    console.log(`Fetched details for ${detailsFetched} persons`);
 
-    console.log(`Successfully parsed ${wantedPersons.length} wanted persons`);
-
-    // Save to database
+    // Step 3: Save to database
     console.log('Saving to database...');
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
@@ -133,19 +278,27 @@ serve(async (req) => {
           .ilike('full_name', fullName)
           .maybeSingle();
 
+        const recordData = {
+          first_name: person.firstName,
+          surname: person.surname,
+          charges: person.crime,
+          photo_url: person.photoUrl,
+          detail_page_url: person.detailUrl,
+          case_number: person.caseNumber || null,
+          police_station: person.policeStation || null,
+          protection_order_number: person.protectionOrderNumber || null,
+          court_case_number: person.courtCaseNumber || null,
+          last_known_location: person.lastKnownLocation || null,
+          id_number: person.idNumber || null,
+          date_wanted: person.dateWanted || null,
+          is_active: true,
+          updated_at: new Date().toISOString(),
+        };
+
         if (existing) {
-          // Update existing record
           const { error } = await supabase
             .from('wanted_persons')
-            .update({
-              first_name: person.firstName,
-              surname: person.surname,
-              charges: person.crime,
-              photo_url: person.photoUrl,
-              detail_page_url: person.detailUrl,
-              is_active: true,
-              updated_at: new Date().toISOString(),
-            })
+            .update(recordData)
             .eq('id', existing.id);
 
           if (error) {
@@ -155,17 +308,11 @@ serve(async (req) => {
             updatedRecords++;
           }
         } else {
-          // Insert new record
           const { error } = await supabase
             .from('wanted_persons')
             .insert({
               full_name: fullName,
-              first_name: person.firstName,
-              surname: person.surname,
-              charges: person.crime,
-              photo_url: person.photoUrl,
-              detail_page_url: person.detailUrl,
-              is_active: true,
+              ...recordData,
             });
 
           if (error) {
@@ -181,7 +328,7 @@ serve(async (req) => {
       }
     }
 
-    // Mark persons as inactive if not updated in last 48 hours
+    // Mark old persons as inactive
     const fortyEightHoursAgo = new Date();
     fortyEightHoursAgo.setHours(fortyEightHoursAgo.getHours() - 48);
 
@@ -205,6 +352,7 @@ serve(async (req) => {
       JSON.stringify({
         success: true,
         total_scraped: wantedPersons.length,
+        details_fetched: detailsFetched,
         new_records: newRecords,
         updated_records: updatedRecords,
         deactivated_records: deactivatedCount,

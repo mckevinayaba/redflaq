@@ -59,21 +59,9 @@ serve(async (req) => {
         }
       );
     } else if (searchType === 'protection_order' && !requestBody.protectionOrderNumber) {
-      return new Response(
-        JSON.stringify({ error: 'Protection order number is required' }),
-        {
-          status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        }
-      );
+      // Allow empty - will default to searching for "protection" keyword
     } else if (searchType === 'court_case' && !requestBody.courtCaseNumber) {
-      return new Response(
-        JSON.stringify({ error: 'Court case number is required' }),
-        {
-          status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        }
-      );
+      // Allow empty - will default to searching for "court" keyword
     }
 
     // Initialize Supabase client
@@ -133,27 +121,31 @@ serve(async (req) => {
       
     } else if (searchType === 'protection_order') {
       const { protectionOrderNumber, issuingCourt } = requestBody;
-      searchIdentifier = protectionOrderNumber!;
+      // Search for "protection" keyword in charges field (e.g., "CONTRAVENTION OF PROTECTION ORDER")
+      const searchKeyword = protectionOrderNumber?.trim() || 'protection';
+      searchIdentifier = `Protection Order: ${searchKeyword}`;
       
-      console.log(`Protection order search: ${protectionOrderNumber}, Court: ${issuingCourt || 'not provided'}`);
+      console.log(`Protection order search: keyword "${searchKeyword}", Court: ${issuingCourt || 'not provided'}`);
       
       searchQuery = supabase
         .from('wanted_persons')
         .select('*')
         .eq('is_active', true)
-        .ilike('protection_order_number', `%${protectionOrderNumber}%`);
+        .ilike('charges', `%${searchKeyword}%`);
         
     } else if (searchType === 'court_case') {
       const { courtCaseNumber, courtName } = requestBody;
-      searchIdentifier = courtCaseNumber!;
+      // Search for keyword in charges field (e.g., "FAILED TO COMPLY WITH A COURT ORDER")
+      const searchKeyword = courtCaseNumber?.trim() || 'court';
+      searchIdentifier = `Court Case: ${searchKeyword}`;
       
-      console.log(`Court case search: ${courtCaseNumber}, Court: ${courtName || 'not provided'}`);
+      console.log(`Court case search: keyword "${searchKeyword}", Court: ${courtName || 'not provided'}`);
       
       searchQuery = supabase
         .from('wanted_persons')
         .select('*')
         .eq('is_active', true)
-        .ilike('court_case_number', `%${courtCaseNumber}%`);
+        .ilike('charges', `%${searchKeyword}%`);
     }
 
     const { data, error: wantedError } = await searchQuery.limit(10);

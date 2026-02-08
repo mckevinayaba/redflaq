@@ -247,8 +247,9 @@ export default function SearchForm() {
       return false;
     }
     
-    if (type === "protection_order" && !/^\d{1,4}\/\d{1,2}\/\d{4}$/.test(number)) {
-      setCaseNumberError("Format must be: XXX/DD/YYYY (e.g., 123/05/2024)");
+    // Protection order now accepts keywords - no strict format required
+    if (type === "protection_order" && number.trim().length < 2) {
+      setCaseNumberError("Enter at least 2 characters to search");
       setCaseNumberValid(false);
       return false;
     }
@@ -492,7 +493,7 @@ export default function SearchForm() {
               <FileText className="w-8 h-8 text-[#8B5CF6] flex-shrink-0 mt-1" />
               <div>
                 <div className="font-bold text-lg text-gray-900 mb-1">Protection Order</div>
-                <div className="text-sm text-gray-600">Search using a protection order number (XXX/DD/YYYY)</div>
+                <div className="text-sm text-gray-600">Search for protection order violations by keyword</div>
               </div>
             </Label>
           </div>
@@ -503,8 +504,8 @@ export default function SearchForm() {
             <Label htmlFor="court_case" className="cursor-pointer flex items-start gap-3">
               <Gavel className="w-8 h-8 text-[#8B5CF6] flex-shrink-0 mt-1" />
               <div>
-                <div className="font-bold text-lg text-gray-900 mb-1">Court Case Number</div>
-                <div className="text-sm text-gray-600">Search using a court case number (A XXX/2024)</div>
+                <div className="font-bold text-lg text-gray-900 mb-1">Court Order Violation</div>
+                <div className="text-sm text-gray-600">Search for court order violations by keyword</div>
               </div>
             </Label>
           </div>
@@ -687,7 +688,7 @@ export default function SearchForm() {
             <>
               <div>
                 <label htmlFor="protectionOrderNumber" className="block text-sm font-bold text-gray-900 mb-2">
-                  Protection Order Number *
+                  Search Keyword *
                 </label>
                 <div className="relative">
                   <input
@@ -695,10 +696,10 @@ export default function SearchForm() {
                     type="text"
                     value={protectionOrderNumber}
                     onChange={(e) => {
-                      setProtectionOrderNumber(e.target.value.toUpperCase());
+                      setProtectionOrderNumber(e.target.value);
                       if (e.target.value) validateCaseNumber(e.target.value, "protection_order");
                     }}
-                    placeholder="e.g., 123/05/2024"
+                    placeholder="e.g., protection order, protection"
                     className={`w-full px-4 py-4 border-2 rounded-xl text-base transition-colors ${
                       caseNumberError ? "border-red-500" : caseNumberValid ? "border-green-500" : "border-gray-200"
                     } focus:outline-none focus:border-primary`}
@@ -708,7 +709,7 @@ export default function SearchForm() {
                   {caseNumberValid && <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-green-600" />}
                 </div>
                 {caseNumberError && <p className="text-sm text-red-600 mt-1">{caseNumberError}</p>}
-                <p className="text-xs text-gray-500 mt-2">Format: XXX/DD/YYYY (e.g., 123/05/2024)</p>
+                <p className="text-xs text-gray-500 mt-2">Search for charges containing "protection order", "protection", etc.</p>
               </div>
 
               <div>
@@ -752,19 +753,19 @@ export default function SearchForm() {
             <>
               <div>
                 <label htmlFor="courtCaseNumber" className="block text-sm font-bold text-gray-900 mb-2">
-                  Court Case Number *
+                  Search Keyword *
                 </label>
                 <input
                   id="courtCaseNumber"
                   type="text"
                   value={courtCaseNumber}
-                  onChange={(e) => setCourtCaseNumber(e.target.value.toUpperCase())}
-                  placeholder="e.g., A 123/2024, RC 456/2024"
+                  onChange={(e) => setCourtCaseNumber(e.target.value)}
+                  placeholder="e.g., court order, comply, failed"
                   className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl text-base focus:outline-none focus:border-primary"
                   disabled={isSubmitting}
                   required
                 />
-                <p className="text-xs text-gray-500 mt-2">Format varies by court (A, RC, CCT, etc.)</p>
+                <p className="text-xs text-gray-500 mt-2">Search for charges containing "court order", "comply", etc.</p>
               </div>
 
               <div>

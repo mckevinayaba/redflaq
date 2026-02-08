@@ -8,7 +8,7 @@ const corsHeaders = {
 };
 
 interface SearchRequest {
-  searchType: 'person' | 'police_case' | 'protection_order' | 'court_case';
+  searchType: 'person' | 'police_case' | 'protection_order' | 'court_case' | 'active_warrant';
   // Person search fields
   firstName?: string;
   middleNames?: string;
@@ -26,6 +26,8 @@ interface SearchRequest {
   courtCaseNumber?: string;
   courtName?: string;
   caseType?: string;
+  // Active warrant fields
+  province?: string;
 }
 
 serve(async (req) => {
@@ -44,6 +46,17 @@ serve(async (req) => {
       if (!firstName || !surname) {
         return new Response(
           JSON.stringify({ error: 'First name and surname are required for person search' }),
+          {
+            status: 400,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          }
+        );
+      }
+    } else if (searchType === 'active_warrant') {
+      const { firstName, surname } = requestBody;
+      if (!firstName || !surname) {
+        return new Response(
+          JSON.stringify({ error: 'First name and surname are required for warrant search' }),
           {
             status: 400,
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -102,6 +115,32 @@ serve(async (req) => {
         .select('*')
         .eq('is_active', true)
         .or(searchConditions.join(','));
+
+    } else if (searchType === 'active_warrant') {
+      // New Active Warrant search type - searches by first name and surname
+      const { firstName, surname, province, policeStation } = requestBody;
+      searchIdentifier = `${firstName} ${surname}`;
+      
+      console.log(`Active warrant search: ${firstName} ${surname}, Province: ${province || 'all'}, Station: ${policeStation || 'any'}`);
+
+      // Build search query - must match BOTH first name AND surname
+      searchQuery = supabase
+        .from('wanted_persons')
+        .select('*')
+        .eq('is_active', true)
+        .eq('record_status', 'active')
+        .ilike('first_name', `%${firstName}%`)
+        .ilike('surname', `%${surname}%`);
+      
+      // Optional province filter
+      if (province) {
+        searchQuery = searchQuery.ilike('province', `%${province}%`);
+      }
+      
+      // Optional police station filter
+      if (policeStation) {
+        searchQuery = searchQuery.ilike('police_station', `%${policeStation}%`);
+      }
         
     } else if (searchType === 'police_case') {
       const { caseNumber, policeStation } = requestBody;

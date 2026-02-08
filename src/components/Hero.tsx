@@ -2,27 +2,33 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { PaymentModal } from "@/components/PaymentModal";
+import { supabase } from "@/integrations/supabase/client";
 
 const Hero = () => {
-  const [statsCount, setStatsCount] = useState(0);
+  const [actualRecordCount, setActualRecordCount] = useState(0);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Counter animation for stats
+  // Fetch real record count from database
   useEffect(() => {
-    const timer = setTimeout(() => {
-      const interval = setInterval(() => {
-        setStatsCount(prev => {
-          if (prev >= 15247) {
-            clearInterval(interval);
-            return 15247;
-          }
-          return prev + Math.ceil((15247 - prev) / 20);
-        });
-      }, 30);
-      return () => clearInterval(interval);
-    }, 2500);
-    
-    return () => clearTimeout(timer);
+    const fetchRecordCount = async () => {
+      try {
+        const { count, error } = await supabase
+          .from('wanted_persons')
+          .select('*', { count: 'exact', head: true })
+          .eq('is_active', true);
+
+        if (!error && count !== null) {
+          setActualRecordCount(count);
+        }
+      } catch (err) {
+        console.error('Error fetching record count:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchRecordCount();
   }, []);
 
   return (
@@ -70,26 +76,27 @@ const Hero = () => {
           </h2>
         </div>
 
-        {/* Main Headline - Slide in from left with stagger */}
+        {/* Main Headline - Updated copy */}
         <div className="mb-8 space-y-2">
           <h1 className="font-heading font-black text-4xl md:text-5xl lg:text-[56px] leading-[1.2] text-white text-balance tracking-tight"
             style={{ textShadow: "0 2px 8px rgba(0,0,0,0.2)" }}>
             <span className="block opacity-0 animate-fade-in-left delay-1000">
-              {statsCount.toLocaleString()} South African Women Checked
-            </span>
-            <span className="block opacity-0 animate-fade-in-left delay-1200">
-              Their Date's Criminal Record
-            </span>
-            <span className="block opacity-0 animate-fade-in-left delay-1200">
-              Before Meeting Him.
-            </span>
-            <span className="block mt-6 opacity-0 animate-fade-in-left delay-1200">
-              You Can Too.
-            </span>
-            <span className="block opacity-0 animate-fade-in-left delay-1200">
-              In Under 60 Seconds.
+              Trust Should Never Be a Gamble
             </span>
           </h1>
+          <p className="text-xl md:text-2xl text-white/90 opacity-0 animate-fade-in-left delay-1200 mt-6 font-body">
+            RedFlaq helps you identify verified legal risk signals before trust is given. 
+            Make informed decisions with instant access to public records, warrants, and court cases.
+          </p>
+        </div>
+
+        {/* Value Props */}
+        <div className="mb-8 opacity-0 animate-fade-in delay-1400">
+          <div className="flex flex-wrap justify-center gap-4 text-white font-semibold">
+            <span className="bg-white/10 px-4 py-2 rounded-full">✓ Fast - Results in under 60 seconds</span>
+            <span className="bg-white/10 px-4 py-2 rounded-full">✓ Confidential - Searches are anonymous</span>
+            <span className="bg-white/10 px-4 py-2 rounded-full">✓ Verified - Only public official records</span>
+          </div>
         </div>
 
         {/* Star Rating - Scale in */}
@@ -125,9 +132,9 @@ const Hero = () => {
               setIsPaymentModalOpen(true);
             }}
             size="lg"
-            className="w-full max-w-[380px] h-[80px] bg-white hover:bg-white/95 text-[#8B5CF6] font-body font-bold text-[22px] rounded-xl transition-all duration-300 ease-out hover:scale-105 hover:-translate-y-1 animate-pulse-glow"
+            className="w-full max-w-[380px] h-[80px] bg-white hover:bg-white/95 text-primary font-body font-bold text-[22px] rounded-xl transition-all duration-300 ease-out hover:scale-105 hover:-translate-y-1 animate-pulse-glow"
           >
-            💜 Check His Record Now - R50
+            💜 Check Risk Signals Now - R50
           </Button>
         </div>
         
@@ -144,11 +151,28 @@ const Hero = () => {
           </p>
         </div>
 
-        {/* Trust Indicators - Animated counter */}
-        <div className="mb-16 opacity-0 animate-count-up delay-2500">
-          <p className="text-sm md:text-base text-white/90 font-body">
-            {statsCount.toLocaleString()}+ Searches • 2,847 Records • 100% Confidential
-          </p>
+        {/* Real Stats - Honest numbers */}
+        <div className="mb-16 opacity-0 animate-fade-in delay-2500">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto">
+            <div className="bg-white/10 rounded-xl p-4">
+              <p className="text-2xl md:text-3xl font-bold text-white">
+                {isLoading ? "..." : actualRecordCount}
+              </p>
+              <p className="text-xs text-white/80">Active Legal Records</p>
+            </div>
+            <div className="bg-white/10 rounded-xl p-4">
+              <p className="text-2xl md:text-3xl font-bold text-white">&lt;60 sec</p>
+              <p className="text-xs text-white/80">Average Search Time</p>
+            </div>
+            <div className="bg-white/10 rounded-xl p-4">
+              <p className="text-2xl md:text-3xl font-bold text-white">100%</p>
+              <p className="text-xs text-white/80">Public Record Sources</p>
+            </div>
+            <div className="bg-white/10 rounded-xl p-4">
+              <p className="text-2xl md:text-3xl font-bold text-white">POPIA</p>
+              <p className="text-xs text-white/80">Compliant</p>
+            </div>
+          </div>
         </div>
 
         {/* Scroll Down Arrow */}

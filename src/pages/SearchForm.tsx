@@ -4,10 +4,23 @@ import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { CheckCircle2, XCircle, AlertCircle, User, Shield, Gavel, FileText } from "lucide-react";
+import { CheckCircle2, XCircle, User, Shield, Gavel, FileText, AlertTriangle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
-type SearchType = "person" | "police_case" | "protection_order" | "court_case";
+type SearchType = "person" | "police_case" | "protection_order" | "court_case" | "active_warrant";
+
+const SA_PROVINCES = [
+  "All Provinces",
+  "Eastern Cape",
+  "Free State",
+  "Gauteng",
+  "KwaZulu-Natal",
+  "Limpopo",
+  "Mpumalanga",
+  "Northern Cape",
+  "North West",
+  "Western Cape",
+];
 
 export default function SearchForm() {
   const [searchParams] = useSearchParams();
@@ -43,6 +56,12 @@ export default function SearchForm() {
   const [courtName, setCourtName] = useState("");
   const [caseType, setCaseType] = useState("");
 
+  // Active warrant search fields
+  const [warrantFirstName, setWarrantFirstName] = useState("");
+  const [warrantSurname, setWarrantSurname] = useState("");
+  const [warrantProvince, setWarrantProvince] = useState("All Provinces");
+  const [warrantPoliceStation, setWarrantPoliceStation] = useState("");
+
   const [consent, setConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -57,6 +76,12 @@ export default function SearchForm() {
   const [surnameValid, setSurnameValid] = useState(false);
   const [idValid, setIdValid] = useState(false);
   const [caseNumberValid, setCaseNumberValid] = useState(false);
+
+  // Warrant validation states
+  const [warrantFirstNameValid, setWarrantFirstNameValid] = useState(false);
+  const [warrantSurnameValid, setWarrantSurnameValid] = useState(false);
+  const [warrantFirstNameError, setWarrantFirstNameError] = useState("");
+  const [warrantSurnameError, setWarrantSurnameError] = useState("");
 
   // Validate purchase ID
   const [paymentValid, setPaymentValid] = useState(false);
@@ -161,12 +186,35 @@ export default function SearchForm() {
     return true;
   };
 
+  // Validate warrant first name
+  const validateWarrantFirstName = (name: string) => {
+    if (!validateNameField(name, "First name")) {
+      setWarrantFirstNameError("Please enter a valid first name (minimum 2 characters, letters only)");
+      setWarrantFirstNameValid(false);
+      return false;
+    }
+    setWarrantFirstNameError("");
+    setWarrantFirstNameValid(true);
+    return true;
+  };
+
+  // Validate warrant surname
+  const validateWarrantSurname = (name: string) => {
+    if (!validateNameField(name, "Surname")) {
+      setWarrantSurnameError("Please enter a valid surname (minimum 2 characters, letters only)");
+      setWarrantSurnameValid(false);
+      return false;
+    }
+    setWarrantSurnameError("");
+    setWarrantSurnameValid(true);
+    return true;
+  };
+
   // Luhn algorithm for SA ID checksum validation
   const validateIdChecksum = (id: string): boolean => {
     if (id.length !== 13) return false;
     
     // Extract date of birth (first 6 digits: YYMMDD)
-    const year = parseInt(id.substring(0, 2));
     const month = parseInt(id.substring(2, 4));
     const day = parseInt(id.substring(4, 6));
     
@@ -266,6 +314,8 @@ export default function SearchForm() {
       ? caseNumberValid && consent && !honeypot
       : searchType === "court_case"
       ? courtCaseNumber.trim().length > 0 && consent && !honeypot
+      : searchType === "active_warrant"
+      ? warrantFirstNameValid && warrantSurnameValid && consent && !honeypot
       : false;
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -329,6 +379,17 @@ export default function SearchForm() {
         courtCaseNumber: courtCaseNumber.trim(),
         courtName: courtName || undefined,
         caseType: caseType || undefined,
+      };
+    } else if (searchType === "active_warrant") {
+      if (!validateWarrantFirstName(warrantFirstName) || !validateWarrantSurname(warrantSurname)) {
+        return;
+      }
+      searchBody = {
+        ...searchBody,
+        firstName: sanitizeInput(warrantFirstName),
+        surname: sanitizeInput(warrantSurname),
+        province: warrantProvince !== "All Provinces" ? warrantProvince : undefined,
+        policeStation: warrantPoliceStation || undefined,
       };
     }
 
@@ -411,8 +472,8 @@ export default function SearchForm() {
       <div className="min-h-screen flex items-center justify-center p-4" style={{ background: "linear-gradient(180deg, #8B5CF6 0%, #6D28D9 100%)" }}>
         <div className="bg-white rounded-3xl p-12 max-w-md text-center shadow-2xl">
           <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-4 font-heading">Validating Purchase</h1>
-          <p className="text-gray-600">Please wait while we verify your payment...</p>
+          <h1 className="text-2xl font-bold text-foreground mb-4 font-heading">Validating Purchase</h1>
+          <p className="text-muted-foreground">Please wait while we verify your payment...</p>
         </div>
       </div>
     );
@@ -423,8 +484,8 @@ export default function SearchForm() {
       <div className="min-h-screen flex items-center justify-center p-4" style={{ background: "linear-gradient(180deg, #8B5CF6 0%, #6D28D9 100%)" }}>
         <div className="bg-white rounded-3xl p-12 max-w-md text-center shadow-2xl">
           <XCircle className="w-16 h-16 text-red-600 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-gray-900 mb-4 font-heading">Invalid or Expired Purchase</h1>
-          <p className="text-gray-600 mb-6">Please complete your payment first to access the search form.</p>
+          <h1 className="text-2xl font-bold text-foreground mb-4 font-heading">Invalid or Expired Purchase</h1>
+          <p className="text-muted-foreground mb-6">Please complete your payment first to access the search form.</p>
           <Button onClick={() => navigate("/")} className="w-full bg-primary hover:bg-primary/90">
             Return to Homepage
           </Button>
@@ -453,59 +514,71 @@ export default function SearchForm() {
         </div>
 
         {/* Heading */}
-        <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3 font-heading">
+        <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-3 font-heading">
           How would you like to search?
         </h2>
-        <p className="text-gray-600 mb-8 leading-relaxed">
+        <p className="text-muted-foreground mb-8 leading-relaxed">
           Choose your search method below
         </p>
 
         {/* Search Type Selector */}
         <RadioGroup value={searchType} onValueChange={(value) => setSearchType(value as SearchType)} className="grid md:grid-cols-2 gap-4 mb-8">
           {/* Option 1: Person Search */}
-          <div className={`relative border-2 rounded-2xl p-5 cursor-pointer transition-all ${searchType === "person" ? "border-[#8B5CF6] bg-purple-50" : "border-gray-200 hover:border-[#8B5CF6]/50"}`}>
+          <div className={`relative border-2 rounded-2xl p-5 cursor-pointer transition-all ${searchType === "person" ? "border-primary bg-purple-50" : "border-gray-200 hover:border-primary/50"}`}>
             <RadioGroupItem value="person" id="person" className="absolute top-4 right-4" />
             <Label htmlFor="person" className="cursor-pointer flex items-start gap-3">
-              <User className="w-8 h-8 text-[#8B5CF6] flex-shrink-0 mt-1" />
+              <User className="w-8 h-8 text-primary flex-shrink-0 mt-1" />
               <div>
-                <div className="font-bold text-lg text-gray-900 mb-1">Search by Person ⭐</div>
-                <div className="text-sm text-gray-600">Search using full name and ID number</div>
+                <div className="font-bold text-lg text-foreground mb-1">Search by Person ⭐</div>
+                <div className="text-sm text-muted-foreground">Search using full name and ID number</div>
               </div>
             </Label>
           </div>
 
-          {/* Option 2: Police Case */}
-          <div className={`relative border-2 rounded-2xl p-5 cursor-pointer transition-all ${searchType === "police_case" ? "border-[#8B5CF6] bg-purple-50" : "border-gray-200 hover:border-[#8B5CF6]/50"}`}>
+          {/* Option 2: Active Warrants (NEW) */}
+          <div className={`relative border-2 rounded-2xl p-5 cursor-pointer transition-all ${searchType === "active_warrant" ? "border-primary bg-purple-50" : "border-gray-200 hover:border-primary/50"}`}>
+            <RadioGroupItem value="active_warrant" id="active_warrant" className="absolute top-4 right-4" />
+            <Label htmlFor="active_warrant" className="cursor-pointer flex items-start gap-3">
+              <AlertTriangle className="w-8 h-8 text-primary flex-shrink-0 mt-1" />
+              <div>
+                <div className="font-bold text-lg text-foreground mb-1">Active Warrants 🚨</div>
+                <div className="text-sm text-muted-foreground">Search SAPS wanted persons database</div>
+              </div>
+            </Label>
+          </div>
+
+          {/* Option 3: Police Case */}
+          <div className={`relative border-2 rounded-2xl p-5 cursor-pointer transition-all ${searchType === "police_case" ? "border-primary bg-purple-50" : "border-gray-200 hover:border-primary/50"}`}>
             <RadioGroupItem value="police_case" id="police_case" className="absolute top-4 right-4" />
             <Label htmlFor="police_case" className="cursor-pointer flex items-start gap-3">
-              <Shield className="w-8 h-8 text-[#8B5CF6] flex-shrink-0 mt-1" />
+              <Shield className="w-8 h-8 text-primary flex-shrink-0 mt-1" />
               <div>
-                <div className="font-bold text-lg text-gray-900 mb-1">Police Case Number</div>
-                <div className="text-sm text-gray-600">Search using a police case number (XXX/DD/YYYY)</div>
+                <div className="font-bold text-lg text-foreground mb-1">Police Case Number</div>
+                <div className="text-sm text-muted-foreground">Search using a police case number (XXX/DD/YYYY)</div>
               </div>
             </Label>
           </div>
 
-          {/* Option 3: Protection Order */}
-          <div className={`relative border-2 rounded-2xl p-5 cursor-pointer transition-all ${searchType === "protection_order" ? "border-[#8B5CF6] bg-purple-50" : "border-gray-200 hover:border-[#8B5CF6]/50"}`}>
+          {/* Option 4: Protection Order */}
+          <div className={`relative border-2 rounded-2xl p-5 cursor-pointer transition-all ${searchType === "protection_order" ? "border-primary bg-purple-50" : "border-gray-200 hover:border-primary/50"}`}>
             <RadioGroupItem value="protection_order" id="protection_order" className="absolute top-4 right-4" />
             <Label htmlFor="protection_order" className="cursor-pointer flex items-start gap-3">
-              <FileText className="w-8 h-8 text-[#8B5CF6] flex-shrink-0 mt-1" />
+              <FileText className="w-8 h-8 text-primary flex-shrink-0 mt-1" />
               <div>
-                <div className="font-bold text-lg text-gray-900 mb-1">Protection Order</div>
-                <div className="text-sm text-gray-600">Search for protection order violations by keyword</div>
+                <div className="font-bold text-lg text-foreground mb-1">Protection Order</div>
+                <div className="text-sm text-muted-foreground">Search for protection order violations by keyword</div>
               </div>
             </Label>
           </div>
 
-          {/* Option 4: Court Case */}
-          <div className={`relative border-2 rounded-2xl p-5 cursor-pointer transition-all ${searchType === "court_case" ? "border-[#8B5CF6] bg-purple-50" : "border-gray-200 hover:border-[#8B5CF6]/50"}`}>
+          {/* Option 5: Court Case */}
+          <div className={`relative border-2 rounded-2xl p-5 cursor-pointer transition-all md:col-span-2 ${searchType === "court_case" ? "border-primary bg-purple-50" : "border-gray-200 hover:border-primary/50"}`}>
             <RadioGroupItem value="court_case" id="court_case" className="absolute top-4 right-4" />
             <Label htmlFor="court_case" className="cursor-pointer flex items-start gap-3">
-              <Gavel className="w-8 h-8 text-[#8B5CF6] flex-shrink-0 mt-1" />
+              <Gavel className="w-8 h-8 text-primary flex-shrink-0 mt-1" />
               <div>
-                <div className="font-bold text-lg text-gray-900 mb-1">Court Cases</div>
-                <div className="text-sm text-gray-600">Search by court case number or keyword</div>
+                <div className="font-bold text-lg text-foreground mb-1">Court Cases</div>
+                <div className="text-sm text-muted-foreground">Search by court case number or keyword</div>
               </div>
             </Label>
           </div>
@@ -527,7 +600,7 @@ export default function SearchForm() {
           {searchType === "person" && (
             <>
               <div>
-                <label htmlFor="firstName" className="block text-sm font-bold text-gray-900 mb-2">
+                <label htmlFor="firstName" className="block text-sm font-bold text-foreground mb-2">
                   Name(s) *
                 </label>
                 <div className="relative">
@@ -548,11 +621,11 @@ export default function SearchForm() {
                   {firstNameValid && <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-green-600" />}
                 </div>
                 {firstNameError && <p className="text-sm text-red-600 mt-1">{firstNameError}</p>}
-                <p className="text-xs text-gray-500 mt-2">First name and middle name(s) as they appear on ID</p>
+                <p className="text-xs text-muted-foreground mt-2">First name and middle name(s) as they appear on ID</p>
               </div>
 
               <div>
-                <label htmlFor="surname" className="block text-sm font-bold text-gray-900 mb-2">
+                <label htmlFor="surname" className="block text-sm font-bold text-foreground mb-2">
                   Surname *
                 </label>
                 <div className="relative">
@@ -573,11 +646,11 @@ export default function SearchForm() {
                   {surnameValid && <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-green-600" />}
                 </div>
                 {surnameError && <p className="text-sm text-red-600 mt-1">{surnameError}</p>}
-                <p className="text-xs text-gray-500 mt-2">Last name / family name as it appears on ID</p>
+                <p className="text-xs text-muted-foreground mt-2">Last name / family name as it appears on ID</p>
               </div>
 
               <div>
-                <label htmlFor="idNumber" className="block text-sm font-bold text-gray-900 mb-2">
+                <label htmlFor="idNumber" className="block text-sm font-bold text-foreground mb-2">
                   South African ID Number *
                 </label>
                 <div className="relative">
@@ -599,11 +672,11 @@ export default function SearchForm() {
                   {idValid && <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-green-600" />}
                 </div>
                 {idError && <p className="text-sm text-red-600 mt-1">{idError}</p>}
-                <p className="text-xs text-gray-500 mt-2">13-digit ID number from driver's license, ID card, or bank statement</p>
+                <p className="text-xs text-muted-foreground mt-2">13-digit ID number from driver's license, ID card, or bank statement</p>
               </div>
 
               <div>
-                <label htmlFor="aliases" className="block text-sm font-bold text-gray-900 mb-2">
+                <label htmlFor="aliases" className="block text-sm font-bold text-foreground mb-2">
                   Known Aliases or Previous Names (Optional)
                 </label>
                 <input
@@ -619,10 +692,102 @@ export default function SearchForm() {
             </>
           )}
 
+          {/* Active Warrant Search Fields */}
+          {searchType === "active_warrant" && (
+            <>
+              <div>
+                <label htmlFor="warrantFirstName" className="block text-sm font-bold text-foreground mb-2">
+                  First Name *
+                </label>
+                <div className="relative">
+                  <input
+                    id="warrantFirstName"
+                    type="text"
+                    value={warrantFirstName}
+                    onChange={(e) => {
+                      setWarrantFirstName(sanitizeInput(e.target.value));
+                      if (e.target.value.length >= 2) validateWarrantFirstName(e.target.value);
+                    }}
+                    onBlur={() => warrantFirstName && validateWarrantFirstName(warrantFirstName)}
+                    placeholder="Enter first name"
+                    maxLength={50}
+                    className={`w-full px-4 py-4 border-2 rounded-xl text-base transition-colors ${
+                      warrantFirstNameError ? "border-red-500" : warrantFirstNameValid ? "border-green-500" : "border-gray-200"
+                    } focus:outline-none focus:border-primary`}
+                    disabled={isSubmitting}
+                    required
+                  />
+                  {warrantFirstNameValid && <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-green-600" />}
+                </div>
+                {warrantFirstNameError && <p className="text-sm text-red-600 mt-1">{warrantFirstNameError}</p>}
+              </div>
+
+              <div>
+                <label htmlFor="warrantSurname" className="block text-sm font-bold text-foreground mb-2">
+                  Surname *
+                </label>
+                <div className="relative">
+                  <input
+                    id="warrantSurname"
+                    type="text"
+                    value={warrantSurname}
+                    onChange={(e) => {
+                      setWarrantSurname(sanitizeInput(e.target.value));
+                      if (e.target.value.length >= 2) validateWarrantSurname(e.target.value);
+                    }}
+                    onBlur={() => warrantSurname && validateWarrantSurname(warrantSurname)}
+                    placeholder="Enter surname"
+                    maxLength={50}
+                    className={`w-full px-4 py-4 border-2 rounded-xl text-base transition-colors ${
+                      warrantSurnameError ? "border-red-500" : warrantSurnameValid ? "border-green-500" : "border-gray-200"
+                    } focus:outline-none focus:border-primary`}
+                    disabled={isSubmitting}
+                    required
+                  />
+                  {warrantSurnameValid && <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-green-600" />}
+                </div>
+                {warrantSurnameError && <p className="text-sm text-red-600 mt-1">{warrantSurnameError}</p>}
+              </div>
+
+              <div>
+                <label htmlFor="warrantProvince" className="block text-sm font-bold text-foreground mb-2">
+                  Province (Optional)
+                </label>
+                <select
+                  id="warrantProvince"
+                  value={warrantProvince}
+                  onChange={(e) => setWarrantProvince(e.target.value)}
+                  className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl text-base focus:outline-none focus:border-primary bg-white"
+                  disabled={isSubmitting}
+                >
+                  {SA_PROVINCES.map((province) => (
+                    <option key={province} value={province}>{province}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="warrantPoliceStation" className="block text-sm font-bold text-foreground mb-2">
+                  Police Station (Optional)
+                </label>
+                <input
+                  id="warrantPoliceStation"
+                  type="text"
+                  value={warrantPoliceStation}
+                  onChange={(e) => setWarrantPoliceStation(e.target.value)}
+                  placeholder="e.g., Ermelo"
+                  className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl text-base focus:outline-none focus:border-primary"
+                  disabled={isSubmitting}
+                />
+                <p className="text-xs text-muted-foreground mt-2">Helps narrow down search results</p>
+              </div>
+            </>
+          )}
+
           {searchType === "police_case" && (
             <>
               <div>
-                <label htmlFor="caseNumber" className="block text-sm font-bold text-gray-900 mb-2">
+                <label htmlFor="caseNumber" className="block text-sm font-bold text-foreground mb-2">
                   Police Case Number *
                 </label>
                 <div className="relative">
@@ -644,11 +809,11 @@ export default function SearchForm() {
                   {caseNumberValid && <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-green-600" />}
                 </div>
                 {caseNumberError && <p className="text-sm text-red-600 mt-1">{caseNumberError}</p>}
-                <p className="text-xs text-gray-500 mt-2">Format: XXX/DD/YYYY (e.g., 106/10/2024)</p>
+                <p className="text-xs text-muted-foreground mt-2">Format: XXX/DD/YYYY (e.g., 106/10/2024)</p>
               </div>
 
               <div>
-                <label htmlFor="policeStation" className="block text-sm font-bold text-gray-900 mb-2">
+                <label htmlFor="policeStation" className="block text-sm font-bold text-foreground mb-2">
                   Police Station (Optional but Recommended)
                 </label>
                 <input
@@ -660,11 +825,11 @@ export default function SearchForm() {
                   className="w-full px-4 py-4 border-2 border-gray-200 rounded-xl text-base focus:outline-none focus:border-primary"
                   disabled={isSubmitting}
                 />
-                <p className="text-xs text-gray-500 mt-2">Helps verify the case faster</p>
+                <p className="text-xs text-muted-foreground mt-2">Helps verify the case faster</p>
               </div>
 
               <div>
-                <label htmlFor="relationship" className="block text-sm font-bold text-gray-900 mb-2">
+                <label htmlFor="relationship" className="block text-sm font-bold text-foreground mb-2">
                   Why are you searching this case? (Optional)
                 </label>
                 <select
@@ -687,7 +852,7 @@ export default function SearchForm() {
           {searchType === "protection_order" && (
             <>
               <div>
-                <label htmlFor="protectionOrderNumber" className="block text-sm font-bold text-gray-900 mb-2">
+                <label htmlFor="protectionOrderNumber" className="block text-sm font-bold text-foreground mb-2">
                   Search Keyword *
                 </label>
                 <div className="relative">
@@ -709,11 +874,11 @@ export default function SearchForm() {
                   {caseNumberValid && <CheckCircle2 className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-green-600" />}
                 </div>
                 {caseNumberError && <p className="text-sm text-red-600 mt-1">{caseNumberError}</p>}
-                <p className="text-xs text-gray-500 mt-2">Search for charges containing "protection order", "protection", etc.</p>
+                <p className="text-xs text-muted-foreground mt-2">Search for charges containing "protection order", "protection", etc.</p>
               </div>
 
               <div>
-                <label htmlFor="issuingCourt" className="block text-sm font-bold text-gray-900 mb-2">
+                <label htmlFor="issuingCourt" className="block text-sm font-bold text-foreground mb-2">
                   Which Court Issued the Order? (Optional)
                 </label>
                 <select
@@ -730,11 +895,11 @@ export default function SearchForm() {
                   <option value="Cape Town Magistrate Court">Cape Town Magistrate Court</option>
                   <option value="Durban Magistrate Court">Durban Magistrate Court</option>
                 </select>
-                <p className="text-xs text-gray-500 mt-2">Found on the protection order document</p>
+                <p className="text-xs text-muted-foreground mt-2">Found on the protection order document</p>
               </div>
 
               <div>
-                <label htmlFor="orderDate" className="block text-sm font-bold text-gray-900 mb-2">
+                <label htmlFor="orderDate" className="block text-sm font-bold text-foreground mb-2">
                   Date Order Was Issued (Optional)
                 </label>
                 <input
@@ -752,7 +917,7 @@ export default function SearchForm() {
           {searchType === "court_case" && (
             <>
               <div>
-                <label htmlFor="courtCaseNumber" className="block text-sm font-bold text-gray-900 mb-2">
+                <label htmlFor="courtCaseNumber" className="block text-sm font-bold text-foreground mb-2">
                   Search Keyword *
                 </label>
                 <input
@@ -765,11 +930,11 @@ export default function SearchForm() {
                   disabled={isSubmitting}
                   required
                 />
-                <p className="text-xs text-gray-500 mt-2">Search for charges containing "court order", "comply", etc.</p>
+                <p className="text-xs text-muted-foreground mt-2">Search for charges containing "court order", "comply", etc.</p>
               </div>
 
               <div>
-                <label htmlFor="courtName" className="block text-sm font-bold text-gray-900 mb-2">
+                <label htmlFor="courtName" className="block text-sm font-bold text-foreground mb-2">
                   Which Court? (Optional)
                 </label>
                 <select
@@ -788,7 +953,7 @@ export default function SearchForm() {
               </div>
 
               <div>
-                <label htmlFor="caseType" className="block text-sm font-bold text-gray-900 mb-2">
+                <label htmlFor="caseType" className="block text-sm font-bold text-foreground mb-2">
                   Type of Case (Optional)
                 </label>
                 <select
@@ -817,10 +982,10 @@ export default function SearchForm() {
               className="mt-1"
               disabled={isSubmitting}
             />
-            <label htmlFor="consent" className="text-sm text-gray-700 leading-relaxed cursor-pointer">
+            <label htmlFor="consent" className="text-sm text-muted-foreground leading-relaxed cursor-pointer">
               I confirm this information is accurate and I have the right to search this person's public criminal records. 
               I understand this search is for personal safety purposes only and will be conducted according to{" "}
-              <a href="/privacy-policy" className="text-primary underline hover:text-primary/80">
+              <a href="/privacy" className="text-primary underline hover:text-primary/80">
                 South African law (POPIA)
               </a>.
             </label>
@@ -840,6 +1005,7 @@ export default function SearchForm() {
             ) : (
               `🔍 ${
                 searchType === "person" ? "Search Criminal Records Now" :
+                searchType === "active_warrant" ? "Search Warrants" :
                 searchType === "police_case" ? "Search Police Case Now" :
                 searchType === "protection_order" ? "Search Protection Order Now" :
                 "Search Court Case Now"
@@ -856,14 +1022,14 @@ export default function SearchForm() {
                   style={{ width: `${progress}%` }}
                 />
               </div>
-              <p className="text-sm text-gray-600 text-center">
+              <p className="text-sm text-muted-foreground text-center">
                 Searching databases... {Math.floor((progress / 100) * 60)} seconds
               </p>
             </div>
           )}
 
           {!isSubmitting && (
-            <p className="text-xs text-gray-500 text-center">
+            <p className="text-xs text-muted-foreground text-center">
               ⏱️ Typical search time: 30-60 seconds
             </p>
           )}
@@ -873,11 +1039,11 @@ export default function SearchForm() {
         <div className="mt-8 space-y-4">
           {/* Information Box */}
           <div className="bg-gray-50 border-l-4 border-primary rounded-xl p-6">
-            <h3 className="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
-              <span>📊</span> {searchType === "person" ? "Databases We Search:" : "What We'll Find:"}
+            <h3 className="text-base font-bold text-foreground mb-3 flex items-center gap-2">
+              <span>📊</span> {searchType === "person" ? "Databases We Search:" : searchType === "active_warrant" ? "What We'll Check:" : "What We'll Find:"}
             </h3>
             {searchType === "person" ? (
-              <ul className="space-y-2 text-sm text-gray-700 leading-relaxed">
+              <ul className="space-y-2 text-sm text-muted-foreground leading-relaxed">
               <li className="flex items-start gap-2">
                 <span className="text-primary mt-1">•</span>
                 <span>High Court & Magistrate Court criminal convictions</span>
@@ -907,8 +1073,31 @@ export default function SearchForm() {
                 <span>Case history for the last 10 years</span>
               </li>
             </ul>
+            ) : searchType === "active_warrant" ? (
+              <ul className="space-y-2 text-sm text-muted-foreground leading-relaxed">
+                <li className="flex items-start gap-2">
+                  <span className="text-primary mt-1">•</span>
+                  <span>SAPS wanted persons database</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary mt-1">•</span>
+                  <span>Active arrest warrants</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary mt-1">•</span>
+                  <span>Outstanding court orders</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary mt-1">•</span>
+                  <span>Criminal charges and alleged offenses</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-primary mt-1">•</span>
+                  <span>Last known location and police station</span>
+                </li>
+              </ul>
             ) : (
-              <div className="text-sm text-gray-700 leading-relaxed">
+              <div className="text-sm text-muted-foreground leading-relaxed">
                 <p className="mb-3">
                   When you search by case/order number, we'll show you:
                 </p>

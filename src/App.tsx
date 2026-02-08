@@ -12,6 +12,10 @@ import AdminImport from "./pages/AdminImport";
 import AdminLogin from "./pages/AdminLogin";
 import AdminVerifyPayments from "./pages/AdminVerifyPayments";
 import Receipt from "./pages/Receipt";
+import About from "./pages/About";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
+import Dispute from "./pages/Dispute";
 
 const queryClient = new QueryClient();
 
@@ -26,6 +30,10 @@ const App = () => (
           <Route path="/search-form" element={<SearchForm />} />
           <Route path="/results" element={<Results />} />
           <Route path="/receipt" element={<Receipt />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/dispute" element={<Dispute />} />
           <Route path="/admin/scraper" element={<AdminScraper />} />
           <Route path="/admin/import" element={<AdminImport />} />
           <Route path="/admin/login" element={<AdminLogin />} />

@@ -1,33 +1,31 @@
-import Hero from "@/components/Hero";
-import AboutSection from "@/components/AboutSection";
-import TrustBadgesSection from "@/components/TrustBadgesSection";
-import ProblemSection from "@/components/ProblemSection";
-import SolutionSection from "@/components/SolutionSection";
-import SocialProofSection from "@/components/SocialProofSection";
-import PricingSection from "@/components/PricingSection";
-import GuaranteeSection from "@/components/GuaranteeSection";
-import UrgencySection from "@/components/UrgencySection";
-import FAQSection from "@/components/FAQSection";
-import FinalCTASection from "@/components/FinalCTASection";
-import Footer from "@/components/Footer";
-import { StickyElements } from "@/components/StickyElements";
+import Navbar from "@/components/landing/Navbar";
+import HeroNew from "@/components/landing/HeroNew";
+import StatsBar from "@/components/landing/StatsBar";
+import ProblemSection from "@/components/landing/ProblemSection";
+import SolutionSection from "@/components/landing/SolutionSection";
+import RiskLevelsSection from "@/components/landing/RiskLevelsSection";
+import TestimonialsSection from "@/components/landing/TestimonialsSection";
+import PricingNew from "@/components/landing/PricingNew";
+import WhyRedflaqSection from "@/components/landing/WhyRedflaqSection";
+import FAQNew from "@/components/landing/FAQNew";
+import FinalCTA from "@/components/landing/FinalCTA";
+import FooterNew from "@/components/landing/FooterNew";
 
 const Index = () => {
   return (
     <main className="min-h-screen">
-      <StickyElements />
-      <Hero />
-      <AboutSection />
-      <TrustBadgesSection />
+      <Navbar />
+      <HeroNew />
+      <StatsBar />
       <ProblemSection />
       <SolutionSection />
-      <SocialProofSection />
-      <PricingSection />
-      <GuaranteeSection />
-      <UrgencySection />
-      <FAQSection />
-      <FinalCTASection />
-      <Footer />
+      <RiskLevelsSection />
+      <TestimonialsSection />
+      <PricingNew />
+      <WhyRedflaqSection />
+      <FAQNew />
+      <FinalCTA />
+      <FooterNew />
     </main>
   );
 };

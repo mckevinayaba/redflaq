@@ -504,8 +504,8 @@ export default function SearchForm() {
             <Label htmlFor="court_case" className="cursor-pointer flex items-start gap-3">
               <Gavel className="w-8 h-8 text-[#8B5CF6] flex-shrink-0 mt-1" />
               <div>
-                <div className="font-bold text-lg text-gray-900 mb-1">Court Order Violation</div>
-                <div className="text-sm text-gray-600">Search for court order violations by keyword</div>
+                <div className="font-bold text-lg text-gray-900 mb-1">Court Cases</div>
+                <div className="text-sm text-gray-600">Search by court case number or keyword</div>
               </div>
             </Label>
           </div>

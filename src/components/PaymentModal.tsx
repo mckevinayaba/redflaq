@@ -20,9 +20,9 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
   const navigate = useNavigate();
 
   const packages = {
-    single: { price: 50, credits: 1, label: 'R50 - 1 Search', type: 'single', savings: undefined },
-    '3-pack': { price: 120, credits: 3, label: 'R120 - 3 Searches', savings: 'Save R30!', type: 'triple' },
-    '5-pack': { price: 180, credits: 5, label: 'R180 - 5 Searches', savings: 'Best Value!', type: 'five' }
+    single: { price: 99, credits: 1, label: 'R99 - 1 Verification', type: 'single', savings: undefined },
+    '3-pack': { price: 249, credits: 3, label: 'R249 - 3 Verifications', savings: 'Save R48!', type: 'triple' },
+    '5-pack': { price: 399, credits: 5, label: 'R399 - 5 Verifications', savings: 'Save R96!', type: 'five' }
   };
 
   const copyAccountNumber = async () => {

@@ -1,32 +1,26 @@
-import Navbar from "@/components/landing/Navbar";
-import HeroNew from "@/components/landing/HeroNew";
-import StatsBar from "@/components/landing/StatsBar";
-import ProblemSection from "@/components/landing/ProblemSection";
-import SolutionSection from "@/components/landing/SolutionSection";
-import RiskLevelsSection from "@/components/landing/RiskLevelsSection";
-import TestimonialsSection from "@/components/landing/TestimonialsSection";
-import PricingNew from "@/components/landing/PricingNew";
-import WhyRedflaqSection from "@/components/landing/WhyRedflaqSection";
-import FAQNew from "@/components/landing/FAQNew";
-import FinalCTA from "@/components/landing/FinalCTA";
-import FooterNew from "@/components/landing/FooterNew";
+import NavbarHonest from "@/components/landing/NavbarHonest";
+import HeroHonest from "@/components/landing/HeroHonest";
+import HowItWorksHonest from "@/components/landing/HowItWorksHonest";
+import WhatWeSearchHonest from "@/components/landing/WhatWeSearchHonest";
+import PricingHonest from "@/components/landing/PricingHonest";
+import FAQHonest from "@/components/landing/FAQHonest";
+import FinalCTAHonest from "@/components/landing/FinalCTAHonest";
+import FooterHonest from "@/components/landing/FooterHonest";
 
 const Index = () => {
   return (
-    <main className="min-h-screen">
-      <Navbar />
-      <HeroNew />
-      <StatsBar />
-      <ProblemSection />
-      <SolutionSection />
-      <RiskLevelsSection />
-      <TestimonialsSection />
-      <PricingNew />
-      <WhyRedflaqSection />
-      <FAQNew />
-      <FinalCTA />
-      <FooterNew />
-    </main>
+    <div className="min-h-screen bg-background">
+      <NavbarHonest />
+      <HeroHonest />
+      <HowItWorksHonest />
+      <section id="what-we-search">
+        <WhatWeSearchHonest />
+      </section>
+      <PricingHonest />
+      <FAQHonest />
+      <FinalCTAHonest />
+      <FooterHonest />
+    </div>
   );
 };
 

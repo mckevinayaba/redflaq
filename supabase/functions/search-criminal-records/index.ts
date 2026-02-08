@@ -8,12 +8,16 @@ const corsHeaders = {
 };
 
 interface SearchRequest {
-  searchType: 'person' | 'police_case' | 'protection_order' | 'court_case' | 'active_warrant';
+  searchType: 'person' | 'police_case' | 'protection_order' | 'court_case' | 'active_warrant' | 'verification';
   // Person search fields
   firstName?: string;
   middleNames?: string;
   surname?: string;
   idNumber?: string;
+  // New verification fields (honest flow)
+  fullName?: string;
+  dateOfBirth?: string;
+  courtReference?: string;
   // Police case fields
   caseNumber?: string;
   policeStation?: string;
@@ -53,10 +57,13 @@ serve(async (req) => {
         );
       }
     } else if (searchType === 'active_warrant') {
-      const { firstName, surname } = requestBody;
-      if (!firstName || !surname) {
+      // Legacy active_warrant - requires firstName and surname separately
+      const { firstName, surname, fullName } = requestBody;
+      
+      // Support both old (firstName/surname) and new (fullName) formats
+      if (!fullName && (!firstName || !surname)) {
         return new Response(
-          JSON.stringify({ error: 'First name and surname are required for warrant search' }),
+          JSON.stringify({ error: 'Name is required for warrant search' }),
           {
             status: 400,
             headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -117,20 +124,35 @@ serve(async (req) => {
         .or(searchConditions.join(','));
 
     } else if (searchType === 'active_warrant') {
-      // New Active Warrant search type - searches by first name and surname
-      const { firstName, surname, province, policeStation } = requestBody;
-      searchIdentifier = `${firstName} ${surname}`;
+      // Active Warrant search - supports both old and new format
+      const { firstName, surname, fullName, province, policeStation } = requestBody;
       
-      console.log(`Active warrant search: ${firstName} ${surname}, Province: ${province || 'all'}, Station: ${policeStation || 'any'}`);
+      // Parse fullName if provided (new format), otherwise use firstName/surname
+      let searchFirstName = firstName || '';
+      let searchSurname = surname || '';
+      
+      if (fullName && !firstName && !surname) {
+        // Split fullName into parts
+        const nameParts = fullName.trim().split(/\s+/);
+        if (nameParts.length >= 2) {
+          searchFirstName = nameParts[0];
+          searchSurname = nameParts[nameParts.length - 1];
+        } else if (nameParts.length === 1) {
+          searchFirstName = nameParts[0];
+          searchSurname = nameParts[0];
+        }
+      }
+      
+      searchIdentifier = fullName || `${searchFirstName} ${searchSurname}`;
+      
+      console.log(`Active warrant search: ${searchIdentifier}, Province: ${province || 'all'}, Station: ${policeStation || 'any'}`);
 
-      // Build search query - must match BOTH first name AND surname
+      // Build search query - search in full_name field for flexibility
       searchQuery = supabase
         .from('wanted_persons')
         .select('*')
         .eq('is_active', true)
-        .eq('record_status', 'active')
-        .ilike('first_name', `%${firstName}%`)
-        .ilike('surname', `%${surname}%`);
+        .or(`full_name.ilike.%${searchFirstName}%,full_name.ilike.%${searchSurname}%`);
       
       // Optional province filter
       if (province) {

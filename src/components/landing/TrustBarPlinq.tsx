@@ -1,25 +1,9 @@
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-
 const TrustBarPlinq = () => {
-  const [recordCount, setRecordCount] = useState(69);
-
-  useEffect(() => {
-    const fetchCount = async () => {
-      const { count } = await supabase
-        .from('wanted_persons')
-        .select('*', { count: 'exact', head: true })
-        .eq('is_active', true);
-      if (count) setRecordCount(count);
-    };
-    fetchCount();
-  }, []);
-
   const stats = [
-    { value: recordCount.toLocaleString(), label: "Active Records", icon: "📊" },
     { value: "<5 min", label: "Avg Response", icon: "⏱️" },
     { value: "100%", label: "Confidential", icon: "🔒" },
     { value: "POPIA", label: "Compliant", icon: "✓" },
+    { value: "R99", label: "Per Search", icon: "💰" },
   ];
 
   return (

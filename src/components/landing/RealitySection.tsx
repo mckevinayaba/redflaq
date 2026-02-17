@@ -28,31 +28,31 @@ const RealitySection = () => {
           <div className="grid grid-cols-1 md:grid-cols-2" style={{ borderBottom: '1.5px solid #0D0B0E' }}>
             <div style={{ padding: '40px 48px', borderRight: '1.5px solid #0D0B0E' }}>
               <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 64, color: '#0D0B0E', lineHeight: 1 }}>
-                1 in <span style={{ color: '#7C3AED' }}>5</span>
+                1 in <span style={{ color: '#7C3AED' }}>3</span>
               </div>
               <div style={{ fontSize: 16, fontWeight: 600, color: '#0D0B0E', margin: '12px 0 8px' }}>
-                South African women experience intimate partner violence
+                South African women have experienced lifetime physical violence
               </div>
               <p style={{ fontSize: 14, color: '#4B4453', lineHeight: 1.6 }}>
                 Most will never know their partner had a criminal history in public records.
               </p>
               <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#9CA3AF', marginTop: 12 }}>
-                STATS SA · 2023 GENDER STATISTICS REPORT
+                DSTI / STATS SA · 2024 GENDER REPORT
               </div>
             </div>
 
             <div style={{ padding: '40px 48px' }}>
               <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 64, lineHeight: 1 }}>
-                <span style={{ color: '#7C3AED' }}>42,289</span>
+                <span style={{ color: '#7C3AED' }}>40,000+</span>
               </div>
               <div style={{ fontSize: 16, fontWeight: 600, color: '#0D0B0E', margin: '12px 0 8px' }}>
-                Sexual offenses reported in 2022/2023
+                Sexual offenses reported annually
               </div>
               <p style={{ fontSize: 14, color: '#4B4453', lineHeight: 1.6 }}>
                 Thousands of perpetrators had prior criminal records that were never checked.
               </p>
               <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#9CA3AF', marginTop: 12 }}>
-                SAPS CRIME STATISTICS · 2022/2023 ANNUAL REPORT
+                SAPS CRIME STATISTICS · ANNUAL REPORT
               </div>
             </div>
           </div>

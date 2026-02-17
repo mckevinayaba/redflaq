@@ -4,9 +4,9 @@ const BarrierSection = () => {
   const { ref, isVisible } = useScrollReveal();
 
   const cards = [
-    { num: "01", icon: "💰", title: "Too Expensive", value: "R5,000", desc: "The cost of a traditional corporate background check. Out of reach for most South Africans making personal safety decisions." },
+    { num: "01", icon: "💰", title: "Too Expensive", value: "R2,000–R5,000+", desc: "Traditional bundled corporate background checks (criminal + credit + employment) cost thousands. Designed for businesses, not individuals." },
     { num: "02", icon: "📋", title: "Too Bureaucratic", value: "Fingerprints", desc: "Police station visits. Physical forms. Systems designed for HR departments, not for women deciding who to trust." },
-    { num: "03", icon: "⏱️", title: "Too Slow", value: "3 Weeks", desc: "The average wait for traditional results. Too late when you need to make a decision today." },
+    { num: "03", icon: "⏱️", title: "Too Slow", value: "Days to Weeks", desc: "Traditional checks can take days to weeks, especially manual fingerprints or qualifications. Too late when you need to decide today." },
   ];
 
   return (

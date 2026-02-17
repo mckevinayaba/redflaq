@@ -21,15 +21,15 @@ const WhyRedflaqSection = () => {
         </h2>
 
         <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 20, color: 'white', maxWidth: 800, margin: '0 auto', lineHeight: 1.8 }} className="space-y-6">
-          <p>South Africa has one of the highest rates of gender-based violence globally. A woman is murdered by her intimate partner every four hours. Over 42,000 sexual offenses were reported in 2022/2023 alone.</p>
+          <p>South Africa has one of the highest GBV rates globally. A woman is killed by her intimate partner every 6 hours. Over 40,000 sexual offences are reported yearly.</p>
           <p>Many of these tragedies had warning signs. Public criminal records. Court cases. Protection orders. Information that existed in government databases that nobody could access.</p>
-          <p>Why? Because traditional background checks cost R5,000, required fingerprints at a police station, and took three weeks. They were designed for corporations verifying employees, not for women making decisions about who to trust.</p>
+          <p>Why? Because traditional bundled background checks cost R2,000–R5,000+, required fingerprints at a police station, and took days to weeks. They were designed for corporations verifying employees, not for women making decisions about who to trust.</p>
         </div>
 
         {/* Founder quote */}
         <div style={{ maxWidth: 800, margin: '40px auto', borderLeft: '4px solid rgba(255,255,255,0.4)', paddingLeft: 24 }}>
           <p style={{ fontFamily: "'DM Serif Display', serif", fontSize: 22, fontStyle: 'italic', color: 'white', lineHeight: 1.6 }}>
-            "Traditional background check services exist, but they are slow, bureaucratic, and designed for businesses, not individuals. I wanted to build something instant. Women should be able to know if someone they are close to has a history of violence or fraud."
+            "Traditional background check services exist, but they are slow, bureaucratic, and designed for businesses, not individuals. I built RedFlaq for instant access—women should be able to know if someone they are close to has a history of violence or fraud. At R99."
           </p>
           <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 600, color: 'rgba(255,255,255,0.7)', marginTop: 16 }}>
             — McKevin Ayaba, Founder of RedFlaq
@@ -37,7 +37,7 @@ const WhyRedflaqSection = () => {
         </div>
 
         <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 20, color: 'white', maxWidth: 800, margin: '32px auto 0', lineHeight: 1.8 }}>
-          <p>RedFlaq connects directly to SAPS, court records, and government gazettes. The same databases corporations use for employee screening. We made them searchable by anyone for R99 in minutes, not weeks.</p>
+          <p>RedFlaq searches SAPS, court records, and government gazettes—the same public databases corporations use for employee screening. We made them searchable by anyone for R99 in minutes, not weeks.</p>
         </div>
 
         <p style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, fontStyle: 'italic', color: 'white', textAlign: 'center', marginTop: 40 }}>
@@ -56,7 +56,7 @@ const WhyRedflaqSection = () => {
         </div>
 
         <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: 'rgba(255,255,255,0.4)', textAlign: 'center', marginTop: 48 }}>
-          Sources: SAPS Crime Statistics 2022/2023 · Stats SA Gender Report 2023 · MRC National Femicide Study
+          Sources: SAPS Crime Statistics · DSTI/Stats SA 2024 Gender Report · MRC National Femicide Study
         </p>
       </div>
     </section>

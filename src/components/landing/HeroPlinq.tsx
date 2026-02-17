@@ -1,120 +1,124 @@
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Check, Heart, Shield } from "lucide-react";
+import { useState } from "react";
+import { Check } from "lucide-react";
 import { PaymentModal } from "@/components/PaymentModal";
-import { supabase } from "@/integrations/supabase/client";
 
 const HeroPlinq = () => {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-  const [searchCount, setSearchCount] = useState(1247);
-
-  useEffect(() => {
-    const fetchCount = async () => {
-      const { count } = await supabase
-        .from('manual_payments')
-        .select('*', { count: 'exact', head: true })
-        .eq('status', 'verified');
-      if (count) setSearchCount(count + 1200);
-    };
-    fetchCount();
-  }, []);
 
   return (
     <>
-      <section className="relative pt-[120px] pb-20 overflow-hidden" style={{ background: 'linear-gradient(180deg, hsl(270 100% 98%) 0%, hsl(0 0% 100%) 100%)' }}>
-        <div className="max-w-[1280px] mx-auto px-6">
-          <div className="grid lg:grid-cols-12 gap-12 items-center">
-            {/* Left Column - Content (55%) */}
-            <div className="lg:col-span-7 space-y-8">
-              {/* Badge */}
-              <div className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-full text-sm font-medium">
-                💜 Trusted by women across South Africa
+      <section className="relative min-h-screen overflow-hidden" style={{ background: 'linear-gradient(160deg, #FAF5FF 0%, #F7F4F0 60%)' }}>
+        <div className="grid lg:grid-cols-2 min-h-screen">
+          {/* LEFT COLUMN */}
+          <div style={{ padding: '140px 60px 80px' }}>
+            {/* Badge */}
+            <div style={{
+              border: '1px solid #7C3AED', padding: '6px 12px',
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              fontFamily: "'JetBrains Mono', monospace", fontSize: 11,
+              letterSpacing: '0.15em', textTransform: 'uppercase', color: '#7C3AED',
+            }}>
+              <span className="animate-pulse" style={{ width: 6, height: 6, borderRadius: '50%', background: '#7C3AED', display: 'inline-block' }} />
+              South Africa's First Instant Verification Platform
+            </div>
+
+            {/* Headline */}
+            <h1 style={{
+              fontFamily: "'DM Serif Display', serif",
+              fontSize: 'clamp(52px, 5vw, 76px)', lineHeight: 1.05,
+              color: '#0D0B0E', marginTop: 32, marginBottom: 24,
+            }}>
+              Trusting relationships<br />begin with<br />
+              <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>information.</em>
+            </h1>
+
+            {/* Subheadline */}
+            <p style={{
+              fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 400,
+              lineHeight: 1.6, color: '#4B4453', maxWidth: 480, marginBottom: 16,
+            }}>
+              With a full name and ID number, verify someone's criminal record before you trust them with your life.
+            </p>
+
+            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, color: '#4B4453', marginBottom: 32 }}>
+              <strong>Not in weeks. In minutes. Not for thousands. For R99.</strong>
+            </p>
+
+            {/* Value props */}
+            <div className="flex flex-wrap gap-4" style={{ marginBottom: 32 }}>
+              {["Results in 2 to 5 minutes", "100% Confidential searches", "POPIA Compliant"].map(item => (
+                <div key={item} className="flex items-center gap-2" style={{ fontSize: 16, color: '#4B4453' }}>
+                  <Check className="h-5 w-5" style={{ color: '#7C3AED' }} />
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Buttons */}
+            <div className="flex flex-wrap gap-4">
+              <button onClick={() => setIsPaymentModalOpen(true)} className="hover:!bg-[#7C3AED] hover:!border-[#7C3AED] transition-colors" style={{
+                background: '#0D0B0E', color: '#F7F4F0', padding: '16px 36px',
+                fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 15,
+                border: '2px solid #0D0B0E', cursor: 'pointer',
+              }}>
+                Verify Someone Now — R99
+              </button>
+              <button onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })} className="hover:!bg-[#0D0B0E] hover:!text-[#F7F4F0] transition-colors" style={{
+                background: 'transparent', color: '#0D0B0E', padding: '16px 36px',
+                fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 15,
+                border: '2px solid #0D0B0E', cursor: 'pointer',
+              }}>
+                See How It Works
+              </button>
+            </div>
+
+            {/* Trust line */}
+            <div className="flex items-center gap-3" style={{ marginTop: 48 }}>
+              <div style={{ width: 40, height: 1, background: '#9CA3AF' }} />
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#9CA3AF', letterSpacing: '0.05em' }}>
+                POPIA COMPLIANT · GOVERNMENT SOURCES ONLY · 100% CONFIDENTIAL
+              </span>
+            </div>
+          </div>
+
+          {/* RIGHT COLUMN */}
+          <div style={{ background: '#0D0B0E', position: 'relative', overflow: 'hidden' }}>
+            {/* Photo collage */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, padding: '24px 24px 0', height: 320 }}>
+              <div style={{ gridRow: '1', overflow: 'hidden' }}>
+                <img src="https://images.unsplash.com/photo-1589156280159-27a852cc18c4?w=600&q=80" alt="South African woman" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.75)' }} />
               </div>
-
-              {/* Main Headline */}
-              <h1 className="text-4xl md:text-5xl lg:text-6xl xl:text-[72px] font-bold text-foreground leading-[1.1] tracking-tight">
-                Trusting relationships begin with{" "}
-                <span className="text-primary">information.</span>
-              </h1>
-
-              {/* Subheadline */}
-              <p className="text-xl md:text-2xl text-muted-foreground font-medium">
-                With a full name and ID number, verify legal risk signals before trust is given.
-              </p>
-
-              {/* Body text */}
-              <p className="text-lg text-muted-foreground leading-relaxed max-w-xl">
-                RedFlaq searches South African government records so you can make informed decisions about who enters your life. Whether romantic relationships, childcare, or business connections.
-              </p>
-
-              {/* Value props */}
-              <div className="flex flex-wrap gap-6 text-muted-foreground">
-                <div className="flex items-center gap-2">
-                  <Check className="h-5 w-5 text-primary" />
-                  <span>Results in 2-5 minutes</span>
+              <div style={{ display: 'grid', gridTemplateRows: '1fr 1fr', gap: 8 }}>
+                <div style={{ overflow: 'hidden' }}>
+                  <img src="https://images.unsplash.com/photo-1611432579699-484f7990b127?w=400&q=80" alt="Professional woman" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.75)' }} />
                 </div>
-                <div className="flex items-center gap-2">
-                  <Check className="h-5 w-5 text-primary" />
-                  <span>100% Confidential searches</span>
+                <div style={{ overflow: 'hidden' }}>
+                  <img src="https://images.unsplash.com/photo-1523824921871-d6f1a15151f1?w=400&q=80" alt="Confident woman" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.75)' }} />
                 </div>
-                <div className="flex items-center gap-2">
-                  <Check className="h-5 w-5 text-primary" />
-                  <span>POPIA Compliant</span>
-                </div>
-              </div>
-
-              {/* CTA Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <Button 
-                  onClick={() => setIsPaymentModalOpen(true)}
-                  size="lg"
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground text-lg px-8 py-6 rounded-full shadow-lg hover:shadow-xl transition-all font-semibold"
-                >
-                  Check Risk Signals — R99
-                </Button>
-                <Button 
-                  variant="outline"
-                  size="lg"
-                  className="border-2 border-primary text-primary hover:bg-primary/5 text-lg px-8 py-6 rounded-full"
-                  onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
-                >
-                  See How It Works
-                </Button>
               </div>
             </div>
 
-            {/* Right Column - Visual (45%) */}
-            <div className="lg:col-span-5 relative">
-              {/* Main Image Container */}
-              <div className="relative rounded-3xl overflow-hidden shadow-2xl" style={{ background: 'linear-gradient(135deg, hsl(270 100% 95%) 0%, hsl(330 100% 95%) 100%)' }}>
-                {/* Placeholder for South African women photo */}
-                <div className="aspect-[4/5] flex items-center justify-center p-8">
-                  <div className="text-center space-y-4">
-                    <div className="w-32 h-32 mx-auto rounded-full bg-primary/20 flex items-center justify-center">
-                      <Shield className="w-16 h-16 text-primary" />
-                    </div>
-                    <p className="text-muted-foreground text-sm">
-                      [Photo: Two South African women, diverse, confident, smiling]
-                    </p>
-                  </div>
-                </div>
-
-                {/* Floating badge - top right */}
-                <div className="absolute top-4 right-4 px-4 py-2 rounded-full text-white text-sm font-medium shadow-lg" style={{ background: 'linear-gradient(135deg, hsl(262 83% 58%) 0%, hsl(330 80% 60%) 100%)' }}>
-                  Over {searchCount.toLocaleString()} searches performed
+            {/* Stat cards */}
+            <div style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <div style={{ background: 'rgba(124,58,237,0.1)', border: '1px solid #7C3AED', padding: 24 }}>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#DDD6FE' }}>SOUTH AFRICAN REALITY</div>
+                <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 48, color: 'white', lineHeight: 1, margin: '8px 0' }}>1 in 3</div>
+                <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.6)', lineHeight: 1.5 }}>
+                  Women have experienced lifetime physical violence from an intimate partner.
+                </p>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: 'rgba(255,255,255,0.3)', marginTop: 8 }}>
+                  SOURCE: STATS SA · DSTI 2024 GENDER REPORT
                 </div>
               </div>
 
-              {/* Trust badge - bottom */}
-              <div className="absolute -bottom-4 left-4 right-4 bg-background rounded-2xl p-4 shadow-xl border border-border">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
-                    <Heart className="w-5 h-5 text-red-500" />
-                  </div>
-                  <div>
-                    <p className="font-semibold text-foreground">Secure and reliable verification</p>
-                    <p className="text-sm text-muted-foreground">POPIA compliant</p>
-                  </div>
+              <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', padding: 24 }}>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#DDD6FE' }}>PUBLIC DATABASE ACCESS</div>
+                <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 48, color: 'white', lineHeight: 1, margin: '8px 0' }}>R99</div>
+                <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.6)', lineHeight: 1.5 }}>
+                  Instant access to verified public criminal records from government sources.
+                </p>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: 'rgba(255,255,255,0.3)', marginTop: 8 }}>
+                  SAPS · SAFLII · GOVERNMENT GAZETTE
                 </div>
               </div>
             </div>
@@ -122,11 +126,7 @@ const HeroPlinq = () => {
         </div>
       </section>
 
-      <PaymentModal 
-        isOpen={isPaymentModalOpen} 
-        onClose={() => setIsPaymentModalOpen(false)}
-        packageType="single"
-      />
+      <PaymentModal isOpen={isPaymentModalOpen} onClose={() => setIsPaymentModalOpen(false)} packageType="single" />
     </>
   );
 };

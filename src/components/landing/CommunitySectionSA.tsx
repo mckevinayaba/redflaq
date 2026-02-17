@@ -45,17 +45,17 @@ const CommunitySectionSA = () => {
           {/* RIGHT - photo grid */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '220px 220px', gap: 8, height: 440 }}>
             <div className="group" style={{ gridRow: '1 / 3', overflow: 'hidden' }}>
-              <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=600&q=80" alt="South African woman"
+              <img src="https://images.unsplash.com/photo-1589156280159-27a852cc18c4?w=600&q=80" alt="South African woman"
                 className="transition-all duration-400 group-hover:grayscale-0 group-hover:brightness-100"
                 style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(30%) brightness(0.8)' }} />
             </div>
             <div className="group" style={{ overflow: 'hidden' }}>
-              <img src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?w=400&q=80" alt="Women community"
+              <img src="https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=400&q=80" alt="Woman"
                 className="transition-all duration-400 group-hover:grayscale-0 group-hover:brightness-100"
                 style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(30%) brightness(0.8)' }} />
             </div>
             <div className="group" style={{ overflow: 'hidden' }}>
-              <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&q=80" alt="Professional woman"
+              <img src="https://images.unsplash.com/photo-1611432579699-484f7990b127?w=400&q=80" alt="Professional woman"
                 className="transition-all duration-400 group-hover:grayscale-0 group-hover:brightness-100"
                 style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(30%) brightness(0.8)' }} />
             </div>

@@ -1,101 +1,63 @@
-import { FileText, Search, CheckCircle, Mail } from "lucide-react";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
+
+const steps = [
+  { num: "01", title: "You Provide Details", desc: "Full name, SA ID number, and reason for search. All information encrypted and secured under POPIA.", time: "⏱ 30 seconds" },
+  { num: "02", title: "We Search Records", desc: "Our system searches SAPS wanted persons, SAFLII court judgments, and government gazettes simultaneously.", time: "⏱ 1 to 2 minutes" },
+  { num: "03", title: "Human Verification", desc: "Our team confirms matches are the correct person. South Africa has many duplicate names. We verify before we report.", time: "⏱ 2 to 3 minutes" },
+  { num: "04", title: "You Get the Report", desc: "Color-coded result with source links. Every finding is traceable and cited. Red, Amber, or Green.", time: "⏱ Delivered instantly" },
+];
 
 const HowItWorksPlinq = () => {
-  const steps = [
-    {
-      number: "1",
-      icon: FileText,
-      title: "You Provide Information",
-      description: "Full name, ID number, and reason for search. All information encrypted and secured.",
-      time: "30 seconds",
-    },
-    {
-      number: "2",
-      icon: Search,
-      title: "We Search Public Records",
-      description: "Our system searches SAPS wanted persons, SAFLII court judgments, and government gazettes.",
-      time: "1-2 minutes",
-    },
-    {
-      number: "3",
-      icon: CheckCircle,
-      title: "Human Verification",
-      description: "Our team verifies matches are the correct person. Common names require extra verification to avoid false positives.",
-      time: "2-3 minutes",
-    },
-    {
-      number: "4",
-      icon: Mail,
-      title: "You Receive Report",
-      description: "Clear, color-coded report with source links sent via email. Every result is defensible and traceable.",
-      time: "Immediate delivery",
-    },
-  ];
+  const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section id="how-it-works" className="py-24 md:py-32 bg-background">
-      <div className="max-w-[1100px] mx-auto px-6">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-full text-sm font-medium mb-6">
-            OUR PROCESS
-          </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
-            How RedFlaq Actually Works
-          </h2>
-          <p className="text-xl text-muted-foreground">
-            Human-verified. Factual. Transparent.
-          </p>
+    <section id="how-it-works" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '120px 60px' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 16 }}>
+          The Process
         </div>
 
-        {/* Timeline */}
-        <div className="relative">
-          {/* Vertical line */}
-          <div className="absolute left-8 md:left-12 top-0 bottom-0 w-0.5 bg-primary/20" />
+        <h2 style={{
+          fontFamily: "'DM Serif Display', serif",
+          fontSize: 'clamp(36px, 4vw, 52px)', maxWidth: 600, color: '#0D0B0E', marginBottom: 64,
+        }}>
+          Fast. Verified. <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>Defensible.</em>
+        </h2>
 
-          <div className="space-y-12">
-            {steps.map((step, index) => (
-              <div key={step.number} className="relative flex gap-6 md:gap-8">
-                {/* Step number circle */}
-                <div className="relative z-10 flex-shrink-0">
-                  <div className="w-16 h-16 md:w-24 md:h-24 rounded-full bg-primary flex items-center justify-center text-primary-foreground font-bold text-2xl md:text-3xl shadow-lg">
-                    {step.number}
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="flex-1 pt-2 md:pt-4">
-                  <div className="bg-card rounded-2xl p-6 md:p-8 border border-border shadow-sm">
-                    <div className="flex items-start gap-4 mb-4">
-                      <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
-                        <step.icon className="w-6 h-6 text-primary" />
-                      </div>
-                      <div>
-                        <h3 className="text-xl md:text-2xl font-bold text-foreground mb-2">
-                          {step.title}
-                        </h3>
-                        <p className="text-muted-foreground leading-relaxed">
-                          {step.description}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2 text-primary font-medium">
-                      <span className="w-2 h-2 rounded-full bg-primary" />
-                      {step.time}
-                    </div>
-                  </div>
-                </div>
+        <div className="grid grid-cols-1 md:grid-cols-4" style={{ border: '1.5px solid #0D0B0E' }}>
+          {steps.map((step, i) => (
+            <div
+              key={step.num}
+              className="transition-colors hover:bg-[#EDE9E3]"
+              style={{
+                padding: '40px 32px',
+                borderRight: i < steps.length - 1 ? '1.5px solid #0D0B0E' : 'none',
+              }}
+            >
+              <div style={{
+                fontFamily: "'DM Serif Display', serif", fontSize: 72, color: '#DDD6FE',
+                lineHeight: 1, marginBottom: 16,
+              }}>
+                {step.num}
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Why human verification callout */}
-        <div className="mt-16 bg-accent rounded-2xl p-8 border-l-4 border-primary">
-          <p className="text-foreground leading-relaxed">
-            <span className="font-semibold">Why human verification?</span> South Africa has many people with the same name. 
-            We verify DOB and location to ensure we report on the correct person. This protects you from defamation and ensures accuracy.
-          </p>
+              <div style={{
+                fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 700,
+                color: '#0D0B0E', marginBottom: 12, letterSpacing: '0.02em',
+              }}>
+                {step.title}
+              </div>
+              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#4B4453', lineHeight: 1.6 }}>
+                {step.desc}
+              </p>
+              <span style={{
+                fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#7C3AED',
+                fontWeight: 500, letterSpacing: '0.1em',
+                borderTop: '1px solid #DDD6FE', paddingTop: 12, marginTop: 20, display: 'block',
+              }}>
+                {step.time}
+              </span>
+            </div>
+          ))}
         </div>
       </div>
     </section>

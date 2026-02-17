@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Menu, X, Shield } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { PaymentModal } from "@/components/PaymentModal";
 
 const NavbarPlinq = () => {
@@ -10,7 +9,8 @@ const NavbarPlinq = () => {
   const navLinks = [
     { label: "How It Works", href: "#how-it-works" },
     { label: "Pricing", href: "#pricing" },
-    { label: "About Us", href: "#about" },
+    { label: "About", href: "#about" },
+    { label: "FAQ", href: "#faq" },
   ];
 
   const scrollToSection = (href: string) => {
@@ -23,15 +23,28 @@ const NavbarPlinq = () => {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm shadow-sm">
-        <div className="max-w-[1280px] mx-auto px-6">
-          <div className="flex items-center justify-between h-[72px]">
+      <nav className="fixed top-0 left-0 right-0 z-50" style={{ background: '#F7F4F0', borderBottom: '1.5px solid #0D0B0E', height: '60px' }}>
+        <div className="max-w-[1280px] mx-auto px-6 h-full">
+          <div className="flex items-center justify-between h-full">
             {/* Logo */}
             <a href="/" className="flex items-center gap-2">
-              <div className="w-9 h-9 bg-primary rounded-lg flex items-center justify-center">
-                <Shield className="h-5 w-5 text-primary-foreground" />
+              <div className="relative" style={{ width: 28, height: 28 }}>
+                <div style={{
+                  width: 28, height: 28,
+                  background: '#0D0B0E',
+                  clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }} />
+                <div style={{
+                  width: 12, height: 12,
+                  background: '#7C3AED',
+                  clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
+                  position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+                }} />
               </div>
-              <span className="font-heading font-bold text-2xl text-foreground">REDFLAQ</span>
+              <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 18, letterSpacing: '0.1em', color: '#0D0B0E' }}>
+                REDFLAQ
+              </span>
             </a>
 
             {/* Desktop Navigation */}
@@ -40,7 +53,8 @@ const NavbarPlinq = () => {
                 <button
                   key={link.label}
                   onClick={() => scrollToSection(link.href)}
-                  className="text-muted-foreground hover:text-primary transition-colors text-sm font-medium"
+                  style={{ color: '#4B4453', fontSize: 14, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', fontFamily: "'Syne', sans-serif", background: 'none', border: 'none', cursor: 'pointer' }}
+                  className="hover:!text-[#0D0B0E] transition-colors"
                 >
                   {link.label}
                 </button>
@@ -49,63 +63,53 @@ const NavbarPlinq = () => {
 
             {/* CTA */}
             <div className="hidden md:flex items-center gap-4">
-              <button className="text-muted-foreground hover:text-foreground transition-colors text-sm font-medium">
-                Sign In
-              </button>
-              <Button 
+              <button
                 onClick={() => setIsPaymentModalOpen(true)}
-                className="bg-primary hover:bg-primary/90 text-primary-foreground rounded-full px-6"
+                style={{
+                  background: '#0D0B0E', color: '#F7F4F0', padding: '8px 20px',
+                  fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13,
+                  letterSpacing: '0.08em', textTransform: 'uppercase', border: 'none', cursor: 'pointer',
+                }}
+                className="hover:!bg-[#7C3AED] transition-colors"
               >
-                Check Now
-              </Button>
+                Verify Now
+              </button>
             </div>
 
             {/* Mobile Menu Button */}
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="md:hidden p-2"
-            >
-              {isMenuOpen ? (
-                <X className="h-6 w-6 text-foreground" />
-              ) : (
-                <Menu className="h-6 w-6 text-foreground" />
-              )}
+            <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden p-2">
+              {isMenuOpen ? <X className="h-6 w-6" style={{ color: '#0D0B0E' }} /> : <Menu className="h-6 w-6" style={{ color: '#0D0B0E' }} />}
             </button>
           </div>
         </div>
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden border-t border-border bg-background">
+          <div className="md:hidden" style={{ borderTop: '1.5px solid #0D0B0E', background: '#F7F4F0' }}>
             <div className="max-w-[1280px] mx-auto px-6 py-4 space-y-4">
               {navLinks.map((link) => (
                 <button
                   key={link.label}
                   onClick={() => scrollToSection(link.href)}
-                  className="block w-full text-left text-foreground hover:text-primary transition-colors py-2 font-medium"
+                  className="block w-full text-left py-2"
+                  style={{ color: '#0D0B0E', fontFamily: "'Syne', sans-serif", fontWeight: 600, textTransform: 'uppercase', fontSize: 14, letterSpacing: '0.05em' }}
                 >
                   {link.label}
                 </button>
               ))}
-              <Button 
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  setIsPaymentModalOpen(true);
-                }}
-                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground rounded-full"
+              <button
+                onClick={() => { setIsMenuOpen(false); setIsPaymentModalOpen(true); }}
+                className="w-full"
+                style={{ background: '#0D0B0E', color: '#F7F4F0', padding: '12px', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.08em', textTransform: 'uppercase', border: 'none' }}
               >
-                Check Now
-              </Button>
+                Verify Now
+              </button>
             </div>
           </div>
         )}
       </nav>
 
-      <PaymentModal 
-        isOpen={isPaymentModalOpen}
-        onClose={() => setIsPaymentModalOpen(false)}
-        packageType="single"
-      />
+      <PaymentModal isOpen={isPaymentModalOpen} onClose={() => setIsPaymentModalOpen(false)} packageType="single" />
     </>
   );
 };

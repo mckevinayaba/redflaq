@@ -9,13 +9,29 @@ const NotFound = () => {
   }, [location.pathname]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">404</h1>
-        <p className="mb-4 text-xl text-gray-600">Oops! Page not found</p>
-        <a href="/" className="text-blue-500 underline hover:text-blue-700">
-          Return to Home
-        </a>
+    <div className="flex min-h-screen items-center justify-center" style={{ background: '#F7F4F0' }}>
+      <div style={{ textAlign: 'center' }}>
+        <div style={{
+          fontFamily: "'DM Serif Display', serif", fontSize: 160,
+          color: '#EDE9E3', lineHeight: 1,
+        }}>
+          404
+        </div>
+        <h1 style={{
+          fontFamily: "'DM Serif Display', serif", fontSize: 40,
+          color: '#0D0B0E', marginBottom: 12,
+        }}>
+          No red flags here.
+        </h1>
+        <p style={{
+          fontFamily: "'Syne', sans-serif", fontSize: 18, color: '#4B4453', marginBottom: 32,
+        }}>
+          This page doesn't exist. But your safety questions deserve answers.
+        </p>
+        <div className="flex flex-wrap justify-center gap-4">
+          <a href="/" className="btn-primary inline-block no-underline">Back to RedFlaq</a>
+          <a href="/#search" className="btn-secondary inline-block no-underline">Start Verifying</a>
+        </div>
       </div>
     </div>
   );

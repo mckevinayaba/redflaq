@@ -257,7 +257,7 @@ const SearchOptionsSection = () => {
                   }}
                   className={consentChecked ? 'hover:!bg-[#7C3AED]' : ''}
                 >
-                  Check Now — R99
+                  Verify Someone Now — R99
                 </button>
 
                 {/* Form meta */}

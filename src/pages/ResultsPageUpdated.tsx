@@ -85,13 +85,13 @@ const getSourceLabel = (person: WantedPerson): string => {
 const getRiskBadge = (riskLevel: string) => {
   switch (riskLevel) {
     case 'RED':
-      return { color: '#DC2626', bg: '#FEF2F2', label: 'HIGH RISK', icon: '🔴' };
+      return { color: '#7C3AED', bg: '#FAF5FF', label: 'SERIOUS RED FLAG', icon: '🟣' };
     case 'ORANGE':
-      return { color: '#EA580C', bg: '#FFF7ED', label: 'MEDIUM RISK', icon: '🟠' };
+      return { color: '#D97706', bg: '#FFFBEB', label: 'MEDIUM RISK', icon: '🟠' };
     case 'YELLOW':
       return { color: '#CA8A04', bg: '#FEFCE8', label: 'ELEVATED', icon: '🟡' };
     default:
-      return { color: '#16A34A', bg: '#F0FDF4', label: 'NO FLAGS', icon: '🟢' };
+      return { color: '#6B7280', bg: '#F9FAFB', label: 'NO PUBLIC RED FLAGS', icon: '✅' };
   }
 };
 
@@ -102,13 +102,13 @@ const getRiskExplainer = (riskLevel: string, persons: WantedPerson[]) => {
   switch (riskLevel) {
     case 'RED':
       return {
-        title: 'High Risk — Violent or serious offenses found',
+        title: 'Serious public red flag — wanted for violent or serious offenses',
         triggers: [
           hasViolent ? 'Active warrant for violent crime (assault, murder, sexual offense, or firearms)' : null,
           hasSanctions ? 'Listed on FIC financial sanctions list' : null,
           'Strong match confidence to this individual',
         ].filter(Boolean),
-        action: 'Do NOT meet this person alone. Do NOT confront them. Share this report with a trusted person immediately. Contact SAPS if you have concerns about your safety.',
+        action: 'Safety first: Do NOT meet this person alone. Do NOT confront them. Share this report with a trusted person. If you feel unsafe, call SAPS on 10111 or Crime Stop on 08600 10111.',
       };
     case 'ORANGE':
       return {
@@ -131,9 +131,9 @@ const getRiskExplainer = (riskLevel: string, persons: WantedPerson[]) => {
       };
     default:
       return {
-        title: 'No Red Flags Found',
+        title: 'No public red flags found in the South African wanted/sanctions lists we monitor',
         triggers: ['No active warrants, sanctions, or legal notices found in searched databases'],
-        action: 'While no records were found, this does not guarantee safety. Always trust your instincts and take normal precautions.',
+        action: 'A clean result does not mean "no criminal record" — it means no match in these public sources. Always trust your instincts and take normal precautions.',
       };
   }
 };
@@ -342,7 +342,7 @@ const ResultsPageUpdated = () => {
                 {/* Header */}
                 <div style={{ padding: 32, borderBottom: '1.5px solid var(--cream)', position: 'relative' }}>
                   {isMultiple && (
-                    <span style={{ position: 'absolute', top: 16, right: 16, background: 'var(--purple-mid)', color: 'white', fontFamily: "'JetBrains Mono', monospace", fontSize: 10, padding: '4px 12px' }}>
+                    <span style={{ position: 'absolute', top: 16, right: 16, background: '#7C3AED', color: 'white', fontFamily: "'JetBrains Mono', monospace", fontSize: 10, padding: '4px 12px' }}>
                       MATCH {idx + 1} OF {results.wantedPersonsCount}
                     </span>
                   )}
@@ -350,10 +350,10 @@ const ResultsPageUpdated = () => {
                     display: 'inline-block', padding: '6px 16px', marginBottom: 16,
                     fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: '0.1em',
                     textTransform: 'uppercase', fontWeight: 600,
-                    background: person.legal_status === 'wanted' || !person.legal_status ? '#DC2626' : person.court_case_number ? '#EA580C' : '#CA8A04',
+                    background: isViolent ? '#7C3AED' : person.legal_status === 'wanted' || !person.legal_status ? '#D97706' : '#6B7280',
                     color: 'white',
                   }}>
-                    {person.legal_status === 'wanted' || !person.legal_status ? 'ACTIVE WARRANT LISTED' : person.court_case_number ? 'COURT RECORD FOUND' : 'LEGAL NOTICE FOUND'}
+                    {person.legal_status === 'wanted' || !person.legal_status ? `WANTED — ${person.charges}` : person.court_case_number ? 'COURT RECORD FOUND' : 'LEGAL NOTICE FOUND'}
                   </span>
                   <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 32, color: 'var(--ink)', lineHeight: 1.2, marginBottom: 8 }}>
                     {person.full_name}
@@ -377,8 +377,8 @@ const ResultsPageUpdated = () => {
                       <span key={i} style={{
                         display: 'inline-block', padding: '4px 12px',
                         fontFamily: "'JetBrains Mono', monospace", fontSize: 11,
-                        background: isViolent ? '#FEE2E2' : '#FEF3C7',
-                        color: isViolent ? '#991B1B' : '#92400E',
+                        background: isViolent ? '#F3E8FF' : '#FEF3C7',
+                        color: isViolent ? '#6D28D9' : '#92400E',
                         fontWeight: 600,
                       }}>
                         {cat}
@@ -524,9 +524,9 @@ const ResultsPageUpdated = () => {
                 </div>
 
                 {/* Safety Warning */}
-                <div style={{ padding: 32, background: '#FEF2F2', borderBottom: '1.5px solid var(--cream)' }}>
-                  <h3 style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 700, color: '#DC2626', display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-                    🛡️ For Your Own Safety
+                <div style={{ padding: 32, background: '#FAF5FF', borderBottom: '1.5px solid var(--cream)', borderLeft: '4px solid #7C3AED' }}>
+                  <h3 style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 700, color: '#7C3AED', display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                    💜 Safety First
                   </h3>
                   <ul style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'var(--mid)', lineHeight: 1.8, listStyle: 'none', padding: 0, margin: 0 }}>
                     <li>❌ Do NOT confront this person yourself</li>
@@ -622,10 +622,10 @@ const ResultsPageUpdated = () => {
           <div style={{ border: '1.5px solid var(--ink)', background: 'var(--paper)', padding: 48, textAlign: 'center' }}>
             <span style={{ fontSize: 48, display: 'block', marginBottom: 16 }}>✅</span>
             <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, color: 'var(--ink)', marginBottom: 12 }}>
-              No Red Flags Found in Public Records
+              No public red flags found
             </h3>
             <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, color: 'var(--mid)', lineHeight: 1.7, maxWidth: 520, margin: '0 auto 24px' }}>
-              We searched SAPS wanted persons, FIC sanctions lists, and government records and found no criminal records, active warrants, or legal notices for this person as of {searchDate}.
+              We searched the South African SAPS wanted persons and FIC sanctions lists and found no matches for this name as of {searchDate}. This does not mean "no criminal record" — only that no match was found in these specific public sources.
             </p>
 
             <div style={{ background: 'white', border: '1.5px solid var(--cream)', padding: 24, textAlign: 'left', maxWidth: 520, margin: '0 auto 24px' }}>

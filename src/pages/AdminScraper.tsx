@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Database, CheckCircle2, AlertCircle, Upload, Users, FileSearch } from "lucide-react";
+import { Loader2, Database, CheckCircle2, AlertCircle, Upload, Users, FileSearch, Globe } from "lucide-react";
 
 interface ScraperResult {
   success: boolean;
@@ -29,6 +29,17 @@ interface DetailScraperResult {
   error?: string;
 }
 
+interface SapswantedResult {
+  success: boolean;
+  total_parsed?: number;
+  enriched?: number;
+  inserted?: number;
+  skipped?: number;
+  errors?: string[];
+  error?: string;
+  message?: string;
+}
+
 const AdminScraper = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -36,6 +47,8 @@ const AdminScraper = () => {
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);
   const [result, setResult] = useState<ScraperResult | null>(null);
   const [detailResult, setDetailResult] = useState<DetailScraperResult | null>(null);
+  const [isLoadingSapswanted, setIsLoadingSapswanted] = useState(false);
+  const [sapswantedResult, setSapswantedResult] = useState<SapswantedResult | null>(null);
   const [lastRun, setLastRun] = useState<string | null>(null);
   const [dbStats, setDbStats] = useState({ total: 0, active: 0, withDetails: 0, needingDetails: 0 });
 
@@ -454,6 +467,114 @@ const AdminScraper = () => {
                     {detailResult.errors.map((error, i) => (
                       <li key={i}>• {error}</li>
                     ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+        </Card>
+
+        {/* SAPS Wanted Import */}
+        <Card className="p-6 space-y-6">
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <h2 className="text-2xl font-semibold">SAPS Wanted Import</h2>
+              <p className="text-sm text-muted-foreground">
+                Enriches records from sapswanted.netlify.app (merge only, never overwrites OpenSanctions)
+              </p>
+            </div>
+            <Button
+              onClick={async () => {
+                setIsLoadingSapswanted(true);
+                setSapswantedResult(null);
+                try {
+                  const response = await fetch(
+                    `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/import-sapswanted`,
+                    { method: "POST", headers: { "Content-Type": "application/json" } }
+                  );
+                  const data: SapswantedResult = await response.json();
+                  setSapswantedResult(data);
+                  if (data.success) {
+                    await fetchDbStats();
+                    toast({
+                      title: "✅ SAPS Wanted import complete!",
+                      description: `Parsed ${data.total_parsed}. Enriched ${data.enriched}, inserted ${data.inserted}, skipped ${data.skipped}.`,
+                    });
+                  } else {
+                    toast({ title: "❌ Import failed", description: data.error || data.message, variant: "destructive" });
+                  }
+                } catch (error) {
+                  toast({ title: "❌ Request failed", description: error instanceof Error ? error.message : "Unknown error", variant: "destructive" });
+                  setSapswantedResult({ success: false, error: error instanceof Error ? error.message : "Unknown error" });
+                } finally {
+                  setIsLoadingSapswanted(false);
+                }
+              }}
+              disabled={isLoading || isLoadingDetails || isLoadingSapswanted}
+              size="lg"
+              variant="outline"
+              className="min-w-[200px]"
+            >
+              {isLoadingSapswanted ? (
+                <>
+                  <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  Importing...
+                </>
+              ) : (
+                <>
+                  <Globe className="mr-2 h-5 w-5" />
+                  Import SAPS Wanted
+                </>
+              )}
+            </Button>
+          </div>
+
+          {sapswantedResult && (
+            <div className="space-y-4 border-t pt-6">
+              <div className="flex items-center gap-2">
+                {sapswantedResult.success ? (
+                  <>
+                    <CheckCircle2 className="h-6 w-6 text-primary" />
+                    <h3 className="text-xl font-semibold text-primary">
+                      {sapswantedResult.message || `Parsed ${sapswantedResult.total_parsed} persons`}
+                    </h3>
+                  </>
+                ) : (
+                  <>
+                    <AlertCircle className="h-6 w-6 text-destructive" />
+                    <h3 className="text-xl font-semibold text-destructive">Import Failed</h3>
+                  </>
+                )}
+              </div>
+
+              {sapswantedResult.success && !sapswantedResult.message && (
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="bg-primary/10 p-4 rounded-lg">
+                    <p className="text-sm text-muted-foreground">Enriched</p>
+                    <p className="text-3xl font-bold text-primary">{sapswantedResult.enriched}</p>
+                  </div>
+                  <div className="bg-primary/10 p-4 rounded-lg">
+                    <p className="text-sm text-muted-foreground">Inserted</p>
+                    <p className="text-3xl font-bold text-primary">{sapswantedResult.inserted}</p>
+                  </div>
+                  <div className="bg-muted p-4 rounded-lg">
+                    <p className="text-sm text-muted-foreground">Skipped</p>
+                    <p className="text-3xl font-bold text-muted-foreground">{sapswantedResult.skipped}</p>
+                  </div>
+                </div>
+              )}
+
+              {sapswantedResult.error && (
+                <div className="bg-destructive/10 p-4 rounded-lg">
+                  <p className="text-sm text-destructive">{sapswantedResult.error}</p>
+                </div>
+              )}
+
+              {sapswantedResult.errors && sapswantedResult.errors.length > 0 && (
+                <div className="bg-muted p-4 rounded-lg">
+                  <p className="text-sm font-semibold text-muted-foreground mb-2">Errors ({sapswantedResult.errors.length}):</p>
+                  <ul className="text-xs text-muted-foreground space-y-1 max-h-40 overflow-auto">
+                    {sapswantedResult.errors.map((error, i) => <li key={i}>• {error}</li>)}
                   </ul>
                 </div>
               )}

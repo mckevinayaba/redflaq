@@ -25,11 +25,11 @@ const FooterPlinq = () => {
         <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_1fr] gap-16 mb-12">
           {/* Column 1 - Logo */}
           <div>
-            <a href="/" className="flex items-center gap-2 mb-4">
-              <div className="relative" style={{ width: 28, height: 28 }}>
-                <div style={{ width: 28, height: 28, background: '#7C3AED', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' }} />
+            <a href="/" className="flex items-center mb-4" style={{ gap: 0 }}>
+              <div style={{ width: 28, height: 28, background: '#7C3AED', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 900, fontSize: 15, color: '#2D2235', lineHeight: 1 }}>R</span>
               </div>
-              <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 18, letterSpacing: '0.1em', color: '#2D2235' }}>REDFLAQ</span>
+              <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 18, letterSpacing: '0.1em', color: '#2D2235', marginLeft: 1 }}>EDFLAQ</span>
             </a>
             <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', maxWidth: 260, lineHeight: 1.6 }}>
               Making South Africa safer, one informed decision at a time.

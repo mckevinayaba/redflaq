@@ -36,11 +36,11 @@ const NavbarPlinq = () => {
     <nav className="fixed top-0 left-0 right-0 z-50" style={{ background: '#F7F4F0', borderBottom: '1.5px solid #D6D3CD', height: '60px' }}>
       <div className="max-w-[1280px] mx-auto px-6 h-full">
         <div className="flex items-center justify-between h-full">
-          <a href="/" className="flex items-center gap-2">
-            <div className="relative" style={{ width: 28, height: 28 }}>
-              <div style={{ width: 28, height: 28, background: '#7C3AED', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' }} />
+          <a href="/" className="flex items-center" style={{ gap: 0 }}>
+            <div style={{ width: 28, height: 28, background: '#7C3AED', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 900, fontSize: 15, color: '#2D2235', lineHeight: 1 }}>R</span>
             </div>
-            <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 18, letterSpacing: '0.1em', color: '#2D2235' }}>REDFLAQ</span>
+            <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 18, letterSpacing: '0.1em', color: '#2D2235', marginLeft: 1 }}>EDFLAQ</span>
           </a>
 
           <div className="hidden md:flex items-center gap-10">

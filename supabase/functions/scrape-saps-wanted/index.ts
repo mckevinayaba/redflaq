@@ -281,26 +281,52 @@ serve(async (req) => {
     
     console.log(`Fetched details for ${detailsFetched} persons`);
 
-    // Step 3: Save to database
-    console.log('Saving to database...');
+    // Step 3: Save to database with cross-referencing
+    console.log('Saving to database with cross-referencing...');
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     let newRecords = 0;
     let updatedRecords = 0;
+    let mergedRecords = 0;
     const errors: string[] = [];
+
+    function normalizeName(name: string): string {
+      return name.toLowerCase().replace(/\s+/g, '').replace(/[^a-z]/g, '');
+    }
+
+    function calculateMatchConfidence(existing: any, newData: any): number {
+      let score = 0;
+      if (normalizeName(existing.full_name) === normalizeName(`${newData.firstName} ${newData.surname}`)) {
+        score += 30;
+      }
+      if (existing.province && newData.province && existing.province === newData.province) {
+        score += 15;
+      }
+      if (existing.police_station && newData.policeStation &&
+          existing.police_station.toLowerCase() === newData.policeStation.toLowerCase()) {
+        score += 15;
+      }
+      const existingCases = existing.saps_case_numbers || [];
+      if (newData.caseNumber && existingCases.includes(newData.caseNumber)) {
+        score += 40;
+      }
+      return score;
+    }
 
     for (const person of wantedPersons) {
       try {
         const fullName = `${person.firstName} ${person.surname}`.trim();
-        
-        // Check if person exists
-        const { data: existing } = await supabase
+        const nameNormalized = normalizeName(fullName);
+        const saIdPartial = person.idNumber ? person.idNumber.slice(-4) : null;
+
+        // Check if person exists by normalized name
+        const { data: existingRecords } = await supabase
           .from('wanted_persons')
-          .select('id')
-          .ilike('full_name', fullName)
-          .maybeSingle();
+          .select('*')
+          .eq('name_normalized', nameNormalized)
+          .eq('is_active', true);
 
         const recordData = {
           first_name: person.firstName,
@@ -317,30 +343,97 @@ serve(async (req) => {
           date_wanted: person.dateWanted || null,
           is_active: true,
           updated_at: new Date().toISOString(),
+          name_normalized: nameNormalized,
+          sa_id_partial: saIdPartial,
+          found_in_saps: true,
+          photo_source: 'saps',
+          saps_case_numbers: person.caseNumber ? [person.caseNumber] : [],
+          court_case_numbers: person.courtCaseNumber ? [person.courtCaseNumber] : [],
+          protection_order_refs: person.protectionOrderNumber ? [person.protectionOrderNumber] : [],
+          alleged_offenses: person.crime ? [person.crime] : [],
         };
 
-        if (existing) {
-          const { error } = await supabase
-            .from('wanted_persons')
-            .update(recordData)
-            .eq('id', existing.id);
+        if (existingRecords && existingRecords.length > 0) {
+          // Try to find a high-confidence match
+          let bestMatch: any = null;
+          let bestConfidence = 0;
 
-          if (error) {
-            console.error(`Error updating ${fullName}:`, error);
-            errors.push(`Update error for ${fullName}: ${error.message}`);
+          for (const existing of existingRecords) {
+            const confidence = calculateMatchConfidence(existing, person);
+            if (confidence > bestConfidence) {
+              bestConfidence = confidence;
+              bestMatch = existing;
+            }
+          }
+
+          if (bestMatch && bestConfidence >= 70) {
+            // High confidence — merge data
+            const mergedSapsCases = [...new Set([
+              ...(bestMatch.saps_case_numbers || []),
+              ...(person.caseNumber ? [person.caseNumber] : []),
+            ])];
+            const mergedCourtCases = [...new Set([
+              ...(bestMatch.court_case_numbers || []),
+              ...(person.courtCaseNumber ? [person.courtCaseNumber] : []),
+            ])];
+            const mergedOffenses = [...new Set([
+              ...(bestMatch.alleged_offenses || []),
+              ...(person.crime ? [person.crime] : []),
+            ])];
+
+            const { error } = await supabase
+              .from('wanted_persons')
+              .update({
+                ...recordData,
+                saps_case_numbers: mergedSapsCases,
+                court_case_numbers: mergedCourtCases,
+                alleged_offenses: mergedOffenses,
+                photo_url: person.photoUrl || bestMatch.photo_url,
+                needs_human_review: false,
+                identity_confidence_score: bestConfidence,
+              })
+              .eq('id', bestMatch.id);
+
+            if (error) {
+              errors.push(`Merge error for ${fullName}: ${error.message}`);
+            } else {
+              mergedRecords++;
+              // Log the merge
+              await supabase.from('record_merge_log').insert({
+                final_record_id: bestMatch.id,
+                source_1_type: 'existing',
+                source_1_data: bestMatch,
+                source_2_type: 'saps',
+                source_2_data: person as any,
+                match_confidence: bestConfidence,
+                match_criteria: ['name_exact', 'location_match'],
+                matched_by: 'automatic',
+              });
+            }
           } else {
-            updatedRecords++;
+            // Low confidence — update existing but flag for review
+            const { error } = await supabase
+              .from('wanted_persons')
+              .update({ ...recordData, needs_human_review: true })
+              .eq('id', existingRecords[0].id);
+
+            if (error) {
+              errors.push(`Update error for ${fullName}: ${error.message}`);
+            } else {
+              updatedRecords++;
+            }
           }
         } else {
+          // New person — insert
           const { error } = await supabase
             .from('wanted_persons')
             .insert({
               full_name: fullName,
               ...recordData,
+              identity_confidence_score: 60,
             });
 
           if (error) {
-            console.error(`Error inserting ${fullName}:`, error);
             errors.push(`Insert error for ${fullName}: ${error.message}`);
           } else {
             newRecords++;
@@ -370,7 +463,7 @@ serve(async (req) => {
       errors.push(`Deactivation error: ${deactivateError.message}`);
     }
 
-    console.log(`Database update complete: ${newRecords} new, ${updatedRecords} updated, ${deactivatedCount} deactivated`);
+    console.log(`Database update complete: ${newRecords} new, ${updatedRecords} updated, ${mergedRecords} merged, ${deactivatedCount} deactivated`);
 
     return new Response(
       JSON.stringify({
@@ -379,6 +472,7 @@ serve(async (req) => {
         details_fetched: detailsFetched,
         new_records: newRecords,
         updated_records: updatedRecords,
+        merged_records: mergedRecords,
         deactivated_records: deactivatedCount,
         errors: errors.length > 0 ? errors : undefined,
         scrapedAt: new Date().toISOString(),

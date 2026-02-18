@@ -11,6 +11,7 @@ import AdminScraper from "./pages/AdminScraper";
 import AdminImport from "./pages/AdminImport";
 import AdminLogin from "./pages/AdminLogin";
 import AdminVerifyPayments from "./pages/AdminVerifyPayments";
+import AdminMergeReview from "./pages/AdminMergeReview";
 import Receipt from "./pages/Receipt";
 import About from "./pages/About";
 import Privacy from "./pages/Privacy";
@@ -38,6 +39,7 @@ const App = () => (
           <Route path="/admin/import" element={<AdminImport />} />
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin/verify-payments" element={<AdminVerifyPayments />} />
+          <Route path="/admin/merge-review" element={<AdminMergeReview />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -171,17 +171,16 @@ export default function SearchForm() {
 
       if (updateError) throw new Error('Failed to use credit');
 
-      // Build search query
+      // Build search query using multi-parameter search
       const searchBody = {
-        searchType: "active_warrant",
-        fullName: sanitizeInput(fullName).trim(),
-        dateOfBirth: dateOfBirth || undefined,
+        full_name: sanitizeInput(fullName).trim(),
+        date_of_birth: dateOfBirth || undefined,
         province: province && province !== "Select province (optional)" ? province : undefined,
-        courtReference: courtReference ? sanitizeInput(courtReference) : undefined,
+        case_number: courtReference ? sanitizeInput(courtReference).trim() : undefined,
       };
 
       const { data: searchResult, error } = await supabase.functions.invoke(
-        'search-criminal-records',
+        'multi-parameter-search',
         { body: searchBody }
       );
 

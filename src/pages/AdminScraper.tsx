@@ -5,7 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Loader2, Database, CheckCircle2, AlertCircle, Upload, Users, FileSearch, Globe } from "lucide-react";
+import { Loader2, Database, CheckCircle2, AlertCircle, Upload, Users, FileSearch, Globe, ClipboardPaste } from "lucide-react";
+import { Textarea } from "@/components/ui/textarea";
 
 interface ScraperResult {
   success: boolean;
@@ -50,6 +51,9 @@ const AdminScraper = () => {
   const [isLoadingSapswanted, setIsLoadingSapswanted] = useState(false);
   const [sapswantedResult, setSapswantedResult] = useState<SapswantedResult | null>(null);
   const [lastRun, setLastRun] = useState<string | null>(null);
+  const [csvText, setCsvText] = useState("");
+  const [isImportingCsv, setIsImportingCsv] = useState(false);
+  const [csvImportResult, setCsvImportResult] = useState<{ inserted: number; updated: number; skipped: number; errors: string[] } | null>(null);
   const [dbStats, setDbStats] = useState({ total: 0, active: 0, withDetails: 0, needingDetails: 0 });
 
   useEffect(() => {
@@ -580,6 +584,118 @@ const AdminScraper = () => {
               )}
             </div>
           )}
+        </Card>
+
+        {/* CSV Paste Import */}
+        <Card className="p-6 space-y-6">
+          <div className="space-y-1">
+            <h2 className="text-2xl font-semibold flex items-center gap-2">
+              <ClipboardPaste className="h-5 w-5" />
+              CSV Paste Import
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Paste CSV rows with format: "Name","Crime","Status","details_url" — one per line. Skips "Unknown Unknown".
+            </p>
+          </div>
+          <Textarea
+            value={csvText}
+            onChange={(e) => setCsvText(e.target.value)}
+            placeholder={`"Nsibande Sipho Doctor","Rape","Wanted","https://www.saps.gov.za/crimestop/wanted/detail.php?bid=18639"\n"Ndlovu Abby","Attempted Murder","Wanted","https://www.saps.gov.za/crimestop/wanted/detail.php?bid=18638"`}
+            rows={8}
+            className="font-mono text-xs"
+          />
+          <div className="flex items-center gap-4">
+            <Button
+              disabled={isImportingCsv || !csvText.trim()}
+              onClick={async () => {
+                setIsImportingCsv(true);
+                setCsvImportResult(null);
+                try {
+                  const lines = csvText.trim().split('\n').filter(l => l.trim());
+                  const records: Array<{ name: string; crime: string; status: string; url: string }> = [];
+                  for (const line of lines) {
+                    const match = line.match(/"([^"]+)","([^"]+)","([^"]+)","([^"]+)"/);
+                    if (!match) continue;
+                    const [, name, crime, status, url] = match;
+                    if (name === 'Unknown Unknown' || name === 'name') continue;
+                    records.push({ name, crime, status, url });
+                  }
+                  if (records.length === 0) {
+                    toast({ title: "No valid rows found", variant: "destructive" });
+                    setIsImportingCsv(false);
+                    return;
+                  }
+
+                  const categorize = (c: string) => {
+                    const cl = c.toLowerCase();
+                    if (cl.includes('murder') || cl.includes('homicide')) return ['Murder/Homicide'];
+                    if (cl.includes('rape') || cl.includes('sexual')) return ['Sexual Offenses'];
+                    if (cl.includes('robbery') || cl.includes('theft') || cl.includes('burglary') || cl.includes('housebreaking') || cl.includes('shoplifting') || cl.includes('stolen')) return ['Robbery/Theft'];
+                    if (cl.includes('fraud') || cl.includes('forgery') || cl.includes('corruption')) return ['Fraud/Financial Crime'];
+                    if (cl.includes('assault') || cl.includes('gbh')) return ['Assault'];
+                    if (cl.includes('drug') || cl.includes('mandrax') || cl.includes('dealing')) return ['Drug Offenses'];
+                    if (cl.includes('kidnap') || cl.includes('abduction')) return ['Kidnapping'];
+                    return ['Other'];
+                  };
+                  const riskLevel = (c: string) => {
+                    const cl = c.toLowerCase();
+                    if (cl.includes('murder') || cl.includes('rape') || cl.includes('armed robbery')) return 'red';
+                    if (cl.includes('shoplifting') || cl.includes('driving under')) return 'yellow';
+                    return 'orange';
+                  };
+
+                  let inserted = 0, skipped = 0;
+                  const errors: string[] = [];
+
+                  // Batch all records through the import edge function
+                  const importRecords = records.map(r => {
+                    const nameParts = r.name.split(' ');
+                    return {
+                      surname: nameParts[0],
+                      first_name: nameParts.slice(1).join(' ') || nameParts[0],
+                      full_name: r.name,
+                      charges: r.crime,
+                    };
+                  });
+
+                  const response = await fetch(
+                    `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/import-wanted-persons`,
+                    {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ records: importRecords })
+                    }
+                  );
+                  const result = await response.json();
+                  inserted = result.inserted || 0;
+                  skipped = result.updated || 0;
+
+                  setCsvImportResult({ inserted, updated: skipped, skipped: 0, errors: result.errorDetails || [] });
+                  await fetchDbStats();
+                  toast({
+                    title: "✅ CSV import complete",
+                    description: `${inserted} inserted, ${skipped} updated`,
+                  });
+                } catch (err) {
+                  toast({ title: "❌ Import failed", description: err instanceof Error ? err.message : "Unknown error", variant: "destructive" });
+                } finally {
+                  setIsImportingCsv(false);
+                }
+              }}
+            >
+              {isImportingCsv ? (
+                <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Importing...</>
+              ) : (
+                <><Upload className="mr-2 h-4 w-4" /> Import CSV</>
+              )}
+            </Button>
+            {csvImportResult && (
+              <span className="text-sm text-muted-foreground">
+                {csvImportResult.inserted} inserted, {csvImportResult.updated} updated
+                {csvImportResult.errors.length > 0 && `, ${csvImportResult.errors.length} errors`}
+              </span>
+            )}
+          </div>
         </Card>
 
         <Card className="p-6 bg-muted/50">

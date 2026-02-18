@@ -20,3 +20,6 @@ verify_jwt = false
 
 [functions."multi-parameter-search"]
 verify_jwt = false
+
+[functions."import-opensanctions"]
+verify_jwt = false

@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_events: {
+        Row: {
+          created_at: string | null
+          details: Json | null
+          event_type: string
+          id: string
+          performed_by: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          details?: Json | null
+          event_type: string
+          id?: string
+          performed_by?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          details?: Json | null
+          event_type?: string
+          id?: string
+          performed_by?: string | null
+        }
+        Relationships: []
+      }
       disputes: {
         Row: {
           created_at: string | null
@@ -299,9 +323,11 @@ export type Database = {
       wanted_persons: {
         Row: {
           added_at: string
+          aliases: string[] | null
           alleged_offenses: string[] | null
           case_number: string | null
           charges: string
+          country: string | null
           court_case_number: string | null
           court_case_numbers: string[] | null
           court_name: string | null
@@ -313,6 +339,7 @@ export type Database = {
           found_in_saps: boolean | null
           full_name: string
           gazette_notice_refs: string[] | null
+          gender: string | null
           id: string
           id_number: string | null
           identity_confidence_score: number | null
@@ -324,6 +351,7 @@ export type Database = {
           merged_from_records: string[] | null
           name_normalized: string | null
           needs_human_review: boolean | null
+          offense_categories: string[] | null
           offense_category: string | null
           photo_source: string | null
           photo_url: string | null
@@ -336,15 +364,20 @@ export type Database = {
           risk_level: string | null
           sa_id_partial: string | null
           saps_case_numbers: string[] | null
+          source_dataset: string | null
           source_url: string | null
+          source_urls: string[] | null
           surname: string | null
           updated_at: string
+          year_of_birth: number | null
         }
         Insert: {
           added_at?: string
+          aliases?: string[] | null
           alleged_offenses?: string[] | null
           case_number?: string | null
           charges: string
+          country?: string | null
           court_case_number?: string | null
           court_case_numbers?: string[] | null
           court_name?: string | null
@@ -356,6 +389,7 @@ export type Database = {
           found_in_saps?: boolean | null
           full_name: string
           gazette_notice_refs?: string[] | null
+          gender?: string | null
           id?: string
           id_number?: string | null
           identity_confidence_score?: number | null
@@ -367,6 +401,7 @@ export type Database = {
           merged_from_records?: string[] | null
           name_normalized?: string | null
           needs_human_review?: boolean | null
+          offense_categories?: string[] | null
           offense_category?: string | null
           photo_source?: string | null
           photo_url?: string | null
@@ -379,15 +414,20 @@ export type Database = {
           risk_level?: string | null
           sa_id_partial?: string | null
           saps_case_numbers?: string[] | null
+          source_dataset?: string | null
           source_url?: string | null
+          source_urls?: string[] | null
           surname?: string | null
           updated_at?: string
+          year_of_birth?: number | null
         }
         Update: {
           added_at?: string
+          aliases?: string[] | null
           alleged_offenses?: string[] | null
           case_number?: string | null
           charges?: string
+          country?: string | null
           court_case_number?: string | null
           court_case_numbers?: string[] | null
           court_name?: string | null
@@ -399,6 +439,7 @@ export type Database = {
           found_in_saps?: boolean | null
           full_name?: string
           gazette_notice_refs?: string[] | null
+          gender?: string | null
           id?: string
           id_number?: string | null
           identity_confidence_score?: number | null
@@ -410,6 +451,7 @@ export type Database = {
           merged_from_records?: string[] | null
           name_normalized?: string | null
           needs_human_review?: boolean | null
+          offense_categories?: string[] | null
           offense_category?: string | null
           photo_source?: string | null
           photo_url?: string | null
@@ -422,9 +464,12 @@ export type Database = {
           risk_level?: string | null
           sa_id_partial?: string | null
           saps_case_numbers?: string[] | null
+          source_dataset?: string | null
           source_url?: string | null
+          source_urls?: string[] | null
           surname?: string | null
           updated_at?: string
+          year_of_birth?: number | null
         }
         Relationships: []
       }

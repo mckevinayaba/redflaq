@@ -1,83 +1,87 @@
 
-# RedFlaq Application - Complete Audit
 
-## 1. Application Overview
+# Add sapswanted.netlify.app as Enrichment Source
 
-RedFlaq is a South Africa-focused background check platform that searches public criminal records (SAPS wanted persons, FIC sanctions) for personal safety decisions. Users pay via manual EFT, then get a search link to verify a person's name against public databases.
+## What We Found
 
----
+- The site has **no JSON/CSV API** -- it's a Vue.js single-page app rendering HTML cards
+- Each card contains: **full name**, **crime type** (e.g. "Rape", "Fraud", "Armed Robbery"), **status** (Wanted/Suspect), **SAPS photo URL**, and **SAPS detail page URL**
+- About 9 persons are currently listed -- this is a small, curated subset of SAPS data
+- Your database already has **450 za_wanted** + **723 za_fic_sanctions** records from OpenSanctions
 
-## 2. Pages and Routes
+## What This Source Adds
 
-| Route | Page | Status |
-|-------|------|--------|
-| `/` | Landing page (Plinq design) | Working |
-| `/search-form` | Search form (Honest version) | Working (requires valid payment_id) |
-| `/results` | Results page (Updated version) | Partially working (sessionStorage only) |
-| `/receipt` | Payment receipt | Built, untested |
-| `/about` | About RedFlaq | Working |
-| `/privacy` | Privacy Policy | Working |
-| `/terms` | Terms of Service | Working |
-| `/dispute` | Dispute a Record (info page) | Working |
-| `/admin/login` | Admin login | Working |
-| `/admin/import` | Admin data import | Working |
-| `/admin/scraper` | Admin SAPS scraper | Built |
-| `/admin/verify-payments` | Admin payment verification | ✅ FIXED - uses edge function |
-| `/admin/merge-review` | Admin merge review | Built |
+The sapswanted.netlify.app data gives you:
+- **Cleaner crime wording** -- e.g. "Rape", "Attempted Murder", "Fraud" vs OpenSanctions' raw sanctions text
+- **Wanted vs Suspect status** -- a distinction OpenSanctions doesn't make
+- **Direct SAPS photo thumbnail URLs** -- `thumbnail.php?id=XXXXX`
+- **Direct SAPS detail page URLs** -- `detail.php?bid=XXXXX` (clickable "View on official source" links)
 
----
+It will NOT replace OpenSanctions -- it only enriches existing records or adds new ones that SAPS has but OpenSanctions hasn't picked up yet.
 
-## 3. Backend Functions (Edge Functions)
+## Implementation Plan
 
-| Function | Purpose | Status |
-|----------|---------|--------|
-| `submit-payment` | Creates a pending manual payment record | ✅ FIXED - prices aligned (R99/R249/R399) |
-| `verify-admin` | Validates admin password | Working |
-| `admin-verify-payment` | ✅ NEW - Server-side payment verification/rejection | Working |
-| `multi-parameter-search` | Tiered search with server-side credit deduction | ✅ FIXED - credit deduction moved server-side |
-| `import-opensanctions` | Imports za_wanted + za_fic_sanctions datasets | Working |
-| `search-criminal-records` | Old multi-type search | Legacy, not used |
-| `import-wanted-persons` | Old CSV-based import | Legacy |
-| `scrape-saps-wanted` / `scrape-saps-details` | SAPS scrapers | Legacy |
+### Step 1: Create `import-sapswanted` Edge Function
 
----
+A new edge function that:
+1. Uses Firecrawl (already connected) to fetch `https://sapswanted.netlify.app` HTML
+2. Parses the structured card elements to extract per-person: name, crime, status, photo URL, SAPS detail URL
+3. For each person, normalizes the name and checks for an existing record in `wanted_persons`
+4. **If match found**: enriches the existing record with SAPS-specific fields (photo_url, detail_page_url, better crime wording in `charges`, status)
+5. **If no match**: inserts a new record with `source_dataset = 'sapswanted_netlify'`
+6. Never deletes or overwrites OpenSanctions data -- merge only
 
-## 4. Bugs Fixed (This Session)
+### Step 2: Deduplication Logic
 
-### ✅ BUG 1: Database country data - FIXED
-All 1,173 records updated to `country = 'South Africa'`. All records now searchable.
+Match strategy (same pattern as existing scrapers):
+- Normalize name (`lowercase + strip spaces/special chars`)
+- Compare against `name_normalized` in existing records
+- If match: update only NULL or less-detailed fields (e.g. add photo_url if missing, add detail_page_url, append crime to `alleged_offenses`)
+- If no match: insert new record
 
-### ✅ BUG 4: Payment prices mismatch - FIXED
-`submit-payment` edge function now uses R99/R249/R399 matching the frontend.
+### Step 3: Admin Trigger
 
-### ✅ BUG 5: No payment verification flow - FIXED
-Created `admin-verify-payment` edge function using service role key. Bypasses RLS deadlock. Admin page updated to use it.
+Add a "Import from SAPS Wanted" button on the existing Admin Scraper page (`/admin/scraper`) that calls this function. No automated cron needed given the small dataset size -- manual trigger is sufficient.
 
-### ✅ BUG 6: Credit deduction client-side - FIXED
-Credit deduction moved to `multi-parameter-search` edge function (server-side with service role key). Search form no longer touches `manual_payments` directly.
+### Step 4: Wire Up Config
 
----
+Add the new function to `supabase/config.toml` with `verify_jwt = false` (same as other import functions).
 
-## 5. Remaining Issues
+## Technical Details
 
-### BUG 2: Search results stored in sessionStorage only (MEDIUM)
-Results page still relies on sessionStorage. No persistent storage of search results.
+### Files to Create
+- `supabase/functions/import-sapswanted/index.ts` -- the edge function
 
-### BUG 3: Spacebar in old SearchForm.tsx (LOW)
-Only affects unused legacy file.
+### Files to Modify
+- `supabase/config.toml` -- add function config entry
+- `src/pages/AdminScraper.tsx` -- add import button for this source
 
-### Security: RLS policies still use `true` for most tables
-### Security: Admin auth is localStorage only
-### No email notifications
-### No user authentication system
-### Legacy code cleanup needed
+### Edge Function Pseudocode
 
----
+```text
+1. Fetch HTML via Firecrawl (formats: ['html'])
+2. Parse cards using regex on the structured HTML:
+   - Name from: <span class="span-description">{name}</span> after "Name:"
+   - Crime from: <span class="span-description">({crime})</span> after "Crime:"
+   - Status from: <span class="span-description">{status}</span> after "Status:"
+   - Photo from: <img src="{photo_url}">
+   - Detail URL from: <a href="{saps_url}">More Details</a>
+3. Skip entries with name = "Unknown Unknown"
+4. For each person:
+   a. Normalize name
+   b. Query wanted_persons WHERE name_normalized = normalized
+   c. If exists: UPDATE with enrichment fields (photo, detail URL, crime)
+   d. If not: INSERT with source_dataset = 'sapswanted_netlify'
+5. Return stats: { enriched, inserted, skipped, errors }
+```
 
-## 6. Recommended Next Steps
+### Data Mapping
 
-1. **Persist search results** to database for shareable/bookmarkable URLs
-2. **Add proper admin authentication** (server-side session)
-3. **Tighten RLS policies** across all tables
-4. **Add email notifications** after payment verification
-5. **Clean up legacy code** (unused components, edge functions, tables)
+| sapswanted field | wanted_persons column | Behavior |
+|-----------------|----------------------|----------|
+| Name | full_name, first_name, surname, name_normalized | Only on new inserts |
+| Crime | charges, alleged_offenses, offense_categories | Enrich/append |
+| Status | legal_status ('wanted' or 'suspect') | Enrich if different |
+| Photo URL | photo_url, photo_source = 'saps' | Enrich if NULL |
+| Detail URL | detail_page_url, source_url | Enrich if NULL |
+

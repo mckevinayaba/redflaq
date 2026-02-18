@@ -34,7 +34,7 @@ const Footer = () => {
           <div>
             <h4 className="font-bold text-white mb-4">Contact Us</h4>
             <ul className="space-y-2 text-sm">
-              <li>📧 <a href="mailto:support@setupastartup.com" className="hover:text-white transition-colors">support@setupastartup.com</a></li>
+              <li>📧 <a href="mailto:support@redflaq.com" className="hover:text-white transition-colors">support@redflaq.com</a></li>
               <li>📱 WhatsApp: <a href="https://wa.me/27663365296" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">+27 66 336 5296</a></li>
               <li>🌍 Johannesburg, South Africa</li>
             </ul>

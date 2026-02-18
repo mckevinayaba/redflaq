@@ -104,10 +104,10 @@ const FAQHonest = () => {
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <a 
-                href="mailto:support@setupastartup.com"
+                href="mailto:support@redflaq.com"
                 className="text-primary hover:underline font-medium"
               >
-                support@setupastartup.com
+                support@redflaq.com
               </a>
               <span className="text-muted-foreground">•</span>
               <a 

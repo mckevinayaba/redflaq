@@ -71,8 +71,8 @@ const FooterNew = () => {
             <h4 className="font-semibold text-white mb-4">Contact</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                📧 <a href="mailto:support@setupastartup.com" className="hover:text-white transition-colors">
-                  support@setupastartup.com
+                📧 <a href="mailto:support@redflaq.com" className="hover:text-white transition-colors">
+                  support@redflaq.com
                 </a>
               </li>
               <li>

@@ -107,7 +107,7 @@ const ProblemSection = () => {
         {/* Bullet List */}
         <ul className="space-y-3 mb-10">
           {[
-            { label: "EXPENSIVE", text: "(R500-R5,000 for official background checks)" },
+            { label: "EXPENSIVE", text: "(Traditional checks are expensive and built for companies)" },
             { label: "COMPLICATED", text: "(Requires fingerprints, police station visits, paperwork)" },
             { label: "SLOW", text: "(Takes 4 days to 3 weeks for results)" },
             { label: "INCOMPLETE", text: "(Sex offender registry is locked to the public)" },

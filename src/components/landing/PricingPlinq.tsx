@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 import { PaymentModal } from "@/components/PaymentModal";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
@@ -8,6 +10,8 @@ const PricingPlinq = () => {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<PackageType>("3-pack");
   const { ref, isVisible } = useScrollReveal();
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   const plans = [
     {
@@ -33,6 +37,10 @@ const PricingPlinq = () => {
   ];
 
   const handleOpenPayment = (packageType: PackageType) => {
+    if (!isAuthenticated) {
+      navigate('/signup');
+      return;
+    }
     setSelectedPackage(packageType);
     setIsPaymentModalOpen(true);
   };
@@ -56,16 +64,9 @@ const PricingPlinq = () => {
             Each safety check uses South African public‑record warning lists to highlight possible red flags. It does not provide a full SAPS criminal record.
           </p>
 
-          {/* Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 1, background: '#E8E4DF' }}>
             {plans.map(plan => (
-              <div
-                key={plan.id}
-                style={{
-                  background: plan.highlight ? '#7C3AED' : 'white',
-                  padding: '48px 36px',
-                }}
-              >
+              <div key={plan.id} style={{ background: plan.highlight ? '#7C3AED' : 'white', padding: '48px 36px' }}>
                 <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: plan.highlight ? 'rgba(255,255,255,0.6)' : '#9CA3AF' }}>
                   {plan.label}
                 </div>

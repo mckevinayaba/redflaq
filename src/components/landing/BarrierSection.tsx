@@ -4,7 +4,7 @@ const BarrierSection = () => {
   const { ref, isVisible } = useScrollReveal();
 
   const cards = [
-    { num: "01", icon: "💰", title: "Too Expensive", value: "R2,000+", desc: "Traditional background checks can be expensive and designed for businesses, not for women or communities making personal safety decisions." },
+    { num: "01", icon: "💰", title: "Too Expensive", value: "Costly", desc: "Traditional checks are expensive, slow and built for companies, not for women and communities." },
     { num: "02", icon: "📋", title: "Too Bureaucratic", value: "Fingerprints", desc: "Police station visits. Physical forms. Systems designed for HR departments, not for women deciding who to trust." },
     { num: "03", icon: "⏱️", title: "Too Slow", value: "Days to Weeks", desc: "Traditional checks can take days to weeks. Too late when you need to decide today." },
   ];
@@ -55,7 +55,7 @@ const BarrierSection = () => {
             fontSize: 'clamp(24px, 3vw, 40px)', color: '#2D2235',
             textAlign: 'center', flex: 3,
           }}>
-            RedFlaq makes it <em style={{ fontStyle: 'italic', color: '#7C3AED' }}>R149 and minutes.</em>
+            RedFlaq makes it <em style={{ fontStyle: 'italic', color: '#7C3AED' }}>R99 and minutes.</em>
           </div>
           <div style={{ flex: 1, height: 1, background: '#E8E4DF' }} />
         </div>

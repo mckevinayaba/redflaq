@@ -5,7 +5,7 @@ const ProblemSection = () => {
     {
       icon: DollarSign,
       title: "EXPENSIVE",
-      description: "R500 to R5,000 for official checks",
+      description: "Traditional checks are expensive and built for companies",
       color: "text-risk-red",
     },
     {

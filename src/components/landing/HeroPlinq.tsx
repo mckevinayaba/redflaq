@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Check } from "lucide-react";
+import { Check, Shield, Heart, Eye } from "lucide-react";
 import { PaymentModal } from "@/components/PaymentModal";
 
 const HeroPlinq = () => {
@@ -26,7 +26,7 @@ const HeroPlinq = () => {
             <h1 style={{
               fontFamily: "'DM Serif Display', serif",
               fontSize: 'clamp(52px, 5vw, 76px)', lineHeight: 1.05,
-              color: '#0D0B0E', marginTop: 32, marginBottom: 24,
+              color: '#2D2235', marginTop: 32, marginBottom: 24,
             }}>
               Trusting relationships<br />begin with<br />
               <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>information.</em>
@@ -56,17 +56,17 @@ const HeroPlinq = () => {
 
             {/* Buttons */}
             <div className="flex flex-wrap gap-4">
-              <button onClick={() => setIsPaymentModalOpen(true)} className="hover:!bg-[#7C3AED] hover:!border-[#7C3AED] transition-colors" style={{
-                background: '#0D0B0E', color: '#F7F4F0', padding: '16px 36px',
+              <button onClick={() => setIsPaymentModalOpen(true)} className="hover:opacity-90 transition-opacity" style={{
+                background: '#7C3AED', color: '#FFFFFF', padding: '16px 36px',
                 fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 15,
-                border: '2px solid #0D0B0E', cursor: 'pointer',
+                border: '2px solid #7C3AED', cursor: 'pointer',
               }}>
                 Verify Someone Now — R149
               </button>
-              <button onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })} className="hover:!bg-[#0D0B0E] hover:!text-[#F7F4F0] transition-colors" style={{
-                background: 'transparent', color: '#0D0B0E', padding: '16px 36px',
+              <button onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })} className="hover:!bg-[#7C3AED] hover:!text-white hover:!border-[#7C3AED] transition-colors" style={{
+                background: 'transparent', color: '#7C3AED', padding: '16px 36px',
                 fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 15,
-                border: '2px solid #0D0B0E', cursor: 'pointer',
+                border: '2px solid #7C3AED', cursor: 'pointer',
               }}>
                 See How It Works
               </button>
@@ -81,45 +81,47 @@ const HeroPlinq = () => {
             </div>
           </div>
 
-          {/* RIGHT COLUMN */}
-          <div style={{ background: '#0D0B0E', position: 'relative', overflow: 'hidden' }}>
-            {/* Photo collage */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, padding: '24px 24px 0', height: 320 }}>
-              <div style={{ gridRow: '1', overflow: 'hidden' }}>
-                <img src="https://images.unsplash.com/photo-1589156280159-27a852cc18c4?w=600&q=80" alt="South African woman" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.75)' }} />
+          {/* RIGHT COLUMN — Abstract icons instead of photos */}
+          <div style={{ background: '#FAF5FF', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: 48 }}>
+            {/* Abstract icon grid */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+              <div style={{ background: 'white', border: '1.5px solid #EDE9FE', padding: 32, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+                <Shield className="h-12 w-12" style={{ color: '#7C3AED' }} />
+                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#7C3AED' }}>PROTECTION</span>
               </div>
-              <div style={{ display: 'grid', gridTemplateRows: '1fr 1fr', gap: 8 }}>
-                <div style={{ overflow: 'hidden' }}>
-                  <img src="https://images.unsplash.com/photo-1611432579699-484f7990b127?w=400&q=80" alt="Professional woman" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.75)' }} />
-                </div>
-                <div style={{ overflow: 'hidden' }}>
-                  <img src="https://images.unsplash.com/photo-1523824921871-d6f1a15151f1?w=400&q=80" alt="Confident woman" style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.75)' }} />
-                </div>
+              <div style={{ background: 'white', border: '1.5px solid #EDE9FE', padding: 32, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+                <Heart className="h-12 w-12" style={{ color: '#7C3AED' }} />
+                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#7C3AED' }}>SAFETY</span>
+              </div>
+              <div style={{ background: 'white', border: '1.5px solid #EDE9FE', padding: 32, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+                <Eye className="h-12 w-12" style={{ color: '#7C3AED' }} />
+                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#7C3AED' }}>AWARENESS</span>
+              </div>
+              <div style={{ background: 'white', border: '1.5px solid #EDE9FE', padding: 32, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+                <Check className="h-12 w-12" style={{ color: '#7C3AED' }} />
+                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#7C3AED' }}>VERIFICATION</span>
               </div>
             </div>
 
             {/* Stat cards */}
-            <div style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
-              <div style={{ background: 'rgba(124,58,237,0.1)', border: '1px solid #7C3AED', padding: 24 }}>
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#DDD6FE' }}>SOUTH AFRICAN REALITY</div>
-                <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 48, color: 'white', lineHeight: 1, margin: '8px 0' }}>1 in 3</div>
-                <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.6)', lineHeight: 1.5 }}>
+            <div style={{ marginTop: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
+              <div style={{ background: 'white', border: '1.5px solid #EDE9FE', padding: 24 }}>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#7C3AED' }}>SOUTH AFRICAN REALITY</div>
+                <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 48, color: '#2D2235', lineHeight: 1, margin: '8px 0' }}>1 in 3</div>
+                <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', lineHeight: 1.5 }}>
                   Women have experienced lifetime physical violence from an intimate partner.
                 </p>
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: 'rgba(255,255,255,0.3)', marginTop: 8 }}>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#9CA3AF', marginTop: 8 }}>
                   SOURCE: STATS SA · DSTI 2024 GENDER REPORT
                 </div>
               </div>
 
-              <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', padding: 24 }}>
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#DDD6FE' }}>PUBLIC‑RECORD SAFETY CHECK</div>
+              <div style={{ background: '#7C3AED', padding: 24 }}>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.7)' }}>PUBLIC‑RECORD SAFETY CHECK</div>
                 <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 48, color: 'white', lineHeight: 1, margin: '8px 0' }}>R149</div>
-                <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.6)', lineHeight: 1.5 }}>
+                <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.8)', lineHeight: 1.5 }}>
                   Scan public SAPS wanted and SA sanctions lists. Not a full criminal record check.
                 </p>
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: 'rgba(255,255,255,0.3)', marginTop: 8 }}>
-                  SAPS WANTED · FIC SANCTIONS · OPENSANCTIONS
-                </div>
               </div>
             </div>
           </div>

@@ -1,11 +1,12 @@
+import { Shield, Heart, Eye, Check, Lock } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
-const photos = [
-  { src: "https://images.unsplash.com/photo-1589156280159-27a852cc18c4?w=800&q=80", span: "row-span-2" },
-  { src: "https://images.unsplash.com/photo-1611432579699-484f7990b127?w=500&q=80" },
-  { src: "https://images.unsplash.com/photo-1523824921871-d6f1a15151f1?w=500&q=80" },
-  { src: "https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=500&q=80" },
-  { src: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&q=80" },
+const icons = [
+  { Icon: Shield, label: "PROTECTION" },
+  { Icon: Heart, label: "SAFETY" },
+  { Icon: Eye, label: "AWARENESS" },
+  { Icon: Check, label: "VERIFICATION" },
+  { Icon: Lock, label: "PRIVACY" },
 ];
 
 const PhotoGrid = () => {
@@ -15,25 +16,21 @@ const PhotoGrid = () => {
     <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '0 60px 100px', maxWidth: 1200, margin: '0 auto' }}>
       <div style={{
         display: 'grid',
-        gridTemplateColumns: '2fr 1fr 1fr',
-        gridTemplateRows: '280px 280px',
-        gap: 8,
+        gridTemplateColumns: 'repeat(5, 1fr)',
+        gap: 16,
       }}>
-        {photos.map((photo, i) => (
+        {icons.map(({ Icon, label }) => (
           <div
-            key={i}
-            className="group"
+            key={label}
+            className="group hover:bg-[#FAF5FF] transition-colors"
             style={{
-              overflow: 'hidden', position: 'relative',
-              ...(i === 0 ? { gridRow: '1 / 3' } : {}),
+              background: 'white', border: '1.5px solid #EDE9FE',
+              padding: '40px 24px', display: 'flex', flexDirection: 'column',
+              alignItems: 'center', gap: 12,
             }}
           >
-            <img
-              src={photo.src}
-              alt="South African woman"
-              className="transition-all duration-500 group-hover:scale-[1.03] group-hover:grayscale-0"
-              style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(20%)' }}
-            />
+            <Icon className="h-10 w-10 transition-transform group-hover:scale-110" style={{ color: '#7C3AED' }} />
+            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#7C3AED' }}>{label}</span>
           </div>
         ))}
       </div>

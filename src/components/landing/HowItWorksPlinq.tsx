@@ -19,40 +19,41 @@ const HowItWorksPlinq = () => {
 
         <h2 style={{
           fontFamily: "'DM Serif Display', serif",
-          fontSize: 'clamp(36px, 4vw, 52px)', maxWidth: 600, color: '#0D0B0E', marginBottom: 64,
+          fontSize: 'clamp(36px, 4vw, 52px)', maxWidth: 600, color: '#2D2235', marginBottom: 64,
         }}>
           Fast. Simple. <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>Public‑record based.</em>
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-4" style={{ border: '1.5px solid #0D0B0E' }}>
+        <div className="grid grid-cols-1 md:grid-cols-4" style={{ border: '1.5px solid #D6D3CD' }}>
           {steps.map((step, i) => (
             <div
               key={step.num}
-              className="transition-colors hover:bg-[#EDE9E3]"
+              className="transition-colors hover:bg-[#FAF5FF]"
               style={{
                 padding: '40px 32px',
-                borderRight: i < steps.length - 1 ? '1.5px solid #0D0B0E' : 'none',
+                borderRight: i < steps.length - 1 ? '1.5px solid #D6D3CD' : 'none',
+                background: 'white',
               }}
             >
               <div style={{
-                fontFamily: "'DM Serif Display', serif", fontSize: 72, color: '#DDD6FE',
+                fontFamily: "'DM Serif Display', serif", fontSize: 72, color: '#EDE9FE',
                 lineHeight: 1, marginBottom: 16,
               }}>
                 {step.num}
               </div>
               <div style={{
                 fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 700,
-                color: '#0D0B0E', marginBottom: 12, letterSpacing: '0.02em',
+                color: '#2D2235', marginBottom: 12, letterSpacing: '0.02em',
               }}>
                 {step.title}
               </div>
-              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#4B4453', lineHeight: 1.6 }}>
+              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', lineHeight: 1.6 }}>
                 {step.desc}
               </p>
               <span style={{
                 fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#7C3AED',
                 fontWeight: 500, letterSpacing: '0.1em',
-                borderTop: '1px solid #DDD6FE', paddingTop: 12, marginTop: 20, display: 'block',
+                borderTop: '1px solid #EDE9FE', paddingTop: 12, marginTop: 20, display: 'block',
               }}>
                 {step.time}
               </span>

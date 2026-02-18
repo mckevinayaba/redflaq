@@ -41,45 +41,45 @@ const PricingPlinq = () => {
 
   return (
     <>
-      <section id="pricing" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#0D0B0E', padding: '120px 60px' }}>
+      <section id="pricing" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '120px 60px' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-          <div className="section-tag" style={{ color: 'rgba(255,255,255,0.4)', marginBottom: 16 }}>Pricing</div>
+          <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 16 }}>Pricing</div>
 
           <h2 style={{
             fontFamily: "'DM Serif Display', serif",
-            fontSize: 'clamp(40px, 4vw, 56px)', color: 'white', lineHeight: 1.1, maxWidth: 600, marginBottom: 16,
+            fontSize: 'clamp(40px, 4vw, 56px)', color: '#2D2235', lineHeight: 1.1, maxWidth: 600, marginBottom: 16,
           }}>
             Choose your safety plan
           </h2>
-          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 17, color: 'rgba(255,255,255,0.5)', maxWidth: 560, lineHeight: 1.6, marginBottom: 64 }}>
+          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 17, color: '#78716C', maxWidth: 560, lineHeight: 1.6, marginBottom: 64 }}>
             Each safety check uses South African public‑record warning lists to highlight possible red flags. It does not provide a full SAPS criminal record.
           </p>
 
           {/* Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 1, background: 'rgba(255,255,255,0.08)' }}>
+          <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 1, background: '#E8E4DF' }}>
             {plans.map(plan => (
               <div
                 key={plan.id}
                 className="transition-colors"
                 style={{
-                  background: plan.highlight ? '#7C3AED' : '#0D0B0E',
+                  background: plan.highlight ? '#7C3AED' : 'white',
                   padding: '48px 40px',
                 }}
               >
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', color: plan.highlight ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.4)' }}>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', color: plan.highlight ? 'rgba(255,255,255,0.7)' : '#9CA3AF' }}>
                   {plan.label}
                 </div>
-                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 24, fontWeight: 800, color: 'white', margin: '8px 0' }}>{plan.title}</div>
-                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: plan.highlight ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.5)', marginBottom: 24 }}>{plan.sub}</div>
+                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 24, fontWeight: 800, color: plan.highlight ? 'white' : '#2D2235', margin: '8px 0' }}>{plan.title}</div>
+                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: plan.highlight ? 'rgba(255,255,255,0.7)' : '#78716C', marginBottom: 24 }}>{plan.sub}</div>
 
-                <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 64, color: 'white', lineHeight: 1 }}>{plan.price}</div>
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: plan.highlight ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.4)', marginTop: 4, marginBottom: plan.savings ? 12 : 24 }}>
+                <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 64, color: plan.highlight ? 'white' : '#2D2235', lineHeight: 1 }}>{plan.price}</div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: plan.highlight ? 'rgba(255,255,255,0.6)' : '#9CA3AF', marginTop: 4, marginBottom: plan.savings ? 12 : 24 }}>
                   {plan.period}
                 </div>
 
                 {plan.savings && (
                   <span style={{
-                    display: 'inline-block', background: 'rgba(21,128,61,0.2)', color: '#86efac',
+                    display: 'inline-block', background: plan.highlight ? 'rgba(255,255,255,0.15)' : '#F0FDF4', color: plan.highlight ? 'white' : '#16A34A',
                     fontFamily: "'JetBrains Mono', monospace", fontSize: 11, padding: '4px 10px', marginBottom: 24,
                   }}>
                     {plan.savings}
@@ -90,11 +90,11 @@ const PricingPlinq = () => {
                   {plan.features.map(f => (
                     <div key={f} style={{
                       fontFamily: "'Syne', sans-serif", fontSize: 14,
-                      color: plan.highlight ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.7)',
-                      borderBottom: '1px solid ' + (plan.highlight ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.07)'),
+                      color: plan.highlight ? 'rgba(255,255,255,0.85)' : '#4B4453',
+                      borderBottom: '1px solid ' + (plan.highlight ? 'rgba(255,255,255,0.15)' : '#E8E4DF'),
                       padding: '10px 0', display: 'flex', alignItems: 'center', gap: 10,
                     }}>
-                      <span style={{ color: plan.highlight ? 'white' : '#DDD6FE' }}>✓</span> {f}
+                      <span style={{ color: plan.highlight ? 'white' : '#7C3AED' }}>✓</span> {f}
                     </div>
                   ))}
                 </div>
@@ -104,12 +104,12 @@ const PricingPlinq = () => {
                   style={{
                     width: '100%', marginTop: 24, padding: 16,
                     fontFamily: "'Syne', sans-serif", fontWeight: 700,
-                    border: plan.highlight ? '2px solid white' : '2px solid rgba(255,255,255,0.3)',
+                    border: plan.highlight ? '2px solid white' : '2px solid #7C3AED',
                     background: plan.highlight ? 'white' : 'transparent',
-                    color: plan.highlight ? '#7C3AED' : 'white',
+                    color: plan.highlight ? '#7C3AED' : '#7C3AED',
                     cursor: 'pointer', transition: 'all 0.2s',
                   }}
-                  className={plan.highlight ? 'hover:!bg-[rgba(255,255,255,0.9)]' : 'hover:!bg-white hover:!text-[#0D0B0E]'}
+                  className={plan.highlight ? 'hover:!bg-[rgba(255,255,255,0.9)]' : 'hover:!bg-[#7C3AED] hover:!text-white'}
                 >
                   {plan.cta}
                 </button>
@@ -122,9 +122,9 @@ const PricingPlinq = () => {
             {trustBadges.map(badge => (
               <span key={badge} className="flex items-center gap-2" style={{
                 fontFamily: "'JetBrains Mono', monospace", fontSize: 11,
-                color: 'rgba(255,255,255,0.4)', letterSpacing: '0.1em', textTransform: 'uppercase',
+                color: '#9CA3AF', letterSpacing: '0.1em', textTransform: 'uppercase',
               }}>
-                <span style={{ width: 16, height: 16, background: 'rgba(255,255,255,0.1)', borderRadius: '50%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: 'white' }}>✓</span>
+                <span style={{ width: 16, height: 16, background: '#EDE9FE', borderRadius: '50%', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 10, color: '#7C3AED' }}>✓</span>
                 {badge}
               </span>
             ))}

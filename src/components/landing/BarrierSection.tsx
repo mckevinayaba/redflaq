@@ -4,9 +4,9 @@ const BarrierSection = () => {
   const { ref, isVisible } = useScrollReveal();
 
   const cards = [
-    { num: "01", icon: "💰", title: "Too Expensive", value: "R2,000–R5,000+", desc: "Traditional bundled corporate background checks (criminal + credit + employment) cost thousands. Designed for businesses, not individuals." },
+    { num: "01", icon: "💰", title: "Too Expensive", value: "R2,000+", desc: "Traditional background checks can be expensive and designed for businesses, not for women or communities making personal safety decisions." },
     { num: "02", icon: "📋", title: "Too Bureaucratic", value: "Fingerprints", desc: "Police station visits. Physical forms. Systems designed for HR departments, not for women deciding who to trust." },
-    { num: "03", icon: "⏱️", title: "Too Slow", value: "Days to Weeks", desc: "Traditional checks can take days to weeks, especially manual fingerprints or qualifications. Too late when you need to decide today." },
+    { num: "03", icon: "⏱️", title: "Too Slow", value: "Days to Weeks", desc: "Traditional checks can take days to weeks. Too late when you need to decide today." },
   ];
 
   return (
@@ -15,7 +15,6 @@ const BarrierSection = () => {
       className={`scroll-reveal ${isVisible ? 'visible' : ''}`}
       style={{ background: '#0D0B0E', padding: '120px 60px', overflow: 'hidden', position: 'relative' }}
     >
-      {/* Background watermark */}
       <div style={{
         position: 'absolute', inset: 0,
         fontFamily: "'DM Serif Display', serif", fontSize: 200,
@@ -37,7 +36,6 @@ const BarrierSection = () => {
           Background checks existed. But they weren't built for you.
         </h2>
 
-        {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 1, background: 'rgba(255,255,255,0.1)' }}>
           {cards.map(card => (
             <div key={card.num} className="transition-colors hover:bg-[rgba(124,58,237,0.15)]" style={{ background: '#0D0B0E', padding: 40 }}>
@@ -58,7 +56,6 @@ const BarrierSection = () => {
           ))}
         </div>
 
-        {/* Solution bar */}
         <div className="flex items-center gap-6" style={{ marginTop: 64 }}>
           <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.1)' }} />
           <div style={{
@@ -66,7 +63,7 @@ const BarrierSection = () => {
             fontSize: 'clamp(24px, 3vw, 40px)', color: 'white',
             textAlign: 'center', flex: 3,
           }}>
-            RedFlaq makes it <em style={{ fontStyle: 'italic', color: '#DDD6FE' }}>R99 and 5 minutes.</em>
+            RedFlaq makes it <em style={{ fontStyle: 'italic', color: '#DDD6FE' }}>R149 and minutes.</em>
           </div>
           <div style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.1)' }} />
         </div>

@@ -1,10 +1,10 @@
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const steps = [
-  { num: "01", title: "You Provide Details", desc: "Full name, SA ID number, and reason for search. All information encrypted and secured under POPIA.", time: "⏱ 30 seconds" },
-  { num: "02", title: "We Search Records", desc: "Our system searches SAPS wanted persons, SAFLII court judgments, and government gazettes simultaneously.", time: "⏱ 1 to 2 minutes" },
-  { num: "03", title: "Human Verification", desc: "Our team confirms matches are the correct person. South Africa has many duplicate names. We verify before we report.", time: "⏱ 2 to 3 minutes" },
-  { num: "04", title: "You Get the Report", desc: "Color-coded result with source links. Every finding is traceable and cited. Red, Amber, or Green.", time: "⏱ Delivered instantly" },
+  { num: "01", title: "You Provide Details", desc: "Share their full name and, if you know it, province or area. Tell us your legitimate reason for searching so we can respect everyone's rights.", time: "⏱ 30 seconds" },
+  { num: "02", title: "We Scan Public Records", desc: "Our system checks South African public‑record warning lists, including wanted and sanctions information, for possible matches on that name.", time: "⏱ Under a minute" },
+  { num: "03", title: "You Get a Clear Safety Signal", desc: "We highlight any possible matches, show crime type, status, area and timing when available, and explain what this could mean for your safety.", time: "⏱ Instant results" },
+  { num: "04", title: "Download Your Report", desc: "View your results online or download a detailed PDF report so you can keep a record or share it with someone you trust.", time: "⏱ Available immediately" },
 ];
 
 const HowItWorksPlinq = () => {
@@ -21,7 +21,7 @@ const HowItWorksPlinq = () => {
           fontFamily: "'DM Serif Display', serif",
           fontSize: 'clamp(36px, 4vw, 52px)', maxWidth: 600, color: '#0D0B0E', marginBottom: 64,
         }}>
-          Fast. Verified. <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>Defensible.</em>
+          Fast. Simple. <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>Public‑record based.</em>
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-4" style={{ border: '1.5px solid #0D0B0E' }}>
@@ -59,6 +59,10 @@ const HowItWorksPlinq = () => {
             </div>
           ))}
         </div>
+
+        <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#9CA3AF', textAlign: 'center', marginTop: 24 }}>
+          We never access private SAPS fingerprint or internal criminal record databases. RedFlaq only uses information that is already public.
+        </p>
       </div>
     </section>
   );

@@ -204,7 +204,7 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
                     <p className="font-semibold text-foreground">Include:</p>
                     <p>✓ Proof of payment screenshot</p>
                     <p>✓ Your email address</p>
-                    <p>✓ Package selected (R50/R120/R180)</p>
+                    <p>✓ Package selected (R99/R249/R399)</p>
                   </div>
                 </div>
                 

@@ -13,6 +13,7 @@ interface SearchParams {
   province?: string;
   case_number?: string;
   police_station?: string;
+  payment_id?: string;
 }
 
 function normalizeName(name: string): string {
@@ -60,7 +61,7 @@ serve(async (req) => {
 
   try {
     const params: SearchParams = await req.json();
-    const { full_name, sa_id_number, date_of_birth, province, case_number, police_station } = params;
+    const { full_name, sa_id_number, date_of_birth, province, case_number, police_station, payment_id } = params;
 
     // Validate: at least one parameter
     const hasAny = [full_name, sa_id_number, date_of_birth, case_number].some(v => v && v.length > 0);
@@ -74,6 +75,43 @@ serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
+
+    // Server-side credit deduction
+    if (payment_id) {
+      const { data: payment, error: fetchErr } = await supabase
+        .from('manual_payments')
+        .select('credits_used, search_credits, status')
+        .eq('payment_id', payment_id)
+        .single();
+
+      if (fetchErr || !payment) {
+        return new Response(
+          JSON.stringify({ success: false, error: 'Invalid payment ID' }),
+          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
+      if (payment.credits_used >= payment.search_credits) {
+        return new Response(
+          JSON.stringify({ success: false, error: 'No credits remaining' }),
+          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
+      // Deduct credit using service role (bypasses RLS)
+      const { error: updateErr } = await supabase
+        .from('manual_payments')
+        .update({ credits_used: payment.credits_used + 1 })
+        .eq('payment_id', payment_id);
+
+      if (updateErr) {
+        console.error('Credit deduction error:', updateErr);
+        return new Response(
+          JSON.stringify({ success: false, error: 'Failed to deduct credit' }),
+          { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+    }
 
     let matches: any[] = [];
     const searchStrategies: string[] = [];

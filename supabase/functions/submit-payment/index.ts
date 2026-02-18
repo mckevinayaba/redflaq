@@ -24,9 +24,9 @@ serve(async (req) => {
     
     // Package details
     const packages: Record<string, { amount: number; credits: number }> = {
-      'single': { amount: 50, credits: 1 },
-      'triple': { amount: 120, credits: 3 },
-      'five': { amount: 180, credits: 5 }
+      'single': { amount: 99, credits: 1 },
+      'triple': { amount: 249, credits: 3 },
+      'five': { amount: 399, credits: 5 }
     };
     
     const pkg = packages[package_type] || packages.single;

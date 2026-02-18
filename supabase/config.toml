@@ -23,3 +23,6 @@ verify_jwt = false
 
 [functions."import-opensanctions"]
 verify_jwt = false
+
+[functions."admin-verify-payment"]
+verify_jwt = false

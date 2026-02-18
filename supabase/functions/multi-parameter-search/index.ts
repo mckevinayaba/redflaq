@@ -13,6 +13,7 @@ interface SearchParams {
   province?: string;
   case_number?: string;
   police_station?: string;
+  country?: string;
 }
 
 function normalizeName(name: string): string {
@@ -60,7 +61,7 @@ serve(async (req) => {
 
   try {
     const params: SearchParams = await req.json();
-    const { full_name, sa_id_number, date_of_birth, province, case_number, police_station } = params;
+    const { full_name, sa_id_number, date_of_birth, province, case_number, police_station, country } = params;
 
     // Validate: at least one parameter
     const hasAny = [full_name, sa_id_number, date_of_birth, case_number].some(v => v && v.length > 0);
@@ -174,6 +175,9 @@ serve(async (req) => {
         .eq('is_active', true)
         .eq('name_normalized', normalized);
 
+      if (country) {
+        query = query.eq('country', country);
+      }
       if (province) {
         query = query.eq('province', province);
       }

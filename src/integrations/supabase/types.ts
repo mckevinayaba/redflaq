@@ -320,6 +320,66 @@ export type Database = {
           },
         ]
       }
+      searches: {
+        Row: {
+          created_at: string
+          id: string
+          is_wanted: boolean
+          matches_found: number
+          needs_human_verification: boolean | null
+          payment_id: string | null
+          recommendation: string | null
+          results: Json
+          risk_level: string
+          search_case_number: string | null
+          search_dob: string | null
+          search_id: string
+          search_id_number: string | null
+          search_name: string | null
+          search_province: string | null
+          search_strategies: string[] | null
+          searched_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_wanted?: boolean
+          matches_found?: number
+          needs_human_verification?: boolean | null
+          payment_id?: string | null
+          recommendation?: string | null
+          results?: Json
+          risk_level?: string
+          search_case_number?: string | null
+          search_dob?: string | null
+          search_id: string
+          search_id_number?: string | null
+          search_name?: string | null
+          search_province?: string | null
+          search_strategies?: string[] | null
+          searched_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_wanted?: boolean
+          matches_found?: number
+          needs_human_verification?: boolean | null
+          payment_id?: string | null
+          recommendation?: string | null
+          results?: Json
+          risk_level?: string
+          search_case_number?: string | null
+          search_dob?: string | null
+          search_id?: string
+          search_id_number?: string | null
+          search_name?: string | null
+          search_province?: string | null
+          search_strategies?: string[] | null
+          searched_at?: string
+        }
+        Relationships: []
+      }
       wanted_persons: {
         Row: {
           added_at: string

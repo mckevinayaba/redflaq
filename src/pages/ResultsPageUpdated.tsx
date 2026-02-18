@@ -4,7 +4,8 @@ import { toast } from "sonner";
 import { DisputeModal } from "@/components/DisputeModal";
 import { Progress } from "@/components/ui/progress";
 import IdentityMatchSelector from "@/components/IdentityMatchSelector";
-import { calculateIdentityConfidence, getConfidenceLevel, type SearchInput, type PersonRecord } from "@/utils/identityConfidence";
+import { type PersonRecord } from "@/utils/identityConfidence";
+import { supabase } from "@/integrations/supabase/client";
 
 interface WantedPerson {
   id: string;
@@ -14,16 +15,26 @@ interface WantedPerson {
   charges: string;
   photo_url?: string;
   detail_page_url?: string;
+  source_url?: string;
+  source_urls?: string[];
   case_number?: string;
   police_station?: string;
   court_case_number?: string;
+  court_name?: string;
   legal_status?: string;
   province?: string;
   updated_at?: string;
   date_wanted?: string;
-  court_name?: string;
   identity_confidence_score?: number;
   requires_human_verification?: boolean;
+  gender?: string;
+  year_of_birth?: number;
+  offense_categories?: string[];
+  offense_categories_derived?: string[];
+  source_dataset?: string;
+  aliases?: string[];
+  confidence?: number;
+  match_type?: string;
 }
 
 interface SearchResultData {
@@ -39,15 +50,11 @@ interface SearchResultData {
   wantedPersons: WantedPerson[];
   searchedAt: string;
   hasMultipleMatches?: boolean;
+  recommendation?: string;
 }
 
-const getConfidence = (person: WantedPerson, idNumber?: string) => {
-  let score = 20; // name match base
-  if (person.date_wanted) score += 15;
-  if (person.province) score += 20;
-  if (person.photo_url) score += 15;
-  if (idNumber) score += 30;
-  return Math.min(score, 100);
+const getConfidence = (person: WantedPerson) => {
+  return person.confidence || 20;
 };
 
 const getDaysAgo = (dateStr?: string) => {
@@ -59,6 +66,76 @@ const getDaysAgo = (dateStr?: string) => {
 const redactId = (id?: string) => {
   if (!id || id.length < 4) return id || "N/A";
   return "████████" + id.slice(-4);
+};
+
+const getOfficialSourceUrl = (person: WantedPerson): string | null => {
+  if (person.detail_page_url) return person.detail_page_url;
+  if (person.source_url && person.source_url !== 'https://www.saps.gov.za/crimestop/wanted/list.php') return person.source_url;
+  if (person.source_urls && person.source_urls.length > 0) return person.source_urls[0];
+  if (person.source_dataset === 'za_wanted') return 'https://www.saps.gov.za/crimestop/wanted/list.php';
+  return null;
+};
+
+const getSourceLabel = (person: WantedPerson): string => {
+  if (person.source_dataset === 'za_wanted') return 'SAPS Wanted Persons';
+  if (person.source_dataset === 'za_fic_sanctions') return 'FIC Sanctions List';
+  return 'South African Public Records';
+};
+
+const getRiskBadge = (riskLevel: string) => {
+  switch (riskLevel) {
+    case 'RED':
+      return { color: '#DC2626', bg: '#FEF2F2', label: 'HIGH RISK', icon: '🔴' };
+    case 'ORANGE':
+      return { color: '#EA580C', bg: '#FFF7ED', label: 'MEDIUM RISK', icon: '🟠' };
+    case 'YELLOW':
+      return { color: '#CA8A04', bg: '#FEFCE8', label: 'ELEVATED', icon: '🟡' };
+    default:
+      return { color: '#16A34A', bg: '#F0FDF4', label: 'NO FLAGS', icon: '🟢' };
+  }
+};
+
+const getRiskExplainer = (riskLevel: string, persons: WantedPerson[]) => {
+  const hasViolent = persons.some(p => /murder|assault|rape|sexual|violence|attack|stab|shoot|firearm/i.test(p.charges));
+  const hasSanctions = persons.some(p => p.source_dataset === 'za_fic_sanctions');
+  
+  switch (riskLevel) {
+    case 'RED':
+      return {
+        title: 'High Risk — Violent or serious offenses found',
+        triggers: [
+          hasViolent ? 'Active warrant for violent crime (assault, murder, sexual offense, or firearms)' : null,
+          hasSanctions ? 'Listed on FIC financial sanctions list' : null,
+          'Strong match confidence to this individual',
+        ].filter(Boolean),
+        action: 'Do NOT meet this person alone. Do NOT confront them. Share this report with a trusted person immediately. Contact SAPS if you have concerns about your safety.',
+      };
+    case 'ORANGE':
+      return {
+        title: 'Medium Risk — Criminal records found',
+        triggers: [
+          'Active warrant or legal notice found in public records',
+          persons.length > 1 ? 'Multiple possible matches — verify identity carefully' : null,
+          hasSanctions ? 'Listed on FIC sanctions/watchlist' : null,
+        ].filter(Boolean),
+        action: 'Proceed with caution. Verify the identity carefully using date of birth and location. Consider meeting in a public place and informing someone of your plans.',
+      };
+    case 'YELLOW':
+      return {
+        title: 'Elevated — Low-confidence match found',
+        triggers: [
+          'A possible match was found but confidence is low',
+          'Name may match multiple people in the database',
+        ],
+        action: 'This may not be the same person. Verify with additional information before making decisions. Contact SAPS for official confirmation.',
+      };
+    default:
+      return {
+        title: 'No Red Flags Found',
+        triggers: ['No active warrants, sanctions, or legal notices found in searched databases'],
+        action: 'While no records were found, this does not guarantee safety. Always trust your instincts and take normal precautions.',
+      };
+  }
 };
 
 const ResultsPageUpdated = () => {
@@ -78,34 +155,63 @@ const ResultsPageUpdated = () => {
       navigate("/");
       return;
     }
-    const storedResult = sessionStorage.getItem("searchResult");
-    if (storedResult) {
+
+    const fetchResults = async () => {
       try {
-        setResults(JSON.parse(storedResult));
-      } catch {
+        // Fetch from database
+        const { data, error } = await supabase
+          .from('searches')
+          .select('*')
+          .eq('search_id', searchId)
+          .maybeSingle();
+
+        if (error) throw error;
+
+        if (data) {
+          const parsedResults = data.results as unknown as WantedPerson[];
+          setResults({
+            searchId: data.search_id,
+            fullName: data.search_name || '',
+            idNumber: data.search_id_number || '',
+            riskLevel: data.risk_level,
+            riskScore: data.is_wanted ? 100 : 0,
+            isWanted: data.is_wanted,
+            wantedPersonsCount: data.matches_found,
+            wantedPersons: parsedResults || [],
+            searchedAt: data.searched_at,
+            hasMultipleMatches: data.matches_found > 1,
+            recommendation: data.recommendation || undefined,
+          });
+
+          if (data.matches_found > 1) {
+            setShowMatchSelector(true);
+          }
+        } else {
+          // Fallback: check sessionStorage for just-completed searches
+          const storedResult = sessionStorage.getItem("searchResult");
+          if (storedResult) {
+            const parsed = JSON.parse(storedResult);
+            setResults(parsed);
+            if (parsed.hasMultipleMatches && parsed.wantedPersonsCount > 1) {
+              setShowMatchSelector(true);
+            }
+            sessionStorage.removeItem("searchResult");
+          } else {
+            toast.error("Search not found. It may have expired.");
+            navigate("/");
+            return;
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching search results:', err);
         toast.error("Failed to load search results");
         navigate("/");
+      } finally {
+        setLoading(false);
       }
-    } else {
-      setResults({
-        searchId,
-        fullName: sessionStorage.getItem("searchName") || "Test Person",
-        idNumber: sessionStorage.getItem("searchIdNumber") || "",
-        riskLevel: "GREEN",
-        riskScore: 0,
-        isWanted: false,
-        wantedPersonsCount: 0,
-        wantedPersons: [],
-        searchedAt: new Date().toISOString(),
-      });
-    }
-    setLoading(false);
+    };
 
-    // Auto-show match selector for multiple matches
-    const parsed = storedResult ? JSON.parse(storedResult) : null;
-    if (parsed && parsed.hasMultipleMatches && parsed.wantedPersonsCount > 1) {
-      setShowMatchSelector(true);
-    }
+    fetchResults();
   }, [searchId, navigate]);
 
   const handleDownload = async () => {
@@ -138,6 +244,8 @@ const ResultsPageUpdated = () => {
   const isMultiple = results.wantedPersonsCount > 1;
   const searchDate = new Date(results.searchedAt).toLocaleDateString('en-ZA', { day: '2-digit', month: '2-digit', year: 'numeric' });
   const searchTime = new Date(results.searchedAt).toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' });
+  const riskBadge = getRiskBadge(results.riskLevel);
+  const riskExplainer = getRiskExplainer(results.riskLevel, results.wantedPersons);
 
   return (
     <div style={{ background: 'var(--paper)', minHeight: '100vh', padding: '120px 24px 80px' }}>
@@ -147,6 +255,35 @@ const ResultsPageUpdated = () => {
         <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: 'var(--muted)', letterSpacing: '0.1em', marginBottom: 24 }}>
           SEARCH RESULTS · {(results.searchType || 'person').toUpperCase().replace('_', ' ')} · {searchDate} {searchTime}
         </p>
+
+        {/* Risk Level Summary */}
+        <div style={{ background: riskBadge.bg, border: `2px solid ${riskBadge.color}`, padding: 32, marginBottom: 32 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
+            <span style={{ fontSize: 32 }}>{riskBadge.icon}</span>
+            <div>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: '0.1em', color: riskBadge.color, fontWeight: 700 }}>{riskBadge.label}</span>
+              <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 24, color: 'var(--ink)', margin: '4px 0 0' }}>
+                {results.fullName || results.searchIdentifier}
+              </h2>
+            </div>
+          </div>
+
+          <h3 style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 700, color: riskBadge.color, marginBottom: 12 }}>
+            {riskExplainer.title}
+          </h3>
+          
+          <div style={{ marginBottom: 16 }}>
+            <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.1em', color: 'var(--muted)', marginBottom: 8 }}>WHAT TRIGGERED THIS:</p>
+            <ul style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'var(--mid)', lineHeight: 1.8, listStyle: 'disc', paddingLeft: 20, margin: 0 }}>
+              {riskExplainer.triggers.map((t, i) => <li key={i}>{t}</li>)}
+            </ul>
+          </div>
+
+          <div style={{ background: 'white', padding: 16, borderLeft: `3px solid ${riskBadge.color}` }}>
+            <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.1em', color: 'var(--muted)', marginBottom: 4 }}>WHAT YOU SHOULD DO:</p>
+            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 600, color: 'var(--ink)' }}>{riskExplainer.action}</p>
+          </div>
+        </div>
 
         {/* Identity Match Selector for multiple matches */}
         {showMatchSelector && isMultiple && !selectedMatch && (
@@ -167,7 +304,7 @@ const ResultsPageUpdated = () => {
           />
         )}
 
-        {/* Multiple Matches Warning (shown after selector dismissed) */}
+        {/* Multiple Matches Warning */}
         {isMultiple && !showMatchSelector && (
           <div style={{ background: '#FEF2F2', border: '2px solid #DC2626', padding: 32, marginBottom: 32 }}>
             <span style={{ fontSize: 40 }}>⚠️</span>
@@ -185,9 +322,12 @@ const ResultsPageUpdated = () => {
 
         {/* Wanted Person Cards */}
         {results.isWanted && results.wantedPersons.map((person, idx) => {
-          const confidence = getConfidence(person, results.idNumber);
+          const confidence = getConfidence(person);
           const daysAgo = getDaysAgo(person.updated_at);
           const isViolent = /murder|assault|rape|sexual|violence|attack|stab|shoot/i.test(person.charges);
+          const offenseCategories = person.offense_categories_derived || person.offense_categories || [];
+          const officialUrl = getOfficialSourceUrl(person);
+          const sourceLabel = getSourceLabel(person);
 
           return (
             <div key={person.id}>
@@ -218,12 +358,34 @@ const ResultsPageUpdated = () => {
                   <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 32, color: 'var(--ink)', lineHeight: 1.2, marginBottom: 8 }}>
                     {person.full_name}
                   </h2>
+                  {person.aliases && person.aliases.length > 0 && (
+                    <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: 'var(--muted)', marginBottom: 4 }}>
+                      Also known as: {person.aliases.join(', ')}
+                    </p>
+                  )}
                   {results.idNumber && (
                     <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'var(--muted)' }}>
                       ID: {redactId(results.idNumber)}
                     </p>
                   )}
                 </div>
+
+                {/* Crime Type Tags */}
+                {offenseCategories.length > 0 && (
+                  <div style={{ padding: '16px 32px', borderBottom: '1.5px solid var(--cream)', display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                    {offenseCategories.map((cat, i) => (
+                      <span key={i} style={{
+                        display: 'inline-block', padding: '4px 12px',
+                        fontFamily: "'JetBrains Mono', monospace", fontSize: 11,
+                        background: isViolent ? '#FEE2E2' : '#FEF3C7',
+                        color: isViolent ? '#991B1B' : '#92400E',
+                        fontWeight: 600,
+                      }}>
+                        {cat}
+                      </span>
+                    ))}
+                  </div>
+                )}
 
                 {/* Photo & Details */}
                 <div className="results-photo-grid" style={{ padding: 32, display: 'grid', gridTemplateColumns: '200px 1fr', gap: 32 }}>
@@ -233,8 +395,8 @@ const ResultsPageUpdated = () => {
                         <div style={{ width: 200, height: 200, border: '1.5px solid var(--cream)', overflow: 'hidden' }}>
                           <img src={person.photo_url} alt={person.full_name} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(40%)' }} />
                         </div>
-                        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: 'var(--muted)', display: 'block', marginTop: 8 }}>Photo source: SAPS database</span>
-                        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#EA580C', display: 'block', marginTop: 4 }}>Photos may be outdated. Do not rely on photo alone for identification.</span>
+                        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: 'var(--muted)', display: 'block', marginTop: 8 }}>Photo source: {sourceLabel}</span>
+                        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#EA580C', display: 'block', marginTop: 4 }}>Photos may be outdated. Do not rely on photo alone.</span>
                       </>
                     ) : (
                       <div style={{ width: 200, height: 200, background: '#F5F5F4', border: '1.5px solid var(--cream)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
@@ -247,16 +409,38 @@ const ResultsPageUpdated = () => {
                   <div>
                     {[
                       { label: 'ALLEGED OFFENSE', value: person.charges, highlight: isViolent },
+                      { label: 'GENDER', value: person.gender ? person.gender.charAt(0).toUpperCase() + person.gender.slice(1) : null },
+                      { label: 'YEAR OF BIRTH', value: person.year_of_birth ? String(person.year_of_birth) : null },
                       { label: 'POLICE STATION', value: person.police_station },
                       { label: 'PROVINCE', value: person.province },
                       { label: 'CASE NUMBER', value: person.case_number },
                       { label: 'COURT', value: person.court_name || person.court_case_number },
+                      { label: 'DATE LISTED', value: person.date_wanted ? new Date(person.date_wanted).toLocaleDateString('en-ZA') : null },
+                      { label: 'DATA SOURCE', value: sourceLabel },
                     ].filter(d => d.value).map(d => (
                       <div key={d.label} style={{ marginBottom: 16 }}>
                         <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)', display: 'block', marginBottom: 4 }}>{d.label}</span>
                         <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: d.highlight ? '#DC2626' : 'var(--ink)', fontWeight: d.highlight ? 700 : 500 }}>{d.value}</span>
                       </div>
                     ))}
+
+                    {/* View on official source link */}
+                    {officialUrl && (
+                      <div style={{ marginTop: 8 }}>
+                        <a
+                          href={officialUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{
+                            display: 'inline-flex', alignItems: 'center', gap: 6,
+                            fontFamily: "'JetBrains Mono', monospace", fontSize: 12,
+                            color: '#2563EB', textDecoration: 'underline',
+                          }}
+                        >
+                          🔗 View on official source →
+                        </a>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -266,20 +450,23 @@ const ResultsPageUpdated = () => {
                     ⚠️ What This Means
                   </h3>
                   <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: 'var(--mid)', lineHeight: 1.7 }}>
-                    An active arrest warrant is listed on the SAPS wanted persons database as of {person.updated_at ? new Date(person.updated_at).toLocaleDateString('en-ZA') : 'recently'}.
+                    {person.source_dataset === 'za_fic_sanctions' 
+                      ? `This person appears on the Financial Intelligence Centre (FIC) sanctions list. This indicates they are subject to financial restrictions or watchlist monitoring as of ${person.updated_at ? new Date(person.updated_at).toLocaleDateString('en-ZA') : 'recently'}.`
+                      : `An active arrest warrant is listed on the SAPS wanted persons database as of ${person.updated_at ? new Date(person.updated_at).toLocaleDateString('en-ZA') : 'recently'}.`
+                    }
                   </p>
                   <div style={{ background: 'white', padding: 16, borderLeft: '3px solid #EA580C', marginTop: 16 }}>
                     <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: '#DC2626', marginBottom: 8 }}>This Does NOT Confirm:</p>
                     <ul style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'var(--mid)', lineHeight: 1.8, listStyle: 'disc', paddingLeft: 20, margin: 0 }}>
-                      <li>Whether this person is currently wanted</li>
-                      <li>Whether they have been arrested</li>
-                      <li>Current bail or custody status</li>
-                      <li>Case progression or court dates</li>
-                      <li>Any outcome or conviction</li>
+                      <li>Whether this person is currently wanted or sanctioned</li>
+                      <li>Whether they have been arrested or cleared</li>
+                      <li>Current bail, custody, or legal status</li>
+                      <li>Case progression, court dates, or outcomes</li>
+                      <li>Any conviction — only allegations</li>
                     </ul>
                   </div>
                   <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', marginTop: 12, fontStyle: 'italic' }}>
-                    SAPS wanted lists are not updated in real-time. This listing may be outdated. The person may have been arrested, case may have progressed, or warrant may have been withdrawn.
+                    Public records are not updated in real-time. This listing may be outdated. The person may have been arrested, case may have progressed, or warrant may have been withdrawn.
                   </p>
                 </div>
 
@@ -290,8 +477,10 @@ const ResultsPageUpdated = () => {
                   </h3>
                   <div className="results-verification-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
                     {[
-                      { label: 'SOURCE', value: 'South African Police Service' },
+                      { label: 'SOURCE', value: sourceLabel },
                       { label: 'LAST VERIFIED', value: person.updated_at ? `${new Date(person.updated_at).toLocaleDateString('en-ZA')} (${daysAgo} days ago)` : 'Recently' },
+                      { label: 'MATCH TYPE', value: person.match_type?.replace(/_/g, ' ').toUpperCase() || 'NAME MATCH' },
+                      { label: 'CONFIDENCE', value: `${confidence}%` },
                       { label: 'RECORD ID', value: person.id.slice(0, 8) },
                     ].map(item => (
                       <div key={item.label}>
@@ -317,9 +506,7 @@ const ResultsPageUpdated = () => {
                   <Progress
                     value={confidence}
                     className="h-3 mb-3"
-                    style={{
-                      background: 'var(--cream)',
-                    }}
+                    style={{ background: 'var(--cream)' }}
                   />
                   <p style={{
                     fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 600, marginBottom: 12,
@@ -334,6 +521,21 @@ const ResultsPageUpdated = () => {
                       This match is based on name only. South Africa has many people with identical names. DO NOT assume this is the correct person without verifying date of birth, location, and other details.
                     </p>
                   )}
+                </div>
+
+                {/* Safety Warning */}
+                <div style={{ padding: 32, background: '#FEF2F2', borderBottom: '1.5px solid var(--cream)' }}>
+                  <h3 style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 700, color: '#DC2626', display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                    🛡️ For Your Own Safety
+                  </h3>
+                  <ul style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'var(--mid)', lineHeight: 1.8, listStyle: 'none', padding: 0, margin: 0 }}>
+                    <li>❌ Do NOT confront this person yourself</li>
+                    <li>❌ Do NOT meet them alone or in a private location</li>
+                    <li>✅ Share this report with a trusted friend or family member</li>
+                    <li>✅ If you feel unsafe, call SAPS on <strong>10111</strong> immediately</li>
+                    <li>✅ For non-emergency tips, call Crime Stop on <strong>08600 10111</strong></li>
+                    <li>✅ Verify current case status with your local police station</li>
+                  </ul>
                 </div>
 
                 {/* Contact Section */}
@@ -361,9 +563,6 @@ const ResultsPageUpdated = () => {
                       <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#78716C' }}>Contact for case details</span>
                     </div>
                   </div>
-                  <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#78716C', marginTop: 20, paddingTop: 20, borderTop: '1px solid var(--cream)' }}>
-                    Do not confront this person. Do not meet them alone. Share this information with a trusted friend or family member immediately if you are concerned.
-                  </p>
                 </div>
 
                 {/* Action Buttons */}
@@ -371,12 +570,14 @@ const ResultsPageUpdated = () => {
                   <button onClick={handleDownload} style={{ background: 'var(--ink)', color: 'var(--paper)', padding: '14px 28px', fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer' }}>
                     Download Full Report
                   </button>
-                  <button style={{ border: '2px solid var(--ink)', background: 'transparent', color: 'var(--ink)', padding: '14px 28px', fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
-                    Report Case Update
-                  </button>
                   <button onClick={() => { setDisputeRecord(person); setIsDisputeModalOpen(true); }} style={{ border: '2px solid var(--ink)', background: 'transparent', color: 'var(--ink)', padding: '14px 28px', fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
                     Challenge This Result
                   </button>
+                  {officialUrl && (
+                    <a href={officialUrl} target="_blank" rel="noopener noreferrer" style={{ border: '2px solid var(--ink)', background: 'transparent', color: 'var(--ink)', padding: '14px 28px', fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, cursor: 'pointer', textDecoration: 'none', display: 'inline-block' }}>
+                      View Official Source
+                    </a>
+                  )}
                 </div>
 
                 {/* Legal Footer */}
@@ -385,9 +586,11 @@ const ResultsPageUpdated = () => {
                     ⚖️ Important Legal Notice
                   </h4>
                   <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: 'var(--mid)', lineHeight: 1.8 }}>
-                    RedFlaq reports public records only. This is not a determination of guilt. Legal proceedings are ongoing until concluded by a court of law. Always verify current status with official sources before making any decisions.
+                    RedFlaq reports public records only, sourced from SAPS wanted persons lists and FIC sanctions data via OpenSanctions. This is not a determination of guilt. Legal proceedings are ongoing until concluded by a court of law. Always verify current status with official sources before making any decisions.
                     <br /><br />
-                    DO NOT use this information to harass, discriminate against, defame, or harm this person. Unlawful use of this information is prohibited and prosecutable under South African law.
+                    DO NOT use this information to harass, discriminate against, defame, or harm this person. Unlawful use of this information is prohibited and prosecutable under South African law, including under POPIA (Protection of Personal Information Act) and the Harassment Act.
+                    <br /><br />
+                    RedFlaq is not a replacement for SAPS, the courts, or any official authority. We provide no guarantee of completeness — records may be missing, outdated, or belong to a different person with the same name.
                     <br /><br />
                     Under POPIA, this person has the right to challenge this information. If you are the subject of this search and believe it contains errors, click 'Challenge This Result' above.
                   </p>
@@ -411,18 +614,10 @@ const ResultsPageUpdated = () => {
             <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: 'var(--muted)', marginTop: 16, letterSpacing: '0.05em' }}>
               IF YOU CANNOT VERIFY WITH CONFIDENCE, DO NOT USE THIS INFORMATION. CONTACT SAPS DIRECTLY OR REQUEST HUMAN VERIFICATION FROM REDFLAQ.
             </p>
-            <div style={{ display: 'flex', gap: 16, marginTop: 24, flexWrap: 'wrap' }}>
-              <button style={{ background: 'var(--ink)', color: 'var(--paper)', padding: '14px 28px', fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer' }}>
-                Request Human Verification - R49
-              </button>
-              <button style={{ border: '2px solid var(--ink)', background: 'transparent', color: 'var(--ink)', padding: '14px 28px', fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
-                None of These Match
-              </button>
-            </div>
           </div>
         )}
 
-        {/* Empty State — No matches */}
+        {/* Empty State */}
         {!results.isWanted && (
           <div style={{ border: '1.5px solid var(--ink)', background: 'var(--paper)', padding: 48, textAlign: 'center' }}>
             <span style={{ fontSize: 48, display: 'block', marginBottom: 16 }}>✅</span>
@@ -430,7 +625,7 @@ const ResultsPageUpdated = () => {
               No Red Flags Found in Public Records
             </h3>
             <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, color: 'var(--mid)', lineHeight: 1.7, maxWidth: 520, margin: '0 auto 24px' }}>
-              We searched SAPS wanted persons, court judgments, and government gazettes and found no criminal records, active warrants, or legal notices for this person as of {searchDate}.
+              We searched SAPS wanted persons, FIC sanctions lists, and government records and found no criminal records, active warrants, or legal notices for this person as of {searchDate}.
             </p>
 
             <div style={{ background: 'white', border: '1.5px solid var(--cream)', padding: 24, textAlign: 'left', maxWidth: 520, margin: '0 auto 24px' }}>
@@ -452,12 +647,6 @@ const ResultsPageUpdated = () => {
               <button onClick={handleDownload} style={{ background: 'var(--ink)', color: 'var(--paper)', padding: '14px 28px', fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer' }}>
                 Download No-Record Certificate
               </button>
-              <button onClick={() => {
-                const paymentId = sessionStorage.getItem("currentPaymentId");
-                navigate(paymentId ? `/search-form?payment_id=${paymentId}` : "/");
-              }} style={{ border: '2px solid var(--ink)', background: 'transparent', color: 'var(--ink)', padding: '14px 28px', fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
-                Search Another Person
-              </button>
             </div>
           </div>
         )}
@@ -470,7 +659,7 @@ const ResultsPageUpdated = () => {
           .results-photo-grid > div:first-child { display: flex; flex-direction: column; align-items: center; }
           .results-contact-grid { grid-template-columns: 1fr !important; }
           .results-actions { flex-direction: column; }
-          .results-actions button { width: 100%; }
+          .results-actions button, .results-actions a { width: 100%; text-align: center; }
           .results-verification-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>

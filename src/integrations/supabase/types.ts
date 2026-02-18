@@ -249,90 +249,179 @@ export type Database = {
         }
         Relationships: []
       }
+      record_merge_log: {
+        Row: {
+          final_record_id: string | null
+          id: string
+          match_confidence: number | null
+          match_criteria: string[] | null
+          matched_at: string | null
+          matched_by: string | null
+          source_1_data: Json | null
+          source_1_type: string | null
+          source_2_data: Json | null
+          source_2_type: string | null
+        }
+        Insert: {
+          final_record_id?: string | null
+          id?: string
+          match_confidence?: number | null
+          match_criteria?: string[] | null
+          matched_at?: string | null
+          matched_by?: string | null
+          source_1_data?: Json | null
+          source_1_type?: string | null
+          source_2_data?: Json | null
+          source_2_type?: string | null
+        }
+        Update: {
+          final_record_id?: string | null
+          id?: string
+          match_confidence?: number | null
+          match_criteria?: string[] | null
+          matched_at?: string | null
+          matched_by?: string | null
+          source_1_data?: Json | null
+          source_1_type?: string | null
+          source_2_data?: Json | null
+          source_2_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "record_merge_log_final_record_id_fkey"
+            columns: ["final_record_id"]
+            isOneToOne: false
+            referencedRelation: "wanted_persons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       wanted_persons: {
         Row: {
           added_at: string
+          alleged_offenses: string[] | null
           case_number: string | null
           charges: string
           court_case_number: string | null
+          court_case_numbers: string[] | null
           court_name: string | null
           date_wanted: string | null
           detail_page_url: string | null
           first_name: string | null
+          found_in_gazettes: boolean | null
+          found_in_saflii: boolean | null
+          found_in_saps: boolean | null
           full_name: string
+          gazette_notice_refs: string[] | null
           id: string
           id_number: string | null
           identity_confidence_score: number | null
           is_active: boolean | null
+          last_known_address: string | null
           last_known_location: string | null
           last_verified_at: string | null
           legal_status: string | null
+          merged_from_records: string[] | null
+          name_normalized: string | null
+          needs_human_review: boolean | null
           offense_category: string | null
+          photo_source: string | null
           photo_url: string | null
           police_station: string | null
           protection_order_number: string | null
+          protection_order_refs: string[] | null
           province: string | null
           record_status: string | null
           requires_human_verification: boolean | null
           risk_level: string | null
+          sa_id_partial: string | null
+          saps_case_numbers: string[] | null
           source_url: string | null
           surname: string | null
           updated_at: string
         }
         Insert: {
           added_at?: string
+          alleged_offenses?: string[] | null
           case_number?: string | null
           charges: string
           court_case_number?: string | null
+          court_case_numbers?: string[] | null
           court_name?: string | null
           date_wanted?: string | null
           detail_page_url?: string | null
           first_name?: string | null
+          found_in_gazettes?: boolean | null
+          found_in_saflii?: boolean | null
+          found_in_saps?: boolean | null
           full_name: string
+          gazette_notice_refs?: string[] | null
           id?: string
           id_number?: string | null
           identity_confidence_score?: number | null
           is_active?: boolean | null
+          last_known_address?: string | null
           last_known_location?: string | null
           last_verified_at?: string | null
           legal_status?: string | null
+          merged_from_records?: string[] | null
+          name_normalized?: string | null
+          needs_human_review?: boolean | null
           offense_category?: string | null
+          photo_source?: string | null
           photo_url?: string | null
           police_station?: string | null
           protection_order_number?: string | null
+          protection_order_refs?: string[] | null
           province?: string | null
           record_status?: string | null
           requires_human_verification?: boolean | null
           risk_level?: string | null
+          sa_id_partial?: string | null
+          saps_case_numbers?: string[] | null
           source_url?: string | null
           surname?: string | null
           updated_at?: string
         }
         Update: {
           added_at?: string
+          alleged_offenses?: string[] | null
           case_number?: string | null
           charges?: string
           court_case_number?: string | null
+          court_case_numbers?: string[] | null
           court_name?: string | null
           date_wanted?: string | null
           detail_page_url?: string | null
           first_name?: string | null
+          found_in_gazettes?: boolean | null
+          found_in_saflii?: boolean | null
+          found_in_saps?: boolean | null
           full_name?: string
+          gazette_notice_refs?: string[] | null
           id?: string
           id_number?: string | null
           identity_confidence_score?: number | null
           is_active?: boolean | null
+          last_known_address?: string | null
           last_known_location?: string | null
           last_verified_at?: string | null
           legal_status?: string | null
+          merged_from_records?: string[] | null
+          name_normalized?: string | null
+          needs_human_review?: boolean | null
           offense_category?: string | null
+          photo_source?: string | null
           photo_url?: string | null
           police_station?: string | null
           protection_order_number?: string | null
+          protection_order_refs?: string[] | null
           province?: string | null
           record_status?: string | null
           requires_human_verification?: boolean | null
           risk_level?: string | null
+          sa_id_partial?: string | null
+          saps_case_numbers?: string[] | null
           source_url?: string | null
           surname?: string | null
           updated_at?: string

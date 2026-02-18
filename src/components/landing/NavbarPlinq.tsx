@@ -23,7 +23,7 @@ const NavbarPlinq = () => {
 
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50" style={{ background: '#F7F4F0', borderBottom: '1.5px solid #0D0B0E', height: '60px' }}>
+      <nav className="fixed top-0 left-0 right-0 z-50" style={{ background: '#F7F4F0', borderBottom: '1.5px solid #D6D3CD', height: '60px' }}>
         <div className="max-w-[1280px] mx-auto px-6 h-full">
           <div className="flex items-center justify-between h-full">
             {/* Logo */}
@@ -31,18 +31,11 @@ const NavbarPlinq = () => {
               <div className="relative" style={{ width: 28, height: 28 }}>
                 <div style={{
                   width: 28, height: 28,
-                  background: '#0D0B0E',
-                  clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }} />
-                <div style={{
-                  width: 12, height: 12,
                   background: '#7C3AED',
                   clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
-                  position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
                 }} />
               </div>
-              <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 18, letterSpacing: '0.1em', color: '#0D0B0E' }}>
+              <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 18, letterSpacing: '0.1em', color: '#2D2235' }}>
                 REDFLAQ
               </span>
             </a>
@@ -54,7 +47,7 @@ const NavbarPlinq = () => {
                   key={link.label}
                   onClick={() => scrollToSection(link.href)}
                   style={{ color: '#4B4453', fontSize: 14, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', fontFamily: "'Syne', sans-serif", background: 'none', border: 'none', cursor: 'pointer' }}
-                  className="hover:!text-[#0D0B0E] transition-colors"
+                  className="hover:!text-[#7C3AED] transition-colors"
                 >
                   {link.label}
                 </button>
@@ -66,11 +59,11 @@ const NavbarPlinq = () => {
               <button
                 onClick={() => setIsPaymentModalOpen(true)}
                 style={{
-                  background: '#0D0B0E', color: '#F7F4F0', padding: '8px 20px',
+                  background: '#7C3AED', color: 'white', padding: '8px 20px',
                   fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13,
                   letterSpacing: '0.08em', textTransform: 'uppercase', border: 'none', cursor: 'pointer',
                 }}
-                className="hover:!bg-[#7C3AED] transition-colors"
+                className="hover:!bg-[#6D28D9] transition-colors"
               >
                 Verify Now
               </button>
@@ -78,21 +71,21 @@ const NavbarPlinq = () => {
 
             {/* Mobile Menu Button */}
             <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden p-2">
-              {isMenuOpen ? <X className="h-6 w-6" style={{ color: '#0D0B0E' }} /> : <Menu className="h-6 w-6" style={{ color: '#0D0B0E' }} />}
+              {isMenuOpen ? <X className="h-6 w-6" style={{ color: '#2D2235' }} /> : <Menu className="h-6 w-6" style={{ color: '#2D2235' }} />}
             </button>
           </div>
         </div>
 
         {/* Mobile Menu */}
         {isMenuOpen && (
-          <div className="md:hidden" style={{ borderTop: '1.5px solid #0D0B0E', background: '#F7F4F0' }}>
+          <div className="md:hidden" style={{ borderTop: '1.5px solid #D6D3CD', background: '#F7F4F0' }}>
             <div className="max-w-[1280px] mx-auto px-6 py-4 space-y-4">
               {navLinks.map((link) => (
                 <button
                   key={link.label}
                   onClick={() => scrollToSection(link.href)}
                   className="block w-full text-left py-2"
-                  style={{ color: '#0D0B0E', fontFamily: "'Syne', sans-serif", fontWeight: 600, textTransform: 'uppercase', fontSize: 14, letterSpacing: '0.05em' }}
+                  style={{ color: '#2D2235', fontFamily: "'Syne', sans-serif", fontWeight: 600, textTransform: 'uppercase', fontSize: 14, letterSpacing: '0.05em' }}
                 >
                   {link.label}
                 </button>
@@ -100,7 +93,7 @@ const NavbarPlinq = () => {
               <button
                 onClick={() => { setIsMenuOpen(false); setIsPaymentModalOpen(true); }}
                 className="w-full"
-                style={{ background: '#0D0B0E', color: '#F7F4F0', padding: '12px', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.08em', textTransform: 'uppercase', border: 'none' }}
+                style={{ background: '#7C3AED', color: 'white', padding: '12px', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.08em', textTransform: 'uppercase', border: 'none' }}
               >
                 Verify Now
               </button>

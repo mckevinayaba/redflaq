@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Shield, Heart, Users } from "lucide-react";
 import { PaymentModal } from "@/components/PaymentModal";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
@@ -8,26 +9,26 @@ const CommunitySectionSA = () => {
 
   return (
     <>
-      <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#0D0B0E', padding: '80px 60px', overflow: 'hidden' }}>
+      <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#FAF5FF', padding: '80px 60px', overflow: 'hidden' }}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center" style={{ maxWidth: 1200, margin: '0 auto' }}>
           {/* LEFT */}
           <div>
-            <div className="section-tag" style={{ color: 'rgba(255,255,255,0.4)', marginBottom: 24 }}>
+            <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 24 }}>
               Built For Women. Available To All.
             </div>
 
             <h2 style={{
               fontFamily: "'DM Serif Display', serif",
-              fontSize: 'clamp(32px, 3.5vw, 48px)', color: 'white',
+              fontSize: 'clamp(32px, 3.5vw, 48px)', color: '#2D2235',
               lineHeight: 1.15, marginBottom: 24,
             }}>
               Before you give him a spare key, give yourself{" "}
-              <em style={{ fontStyle: 'italic', color: '#DDD6FE' }}>clarity.</em>
+              <em style={{ fontStyle: 'italic', color: '#7C3AED' }}>clarity.</em>
             </h2>
 
             <p style={{
               fontFamily: "'Syne', sans-serif", fontSize: 16,
-              color: 'rgba(255,255,255,0.55)', lineHeight: 1.8, marginBottom: 32,
+              color: '#78716C', lineHeight: 1.8, marginBottom: 32,
             }}>
               RedFlaq was created in response to South Africa's GBV crisis.
               Women adopt this platform first because the cost of uncertainty is highest for them.
@@ -42,22 +43,19 @@ const CommunitySectionSA = () => {
             </button>
           </div>
 
-          {/* RIGHT - photo grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '220px 220px', gap: 8, height: 440 }}>
-            <div className="group" style={{ gridRow: '1 / 3', overflow: 'hidden' }}>
-              <img src="https://images.unsplash.com/photo-1589156280159-27a852cc18c4?w=600&q=80" alt="South African woman"
-                className="transition-all duration-400 group-hover:grayscale-0 group-hover:brightness-100"
-                style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(30%) brightness(0.8)' }} />
+          {/* RIGHT - Abstract icons grid instead of photos */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '200px 200px', gap: 16, height: 416 }}>
+            <div style={{ gridRow: '1 / 3', background: 'white', border: '1.5px solid #EDE9FE', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
+              <Shield className="h-20 w-20" style={{ color: '#7C3AED' }} />
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#7C3AED' }}>PROTECT</span>
             </div>
-            <div className="group" style={{ overflow: 'hidden' }}>
-              <img src="https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?w=400&q=80" alt="Woman"
-                className="transition-all duration-400 group-hover:grayscale-0 group-hover:brightness-100"
-                style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(30%) brightness(0.8)' }} />
+            <div style={{ background: 'white', border: '1.5px solid #EDE9FE', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+              <Heart className="h-12 w-12" style={{ color: '#7C3AED' }} />
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#7C3AED' }}>CARE</span>
             </div>
-            <div className="group" style={{ overflow: 'hidden' }}>
-              <img src="https://images.unsplash.com/photo-1611432579699-484f7990b127?w=400&q=80" alt="Professional woman"
-                className="transition-all duration-400 group-hover:grayscale-0 group-hover:brightness-100"
-                style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(30%) brightness(0.8)' }} />
+            <div style={{ background: 'white', border: '1.5px solid #EDE9FE', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+              <Users className="h-12 w-12" style={{ color: '#7C3AED' }} />
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#7C3AED' }}>COMMUNITY</span>
             </div>
           </div>
         </div>

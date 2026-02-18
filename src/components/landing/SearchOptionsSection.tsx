@@ -12,8 +12,8 @@ const SearchOptionsSection = () => {
   const searchReasons = ["Potential romantic partner", "Employee verification", "Childcare provider", "Tenant screening", "Business partner", "Other legitimate purpose"];
 
   const inputStyle: React.CSSProperties = {
-    background: 'white', border: '1.5px solid #0D0B0E', padding: '14px 16px',
-    fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#0D0B0E',
+    background: 'white', border: '1.5px solid #D6D3CD', padding: '14px 16px',
+    fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#2D2235',
     borderRadius: 0, width: '100%', outline: 'none',
   };
 
@@ -33,7 +33,7 @@ const SearchOptionsSection = () => {
 
           <h2 style={{
             fontFamily: "'DM Serif Display', serif",
-            fontSize: 'clamp(36px, 4vw, 52px)', maxWidth: 600, color: '#0D0B0E', marginBottom: 16,
+            fontSize: 'clamp(36px, 4vw, 52px)', maxWidth: 600, color: '#2D2235', marginBottom: 16,
           }}>
             Check a person using their full name and province.
           </h2>
@@ -43,11 +43,11 @@ const SearchOptionsSection = () => {
           </p>
 
           {/* Search form */}
-          <div style={{ background: '#EDE9E3', border: '1.5px solid #0D0B0E', padding: 40 }}>
-            <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, color: '#0D0B0E', marginBottom: 8 }}>
+          <div style={{ background: 'white', border: '1.5px solid #D6D3CD', padding: 40 }}>
+            <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, color: '#2D2235', marginBottom: 8 }}>
               Person Search
             </h3>
-            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#4B4453', marginBottom: 32 }}>
+            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', marginBottom: 32 }}>
               Results shown instantly and sent to your email. We're continuously improving accuracy, but no system can be perfect.
             </p>
 
@@ -109,12 +109,12 @@ const SearchOptionsSection = () => {
                 onClick={() => setIsPaymentModalOpen(true)}
                 disabled={!consentChecked}
                 style={{
-                  width: '100%', background: consentChecked ? '#0D0B0E' : '#9CA3AF', color: '#F7F4F0',
+                  width: '100%', background: consentChecked ? '#7C3AED' : '#9CA3AF', color: 'white',
                   padding: 18, fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 700,
                   letterSpacing: '0.05em', border: 'none', cursor: consentChecked ? 'pointer' : 'not-allowed',
                   transition: 'background 0.2s',
                 }}
-                className={consentChecked ? 'hover:!bg-[#7C3AED]' : ''}
+                className={consentChecked ? 'hover:!bg-[#6D28D9]' : ''}
               >
                 Verify Someone Now — R149
               </button>

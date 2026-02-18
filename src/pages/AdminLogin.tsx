@@ -34,6 +34,7 @@ const AdminLogin = () => {
       }
 
       localStorage.setItem("admin_authenticated", "true");
+      localStorage.setItem("adminPassword", password);
       toast({
         title: "Login successful",
         description: "Welcome to the admin panel",

@@ -171,9 +171,7 @@ export default function SearchForm() {
         clearInterval(progressInterval);
         setProgress(100);
 
-        sessionStorage.setItem("searchType", "verification");
-        sessionStorage.setItem("searchResult", JSON.stringify(searchResult));
-
+        // Results are now persisted server-side in the searches table
         setTimeout(() => {
           navigate(`/results?search_id=${searchResult.searchId}`);
         }, 1000);

@@ -3,7 +3,7 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.7';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
 interface SearchParams {
@@ -38,6 +38,26 @@ function parseCaseNumber(input: string): { type: string; normalized: string } {
   return { type: 'unknown', normalized: trimmed };
 }
 
+function categorizeOffense(charges: string): string[] {
+  const categories: string[] = [];
+  const lower = charges.toLowerCase();
+  
+  if (/murder|homicide|culpable/.test(lower)) categories.push('Murder / Homicide');
+  if (/rape|sexual|indecent|molestation/.test(lower)) categories.push('Sexual Offense');
+  if (/assault|gbh|bodily harm|violence|attack/.test(lower)) categories.push('Assault / Violence');
+  if (/robbery|theft|steal|burglary|housebreaking|larceny/.test(lower)) categories.push('Robbery / Theft');
+  if (/fraud|forgery|corruption|bribery|embezzlement|money laundering/.test(lower)) categories.push('Fraud / Financial Crime');
+  if (/drug|narcotic|dagga|cannabis|cocaine|heroin|substance/.test(lower)) categories.push('Drug Offense');
+  if (/kidnap|abduct|trafficking/.test(lower)) categories.push('Kidnapping / Trafficking');
+  if (/arson|fire|malicious damage/.test(lower)) categories.push('Arson / Malicious Damage');
+  if (/firearm|weapon|gun|ammunition/.test(lower)) categories.push('Firearms / Weapons');
+  if (/domestic|protection order|gbv/.test(lower)) categories.push('Domestic / GBV');
+  if (/sanction|terror|proliferation|fic/.test(lower)) categories.push('Sanctions / FIC');
+  
+  if (categories.length === 0) categories.push('Other Criminal Offense');
+  return categories;
+}
+
 function getRecommendation(matches: any[]): string {
   if (matches.length === 0) {
     return "No records found. This person may have a clean record.";
@@ -54,6 +74,16 @@ function getRecommendation(matches: any[]): string {
   return "Multiple weak matches. Human verification strongly recommended.";
 }
 
+function getRiskLevel(matches: any[]): string {
+  if (matches.length === 0) return 'GREEN';
+  const hasViolent = matches.some((m: any) => 
+    /murder|rape|sexual|assault|violence|attack|kidnap|firearm/i.test(m.charges || '')
+  );
+  if (hasViolent) return 'RED';
+  if (matches.length > 1 || matches[0]?.confidence >= 70) return 'ORANGE';
+  return 'YELLOW';
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -63,7 +93,6 @@ serve(async (req) => {
     const params: SearchParams = await req.json();
     const { full_name, sa_id_number, date_of_birth, province, case_number, police_station, payment_id } = params;
 
-    // Validate: at least one parameter
     const hasAny = [full_name, sa_id_number, date_of_birth, case_number].some(v => v && v.length > 0);
     if (!hasAny) {
       return new Response(
@@ -98,7 +127,6 @@ serve(async (req) => {
         );
       }
 
-      // Deduct credit using service role (bypasses RLS)
       const { error: updateErr } = await supabase
         .from('manual_payments')
         .update({ credits_used: payment.credits_used + 1 })
@@ -116,7 +144,7 @@ serve(async (req) => {
     let matches: any[] = [];
     const searchStrategies: string[] = [];
 
-    // Strategy 1: Case Number (Highest Confidence)
+    // Strategy 1: Case Number
     if (case_number) {
       searchStrategies.push('case_number');
       const parsed = parseCaseNumber(case_number);
@@ -132,7 +160,6 @@ serve(async (req) => {
           matches.push(...sapsMatches.map(m => ({ ...m, match_type: 'case_number_exact', confidence: 95 })));
         }
 
-        // Fallback: search legacy case_number field
         if (matches.length === 0) {
           const { data: legacyMatches } = await supabase
             .from('wanted_persons')
@@ -157,7 +184,6 @@ serve(async (req) => {
           matches.push(...courtMatches.map(m => ({ ...m, match_type: 'court_case_exact', confidence: 93 })));
         }
 
-        // Fallback: search legacy court_case_number field
         if (matches.length === 0) {
           const { data: legacyCourt } = await supabase
             .from('wanted_persons')
@@ -172,7 +198,7 @@ serve(async (req) => {
       }
     }
 
-    // Strategy 2: ID Number (High Confidence)
+    // Strategy 2: ID Number
     if (sa_id_number && matches.length === 0) {
       searchStrategies.push('id_number');
 
@@ -186,7 +212,6 @@ serve(async (req) => {
         matches.push(...idMatches.map(m => ({ ...m, match_type: 'id_exact', confidence: 90 })));
       }
 
-      // Partial ID (last 4 digits)
       if (matches.length === 0 && sa_id_number.length >= 4) {
         const last4 = sa_id_number.slice(-4);
         const { data: partialMatches } = await supabase
@@ -201,7 +226,7 @@ serve(async (req) => {
       }
     }
 
-    // Strategy 3: Name + Filters (Medium Confidence)
+    // Strategy 3: Name + Filters
     if (full_name && matches.length === 0) {
       searchStrategies.push('name_filtered');
       const normalized = normalizeName(full_name);
@@ -236,7 +261,7 @@ serve(async (req) => {
       }
     }
 
-    // Strategy 4: Fuzzy Name (Low Confidence)
+    // Strategy 4: Fuzzy Name
     if (full_name && matches.length === 0) {
       searchStrategies.push('name_fuzzy');
 
@@ -260,7 +285,7 @@ serve(async (req) => {
       }
     }
 
-    // Deduplicate by ID
+    // Deduplicate
     const seen = new Set<string>();
     matches = matches.filter(m => {
       if (seen.has(m.id)) return false;
@@ -268,15 +293,20 @@ serve(async (req) => {
       return true;
     });
 
-    // Sort by confidence descending
+    // Sort by confidence
     matches.sort((a, b) => b.confidence - a.confidence);
 
-    // Determine if human verification needed
+    // Enrich with offense categories
+    matches = matches.map(m => ({
+      ...m,
+      offense_categories_derived: categorizeOffense(m.charges || ''),
+    }));
+
     const needsHumanReview =
       matches.length > 3 ||
       (matches.length > 0 && matches[0].confidence < 70);
 
-    // Track duplicate groups for analytics
+    // Log duplicate groups
     if (matches.length > 1 && full_name) {
       try {
         await supabase.from('duplicate_name_groups').insert({
@@ -291,6 +321,31 @@ serve(async (req) => {
     }
 
     const searchId = `search-${Date.now()}-${Math.random().toString(36).substring(7)}`;
+    const riskLevel = getRiskLevel(matches);
+    const recommendation = getRecommendation(matches);
+
+    // Persist search results to database
+    try {
+      await supabase.from('searches').insert({
+        search_id: searchId,
+        payment_id: payment_id || null,
+        search_name: full_name || null,
+        search_id_number: sa_id_number || null,
+        search_dob: date_of_birth || null,
+        search_province: province || null,
+        search_case_number: case_number || null,
+        results: matches,
+        matches_found: matches.length,
+        risk_level: riskLevel,
+        is_wanted: matches.length > 0,
+        search_strategies: searchStrategies,
+        recommendation,
+        needs_human_verification: needsHumanReview,
+        searched_at: new Date().toISOString(),
+      });
+    } catch (e) {
+      console.error('Failed to persist search:', e);
+    }
 
     console.log(`Multi-parameter search: strategies=${searchStrategies.join(',')}, matches=${matches.length}`);
 
@@ -302,10 +357,9 @@ serve(async (req) => {
         search_strategies_used: searchStrategies,
         results: matches,
         needs_human_verification: needsHumanReview,
-        recommendation: getRecommendation(matches),
-        // Backward-compatible fields
+        recommendation,
         isWanted: matches.length > 0,
-        riskLevel: matches.length > 0 ? 'RED' : 'GREEN',
+        riskLevel,
         riskScore: matches.length > 0 ? 100 : 0,
         wantedPersonsCount: matches.length,
         wantedPersons: matches,

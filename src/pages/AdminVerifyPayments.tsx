@@ -58,21 +58,15 @@ export default function AdminVerifyPayments() {
 
   const handleVerify = async (paymentId: string, email: string) => {
     try {
-      const { error } = await supabase
-        .from('manual_payments')
-        .update({
-          status: 'verified',
-          verified_at: new Date().toISOString(),
-          verified_by: 'admin'
-        })
-        .eq('payment_id', paymentId);
+      const adminPassword = localStorage.getItem('adminPassword');
+      const { data, error } = await supabase.functions.invoke('admin-verify-payment', {
+        body: { payment_id: paymentId, action: 'verify', admin_password: adminPassword }
+      });
 
       if (error) throw error;
+      if (!data?.success) throw new Error(data?.error || 'Failed');
 
-      // Generate search URL
       const searchUrl = `${window.location.origin}/search-form?payment_id=${paymentId}`;
-
-      // Copy to clipboard
       await navigator.clipboard.writeText(searchUrl);
 
       toast({
@@ -93,16 +87,13 @@ export default function AdminVerifyPayments() {
 
   const handleReject = async (paymentId: string) => {
     try {
-      const { error } = await supabase
-        .from('manual_payments')
-        .update({
-          status: 'rejected',
-          verified_at: new Date().toISOString(),
-          verified_by: 'admin'
-        })
-        .eq('payment_id', paymentId);
+      const adminPassword = localStorage.getItem('adminPassword');
+      const { data, error } = await supabase.functions.invoke('admin-verify-payment', {
+        body: { payment_id: paymentId, action: 'reject', admin_password: adminPassword }
+      });
 
       if (error) throw error;
+      if (!data?.success) throw new Error(data?.error || 'Failed');
 
       toast({
         title: 'Payment Rejected',

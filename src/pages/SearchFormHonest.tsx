@@ -150,33 +150,14 @@ export default function SearchForm() {
 
     try {
       const paymentId = searchParams.get("payment_id");
-      
-      // Fetch and deduct credit
-      const { data: currentPayment, error: fetchError } = await supabase
-        .from('manual_payments')
-        .select('credits_used, search_credits')
-        .eq('payment_id', paymentId)
-        .single();
 
-      if (fetchError) throw new Error('Failed to fetch payment data');
-
-      if (currentPayment.credits_used >= currentPayment.search_credits) {
-        throw new Error('No credits remaining');
-      }
-
-      const { error: updateError } = await supabase
-        .from('manual_payments')
-        .update({ credits_used: currentPayment.credits_used + 1 })
-        .eq('payment_id', paymentId);
-
-      if (updateError) throw new Error('Failed to use credit');
-
-      // Build search query using multi-parameter search
+      // Build search query - credit deduction is now handled server-side
       const searchBody = {
         full_name: sanitizeInput(fullName).trim(),
         date_of_birth: dateOfBirth || undefined,
         province: province && province !== "Select province (optional)" ? province : undefined,
         case_number: courtReference ? sanitizeInput(courtReference).trim() : undefined,
+        payment_id: paymentId || undefined,
       };
 
       const { data: searchResult, error } = await supabase.functions.invoke(

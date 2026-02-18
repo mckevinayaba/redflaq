@@ -3,6 +3,8 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { DisputeModal } from "@/components/DisputeModal";
 import { Progress } from "@/components/ui/progress";
+import IdentityMatchSelector from "@/components/IdentityMatchSelector";
+import { calculateIdentityConfidence, getConfidenceLevel, type SearchInput, type PersonRecord } from "@/utils/identityConfidence";
 
 interface WantedPerson {
   id: string;
@@ -20,6 +22,8 @@ interface WantedPerson {
   updated_at?: string;
   date_wanted?: string;
   court_name?: string;
+  identity_confidence_score?: number;
+  requires_human_verification?: boolean;
 }
 
 interface SearchResultData {
@@ -34,6 +38,7 @@ interface SearchResultData {
   wantedPersonsCount: number;
   wantedPersons: WantedPerson[];
   searchedAt: string;
+  hasMultipleMatches?: boolean;
 }
 
 const getConfidence = (person: WantedPerson, idNumber?: string) => {
@@ -63,6 +68,8 @@ const ResultsPageUpdated = () => {
   const [results, setResults] = useState<SearchResultData | null>(null);
   const [disputeRecord, setDisputeRecord] = useState<WantedPerson | null>(null);
   const [isDisputeModalOpen, setIsDisputeModalOpen] = useState(false);
+  const [selectedMatch, setSelectedMatch] = useState<WantedPerson | null>(null);
+  const [showMatchSelector, setShowMatchSelector] = useState(false);
   const searchId = searchParams.get("search_id");
 
   useEffect(() => {
@@ -93,6 +100,12 @@ const ResultsPageUpdated = () => {
       });
     }
     setLoading(false);
+
+    // Auto-show match selector for multiple matches
+    const parsed = storedResult ? JSON.parse(storedResult) : null;
+    if (parsed && parsed.hasMultipleMatches && parsed.wantedPersonsCount > 1) {
+      setShowMatchSelector(true);
+    }
   }, [searchId, navigate]);
 
   const handleDownload = async () => {
@@ -135,8 +148,27 @@ const ResultsPageUpdated = () => {
           SEARCH RESULTS · {(results.searchType || 'person').toUpperCase().replace('_', ' ')} · {searchDate} {searchTime}
         </p>
 
-        {/* Multiple Matches Warning */}
-        {isMultiple && (
+        {/* Identity Match Selector for multiple matches */}
+        {showMatchSelector && isMultiple && !selectedMatch && (
+          <IdentityMatchSelector
+            matches={results.wantedPersons as unknown as PersonRecord[]}
+            searchInput={{
+              search_name: results.searchIdentifier || results.fullName || '',
+              search_id: results.idNumber,
+            }}
+            onSelectMatch={(match) => {
+              setSelectedMatch(match as unknown as WantedPerson);
+              setShowMatchSelector(false);
+            }}
+            onNoneMatch={() => {
+              setShowMatchSelector(false);
+              toast.info("If none of these match, the person may not have public records.");
+            }}
+          />
+        )}
+
+        {/* Multiple Matches Warning (shown after selector dismissed) */}
+        {isMultiple && !showMatchSelector && (
           <div style={{ background: '#FEF2F2', border: '2px solid #DC2626', padding: 32, marginBottom: 32 }}>
             <span style={{ fontSize: 40 }}>⚠️</span>
             <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, color: '#DC2626', margin: '12px 0' }}>

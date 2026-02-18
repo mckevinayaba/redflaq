@@ -61,6 +61,92 @@ export type Database = {
           },
         ]
       }
+      duplicate_name_groups: {
+        Row: {
+          created_at: string | null
+          flagged_for_review: boolean | null
+          id: string
+          match_count: number
+          normalized_name: string
+          person_ids: string[]
+        }
+        Insert: {
+          created_at?: string | null
+          flagged_for_review?: boolean | null
+          id?: string
+          match_count: number
+          normalized_name: string
+          person_ids: string[]
+        }
+        Update: {
+          created_at?: string | null
+          flagged_for_review?: boolean | null
+          id?: string
+          match_count?: number
+          normalized_name?: string
+          person_ids?: string[]
+        }
+        Relationships: []
+      }
+      human_verification_requests: {
+        Row: {
+          additional_info: string | null
+          completed_at: string | null
+          created_at: string | null
+          id: string
+          payment_id: string | null
+          possible_match_ids: string[] | null
+          search_dob: string | null
+          search_id_number: string | null
+          search_name: string
+          search_province: string | null
+          status: string | null
+          verification_notes: string | null
+          verified_by_admin: string | null
+          verified_match_id: string | null
+        }
+        Insert: {
+          additional_info?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          payment_id?: string | null
+          possible_match_ids?: string[] | null
+          search_dob?: string | null
+          search_id_number?: string | null
+          search_name: string
+          search_province?: string | null
+          status?: string | null
+          verification_notes?: string | null
+          verified_by_admin?: string | null
+          verified_match_id?: string | null
+        }
+        Update: {
+          additional_info?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          payment_id?: string | null
+          possible_match_ids?: string[] | null
+          search_dob?: string | null
+          search_id_number?: string | null
+          search_name?: string
+          search_province?: string | null
+          status?: string | null
+          verification_notes?: string | null
+          verified_by_admin?: string | null
+          verified_match_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "human_verification_requests_verified_match_id_fkey"
+            columns: ["verified_match_id"]
+            isOneToOne: false
+            referencedRelation: "wanted_persons"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       manual_payments: {
         Row: {
           amount: number
@@ -176,6 +262,7 @@ export type Database = {
           full_name: string
           id: string
           id_number: string | null
+          identity_confidence_score: number | null
           is_active: boolean | null
           last_known_location: string | null
           last_verified_at: string | null
@@ -186,6 +273,7 @@ export type Database = {
           protection_order_number: string | null
           province: string | null
           record_status: string | null
+          requires_human_verification: boolean | null
           risk_level: string | null
           source_url: string | null
           surname: string | null
@@ -203,6 +291,7 @@ export type Database = {
           full_name: string
           id?: string
           id_number?: string | null
+          identity_confidence_score?: number | null
           is_active?: boolean | null
           last_known_location?: string | null
           last_verified_at?: string | null
@@ -213,6 +302,7 @@ export type Database = {
           protection_order_number?: string | null
           province?: string | null
           record_status?: string | null
+          requires_human_verification?: boolean | null
           risk_level?: string | null
           source_url?: string | null
           surname?: string | null
@@ -230,6 +320,7 @@ export type Database = {
           full_name?: string
           id?: string
           id_number?: string | null
+          identity_confidence_score?: number | null
           is_active?: boolean | null
           last_known_location?: string | null
           last_verified_at?: string | null
@@ -240,6 +331,7 @@ export type Database = {
           protection_order_number?: string | null
           province?: string | null
           record_status?: string | null
+          requires_human_verification?: boolean | null
           risk_level?: string | null
           source_url?: string | null
           surname?: string | null

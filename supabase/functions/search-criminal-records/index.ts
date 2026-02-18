@@ -9,33 +9,76 @@ const corsHeaders = {
 
 interface SearchRequest {
   searchType: 'person' | 'police_case' | 'protection_order' | 'court_case' | 'active_warrant' | 'verification';
-  // Person search fields
   firstName?: string;
   middleNames?: string;
   surname?: string;
   idNumber?: string;
-  // New verification fields (honest flow)
   fullName?: string;
   dateOfBirth?: string;
   courtReference?: string;
-  // Police case fields
   caseNumber?: string;
   policeStation?: string;
   relationship?: string;
-  // Protection order fields
   protectionOrderNumber?: string;
   issuingCourt?: string;
   orderDate?: string;
-  // Court case fields
   courtCaseNumber?: string;
   courtName?: string;
   caseType?: string;
-  // Active warrant fields
   province?: string;
 }
 
+function normalizeName(name: string): string {
+  return name
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, ' ')
+    .replace(/[-]/g, ' ');
+}
+
+function calculateConfidence(
+  record: any,
+  searchName: string,
+  searchId?: string,
+  searchDob?: string,
+  searchProvince?: string
+): number {
+  let score = 0;
+  const normalizedRecord = normalizeName(record.full_name);
+  const normalizedSearch = normalizeName(searchName);
+
+  if (normalizedRecord === normalizedSearch) {
+    score += 20;
+  } else if (normalizedRecord.includes(normalizedSearch) || normalizedSearch.includes(normalizedRecord)) {
+    score += 10;
+  }
+
+  if (record.id_number && searchId) {
+    if (record.id_number === searchId) {
+      score += 30;
+    } else if (record.id_number.slice(-4) === searchId.slice(-4)) {
+      score += 25;
+    }
+  }
+
+  if (record.date_wanted && searchDob && record.date_wanted === searchDob) {
+    score += 30;
+  }
+
+  if (record.province && searchProvince) {
+    if (record.province.toLowerCase() === searchProvince.toLowerCase()) {
+      score += 15;
+    }
+  }
+
+  if (record.photo_url) {
+    score += 10;
+  }
+
+  return Math.min(score, 100);
+}
+
 serve(async (req) => {
-  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -50,41 +93,24 @@ serve(async (req) => {
       if (!firstName || !surname) {
         return new Response(
           JSON.stringify({ error: 'First name and surname are required for person search' }),
-          {
-            status: 400,
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          }
+          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
     } else if (searchType === 'active_warrant') {
-      // Legacy active_warrant - requires firstName and surname separately
       const { firstName, surname, fullName } = requestBody;
-      
-      // Support both old (firstName/surname) and new (fullName) formats
       if (!fullName && (!firstName || !surname)) {
         return new Response(
           JSON.stringify({ error: 'Name is required for warrant search' }),
-          {
-            status: 400,
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          }
+          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
     } else if (searchType === 'police_case' && !requestBody.caseNumber) {
       return new Response(
         JSON.stringify({ error: 'Case number is required' }),
-        {
-          status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        }
+        { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
-    } else if (searchType === 'protection_order' && !requestBody.protectionOrderNumber) {
-      // Allow empty - will default to searching for "protection" keyword
-    } else if (searchType === 'court_case' && !requestBody.courtCaseNumber) {
-      // Allow empty - will default to searching for "court" keyword
     }
 
-    // Initialize Supabase client
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
@@ -93,7 +119,6 @@ serve(async (req) => {
     let searchQuery: any;
     let searchIdentifier = '';
 
-    // Build search based on type
     if (searchType === 'person') {
       const { firstName, middleNames, surname, idNumber } = requestBody;
       const fullName = [firstName, middleNames, surname].filter(Boolean).join(' ').trim();
@@ -110,8 +135,6 @@ serve(async (req) => {
       if (middleNames) {
         searchConditions.push(`full_name.ilike.%${middleNames}%`);
       }
-      
-      // Prioritize ID number match
       if (idNumber) {
         searchConditions.push(`id_number.eq.${idNumber}`);
         searchIdentifier = `${fullName} (ID: ${idNumber})`;
@@ -124,15 +147,12 @@ serve(async (req) => {
         .or(searchConditions.join(','));
 
     } else if (searchType === 'active_warrant') {
-      // Active Warrant search - supports both old and new format
       const { firstName, surname, fullName, province, policeStation } = requestBody;
       
-      // Parse fullName if provided (new format), otherwise use firstName/surname
       let searchFirstName = firstName || '';
       let searchSurname = surname || '';
       
       if (fullName && !firstName && !surname) {
-        // Split fullName into parts
         const nameParts = fullName.trim().split(/\s+/);
         if (nameParts.length >= 2) {
           searchFirstName = nameParts[0];
@@ -145,21 +165,17 @@ serve(async (req) => {
       
       searchIdentifier = fullName || `${searchFirstName} ${searchSurname}`;
       
-      console.log(`Active warrant search: ${searchIdentifier}, Province: ${province || 'all'}, Station: ${policeStation || 'any'}`);
+      console.log(`Active warrant search: ${searchIdentifier}, Province: ${province || 'all'}`);
 
-      // Build search query - search in full_name field for flexibility
       searchQuery = supabase
         .from('wanted_persons')
         .select('*')
         .eq('is_active', true)
         .or(`full_name.ilike.%${searchFirstName}%,full_name.ilike.%${searchSurname}%`);
       
-      // Optional province filter
       if (province) {
         searchQuery = searchQuery.ilike('province', `%${province}%`);
       }
-      
-      // Optional police station filter
       if (policeStation) {
         searchQuery = searchQuery.ilike('police_station', `%${policeStation}%`);
       }
@@ -167,8 +183,6 @@ serve(async (req) => {
     } else if (searchType === 'police_case') {
       const { caseNumber, policeStation } = requestBody;
       searchIdentifier = caseNumber!;
-      
-      console.log(`Police case search: ${caseNumber}, Station: ${policeStation || 'not provided'}`);
       
       searchQuery = supabase
         .from('wanted_persons')
@@ -181,12 +195,9 @@ serve(async (req) => {
       }
       
     } else if (searchType === 'protection_order') {
-      const { protectionOrderNumber, issuingCourt } = requestBody;
-      // Search for "protection" keyword in charges field (e.g., "CONTRAVENTION OF PROTECTION ORDER")
+      const { protectionOrderNumber } = requestBody;
       const searchKeyword = protectionOrderNumber?.trim() || 'protection';
       searchIdentifier = `Protection Order: ${searchKeyword}`;
-      
-      console.log(`Protection order search: keyword "${searchKeyword}", Court: ${issuingCourt || 'not provided'}`);
       
       searchQuery = supabase
         .from('wanted_persons')
@@ -195,12 +206,9 @@ serve(async (req) => {
         .ilike('charges', `%${searchKeyword}%`);
         
     } else if (searchType === 'court_case') {
-      const { courtCaseNumber, courtName } = requestBody;
-      // Search for keyword in charges field (e.g., "FAILED TO COMPLY WITH A COURT ORDER")
+      const { courtCaseNumber } = requestBody;
       const searchKeyword = courtCaseNumber?.trim() || 'court';
       searchIdentifier = `Court Case: ${searchKeyword}`;
-      
-      console.log(`Court case search: keyword "${searchKeyword}", Court: ${courtName || 'not provided'}`);
       
       searchQuery = supabase
         .from('wanted_persons')
@@ -219,6 +227,36 @@ serve(async (req) => {
     const isWanted = wantedPersons.length > 0;
     console.log(`Found ${wantedPersons.length} wanted person matches`);
 
+    // Calculate confidence for each match
+    const searchName = searchIdentifier;
+    const searchIdNum = requestBody.idNumber;
+    const searchDob = requestBody.dateOfBirth;
+    const searchProv = requestBody.province;
+
+    const scoredPersons = wantedPersons.map(person => ({
+      ...person,
+      identity_confidence_score: calculateConfidence(person, searchName, searchIdNum, searchDob, searchProv),
+      requires_human_verification: calculateConfidence(person, searchName, searchIdNum, searchDob, searchProv) < 40,
+    }));
+
+    // Sort by confidence descending
+    scoredPersons.sort((a, b) => b.identity_confidence_score - a.identity_confidence_score);
+
+    // Track duplicate name groups if multiple matches
+    if (scoredPersons.length > 1) {
+      const normalized = normalizeName(searchName);
+      try {
+        await supabase.from('duplicate_name_groups').insert({
+          normalized_name: normalized,
+          person_ids: scoredPersons.map(p => p.id),
+          match_count: scoredPersons.length,
+          flagged_for_review: scoredPersons.some(p => p.requires_human_verification),
+        });
+      } catch (e) {
+        console.error('Failed to log duplicate name group:', e);
+      }
+    }
+
     // Calculate risk level
     let riskLevel = 'GREEN';
     let riskScore = 0;
@@ -228,10 +266,8 @@ serve(async (req) => {
       riskScore = 100;
     }
 
-    // Generate search ID
     const searchId = `search-${Date.now()}-${Math.random().toString(36).substring(7)}`;
 
-    // Return search results
     const response = {
       success: true,
       searchId,
@@ -241,21 +277,17 @@ serve(async (req) => {
       riskLevel,
       riskScore,
       isWanted,
-      wantedPersonsCount: wantedPersons.length,
-      wantedPersons,
+      wantedPersonsCount: scoredPersons.length,
+      wantedPersons: scoredPersons,
+      hasMultipleMatches: scoredPersons.length > 1,
       searchedAt: new Date().toISOString(),
     };
 
-    console.log(`Search complete. Risk level: ${riskLevel}`);
+    console.log(`Search complete. Risk level: ${riskLevel}, Matches: ${scoredPersons.length}`);
 
     return new Response(
       JSON.stringify(response),
-      {
-        headers: {
-          ...corsHeaders,
-          'Content-Type': 'application/json',
-        },
-      }
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
 
   } catch (error) {
@@ -265,13 +297,7 @@ serve(async (req) => {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error occurred',
       }),
-      {
-        status: 500,
-        headers: {
-          ...corsHeaders,
-          'Content-Type': 'application/json',
-        },
-      }
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );
   }
 });

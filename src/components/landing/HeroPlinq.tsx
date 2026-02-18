@@ -19,7 +19,7 @@ const HeroPlinq = () => {
               letterSpacing: '0.15em', textTransform: 'uppercase', color: '#7C3AED',
             }}>
               <span className="animate-pulse" style={{ width: 6, height: 6, borderRadius: '50%', background: '#7C3AED', display: 'inline-block' }} />
-              South Africa's Instant Public-Record Safety Check
+              South Africa's Instant Public‑Record Safety Check
             </div>
 
             {/* Headline */}
@@ -37,16 +37,16 @@ const HeroPlinq = () => {
               fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 400,
               lineHeight: 1.6, color: '#4B4453', maxWidth: 480, marginBottom: 16,
             }}>
-              With a full name and province, scan South Africa's public wanted and sanctions lists before you let someone into your life or business.
+              With a full name and province, RedFlaq scans South African public‑record warning lists so you can spot serious red flags before you let someone into your life or business.
             </p>
 
             <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#78716C', marginBottom: 32, maxWidth: 480 }}>
-              Not a full criminal record check. A fast, public red-flag check powered by official sources.
+              Not a full criminal record check. A fast public‑record safety check with detailed, downloadable reports.
             </p>
 
             {/* Value props */}
             <div className="flex flex-wrap gap-4" style={{ marginBottom: 32 }}>
-              {["Results in under 60 seconds", "100% Confidential", "POPIA Compliant", "Public records only"].map(item => (
+              {["Results in minutes", "Public records only", "100% Confidential", "POPIA‑aware use"].map(item => (
                 <div key={item} className="flex items-center gap-2" style={{ fontSize: 16, color: '#4B4453' }}>
                   <Check className="h-5 w-5" style={{ color: '#7C3AED' }} />
                   <span>{item}</span>
@@ -61,14 +61,14 @@ const HeroPlinq = () => {
                 fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 15,
                 border: '2px solid #0D0B0E', cursor: 'pointer',
               }}>
-                Verify Someone Now — R99
+                Verify Someone Now — R149
               </button>
-              <button onClick={() => document.getElementById('search')?.scrollIntoView({ behavior: 'smooth' })} className="hover:!bg-[#0D0B0E] hover:!text-[#F7F4F0] transition-colors" style={{
+              <button onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })} className="hover:!bg-[#0D0B0E] hover:!text-[#F7F4F0] transition-colors" style={{
                 background: 'transparent', color: '#0D0B0E', padding: '16px 36px',
                 fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 15,
                 border: '2px solid #0D0B0E', cursor: 'pointer',
               }}>
-                How It Works
+                See How It Works
               </button>
             </div>
 
@@ -76,7 +76,7 @@ const HeroPlinq = () => {
             <div className="flex items-center gap-3" style={{ marginTop: 48 }}>
               <div style={{ width: 40, height: 1, background: '#9CA3AF' }} />
               <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#9CA3AF', letterSpacing: '0.05em' }}>
-                FOR YOUR PROTECTION · NOT FOR HARASSMENT OR REVENGE · POPIA COMPLIANT
+                FOR YOUR PROTECTION · NOT FOR HARASSMENT OR REVENGE · POPIA‑AWARE
               </span>
             </div>
           </div>
@@ -112,8 +112,8 @@ const HeroPlinq = () => {
               </div>
 
               <div style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', padding: 24 }}>
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#DDD6FE' }}>PUBLIC RED-FLAG CHECK</div>
-                <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 48, color: 'white', lineHeight: 1, margin: '8px 0' }}>R99</div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#DDD6FE' }}>PUBLIC‑RECORD SAFETY CHECK</div>
+                <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 48, color: 'white', lineHeight: 1, margin: '8px 0' }}>R149</div>
                 <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.6)', lineHeight: 1.5 }}>
                   Scan public SAPS wanted and SA sanctions lists. Not a full criminal record check.
                 </p>

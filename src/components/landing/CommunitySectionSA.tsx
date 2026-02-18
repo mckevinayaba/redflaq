@@ -38,7 +38,7 @@ const CommunitySectionSA = () => {
               background: '#7C3AED', color: 'white', padding: '16px 32px',
               fontFamily: "'Syne', sans-serif", fontWeight: 700, border: 'none', cursor: 'pointer',
             }} className="hover:!bg-[#6D28D9] transition-colors">
-              Protect Yourself Now →
+              Protect Yourself Now — R149
             </button>
           </div>
 

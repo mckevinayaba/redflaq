@@ -4,9 +4,9 @@ const WhyRedflaqSection = () => {
   const { ref, isVisible } = useScrollReveal();
 
   const cards = [
-    { icon: "🛡️", title: "Public Records Only", desc: "We never create data. We surface what already exists in government databases." },
-    { icon: "🔒", title: "POPIA Compliant", desc: "Every search requires explicit consent and a legitimate stated purpose. Your rights protected." },
-    { icon: "✓", title: "Human Verified", desc: "No automated flags. Every result reviewed by a human before delivery to ensure accuracy." },
+    { icon: "🛡️", title: "Public Records Only", desc: "We never create data. We surface what already exists in public‑record warning lists and government‑published information." },
+    { icon: "🔒", title: "POPIA‑Aware", desc: "Every search requires a legitimate purpose and consent statement. We minimise data, protect your information, and respect everyone's rights." },
+    { icon: "✓", title: "Confidential Use", desc: "Searches are private. The person you check is not notified. Results are for your own safety decisions, not for public shaming or harassment." },
   ];
 
   return (
@@ -21,15 +21,15 @@ const WhyRedflaqSection = () => {
         </h2>
 
         <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 20, color: 'white', maxWidth: 800, margin: '0 auto', lineHeight: 1.8 }} className="space-y-6">
-          <p>South Africa has one of the highest GBV rates globally. A woman is killed by her intimate partner every 6 hours. Over 40,000 sexual offences are reported yearly.</p>
-          <p>Many of these tragedies had warning signs. Public criminal records. Court cases. Protection orders. Information that existed in government databases that nobody could access.</p>
-          <p>Why? Because traditional bundled background checks cost R2,000–R5,000+, required fingerprints at a police station, and took days to weeks. They were designed for corporations verifying employees, not for women making decisions about who to trust.</p>
+          <p>South Africa has one of the highest GBV rates globally. A woman is killed by her intimate partner every few hours. Tens of thousands of sexual offences are reported each year.</p>
+          <p>Many of these tragedies had warning signs: public wanted notices, sanctions, and other public‑record warnings. The information existed, but ordinary people couldn't access it easily or quickly.</p>
+          <p>Traditional background checks can be expensive, slow, and built for employers, not for women, families, or communities deciding who to trust. RedFlaq exists to make key public‑record warnings easier to search so more people can make informed safety decisions.</p>
         </div>
 
         {/* Founder quote */}
         <div style={{ maxWidth: 800, margin: '40px auto', borderLeft: '4px solid rgba(255,255,255,0.4)', paddingLeft: 24 }}>
           <p style={{ fontFamily: "'DM Serif Display', serif", fontSize: 22, fontStyle: 'italic', color: 'white', lineHeight: 1.6 }}>
-            "Traditional background check services exist, but they are slow, bureaucratic, and designed for businesses, not individuals. I built RedFlaq for instant access—women should be able to know if someone they are close to has a history of violence or fraud. At R99."
+            "Traditional background check services exist, but they are slow, bureaucratic, and designed for businesses, not individuals. I built RedFlaq so women and communities can access key public‑record warnings quickly and affordably."
           </p>
           <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 600, color: 'rgba(255,255,255,0.7)', marginTop: 16 }}>
             — McKevin Ayaba, Founder of RedFlaq
@@ -37,7 +37,7 @@ const WhyRedflaqSection = () => {
         </div>
 
         <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 20, color: 'white', maxWidth: 800, margin: '32px auto 0', lineHeight: 1.8 }}>
-          <p>RedFlaq searches SAPS, court records, and government gazettes—the same public databases corporations use for employee screening. We made them searchable by anyone for R99 in minutes, not weeks.</p>
+          <p>RedFlaq uses South African public‑record warning lists and other public information to make serious risks easier to spot — in minutes, not weeks.</p>
         </div>
 
         <p style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, fontStyle: 'italic', color: 'white', textAlign: 'center', marginTop: 40 }}>

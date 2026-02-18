@@ -1,9 +1,9 @@
 const TrustBarPlinq = () => {
   const stats = [
-    { value: "<5 min", label: "Avg Response", icon: "⏱️" },
+    { value: "Minutes", label: "Results Time", icon: "⏱️" },
     { value: "100%", label: "Confidential", icon: "🔒" },
-    { value: "POPIA", label: "Compliant", icon: "✓" },
-    { value: "R99", label: "Per Search", icon: "💰" },
+    { value: "POPIA", label: "Aware", icon: "✓" },
+    { value: "R149", label: "Per Check", icon: "💰" },
   ];
 
   return (

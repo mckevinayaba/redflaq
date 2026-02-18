@@ -11,24 +11,24 @@ const PricingPlinq = () => {
 
   const plans = [
     {
-      id: "single" as PackageType, label: "Single Search", title: "Pay As You Go",
-      sub: "For verifying one person", price: "R99", period: "ONCE OFF · NO SUBSCRIPTION",
-      features: ["Complete criminal record check", "SAPS, courts, gazette search", "Human-verified result", "PDF report with source links", "Valid for 30 days"],
-      cta: "Search Now", highlight: false,
+      id: "single" as PackageType, label: "One Safety Check", title: "One Safety Check",
+      sub: "Best for one‑off peace of mind", price: "R149", period: "ONCE OFF · NO SUBSCRIPTION",
+      features: ["1 detailed safety report", "Uses South African public records", "Downloadable PDF report", "Results shown instantly"],
+      cta: "Get 1 Check", highlight: false,
     },
     {
-      id: "3-pack" as PackageType, label: "3-Search Pack", title: "3-Search Pack",
-      sub: "Share with family or use over time", price: "R249", period: "R83 PER SEARCH",
-      savings: "SAVE R48 vs individual searches",
-      features: ["3 complete criminal checks", "All search types included", "Human-verified results", "PDF reports with source links", "Valid for 90 days", "Share credits with family"],
-      cta: "Get Started", highlight: true,
+      id: "3-pack" as PackageType, label: "Safety Pack", title: "Safety Pack (3 Checks)",
+      sub: "Ideal for dating or flat‑sharing", price: "R299", period: "R100 PER CHECK",
+      savings: "SAVE R148 vs individual checks",
+      features: ["3 public‑record safety reports", "Use over 90 days", "Downloadable PDFs for each search", "Results shown instantly"],
+      cta: "Get 3 Checks", highlight: true,
     },
     {
-      id: "5-pack" as PackageType, label: "5-Search Pack", title: "5-Search Pack",
-      sub: "Best value for ongoing safety", price: "R399", period: "R80 PER SEARCH",
-      savings: "SAVE R96 vs individual searches",
-      features: ["5 complete criminal checks", "All search types included", "Priority human verification", "PDF reports with source links", "Valid for 6 months"],
-      cta: "Get Started", highlight: false,
+      id: "5-pack" as PackageType, label: "Family & Friends", title: "Family & Friends (5 Checks)",
+      sub: "Best for family and close circle", price: "R499", period: "R100 PER CHECK",
+      savings: "SAVE R246 vs individual checks",
+      features: ["5 public‑record safety reports", "Use over 6 months", "Downloadable PDFs for each search", "Results shown instantly"],
+      cta: "Get 5 Checks", highlight: false,
     },
   ];
 
@@ -37,7 +37,7 @@ const PricingPlinq = () => {
     setIsPaymentModalOpen(true);
   };
 
-  const trustBadges = ["EFT and Card Payment", "POPIA Compliant", "Results via Email", "Money-Back Guarantee", "No Hidden Fees"];
+  const trustBadges = ["EFT and Card Payment", "POPIA‑Aware", "Instant Results", "No Hidden Fees"];
 
   return (
     <>
@@ -49,10 +49,10 @@ const PricingPlinq = () => {
             fontFamily: "'DM Serif Display', serif",
             fontSize: 'clamp(40px, 4vw, 56px)', color: 'white', lineHeight: 1.1, maxWidth: 600, marginBottom: 16,
           }}>
-            Transparent pricing. No hidden fees.
+            Choose your safety plan
           </h2>
-          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 17, color: 'rgba(255,255,255,0.5)', maxWidth: 500, lineHeight: 1.6, marginBottom: 64 }}>
-            The same background checks corporations use. Now accessible to every South African.
+          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 17, color: 'rgba(255,255,255,0.5)', maxWidth: 560, lineHeight: 1.6, marginBottom: 64 }}>
+            Each safety check uses South African public‑record warning lists to highlight possible red flags. It does not provide a full SAPS criminal record.
           </p>
 
           {/* Cards */}

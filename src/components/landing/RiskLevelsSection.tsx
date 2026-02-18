@@ -5,7 +5,7 @@ const RiskLevelsSection = () => {
     {
       level: "HIGH RISK",
       icon: AlertTriangle,
-      description: "Active warrants, violent offenses, multiple convictions, protection order violations",
+      description: "Public records showing serious offences such as violent crime, sexual offences, or armed robbery, with an active wanted or sanctions status.",
       bgColor: "bg-risk-red-light",
       borderColor: "border-risk-red",
       textColor: "text-risk-red",
@@ -14,7 +14,7 @@ const RiskLevelsSection = () => {
     {
       level: "MODERATE RISK",
       icon: AlertTriangle,
-      description: "Past convictions, protection orders, pending court cases",
+      description: "Older or less severe public‑record warnings, or records where the status is unclear or may no longer be active.",
       bgColor: "bg-risk-amber-light",
       borderColor: "border-risk-amber",
       textColor: "text-risk-amber",
@@ -23,7 +23,7 @@ const RiskLevelsSection = () => {
     {
       level: "LOW RISK",
       icon: Clock,
-      description: "Minor offenses, old records, resolved cases",
+      description: "Public records suggesting lower‑level issues, or only partial or inconclusive information.",
       bgColor: "bg-risk-yellow-light",
       borderColor: "border-risk-yellow",
       textColor: "text-risk-yellow",
@@ -32,7 +32,7 @@ const RiskLevelsSection = () => {
     {
       level: "CLEAR",
       icon: Check,
-      description: "No criminal records found in database",
+      description: "No matching public‑record warnings found for this name in the sources we currently check.",
       bgColor: "bg-risk-green-light",
       borderColor: "border-risk-green",
       textColor: "text-risk-green",
@@ -41,25 +41,21 @@ const RiskLevelsSection = () => {
   ];
 
   const checklistItems = [
-    "Criminal convictions (all courts)",
-    "Domestic violence cases",
-    "Protection orders (active & violated)",
-    "Sexual offense records",
-    "Assault & battery charges",
-    "Fraud & theft convictions",
-    "Active warrants",
-    "Full source attribution",
+    "Possible matches on public wanted‑person notices",
+    "Possible matches on public sanctions and watchlists",
+    "Crime type, status, area and timing when available",
+    "A clear risk level (High / Moderate / Low / Clear) with explanation",
+    "Links to the original public record where possible",
+    "A downloadable PDF summary of your results",
   ];
 
   return (
     <section className="py-24 bg-background">
       <div className="container mx-auto px-4">
-        {/* Headline */}
         <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 text-center mb-12">
           What Your Report Reveals
         </h2>
 
-        {/* Risk Level Cards */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto mb-16">
           {riskLevels.map((risk, index) => (
             <div 
@@ -75,7 +71,6 @@ const RiskLevelsSection = () => {
           ))}
         </div>
 
-        {/* What You Get Section */}
         <div className="bg-card rounded-2xl p-8 md:p-12 max-w-4xl mx-auto shadow-md">
           <div className="flex justify-center mb-8">
             <Shield className="h-16 w-16 text-purple-600" />

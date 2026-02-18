@@ -9,7 +9,7 @@ const FooterPlinq = () => {
   const legalLinks = [
     { label: "Privacy Policy", href: "/privacy" },
     { label: "Terms of Service", href: "/terms" },
-    { label: "POPIA Compliance", href: "/privacy#popia" },
+    { label: "POPIA Information", href: "/privacy#popia" },
     { label: "Dispute a Record", href: "/dispute" },
     { label: "Data Subject Rights", href: "/privacy#rights" },
   ];
@@ -32,7 +32,7 @@ const FooterPlinq = () => {
               <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 18, letterSpacing: '0.1em', color: 'white' }}>REDFLAQ</span>
             </a>
             <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.4)', maxWidth: 260, lineHeight: 1.6 }}>
-              Making South Africa safer, one informed decision at a time. Built by Setup A Startup and ASEB Society.
+              Making South Africa safer, one informed decision at a time.
             </p>
           </div>
 
@@ -60,7 +60,7 @@ const FooterPlinq = () => {
           <div>
             <h4 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, color: 'white', fontSize: 14, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>CONTACT</h4>
             <ul className="space-y-3">
-              <li><a href="mailto:support@setupastartup.com" style={linkStyle} className="hover:!text-white">support@setupastartup.com</a></li>
+              <li><a href="mailto:support@redflaq.co.za" style={linkStyle} className="hover:!text-white">support@redflaq.co.za</a></li>
               <li><a href="tel:+27663365296" style={linkStyle} className="hover:!text-white">+27 66 336 5296</a></li>
               <li><a href="https://wa.me/27663365296" style={linkStyle} className="hover:!text-white">WhatsApp Us</a></li>
               <li><span style={{ ...linkStyle, cursor: 'default' }}>Johannesburg, South Africa</span></li>
@@ -71,7 +71,7 @@ const FooterPlinq = () => {
         {/* Bottom bar */}
         <div className="flex flex-wrap justify-between items-center gap-4" style={{ borderTop: '1px solid rgba(255,255,255,0.08)', marginTop: 48, paddingTop: 32 }}>
           <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.3)' }}>
-            © 2026 REDFLAQ · Setup A Startup (Pty) Ltd · All rights reserved
+            © 2026 REDFLAQ · All rights reserved · Public records only · POPIA‑aware
           </span>
           <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#DDD6FE', opacity: 0.8 }}>
             💜 Standing with South African women against GBV

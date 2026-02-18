@@ -61,8 +61,8 @@ const FooterHonest = () => {
             <h4 className="font-semibold text-background mb-4">Contact</h4>
             <ul className="space-y-3 text-sm text-background/60">
               <li>
-                <a href="mailto:support@setupastartup.com" className="hover:text-background transition-colors">
-                  support@setupastartup.com
+                <a href="mailto:support@redflaq.com" className="hover:text-background transition-colors">
+                  support@redflaq.com
                 </a>
               </li>
               <li>

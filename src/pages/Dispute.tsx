@@ -110,12 +110,12 @@ export default function Dispute() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <a 
-                href="mailto:support@setupastartup.com"
+                href="mailto:support@redflaq.com"
                 className="inline-flex items-center gap-2"
               >
                 <Button variant="outline" className="w-full sm:w-auto">
                   <Mail className="w-4 h-4" />
-                  support@setupastartup.com
+                  support@redflaq.com
                 </Button>
               </a>
               <a 

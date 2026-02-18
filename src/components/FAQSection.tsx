@@ -166,7 +166,7 @@ const FAQSection = () => {
             Still have questions?
           </p>
           <p className="font-body text-base" style={{ color: '#B91C1C' }}>
-            Email us: <a href="mailto:support@redflaq.co.za" className="underline font-bold hover:text-[#7F1D1D] transition-colors">support@redflaq.co.za</a>
+            Email us: <a href="mailto:support@redflaq.com" className="underline font-bold hover:text-[#7F1D1D] transition-colors">support@redflaq.com</a>
           </p>
         </div>
       </div>

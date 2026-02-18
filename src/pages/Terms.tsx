@@ -100,7 +100,7 @@ export default function Terms() {
             For questions about these terms:
           </p>
           <ul>
-            <li>Email: <a href="mailto:support@setupastartup.com">support@setupastartup.com</a></li>
+            <li>Email: <a href="mailto:support@redflaq.com">support@redflaq.com</a></li>
             <li>WhatsApp: <a href="https://wa.me/27663365296">+27 66 336 5296</a></li>
           </ul>
 

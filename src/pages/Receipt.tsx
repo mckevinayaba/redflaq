@@ -213,7 +213,7 @@ export default function Receipt() {
           <div className="p-8 print:p-6 border-t border-border text-center">
             <p className="text-sm text-muted-foreground mb-4">Thank you for your business!</p>
             <div className="space-y-1 text-sm text-muted-foreground mb-6">
-              <p>Questions? <a href="mailto:support@setupastartup.com" className="text-primary hover:underline">support@setupastartup.com</a></p>
+              <p>Questions? <a href="mailto:support@redflaq.com" className="text-primary hover:underline">support@redflaq.com</a></p>
               <p>WhatsApp: <a href="https://wa.me/27663365296" className="text-primary hover:underline">+27 66 336 5296</a></p>
             </div>
             <div className="text-sm">

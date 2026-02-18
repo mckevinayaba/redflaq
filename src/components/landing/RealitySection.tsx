@@ -65,7 +65,7 @@ const RealitySection = () => {
               fontFamily: "'Syne', sans-serif", fontSize: 13, fontWeight: 600,
               color: '#78716C', marginTop: 16, marginLeft: 56,
             }}>
-              — McKevin Ayaba, Founder of RedFlaq
+              — Founder, RedFlaq
             </div>
           </div>
         </div>

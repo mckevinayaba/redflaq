@@ -42,8 +42,7 @@ const AboutSection = () => {
                 👨‍💼 Founded By
               </p>
               <p className="text-sm text-gray-700">
-                McKevin Ayaba - Founder of Africa Startup Ecosystem 
-                Builders Summit (ASEB)
+                Founder, RedFlaq
               </p>
             </div>
           </div>

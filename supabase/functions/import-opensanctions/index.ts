@@ -17,11 +17,6 @@ const DATASETS = [
     url: 'https://data.opensanctions.org/datasets/latest/za_fic_sanctions/targets.simple.csv',
     defaultCountry: 'South Africa',
   },
-  {
-    name: 'crime',
-    url: 'https://data.opensanctions.org/datasets/latest/crime/targets.simple.csv',
-    defaultCountry: null,
-  },
 ];
 
 function normalizeName(name: string): string {
@@ -121,7 +116,7 @@ async function importDataset(
         surname: surname?.toUpperCase() || null,
         name_normalized: normalizeName(name),
         aliases,
-        country,
+        country: 'South Africa',
         source_dataset: dataset.name,
         source_urls: [`https://www.opensanctions.org/entities/${entityId}/`],
         source_url: `https://www.opensanctions.org/entities/${entityId}/`,

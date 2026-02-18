@@ -25,10 +25,10 @@ const WhyRedflaqSection = () => {
         {/* Founder quote */}
         <div style={{ maxWidth: 700, margin: '40px auto', borderLeft: '4px solid #7C3AED', paddingLeft: 24 }}>
           <p style={{ fontFamily: "'DM Serif Display', serif", fontSize: 20, fontStyle: 'italic', color: '#2D2235', lineHeight: 1.6 }}>
-            "I built RedFlaq so women and communities can access key public‑record warnings quickly and affordably."
+            "Traditional background check services exist, but they are slow, bureaucratic, and designed for businesses, not individuals. We built RedFlaq so women and communities can access key public‑record warnings quickly and affordably."
           </p>
           <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, fontWeight: 600, color: '#78716C', marginTop: 12 }}>
-            — McKevin Ayaba, Founder of RedFlaq
+            — Founder, RedFlaq
           </div>
         </div>
 

@@ -37,15 +37,15 @@ const HeroPlinq = () => {
             fontSize: 'clamp(44px, 5vw, 72px)', lineHeight: 1.05,
             color: '#2D2235', marginBottom: 24,
           }}>
-            Before you trust him,<br />
-            <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>check.</em>
+            Before you give him a spare key,<br />
+            give yourself <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>clarity.</em>
           </h1>
 
           <p style={{
             fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 400,
             lineHeight: 1.7, color: '#4B4453', maxWidth: 480, marginBottom: 12,
           }}>
-            RedFlaq helps women in South Africa scan public records for serious red flags before letting someone into their life, home, or business.
+            RedFlaq searches South African criminal records so you can make informed decisions about who to trust with your life, home, or business. Instant. Confidential. R99.
           </p>
 
           <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', marginBottom: 32, maxWidth: 480, lineHeight: 1.6 }}>

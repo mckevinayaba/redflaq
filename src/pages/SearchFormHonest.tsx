@@ -95,7 +95,6 @@ export default function SearchForm() {
   // Sanitize input
   const sanitizeInput = (input: string): string => {
     return input
-      .trim()
       .replace(/[<>\"'`]/g, "")
       .slice(0, 100);
   };
@@ -175,7 +174,7 @@ export default function SearchForm() {
       // Build search query
       const searchBody = {
         searchType: "active_warrant",
-        fullName: sanitizeInput(fullName),
+        fullName: sanitizeInput(fullName).trim(),
         dateOfBirth: dateOfBirth || undefined,
         province: province && province !== "Select province (optional)" ? province : undefined,
         courtReference: courtReference ? sanitizeInput(courtReference) : undefined,

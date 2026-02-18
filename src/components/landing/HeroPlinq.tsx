@@ -1,54 +1,56 @@
 import { useState } from "react";
-import { Check, Shield, Heart, Eye } from "lucide-react";
+import { Check } from "lucide-react";
 import { PaymentModal } from "@/components/PaymentModal";
+import { useCountUp } from "@/hooks/useCountUp";
 
 const HeroPlinq = () => {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const { count: statOne, ref: statOneRef } = useCountUp(3, 1500);
+  const { count: statTwo, ref: statTwoRef } = useCountUp(40000, 2000);
 
   return (
     <>
-      <section className="relative min-h-screen overflow-hidden" style={{ background: 'linear-gradient(160deg, #FAF5FF 0%, #F7F4F0 60%)' }}>
-        <div className="grid lg:grid-cols-2 min-h-screen">
+      <section className="relative overflow-hidden" style={{ background: '#F7F4F0', minHeight: '100vh' }}>
+        <div className="grid lg:grid-cols-2 min-h-screen max-w-[1280px] mx-auto">
           {/* LEFT COLUMN */}
-          <div style={{ padding: '140px 60px 80px' }}>
+          <div style={{ padding: '160px 40px 80px 40px' }}>
             {/* Badge */}
             <div style={{
-              border: '1px solid #7C3AED', padding: '6px 12px',
+              background: '#FAF5FF', border: '1px solid #EDE9FE', padding: '6px 14px',
               display: 'inline-flex', alignItems: 'center', gap: 8,
-              fontFamily: "'JetBrains Mono', monospace", fontSize: 11,
-              letterSpacing: '0.15em', textTransform: 'uppercase', color: '#7C3AED',
+              fontFamily: "'Syne', sans-serif", fontSize: 13, fontWeight: 600,
+              color: '#7C3AED', marginBottom: 32,
             }}>
-              <span className="animate-pulse" style={{ width: 6, height: 6, borderRadius: '50%', background: '#7C3AED', display: 'inline-block' }} />
-              South Africa's Instant Public‑Record Safety Check
+              💜 Built for women. Available to all.
             </div>
 
             {/* Headline */}
             <h1 style={{
               fontFamily: "'DM Serif Display', serif",
-              fontSize: 'clamp(52px, 5vw, 76px)', lineHeight: 1.05,
-              color: '#2D2235', marginTop: 32, marginBottom: 24,
+              fontSize: 'clamp(44px, 5vw, 72px)', lineHeight: 1.05,
+              color: '#2D2235', marginBottom: 24,
             }}>
-              Trusting relationships<br />begin with<br />
-              <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>information.</em>
+              Before you trust,<br />
+              <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>check.</em>
             </h1>
 
             {/* Subheadline */}
             <p style={{
               fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 400,
-              lineHeight: 1.6, color: '#4B4453', maxWidth: 480, marginBottom: 16,
+              lineHeight: 1.7, color: '#4B4453', maxWidth: 480, marginBottom: 12,
             }}>
-              With a full name and province, RedFlaq scans South African public‑record warning lists so you can spot serious red flags before you let someone into your life or business.
+              With a full name and province, RedFlaq scans South African public records for serious red flags before you let someone into your life, your home, or your business.
             </p>
 
-            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#78716C', marginBottom: 32, maxWidth: 480 }}>
-              Not a full criminal record check. A fast public‑record safety check with detailed, downloadable reports.
+            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', marginBottom: 32, maxWidth: 480, lineHeight: 1.6 }}>
+              Not a full criminal record check. A fast public‑record safety check with a clear report in under 60 seconds.
             </p>
 
             {/* Value props */}
-            <div className="flex flex-wrap gap-4" style={{ marginBottom: 32 }}>
-              {["Results in minutes", "Public records only", "100% Confidential", "POPIA‑aware use"].map(item => (
-                <div key={item} className="flex items-center gap-2" style={{ fontSize: 16, color: '#4B4453' }}>
-                  <Check className="h-5 w-5" style={{ color: '#7C3AED' }} />
+            <div className="flex flex-wrap gap-x-6 gap-y-2" style={{ marginBottom: 36 }}>
+              {["Results in under 60 seconds", "Public records only", "100% confidential", "POPIA‑aware use"].map(item => (
+                <div key={item} className="flex items-center gap-2" style={{ fontSize: 14, color: '#4B4453' }}>
+                  <Check className="h-4 w-4" style={{ color: '#7C3AED' }} />
                   <span>{item}</span>
                 </div>
               ))}
@@ -56,72 +58,91 @@ const HeroPlinq = () => {
 
             {/* Buttons */}
             <div className="flex flex-wrap gap-4">
-              <button onClick={() => setIsPaymentModalOpen(true)} className="hover:opacity-90 transition-opacity" style={{
-                background: '#7C3AED', color: '#FFFFFF', padding: '16px 36px',
-                fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 15,
-                border: '2px solid #7C3AED', cursor: 'pointer',
-              }}>
-                Verify Someone Now — R149
+              <button
+                onClick={() => setIsPaymentModalOpen(true)}
+                className="hover:opacity-90 transition-all hover:-translate-y-0.5 hover:shadow-lg"
+                style={{
+                  background: '#7C3AED', color: '#FFFFFF', padding: '16px 36px',
+                  fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 15,
+                  border: '2px solid #7C3AED', cursor: 'pointer',
+                }}
+              >
+                Verify Someone Now — R99
               </button>
-              <button onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })} className="hover:!bg-[#7C3AED] hover:!text-white hover:!border-[#7C3AED] transition-colors" style={{
-                background: 'transparent', color: '#7C3AED', padding: '16px 36px',
-                fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 15,
-                border: '2px solid #7C3AED', cursor: 'pointer',
-              }}>
+              <button
+                onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
+                className="hover:!bg-[#7C3AED] hover:!text-white transition-all hover:-translate-y-0.5"
+                style={{
+                  background: 'transparent', color: '#7C3AED', padding: '16px 36px',
+                  fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 15,
+                  border: '2px solid #7C3AED', cursor: 'pointer',
+                }}
+              >
                 See How It Works
               </button>
             </div>
 
             {/* Trust line */}
             <div className="flex items-center gap-3" style={{ marginTop: 48 }}>
-              <div style={{ width: 40, height: 1, background: '#9CA3AF' }} />
-              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#9CA3AF', letterSpacing: '0.05em' }}>
-                FOR YOUR PROTECTION · NOT FOR HARASSMENT OR REVENGE · POPIA‑AWARE
+              <div style={{ width: 32, height: 1, background: '#D6D3CD' }} />
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#9CA3AF', letterSpacing: '0.08em' }}>
+                FOR YOUR PROTECTION · NOT FOR HARASSMENT OR REVENGE
               </span>
             </div>
           </div>
 
-          {/* RIGHT COLUMN — Abstract icons instead of photos */}
-          <div style={{ background: '#FAF5FF', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: 48 }}>
-            {/* Abstract icon grid */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
-              <div style={{ background: 'white', border: '1.5px solid #EDE9FE', padding: 32, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-                <Shield className="h-12 w-12" style={{ color: '#7C3AED' }} />
-                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#7C3AED' }}>PROTECTION</span>
+          {/* RIGHT COLUMN — GBV Stat Cards */}
+          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '120px 40px 80px', gap: 16 }}>
+            {/* Card 1 */}
+            <div
+              ref={statOneRef}
+              className="scroll-reveal visible"
+              style={{
+                background: 'white', border: '1.5px solid #EDE9FE', padding: '36px 32px',
+              }}
+            >
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#7C3AED', marginBottom: 8 }}>
+                SOUTH AFRICAN REALITY
               </div>
-              <div style={{ background: 'white', border: '1.5px solid #EDE9FE', padding: 32, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-                <Heart className="h-12 w-12" style={{ color: '#7C3AED' }} />
-                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#7C3AED' }}>SAFETY</span>
+              <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 56, color: '#2D2235', lineHeight: 1 }}>
+                1 in <span style={{ color: '#7C3AED' }}>{statOne || 3}</span>
               </div>
-              <div style={{ background: 'white', border: '1.5px solid #EDE9FE', padding: 32, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-                <Eye className="h-12 w-12" style={{ color: '#7C3AED' }} />
-                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#7C3AED' }}>AWARENESS</span>
-              </div>
-              <div style={{ background: 'white', border: '1.5px solid #EDE9FE', padding: 32, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
-                <Check className="h-12 w-12" style={{ color: '#7C3AED' }} />
-                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#7C3AED' }}>VERIFICATION</span>
+              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#4B4453', lineHeight: 1.6, marginTop: 12 }}>
+                South African women have experienced lifetime physical violence from a partner.
+              </p>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#9CA3AF', marginTop: 12 }}>
+                SOURCE: STATS SA · DSTI 2024 GENDER REPORT
               </div>
             </div>
 
-            {/* Stat cards */}
-            <div style={{ marginTop: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
-              <div style={{ background: 'white', border: '1.5px solid #EDE9FE', padding: 24 }}>
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#7C3AED' }}>SOUTH AFRICAN REALITY</div>
-                <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 48, color: '#2D2235', lineHeight: 1, margin: '8px 0' }}>1 in 3</div>
-                <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', lineHeight: 1.5 }}>
-                  Women have experienced lifetime physical violence from an intimate partner.
-                </p>
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#9CA3AF', marginTop: 8 }}>
-                  SOURCE: STATS SA · DSTI 2024 GENDER REPORT
-                </div>
+            {/* Card 2 */}
+            <div
+              ref={statTwoRef}
+              className="scroll-reveal visible"
+              style={{
+                background: 'white', border: '1.5px solid #EDE9FE', padding: '36px 32px',
+              }}
+            >
+              <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 56, color: '#7C3AED', lineHeight: 1 }}>
+                {statTwo > 0 ? statTwo.toLocaleString() : '40,000'}+
               </div>
+              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#4B4453', lineHeight: 1.6, marginTop: 12 }}>
+                Sexual offences reported every year. Many offenders had prior warnings in public records.
+              </p>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#9CA3AF', marginTop: 12 }}>
+                SOURCE: SAPS ANNUAL CRIME STATISTICS
+              </div>
+            </div>
 
-              <div style={{ background: '#7C3AED', padding: 24 }}>
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.7)' }}>PUBLIC‑RECORD SAFETY CHECK</div>
-                <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 48, color: 'white', lineHeight: 1, margin: '8px 0' }}>R149</div>
-                <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.8)', lineHeight: 1.5 }}>
-                  Scan public SAPS wanted and SA sanctions lists. Not a full criminal record check.
-                </p>
+            {/* Card 3 — mission */}
+            <div style={{
+              background: '#7C3AED', padding: '28px 32px',
+            }}>
+              <p style={{ fontFamily: "'DM Serif Display', serif", fontSize: 20, color: 'white', lineHeight: 1.5, fontStyle: 'italic' }}>
+                RedFlaq is built to help women see those warnings in time — before trust is given.
+              </p>
+              <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: 'rgba(255,255,255,0.6)', marginTop: 12, fontWeight: 600 }}>
+                — McKevin Ayaba, Founder
               </div>
             </div>
           </div>

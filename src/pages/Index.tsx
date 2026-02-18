@@ -2,7 +2,7 @@ import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import HeroPlinq from "@/components/landing/HeroPlinq";
 import TickerBar from "@/components/landing/TickerBar";
 import TrustBarPlinq from "@/components/landing/TrustBarPlinq";
-import PhotoGrid from "@/components/landing/PhotoGrid";
+
 import RealitySection from "@/components/landing/RealitySection";
 import BarrierSection from "@/components/landing/BarrierSection";
 import SearchOptionsSection from "@/components/landing/SearchOptionsSection";
@@ -22,7 +22,7 @@ const Index = () => {
       <HeroPlinq />
       <TickerBar />
       <TrustBarPlinq />
-      <PhotoGrid />
+      
       <RealitySection />
       <BarrierSection />
       <SearchOptionsSection />

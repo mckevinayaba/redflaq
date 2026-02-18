@@ -1,88 +1,95 @@
 import { AlertTriangle, Clock, Check, Shield } from "lucide-react";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const RiskLevelsSection = () => {
+  const { ref, isVisible } = useScrollReveal();
+
   const riskLevels = [
     {
       level: "HIGH RISK",
       icon: AlertTriangle,
-      description: "Public records showing serious offences such as violent crime, sexual offences, or armed robbery, with an active wanted or sanctions status.",
-      bgColor: "bg-risk-red-light",
-      borderColor: "border-risk-red",
-      textColor: "text-risk-red",
-      badgeBg: "bg-risk-red",
+      description: "Serious offences in public records (e.g. violent or sexual crime) with an active warning status.",
+      bgColor: "#FEF2F2", borderColor: "#FCA5A5", textColor: "#DC2626", badgeBg: "#DC2626",
     },
     {
       level: "MODERATE RISK",
       icon: AlertTriangle,
-      description: "Older or less severe public‑record warnings, or records where the status is unclear or may no longer be active.",
-      bgColor: "bg-risk-amber-light",
-      borderColor: "border-risk-amber",
-      textColor: "text-risk-amber",
-      badgeBg: "bg-risk-amber",
+      description: "Older or less severe public‑record warnings, or status that may no longer be active.",
+      bgColor: "#FFFBEB", borderColor: "#FCD34D", textColor: "#D97706", badgeBg: "#D97706",
     },
     {
       level: "LOW RISK",
       icon: Clock,
-      description: "Public records suggesting lower‑level issues, or only partial or inconclusive information.",
-      bgColor: "bg-risk-yellow-light",
-      borderColor: "border-risk-yellow",
-      textColor: "text-risk-yellow",
-      badgeBg: "bg-risk-yellow",
+      description: "Lower‑level issues or incomplete public information.",
+      bgColor: "#FEFCE8", borderColor: "#FDE047", textColor: "#CA8A04", badgeBg: "#CA8A04",
     },
     {
       level: "CLEAR",
       icon: Check,
-      description: "No matching public‑record warnings found for this name in the sources we currently check.",
-      bgColor: "bg-risk-green-light",
-      borderColor: "border-risk-green",
-      textColor: "text-risk-green",
-      badgeBg: "bg-risk-green",
+      description: "No matching public‑record warnings found for this name in the sources we check.",
+      bgColor: "#F0FDF4", borderColor: "#86EFAC", textColor: "#16A34A", badgeBg: "#16A34A",
     },
   ];
 
   const checklistItems = [
     "Possible matches on public wanted‑person notices",
-    "Possible matches on public sanctions and watchlists",
+    "Other public‑record warnings linked to that name",
     "Crime type, status, area and timing when available",
-    "A clear risk level (High / Moderate / Low / Clear) with explanation",
-    "Links to the original public record where possible",
-    "A downloadable PDF summary of your results",
+    "A clear risk level and explanation",
+    "A downloadable PDF summary",
   ];
 
   return (
-    <section className="py-24 bg-background">
-      <div className="container mx-auto px-4">
-        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 text-center mb-12">
-          What Your Report Reveals
+    <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '100px 40px' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 16 }}>Your Report</div>
+
+        <h2 style={{
+          fontFamily: "'DM Serif Display', serif",
+          fontSize: 'clamp(36px, 4vw, 52px)', color: '#2D2235', marginBottom: 48,
+        }}>
+          What your report <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>reveals</em>
         </h2>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto mb-16">
-          {riskLevels.map((risk, index) => (
-            <div 
-              key={index}
-              className={`${risk.bgColor} border-2 ${risk.borderColor} rounded-xl p-6 text-center`}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4" style={{ marginBottom: 48 }}>
+          {riskLevels.map((risk) => (
+            <div
+              key={risk.level}
+              style={{
+                background: risk.bgColor, border: `1.5px solid ${risk.borderColor}`,
+                padding: '28px 24px', textAlign: 'center',
+              }}
             >
-              <risk.icon className={`h-12 w-12 mx-auto mb-4 ${risk.textColor}`} />
-              <span className={`${risk.badgeBg} text-white text-xs font-bold px-3 py-1 rounded-full inline-block mb-4`}>
+              <risk.icon className="mx-auto mb-3" style={{ color: risk.textColor, width: 32, height: 32 }} />
+              <span style={{
+                background: risk.badgeBg, color: 'white', fontSize: 10, fontWeight: 700,
+                padding: '3px 10px', fontFamily: "'JetBrains Mono', monospace",
+                letterSpacing: '0.1em', display: 'inline-block', marginBottom: 12,
+              }}>
                 {risk.level}
               </span>
-              <p className="text-gray-700 text-sm">{risk.description}</p>
+              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#4B4453', lineHeight: 1.5 }}>
+                {risk.description}
+              </p>
             </div>
           ))}
         </div>
 
-        <div className="bg-card rounded-2xl p-8 md:p-12 max-w-4xl mx-auto shadow-md">
-          <div className="flex justify-center mb-8">
-            <Shield className="h-16 w-16 text-purple-600" />
+        {/* What you get — single instance */}
+        <div style={{ background: 'white', border: '1.5px solid #EDE9FE', padding: '40px 36px', maxWidth: 700, margin: '0 auto' }}>
+          <div className="flex items-center gap-3 mb-6">
+            <Shield className="h-7 w-7" style={{ color: '#7C3AED' }} />
+            <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 24, color: '#2D2235' }}>What you get</h3>
           </div>
-          <h3 className="text-2xl md:text-3xl font-bold text-gray-900 text-center mb-8">
-            What You Get
-          </h3>
-          <div className="grid md:grid-cols-2 gap-4">
-            {checklistItems.map((item, index) => (
-              <div key={index} className="flex items-center gap-3">
-                <Check className="h-5 w-5 text-risk-green flex-shrink-0" />
-                <span className="text-gray-700">{item}</span>
+          <div className="space-y-0">
+            {checklistItems.map((item) => (
+              <div key={item} style={{
+                display: 'flex', alignItems: 'center', gap: 12,
+                padding: '10px 0', borderBottom: '1px solid #EDE9FE',
+                fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#4B4453',
+              }}>
+                <Check className="h-4 w-4 flex-shrink-0" style={{ color: '#7C3AED' }} />
+                {item}
               </div>
             ))}
           </div>

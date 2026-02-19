@@ -1,4 +1,9 @@
+import { useState } from "react";
+import ShareInviteModal from "@/components/ShareInviteModal";
+
 const FooterPlinq = () => {
+  const [shareOpen, setShareOpen] = useState(false);
+
   const productLinks = [
     { label: "How It Works", href: "#how-it-works" },
     { label: "Pricing", href: "#pricing" },
@@ -20,6 +25,7 @@ const FooterPlinq = () => {
   };
 
   return (
+    <>
     <footer style={{ background: '#EDE9E3', padding: 60, borderTop: '1.5px solid #D6D3CD' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_1fr] gap-16 mb-12">
@@ -43,6 +49,11 @@ const FooterPlinq = () => {
               {productLinks.map(link => (
                 <li key={link.label}><a href={link.href} style={linkStyle} className="hover:!text-[#7C3AED]">{link.label}</a></li>
               ))}
+              <li>
+                <button onClick={() => setShareOpen(true)} style={{ ...linkStyle, background: 'none', border: 'none', cursor: 'pointer', padding: 0 }} className="hover:!text-[#7C3AED]">
+                  Share RedFlaq
+                </button>
+              </li>
             </ul>
           </div>
 
@@ -89,6 +100,8 @@ const FooterPlinq = () => {
         </div>
       </div>
     </footer>
+    <ShareInviteModal open={shareOpen} onOpenChange={setShareOpen} />
+    </>
   );
 };
 

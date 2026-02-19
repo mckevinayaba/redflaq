@@ -3,7 +3,8 @@ import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import { Shield, BarChart3, CheckCircle2, ArrowRight, Users } from "lucide-react";
+import { Shield, BarChart3, CheckCircle2, ArrowRight, Heart } from "lucide-react";
+import ShareInviteModal from "@/components/ShareInviteModal";
 
 interface SearchRecord {
   id: string;
@@ -27,6 +28,7 @@ export default function Dashboard() {
   const [searches, setSearches] = useState<SearchRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<{ full_name: string | null } | null>(null);
+  const [shareOpen, setShareOpen] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -212,14 +214,16 @@ export default function Dashboard() {
           <Shield className="h-4 w-4" />
           Run a new safety check
         </Link>
-        <Link
-          to="/"
+        <button
+          onClick={() => setShareOpen(true)}
           className="inline-flex items-center gap-2 px-6 py-3 border border-border text-foreground font-body font-medium text-sm rounded-lg hover:bg-muted transition-colors"
         >
-          <Users className="h-4 w-4" />
+          <Heart className="h-4 w-4" />
           Invite a friend to RedFlaq
-        </Link>
+        </button>
       </div>
+
+      <ShareInviteModal open={shareOpen} onOpenChange={setShareOpen} />
     </DashboardLayout>
   );
 }

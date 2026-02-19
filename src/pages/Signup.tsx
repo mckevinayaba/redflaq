@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { Mail, ArrowLeft } from "lucide-react";
 
 export default function Signup() {
   const [fullName, setFullName] = useState("");
@@ -10,6 +11,9 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
   const [nameError, setNameError] = useState("");
   const [mode, setMode] = useState<"signup" | "signin">("signup");
+  const [signupSuccess, setSignupSuccess] = useState(false);
+  const [emailNotConfirmed, setEmailNotConfirmed] = useState(false);
+  const [resending, setResending] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -24,10 +28,22 @@ export default function Signup() {
     return true;
   };
 
+  const handleResendConfirmation = async () => {
+    setResending(true);
+    const { error } = await supabase.auth.resend({ type: "signup", email: email.trim() });
+    if (error) {
+      toast({ title: "Could not resend", description: error.message, variant: "destructive" });
+    } else {
+      toast({ title: "Email sent", description: "Check your inbox for the confirmation link." });
+    }
+    setResending(false);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (mode === "signup" && !validateFullName(fullName)) return;
     setLoading(true);
+    setEmailNotConfirmed(false);
 
     if (mode === "signup") {
       const { error } = await supabase.auth.signUp({
@@ -41,7 +57,7 @@ export default function Signup() {
       if (error) {
         toast({ title: "Sign up failed", description: error.message, variant: "destructive" });
       } else {
-        toast({ title: "Check your email", description: "We sent you a confirmation link. Please verify your email to continue." });
+        setSignupSuccess(true);
       }
     } else {
       const { error } = await supabase.auth.signInWithPassword({
@@ -49,7 +65,11 @@ export default function Signup() {
         password,
       });
       if (error) {
-        toast({ title: "Sign in failed", description: error.message, variant: "destructive" });
+        if (error.message.toLowerCase().includes("email not confirmed")) {
+          setEmailNotConfirmed(true);
+        } else {
+          toast({ title: "Sign in failed", description: error.message, variant: "destructive" });
+        }
       } else {
         navigate("/dashboard");
       }
@@ -82,98 +102,147 @@ export default function Signup() {
         </Link>
 
         <div style={{ background: 'white', border: '1.5px solid #D6D3CD', padding: 40 }}>
-          <h1 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 32, color: '#2D2235', marginBottom: 8 }}>
-            {mode === "signup" ? "Create your free account" : "Welcome back"}
-          </h1>
-          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', marginBottom: 32 }}>
-            {mode === "signup" ? "Sign up to start verifying someone." : "Sign in to continue."}
-          </p>
+          {signupSuccess ? (
+            <div className="text-center" style={{ padding: '20px 0' }}>
+              <div style={{ width: 64, height: 64, background: '#F3F0FF', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
+                <Mail size={32} style={{ color: '#7C3AED' }} />
+              </div>
+              <h1 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, color: '#2D2235', marginBottom: 8 }}>
+                Check your inbox
+              </h1>
+              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', lineHeight: 1.6, marginBottom: 24 }}>
+                We sent a confirmation link to <strong style={{ color: '#2D2235' }}>{email}</strong>. Click the link to activate your account, then come back and sign in.
+              </p>
+              <button
+                onClick={handleResendConfirmation}
+                disabled={resending}
+                style={{
+                  background: 'none', border: '1.5px solid #D6D3CD', padding: '12px 24px',
+                  fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 600,
+                  color: '#7C3AED', cursor: resending ? 'not-allowed' : 'pointer', width: '100%',
+                  opacity: resending ? 0.7 : 1,
+                }}
+              >
+                {resending ? "Sending..." : "Resend confirmation email"}
+              </button>
+              <button
+                onClick={() => { setSignupSuccess(false); setMode("signin"); }}
+                style={{ background: 'none', border: 'none', fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', cursor: 'pointer', marginTop: 16, display: 'inline-flex', alignItems: 'center', gap: 6 }}
+              >
+                <ArrowLeft size={14} /> Back to sign in
+              </button>
+            </div>
+          ) : (
+            <>
+              <h1 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 32, color: '#2D2235', marginBottom: 8 }}>
+                {mode === "signup" ? "Create your free account" : "Welcome back"}
+              </h1>
+              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', marginBottom: 32 }}>
+                {mode === "signup" ? "Sign up to start verifying someone." : "Sign in to continue."}
+              </p>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {mode === "signup" && (
-              <div>
-                <label style={labelStyle}>Full Name *</label>
-                <input
-                  style={inputStyle}
-                  placeholder="e.g. Nomsa Dlamini"
-                  value={fullName}
-                  onChange={(e) => { setFullName(e.target.value); if (nameError) validateFullName(e.target.value); }}
-                  required
-                />
-                {nameError && (
-                  <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#DC2626', marginTop: 4 }}>{nameError}</p>
+              {emailNotConfirmed && (
+                <div style={{ background: '#FFF7ED', border: '1px solid #FDBA74', padding: 16, marginBottom: 20 }}>
+                  <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#9A3412', marginBottom: 8, lineHeight: 1.5 }}>
+                    Your email hasn't been confirmed yet. Check your inbox for the confirmation link.
+                  </p>
+                  <button
+                    onClick={handleResendConfirmation}
+                    disabled={resending}
+                    style={{ background: 'none', border: 'none', fontFamily: "'Syne', sans-serif", fontSize: 13, fontWeight: 700, color: '#7C3AED', cursor: 'pointer', padding: 0 }}
+                  >
+                    {resending ? "Sending..." : "Resend confirmation email"}
+                  </button>
+                </div>
+              )}
+
+              <form onSubmit={handleSubmit} className="space-y-5">
+                {mode === "signup" && (
+                  <div>
+                    <label style={labelStyle}>Full Name *</label>
+                    <input
+                      style={inputStyle}
+                      placeholder="e.g. Nomsa Dlamini"
+                      value={fullName}
+                      onChange={(e) => { setFullName(e.target.value); if (nameError) validateFullName(e.target.value); }}
+                      required
+                    />
+                    {nameError && (
+                      <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#DC2626', marginTop: 4 }}>{nameError}</p>
+                    )}
+                  </div>
+                )}
+
+                <div>
+                  <label style={labelStyle}>Email Address *</label>
+                  <input
+                    style={inputStyle}
+                    type="email"
+                    placeholder="you@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label style={labelStyle}>Password *</label>
+                  <input
+                    style={inputStyle}
+                    type="password"
+                    placeholder="At least 6 characters"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    minLength={6}
+                    required
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loading}
+                  style={{
+                    width: '100%', background: '#7C3AED', color: 'white', padding: 16,
+                    fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700,
+                    border: 'none', cursor: loading ? 'not-allowed' : 'pointer',
+                    opacity: loading ? 0.7 : 1,
+                  }}
+                  className="hover:!bg-[#6D28D9] transition-colors"
+                >
+                  {loading ? "Please wait..." : mode === "signup" ? "Sign Up Free" : "Sign In"}
+                </button>
+              </form>
+
+              {mode === "signup" && (
+                <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#9CA3AF', marginTop: 16, lineHeight: 1.5 }}>
+                  We ask for your full name so we can keep your account secure and understand how people use RedFlaq. Your details are kept private and will never appear in any report.
+                </p>
+              )}
+
+              <div style={{ marginTop: 24, textAlign: 'center', display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <button
+                  onClick={() => { setMode(mode === "signup" ? "signin" : "signup"); setEmailNotConfirmed(false); }}
+                  style={{ background: 'none', border: 'none', fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#7C3AED', cursor: 'pointer' }}
+                >
+                  {mode === "signup" ? "Already have an account? Sign in" : "Don't have an account? Sign up free"}
+                </button>
+                {mode === "signin" && (
+                  <button
+                    type="button"
+                    onClick={async () => {
+                      if (!email.trim()) { toast({ title: "Enter your email", description: "Please enter your email address first.", variant: "destructive" }); return; }
+                      const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), { redirectTo: `${window.location.origin}/reset-password` });
+                      if (error) toast({ title: "Error", description: error.message, variant: "destructive" });
+                      else toast({ title: "Check your email", description: "Password reset link sent." });
+                    }}
+                    style={{ background: 'none', border: 'none', fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#78716C', cursor: 'pointer' }}
+                  >
+                    Forgot your password?
+                  </button>
                 )}
               </div>
-            )}
-
-            <div>
-              <label style={labelStyle}>Email Address *</label>
-              <input
-                style={inputStyle}
-                type="email"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-
-            <div>
-              <label style={labelStyle}>Password *</label>
-              <input
-                style={inputStyle}
-                type="password"
-                placeholder="At least 6 characters"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                minLength={6}
-                required
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={loading}
-              style={{
-                width: '100%', background: '#7C3AED', color: 'white', padding: 16,
-                fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700,
-                border: 'none', cursor: loading ? 'not-allowed' : 'pointer',
-                opacity: loading ? 0.7 : 1,
-              }}
-              className="hover:!bg-[#6D28D9] transition-colors"
-            >
-              {loading ? "Please wait..." : mode === "signup" ? "Sign Up Free" : "Sign In"}
-            </button>
-          </form>
-
-          {mode === "signup" && (
-            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#9CA3AF', marginTop: 16, lineHeight: 1.5 }}>
-              We ask for your full name so we can keep your account secure and understand how people use RedFlaq. Your details are kept private and will never appear in any report.
-            </p>
+            </>
           )}
-
-          <div style={{ marginTop: 24, textAlign: 'center', display: 'flex', flexDirection: 'column', gap: 8 }}>
-            <button
-              onClick={() => setMode(mode === "signup" ? "signin" : "signup")}
-              style={{ background: 'none', border: 'none', fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#7C3AED', cursor: 'pointer' }}
-            >
-              {mode === "signup" ? "Already have an account? Sign in" : "Don't have an account? Sign up free"}
-            </button>
-            {mode === "signin" && (
-              <button
-                type="button"
-                onClick={async () => {
-                  if (!email.trim()) { toast({ title: "Enter your email", description: "Please enter your email address first.", variant: "destructive" }); return; }
-                  const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), { redirectTo: `${window.location.origin}/reset-password` });
-                  if (error) toast({ title: "Error", description: error.message, variant: "destructive" });
-                  else toast({ title: "Check your email", description: "Password reset link sent." });
-                }}
-                style={{ background: 'none', border: 'none', fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#78716C', cursor: 'pointer' }}
-              >
-                Forgot your password?
-              </button>
-            )}
-          </div>
         </div>
 
         <div className="text-center mt-6">

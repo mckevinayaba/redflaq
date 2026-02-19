@@ -143,8 +143,11 @@ export default function Dashboard() {
         </div>
         {searches.length === 0 ? (
           <div className="px-6 py-12 text-center">
-            <Shield className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
-            <p className="font-body text-muted-foreground mb-4">No safety checks yet</p>
+          <Shield className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
+            <p className="font-heading text-lg text-foreground mb-2">No safety checks yet</p>
+            <p className="font-body text-sm text-muted-foreground mb-4 max-w-md mx-auto">
+              When you run your first safety check, you'll see all your results here — with dates, risk levels and downloadable reports.
+            </p>
             <Link
               to="/dashboard/new-check"
               className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-body font-semibold text-sm rounded-lg hover:bg-primary/90 transition-colors"

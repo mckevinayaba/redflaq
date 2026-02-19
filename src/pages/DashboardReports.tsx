@@ -85,12 +85,15 @@ export default function DashboardReports() {
           ) : searches.length === 0 ? (
             <div className="bg-card rounded-xl border border-border p-12 text-center shadow-sm">
               <FileText className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
-              <p className="font-body text-muted-foreground mb-4">No reports found</p>
+              <p className="font-heading text-lg text-foreground mb-2">No reports found</p>
+              <p className="font-body text-sm text-muted-foreground mb-4 max-w-md mx-auto">
+                Try changing your filters or running a new safety check if you haven't used RedFlaq in a while.
+              </p>
               <Link
                 to="/dashboard/new-check"
                 className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground font-body font-semibold text-sm rounded-lg hover:bg-primary/90"
               >
-                <Shield className="h-4 w-4" /> Run a safety check
+                <Shield className="h-4 w-4" /> Run a new safety check
               </Link>
             </div>
           ) : (

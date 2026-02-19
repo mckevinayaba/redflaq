@@ -1,13 +1,16 @@
 import { useState, useRef, useEffect } from "react";
-import { Menu, X, LayoutDashboard, Settings, LogOut } from "lucide-react";
+import { Menu, X, LayoutDashboard, Settings, LogOut, Share2 } from "lucide-react";
+
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import ShareInviteModal from "@/components/ShareInviteModal";
 
 const NavbarPlinq = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [avatarOpen, setAvatarOpen] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
   const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -159,6 +162,17 @@ const NavbarPlinq = () => {
             >
               Verify Now
             </button>
+            <button
+              onClick={() => setShareOpen(true)}
+              title="Share RedFlaq"
+              style={{
+                background: 'none', border: 'none', cursor: 'pointer', padding: 6,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}
+              className="hover:!text-[#7C3AED] transition-colors"
+            >
+              <Share2 style={{ width: 18, height: 18, color: '#4B4453' }} />
+            </button>
           </div>
 
           <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden p-2">
@@ -225,6 +239,7 @@ const NavbarPlinq = () => {
           </div>
         </div>
       )}
+      <ShareInviteModal open={shareOpen} onOpenChange={setShareOpen} />
     </nav>
   );
 };

@@ -285,7 +285,7 @@ export default function DashboardNewCheck() {
             <Heart className="h-8 w-8 text-primary mb-4" />
             <p className="font-heading text-lg text-foreground mb-3">Why this matters</p>
             <p className="font-body text-sm text-muted-foreground leading-relaxed mb-4">
-              1 in 3 South African women experience physical violence from a partner. RedFlaq helps you see serious public-record warnings sooner.
+              1 in 3 South African women experience gender‑based violence in the hands of an intimate partner during their lifetime. RedFlaq helps you see serious public-record warnings sooner.
             </p>
             <p className="font-body text-sm text-muted-foreground leading-relaxed mb-4">
               Information does not guarantee safety, but it helps you spot serious warning signs.

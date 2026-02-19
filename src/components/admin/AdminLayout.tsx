@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
 import AdminSidebar from "./AdminSidebar";
 import AdminHeader from "./AdminHeader";
-import { Menu } from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   const { user, loading: authLoading } = useAuth();
@@ -35,14 +35,28 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           <AdminSidebar />
         </div>
 
+        {/* Mobile overlay */}
         {mobileOpen && (
-          <div className="fixed inset-0 z-50 lg:hidden">
-            <div className="absolute inset-0 bg-black/40" onClick={() => setMobileOpen(false)} />
-            <div className="relative z-10 w-64">
-              <AdminSidebar />
-            </div>
+          <div className="fixed inset-0 z-50 lg:hidden" onClick={() => setMobileOpen(false)}>
+            <div className="absolute inset-0 bg-black/40 animate-fade-in" />
           </div>
         )}
+        <div
+          className={`fixed inset-y-0 left-0 z-[51] w-64 transform transition-transform duration-300 ease-out lg:hidden ${
+            mobileOpen ? "translate-x-0 pointer-events-auto" : "-translate-x-full pointer-events-none"
+          }`}
+        >
+          <div className="relative h-full">
+            <button
+              onClick={() => setMobileOpen(false)}
+              className="absolute top-3 right-3 z-10 p-1.5 rounded-lg bg-background/80 hover:bg-muted transition-colors"
+              aria-label="Close sidebar"
+            >
+              <X className="h-5 w-5 text-foreground" />
+            </button>
+            <AdminSidebar />
+          </div>
+        </div>
 
         <main className="flex-1 min-w-0">
           <div className="lg:hidden flex items-center px-4 py-3 border-b border-border bg-card">

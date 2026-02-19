@@ -13,6 +13,7 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminVerifyPayments from "./pages/AdminVerifyPayments";
 import AdminMergeReview from "./pages/AdminMergeReview";
 import AdminDashboard from "./pages/AdminDashboard";
+import AdminDashboardNew from "./pages/AdminDashboardNew";
 import Receipt from "./pages/Receipt";
 import About from "./pages/About";
 import Privacy from "./pages/Privacy";
@@ -50,6 +51,7 @@ const App = () => (
           <Route path="/dashboard/reports" element={<DashboardReports />} />
           <Route path="/dashboard/account" element={<DashboardAccount />} />
           <Route path="/dashboard/help" element={<DashboardHelp />} />
+          <Route path="/admin" element={<AdminDashboardNew />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/scraper" element={<AdminScraper />} />
           <Route path="/admin/import" element={<AdminImport />} />

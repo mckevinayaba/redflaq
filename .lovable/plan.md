@@ -1,87 +1,72 @@
 
+# Fix Mobile Layout and Make RedFlaq Installable (PWA)
 
-# Add sapswanted.netlify.app as Enrichment Source
+## Problem 1: Mobile Display Issues
 
-## What We Found
+The screenshot shows the mobile version has a dark/black background and oversized text. This is caused by:
 
-- The site has **no JSON/CSV API** -- it's a Vue.js single-page app rendering HTML cards
-- Each card contains: **full name**, **crime type** (e.g. "Rape", "Fraud", "Armed Robbery"), **status** (Wanted/Suspect), **SAPS photo URL**, and **SAPS detail page URL**
-- About 9 persons are currently listed -- this is a small, curated subset of SAPS data
-- Your database already has **450 za_wanted** + **723 za_fic_sanctions** records from OpenSanctions
+- **Missing dark mode prevention**: The site doesn't include `color-scheme: light` meta tag, so phones with dark mode enabled invert the colors
+- **Hero padding too large on mobile**: The left column has `padding: 160px 40px 80px 40px` which wastes space on small screens
+- **Font sizes not optimized for mobile**: The headline uses `clamp(44px, 5vw, 72px)` which is still very large on mobile
+- **Stat cards padding not responsive**: Right column has `padding: 120px 40px 80px` which is excessive on mobile
+- **Sticky bottom bar (StickyElements)** still shows old R50 pricing and may overlap content
 
-## What This Source Adds
+### Changes:
 
-The sapswanted.netlify.app data gives you:
-- **Cleaner crime wording** -- e.g. "Rape", "Attempted Murder", "Fraud" vs OpenSanctions' raw sanctions text
-- **Wanted vs Suspect status** -- a distinction OpenSanctions doesn't make
-- **Direct SAPS photo thumbnail URLs** -- `thumbnail.php?id=XXXXX`
-- **Direct SAPS detail page URLs** -- `detail.php?bid=XXXXX` (clickable "View on official source" links)
+1. **index.html** -- Add `<meta name="color-scheme" content="light only">` and `theme-color` meta tag to prevent dark mode on mobile browsers
 
-It will NOT replace OpenSanctions -- it only enriches existing records or adds new ones that SAPS has but OpenSanctions hasn't picked up yet.
+2. **HeroPlinq.tsx** -- Make responsive:
+   - Reduce left column padding on mobile (e.g., `padding: 100px 20px 40px`)
+   - Reduce right column padding on mobile
+   - Smaller headline font on mobile screens
+   - Stack buttons vertically on small screens
 
-## Implementation Plan
+3. **StickyElements.tsx** -- Update R50 references to R99
 
-### Step 1: Create `import-sapswanted` Edge Function
+4. **NavbarPlinq.tsx** -- Ensure navbar height works well on mobile
 
-A new edge function that:
-1. Uses Firecrawl (already connected) to fetch `https://sapswanted.netlify.app` HTML
-2. Parses the structured card elements to extract per-person: name, crime, status, photo URL, SAPS detail URL
-3. For each person, normalizes the name and checks for an existing record in `wanted_persons`
-4. **If match found**: enriches the existing record with SAPS-specific fields (photo_url, detail_page_url, better crime wording in `charges`, status)
-5. **If no match**: inserts a new record with `source_dataset = 'sapswanted_netlify'`
-6. Never deletes or overwrites OpenSanctions data -- merge only
+---
 
-### Step 2: Deduplication Logic
+## Problem 2: Make RedFlaq Installable as a PWA
 
-Match strategy (same pattern as existing scrapers):
-- Normalize name (`lowercase + strip spaces/special chars`)
-- Compare against `name_normalized` in existing records
-- If match: update only NULL or less-detailed fields (e.g. add photo_url if missing, add detail_page_url, append crime to `alleged_offenses`)
-- If no match: insert new record
+To pin RedFlaq to desktop and phone home screens, we will set up a Progressive Web App (PWA):
 
-### Step 3: Admin Trigger
+1. **Install `vite-plugin-pwa`** dependency
 
-Add a "Import from SAPS Wanted" button on the existing Admin Scraper page (`/admin/scraper`) that calls this function. No automated cron needed given the small dataset size -- manual trigger is sufficient.
+2. **vite.config.ts** -- Configure the PWA plugin with:
+   - App name: "RedFlaq"
+   - Theme color: `#7C3AED`
+   - Background color: `#F7F4F0`
+   - Display: standalone
+   - Icons (we will use a simple generated icon)
+   - `navigateFallbackDenylist: [/^\/~oauth/]`
 
-### Step 4: Wire Up Config
+3. **index.html** -- Add:
+   - `<meta name="theme-color" content="#7C3AED">`
+   - `<meta name="apple-mobile-web-app-capable" content="yes">`
+   - `<meta name="apple-mobile-web-app-status-bar-style" content="default">`
+   - `<link rel="manifest" href="/manifest.webmanifest">`
 
-Add the new function to `supabase/config.toml` with `verify_jwt = false` (same as other import functions).
+4. **Create PWA icons** in `/public`:
+   - `pwa-192x192.png` and `pwa-512x512.png` (simple purple hexagon with R)
+   - Or use an SVG icon that the PWA plugin can reference
 
-## Technical Details
+5. After publishing, users can:
+   - **Desktop (Chrome)**: Click the install icon in the address bar to pin it
+   - **Mobile (Android)**: Tap "Add to Home Screen" from the browser menu
+   - **Mobile (iPhone)**: Tap Share then "Add to Home Screen"
 
-### Files to Create
-- `supabase/functions/import-sapswanted/index.ts` -- the edge function
+---
 
-### Files to Modify
-- `supabase/config.toml` -- add function config entry
-- `src/pages/AdminScraper.tsx` -- add import button for this source
+## Technical Summary
 
-### Edge Function Pseudocode
+| File | Change |
+|------|--------|
+| `index.html` | Add color-scheme, theme-color, apple-mobile-web-app meta tags |
+| `src/components/landing/HeroPlinq.tsx` | Responsive padding, font sizes, button layout for mobile |
+| `src/components/StickyElements.tsx` | Update R50 to R99 |
+| `vite.config.ts` | Add vite-plugin-pwa configuration |
+| `public/pwa-192x192.svg` | Create PWA icon |
+| `public/pwa-512x512.svg` | Create PWA icon |
 
-```text
-1. Fetch HTML via Firecrawl (formats: ['html'])
-2. Parse cards using regex on the structured HTML:
-   - Name from: <span class="span-description">{name}</span> after "Name:"
-   - Crime from: <span class="span-description">({crime})</span> after "Crime:"
-   - Status from: <span class="span-description">{status}</span> after "Status:"
-   - Photo from: <img src="{photo_url}">
-   - Detail URL from: <a href="{saps_url}">More Details</a>
-3. Skip entries with name = "Unknown Unknown"
-4. For each person:
-   a. Normalize name
-   b. Query wanted_persons WHERE name_normalized = normalized
-   c. If exists: UPDATE with enrichment fields (photo, detail URL, crime)
-   d. If not: INSERT with source_dataset = 'sapswanted_netlify'
-5. Return stats: { enriched, inserted, skipped, errors }
-```
-
-### Data Mapping
-
-| sapswanted field | wanted_persons column | Behavior |
-|-----------------|----------------------|----------|
-| Name | full_name, first_name, surname, name_normalized | Only on new inserts |
-| Crime | charges, alleged_offenses, offense_categories | Enrich/append |
-| Status | legal_status ('wanted' or 'suspect') | Enrich if different |
-| Photo URL | photo_url, photo_source = 'saps' | Enrich if NULL |
-| Detail URL | detail_page_url, source_url | Enrich if NULL |
-
+After these changes, the mobile view will match the cream-and-purple desktop design, and users will be able to install RedFlaq as an app on their phone or desktop.

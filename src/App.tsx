@@ -16,6 +16,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminDashboardNew from "./pages/AdminDashboardNew";
 import AdminUsersPage from "./pages/AdminUsersPage";
 import AdminChecksPage from "./pages/AdminChecksPage";
+import AdminContentPage from "./pages/AdminContentPage";
+import AdminPricingPage from "./pages/AdminPricingPage";
 import Receipt from "./pages/Receipt";
 import About from "./pages/About";
 import Privacy from "./pages/Privacy";
@@ -57,6 +59,8 @@ const App = () => (
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/users" element={<AdminUsersPage />} />
           <Route path="/admin/checks" element={<AdminChecksPage />} />
+          <Route path="/admin/content" element={<AdminContentPage />} />
+          <Route path="/admin/pricing" element={<AdminPricingPage />} />
           <Route path="/admin/scraper" element={<AdminScraper />} />
           <Route path="/admin/import" element={<AdminImport />} />
           <Route path="/admin/login" element={<AdminLogin />} />

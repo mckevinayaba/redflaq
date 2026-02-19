@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Copy, Check, MessageCircle, Mail, Heart } from "lucide-react";
 
-const SHARE_URL = "https://redflaq.lovable.app/";
+const SHARE_URL = "https://www.redflaq.com/";
 const INVITE_TEXT =
-  "I'm using RedFlaq to check public records before I trust someone with my life, home or business. Built for South African women facing GBV first. Try it here:";
+  "I'm using RedFlaq to check public records before I trust someone with my life, home or business. It was built with South African women facing GBV in mind. You can try it here:";
 
 const ShareSection = () => {
   const [copied, setCopied] = useState(false);
@@ -32,7 +32,7 @@ const ShareSection = () => {
           Share RedFlaq
         </h3>
         <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#4B4453', lineHeight: 1.7, marginBottom: 28 }}>
-          Know someone who could use a safety check before trusting a new person? Share RedFlaq — it could change a life.
+          Share RedFlaq to raise awareness and help another woman check for serious public‑record warning signs before trusting someone with her life, home or business.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <button

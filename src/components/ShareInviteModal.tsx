@@ -15,15 +15,15 @@ interface ShareInviteModalProps {
 }
 
 const INVITE_TEXT =
-  "I'm using RedFlaq to check public records before I trust someone with my life, home or business. Built for South African women facing GBV first. Try it here:";
+  "I'm using RedFlaq to check public records before I trust someone with my life, home or business. It was built with South African women facing GBV in mind. You can try it here:";
 
 export default function ShareInviteModal({ open, onOpenChange }: ShareInviteModalProps) {
   const { user } = useAuth();
   const [copied, setCopied] = useState(false);
 
   const referralUrl = user?.id
-    ? `https://redflaq.lovable.app/?ref=${user.id}`
-    : "https://redflaq.lovable.app/";
+    ? `https://www.redflaq.com/?ref=${user.id}`
+    : "https://www.redflaq.com/";
 
   const fullMessage = `${INVITE_TEXT} ${referralUrl}`;
 
@@ -52,7 +52,7 @@ export default function ShareInviteModal({ open, onOpenChange }: ShareInviteModa
             Invite others to use RedFlaq
           </DialogTitle>
           <DialogDescription className="font-body text-sm text-muted-foreground leading-relaxed">
-            Share RedFlaq with someone who could use a safety check before trusting a new person.
+            Share RedFlaq to raise awareness and help another woman check for serious public‑record warning signs before trusting someone with her life, home or business.
           </DialogDescription>
         </DialogHeader>
 

@@ -116,7 +116,7 @@ const HeroPlinq = () => {
               1 in <span style={{ color: '#7C3AED' }}>{statOne || 3}</span>
             </div>
             <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#4B4453', lineHeight: 1.6, marginTop: 12 }}>
-              South African women have experienced lifetime physical violence from a partner.
+              South African women experience gender‑based violence in the hands of an intimate partner during their lifetime.
             </p>
             <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#9CA3AF', marginTop: 12 }}>
               SOURCE: STATS SA · DSTI 2024 GENDER REPORT

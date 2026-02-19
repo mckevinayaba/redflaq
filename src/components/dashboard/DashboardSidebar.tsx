@@ -47,7 +47,7 @@ export default function DashboardSidebar() {
           <span className="font-mono text-[10px] tracking-wider text-primary uppercase">Safety first</span>
         </div>
         <p className="font-body text-xs text-muted-foreground leading-relaxed">
-          1 in 3 SA women experience violence from a partner. You're doing the right thing.
+          1 in 3 South African women experience gender‑based violence in the hands of an intimate partner during their lifetime.
         </p>
       </div>
     </aside>

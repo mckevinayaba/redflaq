@@ -29,7 +29,7 @@ const RealitySection = () => {
                 1 in <span style={{ color: '#7C3AED' }}>3</span>
               </div>
               <div style={{ fontSize: 15, fontWeight: 600, color: '#2D2235', margin: '12px 0 8px' }}>
-                Women have experienced lifetime physical violence
+                Women experience gender‑based violence in the hands of an intimate partner during their lifetime
               </div>
               <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#9CA3AF', marginTop: 12 }}>
                 STATS SA · DSTI 2024 GENDER REPORT

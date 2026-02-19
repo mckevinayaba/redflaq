@@ -124,7 +124,7 @@ export default function AdminDashboardNew() {
         ) : (
           <>
             {/* KPI Cards */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
               {kpiCards.map((kpi) => (
                 <div key={kpi.label} className="bg-card rounded-xl border border-border p-5 shadow-sm">
                   <div className="flex items-center gap-2 mb-2">
@@ -154,11 +154,38 @@ export default function AdminDashboardNew() {
 
             {/* Recent checks table */}
             <div className="bg-card rounded-xl border border-border shadow-sm">
-              <div className="px-6 py-4 border-b border-border flex items-center justify-between">
-                <h2 className="font-heading text-lg text-foreground">Latest Safety Checks</h2>
+              <div className="px-4 sm:px-6 py-4 border-b border-border flex items-center justify-between">
+                <h2 className="font-heading text-base sm:text-lg text-foreground">Latest Safety Checks</h2>
                 <Link to="/admin/checks" className="font-body text-sm text-primary hover:underline">View all →</Link>
               </div>
-              <div className="overflow-x-auto">
+              {/* Mobile card view */}
+              <div className="sm:hidden divide-y divide-border">
+                {checks.map((c) => {
+                  const pill = riskPill[c.risk_level] || riskPill.GREEN;
+                  return (
+                    <div key={c.id} className="px-4 py-3 space-y-1.5">
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <p className="font-body text-sm text-foreground font-medium">{c.search_name || "—"}</p>
+                          <p className="font-body text-xs text-muted-foreground">{new Date(c.searched_at).toLocaleDateString("en-ZA")}{c.search_province ? ` · ${c.search_province}` : ""}</p>
+                        </div>
+                        <span className="inline-block px-2.5 py-0.5 rounded-full font-mono text-[10px] font-semibold" style={{ color: pill.color, background: pill.bg }}>
+                          {pill.label}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="font-mono text-xs text-muted-foreground">{c.matches_found} match{c.matches_found !== 1 ? "es" : ""}</span>
+                        <Link to={`/results?search_id=${c.search_id}`} className="font-body text-sm text-primary hover:underline">View</Link>
+                      </div>
+                    </div>
+                  );
+                })}
+                {checks.length === 0 && (
+                  <div className="px-4 py-8 text-center font-body text-sm text-muted-foreground">No checks yet</div>
+                )}
+              </div>
+              {/* Desktop table view */}
+              <div className="hidden sm:block overflow-x-auto">
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-border">

@@ -50,7 +50,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               <Menu className="h-5 w-5 text-foreground" />
             </button>
           </div>
-          <div className="p-6 lg:p-10 max-w-7xl">
+          <div className="p-4 sm:p-6 lg:p-10 max-w-7xl">
             {children}
           </div>
         </main>

@@ -37,11 +37,11 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
             </button>
           </div>
 
-          <div className="p-6 lg:p-10 max-w-7xl">
+          <div className="p-4 sm:p-6 lg:p-10 max-w-7xl">
             {children}
 
             {/* Back to homepage link */}
-            <div className="mt-12 pt-6 border-t border-border text-center">
+            <div className="mt-8 sm:mt-12 pt-4 sm:pt-6 border-t border-border text-center">
               <a
                 href="/"
                 target="_blank"

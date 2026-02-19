@@ -48,9 +48,9 @@ export default function DashboardReports() {
   return (
     <DashboardLayout>
       <p className="font-mono text-[11px] tracking-widest text-muted-foreground uppercase mb-1">Reports</p>
-      <h1 className="font-heading text-3xl text-foreground mb-8">My Reports</h1>
+      <h1 className="font-heading text-2xl sm:text-3xl text-foreground mb-6 sm:mb-8">My Reports</h1>
 
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6">
         {/* Filters */}
         <div className="lg:col-span-1">
           <div className="bg-card rounded-xl border border-border p-5 shadow-sm sticky top-6">

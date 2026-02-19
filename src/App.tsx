@@ -12,12 +12,19 @@ import AdminImport from "./pages/AdminImport";
 import AdminLogin from "./pages/AdminLogin";
 import AdminVerifyPayments from "./pages/AdminVerifyPayments";
 import AdminMergeReview from "./pages/AdminMergeReview";
+import AdminDashboard from "./pages/AdminDashboard";
 import Receipt from "./pages/Receipt";
 import About from "./pages/About";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Dispute from "./pages/Dispute";
 import Signup from "./pages/Signup";
+import ResetPassword from "./pages/ResetPassword";
+import Dashboard from "./pages/Dashboard";
+import DashboardNewCheck from "./pages/DashboardNewCheck";
+import DashboardReports from "./pages/DashboardReports";
+import DashboardAccount from "./pages/DashboardAccount";
+import DashboardHelp from "./pages/DashboardHelp";
 
 const queryClient = new QueryClient();
 
@@ -37,6 +44,13 @@ const App = () => (
           <Route path="/terms" element={<Terms />} />
           <Route path="/dispute" element={<Dispute />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard/new-check" element={<DashboardNewCheck />} />
+          <Route path="/dashboard/reports" element={<DashboardReports />} />
+          <Route path="/dashboard/account" element={<DashboardAccount />} />
+          <Route path="/dashboard/help" element={<DashboardHelp />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/scraper" element={<AdminScraper />} />
           <Route path="/admin/import" element={<AdminImport />} />
           <Route path="/admin/login" element={<AdminLogin />} />

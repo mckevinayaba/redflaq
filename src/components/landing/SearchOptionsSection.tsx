@@ -42,6 +42,19 @@ const SearchOptionsSection = () => {
             We scan South African public‑record warning lists for possible matches. Results shown instantly.
           </p>
 
+          {/* Emotional permission slip */}
+          <div style={{
+            background: '#FAF5FF', border: '1px solid #EDE9FE', padding: '28px 32px',
+            marginBottom: 32, textAlign: 'center',
+          }}>
+            <p style={{
+              fontFamily: "'DM Serif Display', serif", fontSize: 17, fontStyle: 'italic',
+              color: '#5B21B6', lineHeight: 1.7, maxWidth: 600, margin: '0 auto',
+            }}>
+              You're not being paranoid. You're paying attention. Checking someone's public record before trusting them with your home, your safety, or your heart is not suspicious — it's smart. Every search you make is confidential. The person you check will never know.
+            </p>
+          </div>
+
           {/* Search form */}
           <div style={{ background: 'white', border: '1.5px solid #D6D3CD', padding: 40 }}>
             <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, color: '#2D2235', marginBottom: 8 }}>

@@ -75,6 +75,14 @@ const RiskLevelsSection = () => {
           ))}
         </div>
 
+        {/* Clear result caveat */}
+        <p style={{
+          fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#9CA3AF',
+          textAlign: 'center', lineHeight: 1.6, maxWidth: 600, margin: '0 auto 48px',
+        }}>
+          A "Clear" result means no public‑record warnings matched this name in the sources we check. It is not a guarantee of someone's character or conduct. Always trust your instincts too.
+        </p>
+
         {/* What you get — single instance */}
         <div style={{ background: 'white', border: '1.5px solid #EDE9FE', padding: '40px 36px', maxWidth: 700, margin: '0 auto' }}>
           <div className="flex items-center gap-3 mb-6">

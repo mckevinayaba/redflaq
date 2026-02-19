@@ -1,12 +1,34 @@
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import { Menu, X, LayoutDashboard, Settings, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
 
 const NavbarPlinq = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { isAuthenticated } = useAuth();
+  const [avatarOpen, setAvatarOpen] = useState(false);
+  const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const avatarRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (avatarRef.current && !avatarRef.current.contains(e.target as Node)) setAvatarOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    toast({ title: "Signed out" });
+    setAvatarOpen(false);
+    navigate("/");
+  };
+
+  const initial = user?.user_metadata?.full_name?.charAt(0)?.toUpperCase() || user?.email?.charAt(0)?.toUpperCase() || "U";
 
   const navLinks = [
     { label: "How It Works", href: "#how-it-works" },
@@ -57,7 +79,49 @@ const NavbarPlinq = () => {
           </div>
 
           <div className="hidden md:flex items-center gap-4">
-            {!isAuthenticated && (
+            {isAuthenticated ? (
+              <>
+                <button
+                  onClick={() => navigate('/dashboard')}
+                  style={{
+                    background: 'none', border: 'none', cursor: 'pointer',
+                    fontFamily: "'Syne', sans-serif", fontWeight: 600, fontSize: 13,
+                    letterSpacing: '0.05em', color: '#4B4453',
+                  }}
+                  className="hover:!text-[#7C3AED] transition-colors"
+                >
+                  Dashboard
+                </button>
+                <div className="relative" ref={avatarRef}>
+                  <button
+                    onClick={() => setAvatarOpen(!avatarOpen)}
+                    style={{
+                      width: 34, height: 34, borderRadius: '50%', background: 'rgba(124,58,237,0.12)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 14,
+                      color: '#7C3AED', border: 'none', cursor: 'pointer',
+                    }}
+                    className="hover:!bg-[rgba(124,58,237,0.22)] transition-colors"
+                  >
+                    {initial}
+                  </button>
+                  {avatarOpen && (
+                    <div style={{ position: 'absolute', right: 0, top: 42, width: 192, background: '#FFFFFF', border: '1px solid #D6D3CD', borderRadius: 8, boxShadow: '0 4px 16px rgba(0,0,0,0.10)', zIndex: 50, padding: '4px 0' }}>
+                      <button onClick={() => { navigate('/dashboard'); setAvatarOpen(false); }} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', width: '100%', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#2D2235' }} className="hover:!bg-[#F0ECE7] transition-colors">
+                        <LayoutDashboard style={{ width: 16, height: 16, color: '#9B8FA3' }} /> Dashboard
+                      </button>
+                      <button onClick={() => { navigate('/dashboard/account'); setAvatarOpen(false); }} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', width: '100%', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#2D2235' }} className="hover:!bg-[#F0ECE7] transition-colors">
+                        <Settings style={{ width: 16, height: 16, color: '#9B8FA3' }} /> Account
+                      </button>
+                      <div style={{ borderTop: '1px solid #D6D3CD', margin: '4px 0' }} />
+                      <button onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', width: '100%', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#DC2626' }} className="hover:!bg-[#FEE2E2] transition-colors">
+                        <LogOut style={{ width: 16, height: 16 }} /> Log out
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </>
+            ) : (
               <>
                 <button
                   onClick={() => navigate('/signup?mode=signin')}
@@ -116,7 +180,24 @@ const NavbarPlinq = () => {
                 {link.label}
               </button>
             ))}
-            {!isAuthenticated && (
+            {isAuthenticated ? (
+              <div className="space-y-2">
+                <button
+                  onClick={() => { navigate('/dashboard'); setIsMenuOpen(false); }}
+                  className="block w-full text-left py-2"
+                  style={{ color: '#7C3AED', fontFamily: "'Syne', sans-serif", fontWeight: 700, textTransform: 'uppercase', fontSize: 14, letterSpacing: '0.05em' }}
+                >
+                  Dashboard
+                </button>
+                <button
+                  onClick={() => { handleLogout(); setIsMenuOpen(false); }}
+                  className="block w-full text-left py-2"
+                  style={{ color: '#DC2626', fontFamily: "'Syne', sans-serif", fontWeight: 600, fontSize: 14 }}
+                >
+                  Log out
+                </button>
+              </div>
+            ) : (
               <div className="flex gap-3">
                 <button
                   onClick={() => { navigate('/signup?mode=signin'); setIsMenuOpen(false); }}

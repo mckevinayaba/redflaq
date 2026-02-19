@@ -2,11 +2,13 @@ import { useState, useRef, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import { useToast } from "@/hooks/use-toast";
-import { User, LayoutDashboard, LogOut, Settings } from "lucide-react";
+import { User, LayoutDashboard, LogOut, Settings, Shield } from "lucide-react";
 
 export default function AppHeader() {
   const { user } = useAuth();
+  const { isStaff } = useUserRole();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
@@ -52,6 +54,11 @@ export default function AppHeader() {
             <Link to="/dashboard" onClick={() => setOpen(false)} className="flex items-center gap-2 px-4 py-2.5 font-body text-sm text-foreground hover:bg-muted transition-colors">
               <LayoutDashboard className="h-4 w-4 text-muted-foreground" /> Dashboard
             </Link>
+            {isStaff && (
+              <Link to="/admin" onClick={() => setOpen(false)} className="flex items-center gap-2 px-4 py-2.5 font-body text-sm text-primary hover:bg-muted transition-colors">
+                <Shield className="h-4 w-4" /> Admin Dashboard
+              </Link>
+            )}
             <Link to="/dashboard/account" onClick={() => setOpen(false)} className="flex items-center gap-2 px-4 py-2.5 font-body text-sm text-foreground hover:bg-muted transition-colors">
               <Settings className="h-4 w-4 text-muted-foreground" /> Account
             </Link>

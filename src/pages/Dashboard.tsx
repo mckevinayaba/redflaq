@@ -74,13 +74,13 @@ export default function Dashboard() {
   return (
     <DashboardLayout>
       {/* Header */}
-      <div className="mb-8">
+      <div className="mb-6 sm:mb-8">
         <p className="font-mono text-[11px] tracking-widest text-muted-foreground uppercase mb-1">Dashboard</p>
-        <h1 className="font-heading text-3xl text-foreground">Welcome back, {firstName}</h1>
+        <h1 className="font-heading text-2xl sm:text-3xl text-foreground">Welcome back, {firstName}</h1>
       </div>
 
       {/* Top cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-5 mb-6 sm:mb-8">
         {/* Total checks */}
         <div className="bg-card rounded-xl border border-border p-6 shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-center gap-3 mb-4">
@@ -134,9 +134,9 @@ export default function Dashboard() {
       </div>
 
       {/* Recent checks table */}
-      <div className="bg-card rounded-xl border border-border shadow-sm mb-8">
-        <div className="px-6 py-4 border-b border-border flex items-center justify-between">
-          <h2 className="font-heading text-lg text-foreground">Recent checks</h2>
+      <div className="bg-card rounded-xl border border-border shadow-sm mb-6 sm:mb-8">
+        <div className="px-4 sm:px-6 py-4 border-b border-border flex items-center justify-between">
+          <h2 className="font-heading text-base sm:text-lg text-foreground">Recent checks</h2>
           {searches.length > 0 && (
             <Link to="/dashboard/reports" className="font-body text-sm text-primary hover:underline flex items-center gap-1">
               View all <ArrowRight className="h-3 w-3" />
@@ -159,49 +159,65 @@ export default function Dashboard() {
             </Link>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-border">
-                  <th className="text-left px-6 py-3 font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Person</th>
-                  <th className="text-left px-6 py-3 font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Date</th>
-                  <th className="text-left px-6 py-3 font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Result</th>
-                  <th className="text-left px-6 py-3 font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Matches</th>
-                  <th className="text-right px-6 py-3"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {searches.slice(0, 10).map((s) => {
-                  const risk = riskConfig[s.risk_level] || riskConfig.GREEN;
-                  return (
-                    <tr key={s.id} className="border-b border-border last:border-0 hover:bg-purple-50/50 transition-colors">
-                      <td className="px-6 py-4 font-body text-sm text-foreground font-medium">{s.search_name || "—"}</td>
-                      <td className="px-6 py-4 font-body text-sm text-muted-foreground">
-                        {new Date(s.searched_at).toLocaleDateString("en-ZA")}
-                      </td>
-                      <td className="px-6 py-4">
-                        <span
-                          className="inline-block px-3 py-1 rounded-full font-mono text-[10px] font-semibold"
-                          style={{ color: risk.color, background: risk.bg }}
-                        >
-                          {risk.label}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 font-mono text-sm text-muted-foreground">{s.matches_found}</td>
-                      <td className="px-6 py-4 text-right">
-                        <Link
-                          to={`/results?search_id=${s.search_id}`}
-                          className="font-body text-sm text-primary hover:underline"
-                        >
-                          View report
-                        </Link>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+          <>
+            {/* Mobile card view */}
+            <div className="sm:hidden divide-y divide-border">
+              {searches.slice(0, 10).map((s) => {
+                const risk = riskConfig[s.risk_level] || riskConfig.GREEN;
+                return (
+                  <div key={s.id} className="px-4 py-4 space-y-2">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <p className="font-body text-sm text-foreground font-medium">{s.search_name || "—"}</p>
+                        <p className="font-body text-xs text-muted-foreground">{new Date(s.searched_at).toLocaleDateString("en-ZA")}</p>
+                      </div>
+                      <span className="inline-block px-2.5 py-0.5 rounded-full font-mono text-[10px] font-semibold" style={{ color: risk.color, background: risk.bg }}>
+                        {risk.label}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="font-mono text-xs text-muted-foreground">{s.matches_found} match{s.matches_found !== 1 ? "es" : ""}</span>
+                      <Link to={`/results?search_id=${s.search_id}`} className="font-body text-sm text-primary hover:underline">View report</Link>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            {/* Desktop table view */}
+            <div className="hidden sm:block overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="text-left px-6 py-3 font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Person</th>
+                    <th className="text-left px-6 py-3 font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Date</th>
+                    <th className="text-left px-6 py-3 font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Result</th>
+                    <th className="text-left px-6 py-3 font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Matches</th>
+                    <th className="text-right px-6 py-3"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {searches.slice(0, 10).map((s) => {
+                    const risk = riskConfig[s.risk_level] || riskConfig.GREEN;
+                    return (
+                      <tr key={s.id} className="border-b border-border last:border-0 hover:bg-purple-50/50 transition-colors">
+                        <td className="px-6 py-4 font-body text-sm text-foreground font-medium">{s.search_name || "—"}</td>
+                        <td className="px-6 py-4 font-body text-sm text-muted-foreground">{new Date(s.searched_at).toLocaleDateString("en-ZA")}</td>
+                        <td className="px-6 py-4">
+                          <span className="inline-block px-3 py-1 rounded-full font-mono text-[10px] font-semibold" style={{ color: risk.color, background: risk.bg }}>
+                            {risk.label}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 font-mono text-sm text-muted-foreground">{s.matches_found}</td>
+                        <td className="px-6 py-4 text-right">
+                          <Link to={`/results?search_id=${s.search_id}`} className="font-body text-sm text-primary hover:underline">View report</Link>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </div>
 

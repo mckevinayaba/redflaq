@@ -125,12 +125,12 @@ export default function DashboardNewCheck() {
   return (
     <DashboardLayout>
       <p className="font-mono text-[11px] tracking-widest text-muted-foreground uppercase mb-1">New check</p>
-      <h1 className="font-heading text-3xl text-foreground mb-8">Start a new safety check</h1>
+      <h1 className="font-heading text-2xl sm:text-3xl text-foreground mb-6 sm:mb-8">Start a new safety check</h1>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
         {/* Form */}
         <div className="lg:col-span-2">
-          <div className="bg-card rounded-xl border border-border p-8 shadow-sm">
+          <div className="bg-card rounded-xl border border-border p-5 sm:p-8 shadow-sm">
             <form onSubmit={handleSubmit} className="space-y-6">
 
               {/* Error banner */}

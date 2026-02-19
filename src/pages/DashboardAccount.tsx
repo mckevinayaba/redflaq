@@ -35,7 +35,7 @@ export default function DashboardAccount() {
   return (
     <DashboardLayout>
       <p className="font-mono text-[11px] tracking-widest text-muted-foreground uppercase mb-1">Account</p>
-      <h1 className="font-heading text-3xl text-foreground mb-8">Account & Billing</h1>
+      <h1 className="font-heading text-2xl sm:text-3xl text-foreground mb-6 sm:mb-8">Account & Billing</h1>
 
       <div className="max-w-2xl space-y-6">
         <div className="bg-card rounded-xl border border-border p-6 shadow-sm">

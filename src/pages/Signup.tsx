@@ -51,7 +51,7 @@ export default function Signup() {
       if (error) {
         toast({ title: "Sign in failed", description: error.message, variant: "destructive" });
       } else {
-        navigate("/#search");
+        navigate("/dashboard");
       }
     }
 
@@ -152,13 +152,27 @@ export default function Signup() {
             </p>
           )}
 
-          <div style={{ marginTop: 24, textAlign: 'center' }}>
+          <div style={{ marginTop: 24, textAlign: 'center', display: 'flex', flexDirection: 'column', gap: 8 }}>
             <button
               onClick={() => setMode(mode === "signup" ? "signin" : "signup")}
               style={{ background: 'none', border: 'none', fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#7C3AED', cursor: 'pointer' }}
             >
               {mode === "signup" ? "Already have an account? Sign in" : "Don't have an account? Sign up free"}
             </button>
+            {mode === "signin" && (
+              <button
+                type="button"
+                onClick={async () => {
+                  if (!email.trim()) { toast({ title: "Enter your email", description: "Please enter your email address first.", variant: "destructive" }); return; }
+                  const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), { redirectTo: `${window.location.origin}/reset-password` });
+                  if (error) toast({ title: "Error", description: error.message, variant: "destructive" });
+                  else toast({ title: "Check your email", description: "Password reset link sent." });
+                }}
+                style={{ background: 'none', border: 'none', fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#78716C', cursor: 'pointer' }}
+              >
+                Forgot your password?
+              </button>
+            )}
           </div>
         </div>
 

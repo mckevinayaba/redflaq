@@ -20,7 +20,7 @@ const SA_PROVINCES = [
 
 const REASONS = [
   "",
-  "Potential romantic partner",
+  "💜 Potential romantic partner",
   "Sharing my apartment / flat-mate",
   "Tenant or landlord screening",
   "Childcare or home helper",
@@ -198,9 +198,19 @@ export default function DashboardNewCheck() {
                 <label className="block font-mono text-[10px] tracking-wider text-muted-foreground uppercase mb-2">
                   Reason for search <span className="text-destructive">*</span>
                 </label>
-                <select className={inputClass} value={reason} onChange={(e) => { setReason(e.target.value); setFormError(""); }} disabled={isSubmitting}>
+                <select
+                  className={inputClass}
+                  value={reason}
+                  onChange={(e) => { setReason(e.target.value); setFormError(""); }}
+                  disabled={isSubmitting}
+                  style={reason === REASONS[1] ? { color: 'hsl(var(--primary))' } : {}}
+                >
                   <option value="">Select reason</option>
-                  {REASONS.filter(Boolean).map((r) => <option key={r} value={r}>{r}</option>)}
+                  {REASONS.filter(Boolean).map((r, i) => (
+                    <option key={r} value={r} style={i === 0 ? { color: 'hsl(var(--primary))', fontWeight: 600 } : {}}>
+                      {r}
+                    </option>
+                  ))}
                 </select>
                 <p className="font-body text-xs text-muted-foreground mt-1.5">
                   We ask for your reason to respect everyone's rights and stay POPIA‑aware. Choose the option that best fits your situation.

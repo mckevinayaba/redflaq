@@ -14,6 +14,7 @@ import WhyRedflaqSection from "@/components/landing/WhyRedflaqSection";
 import FAQPlinq from "@/components/landing/FAQPlinq";
 import FinalCTAPlinq from "@/components/landing/FinalCTAPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
+import ShareSection from "@/components/landing/ShareSection";
 
 const Index = () => {
   return (
@@ -47,6 +48,7 @@ const Index = () => {
       <WhyRedflaqSection />
       <FAQPlinq />
       <FinalCTAPlinq />
+      <ShareSection />
       <FooterPlinq />
     </div>
   );

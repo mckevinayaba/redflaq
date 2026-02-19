@@ -6,6 +6,7 @@ import { Progress } from "@/components/ui/progress";
 import IdentityMatchSelector from "@/components/IdentityMatchSelector";
 import { type PersonRecord } from "@/utils/identityConfidence";
 import { supabase } from "@/integrations/supabase/client";
+import ShareInviteModal from "@/components/ShareInviteModal";
 
 interface WantedPerson {
   id: string;
@@ -147,6 +148,7 @@ const ResultsPageUpdated = () => {
   const [isDisputeModalOpen, setIsDisputeModalOpen] = useState(false);
   const [selectedMatch, setSelectedMatch] = useState<WantedPerson | null>(null);
   const [showMatchSelector, setShowMatchSelector] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
   const searchId = searchParams.get("search_id");
 
   useEffect(() => {
@@ -670,7 +672,16 @@ const ResultsPageUpdated = () => {
             Back to Dashboard
           </button>
         </div>
-        <p style={{ textAlign: 'center', marginTop: 24, fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#78716C', lineHeight: 1.7, maxWidth: 520, marginLeft: 'auto', marginRight: 'auto' }}>
+        <p style={{ textAlign: 'center', marginTop: 20, fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#78716C' }}>
+          If this helped you, you can{" "}
+          <button
+            onClick={() => setShareOpen(true)}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontSize: 13, fontWeight: 700, color: '#7C3AED', textDecoration: 'underline', padding: 0 }}
+          >
+            share RedFlaq with another woman who needs it
+          </button>.
+        </p>
+        <p style={{ textAlign: 'center', marginTop: 16, fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#78716C', lineHeight: 1.7, maxWidth: 520, marginLeft: 'auto', marginRight: 'auto' }}>
           RedFlaq is a support tool, not a replacement for police, social workers or legal advice. If you are in immediate danger, contact emergency services or trusted support organisations.
         </p>
         <div style={{ textAlign: 'center', marginTop: 16 }}>
@@ -684,6 +695,8 @@ const ResultsPageUpdated = () => {
           </a>
         </div>
       </div>
+
+      <ShareInviteModal open={shareOpen} onOpenChange={setShareOpen} />
 
       {/* Mobile responsive styles */}
       <style>{`

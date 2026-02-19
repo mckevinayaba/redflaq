@@ -1,36 +1,26 @@
 
-# Fix: Make Signup and Sign-in Smoother
+
+# Fix: Show user state clearly on landing page navbar
 
 ## Problem
-The signup and sign-in technically work, but:
-1. After signup, users must confirm their email before signing in -- there's no clear on-screen message explaining this (just a brief toast).
-2. There's no visible success state after signing up -- the form just sits there looking the same.
-3. If a user tries to sign in without confirming, they get a generic error ("Email not confirmed") with no guidance.
+When you're logged in and visit the landing page, the "Sign up free" and "Log in" buttons disappear (correct behaviour), but nothing replaces them. You only see "VERIFY NOW" with no indication that you're signed in or any way to reach your dashboard. This feels broken.
 
 ## Solution
+When authenticated, replace the "Sign up free / Log in" buttons with:
+- A **"Dashboard"** link that goes to `/dashboard`
+- The same **user avatar button** used in the app header (showing your initial, with a dropdown for Dashboard, Account, Log out)
 
-### 1. Show a clear confirmation screen after signup
-Instead of just a toast, replace the form with a visible confirmation message:
-- Large envelope/email icon
-- Heading: "Check your inbox"
-- Body: "We sent a confirmation link to **[email]**. Click the link to activate your account, then come back and sign in."
-- A "Resend email" button
-- A "Back to sign in" link
+This way:
+- Not logged in: you see "Log in", "Sign up free", "Verify Now"
+- Logged in: you see "Dashboard", avatar dropdown, "Verify Now"
 
-### 2. Handle "Email not confirmed" sign-in error gracefully
-When sign-in fails with "Email not confirmed":
-- Show a specific message: "Your email hasn't been confirmed yet. Check your inbox for the confirmation link."
-- Offer a "Resend confirmation email" button
+## Technical Details
 
-### 3. Enable auto-confirm for faster testing (optional, your choice)
-If you want to skip email confirmation entirely (users can sign up and immediately sign in), I can enable that. This is simpler but less secure.
+### File: `src/components/landing/NavbarPlinq.tsx`
+- Import `supabase` client and `useToast` for logout
+- When `isAuthenticated` is true, render:
+  - A "Dashboard" text link navigating to `/dashboard`
+  - A circular avatar button (user initial) with a dropdown (Dashboard, Account, Log out) -- matching the app header style
+- Keep "Verify Now" button visible in both states
+- Apply the same logic to the mobile menu: show "Dashboard" and "Log out" instead of "Log in" and "Sign up free" when authenticated
 
-## Technical Changes
-
-### File: `src/pages/Signup.tsx`
-- Add a `signupSuccess` state that toggles after successful signup
-- When `signupSuccess` is true, render a confirmation card instead of the form
-- In sign-in mode, detect `"Email not confirmed"` error and show a helpful message with a resend button
-- Add a `handleResendConfirmation` function using `supabase.auth.resend()`
-
-No database changes needed. No new files needed.

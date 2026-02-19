@@ -44,8 +44,9 @@ export default function DashboardAccount() {
             <div className="flex items-center gap-3">
               <User className="h-4 w-4 text-muted-foreground" />
               <div>
-                <p className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Name</p>
+                <p className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Full name</p>
                 <p className="font-body text-sm text-foreground">{profile?.full_name || "—"}</p>
+                <p className="font-body text-xs text-muted-foreground mt-0.5">This name is for your account only and does not appear in any reports.</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -53,6 +54,7 @@ export default function DashboardAccount() {
               <div>
                 <p className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Email</p>
                 <p className="font-body text-sm text-foreground">{user?.email || "—"}</p>
+                <p className="font-body text-xs text-muted-foreground mt-0.5">We use this email to send your reports and important security updates.</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -69,11 +71,25 @@ export default function DashboardAccount() {
 
         <div className="bg-card rounded-xl border border-border p-6 shadow-sm">
           <h2 className="font-heading text-lg text-foreground mb-4">Security</h2>
+          <p className="font-body text-xs text-muted-foreground mb-3">Choose a strong password you don't use anywhere else.</p>
           <button
             onClick={handleResetPassword}
             className="px-5 py-2.5 border border-border text-foreground font-body font-medium text-sm rounded-lg hover:bg-muted transition-colors"
           >
             Reset password
+          </button>
+        </div>
+
+        <div className="bg-card rounded-xl border border-destructive/30 p-6 shadow-sm">
+          <h2 className="font-heading text-lg text-foreground mb-2">Delete my account</h2>
+          <p className="font-body text-sm text-muted-foreground mb-4">
+            If you delete your account, you will lose access to your reports and history. We will keep only the information we must retain for legal or financial reasons.
+          </p>
+          <button
+            className="px-5 py-2.5 border border-destructive text-destructive font-body font-medium text-sm rounded-lg hover:bg-destructive/10 transition-colors"
+            onClick={() => window.location.href = "mailto:support@redflaq.com?subject=Account%20Deletion%20Request"}
+          >
+            Request account deletion
           </button>
         </div>
       </div>

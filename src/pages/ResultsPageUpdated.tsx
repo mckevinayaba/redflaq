@@ -102,7 +102,7 @@ const getRiskExplainer = (riskLevel: string, persons: WantedPerson[]) => {
   switch (riskLevel) {
     case 'RED':
       return {
-        title: 'Serious public red flag — wanted for violent or serious offenses',
+        title: 'We found public‑record warnings linked to this name that suggest a serious safety concern. Carefully consider your next steps and prioritise your safety.',
         triggers: [
           hasViolent ? 'Active warrant for violent crime (assault, murder, sexual offense, or firearms)' : null,
           hasSanctions ? 'Listed on FIC financial sanctions list' : null,
@@ -112,7 +112,7 @@ const getRiskExplainer = (riskLevel: string, persons: WantedPerson[]) => {
       };
     case 'ORANGE':
       return {
-        title: 'Medium Risk — Criminal records found',
+        title: 'We found some public‑record warnings linked to this name. They may or may not be current, but they are important context for your decision.',
         triggers: [
           'Active warrant or legal notice found in public records',
           persons.length > 1 ? 'Multiple possible matches — verify identity carefully' : null,
@@ -122,7 +122,7 @@ const getRiskExplainer = (riskLevel: string, persons: WantedPerson[]) => {
       };
     case 'YELLOW':
       return {
-        title: 'Elevated — Low-confidence match found',
+        title: 'We found limited or lower‑level public‑record information linked to this name. It does not eliminate risk, but there are no serious warnings in our sources.',
         triggers: [
           'A possible match was found but confidence is low',
           'Name may match multiple people in the database',
@@ -131,7 +131,7 @@ const getRiskExplainer = (riskLevel: string, persons: WantedPerson[]) => {
       };
     default:
       return {
-        title: 'No public red flags found in the South African wanted/sanctions lists we monitor',
+        title: 'We did not find matching public‑record warnings for this name in the sources we currently check. This does not guarantee safety, but no visible red flags were found.',
         triggers: ['No active warrants, sanctions, or legal notices found in searched databases'],
         action: 'A clean result does not mean "no criminal record" — it means no match in these public sources. Always trust your instincts and take normal precautions.',
       };
@@ -283,6 +283,10 @@ const ResultsPageUpdated = () => {
             <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.1em', color: 'var(--muted)', marginBottom: 4 }}>WHAT YOU SHOULD DO:</p>
             <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 600, color: 'var(--ink)' }}>{riskExplainer.action}</p>
           </div>
+
+          <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.08em', color: 'var(--muted)', marginTop: 16 }}>
+            RedFlaq uses South African public‑record warning lists. It is not a full SAPS criminal record.
+          </p>
         </div>
 
         {/* Identity Match Selector for multiple matches */}
@@ -666,6 +670,9 @@ const ResultsPageUpdated = () => {
             Back to Dashboard
           </button>
         </div>
+        <p style={{ textAlign: 'center', marginTop: 24, fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#78716C', lineHeight: 1.7, maxWidth: 520, marginLeft: 'auto', marginRight: 'auto' }}>
+          RedFlaq is a support tool, not a replacement for police, social workers or legal advice. If you are in immediate danger, contact emergency services or trusted support organisations.
+        </p>
         <div style={{ textAlign: 'center', marginTop: 16 }}>
           <a
             href="/"

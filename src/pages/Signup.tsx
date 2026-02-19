@@ -11,7 +11,10 @@ export default function Signup() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [nameError, setNameError] = useState("");
-  const [mode, setMode] = useState<"signup" | "signin">("signup");
+  const [mode, setMode] = useState<"signup" | "signin">(() => {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("mode") === "signin" ? "signin" : "signup";
+  });
   const [signupSuccess, setSignupSuccess] = useState(false);
   const [emailNotConfirmed, setEmailNotConfirmed] = useState(false);
   const [resending, setResending] = useState(false);

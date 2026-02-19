@@ -68,8 +68,18 @@ const FooterPlinq = () => {
           </div>
         </div>
 
+        {/* Account prompt */}
+        <div style={{ borderTop: '1px solid #D6D3CD', marginTop: 48, paddingTop: 32, textAlign: 'center', marginBottom: 32 }}>
+          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#4B4453' }}>
+            Ready to keep checking?{" "}
+            <a href="/signup?mode=signin" style={{ color: '#7C3AED', fontWeight: 700, textDecoration: 'underline' }}>
+              Log in to your RedFlaq account
+            </a>
+          </p>
+        </div>
+
         {/* Bottom bar */}
-        <div className="flex flex-wrap justify-between items-center gap-4" style={{ borderTop: '1px solid #D6D3CD', marginTop: 48, paddingTop: 32 }}>
+        <div className="flex flex-wrap justify-between items-center gap-4" style={{ borderTop: '1px solid #D6D3CD', paddingTop: 32 }}>
           <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#9CA3AF' }}>
             © 2026 REDFLAQ · All rights reserved · Public records only · POPIA‑aware
           </span>

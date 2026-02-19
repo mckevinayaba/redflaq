@@ -25,7 +25,7 @@ const NavbarPlinq = () => {
 
   const handleVerifyNow = () => {
     if (isAuthenticated) {
-      document.getElementById('search')?.scrollIntoView({ behavior: 'smooth' });
+      navigate('/dashboard/new-check');
     } else {
       navigate('/signup');
     }
@@ -57,6 +57,33 @@ const NavbarPlinq = () => {
           </div>
 
           <div className="hidden md:flex items-center gap-4">
+            {!isAuthenticated && (
+              <>
+                <button
+                  onClick={() => navigate('/signup?mode=signin')}
+                  style={{
+                    background: 'none', border: 'none', cursor: 'pointer',
+                    fontFamily: "'Syne', sans-serif", fontWeight: 600, fontSize: 13,
+                    letterSpacing: '0.05em', color: '#4B4453',
+                  }}
+                  className="hover:!text-[#7C3AED] transition-colors"
+                >
+                  Log in
+                </button>
+                <button
+                  onClick={() => navigate('/signup')}
+                  style={{
+                    background: 'transparent', color: '#7C3AED', padding: '8px 20px',
+                    fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13,
+                    letterSpacing: '0.08em', textTransform: 'uppercase',
+                    border: '1.5px solid #7C3AED', cursor: 'pointer',
+                  }}
+                  className="hover:!bg-[#7C3AED] hover:!text-white transition-colors"
+                >
+                  Sign up free
+                </button>
+              </>
+            )}
             <button
               onClick={handleVerifyNow}
               style={{
@@ -89,6 +116,24 @@ const NavbarPlinq = () => {
                 {link.label}
               </button>
             ))}
+            {!isAuthenticated && (
+              <div className="flex gap-3">
+                <button
+                  onClick={() => { navigate('/signup?mode=signin'); setIsMenuOpen(false); }}
+                  className="flex-1"
+                  style={{ background: 'transparent', color: '#4B4453', padding: '12px', fontFamily: "'Syne', sans-serif", fontWeight: 600, fontSize: 13, border: '1.5px solid #D6D3CD' }}
+                >
+                  Log in
+                </button>
+                <button
+                  onClick={() => { navigate('/signup'); setIsMenuOpen(false); }}
+                  className="flex-1"
+                  style={{ background: 'transparent', color: '#7C3AED', padding: '12px', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, border: '1.5px solid #7C3AED' }}
+                >
+                  Sign up free
+                </button>
+              </div>
+            )}
             <button
               onClick={handleVerifyNow}
               className="w-full"

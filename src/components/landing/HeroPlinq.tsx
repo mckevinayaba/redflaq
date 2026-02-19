@@ -22,7 +22,7 @@ const HeroPlinq = () => {
     <section className="relative overflow-hidden" style={{ background: '#F7F4F0', minHeight: '100vh' }}>
       <div className="grid lg:grid-cols-2 min-h-screen max-w-[1280px] mx-auto">
         {/* LEFT COLUMN */}
-        <div style={{ padding: '160px 40px 80px 40px' }}>
+        <div className="pt-24 px-5 pb-10 lg:pt-40 lg:px-10 lg:pb-20">
           <div style={{
             background: '#FAF5FF', border: '1px solid #EDE9FE', padding: '6px 14px',
             display: 'inline-flex', alignItems: 'center', gap: 8,
@@ -34,17 +34,17 @@ const HeroPlinq = () => {
 
           <h1 style={{
             fontFamily: "'DM Serif Display', serif",
-            fontSize: 'clamp(44px, 5vw, 72px)', lineHeight: 1.05,
+            lineHeight: 1.05,
             color: '#2D2235', marginBottom: 24,
-          }}>
+          }} className="text-[36px] sm:text-[44px] lg:text-[56px] xl:text-[72px]">
             Before you give him a spare key,<br />
             give yourself <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>clarity.</em>
           </h1>
 
           <p style={{
-            fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 400,
+            fontFamily: "'Syne', sans-serif", fontWeight: 400,
             lineHeight: 1.7, color: '#4B4453', maxWidth: 480, marginBottom: 12,
-          }}>
+          }} className="text-base lg:text-lg">
             RedFlaq searches South African criminal records so you can make informed decisions about who to trust with your life, home, or business. Instant. Confidential. R99.
           </p>
 
@@ -61,7 +61,7 @@ const HeroPlinq = () => {
             ))}
           </div>
 
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-col sm:flex-row gap-4">
             <button
               onClick={handleVerify}
               className="hover:opacity-90 transition-all hover:-translate-y-0.5 hover:shadow-lg"
@@ -95,7 +95,7 @@ const HeroPlinq = () => {
         </div>
 
         {/* RIGHT COLUMN — GBV Stat Cards */}
-        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '120px 40px 80px', gap: 16 }}>
+        <div className="flex flex-col justify-center px-5 pb-20 gap-4 lg:px-10 lg:pt-28 lg:pb-20">
           <div ref={statOneRef} className="scroll-reveal visible" style={{ background: 'white', border: '1.5px solid #EDE9FE', padding: '36px 32px' }}>
             <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#7C3AED', marginBottom: 8 }}>
               SOUTH AFRICAN REALITY

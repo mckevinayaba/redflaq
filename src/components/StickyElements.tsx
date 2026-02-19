@@ -97,7 +97,7 @@ export const StickyElements = () => {
             onClick={handleCTAClick}
             className="bg-white hover:bg-white/90 text-[#8B5CF6] font-bold"
           >
-            Check Now - R50
+            Check Now - R99
           </Button>
         </div>
       </div>
@@ -117,7 +117,7 @@ export const StickyElements = () => {
             onClick={handleCTAClick}
             className="bg-white hover:bg-white/90 text-[#8B5CF6] font-bold whitespace-nowrap text-sm px-4"
           >
-            💜 Get Your Report Now - R50
+            💜 Get Your Report Now - R99
           </Button>
         </div>
       </div>

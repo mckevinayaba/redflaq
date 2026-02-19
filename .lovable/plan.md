@@ -1,72 +1,36 @@
 
-# Fix Mobile Layout and Make RedFlaq Installable (PWA)
+# Fix: Make Signup and Sign-in Smoother
 
-## Problem 1: Mobile Display Issues
+## Problem
+The signup and sign-in technically work, but:
+1. After signup, users must confirm their email before signing in -- there's no clear on-screen message explaining this (just a brief toast).
+2. There's no visible success state after signing up -- the form just sits there looking the same.
+3. If a user tries to sign in without confirming, they get a generic error ("Email not confirmed") with no guidance.
 
-The screenshot shows the mobile version has a dark/black background and oversized text. This is caused by:
+## Solution
 
-- **Missing dark mode prevention**: The site doesn't include `color-scheme: light` meta tag, so phones with dark mode enabled invert the colors
-- **Hero padding too large on mobile**: The left column has `padding: 160px 40px 80px 40px` which wastes space on small screens
-- **Font sizes not optimized for mobile**: The headline uses `clamp(44px, 5vw, 72px)` which is still very large on mobile
-- **Stat cards padding not responsive**: Right column has `padding: 120px 40px 80px` which is excessive on mobile
-- **Sticky bottom bar (StickyElements)** still shows old R50 pricing and may overlap content
+### 1. Show a clear confirmation screen after signup
+Instead of just a toast, replace the form with a visible confirmation message:
+- Large envelope/email icon
+- Heading: "Check your inbox"
+- Body: "We sent a confirmation link to **[email]**. Click the link to activate your account, then come back and sign in."
+- A "Resend email" button
+- A "Back to sign in" link
 
-### Changes:
+### 2. Handle "Email not confirmed" sign-in error gracefully
+When sign-in fails with "Email not confirmed":
+- Show a specific message: "Your email hasn't been confirmed yet. Check your inbox for the confirmation link."
+- Offer a "Resend confirmation email" button
 
-1. **index.html** -- Add `<meta name="color-scheme" content="light only">` and `theme-color` meta tag to prevent dark mode on mobile browsers
+### 3. Enable auto-confirm for faster testing (optional, your choice)
+If you want to skip email confirmation entirely (users can sign up and immediately sign in), I can enable that. This is simpler but less secure.
 
-2. **HeroPlinq.tsx** -- Make responsive:
-   - Reduce left column padding on mobile (e.g., `padding: 100px 20px 40px`)
-   - Reduce right column padding on mobile
-   - Smaller headline font on mobile screens
-   - Stack buttons vertically on small screens
+## Technical Changes
 
-3. **StickyElements.tsx** -- Update R50 references to R99
+### File: `src/pages/Signup.tsx`
+- Add a `signupSuccess` state that toggles after successful signup
+- When `signupSuccess` is true, render a confirmation card instead of the form
+- In sign-in mode, detect `"Email not confirmed"` error and show a helpful message with a resend button
+- Add a `handleResendConfirmation` function using `supabase.auth.resend()`
 
-4. **NavbarPlinq.tsx** -- Ensure navbar height works well on mobile
-
----
-
-## Problem 2: Make RedFlaq Installable as a PWA
-
-To pin RedFlaq to desktop and phone home screens, we will set up a Progressive Web App (PWA):
-
-1. **Install `vite-plugin-pwa`** dependency
-
-2. **vite.config.ts** -- Configure the PWA plugin with:
-   - App name: "RedFlaq"
-   - Theme color: `#7C3AED`
-   - Background color: `#F7F4F0`
-   - Display: standalone
-   - Icons (we will use a simple generated icon)
-   - `navigateFallbackDenylist: [/^\/~oauth/]`
-
-3. **index.html** -- Add:
-   - `<meta name="theme-color" content="#7C3AED">`
-   - `<meta name="apple-mobile-web-app-capable" content="yes">`
-   - `<meta name="apple-mobile-web-app-status-bar-style" content="default">`
-   - `<link rel="manifest" href="/manifest.webmanifest">`
-
-4. **Create PWA icons** in `/public`:
-   - `pwa-192x192.png` and `pwa-512x512.png` (simple purple hexagon with R)
-   - Or use an SVG icon that the PWA plugin can reference
-
-5. After publishing, users can:
-   - **Desktop (Chrome)**: Click the install icon in the address bar to pin it
-   - **Mobile (Android)**: Tap "Add to Home Screen" from the browser menu
-   - **Mobile (iPhone)**: Tap Share then "Add to Home Screen"
-
----
-
-## Technical Summary
-
-| File | Change |
-|------|--------|
-| `index.html` | Add color-scheme, theme-color, apple-mobile-web-app meta tags |
-| `src/components/landing/HeroPlinq.tsx` | Responsive padding, font sizes, button layout for mobile |
-| `src/components/StickyElements.tsx` | Update R50 to R99 |
-| `vite.config.ts` | Add vite-plugin-pwa configuration |
-| `public/pwa-192x192.svg` | Create PWA icon |
-| `public/pwa-512x512.svg` | Create PWA icon |
-
-After these changes, the mobile view will match the cream-and-purple desktop design, and users will be able to install RedFlaq as an app on their phone or desktop.
+No database changes needed. No new files needed.

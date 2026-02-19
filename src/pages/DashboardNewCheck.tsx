@@ -13,8 +13,8 @@ const SA_PROVINCES = [
 ];
 
 const REASONS = [
-  "", "Dating / Romantic interest", "Tenant screening", "Domestic worker check",
-  "Business partner", "Childcare provider", "Neighbour concern", "Other",
+  "", "Dating / Romantic interest", "Flat-share / Tenant", "Childcare provider",
+  "Landlord", "Domestic worker", "Business partner", "Neighbour concern", "Other",
 ];
 
 export default function DashboardNewCheck() {
@@ -179,7 +179,7 @@ export default function DashboardNewCheck() {
 
         {/* Side card */}
         <div className="hidden lg:block">
-          <div className="bg-purple-50 border border-border rounded-xl p-6 sticky top-10">
+          <div className="bg-primary/5 border border-border rounded-xl p-6 sticky top-10">
             <Heart className="h-8 w-8 text-primary mb-4" />
             <p className="font-heading text-lg text-foreground mb-3">Why this matters</p>
             <p className="font-body text-sm text-muted-foreground leading-relaxed mb-4">

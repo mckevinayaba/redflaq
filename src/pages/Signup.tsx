@@ -2,18 +2,23 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, ArrowLeft } from "lucide-react";
+import { Mail, ArrowLeft, Shield, Sparkles } from "lucide-react";
 
 export default function Signup() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [nameError, setNameError] = useState("");
   const [mode, setMode] = useState<"signup" | "signin">("signup");
   const [signupSuccess, setSignupSuccess] = useState(false);
   const [emailNotConfirmed, setEmailNotConfirmed] = useState(false);
   const [resending, setResending] = useState(false);
+  const [consent, setConsent] = useState(false);
+  // Welcome modal state
+  const [showWelcome, setShowWelcome] = useState(false);
+  const [welcomeName, setWelcomeName] = useState("");
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -42,6 +47,14 @@ export default function Signup() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (mode === "signup" && !validateFullName(fullName)) return;
+    if (mode === "signup" && password !== confirmPassword) {
+      toast({ title: "Passwords don't match", description: "Please make sure both passwords match.", variant: "destructive" });
+      return;
+    }
+    if (mode === "signup" && !consent) {
+      toast({ title: "Please agree", description: "You must agree to the Terms and Privacy Policy.", variant: "destructive" });
+      return;
+    }
     setLoading(true);
     setEmailNotConfirmed(false);
 
@@ -60,7 +73,7 @@ export default function Signup() {
         setSignupSuccess(true);
       }
     } else {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { data: signInData, error } = await supabase.auth.signInWithPassword({
         email: email.trim(),
         password,
       });
@@ -71,7 +84,28 @@ export default function Signup() {
           toast({ title: "Sign in failed", description: error.message, variant: "destructive" });
         }
       } else {
-        navigate("/dashboard");
+        // Smart redirect: check if user has any searches
+        const userId = signInData.user?.id;
+        if (userId) {
+          const { count } = await supabase
+            .from("searches")
+            .select("*", { count: "exact", head: true })
+            .eq("user_id", userId);
+          if (count && count > 0) {
+            navigate("/dashboard");
+          } else {
+            // First-time or no checks: show welcome then go to new check
+            const firstName = signInData.user?.user_metadata?.full_name?.split(" ")[0] || "";
+            if (firstName) {
+              setWelcomeName(firstName);
+              setShowWelcome(true);
+            } else {
+              navigate("/dashboard/new-check");
+            }
+          }
+        } else {
+          navigate("/dashboard");
+        }
       }
     }
 
@@ -81,7 +115,7 @@ export default function Signup() {
   const inputStyle: React.CSSProperties = {
     background: 'white', border: '1.5px solid #D6D3CD', padding: '14px 16px',
     fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#2D2235',
-    width: '100%', outline: 'none',
+    width: '100%', outline: 'none', borderRadius: 4,
   };
 
   const labelStyle: React.CSSProperties = {
@@ -89,6 +123,46 @@ export default function Signup() {
     letterSpacing: '0.1em', textTransform: 'uppercase', color: '#4B4453',
     display: 'block', marginBottom: 8,
   };
+
+  // Welcome modal overlay
+  if (showWelcome) {
+    return (
+      <div style={{ background: '#F7F4F0', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+        <div style={{ maxWidth: 480, width: '100%', textAlign: 'center' }}>
+          <div style={{ background: 'white', border: '1.5px solid #D6D3CD', padding: '48px 40px' }}>
+            <div style={{ width: 64, height: 64, background: '#F3F0FF', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
+              <Sparkles size={32} style={{ color: '#7C3AED' }} />
+            </div>
+            <h1 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, color: '#2D2235', marginBottom: 8 }}>
+              Welcome to RedFlaq, {welcomeName}
+            </h1>
+            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#78716C', lineHeight: 1.6, marginBottom: 32 }}>
+              Let's run your first safety check. It takes less than 60 seconds and costs R99.
+            </p>
+            <button
+              onClick={() => navigate("/dashboard/new-check")}
+              style={{
+                width: '100%', background: '#7C3AED', color: 'white', padding: '16px 24px',
+                fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700,
+                border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                borderRadius: 4,
+              }}
+              className="hover:!bg-[#6D28D9] transition-colors"
+            >
+              <Shield size={18} />
+              Run a safety check now
+            </button>
+            <button
+              onClick={() => navigate("/dashboard")}
+              style={{ background: 'none', border: 'none', fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', cursor: 'pointer', marginTop: 16 }}
+            >
+              Go to Dashboard instead
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ background: '#F7F4F0', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
@@ -120,7 +194,7 @@ export default function Signup() {
                   background: 'none', border: '1.5px solid #D6D3CD', padding: '12px 24px',
                   fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 600,
                   color: '#7C3AED', cursor: resending ? 'not-allowed' : 'pointer', width: '100%',
-                  opacity: resending ? 0.7 : 1,
+                  opacity: resending ? 0.7 : 1, borderRadius: 4,
                 }}
               >
                 {resending ? "Sending..." : "Resend confirmation email"}
@@ -142,7 +216,7 @@ export default function Signup() {
               </p>
 
               {emailNotConfirmed && (
-                <div style={{ background: '#FFF7ED', border: '1px solid #FDBA74', padding: 16, marginBottom: 20 }}>
+                <div style={{ background: '#FFF7ED', border: '1px solid #FDBA74', padding: 16, marginBottom: 20, borderRadius: 4 }}>
                   <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#9A3412', marginBottom: 8, lineHeight: 1.5 }}>
                     Your email hasn't been confirmed yet. Check your inbox for the confirmation link.
                   </p>
@@ -198,24 +272,55 @@ export default function Signup() {
                   />
                 </div>
 
+                {mode === "signup" && (
+                  <div>
+                    <label style={labelStyle}>Confirm Password *</label>
+                    <input
+                      style={inputStyle}
+                      type="password"
+                      placeholder="Re-enter your password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      minLength={6}
+                      required
+                    />
+                  </div>
+                )}
+
+                {mode === "signup" && (
+                  <label style={{ display: 'flex', alignItems: 'flex-start', gap: 10, cursor: 'pointer' }}>
+                    <input
+                      type="checkbox"
+                      checked={consent}
+                      onChange={(e) => setConsent(e.target.checked)}
+                      style={{ marginTop: 3, accentColor: '#7C3AED' }}
+                    />
+                    <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#78716C', lineHeight: 1.5 }}>
+                      I agree to the{" "}
+                      <Link to="/terms" target="_blank" style={{ color: '#7C3AED', textDecoration: 'underline' }}>Terms</Link>{" "}and{" "}
+                      <Link to="/privacy" target="_blank" style={{ color: '#7C3AED', textDecoration: 'underline' }}>Privacy Policy</Link>.
+                    </span>
+                  </label>
+                )}
+
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || (mode === "signup" && !consent)}
                   style={{
                     width: '100%', background: '#7C3AED', color: 'white', padding: 16,
                     fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700,
                     border: 'none', cursor: loading ? 'not-allowed' : 'pointer',
-                    opacity: loading ? 0.7 : 1,
+                    opacity: loading || (mode === "signup" && !consent) ? 0.5 : 1, borderRadius: 4,
                   }}
                   className="hover:!bg-[#6D28D9] transition-colors"
                 >
-                  {loading ? "Please wait..." : mode === "signup" ? "Sign Up Free" : "Sign In"}
+                  {loading ? "Please wait..." : mode === "signup" ? "Create my free account" : "Sign In"}
                 </button>
               </form>
 
               {mode === "signup" && (
                 <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#9CA3AF', marginTop: 16, lineHeight: 1.5 }}>
-                  We ask for your full name so we can keep your account secure and understand how people use RedFlaq. Your details are kept private and will never appear in any report.
+                  We ask for your full name to keep your account secure. Your details never appear in any report.
                 </p>
               )}
 

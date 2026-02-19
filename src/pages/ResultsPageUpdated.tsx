@@ -650,6 +650,32 @@ const ResultsPageUpdated = () => {
             </div>
           </div>
         )}
+
+        {/* Navigation buttons */}
+        <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap', marginTop: 32 }}>
+          <button
+            onClick={() => navigate("/dashboard/new-check")}
+            style={{ background: '#7C3AED', color: 'white', padding: '14px 28px', fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer' }}
+          >
+            Run another safety check
+          </button>
+          <button
+            onClick={() => navigate("/dashboard")}
+            style={{ border: '2px solid var(--ink)', background: 'transparent', color: 'var(--ink)', padding: '14px 28px', fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, cursor: 'pointer' }}
+          >
+            Back to Dashboard
+          </button>
+        </div>
+        <div style={{ textAlign: 'center', marginTop: 16 }}>
+          <a
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#78716C' }}
+          >
+            ← Back to redflaq.com homepage
+          </a>
+        </div>
       </div>
 
       {/* Mobile responsive styles */}

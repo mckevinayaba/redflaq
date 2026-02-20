@@ -58,11 +58,11 @@ const NavbarPlinq = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50" style={{ background: '#F7F4F0', borderBottom: '1.5px solid #D6D3CD', height: '60px', position: 'fixed', WebkitTransform: 'translateZ(0)' }}>
+    <nav className="fixed top-0 left-0 right-0" style={{ background: '#F7F4F0', backgroundColor: '#F7F4F0', borderBottom: '1.5px solid #D6D3CD', height: '60px', position: 'fixed', zIndex: 9999, visibility: 'visible' as const, opacity: 1, display: 'block', WebkitTransform: 'translateZ(0)', WebkitBackfaceVisibility: 'hidden' as const, transform: 'translateZ(0)' }}>
       <div className="max-w-[1280px] mx-auto px-6 h-full">
         <div className="flex items-center justify-between h-full">
           <a href="/" className="flex items-center" style={{ gap: 0 }}>
-            <div style={{ width: 28, height: 28, background: '#7C3AED', WebkitClipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: 28, height: 28, background: '#7C3AED', borderRadius: 4, WebkitClipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'visible' }}>
               <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 900, fontSize: 15, color: '#FFFFFF', lineHeight: 1 }}>R</span>
             </div>
             <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 18, letterSpacing: '0.1em', color: '#2D2235', marginLeft: 1 }}>EDFLAQ</span>

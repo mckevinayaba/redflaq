@@ -274,7 +274,24 @@
   .delay-800 { animation-delay: 0.8s; }
   .delay-900 { animation-delay: 0.9s; }
   .delay-1000 { animation-delay: 1s; }
+}
 
+/* In-app browser safety net — outside @layer so it always wins */
+nav, header {
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+@supports not (clip-path: polygon(0 0)) {
+  [style*="clip-path"],
+  [style*="ClipPath"] {
+    border-radius: 4px !important;
+    -webkit-clip-path: none !important;
+    clip-path: none !important;
+  }
+}
+
+@layer utilities {
   /* Accordion animations */
   @keyframes accordion-down {
     from { height: 0; opacity: 0; }

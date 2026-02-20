@@ -31,10 +31,10 @@ export default function AppHeader() {
   const initial = user?.user_metadata?.full_name?.charAt(0)?.toUpperCase() || user?.email?.charAt(0)?.toUpperCase() || "U";
 
   return (
-    <header className="h-14 border-b border-border bg-card flex items-center justify-between px-4 lg:px-6 sticky top-0 z-40">
+    <header className="h-14 border-b border-border bg-card flex items-center justify-between px-4 lg:px-6 sticky top-0" style={{ zIndex: 9999, visibility: 'visible' as const, opacity: 1, backgroundColor: '#FFFFFF', WebkitBackfaceVisibility: 'hidden' as const, transform: 'translateZ(0)', WebkitTransform: 'translateZ(0)' }}>
       {/* Logo – opens homepage in new tab */}
       <a href="/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
-        <div className="w-7 h-7 bg-primary flex items-center justify-center" style={{ WebkitClipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)' }}>
+        <div className="w-7 h-7 bg-primary flex items-center justify-center" style={{ borderRadius: 4, WebkitClipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', overflow: 'visible' }}>
           <span className="font-body font-black text-sm text-primary-foreground leading-none">R</span>
         </div>
         <span className="font-body font-extrabold text-lg tracking-widest text-foreground">EDFLAQ</span>

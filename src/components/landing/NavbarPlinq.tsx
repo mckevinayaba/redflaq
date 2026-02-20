@@ -11,6 +11,7 @@ const NavbarPlinq = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [avatarOpen, setAvatarOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
   const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -22,6 +23,12 @@ const NavbarPlinq = () => {
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 10);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   const handleLogout = async () => {
@@ -36,7 +43,7 @@ const NavbarPlinq = () => {
   const navLinks = [
     { label: "How It Works", href: "#how-it-works" },
     { label: "Pricing", href: "#pricing" },
-    { label: "About", href: "#about" },
+    { label: "Search Now", href: "#search" },
     { label: "FAQ", href: "#faq" },
   ];
 
@@ -58,17 +65,41 @@ const NavbarPlinq = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0" style={{ background: '#F7F4F0', backgroundColor: '#F7F4F0', borderBottom: '1.5px solid #D6D3CD', height: '60px', position: 'fixed', zIndex: 9999, visibility: 'visible' as const, opacity: 1, display: 'block', WebkitTransform: 'translateZ(0)', WebkitBackfaceVisibility: 'hidden' as const, transform: 'translateZ(0)' }}>
-      <div className="max-w-[1280px] mx-auto px-6 h-full">
-        <div className="flex items-center justify-between h-full">
-          <a href="/" className="flex items-center" style={{ gap: 0 }}>
+    <nav
+      id="redflaq-navbar"
+      style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        width: '100%',
+        height: 60,
+        zIndex: 2147483647,
+        visibility: 'visible',
+        opacity: 1,
+        display: 'block',
+        background: '#F7F4F0',
+        backgroundColor: '#F7F4F0',
+        borderBottom: '1.5px solid #D6D3CD',
+        boxShadow: isScrolled ? '0 2px 12px rgba(0,0,0,0.08)' : 'none',
+        transition: 'box-shadow 0.3s ease',
+        WebkitTransform: 'translate3d(0,0,0)',
+        transform: 'translate3d(0,0,0)',
+        WebkitBackfaceVisibility: 'hidden' as const,
+        backfaceVisibility: 'hidden' as const,
+      }}
+    >
+      <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', height: '100%' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '100%' }}>
+          <a href="/" style={{ display: 'flex', alignItems: 'center', gap: 0, textDecoration: 'none' }}>
             <div style={{ width: 28, height: 28, background: '#7C3AED', borderRadius: 4, WebkitClipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'visible' }}>
               <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 900, fontSize: 15, color: '#FFFFFF', lineHeight: 1 }}>R</span>
             </div>
             <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 18, letterSpacing: '0.1em', color: '#2D2235', marginLeft: 1 }}>EDFLAQ</span>
           </a>
 
-          <div className="hidden md:flex items-center gap-10">
+          {/* Desktop nav links */}
+          <div className="hidden md:flex" style={{ alignItems: 'center', gap: 40 }}>
             {navLinks.map((link) => (
               <button
                 key={link.label}
@@ -81,7 +112,8 @@ const NavbarPlinq = () => {
             ))}
           </div>
 
-          <div className="hidden md:flex items-center gap-4">
+          {/* Desktop right side */}
+          <div className="hidden md:flex" style={{ alignItems: 'center', gap: 16 }}>
             {isAuthenticated ? (
               <>
                 <button
@@ -95,7 +127,7 @@ const NavbarPlinq = () => {
                 >
                   Dashboard
                 </button>
-                <div className="relative" ref={avatarRef}>
+                <div style={{ position: 'relative' }} ref={avatarRef}>
                   <button
                     onClick={() => setAvatarOpen(!avatarOpen)}
                     style={{
@@ -125,31 +157,17 @@ const NavbarPlinq = () => {
                 </div>
               </>
             ) : (
-              <>
-                <button
-                  onClick={() => navigate('/signup?mode=signin')}
-                  style={{
-                    background: 'none', border: 'none', cursor: 'pointer',
-                    fontFamily: "'Syne', sans-serif", fontWeight: 600, fontSize: 13,
-                    letterSpacing: '0.05em', color: '#4B4453',
-                  }}
-                  className="hover:!text-[#7C3AED] transition-colors"
-                >
-                  Log in
-                </button>
-                <button
-                  onClick={() => navigate('/signup')}
-                  style={{
-                    background: 'transparent', color: '#7C3AED', padding: '8px 20px',
-                    fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13,
-                    letterSpacing: '0.08em', textTransform: 'uppercase',
-                    border: '1.5px solid #7C3AED', cursor: 'pointer',
-                  }}
-                  className="hover:!bg-[#7C3AED] hover:!text-white transition-colors"
-                >
-                  Sign up free
-                </button>
-              </>
+              <button
+                onClick={() => navigate('/signup?mode=signin')}
+                style={{
+                  background: 'none', border: 'none', cursor: 'pointer',
+                  fontFamily: "'Syne', sans-serif", fontWeight: 600, fontSize: 13,
+                  letterSpacing: '0.05em', color: '#4B4453',
+                }}
+                className="hover:!text-[#7C3AED] transition-colors"
+              >
+                Log In
+              </button>
             )}
             <button
               onClick={handleVerifyNow}
@@ -175,21 +193,38 @@ const NavbarPlinq = () => {
             </button>
           </div>
 
-          <button onClick={() => setIsMenuOpen(!isMenuOpen)} className="md:hidden p-2">
-            {isMenuOpen ? <X className="h-6 w-6" style={{ color: '#2D2235' }} /> : <Menu className="h-6 w-6" style={{ color: '#2D2235' }} />}
+          {/* Mobile hamburger */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden"
+            style={{ padding: 8, background: 'none', border: 'none', cursor: 'pointer' }}
+          >
+            {isMenuOpen
+              ? <X style={{ width: 24, height: 24, color: '#2D2235' }} />
+              : <Menu style={{ width: 24, height: 24, color: '#2D2235' }} />
+            }
           </button>
         </div>
       </div>
 
+      {/* Mobile menu */}
       {isMenuOpen && (
-        <div className="md:hidden" style={{ borderTop: '1.5px solid #D6D3CD', background: '#F7F4F0' }}>
-          <div className="max-w-[1280px] mx-auto px-6 py-4 space-y-4">
+        <div
+          className="md:hidden"
+          style={{
+            borderTop: '1.5px solid #D6D3CD',
+            background: '#F7F4F0',
+            backgroundColor: '#F7F4F0',
+            position: 'relative',
+            zIndex: 2147483647,
+          }}
+        >
+          <div style={{ maxWidth: 1280, margin: '0 auto', padding: '16px 24px' }} className="space-y-4">
             {navLinks.map((link) => (
               <button
                 key={link.label}
                 onClick={() => scrollToSection(link.href)}
-                className="block w-full text-left py-2"
-                style={{ color: '#2D2235', fontFamily: "'Syne', sans-serif", fontWeight: 600, textTransform: 'uppercase', fontSize: 14, letterSpacing: '0.05em' }}
+                style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 0', color: '#2D2235', fontFamily: "'Syne', sans-serif", fontWeight: 600, textTransform: 'uppercase', fontSize: 14, letterSpacing: '0.05em', background: 'none', border: 'none', cursor: 'pointer' }}
               >
                 {link.label}
               </button>
@@ -198,32 +233,28 @@ const NavbarPlinq = () => {
               <div className="space-y-2">
                 <button
                   onClick={() => { navigate('/dashboard'); setIsMenuOpen(false); }}
-                  className="block w-full text-left py-2"
-                  style={{ color: '#7C3AED', fontFamily: "'Syne', sans-serif", fontWeight: 700, textTransform: 'uppercase', fontSize: 14, letterSpacing: '0.05em' }}
+                  style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 0', color: '#7C3AED', fontFamily: "'Syne', sans-serif", fontWeight: 700, textTransform: 'uppercase', fontSize: 14, letterSpacing: '0.05em', background: 'none', border: 'none', cursor: 'pointer' }}
                 >
                   Dashboard
                 </button>
                 <button
                   onClick={() => { handleLogout(); setIsMenuOpen(false); }}
-                  className="block w-full text-left py-2"
-                  style={{ color: '#DC2626', fontFamily: "'Syne', sans-serif", fontWeight: 600, fontSize: 14 }}
+                  style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 0', color: '#DC2626', fontFamily: "'Syne', sans-serif", fontWeight: 600, fontSize: 14, background: 'none', border: 'none', cursor: 'pointer' }}
                 >
                   Log out
                 </button>
               </div>
             ) : (
-              <div className="flex gap-3">
+              <div style={{ display: 'flex', gap: 12 }}>
                 <button
                   onClick={() => { navigate('/signup?mode=signin'); setIsMenuOpen(false); }}
-                  className="flex-1"
-                  style={{ background: 'transparent', color: '#4B4453', padding: '12px', fontFamily: "'Syne', sans-serif", fontWeight: 600, fontSize: 13, border: '1.5px solid #D6D3CD' }}
+                  style={{ flex: 1, background: 'transparent', color: '#4B4453', padding: 12, fontFamily: "'Syne', sans-serif", fontWeight: 600, fontSize: 13, border: '1.5px solid #D6D3CD', cursor: 'pointer' }}
                 >
-                  Log in
+                  Log In
                 </button>
                 <button
                   onClick={() => { navigate('/signup'); setIsMenuOpen(false); }}
-                  className="flex-1"
-                  style={{ background: 'transparent', color: '#7C3AED', padding: '12px', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, border: '1.5px solid #7C3AED' }}
+                  style={{ flex: 1, background: 'transparent', color: '#7C3AED', padding: 12, fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, border: '1.5px solid #7C3AED', cursor: 'pointer' }}
                 >
                   Sign up free
                 </button>
@@ -231,8 +262,7 @@ const NavbarPlinq = () => {
             )}
             <button
               onClick={handleVerifyNow}
-              className="w-full"
-              style={{ background: '#7C3AED', color: 'white', padding: '12px', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.08em', textTransform: 'uppercase', border: 'none' }}
+              style={{ width: '100%', background: '#7C3AED', color: 'white', padding: 12, fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.08em', textTransform: 'uppercase', border: 'none', cursor: 'pointer' }}
             >
               Verify Now
             </button>

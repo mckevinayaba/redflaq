@@ -32,7 +32,7 @@ const FooterPlinq = () => {
           {/* Column 1 - Logo */}
           <div>
             <a href="/" className="flex items-center mb-4" style={{ gap: 0 }}>
-              <div style={{ width: 28, height: 28, background: '#7C3AED', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ width: 28, height: 28, background: '#7C3AED', borderRadius: 4, WebkitClipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                 <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 900, fontSize: 15, color: '#FFFFFF', lineHeight: 1 }}>R</span>
               </div>
               <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 18, letterSpacing: '0.1em', color: '#2D2235', marginLeft: 1 }}>EDFLAQ</span>
@@ -40,6 +40,11 @@ const FooterPlinq = () => {
             <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', maxWidth: 260, lineHeight: 1.6 }}>
               Making South Africa safer, one informed decision at a time.
             </p>
+            {/* POPIA badge */}
+            <div style={{ marginTop: 16, display: 'inline-flex', alignItems: 'center', gap: 6, background: '#F0FDF4', border: '1px solid #BBF7D0', padding: '6px 12px', borderRadius: 4 }}>
+              <span style={{ fontSize: 14 }}>🛡️</span>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 600, color: '#16A34A', letterSpacing: '0.08em' }}>POPIA COMPLIANT</span>
+            </div>
           </div>
 
           {/* Column 2 - Product */}
@@ -67,7 +72,7 @@ const FooterPlinq = () => {
             </ul>
           </div>
 
-          {/* Column 4 - Contact */}
+          {/* Column 4 - Contact & Social */}
           <div>
             <h4 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, color: '#2D2235', fontSize: 14, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>CONTACT</h4>
             <ul className="space-y-3">
@@ -76,6 +81,19 @@ const FooterPlinq = () => {
               <li><a href="https://wa.me/27663365296" style={linkStyle} className="hover:!text-[#7C3AED]">WhatsApp Us</a></li>
               <li><span style={{ ...linkStyle, cursor: 'default' }}>Johannesburg, South Africa</span></li>
             </ul>
+
+            {/* Social media placeholders */}
+            <div style={{ marginTop: 16, display: 'flex', gap: 12 }}>
+              {[
+                { label: "X", href: "#" },
+                { label: "LinkedIn", href: "#" },
+                { label: "Instagram", href: "#" },
+              ].map(s => (
+                <a key={s.label} href={s.href} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#9CA3AF', textDecoration: 'none' }} className="hover:!text-[#7C3AED]">
+                  {s.label}
+                </a>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -91,9 +109,14 @@ const FooterPlinq = () => {
 
         {/* Bottom bar */}
         <div className="flex flex-wrap justify-between items-center gap-4" style={{ borderTop: '1px solid #D6D3CD', paddingTop: 32 }}>
-          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#9CA3AF' }}>
-            © 2026 REDFLAQ · All rights reserved · Public records only · POPIA‑aware
-          </span>
+          <div>
+            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#9CA3AF', display: 'block' }}>
+              © 2026 REDFLAQ · All rights reserved · Public records only · POPIA‑aware
+            </span>
+            <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#78716C', marginTop: 4, display: 'block' }}>
+              Built by McKevin Ayaba · Johannesburg, South Africa
+            </span>
+          </div>
           <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#7C3AED' }}>
             💜 Standing with South African women against GBV
           </span>

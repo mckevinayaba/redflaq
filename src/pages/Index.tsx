@@ -11,6 +11,8 @@ import RiskLevelsSection from "@/components/landing/RiskLevelsSection";
 import PricingPlinq from "@/components/landing/PricingPlinq";
 import CommunitySectionSA from "@/components/landing/CommunitySectionSA";
 import WhyRedflaqSection from "@/components/landing/WhyRedflaqSection";
+import FounderSection from "@/components/landing/FounderSection";
+import TestimonialsSectionNew from "@/components/landing/TestimonialsSectionNew";
 import FAQPlinq from "@/components/landing/FAQPlinq";
 import FinalCTAPlinq from "@/components/landing/FinalCTAPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
@@ -44,8 +46,10 @@ const Index = () => {
         </span>
       </div>
 
+      <TestimonialsSectionNew />
       <CommunitySectionSA />
       <WhyRedflaqSection />
+      <FounderSection />
       <FAQPlinq />
       <FinalCTAPlinq />
       <ShareSection />

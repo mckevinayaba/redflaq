@@ -292,6 +292,16 @@ nav, header {
 }
 
 @layer utilities {
+  /* Shake animation for consent hint */
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-6px); }
+    40% { transform: translateX(6px); }
+    60% { transform: translateX(-4px); }
+    80% { transform: translateX(4px); }
+  }
+  .animate-shake { animation: shake 0.5s ease-in-out; }
+
   /* Accordion animations */
   @keyframes accordion-down {
     from { height: 0; opacity: 0; }
@@ -302,4 +312,11 @@ nav, header {
     from { height: var(--radix-accordion-content-height); opacity: 1; }
     to { height: 0; opacity: 0; }
   }
+}
+
+/* Ensure navbar is always visible — max specificity for in-app browsers */
+#redflaq-navbar {
+  visibility: visible !important;
+  opacity: 1 !important;
+  display: block !important;
 }

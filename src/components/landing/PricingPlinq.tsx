@@ -17,22 +17,24 @@ const PricingPlinq = () => {
     {
       id: "single" as PackageType, label: "One Safety Check", title: "One Safety Check",
       sub: "Best for one‑off peace of mind", price: "R99", period: "ONCE OFF",
+      validity: "Valid for 30 days",
       features: ["1 detailed safety report", "Uses South African public records", "Downloadable PDF report", "Results shown instantly"],
-      cta: "Get 1 Check", highlight: false,
+      cta: "Get 1 Check", highlight: false, badge: null,
     },
     {
       id: "3-pack" as PackageType, label: "Safety Pack", title: "Safety Pack (3 Checks)",
       sub: "Ideal for dating or flat‑sharing", price: "R249", period: "R83 PER CHECK",
-      savings: "SAVE R48",
+      savings: "SAVE R48", validity: "Valid for 90 days",
       features: ["3 public‑record safety reports", "Use over 90 days", "Downloadable PDFs", "Results shown instantly"],
-      cta: "Get 3 Checks", highlight: true,
+      cta: "Get 3 Checks", highlight: true, badge: "MOST POPULAR",
     },
     {
       id: "5-pack" as PackageType, label: "Family & Friends", title: "Family & Friends (5 Checks)",
       sub: "Share with trusted people", price: "R399", period: "R80 PER CHECK",
-      savings: "SAVE R96",
+      savings: "SAVE R96", validity: "Valid for 6 months",
+      shareNote: "Transfer unused checks to family or friends via your account",
       features: ["5 public‑record safety reports", "Use over 6 months", "Downloadable PDFs", "Share with trusted people"],
-      cta: "Get 5 Checks", highlight: false,
+      cta: "Get 5 Checks", highlight: false, badge: null,
     },
   ];
 
@@ -47,7 +49,7 @@ const PricingPlinq = () => {
 
   return (
     <>
-      <section id="pricing" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '100px 40px' }}>
+      <section id="pricing" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '80px 40px' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 16 }}>Pricing</div>
 
@@ -66,7 +68,18 @@ const PricingPlinq = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3" style={{ gap: 1, background: '#E8E4DF' }}>
             {plans.map(plan => (
-              <div key={plan.id} style={{ background: plan.highlight ? '#7C3AED' : 'white', padding: '48px 36px' }}>
+              <div key={plan.id} style={{ background: plan.highlight ? '#7C3AED' : 'white', padding: '48px 36px', position: 'relative' }}>
+                {/* Badge */}
+                {plan.badge && (
+                  <div style={{
+                    position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%) translateY(-50%)',
+                    background: '#F59E0B', color: '#FFFFFF', fontFamily: "'JetBrains Mono', monospace",
+                    fontSize: 10, fontWeight: 700, letterSpacing: '0.12em', padding: '5px 16px',
+                  }}>
+                    {plan.badge}
+                  </div>
+                )}
+
                 <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: plan.highlight ? 'rgba(255,255,255,0.6)' : '#9CA3AF' }}>
                   {plan.label}
                 </div>
@@ -74,8 +87,11 @@ const PricingPlinq = () => {
                 <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: plan.highlight ? 'rgba(255,255,255,0.7)' : '#78716C', marginBottom: 24 }}>{plan.sub}</div>
 
                 <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 56, color: plan.highlight ? 'white' : '#2D2235', lineHeight: 1 }}>{plan.price}</div>
-                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: plan.highlight ? 'rgba(255,255,255,0.5)' : '#9CA3AF', marginTop: 4, marginBottom: plan.savings ? 12 : 24 }}>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: plan.highlight ? 'rgba(255,255,255,0.5)' : '#9CA3AF', marginTop: 4 }}>
                   {plan.period}
+                </div>
+                <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: plan.highlight ? 'rgba(255,255,255,0.6)' : '#78716C', marginTop: 4, marginBottom: plan.savings ? 12 : 24 }}>
+                  {plan.validity}
                 </div>
 
                 {plan.savings && (
@@ -100,6 +116,13 @@ const PricingPlinq = () => {
                   ))}
                 </div>
 
+                {/* Share note for Family plan */}
+                {'shareNote' in plan && plan.shareNote && (
+                  <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 11, color: plan.highlight ? 'rgba(255,255,255,0.6)' : '#9CA3AF', marginTop: 8, lineHeight: 1.5 }}>
+                    {plan.shareNote}
+                  </p>
+                )}
+
                 <button
                   onClick={() => handleOpenPayment(plan.id)}
                   style={{
@@ -115,6 +138,22 @@ const PricingPlinq = () => {
                 </button>
               </div>
             ))}
+          </div>
+
+          {/* No subscription line */}
+          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#4B4453', textAlign: 'center', marginTop: 24 }}>
+            No subscription. No recurring charges. Pay once, use when you need it.
+          </p>
+
+          {/* Paystack badge placeholder */}
+          <div style={{ textAlign: 'center', marginTop: 16 }}>
+            <span style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#9CA3AF',
+              border: '1px solid #E8E4DF', padding: '8px 16px', background: 'white',
+            }}>
+              🔒 Secure Checkout · Paystack (Coming Soon)
+            </span>
           </div>
         </div>
       </section>

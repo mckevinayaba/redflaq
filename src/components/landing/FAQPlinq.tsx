@@ -45,7 +45,7 @@ const FAQPlinq = () => {
   ];
 
   return (
-    <section id="faq" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '100px 40px' }}>
+    <section id="faq" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '48px 40px 56px' }}>
       <div style={{ maxWidth: 700, margin: '0 auto' }}>
         <div className="section-tag justify-center" style={{ color: '#7C3AED', marginBottom: 16 }}>FAQ</div>
 

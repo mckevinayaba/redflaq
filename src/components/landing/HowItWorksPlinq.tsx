@@ -11,7 +11,7 @@ const HowItWorksPlinq = () => {
   const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section id="how-it-works" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '100px 40px' }}>
+    <section id="how-it-works" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '48px 40px 56px' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 16 }}>
           The Process
@@ -19,7 +19,7 @@ const HowItWorksPlinq = () => {
 
         <h2 style={{
           fontFamily: "'DM Serif Display', serif",
-          fontSize: 'clamp(36px, 4vw, 52px)', maxWidth: 500, color: '#2D2235', marginBottom: 56,
+          fontSize: 'clamp(36px, 4vw, 52px)', maxWidth: 500, color: '#2D2235', marginBottom: 36,
         }}>
           Fast. Simple. <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>Public‑record based.</em>
         </h2>

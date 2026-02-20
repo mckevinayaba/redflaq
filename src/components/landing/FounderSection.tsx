@@ -1,10 +1,11 @@
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import founderPhoto from "@/assets/mckevin-ayaba.png";
 
 const FounderSection = () => {
   const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '60px 40px 80px' }}>
+    <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '40px 40px 48px' }}>
       <div style={{ maxWidth: 800, margin: '0 auto' }}>
         <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 16 }}>
           Why I Built This
@@ -12,23 +13,18 @@ const FounderSection = () => {
 
         <h2 style={{
           fontFamily: "'DM Serif Display', serif",
-          fontSize: 'clamp(32px, 4vw, 44px)', color: '#2D2235', marginBottom: 40,
+          fontSize: 'clamp(32px, 4vw, 44px)', color: '#2D2235', marginBottom: 32,
         }}>
           About the <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>Founder</em>
         </h2>
 
         <div className="flex flex-col md:flex-row gap-10 items-start">
-          {/* Photo placeholder */}
           <div style={{
             width: 160, minWidth: 160, height: 160, borderRadius: '50%',
             background: '#EDE9FE', border: '3px solid #7C3AED',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            flexShrink: 0, margin: '0 auto',
+            overflow: 'hidden', flexShrink: 0, margin: '0 auto',
           }}>
-            {/* PLACEHOLDER: Upload founder headshot here */}
-            <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#7C3AED', textAlign: 'center', padding: 16 }}>
-              Founder Photo
-            </span>
+            <img src={founderPhoto} alt="McKevin Ayaba, Founder of RedFlaq" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
 
           <div>
@@ -53,13 +49,14 @@ const FounderSection = () => {
         </div>
 
         {/* Also founded by */}
-        <div style={{ marginTop: 40, textAlign: 'center' }}>
+        <div style={{ marginTop: 32, textAlign: 'center' }}>
           <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#9CA3AF', marginBottom: 12 }}>
             Also founded by McKevin:
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             {[
-              { label: "ASEB Summit & Awards", href: "https://www.aseb.africa" },
+              { label: "ASEB Summit & Awards", href: "https://www.asebsummit.com" },
+              { label: "ASEB Society", href: "https://www.aseb.africa" },
               { label: "Setup A Startup", href: "https://www.setupastartup.com" },
               { label: "KeaLeboga", href: "https://www.kealeboga.com" },
               { label: "Grieve.World", href: "https://www.grieve.world" },

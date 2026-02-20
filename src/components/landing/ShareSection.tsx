@@ -25,7 +25,7 @@ const ShareSection = () => {
   };
 
   return (
-    <section style={{ background: '#F7F4F0', padding: '60px 20px', borderTop: '1.5px solid #EDE9FE' }}>
+    <section style={{ background: '#F7F4F0', padding: '36px 20px', borderTop: '1.5px solid #EDE9FE' }}>
       <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
         <Heart className="h-8 w-8 mx-auto mb-4" style={{ color: '#7C3AED' }} />
         <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, color: '#2D2235', marginBottom: 12 }}>

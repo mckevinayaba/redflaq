@@ -49,7 +49,7 @@ const PricingPlinq = () => {
 
   return (
     <>
-      <section id="pricing" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '80px 40px' }}>
+      <section id="pricing" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '48px 40px 56px' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 16 }}>Pricing</div>
 

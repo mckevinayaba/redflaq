@@ -16,7 +16,7 @@ const CommunitySectionSA = () => {
   };
 
   return (
-    <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#FAF5FF', padding: '80px 40px' }}>
+    <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#FAF5FF', padding: '40px 40px 48px' }}>
       <div style={{ maxWidth: 800, margin: '0 auto', textAlign: 'center' }}>
         <div className="section-tag justify-center" style={{ color: '#7C3AED', marginBottom: 24 }}>
           Built For Women. Available To All.

@@ -103,6 +103,13 @@
   html {
     background-color: #F7F4F0;
     color-scheme: light only;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+  }
+
+  #root {
+    min-height: 100vh;
+    min-height: 100dvh;
   }
 
   body {

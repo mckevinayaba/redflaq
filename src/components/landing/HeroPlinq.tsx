@@ -7,7 +7,6 @@ import { useCountUp } from "@/hooks/useCountUp";
 const HeroPlinq = () => {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const { count: statOne, ref: statOneRef } = useCountUp(3, 1500);
   const { count: statTwo, ref: statTwoRef } = useCountUp(40000, 2000);
 
   const handleVerify = () => {
@@ -108,12 +107,12 @@ const HeroPlinq = () => {
 
         {/* RIGHT COLUMN — GBV Stat Cards */}
         <div className="flex flex-col justify-center px-5 pb-20 gap-4 lg:px-10 lg:pt-28 lg:pb-20">
-          <div ref={statOneRef} className="scroll-reveal visible" style={{ background: 'white', border: '1.5px solid #EDE9FE', padding: '36px 32px' }}>
+          <div className="scroll-reveal visible" style={{ background: 'white', border: '1.5px solid #EDE9FE', padding: '36px 32px' }}>
             <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#7C3AED', marginBottom: 8 }}>
               SOUTH AFRICAN REALITY
             </div>
             <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 56, color: '#2D2235', lineHeight: 1 }}>
-              1 in <span style={{ color: '#7C3AED' }}>{statOne || 3}</span>
+              1 in <span style={{ color: '#7C3AED' }}>3</span>
             </div>
             <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#4B4453', lineHeight: 1.6, marginTop: 12 }}>
               South African women experience gender‑based violence in the hands of an intimate partner during their lifetime.
@@ -140,7 +139,7 @@ const HeroPlinq = () => {
               We built RedFlaq so women and communities can access key public‑record warnings quickly and affordably.
             </p>
             <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: 'rgba(255,255,255,0.6)', marginTop: 12, fontWeight: 600 }}>
-              — Founder, RedFlaq
+              — McKevin Ayaba, Founder of RedFlaq
             </div>
           </div>
         </div>

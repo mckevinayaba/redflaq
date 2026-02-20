@@ -18,7 +18,7 @@ const FinalCTAPlinq = () => {
   return (
     <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{
       background: '#F7F4F0', borderTop: '1.5px solid #D6D3CD',
-      padding: '100px 40px', textAlign: 'center', overflow: 'hidden', position: 'relative',
+      padding: '48px 40px 56px', textAlign: 'center', overflow: 'hidden', position: 'relative',
     }}>
       <div style={{
         position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',

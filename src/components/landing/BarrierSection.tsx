@@ -13,7 +13,7 @@ const BarrierSection = () => {
     <section
       ref={ref}
       className={`scroll-reveal ${isVisible ? 'visible' : ''}`}
-      style={{ background: '#F7F4F0', padding: '120px 60px', overflow: 'hidden', position: 'relative' }}
+      style={{ background: '#F7F4F0', padding: '48px 40px 56px', overflow: 'hidden', position: 'relative' }}
     >
       <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1 }}>
         <div className="section-tag" style={{ color: '#7C3AED' }}>
@@ -23,7 +23,7 @@ const BarrierSection = () => {
         <h2 style={{
           fontFamily: "'DM Serif Display', serif",
           fontSize: 'clamp(36px, 4vw, 56px)', color: '#2D2235',
-          lineHeight: 1.1, maxWidth: 700, margin: '40px 0 64px',
+          lineHeight: 1.1, maxWidth: 700, margin: '24px 0 40px',
         }}>
           Background checks existed. But they weren't built for <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>you.</em>
         </h2>

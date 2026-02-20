@@ -7,7 +7,7 @@ const RealitySection = () => {
   const { count: statTwo, ref: statRef } = useCountUp(40000, 2000);
 
   return (
-    <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '60px 40px 80px' }}>
+    <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '40px 40px 48px' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 32 }}>
           The South African Reality

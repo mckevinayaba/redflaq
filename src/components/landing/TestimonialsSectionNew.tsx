@@ -31,7 +31,7 @@ const TestimonialsSectionNew = () => {
   };
 
   return (
-    <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '80px 40px' }}>
+    <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '40px 40px 48px' }}>
       <div style={{ maxWidth: 1000, margin: '0 auto' }}>
         <div className="section-tag justify-center" style={{ color: '#7C3AED', marginBottom: 16 }}>
           What People Say

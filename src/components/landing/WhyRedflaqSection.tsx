@@ -10,7 +10,7 @@ const WhyRedflaqSection = () => {
   ];
 
   return (
-    <section id="about" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '60px 40px 80px' }}>
+    <section id="about" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '40px 40px 48px' }}>
       <div style={{ maxWidth: 800, margin: '0 auto' }}>
         <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 'clamp(36px, 4vw, 48px)', color: '#2D2235', textAlign: 'center', marginBottom: 40 }}>
           Why RedFlaq <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>Exists</em>

@@ -28,43 +28,88 @@ const CRIME_KEYWORDS = ['rape', 'murder', 'assault', 'robbery', 'fraud', 'theft'
 
 function isCriminalCase(title: string): boolean {
   const lower = title.toLowerCase();
-  // "S v Name" or "Name v S" patterns
   if (/\bs\s+v\s+/i.test(title) || /\bv\s+s\b/i.test(title) || /v\s+the\s+state/i.test(title)) {
     return true;
   }
-  // Check for crime keywords in the title
   return CRIME_KEYWORDS.some(kw => lower.includes(kw));
 }
 
-function extractAccusedName(title: string): { fullName: string; surname: string; firstName: string } | null {
+function extractAccusedNameFromTitle(title: string): { fullName: string; surname: string; firstName: string } | null {
   let name = '';
-
-  // Pattern: "S v Name ..."
   const svMatch = title.match(/\bS\s+v\s+([A-Z][a-zA-Zà-ÿ\-']+(?:\s+[A-Z][a-zA-Zà-ÿ\-']+)*)/);
   if (svMatch) {
     name = svMatch[1];
   } else {
-    // Pattern: "Name v S" or "Name v The State"
     const vsMatch = title.match(/^([A-Z][a-zA-Zà-ÿ\-']+(?:\s+[A-Z][a-zA-Zà-ÿ\-']+)*)\s+v\s+(?:S|The\s+State)/);
-    if (vsMatch) {
-      name = vsMatch[1];
-    }
+    if (vsMatch) name = vsMatch[1];
   }
-
   if (!name) return null;
-
-  // Strip "and Another", "and Others", case numbers in parens
   name = name.replace(/\s+and\s+(Another|Others?).*$/i, '');
   name = name.replace(/\s*\(.*\)\s*$/, '');
   name = name.trim();
-
   if (!name || name.length < 2) return null;
-
   const parts = name.split(/\s+/);
   const surname = parts[parts.length - 1];
   const firstName = parts.length > 1 ? parts[0] : '';
-
   return { fullName: name, surname, firstName };
+}
+
+/**
+ * CRITICAL FIX: Extract full party names from the judgment body HTML.
+ * Looks for patterns like:
+ *   KELLY MALIZANA — FIRST APPELLANT
+ *   THANDOWANI MBOTO — SECOND APPELLANT
+ *   "In the matter between:" block
+ */
+function extractPartiesFromBody(html: string): Array<{
+  firstName: string;
+  lastName: string;
+  role: string;
+}> {
+  const parties: Array<{ firstName: string; lastName: string; role: string }> = [];
+  
+  // Remove HTML tags for text parsing
+  const text = html
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/<\/?(p|div|span|td|tr|li|h[1-6])[^>]*>/gi, '\n')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/\s+/g, ' ');
+
+  // Pattern 1: "NAME SURNAME" followed by role indicator (APPELLANT/ACCUSED/RESPONDENT/APPLICANT)
+  // These appear in the parties block near the top
+  const partyPatterns = [
+    // "KELLY MALIZANA" — FIRST APPELLANT
+    /([A-Z][A-Z\s'-]{2,40})\s*[—–-]\s*((?:FIRST|SECOND|THIRD|FOURTH|FIFTH|SIXTH|SEVENTH|EIGHTH|NINTH|TENTH|THE)?\s*(?:APPELLANT|ACCUSED|RESPONDENT|APPLICANT|DEFENDANT|COMPLAINANT))/gi,
+    // "KELLY MALIZANA" ... Appellant / Accused
+    /([A-Z][A-Z\s'-]{2,40})\s+(?:(?:FIRST|SECOND|THIRD|FOURTH|FIFTH|SIXTH)\s+)?(APPELLANT|ACCUSED|RESPONDENT|APPLICANT|DEFENDANT|COMPLAINANT)/gi,
+  ];
+
+  for (const regex of partyPatterns) {
+    let match;
+    while ((match = regex.exec(text)) !== null) {
+      const rawName = match[1].trim();
+      const role = match[2].trim();
+      
+      // Filter out common non-name phrases
+      if (/^(IN THE|THE STATE|THE MATTER|BETWEEN|AND|CASE|REPUBLIC|MINISTER|DEPARTMENT|COURT|HIGH|SUPREME)/i.test(rawName)) continue;
+      if (rawName.length < 3) continue;
+      
+      const nameParts = rawName.split(/\s+/).filter(p => p.length >= 2);
+      if (nameParts.length < 2) continue; // Need at least first + last name
+      
+      const firstName = nameParts.slice(0, -1).join(' ');
+      const lastName = nameParts[nameParts.length - 1];
+      
+      // Avoid duplicates
+      if (!parties.some(p => p.firstName === firstName && p.lastName === lastName)) {
+        parties.push({ firstName, lastName, role: role.toUpperCase() });
+      }
+    }
+  }
+
+  return parties;
 }
 
 function extractChargeKeywords(title: string): string[] {
@@ -73,7 +118,6 @@ function extractChargeKeywords(title: string): string[] {
 }
 
 function extractCaseNumber(title: string): string | null {
-  // e.g. (SS 063/2016) or (CC 12/2024) or (A104/2021)
   const match = title.match(/\(([^)]+)\)/);
   if (match) return match[1].trim();
   return null;
@@ -87,6 +131,40 @@ function delay(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+async function fetchWithFallback(url: string): Promise<string | null> {
+  // Try direct fetch first
+  try {
+    const response = await fetch(url, {
+      headers: { 'User-Agent': 'RedFlaq-Indexer/1.0 (https://redflaq.com; respects crawl-delay)' },
+    });
+    if (response.ok) return await response.text();
+  } catch (e) {
+    console.error('Direct fetch failed for', url);
+  }
+
+  // Fallback to Firecrawl
+  const firecrawlKey = Deno.env.get('FIRECRAWL_API_KEY');
+  if (!firecrawlKey) return null;
+
+  try {
+    const fcResponse = await fetch('https://api.firecrawl.dev/v1/scrape', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${firecrawlKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ url, formats: ['rawHtml'], onlyMainContent: false }),
+    });
+    const fcData = await fcResponse.json();
+    const htmlContent = fcData.data?.rawHtml || fcData.rawHtml || fcData.data?.html || fcData.html;
+    if (fcData.success && htmlContent) return htmlContent;
+  } catch (e) {
+    console.error('Firecrawl fallback also failed for', url);
+  }
+
+  return null;
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -97,7 +175,6 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Accept optional params to target specific court/year
     let targetCourtCode: string | null = null;
     let targetYear: number | null = null;
 
@@ -106,15 +183,12 @@ serve(async (req) => {
       targetCourtCode = body.court_code || null;
       targetYear = body.year || null;
     } catch {
-      // No body = auto-pick next court/year
+      // No body = auto-pick
     }
 
-    // If no specific target, pick the next court/year to process
     if (!targetCourtCode || !targetYear) {
       const currentYear = new Date().getFullYear();
-      const years = Array.from({ length: currentYear - 2019 }, (_, i) => currentYear - i); // 2026 down to 2020
-
-      // Find what we've already indexed
+      const years = Array.from({ length: currentYear - 2019 }, (_, i) => currentYear - i);
       const { data: indexed } = await supabase
         .from('saflii_judgments')
         .select('court_code, year')
@@ -123,19 +197,10 @@ serve(async (req) => {
 
       const lastCourt = indexed?.[0]?.court_code || null;
       const lastYear = indexed?.[0]?.year || null;
-
-      // Cycle to next court/year
       let courtIdx = lastCourt ? COURTS.findIndex(c => c.code === lastCourt) : -1;
       let yearIdx = lastYear ? years.indexOf(lastYear) : -1;
-
-      // Move to next year, or next court
       yearIdx++;
-      if (yearIdx >= years.length) {
-        yearIdx = 0;
-        courtIdx++;
-        if (courtIdx >= COURTS.length) courtIdx = 0;
-      }
-
+      if (yearIdx >= years.length) { yearIdx = 0; courtIdx++; if (courtIdx >= COURTS.length) courtIdx = 0; }
       targetCourtCode = COURTS[courtIdx >= 0 ? courtIdx : 0].code;
       targetYear = years[yearIdx >= 0 ? yearIdx : 0];
     }
@@ -151,104 +216,106 @@ serve(async (req) => {
     console.log(`Indexing SAFLII: ${court.code} / ${targetYear}`);
 
     const listingUrl = `https://www.saflii.org/za/cases/${court.code}/${targetYear}/`;
+    const listingHtml = await fetchWithFallback(listingUrl);
     
-    let response: Response;
-    try {
-      response = await fetch(listingUrl, {
-        headers: { 'User-Agent': 'RedFlaq-Indexer/1.0 (https://redflaq.com; respects crawl-delay)' },
-      });
-    } catch (fetchErr) {
-      // Deno strict TLS may reject SAFLII's cert chain — use Firecrawl as fallback
-      console.error('Fetch failed (likely TLS):', fetchErr);
-
-      // Try via a simple proxy approach: use the Firecrawl API if available
-      const firecrawlKey = Deno.env.get('FIRECRAWL_API_KEY');
-      if (firecrawlKey) {
-        console.log('Falling back to Firecrawl for HTML fetch');
-        const fcResponse = await fetch('https://api.firecrawl.dev/v1/scrape', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${firecrawlKey}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ url: listingUrl, formats: ['rawHtml'], onlyMainContent: false }),
-        });
-        const fcData = await fcResponse.json();
-        console.log('Firecrawl response keys:', JSON.stringify(Object.keys(fcData)), 'data keys:', fcData.data ? JSON.stringify(Object.keys(fcData.data)) : 'none');
-        console.log('Firecrawl success:', fcData.success, 'status:', fcResponse.status);
-        const htmlContent = fcData.data?.rawHtml || fcData.rawHtml || fcData.data?.html || fcData.html;
-        if (fcData.success && htmlContent) {
-          response = new Response(htmlContent, { status: 200 });
-        } else {
-          return new Response(
-            JSON.stringify({ success: false, error: 'TLS issue and Firecrawl fallback failed' }),
-            { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-          );
-        }
-      } else {
-        return new Response(
-          JSON.stringify({ success: false, error: 'TLS certificate issue with SAFLII. Configure Firecrawl for fallback.' }),
-          { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
-      }
-    }
-
-    if (!response.ok) {
-      console.log(`No listing for ${court.code}/${targetYear}: ${response.status}`);
+    if (!listingHtml) {
       return new Response(
-        JSON.stringify({ success: true, message: `No listing found for ${court.code}/${targetYear}`, indexed: 0 }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        JSON.stringify({ success: false, error: 'Failed to fetch listing page (TLS + Firecrawl both failed)' }),
+        { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
       );
     }
 
-    const html = await response.text();
-
-    // Parse case links from the listing page
-    // SAFLII listings use: <a href="https://www.saflii.org/za/cases/ZAGPJHC/2025/1.html" class="make-database">Case Title</a>
-    // Also handle relative URLs: <a href="/za/cases/...">
+    // Parse case links
     const linkRegex = /<a\s+href="((?:https?:\/\/www\.saflii\.org)?\/za\/cases\/[^"]+\.html)"[^>]*>([^<]+)<\/a>/gi;
     const cases: { url: string; title: string }[] = [];
     let match;
-
-    while ((match = linkRegex.exec(html)) !== null) {
+    while ((match = linkRegex.exec(listingHtml)) !== null) {
       let url = match[1];
       const title = match[2].trim();
-      // Normalize to full URL
-      if (url.startsWith('/')) {
-        url = `https://www.saflii.org${url}`;
-      }
+      if (url.startsWith('/')) url = `https://www.saflii.org${url}`;
       if (title && url.includes(court.code)) {
         cases.push({ url, title });
       }
     }
 
     console.log(`Found ${cases.length} total cases for ${court.code}/${targetYear}`);
-
-    // Filter for criminal cases and extract data
     const criminalCases = cases.filter(c => isCriminalCase(c.title));
     console.log(`${criminalCases.length} criminal cases identified`);
 
     const records: any[] = [];
+    let bodiesFetched = 0;
+    const MAX_BODY_FETCHES = 30; // Rate limit: max 30 judgment bodies per run
 
     for (const caseItem of criminalCases) {
-      const accused = extractAccusedName(caseItem.title);
-      if (!accused) continue;
+      const titleAccused = extractAccusedNameFromTitle(caseItem.title);
+      const caseNumber = extractCaseNumber(caseItem.title);
+      const chargeKeywords = extractChargeKeywords(caseItem.title);
 
-      records.push({
-        accused_name: accused.fullName,
-        accused_surname: accused.surname,
-        accused_first_name: accused.firstName || null,
-        name_normalized: normalizeName(accused.fullName),
-        charge_keywords: extractChargeKeywords(caseItem.title),
-        court_code: court.code,
-        court_name: court.name,
-        province: court.province,
-        year: targetYear,
-        case_number: extractCaseNumber(caseItem.title),
-        case_title: caseItem.title,
-        saflii_url: caseItem.url,
-        is_criminal: true,
-      });
+      // CRITICAL FIX: Fetch the judgment body to extract full party names
+      if (bodiesFetched < MAX_BODY_FETCHES) {
+        try {
+          await delay(500); // Respect crawl delay
+          const judgmentHtml = await fetchWithFallback(caseItem.url);
+          bodiesFetched++;
+
+          if (judgmentHtml) {
+            const parties = extractPartiesFromBody(judgmentHtml);
+            
+            // Also try to extract charge context from judgment body
+            const bodyLower = judgmentHtml.toLowerCase();
+            const bodyCharges = CRIME_KEYWORDS.filter(kw => bodyLower.includes(kw));
+            const allCharges = [...new Set([...chargeKeywords, ...bodyCharges])];
+
+            if (parties.length > 0) {
+              // Use the full names from the judgment body
+              for (const party of parties) {
+                // Only include accused/appellant parties (not the state/respondent in criminal cases)
+                const isAccused = /ACCUSED|APPELLANT|APPLICANT|DEFENDANT/i.test(party.role);
+                if (!isAccused) continue;
+
+                const fullName = `${party.firstName} ${party.lastName}`;
+                records.push({
+                  accused_name: fullName,
+                  accused_surname: party.lastName,
+                  accused_first_name: party.firstName,
+                  name_normalized: normalizeName(fullName),
+                  charge_keywords: allCharges.length > 0 ? allCharges : chargeKeywords,
+                  court_code: court.code,
+                  court_name: court.name,
+                  province: court.province,
+                  year: targetYear,
+                  case_number: caseNumber,
+                  case_title: caseItem.title,
+                  saflii_url: caseItem.url,
+                  is_criminal: true,
+                });
+              }
+              continue; // Skip fallback to title extraction
+            }
+          }
+        } catch (e) {
+          console.error(`Failed to fetch judgment body: ${caseItem.url}`, e);
+        }
+      }
+
+      // Fallback: use title-only extraction (surname only)
+      if (titleAccused) {
+        records.push({
+          accused_name: titleAccused.fullName,
+          accused_surname: titleAccused.surname,
+          accused_first_name: titleAccused.firstName || null,
+          name_normalized: normalizeName(titleAccused.fullName),
+          charge_keywords: chargeKeywords,
+          court_code: court.code,
+          court_name: court.name,
+          province: court.province,
+          year: targetYear,
+          case_number: caseNumber,
+          case_title: caseItem.title,
+          saflii_url: caseItem.url,
+          is_criminal: true,
+        });
+      }
     }
 
     // Upsert in batches of 50
@@ -258,7 +325,6 @@ serve(async (req) => {
       const { error } = await supabase
         .from('saflii_judgments')
         .upsert(batch, { onConflict: 'saflii_url', ignoreDuplicates: true });
-
       if (error) {
         console.error(`Upsert error for batch ${i}:`, error);
       } else {
@@ -266,7 +332,7 @@ serve(async (req) => {
       }
     }
 
-    console.log(`Indexed ${insertedCount} criminal judgments for ${court.code}/${targetYear}`);
+    console.log(`Indexed ${insertedCount} records (${bodiesFetched} judgment bodies fetched) for ${court.code}/${targetYear}`);
 
     return new Response(
       JSON.stringify({
@@ -276,6 +342,7 @@ serve(async (req) => {
         total_cases: cases.length,
         criminal_cases: criminalCases.length,
         indexed: insertedCount,
+        bodies_fetched: bodiesFetched,
       }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
     );

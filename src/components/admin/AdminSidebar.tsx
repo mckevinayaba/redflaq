@@ -8,6 +8,7 @@ import {
   CreditCard,
   BarChart3,
   ShieldCheck,
+  FileText,
 } from "lucide-react";
 
 const allItems = [
@@ -17,6 +18,7 @@ const allItems = [
   { title: "Content & Copy", path: "/admin/content", icon: FileEdit, minRole: "admin" as const },
   { title: "Pricing & Plans", path: "/admin/pricing", icon: CreditCard, minRole: "admin" as const },
   { title: "Analytics", path: "/admin/analytics", icon: BarChart3, minRole: "support" as const },
+  { title: "Gazette", path: "/admin/gazette", icon: FileText, minRole: "admin" as const },
   { title: "System & Roles", path: "/admin/system", icon: ShieldCheck, minRole: "owner" as const },
 ];
 

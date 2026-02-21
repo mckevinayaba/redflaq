@@ -81,6 +81,7 @@ const getSourceLabel = (person: WantedPerson): string => {
   if (person.source_dataset === 'za_wanted') return 'SAPS Wanted Persons';
   if (person.source_dataset === 'za_fic_sanctions') return 'FIC Sanctions List';
   if (person.source_dataset === 'saflii') return 'SAFLII Court Judgment';
+  if (person.source_dataset === 'gazette') return 'Government Gazette — Financial Court Order';
   return 'South African Public Records';
 };
 

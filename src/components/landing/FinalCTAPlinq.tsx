@@ -1,18 +1,12 @@
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
 
 const FinalCTAPlinq = () => {
-  const { isAuthenticated } = useAuth();
-  const navigate = useNavigate();
+  const { guardedAction } = useAuthGuard();
   const { ref, isVisible } = useScrollReveal();
 
   const handleVerify = () => {
-    if (isAuthenticated) {
-      document.getElementById('search')?.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      navigate('/signup');
-    }
+    guardedAction();
   };
 
   return (

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -19,11 +19,20 @@ export default function Signup() {
   const [emailNotConfirmed, setEmailNotConfirmed] = useState(false);
   const [resending, setResending] = useState(false);
   const [consent, setConsent] = useState(false);
+  const [showCTABanner, setShowCTABanner] = useState(false);
   // Welcome modal state
   const [showWelcome, setShowWelcome] = useState(false);
   const [welcomeName, setWelcomeName] = useState("");
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  useEffect(() => {
+    const fromCTA = sessionStorage.getItem("fromCTA");
+    if (fromCTA) {
+      setShowCTABanner(true);
+      // Don't remove yet — keep for post-login redirect chain
+    }
+  }, []);
 
   const validateFullName = (name: string) => {
     const trimmed = name.trim();
@@ -74,6 +83,9 @@ export default function Signup() {
         toast({ title: "Sign up failed", description: error.message, variant: "destructive" });
       } else {
         setSignupSuccess(true);
+        // Redirect to verify-email page after signup
+        navigate("/verify-email");
+        return;
       }
     } else {
       const { data: signInData, error } = await supabase.auth.signInWithPassword({
@@ -87,27 +99,50 @@ export default function Signup() {
           toast({ title: "Sign in failed", description: error.message, variant: "destructive" });
         }
       } else {
-        // Smart redirect: check if user has any searches
-        const userId = signInData.user?.id;
-        if (userId) {
-          const { count } = await supabase
-            .from("searches")
-            .select("*", { count: "exact", head: true })
-            .eq("user_id", userId);
-          if (count && count > 0) {
-            navigate("/dashboard");
-          } else {
-            // First-time or no checks: show welcome then go to new check
-            const firstName = signInData.user?.user_metadata?.full_name?.split(" ")[0] || "";
+        // Post-login auth guard: check email verification & credits
+        const freshUser = signInData.user;
+        if (!freshUser?.email_confirmed_at) {
+          navigate("/verify-email");
+        } else {
+          // Check if user has active credits
+          const userEmail = freshUser.email || "";
+          const { data: purchases } = await supabase
+            .from("purchases")
+            .select("credits_remaining")
+            .eq("email", userEmail)
+            .eq("status", "completed")
+            .gt("credits_remaining", 0)
+            .limit(1);
+          const { data: manualPayments } = await supabase
+            .from("manual_payments")
+            .select("search_credits, credits_used")
+            .eq("email", userEmail)
+            .eq("status", "verified")
+            .limit(1);
+          const hasCredits =
+            (purchases && purchases.length > 0) ||
+            (manualPayments && manualPayments.some(p => (p.search_credits || 0) - (p.credits_used || 0) > 0));
+
+          if (!hasCredits && sessionStorage.getItem("fromCTA")) {
+            navigate("/pricing");
+          } else if (!hasCredits) {
+            // First time user — show welcome
+            const firstName = freshUser.user_metadata?.full_name?.split(" ")[0] || "";
             if (firstName) {
               setWelcomeName(firstName);
               setShowWelcome(true);
             } else {
               navigate("/dashboard/new-check");
             }
+          } else {
+            // Has credits — check pending search
+            const pending = sessionStorage.getItem("pendingSearch");
+            if (pending) {
+              sessionStorage.removeItem("pendingSearch");
+              sessionStorage.removeItem("fromCTA");
+            }
+            navigate("/dashboard/new-check");
           }
-        } else {
-          navigate("/dashboard");
         }
       }
     }
@@ -179,6 +214,15 @@ export default function Signup() {
         </Link>
 
         <div style={{ background: 'white', border: '1.5px solid #D6D3CD', padding: 40 }}>
+          {showCTABanner && !signupSuccess && (
+            <div style={{
+              background: '#FAF5FF', border: '1px solid #EDE9FE', padding: '12px 16px',
+              marginBottom: 24, borderRadius: 4, fontFamily: "'Syne', sans-serif",
+              fontSize: 14, color: '#7C3AED', fontWeight: 600, textAlign: 'center',
+            }}>
+              🔍 Your search has been saved. Create a free account to continue.
+            </div>
+          )}
           {signupSuccess ? (
             <div className="text-center" style={{ padding: '20px 0' }}>
               <div style={{ width: 64, height: 64, background: '#F3F0FF', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>

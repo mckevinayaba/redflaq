@@ -1,16 +1,17 @@
 import { useState, useRef } from "react";
 import { Lock } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
-import { PaymentModal } from "@/components/PaymentModal";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
 
 const SearchOptionsSection = () => {
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [consentChecked, setConsentChecked] = useState(false);
   const [shakeConsent, setShakeConsent] = useState(false);
   const [showConsentHint, setShowConsentHint] = useState(false);
   const { ref, isVisible } = useScrollReveal();
   const consentRef = useRef<HTMLDivElement>(null);
+  const { guardedAction } = useAuthGuard();
+  const nameRef = useRef<HTMLInputElement>(null);
 
   const provinces = ["Gauteng", "Western Cape", "KwaZulu-Natal", "Eastern Cape", "Free State", "Limpopo", "Mpumalanga", "North West", "Northern Cape"];
   const searchReasons = ["Potential romantic partner", "Employee verification", "Childcare provider", "Tenant screening", "Business partner", "Other legitimate purpose"];
@@ -68,7 +69,7 @@ const SearchOptionsSection = () => {
             <div className="space-y-5">
               <div>
                 <label style={labelStyle}>Full Name *</label>
-                <input style={inputStyle} placeholder="e.g. John David Mokoena" />
+                <input ref={nameRef} style={inputStyle} placeholder="e.g. John David Mokoena" />
               </div>
               <div>
                 <label style={labelStyle}>Province (Optional)</label>
@@ -138,7 +139,7 @@ const SearchOptionsSection = () => {
               {/* Submit */}
               <div onClick={!consentChecked ? handleDisabledClick : undefined}>
                 <button
-                  onClick={() => consentChecked && setIsPaymentModalOpen(true)}
+                  onClick={() => consentChecked && guardedAction(nameRef.current?.value || "")}
                   disabled={!consentChecked}
                   style={{
                     width: '100%', background: consentChecked ? '#7C3AED' : '#9CA3AF', color: 'white',
@@ -168,7 +169,6 @@ const SearchOptionsSection = () => {
         </div>
       </section>
 
-      <PaymentModal isOpen={isPaymentModalOpen} onClose={() => setIsPaymentModalOpen(false)} packageType="single" />
     </>
   );
 };

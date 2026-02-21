@@ -336,6 +336,63 @@ serve(async (req) => {
       }
     }
 
+    // Strategy 6: Gazette Financial Court Orders
+    if (full_name) {
+      searchStrategies.push('gazette_records');
+      const normalizedSearch = normalizeName(full_name);
+      const nameParts = full_name.trim().split(/\s+/);
+      const searchSurname = nameParts[nameParts.length - 1].toLowerCase();
+      const searchFirstName = nameParts[0]?.toLowerCase() || '';
+
+      let gazetteQuery = supabase
+        .from('gazette_records')
+        .select('*')
+        .eq('is_active', true)
+        .or(`name_normalized.eq.${normalizedSearch},surname.ilike.${searchSurname}`);
+
+      if (province) {
+        gazetteQuery = gazetteQuery.eq('province', province);
+      }
+
+      const { data: gazetteMatches } = await gazetteQuery.limit(10);
+
+      if (gazetteMatches && gazetteMatches.length > 0) {
+        for (const gr of gazetteMatches) {
+          // Require both first name and surname to match for gazette records
+          const grFirstLower = (gr.first_name || '').toLowerCase();
+          const grSurnameLower = (gr.surname || '').toLowerCase();
+          const firstNameMatch = searchFirstName && grFirstLower.includes(searchFirstName);
+          const surnameMatch = grSurnameLower === searchSurname;
+          
+          if (!firstNameMatch || !surnameMatch) continue;
+
+          if (!matches.some(m => m.full_name?.toLowerCase() === gr.full_name?.toLowerCase())) {
+            matches.push({
+              id: gr.id,
+              full_name: gr.full_name,
+              first_name: gr.first_name,
+              surname: gr.surname,
+              charges: gr.order_type || gr.record_type || 'Financial Court Order',
+              court_name: gr.court_name,
+              court_case_number: gr.case_number,
+              province: gr.province,
+              source_dataset: 'gazette',
+              source_url: 'https://www.gpwonline.co.za/egazettes/',
+              detail_page_url: null,
+              match_type: 'gazette_record',
+              confidence: 75,
+              found_in_gazettes: true,
+              legal_status: 'court_order',
+              offense_categories: ['Fraud / Financial Crime'],
+              year_of_birth: null,
+              gazette_number: gr.gazette_number,
+              gazette_date: gr.gazette_date,
+            });
+          }
+        }
+      }
+    }
+
     // Deduplicate
     const seen = new Set<string>();
     matches = matches.filter(m => {

@@ -20,6 +20,8 @@ import AdminContentPage from "./pages/AdminContentPage";
 import AdminPricingPage from "./pages/AdminPricingPage";
 import AdminAnalyticsPage from "./pages/AdminAnalyticsPage";
 import AdminSystemPage from "./pages/AdminSystemPage";
+import AdminGazettePage from "./pages/AdminGazettePage";
+import DataSources from "./pages/DataSources";
 import Receipt from "./pages/Receipt";
 import About from "./pages/About";
 import Privacy from "./pages/Privacy";
@@ -65,6 +67,8 @@ const App = () => (
           <Route path="/admin/pricing" element={<AdminPricingPage />} />
           <Route path="/admin/analytics" element={<AdminAnalyticsPage />} />
           <Route path="/admin/system" element={<AdminSystemPage />} />
+          <Route path="/admin/gazette" element={<AdminGazettePage />} />
+          <Route path="/sources" element={<DataSources />} />
           <Route path="/admin/scraper" element={<AdminScraper />} />
           <Route path="/admin/import" element={<AdminImport />} />
           <Route path="/admin/login" element={<AdminLogin />} />

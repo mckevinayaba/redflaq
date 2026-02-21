@@ -112,6 +112,72 @@ export type Database = {
         }
         Relationships: []
       }
+      gazette_records: {
+        Row: {
+          case_number: string | null
+          court_name: string | null
+          created_at: string
+          details: string | null
+          first_name: string | null
+          full_name: string
+          gazette_date: string | null
+          gazette_number: string | null
+          id: string
+          id_number: string | null
+          is_active: boolean | null
+          name_normalized: string | null
+          order_type: string | null
+          province: string | null
+          record_type: string
+          source_page_number: number | null
+          source_pdf_url: string | null
+          surname: string | null
+          updated_at: string
+        }
+        Insert: {
+          case_number?: string | null
+          court_name?: string | null
+          created_at?: string
+          details?: string | null
+          first_name?: string | null
+          full_name: string
+          gazette_date?: string | null
+          gazette_number?: string | null
+          id?: string
+          id_number?: string | null
+          is_active?: boolean | null
+          name_normalized?: string | null
+          order_type?: string | null
+          province?: string | null
+          record_type?: string
+          source_page_number?: number | null
+          source_pdf_url?: string | null
+          surname?: string | null
+          updated_at?: string
+        }
+        Update: {
+          case_number?: string | null
+          court_name?: string | null
+          created_at?: string
+          details?: string | null
+          first_name?: string | null
+          full_name?: string
+          gazette_date?: string | null
+          gazette_number?: string | null
+          id?: string
+          id_number?: string | null
+          is_active?: boolean | null
+          name_normalized?: string | null
+          order_type?: string | null
+          province?: string | null
+          record_type?: string
+          source_page_number?: number | null
+          source_pdf_url?: string | null
+          surname?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       human_verification_requests: {
         Row: {
           additional_info: string | null

@@ -37,7 +37,7 @@ export default function AppHeader() {
         <div className="w-7 h-7 bg-primary flex items-center justify-center" style={{ borderRadius: 4, WebkitClipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', overflow: 'visible' }}>
           <span className="font-body font-black text-sm text-primary-foreground leading-none">R</span>
         </div>
-        <span className="font-body font-extrabold text-lg tracking-widest text-foreground">EDFLAQ</span>
+        <span className="font-body font-extrabold text-lg tracking-widest"><span style={{ color: '#7C3AED' }}>ed</span><span className="text-foreground">Flaq</span></span>
       </a>
 
       {/* Avatar dropdown */}

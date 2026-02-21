@@ -93,7 +93,7 @@ const NavbarPlinq = () => {
             <div style={{ width: 28, height: 28, background: '#7C3AED', borderRadius: 4, WebkitClipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'visible' }}>
               <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 900, fontSize: 15, color: '#FFFFFF', lineHeight: 1 }}>R</span>
             </div>
-            <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 18, letterSpacing: '0.1em', color: '#2D2235', marginLeft: 1 }}>EDFLAQ</span>
+            <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 18, letterSpacing: '0.1em', marginLeft: 1 }}><span style={{ color: '#7C3AED' }}>ed</span><span style={{ color: '#2D2235' }}>Flaq</span></span>
           </a>
 
           {/* Desktop nav links */}

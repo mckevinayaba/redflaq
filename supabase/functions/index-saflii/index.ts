@@ -152,9 +152,46 @@ serve(async (req) => {
 
     const listingUrl = `https://www.saflii.org/za/cases/${court.code}/${targetYear}/`;
     
-    const response = await fetch(listingUrl, {
-      headers: { 'User-Agent': 'RedFlaq-Indexer/1.0 (https://redflaq.com; respects crawl-delay)' },
-    });
+    let response: Response;
+    try {
+      response = await fetch(listingUrl, {
+        headers: { 'User-Agent': 'RedFlaq-Indexer/1.0 (https://redflaq.com; respects crawl-delay)' },
+      });
+    } catch (fetchErr) {
+      // Deno strict TLS may reject SAFLII's cert chain — use Firecrawl as fallback
+      console.error('Fetch failed (likely TLS):', fetchErr);
+
+      // Try via a simple proxy approach: use the Firecrawl API if available
+      const firecrawlKey = Deno.env.get('FIRECRAWL_API_KEY');
+      if (firecrawlKey) {
+        console.log('Falling back to Firecrawl for HTML fetch');
+        const fcResponse = await fetch('https://api.firecrawl.dev/v1/scrape', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${firecrawlKey}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ url: listingUrl, formats: ['rawHtml'], onlyMainContent: false }),
+        });
+        const fcData = await fcResponse.json();
+        console.log('Firecrawl response keys:', JSON.stringify(Object.keys(fcData)), 'data keys:', fcData.data ? JSON.stringify(Object.keys(fcData.data)) : 'none');
+        console.log('Firecrawl success:', fcData.success, 'status:', fcResponse.status);
+        const htmlContent = fcData.data?.rawHtml || fcData.rawHtml || fcData.data?.html || fcData.html;
+        if (fcData.success && htmlContent) {
+          response = new Response(htmlContent, { status: 200 });
+        } else {
+          return new Response(
+            JSON.stringify({ success: false, error: 'TLS issue and Firecrawl fallback failed' }),
+            { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
+      } else {
+        return new Response(
+          JSON.stringify({ success: false, error: 'TLS certificate issue with SAFLII. Configure Firecrawl for fallback.' }),
+          { status: 502, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+    }
 
     if (!response.ok) {
       console.log(`No listing for ${court.code}/${targetYear}: ${response.status}`);
@@ -167,19 +204,21 @@ serve(async (req) => {
     const html = await response.text();
 
     // Parse case links from the listing page
-    // SAFLII listings have links like: <a href="/za/cases/ZAGPJHC/2026/1.html">Case Title</a>
-    const linkRegex = /<a\s+href="(\/za\/cases\/[^"]+\.html)"[^>]*>([^<]+)<\/a>/gi;
+    // SAFLII listings use: <a href="https://www.saflii.org/za/cases/ZAGPJHC/2025/1.html" class="make-database">Case Title</a>
+    // Also handle relative URLs: <a href="/za/cases/...">
+    const linkRegex = /<a\s+href="((?:https?:\/\/www\.saflii\.org)?\/za\/cases\/[^"]+\.html)"[^>]*>([^<]+)<\/a>/gi;
     const cases: { url: string; title: string }[] = [];
     let match;
 
     while ((match = linkRegex.exec(html)) !== null) {
-      const relUrl = match[1];
+      let url = match[1];
       const title = match[2].trim();
-      if (title && relUrl.includes(court.code)) {
-        cases.push({
-          url: `https://www.saflii.org${relUrl}`,
-          title,
-        });
+      // Normalize to full URL
+      if (url.startsWith('/')) {
+        url = `https://www.saflii.org${url}`;
+      }
+      if (title && url.includes(court.code)) {
+        cases.push({ url, title });
       }
     }
 

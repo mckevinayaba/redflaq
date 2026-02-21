@@ -25,7 +25,7 @@ const FooterNew = () => {
           <div>
             <div className="flex items-center gap-2 mb-4">
               <Shield className="h-8 w-8 text-purple-400" />
-              <span className="text-xl font-bold text-white">REDFLAQ</span>
+              <span className="text-xl font-bold"><span style={{ color: '#A78BFA' }}>Red</span><span className="text-white">Flaq</span></span>
             </div>
             <p className="text-sm">
               Making South Africa safer, one informed decision at a time.

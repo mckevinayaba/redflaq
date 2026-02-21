@@ -1,99 +1,141 @@
 
+# SAFLII Criminal Judgment Integration for RedFlaq
 
-# Fix: Navbar Visibility on Comet/Perplexity In-App Browsers
+## Overview
 
-## Problem
-The RedFlaq navigation bar is invisible on in-app browsers like Comet and Perplexity. Previous fixes (webkit prefixes, GPU compositing hints) were insufficient. These browsers often have quirks with `position: fixed`, `z-index` stacking, and may strip or ignore certain CSS properties.
+Add SAFLII (saflii.org) as a new data source for RedFlaq, enabling searches against South Africa's free, open-access court judgment database covering all 9 provincial High Courts back to 2003.
 
-## Root Cause Analysis
-In-app browsers (WebView-based) commonly break with:
-- `position: fixed` failing silently (element renders but is not visible or is behind the browser chrome)
-- High `z-index` values being clamped or ignored
-- CSS `clip-path` not rendering the hexagon logo, making the navbar appear "empty"
-- Service Worker (PWA) caching stale versions of the page without the latest fixes
+## Architecture
 
-## Plan
+The integration has 3 parts:
+1. **Database table** to store indexed SAFLII criminal judgments
+2. **Background indexer edge function** that crawls SAFLII court listing pages nightly
+3. **Search integration** into the existing multi-parameter-search function
 
-### 1. Harden the Navbar (`NavbarPlinq.tsx`)
-- Replace inline `position: fixed` style with a belt-and-suspenders approach: use both the Tailwind `fixed` class AND explicit inline styles
-- Add explicit `visibility: visible`, `opacity: 1`, `display: block` to prevent any browser default from hiding it
-- Add `-webkit-backface-visibility: hidden` for WebView compositing
-- Add a solid `background-color` fallback directly on the element (not just via CSS variable)
-- Lower `z-index` from 50 to a safer `9999` (some in-app browsers cap z-index differently)
+## Part 1 -- Database Table
 
-### 2. Add a Fallback for the Hexagon Logo
-- Add a text-only fallback that renders if `clip-path` is unsupported, using `@supports` in CSS or a simple `border-radius: 4px` square fallback inline so the logo area is never invisible
+Create a new `saflii_judgments` table with:
 
-### 3. Harden the Dashboard Header (`AppHeader.tsx`)
-- Apply the same visibility and compositing fixes to the sticky app header
+| Column | Type | Purpose |
+|--------|------|---------|
+| id | uuid (PK) | Primary key |
+| accused_name | text | Full name from case title |
+| accused_surname | text | Extracted surname for matching |
+| accused_first_name | text | Extracted first name |
+| name_normalized | text | Lowercase, stripped for fuzzy match |
+| charge_keywords | text[] | Extracted crime keywords (rape, assault, etc.) |
+| court_code | text | e.g. ZAGPJHC |
+| court_name | text | e.g. South Gauteng High Court |
+| province | text | Mapped province |
+| year | integer | Judgment year |
+| case_number | text | e.g. SS 063/2016 |
+| case_title | text | Full case title line |
+| saflii_url | text | Direct link to judgment |
+| is_criminal | boolean | Confirmed criminal matter |
+| created_at | timestamptz | Indexing timestamp |
 
-### 4. Global CSS Safety Net (`index.css`)
-- Add a global rule ensuring `nav` and `header` elements within `#root` always have `visibility: visible` and `display: block/flex`
-- Add a `@supports not (clip-path: polygon(...))` fallback that gives hexagon elements a simple `border-radius` instead
+Indexes on `name_normalized`, `accused_surname`, `province`, and `year`. RLS policy: public SELECT only (same as `wanted_persons`).
 
-### 5. Service Worker Cache Bust
-- Update `vite.config.ts` to add a `revision` or timestamp to PWA cached assets so Comet/Perplexity users who visited before get fresh content instead of stale cached pages
+## Part 2 -- Background Indexer Edge Function
 
-### 6. Add `<noscript>` Fallback (`index.html`)
-- Add a `<noscript>` message in `index.html` for edge cases where JavaScript is disabled or delayed in in-app browsers
+New edge function: `supabase/functions/index-saflii/index.ts`
 
-## Files to Modify
-- `src/components/landing/NavbarPlinq.tsx` -- hardened positioning, visibility, logo fallback
-- `src/components/dashboard/AppHeader.tsx` -- same fixes for dashboard header
-- `src/index.css` -- global safety-net rules and clip-path fallback
-- `vite.config.ts` -- PWA cache revision
-- `index.html` -- noscript fallback
+**How it works:**
+1. Iterates through all 9 SA High Court codes and recent years (2020-2026 initially, expandable)
+2. For each court/year, fetches the listing page at `https://www.saflii.org/za/cases/{COURT_CODE}/{YEAR}/`
+3. Parses HTML to extract case title links
+4. Filters for criminal matters using patterns: `S v `, `v S `, `v The State`, plus crime keywords
+5. Extracts accused name from the case title (e.g. "S v Dlamini" yields "Dlamini")
+6. Upserts into `saflii_judgments` table (deduplicated by `saflii_url`)
+7. Respects SAFLII's 10-second crawl delay between requests
+8. Processes in batches to stay within edge function timeout limits
+
+**Court codes covered:**
+- ZAGPJHC (South Gauteng / Johannesburg)
+- ZAGPPHC (North Gauteng / Pretoria)
+- ZAWCHC (Western Cape)
+- ZAKZDHC (KZN Durban)
+- ZAKZPHC (KZN Pietermaritzburg)
+- ZAECGHC (Eastern Cape Grahamstown)
+- ZAECMHC (Eastern Cape Mthatha)
+- ZAFSHC (Free State)
+- ZANCHC (Northern Cape)
+- ZALMPHC (Limpopo)
+- ZANWHC (North West)
+- ZAMPHC (Mpumalanga)
+- ZASCA (Supreme Court of Appeal)
+- ZACC (Constitutional Court)
+
+**Scheduling:** Set up as a nightly cron job. Each run processes one court/year combination to stay within timeout limits, cycling through all courts over multiple nights.
+
+## Part 3 -- Search Integration
+
+Modify `supabase/functions/multi-parameter-search/index.ts` to add a **Strategy 5: SAFLII Court Judgments** that runs alongside existing strategies:
+
+- When a user searches by name, query `saflii_judgments` for normalized name matches and surname fuzzy matches
+- When province is provided, filter by province
+- SAFLII matches get a confidence score of 70 (court judgment = strong signal but name-only matching)
+- Results are returned with `match_type: 'saflii_judgment'` and `source: 'SAFLII'`
+- Include the `saflii_url` so the results page can show a "View judgment on SAFLII" button
+
+## Part 4 -- Results Display Update
+
+Update `ResultsPageUpdated.tsx` to handle SAFLII-sourced matches:
+- Show "Court Judgment Found" label with a gavel icon
+- Display: court name, province, year, charge keywords
+- "View judgment on SAFLII" button linking directly to the source page
+- Do NOT reproduce judgment text (link out only)
+
+## Part 5 -- Landing Page Update
+
+Update the "What We Search" section (`WhatWeSearchHonest.tsx`) to include SAFLII as a confirmed data source with its link.
 
 ## Technical Details
 
-### NavbarPlinq nav element will change from:
-```jsx
-<nav className="fixed top-0 left-0 right-0 z-50" 
-  style={{ background: '#F7F4F0', borderBottom: '1.5px solid #D6D3CD', height: '60px', position: 'fixed', WebkitTransform: 'translateZ(0)' }}>
-```
-### To:
-```jsx
-<nav className="fixed top-0 left-0 right-0" 
-  style={{ 
-    background: '#F7F4F0', 
-    backgroundColor: '#F7F4F0',
-    borderBottom: '1.5px solid #D6D3CD', 
-    height: '60px', 
-    position: 'fixed', 
-    zIndex: 9999,
-    visibility: 'visible',
-    opacity: 1,
-    display: 'block',
-    WebkitTransform: 'translateZ(0)',
-    WebkitBackfaceVisibility: 'hidden',
-    transform: 'translateZ(0)',
-  }}>
+### Name extraction from case titles
+
+```text
+"S v Dlamini" -> accused: "Dlamini"
+"S v Nkosi and Another" -> accused: "Nkosi"
+"Dube and Others v S (SS 063/2016)" -> accused: "Dube"
+"S v Mthembu (CC 12/2024)" -> accused: "Mthembu"
 ```
 
-### Hexagon logo fallback pattern:
-```jsx
-<div style={{ 
-  width: 28, height: 28, background: '#7C3AED', 
-  borderRadius: 4, // fallback for when clip-path fails
-  WebkitClipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', 
-  clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)',
-  display: 'flex', alignItems: 'center', justifyContent: 'center',
-  overflow: 'visible',
-}}>
+The parser handles `S v [Name]` and `[Name] v S` patterns, strips case numbers in parentheses, and handles "and Another/Others" suffixes.
+
+### Court-to-province mapping
+
+```text
+ZAGPJHC / ZAGPPHC -> Gauteng
+ZAWCHC -> Western Cape
+ZAKZDHC / ZAKZPHC -> KwaZulu-Natal
+ZAECGHC / ZAECMHC -> Eastern Cape
+ZAFSHC -> Free State
+ZANCHC -> Northern Cape
+ZALMPHC -> Limpopo
+ZANWHC -> North West
+ZAMPHC -> Mpumalanga
 ```
 
-### Global CSS safety net:
-```css
-/* In-app browser safety net */
-nav, header {
-  visibility: visible !important;
-  opacity: 1 !important;
-}
+### Crawl delay compliance
 
-@supports not (clip-path: polygon(0 0)) {
-  [style*="clip-path"] {
-    border-radius: 4px !important;
-  }
-}
-```
+The indexer uses a 10-second `setTimeout` between each HTTP request to SAFLII, and processes only one court/year per invocation. This means the full index builds incrementally over days rather than in a single burst.
 
+### Files to create
+- `supabase/functions/index-saflii/index.ts` -- the background indexer
+- Database migration for `saflii_judgments` table
+
+### Files to modify
+- `supabase/functions/multi-parameter-search/index.ts` -- add Strategy 5 (SAFLII search)
+- `src/pages/ResultsPageUpdated.tsx` -- display SAFLII matches with "View on SAFLII" link
+- `src/components/landing/WhatWeSearchHonest.tsx` -- add SAFLII as a listed data source
+- `supabase/config.toml` -- register the new edge function
+
+## Important Limitations (displayed to users)
+
+- Only High Court and above (magistrate court convictions are not on SAFLII)
+- Not every conviction produces a written judgment
+- Name-only matching means some false positives are possible
+- Courts may anonymise parties in certain cases
+
+These limitations will be noted in the results UI when a SAFLII match is shown.

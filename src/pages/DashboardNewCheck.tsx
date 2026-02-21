@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import { Shield, Clock, Lock, Heart, Info } from "lucide-react";
+import { Shield, Clock, Lock, Heart, Info, AlertTriangle } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import {
@@ -14,12 +14,11 @@ import {
 } from "@/components/ui/tooltip";
 
 const SA_PROVINCES = [
-  "", "Eastern Cape", "Free State", "Gauteng", "KwaZulu-Natal",
+  "Eastern Cape", "Free State", "Gauteng", "KwaZulu-Natal",
   "Limpopo", "Mpumalanga", "Northern Cape", "North West", "Western Cape",
 ];
 
 const REASONS = [
-  "",
   "💜 Potential romantic partner",
   "Sharing my apartment / flat-mate",
   "Tenant or landlord screening",
@@ -33,7 +32,8 @@ export default function DashboardNewCheck() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const [fullName, setFullName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [surname, setSurname] = useState("");
   const [province, setProvince] = useState("");
   const [ageRange, setAgeRange] = useState("");
   const [reason, setReason] = useState("");
@@ -45,13 +45,12 @@ export default function DashboardNewCheck() {
   const sanitize = (s: string) => s.replace(/[<>"'`]/g, "").slice(0, 100);
 
   const validate = (): boolean => {
-    const name = fullName.trim();
-    if (!name) {
-      setFormError("Please enter the person's full name so we can search accurately.");
+    if (!firstName.trim()) {
+      setFormError("Please enter the person's first name.");
       return false;
     }
-    if (!name.includes(" ")) {
-      setFormError("Use both name and surname. This helps us find the correct person.");
+    if (!surname.trim()) {
+      setFormError("Please enter the person's surname.");
       return false;
     }
     if (!reason) {
@@ -59,7 +58,7 @@ export default function DashboardNewCheck() {
       return false;
     }
     if (!consent) {
-      setFormError("Please fill in all required fields so we can search public records accurately.");
+      setFormError("Please confirm you agree to the terms before searching.");
       return false;
     }
     setFormError("");
@@ -77,10 +76,12 @@ export default function DashboardNewCheck() {
       setProgress((p) => (p >= 90 ? (clearInterval(interval), 90) : p + 5));
     }, 300);
 
+    const fullName = `${sanitize(firstName).trim()} ${sanitize(surname).trim()}`;
+
     try {
       const { data, error } = await supabase.functions.invoke("multi-parameter-search", {
         body: {
-          full_name: sanitize(fullName).trim(),
+          full_name: fullName,
           province: province || undefined,
           user_id: user?.id,
         },
@@ -135,30 +136,48 @@ export default function DashboardNewCheck() {
 
               {/* Error banner */}
               {formError && (
-                <div className="bg-destructive/10 border border-destructive/30 rounded-lg px-4 py-3">
+                <div className="bg-destructive/10 border border-destructive/30 rounded-lg px-4 py-3 flex items-start gap-3">
+                  <AlertTriangle className="h-4 w-4 text-destructive mt-0.5 shrink-0" />
                   <p className="font-body text-sm text-destructive">{formError}</p>
                 </div>
               )}
 
-              {/* Full Name */}
-              <div>
-                <label className="block font-mono text-[10px] tracking-wider text-muted-foreground uppercase mb-2">
-                  Full Name <span className="text-destructive">*</span>
-                  <InfoTip text="RedFlaq only uses information that is already public, such as official warning lists. It does not access private SAPS fingerprint or internal criminal record databases." />
-                </label>
-                <input
-                  className={inputClass}
-                  placeholder="e.g. John David Mokoena"
-                  value={fullName}
-                  onChange={(e) => { setFullName(e.target.value); setFormError(""); }}
-                  maxLength={100}
-                  required
-                  disabled={isSubmitting}
-                />
-                <p className="font-body text-xs text-muted-foreground mt-1.5">
-                  Use the name they share on official documents or social media. A full name helps us find the right public record.
-                </p>
+              {/* First Name + Surname — split fields */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                  <label className="block font-mono text-[10px] tracking-wider text-muted-foreground uppercase mb-2">
+                    First Name <span className="text-destructive">*</span>
+                    <InfoTip text="Enter the person's first name as it appears on official documents or social media." />
+                  </label>
+                  <input
+                    className={inputClass}
+                    placeholder="e.g. John"
+                    value={firstName}
+                    onChange={(e) => { setFirstName(e.target.value); setFormError(""); }}
+                    maxLength={50}
+                    required
+                    disabled={isSubmitting}
+                  />
+                </div>
+                <div>
+                  <label className="block font-mono text-[10px] tracking-wider text-muted-foreground uppercase mb-2">
+                    Surname <span className="text-destructive">*</span>
+                    <InfoTip text="Enter the person's surname / family name." />
+                  </label>
+                  <input
+                    className={inputClass}
+                    placeholder="e.g. Mokoena"
+                    value={surname}
+                    onChange={(e) => { setSurname(e.target.value); setFormError(""); }}
+                    maxLength={50}
+                    required
+                    disabled={isSubmitting}
+                  />
+                </div>
               </div>
+              <p className="font-body text-xs text-muted-foreground -mt-4">
+                RedFlaq only uses information that is already public, such as official warning lists. It does not access private SAPS fingerprint or internal criminal record databases.
+              </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {/* Province */}
@@ -168,10 +187,10 @@ export default function DashboardNewCheck() {
                   </label>
                   <select className={inputClass} value={province} onChange={(e) => setProvince(e.target.value)} disabled={isSubmitting}>
                     <option value="">Select province</option>
-                    {SA_PROVINCES.filter(Boolean).map((p) => <option key={p} value={p}>{p}</option>)}
+                    {SA_PROVINCES.map((p) => <option key={p} value={p}>{p}</option>)}
                   </select>
                   <p className="font-body text-xs text-muted-foreground mt-1.5">
-                    If you know where they live or work, choose the province. This can improve match accuracy.
+                    If you know where they live or work, this can improve match accuracy.
                   </p>
                 </div>
                 {/* Age Range */}
@@ -188,7 +207,7 @@ export default function DashboardNewCheck() {
                     <option value="56+">56+</option>
                   </select>
                   <p className="font-body text-xs text-muted-foreground mt-1.5">
-                    Choose their approximate age range if you know it. This helps us separate people with the same name.
+                    Helps us separate people with the same name.
                   </p>
                 </div>
               </div>
@@ -203,21 +222,21 @@ export default function DashboardNewCheck() {
                   value={reason}
                   onChange={(e) => { setReason(e.target.value); setFormError(""); }}
                   disabled={isSubmitting}
-                  style={reason === REASONS[1] ? { color: 'hsl(var(--primary))' } : {}}
+                  style={reason === REASONS[0] ? { color: 'hsl(var(--primary))' } : {}}
                 >
                   <option value="">Select reason</option>
-                  {REASONS.filter(Boolean).map((r, i) => (
+                  {REASONS.map((r, i) => (
                     <option key={r} value={r} style={i === 0 ? { color: 'hsl(var(--primary))', fontWeight: 600 } : {}}>
                       {r}
                     </option>
                   ))}
                 </select>
                 <p className="font-body text-xs text-muted-foreground mt-1.5">
-                  We ask for your reason to respect everyone's rights and stay POPIA‑aware. Choose the option that best fits your situation.
+                  We ask for your reason to respect everyone's rights and stay POPIA‑aware.
                 </p>
               </div>
 
-              {/* Consent */}
+              {/* POPIA Consent */}
               <div className="pt-4 border-t border-border">
                 <div className="flex items-start gap-3">
                   <Checkbox
@@ -231,6 +250,7 @@ export default function DashboardNewCheck() {
                     I confirm I have a legitimate reason to search this person and I agree to the{" "}
                     <Link to="/terms" className="text-primary hover:underline" target="_blank">Terms of Service</Link> and{" "}
                     <Link to="/privacy" className="text-primary hover:underline" target="_blank">Privacy Policy</Link>.
+                    I understand this search is POPIA‑compliant and the person will not be notified.
                   </Label>
                 </div>
                 <p className="font-body text-xs text-muted-foreground mt-2 ml-7">
@@ -241,7 +261,7 @@ export default function DashboardNewCheck() {
               {/* Submit */}
               <button
                 type="submit"
-                disabled={!consent || !fullName.trim() || isSubmitting}
+                disabled={!consent || !firstName.trim() || !surname.trim() || isSubmitting}
                 className="w-full py-4 bg-primary text-primary-foreground font-body font-bold text-base rounded-lg hover:bg-primary/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
               >
                 {isSubmitting ? (
@@ -290,6 +310,25 @@ export default function DashboardNewCheck() {
             <p className="font-body text-sm text-muted-foreground leading-relaxed mb-4">
               Information does not guarantee safety, but it helps you spot serious warning signs.
             </p>
+
+            {/* Data sources trust badges */}
+            <div className="border-t border-border pt-4 mb-4">
+              <p className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase mb-3">Sources we check</p>
+              <div className="space-y-2">
+                {[
+                  { emoji: "🚔", label: "SAPS Wanted Persons" },
+                  { emoji: "⚖️", label: "SAFLII Court Judgments" },
+                  { emoji: "📰", label: "Government Gazette" },
+                  { emoji: "💰", label: "FIC Sanctions List" },
+                ].map(({ emoji, label }) => (
+                  <div key={label} className="flex items-center gap-2">
+                    <span className="text-sm">{emoji}</span>
+                    <span className="font-body text-xs text-muted-foreground">{label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <div className="border-t border-border pt-4">
               <p className="font-body text-xs text-muted-foreground leading-relaxed italic">
                 "You're not being paranoid. You're paying attention."

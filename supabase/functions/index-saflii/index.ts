@@ -68,44 +68,56 @@ function extractPartiesFromBody(html: string): Array<{
 }> {
   const parties: Array<{ firstName: string; lastName: string; role: string }> = [];
   
-  // Remove HTML tags for text parsing
   const text = html
     .replace(/<br\s*\/?>/gi, '\n')
     .replace(/<\/?(p|div|span|td|tr|li|h[1-6])[^>]*>/gi, '\n')
     .replace(/<[^>]+>/g, ' ')
     .replace(/&nbsp;/g, ' ')
-    .replace(/&amp;/g, '&')
-    .replace(/\s+/g, ' ');
+    .replace(/&amp;/g, '&');
 
-  // Pattern 1: "NAME SURNAME" followed by role indicator (APPELLANT/ACCUSED/RESPONDENT/APPLICANT)
-  // These appear in the parties block near the top
-  const partyPatterns = [
-    // "KELLY MALIZANA" — FIRST APPELLANT
-    /([A-Z][A-Z\s'-]{2,40})\s*[—–-]\s*((?:FIRST|SECOND|THIRD|FOURTH|FIFTH|SIXTH|SEVENTH|EIGHTH|NINTH|TENTH|THE)?\s*(?:APPELLANT|ACCUSED|RESPONDENT|APPLICANT|DEFENDANT|COMPLAINANT))/gi,
-    // "KELLY MALIZANA" ... Appellant / Accused
-    /([A-Z][A-Z\s'-]{2,40})\s+(?:(?:FIRST|SECOND|THIRD|FOURTH|FIFTH|SIXTH)\s+)?(APPELLANT|ACCUSED|RESPONDENT|APPLICANT|DEFENDANT|COMPLAINANT)/gi,
-  ];
+  // Extract ONLY the header/parties block to avoid false matches in body text
+  let partyBlock = '';
+  const matterMatch = text.match(/[Ii]n\s+the\s+matter\s+between[:\s]*([\s\S]{0,2000}?)(?:JUDGMENT|INTRODUCTION|ORDER|REASONS|BACKGROUND|HEARD|DELIVERED)/);
+  if (matterMatch) {
+    partyBlock = matterMatch[1];
+  } else {
+    const endMatch = text.search(/\b(?:JUDGMENT|INTRODUCTION|ORDER|REASONS|BACKGROUND)\b/);
+    partyBlock = text.substring(0, endMatch > 0 ? endMatch : 3000);
+  }
 
-  for (const regex of partyPatterns) {
-    let match;
-    while ((match = regex.exec(text)) !== null) {
-      const rawName = match[1].trim();
-      const role = match[2].trim();
-      
-      // Filter out common non-name phrases
-      if (/^(IN THE|THE STATE|THE MATTER|BETWEEN|AND|CASE|REPUBLIC|MINISTER|DEPARTMENT|COURT|HIGH|SUPREME)/i.test(rawName)) continue;
-      if (rawName.length < 3) continue;
-      
-      const nameParts = rawName.split(/\s+/).filter(p => p.length >= 2);
-      if (nameParts.length < 2) continue; // Need at least first + last name
-      
-      const firstName = nameParts.slice(0, -1).join(' ');
-      const lastName = nameParts[nameParts.length - 1];
-      
-      // Avoid duplicates
-      if (!parties.some(p => p.firstName === firstName && p.lastName === lastName)) {
-        parties.push({ firstName, lastName, role: role.toUpperCase() });
-      }
+  partyBlock = partyBlock.replace(/\s+/g, ' ');
+
+  // Pattern 1: ALL-CAPS name followed by role keyword
+  const regex = /\b([A-Z][A-Z'-]+(?:\s+[A-Z][A-Z'-]+)+)\s*[—–-]?\s*(?:(?:FIRST|SECOND|THIRD|FOURTH|FIFTH|SIXTH|SEVENTH|EIGHTH|NINTH|TENTH|THE)\s+)?(APPELLANT|ACCUSED|RESPONDENT|APPLICANT|DEFENDANT|COMPLAINANT)\b/g;
+
+  let match;
+  while ((match = regex.exec(partyBlock)) !== null) {
+    const rawName = match[1].trim();
+    const role = match[2].trim();
+    if (/^(IN THE|THE STATE|THE MATTER|BETWEEN|AND|CASE|REPUBLIC|MINISTER|DEPARTMENT|COURT|HIGH|SUPREME|REPORTABLE|NOT|JUDGMENT|CRIMINAL|APPEAL|APPLICATION|WESTERN|EASTERN|NORTHERN|SOUTH|CAPE|DIVISION|FULL|BENCH|KWAZULU)/i.test(rawName)) continue;
+    if (rawName.length < 4) continue;
+    const nameParts = rawName.split(/\s+/).filter(p => p.length >= 2);
+    if (nameParts.length < 2) continue;
+    if (!nameParts.every(p => p === p.toUpperCase())) continue;
+    const firstName = nameParts.slice(0, -1).join(' ');
+    const lastName = nameParts[nameParts.length - 1];
+    if (!parties.some(p => p.firstName === firstName && p.lastName === lastName)) {
+      parties.push({ firstName, lastName, role: role.toUpperCase() });
+    }
+  }
+
+  // Pattern 2: "THE STATE and NAME NAME"
+  const stateAndRegex = /THE\s+STATE\s+and\s+([A-Z][A-Z'-]+(?:\s+[A-Z][A-Z'-]+)+)/g;
+  let stateMatch;
+  while ((stateMatch = stateAndRegex.exec(partyBlock)) !== null) {
+    const rawName = stateMatch[1].trim();
+    if (/^(ANOTHER|OTHERS)/i.test(rawName)) continue;
+    const nameParts = rawName.split(/\s+/).filter(p => p.length >= 2 && p === p.toUpperCase());
+    if (nameParts.length < 2) continue;
+    const firstName = nameParts.slice(0, -1).join(' ');
+    const lastName = nameParts[nameParts.length - 1];
+    if (!parties.some(p => p.firstName === firstName && p.lastName === lastName)) {
+      parties.push({ firstName, lastName, role: 'ACCUSED' });
     }
   }
 
@@ -318,13 +330,13 @@ serve(async (req) => {
       }
     }
 
-    // Upsert in batches of 50
+    // Upsert in batches of 50 — update in place (no delete)
     let insertedCount = 0;
     for (let i = 0; i < records.length; i += 50) {
       const batch = records.slice(i, i + 50);
       const { error } = await supabase
         .from('saflii_judgments')
-        .upsert(batch, { onConflict: 'saflii_url', ignoreDuplicates: true });
+        .upsert(batch, { onConflict: 'saflii_url', ignoreDuplicates: false });
       if (error) {
         console.error(`Upsert error for batch ${i}:`, error);
       } else {

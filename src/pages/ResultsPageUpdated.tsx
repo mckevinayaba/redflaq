@@ -85,6 +85,14 @@ const getSourceLabel = (person: WantedPerson): string => {
   return 'South African Public Records';
 };
 
+const getSourceTrustBadge = (person: WantedPerson): { icon: string; label: string; level: string; color: string } => {
+  if (person.source_dataset === 'za_wanted') return { icon: '🚔', label: 'Official SAPS Database', level: 'HIGH', color: '#DC2626' };
+  if (person.source_dataset === 'za_fic_sanctions') return { icon: '💰', label: 'FIC Sanctions — Government', level: 'HIGH', color: '#DC2626' };
+  if (person.source_dataset === 'saflii') return { icon: '⚖️', label: 'Court Record — SAFLII', level: 'MEDIUM', color: '#1E40AF' };
+  if (person.source_dataset === 'gazette') return { icon: '📰', label: 'Government Gazette', level: 'MEDIUM', color: '#D97706' };
+  return { icon: '📋', label: 'Public Record', level: 'STANDARD', color: '#6B7280' };
+};
+
 const getRiskBadge = (riskLevel: string) => {
   switch (riskLevel) {
     case 'RED':
@@ -336,6 +344,7 @@ const ResultsPageUpdated = () => {
           const offenseCategories = person.offense_categories_derived || person.offense_categories || [];
           const officialUrl = getOfficialSourceUrl(person);
           const sourceLabel = getSourceLabel(person);
+          const trustBadge = getSourceTrustBadge(person);
 
           return (
             <div key={person.id}>
@@ -378,22 +387,29 @@ const ResultsPageUpdated = () => {
                   )}
                 </div>
 
-                {/* Crime Type Tags */}
-                {offenseCategories.length > 0 && (
-                  <div style={{ padding: '16px 32px', borderBottom: '1.5px solid var(--cream)', display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                    {offenseCategories.map((cat, i) => (
-                      <span key={i} style={{
-                        display: 'inline-block', padding: '4px 12px',
-                        fontFamily: "'JetBrains Mono', monospace", fontSize: 11,
-                        background: isViolent ? '#F3E8FF' : '#FEF3C7',
-                        color: isViolent ? '#6D28D9' : '#92400E',
-                        fontWeight: 600,
-                      }}>
-                        {cat}
-                      </span>
-                    ))}
-                  </div>
-                )}
+                {/* Trust Badge */}
+                <div style={{ padding: '12px 32px', borderBottom: '1.5px solid var(--cream)', display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
+                  <span style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 12px',
+                    fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.08em',
+                    background: `${trustBadge.color}10`, color: trustBadge.color, fontWeight: 700, border: `1px solid ${trustBadge.color}30`,
+                  }}>
+                    {trustBadge.icon} {trustBadge.label} · TRUST: {trustBadge.level}
+                  </span>
+
+                  {/* Crime Type Tags */}
+                  {offenseCategories.map((cat, i) => (
+                    <span key={i} style={{
+                      display: 'inline-block', padding: '4px 12px',
+                      fontFamily: "'JetBrains Mono', monospace", fontSize: 11,
+                      background: isViolent ? '#F3E8FF' : '#FEF3C7',
+                      color: isViolent ? '#6D28D9' : '#92400E',
+                      fontWeight: 600,
+                    }}>
+                      {cat}
+                    </span>
+                  ))}
+                </div>
 
                 {/* Photo & Details */}
                 <div className="results-photo-grid" style={{ padding: 32, display: 'grid', gridTemplateColumns: '200px 1fr', gap: 32 }}>

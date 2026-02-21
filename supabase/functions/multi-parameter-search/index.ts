@@ -285,6 +285,57 @@ serve(async (req) => {
       }
     }
 
+    // Strategy 5: SAFLII Court Judgments
+    if (full_name) {
+      searchStrategies.push('saflii_judgment');
+      const normalizedSearch = normalizeName(full_name);
+      const nameParts = full_name.trim().split(/\s+/);
+      const searchSurname = nameParts[nameParts.length - 1].toLowerCase();
+
+      let safliiQuery = supabase
+        .from('saflii_judgments')
+        .select('*')
+        .eq('is_criminal', true)
+        .or(`name_normalized.eq.${normalizedSearch},accused_surname.ilike.${searchSurname}`);
+
+      if (province) {
+        safliiQuery = safliiQuery.eq('province', province);
+      }
+
+      const { data: safliiMatches } = await safliiQuery.limit(10);
+
+      if (safliiMatches && safliiMatches.length > 0) {
+        for (const sj of safliiMatches) {
+          // Avoid duplicates if same person already matched from wanted_persons
+          if (!matches.some(m => m.full_name?.toLowerCase() === sj.accused_name?.toLowerCase())) {
+            matches.push({
+              id: sj.id,
+              full_name: sj.accused_name,
+              first_name: sj.accused_first_name,
+              surname: sj.accused_surname,
+              charges: (sj.charge_keywords || []).join(', ') || 'Criminal matter',
+              court_name: sj.court_name,
+              court_case_number: sj.case_number,
+              province: sj.province,
+              source_dataset: 'saflii',
+              source_url: sj.saflii_url,
+              detail_page_url: sj.saflii_url,
+              match_type: 'saflii_judgment',
+              confidence: 70,
+              found_in_saflii: true,
+              legal_status: 'court_judgment',
+              offense_categories: sj.charge_keywords || [],
+              year_of_birth: null,
+              saflii_url: sj.saflii_url,
+              saflii_year: sj.year,
+              saflii_court_code: sj.court_code,
+              saflii_case_title: sj.case_title,
+            });
+          }
+        }
+      }
+    }
+
     // Deduplicate
     const seen = new Set<string>();
     matches = matches.filter(m => {

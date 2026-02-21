@@ -350,6 +350,60 @@ export type Database = {
           },
         ]
       }
+      saflii_judgments: {
+        Row: {
+          accused_first_name: string | null
+          accused_name: string
+          accused_surname: string | null
+          case_number: string | null
+          case_title: string | null
+          charge_keywords: string[] | null
+          court_code: string | null
+          court_name: string | null
+          created_at: string
+          id: string
+          is_criminal: boolean | null
+          name_normalized: string | null
+          province: string | null
+          saflii_url: string | null
+          year: number | null
+        }
+        Insert: {
+          accused_first_name?: string | null
+          accused_name: string
+          accused_surname?: string | null
+          case_number?: string | null
+          case_title?: string | null
+          charge_keywords?: string[] | null
+          court_code?: string | null
+          court_name?: string | null
+          created_at?: string
+          id?: string
+          is_criminal?: boolean | null
+          name_normalized?: string | null
+          province?: string | null
+          saflii_url?: string | null
+          year?: number | null
+        }
+        Update: {
+          accused_first_name?: string | null
+          accused_name?: string
+          accused_surname?: string | null
+          case_number?: string | null
+          case_title?: string | null
+          charge_keywords?: string[] | null
+          court_code?: string | null
+          court_name?: string | null
+          created_at?: string
+          id?: string
+          is_criminal?: boolean | null
+          name_normalized?: string | null
+          province?: string | null
+          saflii_url?: string | null
+          year?: number | null
+        }
+        Relationships: []
+      }
       searches: {
         Row: {
           created_at: string

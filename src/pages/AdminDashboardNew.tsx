@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import AdminLayout from "@/components/admin/AdminLayout";
 import {
-  Users, Search, BarChart3, CreditCard, TrendingUp,
+  Users, Search, BarChart3, CreditCard, TrendingUp, AlertTriangle, Mail,
 } from "lucide-react";
 import {
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
@@ -46,6 +46,7 @@ export default function AdminDashboardNew() {
   const [checks, setChecks] = useState<CheckRow[]>([]);
   const [dailyChecks, setDailyChecks] = useState<DailyCount[]>([]);
   const [loading, setLoading] = useState(true);
+  const [pendingPayments, setPendingPayments] = useState(0);
 
   useEffect(() => {
     fetchAll();
@@ -58,7 +59,7 @@ export default function AdminDashboardNew() {
     const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
 
-    const [profilesRes, checksRes, checksTodayRes, paymentsRes, recentChecksRes, newSignupsRes, last30Checks] = await Promise.all([
+    const [profilesRes, checksRes, checksTodayRes, paymentsRes, recentChecksRes, newSignupsRes, last30Checks, pendingRes] = await Promise.all([
       supabase.from("profiles").select("*", { count: "exact", head: true }),
       supabase.from("searches").select("*", { count: "exact", head: true }),
       supabase.from("searches").select("*", { count: "exact", head: true }).gte("searched_at", startOfDay),
@@ -66,6 +67,7 @@ export default function AdminDashboardNew() {
       supabase.from("searches").select("*").order("searched_at", { ascending: false }).limit(10),
       supabase.from("profiles").select("*", { count: "exact", head: true }).gte("created_at", sevenDaysAgo),
       supabase.from("searches").select("searched_at").gte("searched_at", thirtyDaysAgo).order("searched_at", { ascending: true }),
+      supabase.from("manual_payments").select("*", { count: "exact", head: true }).eq("status", "pending"),
     ]);
 
     // Active users this month (distinct user_ids who ran checks)
@@ -97,6 +99,7 @@ export default function AdminDashboardNew() {
     });
     setChecks((recentChecksRes.data as CheckRow[]) || []);
     setDailyChecks(dailyArr);
+    setPendingPayments(pendingRes.count || 0);
     setLoading(false);
   };
 
@@ -123,6 +126,26 @@ export default function AdminDashboardNew() {
           </div>
         ) : (
           <>
+            {/* Alert banners */}
+            {pendingPayments > 0 && (
+              <Link to="/admin/verify-payments" className="flex items-center gap-3 p-4 rounded-xl border-2 border-red-500 bg-red-500/10 hover:bg-red-500/15 transition-colors">
+                <div className="w-8 h-8 rounded-full bg-red-500 text-white flex items-center justify-center font-heading text-sm font-bold">{pendingPayments}</div>
+                <div>
+                  <p className="font-heading text-sm text-foreground">Unverified payments waiting</p>
+                  <p className="font-body text-xs text-muted-foreground">Click to review and verify pending payments</p>
+                </div>
+                <AlertTriangle className="h-5 w-5 text-red-500 ml-auto" />
+              </Link>
+            )}
+
+            <div className="flex items-center gap-3 p-4 rounded-xl border-2 border-amber-500 bg-amber-500/10">
+              <Mail className="h-5 w-5 text-amber-600 shrink-0" />
+              <div>
+                <p className="font-heading text-sm text-foreground">Email delivery not configured</p>
+                <p className="font-body text-xs text-muted-foreground">Users are not receiving verification or payment emails. Add a RESEND_API_KEY secret to enable email delivery via Resend.com (free tier available).</p>
+              </div>
+            </div>
+
             {/* KPI Cards */}
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
               {kpiCards.map((kpi) => (
@@ -199,7 +222,7 @@ export default function AdminDashboardNew() {
                     {checks.map((c) => {
                       const pill = riskPill[c.risk_level] || riskPill.GREEN;
                       return (
-                        <tr key={c.id} className="border-b border-border last:border-0 hover:bg-purple-50/50 transition-colors">
+                        <tr key={c.id} className="border-b border-border last:border-0 hover:bg-muted transition-colors">
                           <td className="px-5 py-3 font-body text-sm text-muted-foreground">{new Date(c.searched_at).toLocaleDateString("en-ZA")}</td>
                           <td className="px-5 py-3 font-body text-sm text-foreground font-medium">{c.search_name || "—"}</td>
                           <td className="px-5 py-3 font-body text-sm text-muted-foreground">{c.search_province || "—"}</td>

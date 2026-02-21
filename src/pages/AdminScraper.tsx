@@ -322,7 +322,7 @@ const AdminScraper = () => {
 
               {result.success && (
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                  <div className="bg-primary/10 p-4 rounded-lg">
+                  <div className="p-4 rounded-lg" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
                     <p className="text-sm text-muted-foreground">Total Scraped</p>
                     <p className="text-3xl font-bold text-primary">
                       {result.total_scraped}
@@ -334,7 +334,7 @@ const AdminScraper = () => {
                       {result.details_fetched || 0}
                     </p>
                   </div>
-                  <div className="bg-primary/10 p-4 rounded-lg">
+                  <div className="p-4 rounded-lg" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
                     <p className="text-sm text-muted-foreground">New Records</p>
                     <p className="text-3xl font-bold text-primary">
                       {result.new_records}
@@ -432,7 +432,7 @@ const AdminScraper = () => {
 
               {detailResult.success && !detailResult.message && (
                 <div className="grid grid-cols-3 gap-4">
-                  <div className="bg-primary/10 p-4 rounded-lg">
+                  <div className="p-4 rounded-lg" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
                     <p className="text-sm text-muted-foreground">Processed</p>
                     <p className="text-3xl font-bold text-primary">
                       {detailResult.processed}
@@ -553,11 +553,11 @@ const AdminScraper = () => {
 
               {sapswantedResult.success && !sapswantedResult.message && (
                 <div className="grid grid-cols-3 gap-4">
-                  <div className="bg-primary/10 p-4 rounded-lg">
+                  <div className="p-4 rounded-lg" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
                     <p className="text-sm text-muted-foreground">Enriched</p>
                     <p className="text-3xl font-bold text-primary">{sapswantedResult.enriched}</p>
                   </div>
-                  <div className="bg-primary/10 p-4 rounded-lg">
+                  <div className="p-4 rounded-lg" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
                     <p className="text-sm text-muted-foreground">Inserted</p>
                     <p className="text-3xl font-bold text-primary">{sapswantedResult.inserted}</p>
                   </div>

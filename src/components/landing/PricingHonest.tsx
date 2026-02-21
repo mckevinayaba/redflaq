@@ -67,7 +67,7 @@ const PricingHonest = () => {
         <div className="container mx-auto px-4">
           {/* Header */}
           <div className="text-center mb-16">
-            <span className="inline-block bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-semibold mb-4">
+            <span className="inline-block text-primary px-4 py-2 rounded-full text-sm font-semibold mb-4" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
               PRICING
             </span>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
@@ -132,8 +132,8 @@ const PricingHonest = () => {
                   onClick={() => setSelectedPackage(plan.packageType)}
                   className={`w-full py-6 ${
                     plan.popular 
-                      ? 'bg-primary hover:bg-primary/90 text-primary-foreground' 
-                      : 'bg-card border-2 border-primary text-primary hover:bg-primary/5'
+                      ? 'bg-primary hover:opacity-90 text-primary-foreground' 
+                      : 'bg-card border-2 border-primary text-primary hover:bg-muted'
                   }`}
                   variant={plan.popular ? "default" : "outline"}
                 >
@@ -146,7 +146,7 @@ const PricingHonest = () => {
           {/* Why this price */}
           <div className="max-w-3xl mx-auto bg-card rounded-2xl p-8 border border-border">
             <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
                 <UserCheck className="h-6 w-6 text-primary" />
               </div>
               <div>

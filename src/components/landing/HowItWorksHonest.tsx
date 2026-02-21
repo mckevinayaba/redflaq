@@ -38,7 +38,7 @@ const HowItWorksHonest = () => {
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="text-center mb-16">
-            <span className="inline-block bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-semibold mb-4">
+            <span className="inline-block text-primary px-4 py-2 rounded-full text-sm font-semibold mb-4" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
               THE PROCESS
             </span>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4">
@@ -59,7 +59,7 @@ const HowItWorksHonest = () => {
                 <div key={index} className="relative flex gap-6 md:gap-8">
                   {/* Number circle */}
                   <div className="relative z-10 flex-shrink-0">
-                    <div className="w-16 h-16 rounded-2xl bg-card border-2 border-primary/20 flex items-center justify-center shadow-sm">
+                    <div className="w-16 h-16 rounded-2xl bg-card border-2 flex items-center justify-center shadow-sm" style={{ borderColor: 'hsl(var(--primary) / 0.2)' }}>
                       <step.icon className="h-7 w-7 text-primary" />
                     </div>
                   </div>
@@ -71,7 +71,7 @@ const HowItWorksHonest = () => {
                         <span className="text-xs font-mono text-muted-foreground">STEP {step.number}</span>
                         <h3 className="text-xl font-bold text-foreground mt-1">{step.title}</h3>
                       </div>
-                      <span className="text-sm font-medium text-primary bg-primary/10 px-3 py-1 rounded-full">
+                      <span className="text-sm font-medium text-primary px-3 py-1 rounded-full" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
                         {step.time}
                       </span>
                     </div>

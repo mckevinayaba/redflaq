@@ -262,7 +262,7 @@ export default function DashboardNewCheck() {
               <button
                 type="submit"
                 disabled={!consent || !firstName.trim() || !surname.trim() || isSubmitting}
-                className="w-full py-4 bg-primary text-primary-foreground font-body font-bold text-base rounded-lg hover:bg-primary/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                className="w-full py-4 bg-primary text-primary-foreground font-body font-bold text-base rounded-lg hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
               >
                 {isSubmitting ? (
                   <>
@@ -301,7 +301,7 @@ export default function DashboardNewCheck() {
 
         {/* Side card */}
         <div className="hidden lg:block">
-          <div className="bg-primary/5 border border-border rounded-xl p-6 sticky top-10">
+          <div className="border border-border rounded-xl p-6 sticky top-10" style={{ background: 'hsl(var(--primary) / 0.05)' }}>
             <Heart className="h-8 w-8 text-primary mb-4" />
             <p className="font-heading text-lg text-foreground mb-3">Why this matters</p>
             <p className="font-body text-sm text-muted-foreground leading-relaxed mb-4">

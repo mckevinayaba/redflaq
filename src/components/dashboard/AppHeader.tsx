@@ -44,13 +44,14 @@ export default function AppHeader() {
       <div className="relative" ref={ref}>
         <button
           onClick={() => setOpen(!open)}
-          className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center font-body font-bold text-sm text-primary hover:bg-primary/20 transition-colors"
+          className="font-body font-bold text-sm transition-colors"
+          style={{ width: 36, height: 36, borderRadius: '50%', backgroundColor: '#EDE9FE', color: '#7C3AED', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(124, 58, 237, 0.2)', WebkitAppearance: 'none' as const }}
         >
           {initial}
         </button>
 
         {open && (
-          <div className="absolute right-0 top-12 w-48 bg-card border border-border rounded-lg shadow-lg py-1 z-50">
+          <div className="py-1 z-50" style={{ position: 'absolute', right: 0, top: 48, width: 192, backgroundColor: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: 8, boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}>
             <Link to="/dashboard" onClick={() => setOpen(false)} className="flex items-center gap-2 px-4 py-2.5 font-body text-sm text-foreground hover:bg-muted transition-colors">
               <LayoutDashboard className="h-4 w-4 text-muted-foreground" /> Dashboard
             </Link>

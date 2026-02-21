@@ -85,9 +85,31 @@ export default function SearchForm() {
 
   // Validate purchase ID
   const [paymentValid, setPaymentValid] = useState(false);
+  const [isAdminUser, setIsAdminUser] = useState(false);
 
   useEffect(() => {
     const validatePayment = async () => {
+      // Check if user is admin/owner — they bypass payment validation
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data: roles } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', user.id);
+        const userRoles = roles?.map(r => r.role) || [];
+        if (userRoles.includes('owner') || userRoles.includes('admin')) {
+          setIsAdminUser(true);
+          setPaymentValid(true);
+          setPurchaseData({
+            credits_remaining: 999,
+            email: user.email,
+            payment_id: searchParams.get("payment_id") || 'admin-bypass'
+          });
+          setIsValidatingPurchase(false);
+          return;
+        }
+      }
+
       const paymentId = searchParams.get("payment_id");
       
       if (!paymentId) {
@@ -409,30 +431,33 @@ export default function SearchForm() {
     try {
       const paymentId = searchParams.get("payment_id");
       
-      // First, fetch current payment data and deduct a credit
-      const { data: currentPayment, error: fetchError } = await supabase
-        .from('manual_payments')
-        .select('credits_used, search_credits')
-        .eq('payment_id', paymentId)
-        .single();
+      // Admin/owner users bypass credit deduction
+      if (!isAdminUser) {
+        // First, fetch current payment data and deduct a credit
+        const { data: currentPayment, error: fetchError } = await supabase
+          .from('manual_payments')
+          .select('credits_used, search_credits')
+          .eq('payment_id', paymentId)
+          .single();
 
-      if (fetchError) {
-        throw new Error('Failed to fetch payment data');
-      }
+        if (fetchError) {
+          throw new Error('Failed to fetch payment data');
+        }
 
-      // Double-check credits are available
-      if (currentPayment.credits_used >= currentPayment.search_credits) {
-        throw new Error('No credits remaining');
-      }
+        // Double-check credits are available
+        if (currentPayment.credits_used >= currentPayment.search_credits) {
+          throw new Error('No credits remaining');
+        }
 
-      // Deduct credit
-      const { error: updateError } = await supabase
-        .from('manual_payments')
-        .update({ credits_used: currentPayment.credits_used + 1 })
-        .eq('payment_id', paymentId);
+        // Deduct credit
+        const { error: updateError } = await supabase
+          .from('manual_payments')
+          .update({ credits_used: currentPayment.credits_used + 1 })
+          .eq('payment_id', paymentId);
 
-      if (updateError) {
-        throw new Error('Failed to use credit: ' + updateError.message);
+        if (updateError) {
+          throw new Error('Failed to use credit: ' + updateError.message);
+        }
       }
 
       // Then perform the search

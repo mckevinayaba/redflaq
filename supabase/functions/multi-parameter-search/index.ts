@@ -14,6 +14,7 @@ interface SearchParams {
   case_number?: string;
   police_station?: string;
   payment_id?: string;
+  user_id?: string;
 }
 
 function normalizeName(name: string): string {
@@ -91,7 +92,7 @@ serve(async (req) => {
 
   try {
     const params: SearchParams = await req.json();
-    const { full_name, sa_id_number, date_of_birth, province, case_number, police_station, payment_id } = params;
+    const { full_name, sa_id_number, date_of_birth, province, case_number, police_station, payment_id, user_id } = params;
 
     const hasAny = [full_name, sa_id_number, date_of_birth, case_number].some(v => v && v.length > 0);
     if (!hasAny) {
@@ -436,6 +437,7 @@ serve(async (req) => {
     try {
       await supabase.from('searches').insert({
         search_id: searchId,
+        user_id: user_id || null,
         payment_id: payment_id || null,
         search_name: full_name || null,
         search_id_number: sa_id_number || null,
@@ -453,6 +455,24 @@ serve(async (req) => {
       });
     } catch (e) {
       console.error('Failed to persist search:', e);
+    }
+
+    // Audit log
+    try {
+      await supabase.from('admin_events').insert({
+        event_type: 'search_performed',
+        performed_by: user_id || 'anonymous',
+        details: {
+          search_id: searchId,
+          search_name: full_name || null,
+          province: province || null,
+          matches_found: matches.length,
+          risk_level: riskLevel,
+          strategies: searchStrategies,
+        },
+      });
+    } catch (e) {
+      console.error('Failed to log audit event:', e);
     }
 
     console.log(`Multi-parameter search: strategies=${searchStrategies.join(',')}, matches=${matches.length}`);

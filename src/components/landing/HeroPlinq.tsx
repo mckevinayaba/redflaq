@@ -1,20 +1,13 @@
-import { useState } from "react";
 import { Check } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
 import { useCountUp } from "@/hooks/useCountUp";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
 
 const HeroPlinq = () => {
-  const { isAuthenticated } = useAuth();
-  const navigate = useNavigate();
+  const { guardedAction } = useAuthGuard();
   const { count: statTwo, ref: statTwoRef } = useCountUp(40000, 2000);
 
   const handleVerify = () => {
-    if (isAuthenticated) {
-      navigate('/dashboard/new-check');
-    } else {
-      navigate('/signup');
-    }
+    guardedAction();
   };
 
   return (
@@ -85,19 +78,20 @@ const HeroPlinq = () => {
             </button>
           </div>
 
-          {!isAuthenticated && (
-            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', marginTop: 24 }}>
-              Already have an account?{" "}
-              <button
-                onClick={() => navigate('/signup?mode=signin')}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: '#7C3AED', textDecoration: 'underline', padding: 0 }}
-              >
-                Log in here
-              </button>
-            </p>
-          )}
+          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', marginTop: 24 }}>
+            Already have an account?{" "}
+            <button
+              onClick={() => {
+                sessionStorage.setItem("fromCTA", "true");
+                window.location.href = '/signup?mode=signin';
+              }}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: '#7C3AED', textDecoration: 'underline', padding: 0 }}
+            >
+              Log in here
+            </button>
+          </p>
 
-          <div className="flex items-center gap-3" style={{ marginTop: isAuthenticated ? 48 : 24 }}>
+          <div className="flex items-center gap-3" style={{ marginTop: 24 }}>
             <div style={{ width: 32, height: 1, background: '#D6D3CD' }} />
             <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#9CA3AF', letterSpacing: '0.08em' }}>
               FOR YOUR PROTECTION · NOT FOR HARASSMENT OR REVENGE

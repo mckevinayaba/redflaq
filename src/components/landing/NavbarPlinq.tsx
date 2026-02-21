@@ -3,6 +3,7 @@ import { Menu, X, LayoutDashboard, Settings, LogOut, Share2 } from "lucide-react
 
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import ShareInviteModal from "@/components/ShareInviteModal";
@@ -55,12 +56,9 @@ const NavbarPlinq = () => {
     setIsMenuOpen(false);
   };
 
+  const { guardedAction } = useAuthGuard();
   const handleVerifyNow = () => {
-    if (isAuthenticated) {
-      navigate('/dashboard/new-check');
-    } else {
-      navigate('/signup');
-    }
+    guardedAction();
     setIsMenuOpen(false);
   };
 

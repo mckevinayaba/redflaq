@@ -28,6 +28,8 @@ import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Dispute from "./pages/Dispute";
 import Signup from "./pages/Signup";
+import VerifyEmail from "./pages/VerifyEmail";
+import Pricing from "./pages/Pricing";
 import ResetPassword from "./pages/ResetPassword";
 import Dashboard from "./pages/Dashboard";
 import DashboardNewCheck from "./pages/DashboardNewCheck";
@@ -53,6 +55,8 @@ const App = () => (
           <Route path="/terms" element={<Terms />} />
           <Route path="/dispute" element={<Dispute />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
+          <Route path="/pricing" element={<Pricing />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/dashboard/new-check" element={<DashboardNewCheck />} />

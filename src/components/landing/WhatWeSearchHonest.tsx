@@ -8,8 +8,8 @@ const WhatWeSearchHonest = () => {
       link: "https://www.saps.gov.za"
     },
     {
-      source: "Public Court Judgments (SAFLII)",
-      description: "Civil and criminal case records",
+      source: "SAFLII Court Judgments",
+      description: "High Court criminal judgments — rape, assault, murder convictions across all 9 provinces (2003–present)",
       link: "https://www.saflii.org"
     },
     {

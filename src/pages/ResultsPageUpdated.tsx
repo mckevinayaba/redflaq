@@ -80,6 +80,7 @@ const getOfficialSourceUrl = (person: WantedPerson): string | null => {
 const getSourceLabel = (person: WantedPerson): string => {
   if (person.source_dataset === 'za_wanted') return 'SAPS Wanted Persons';
   if (person.source_dataset === 'za_fic_sanctions') return 'FIC Sanctions List';
+  if (person.source_dataset === 'saflii') return 'SAFLII Court Judgment';
   return 'South African Public Records';
 };
 
@@ -356,10 +357,10 @@ const ResultsPageUpdated = () => {
                     display: 'inline-block', padding: '6px 16px', marginBottom: 16,
                     fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: '0.1em',
                     textTransform: 'uppercase', fontWeight: 600,
-                    background: isViolent ? '#7C3AED' : person.legal_status === 'wanted' || !person.legal_status ? '#D97706' : '#6B7280',
+                    background: person.source_dataset === 'saflii' ? '#1E40AF' : isViolent ? '#7C3AED' : person.legal_status === 'wanted' || !person.legal_status ? '#D97706' : '#6B7280',
                     color: 'white',
                   }}>
-                    {person.legal_status === 'wanted' || !person.legal_status ? `WANTED — ${person.charges}` : person.court_case_number ? 'COURT RECORD FOUND' : 'LEGAL NOTICE FOUND'}
+                    {person.source_dataset === 'saflii' ? `⚖️ COURT JUDGMENT FOUND — ${person.charges}` : person.legal_status === 'wanted' || !person.legal_status ? `WANTED — ${person.charges}` : person.court_case_number ? 'COURT RECORD FOUND' : 'LEGAL NOTICE FOUND'}
                   </span>
                   <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 32, color: 'var(--ink)', lineHeight: 1.2, marginBottom: 8 }}>
                     {person.full_name}
@@ -451,16 +452,29 @@ const ResultsPageUpdated = () => {
                 </div>
 
                 {/* What This Means */}
-                <div style={{ padding: 32, background: '#FFFBEB', borderTop: '1.5px solid var(--cream)', borderBottom: '1.5px solid var(--cream)' }}>
-                  <h3 style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 700, color: 'var(--gold)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
-                    ⚠️ What This Means
+                <div style={{ padding: 32, background: person.source_dataset === 'saflii' ? '#EFF6FF' : '#FFFBEB', borderTop: '1.5px solid var(--cream)', borderBottom: '1.5px solid var(--cream)' }}>
+                  <h3 style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 700, color: person.source_dataset === 'saflii' ? '#1E40AF' : 'var(--gold)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+                    {person.source_dataset === 'saflii' ? '⚖️ What This Means' : '⚠️ What This Means'}
                   </h3>
                   <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: 'var(--mid)', lineHeight: 1.7 }}>
-                    {person.source_dataset === 'za_fic_sanctions' 
-                      ? `This person appears on the Financial Intelligence Centre (FIC) sanctions list. This indicates they are subject to financial restrictions or watchlist monitoring as of ${person.updated_at ? new Date(person.updated_at).toLocaleDateString('en-ZA') : 'recently'}.`
-                      : `An active arrest warrant is listed on the SAPS wanted persons database as of ${person.updated_at ? new Date(person.updated_at).toLocaleDateString('en-ZA') : 'recently'}.`
+                    {person.source_dataset === 'saflii'
+                      ? `A criminal court judgment was found on SAFLII (Southern African Legal Information Institute) involving a person with this name. The judgment is from ${(person as any).saflii_court_code ? `the ${person.court_name}` : 'a South African High Court'}${(person as any).saflii_year ? ` (${(person as any).saflii_year})` : ''}. This is a public court record — not a RedFlaq determination.`
+                      : person.source_dataset === 'za_fic_sanctions' 
+                        ? `This person appears on the Financial Intelligence Centre (FIC) sanctions list. This indicates they are subject to financial restrictions or watchlist monitoring as of ${person.updated_at ? new Date(person.updated_at).toLocaleDateString('en-ZA') : 'recently'}.`
+                        : `An active arrest warrant is listed on the SAPS wanted persons database as of ${person.updated_at ? new Date(person.updated_at).toLocaleDateString('en-ZA') : 'recently'}.`
                     }
                   </p>
+                  {person.source_dataset === 'saflii' && (
+                    <div style={{ background: 'white', padding: 16, borderLeft: '3px solid #1E40AF', marginTop: 16 }}>
+                      <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: '#1E40AF', marginBottom: 8 }}>Important Limitations:</p>
+                      <ul style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'var(--mid)', lineHeight: 1.8, listStyle: 'disc', paddingLeft: 20, margin: 0 }}>
+                        <li>Only High Court and above — most GBV cases start in Magistrate Courts (not on SAFLII)</li>
+                        <li>Not every conviction produces a written judgment</li>
+                        <li>Name-only matching means this may be a different person with the same name</li>
+                        <li>Courts may anonymise parties in certain cases</li>
+                      </ul>
+                    </div>
+                  )}
                   <div style={{ background: 'white', padding: 16, borderLeft: '3px solid #EA580C', marginTop: 16 }}>
                     <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: '#DC2626', marginBottom: 8 }}>This Does NOT Confirm:</p>
                     <ul style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'var(--mid)', lineHeight: 1.8, listStyle: 'disc', paddingLeft: 20, margin: 0 }}>
@@ -592,7 +606,7 @@ const ResultsPageUpdated = () => {
                     ⚖️ Important Legal Notice
                   </h4>
                   <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: 'var(--mid)', lineHeight: 1.8 }}>
-                    RedFlaq reports public records only, sourced from SAPS wanted persons lists and FIC sanctions data via OpenSanctions. This is not a determination of guilt. Legal proceedings are ongoing until concluded by a court of law. Always verify current status with official sources before making any decisions.
+                    RedFlaq reports public records only, sourced from SAPS wanted persons lists, SAFLII court judgments, and FIC sanctions data via OpenSanctions. This is not a determination of guilt. Legal proceedings are ongoing until concluded by a court of law. Always verify current status with official sources before making any decisions.
                     <br /><br />
                     DO NOT use this information to harass, discriminate against, defame, or harm this person. Unlawful use of this information is prohibited and prosecutable under South African law, including under POPIA (Protection of Personal Information Act) and the Harassment Act.
                     <br /><br />
@@ -631,7 +645,7 @@ const ResultsPageUpdated = () => {
               No public red flags found
             </h3>
             <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, color: 'var(--mid)', lineHeight: 1.7, maxWidth: 520, margin: '0 auto 24px' }}>
-              We searched the South African SAPS wanted persons and FIC sanctions lists and found no matches for this name as of {searchDate}. This does not mean "no criminal record" — only that no match was found in these specific public sources.
+              We searched the South African SAPS wanted persons list, SAFLII court judgments, and FIC sanctions list and found no matches for this name as of {searchDate}. This does not mean "no criminal record" — only that no match was found in these specific public sources.
             </p>
 
             <div style={{ background: 'white', border: '1.5px solid var(--cream)', padding: 24, textAlign: 'left', maxWidth: 520, margin: '0 auto 24px' }}>

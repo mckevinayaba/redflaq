@@ -84,7 +84,7 @@ export default function Dashboard() {
         {/* Total checks */}
         <div className="bg-card rounded-xl border border-border p-6 shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
               <Shield className="h-5 w-5 text-primary" />
             </div>
             <span className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Your safety checks</span>
@@ -96,7 +96,7 @@ export default function Dashboard() {
         {/* This month */}
         <div className="bg-card rounded-xl border border-border p-6 shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
               <BarChart3 className="h-5 w-5 text-primary" />
             </div>
             <span className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Checks this month</span>
@@ -110,7 +110,7 @@ export default function Dashboard() {
         {/* Latest result */}
         <div className="bg-card rounded-xl border border-border p-6 shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
               <CheckCircle2 className="h-5 w-5 text-primary" />
             </div>
             <span className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Latest result</span>
@@ -152,7 +152,7 @@ export default function Dashboard() {
             </p>
             <Link
               to="/dashboard/new-check"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-body font-semibold text-sm rounded-lg hover:bg-primary/90 transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-body font-semibold text-sm rounded-lg hover:opacity-90 transition-colors"
             >
               <Shield className="h-4 w-4" />
               Run your first safety check
@@ -199,7 +199,7 @@ export default function Dashboard() {
                   {searches.slice(0, 10).map((s) => {
                     const risk = riskConfig[s.risk_level] || riskConfig.GREEN;
                     return (
-                      <tr key={s.id} className="border-b border-border last:border-0 hover:bg-purple-50/50 transition-colors">
+                      <tr key={s.id} className="border-b border-border last:border-0 hover:bg-muted transition-colors">
                         <td className="px-6 py-4 font-body text-sm text-foreground font-medium">{s.search_name || "—"}</td>
                         <td className="px-6 py-4 font-body text-sm text-muted-foreground">{new Date(s.searched_at).toLocaleDateString("en-ZA")}</td>
                         <td className="px-6 py-4">
@@ -225,7 +225,7 @@ export default function Dashboard() {
       <div className="flex flex-wrap gap-4">
         <Link
           to="/dashboard/new-check"
-          className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-body font-bold text-sm rounded-lg hover:bg-primary/90 transition-colors shadow-sm"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-body font-bold text-sm rounded-lg hover:opacity-90 transition-colors shadow-sm"
         >
           <Shield className="h-4 w-4" />
           Run a new safety check

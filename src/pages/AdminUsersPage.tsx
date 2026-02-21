@@ -19,8 +19,8 @@ interface UserRow {
 }
 
 const roleBadge: Record<string, { label: string; cls: string }> = {
-  owner: { label: "Owner", cls: "bg-primary/15 text-primary" },
-  admin: { label: "Admin", cls: "bg-primary/15 text-primary" },
+  owner: { label: "Owner", cls: "text-primary border border-primary/30" },
+  admin: { label: "Admin", cls: "text-primary border border-primary/30" },
   support: { label: "Support", cls: "bg-amber-100 text-amber-700" },
   user: { label: "User", cls: "bg-muted text-muted-foreground" },
 };

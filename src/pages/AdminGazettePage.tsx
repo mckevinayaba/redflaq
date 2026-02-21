@@ -157,7 +157,7 @@ export default function AdminGazettePage() {
                 type="file"
                 accept=".pdf"
                 onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
-                className="w-full px-4 py-2.5 rounded-lg border border-border bg-background font-body text-sm file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:bg-primary/10 file:text-primary file:text-xs file:font-medium"
+                className="w-full px-4 py-2.5 rounded-lg border border-border bg-background font-body text-sm file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:bg-muted file:text-foreground file:text-xs file:font-medium"
               />
             </div>
 
@@ -198,7 +198,7 @@ export default function AdminGazettePage() {
               <Database className="h-5 w-5 text-primary" />
               Gazette Records
             </h2>
-            <span className="px-3 py-1 bg-primary/10 text-primary rounded-full font-mono text-xs">
+            <span className="px-3 py-1 bg-muted text-foreground rounded-full font-mono text-xs">
               {totalCount} total
             </span>
           </div>

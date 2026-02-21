@@ -171,7 +171,7 @@ export default function AdminDashboard() {
                 {checks.map((c) => {
                   const pill = riskPill[c.risk_level] || riskPill.GREEN;
                   return (
-                    <tr key={c.id} className="border-b border-border last:border-0 hover:bg-purple-50/50 transition-colors">
+                    <tr key={c.id} className="border-b border-border last:border-0 hover:bg-muted transition-colors">
                       <td className="px-5 py-3 font-body text-sm text-muted-foreground">{new Date(c.searched_at).toLocaleDateString("en-ZA")}</td>
                       <td className="px-5 py-3 font-body text-sm text-foreground font-medium">{c.search_name || "—"}</td>
                       <td className="px-5 py-3 font-body text-sm text-muted-foreground">{c.search_province || "—"}</td>
@@ -208,7 +208,7 @@ export default function AdminDashboard() {
               </thead>
               <tbody>
                 {users.map((u) => (
-                  <tr key={u.user_id} className="border-b border-border last:border-0 hover:bg-purple-50/50 transition-colors">
+                  <tr key={u.user_id} className="border-b border-border last:border-0 hover:bg-muted transition-colors">
                     <td className="px-5 py-3 font-body text-sm text-foreground font-medium">{u.full_name || "—"}</td>
                     <td className="px-5 py-3 font-body text-sm text-muted-foreground">{new Date(u.created_at).toLocaleDateString("en-ZA")}</td>
                   </tr>

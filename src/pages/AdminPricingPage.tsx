@@ -159,12 +159,12 @@ export default function AdminPricingPage() {
                   <p className="font-heading text-2xl text-foreground mt-1">R{singlePrice}</p>
                   <p className="font-body text-xs text-muted-foreground mt-1">per check</p>
                 </div>
-                <div className="border border-primary/30 rounded-lg p-4 text-center bg-primary/5">
+                <div className="border rounded-lg p-4 text-center" style={{ borderColor: 'hsl(var(--primary) / 0.3)', background: 'hsl(var(--primary) / 0.05)' }}>
                   <p className="font-mono text-[10px] tracking-wider text-primary uppercase">{pack3Checks}-Check Pack</p>
                   <p className="font-heading text-2xl text-foreground mt-1">R{pack3Total}</p>
                   <p className="font-body text-xs text-muted-foreground mt-1">R{pack3PerCheck} per check</p>
                 </div>
-                <div className="border border-primary/30 rounded-lg p-4 text-center bg-primary/5">
+                <div className="border rounded-lg p-4 text-center" style={{ borderColor: 'hsl(var(--primary) / 0.3)', background: 'hsl(var(--primary) / 0.05)' }}>
                   <p className="font-mono text-[10px] tracking-wider text-primary uppercase">{pack5Checks}-Check Pack</p>
                   <p className="font-heading text-2xl text-foreground mt-1">R{pack5Total}</p>
                   <p className="font-body text-xs text-muted-foreground mt-1">R{pack5PerCheck} per check</p>

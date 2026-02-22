@@ -36,6 +36,15 @@ import DashboardNewCheck from "./pages/DashboardNewCheck";
 import DashboardReports from "./pages/DashboardReports";
 import DashboardAccount from "./pages/DashboardAccount";
 import DashboardHelp from "./pages/DashboardHelp";
+import Tools from "./pages/Tools";
+import FirstDateSafety from "./pages/tools/FirstDateSafety";
+import TenantSafety from "./pages/tools/TenantSafety";
+import DomesticWorkerSafety from "./pages/tools/DomesticWorkerSafety";
+import RedFlagQuiz from "./pages/tools/RedFlagQuiz";
+import Academy from "./pages/Academy";
+import AcademyArticle from "./pages/AcademyArticle";
+import Partners from "./pages/Partners";
+import PartnersApply from "./pages/PartnersApply";
 
 const queryClient = new QueryClient();
 
@@ -63,6 +72,15 @@ const App = () => (
           <Route path="/dashboard/reports" element={<DashboardReports />} />
           <Route path="/dashboard/account" element={<DashboardAccount />} />
           <Route path="/dashboard/help" element={<DashboardHelp />} />
+          <Route path="/tools" element={<Tools />} />
+          <Route path="/tools/first-date-safety" element={<FirstDateSafety />} />
+          <Route path="/tools/tenant-safety" element={<TenantSafety />} />
+          <Route path="/tools/domestic-worker-safety" element={<DomesticWorkerSafety />} />
+          <Route path="/tools/red-flag-quiz" element={<RedFlagQuiz />} />
+          <Route path="/academy" element={<Academy />} />
+          <Route path="/academy/:slug" element={<AcademyArticle />} />
+          <Route path="/partners" element={<Partners />} />
+          <Route path="/partners/apply" element={<PartnersApply />} />
           <Route path="/admin" element={<AdminDashboardNew />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/users" element={<AdminUsersPage />} />

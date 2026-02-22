@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { DisputeModal } from "@/components/DisputeModal";
+import SafetyWinScreen from "@/components/SafetyWinScreen";
 import { Progress } from "@/components/ui/progress";
 import IdentityMatchSelector from "@/components/IdentityMatchSelector";
 import { type PersonRecord } from "@/utils/identityConfidence";
@@ -300,6 +301,9 @@ const ResultsPageUpdated = () => {
             RedFlaq uses South African public‑record warning lists. It is not a full SAPS criminal record.
           </p>
         </div>
+
+        {/* Safety Win Screen for clear/low risk results */}
+        <SafetyWinScreen riskLevel={results.riskLevel} onClose={() => {}} />
 
         {/* Identity Match Selector for multiple matches */}
         {showMatchSelector && isMultiple && !selectedMatch && (

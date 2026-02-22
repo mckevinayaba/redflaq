@@ -82,6 +82,16 @@ export default function Signup() {
       if (error) {
         toast({ title: "Sign up failed", description: error.message, variant: "destructive" });
       } else {
+        // Record referral if present
+        const referrerId = sessionStorage.getItem("referrer_id");
+        if (referrerId) {
+          await supabase.from("referrals").insert({
+            referrer_user_id: referrerId,
+            referred_email: email.trim(),
+            status: "signed_up",
+          });
+          sessionStorage.removeItem("referrer_id");
+        }
         setSignupSuccess(true);
         // Redirect to verify-email page after signup
         navigate("/verify-email");

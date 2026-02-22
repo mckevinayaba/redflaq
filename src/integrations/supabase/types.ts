@@ -14,6 +14,54 @@ export type Database = {
   }
   public: {
     Tables: {
+      academy_articles: {
+        Row: {
+          author: string | null
+          category: string
+          content: string
+          created_at: string | null
+          excerpt: string | null
+          featured_image_url: string | null
+          id: string
+          meta_description: string | null
+          published: boolean | null
+          related_tool_slug: string | null
+          slug: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          author?: string | null
+          category?: string
+          content: string
+          created_at?: string | null
+          excerpt?: string | null
+          featured_image_url?: string | null
+          id?: string
+          meta_description?: string | null
+          published?: boolean | null
+          related_tool_slug?: string | null
+          slug: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          author?: string | null
+          category?: string
+          content?: string
+          created_at?: string | null
+          excerpt?: string | null
+          featured_image_url?: string | null
+          id?: string
+          meta_description?: string | null
+          published?: boolean | null
+          related_tool_slug?: string | null
+          slug?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       admin_events: {
         Row: {
           created_at: string | null
@@ -291,6 +339,54 @@ export type Database = {
         }
         Relationships: []
       }
+      partners: {
+        Row: {
+          approved_at: string | null
+          checks_referred: number | null
+          contact_email: string
+          contact_name: string
+          created_at: string | null
+          id: string
+          notes: string | null
+          org_name: string
+          org_type: string
+          referral_code: string | null
+          revenue_referred: number | null
+          status: string | null
+          website: string | null
+        }
+        Insert: {
+          approved_at?: string | null
+          checks_referred?: number | null
+          contact_email: string
+          contact_name: string
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          org_name: string
+          org_type: string
+          referral_code?: string | null
+          revenue_referred?: number | null
+          status?: string | null
+          website?: string | null
+        }
+        Update: {
+          approved_at?: string | null
+          checks_referred?: number | null
+          contact_email?: string
+          contact_name?: string
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          org_name?: string
+          org_type?: string
+          referral_code?: string | null
+          revenue_referred?: number | null
+          status?: string | null
+          website?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -415,6 +511,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      referrals: {
+        Row: {
+          converted_at: string | null
+          created_at: string | null
+          id: string
+          referred_email: string | null
+          referred_user_id: string | null
+          referrer_user_id: string
+          reward_granted: boolean | null
+          status: string | null
+        }
+        Insert: {
+          converted_at?: string | null
+          created_at?: string | null
+          id?: string
+          referred_email?: string | null
+          referred_user_id?: string | null
+          referrer_user_id: string
+          reward_granted?: boolean | null
+          status?: string | null
+        }
+        Update: {
+          converted_at?: string | null
+          created_at?: string | null
+          id?: string
+          referred_email?: string | null
+          referred_user_id?: string | null
+          referrer_user_id?: string
+          reward_granted?: boolean | null
+          status?: string | null
+        }
+        Relationships: []
       }
       saflii_judgments: {
         Row: {

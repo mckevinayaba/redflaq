@@ -7,7 +7,9 @@ const FooterPlinq = () => {
   const productLinks = [
     { label: "How It Works", href: "#how-it-works" },
     { label: "Pricing", href: "#pricing" },
-    { label: "Search Now", href: "#search" },
+    { label: "Safety Tools", href: "/tools" },
+    { label: "Safety Academy", href: "/academy" },
+    { label: "Partners", href: "/partners" },
     { label: "FAQ", href: "#faq" },
   ];
 
@@ -37,8 +39,8 @@ const FooterPlinq = () => {
               </div>
               <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 18, letterSpacing: '0.1em', marginLeft: 1 }}><span style={{ color: '#7C3AED' }}>ed</span><span style={{ color: '#2D2235' }}>Flaq</span></span>
             </a>
-            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', maxWidth: 260, lineHeight: 1.6 }}>
-              Making South Africa safer, one informed decision at a time.
+            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', maxWidth: 300, lineHeight: 1.6 }}>
+              South Africa's public-record safety check for women and communities — not a SAPS fingerprint check.
             </p>
             {/* POPIA badge */}
             <div style={{ marginTop: 16, display: 'inline-flex', alignItems: 'center', gap: 6, background: '#F0FDF4', border: '1px solid #BBF7D0', padding: '6px 12px', borderRadius: 4 }}>

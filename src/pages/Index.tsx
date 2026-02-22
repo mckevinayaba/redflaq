@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import HeroPlinq from "@/components/landing/HeroPlinq";
 import TickerBar from "@/components/landing/TickerBar";
@@ -19,6 +20,15 @@ import FooterPlinq from "@/components/landing/FooterPlinq";
 import ShareSection from "@/components/landing/ShareSection";
 
 const Index = () => {
+  // Capture referral param
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get("ref");
+    if (ref) {
+      sessionStorage.setItem("referrer_id", ref);
+    }
+  }, []);
+
   return (
     <div className="min-h-screen" style={{ background: '#F7F4F0' }}>
       <NavbarPlinq />

@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import { Shield, BarChart3, CheckCircle2, ArrowRight, Heart } from "lucide-react";
+import { Shield, BarChart3, CheckCircle2, ArrowRight, Heart, Users } from "lucide-react";
 import ShareInviteModal from "@/components/ShareInviteModal";
 
 interface SearchRecord {
@@ -29,6 +29,8 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<{ full_name: string | null } | null>(null);
   const [shareOpen, setShareOpen] = useState(false);
+  const [referralCount, setReferralCount] = useState(0);
+  const [freeChecksEarned, setFreeChecksEarned] = useState(0);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -41,12 +43,17 @@ export default function Dashboard() {
   }, [user, authLoading]);
 
   const fetchData = async () => {
-    const [{ data: profileData }, { data: searchData }] = await Promise.all([
+    const [{ data: profileData }, { data: searchData }, { data: referralData }] = await Promise.all([
       supabase.from("profiles").select("full_name").eq("user_id", user!.id).maybeSingle(),
       supabase.from("searches").select("*").eq("user_id", user!.id).order("searched_at", { ascending: false }).limit(20),
+      supabase.from("referrals").select("id, status").eq("referrer_user_id", user!.id),
     ]);
     setProfile(profileData);
     setSearches(searchData || []);
+    const refs = referralData || [];
+    const converted = refs.filter(r => r.status === "signed_up" || r.status === "paid");
+    setReferralCount(converted.length);
+    setFreeChecksEarned(Math.floor(converted.length / 3));
     setLoading(false);
   };
 
@@ -219,6 +226,24 @@ export default function Dashboard() {
             </div>
           </>
         )}
+      </div>
+
+      {/* Referral stats */}
+      <div className="bg-card rounded-xl border border-border p-6 shadow-sm mb-6 sm:mb-8">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
+            <Users className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <span className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Referral Programme</span>
+            <p className="font-heading text-lg text-foreground mt-1">You invited {referralCount} friend{referralCount !== 1 ? "s" : ""} · Earned {freeChecksEarned} free check{freeChecksEarned !== 1 ? "s" : ""}</p>
+          </div>
+        </div>
+        <p className="font-body text-sm text-muted-foreground mb-3">For every 3 friends who sign up from your link, you earn 1 free safety check.</p>
+        <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden mb-2">
+          <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${((referralCount % 3) / 3) * 100}%` }} />
+        </div>
+        <p className="font-mono text-[10px] text-muted-foreground">{3 - (referralCount % 3)} more referral{3 - (referralCount % 3) !== 1 ? "s" : ""} until your next free check</p>
       </div>
 
       {/* Quick actions */}

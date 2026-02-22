@@ -45,11 +45,17 @@ const NavbarPlinq = () => {
   const navLinks = [
     { label: "How It Works", href: "#how-it-works" },
     { label: "Pricing", href: "#pricing" },
-    { label: "Search Now", href: "#search" },
+    { label: "Tools", href: "/tools", isRoute: true },
+    { label: "Academy", href: "/academy", isRoute: true },
     { label: "FAQ", href: "#faq" },
   ];
 
-  const scrollToSection = (href: string) => {
+  const scrollToSection = (href: string, isRoute?: boolean) => {
+    if (isRoute) {
+      navigate(href);
+      setIsMenuOpen(false);
+      return;
+    }
     const element = document.querySelector(href);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
@@ -103,7 +109,7 @@ const NavbarPlinq = () => {
               {navLinks.map((link) => (
                 <button
                   key={link.label}
-                  onClick={() => scrollToSection(link.href)}
+                  onClick={() => scrollToSection(link.href, (link as any).isRoute)}
                   style={{ color: '#4B4453', fontSize: 14, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', fontFamily: "'Syne', sans-serif", background: 'none', border: 'none', cursor: 'pointer' }}
                 >
                   {link.label}
@@ -220,7 +226,7 @@ const NavbarPlinq = () => {
             {navLinks.map((link) => (
               <button
                 key={link.label}
-                onClick={() => scrollToSection(link.href)}
+                onClick={() => scrollToSection(link.href, (link as any).isRoute)}
                 style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 0', color: '#2D2235', fontFamily: "'Syne', sans-serif", fontWeight: 600, textTransform: 'uppercase', fontSize: 14, letterSpacing: '0.05em', background: 'none', border: 'none', cursor: 'pointer' }}
               >
                 {link.label}

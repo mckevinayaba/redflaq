@@ -1,42 +1,54 @@
 
-
-# Fix: Navigation Avatar Missing in WebView Browsers (Comet, Perplexity)
+# Fix: Navbar Invisible in Comet, Edge, and WebView Browsers
 
 ## Root Cause
 
-The avatar button in AppHeader uses Tailwind's `bg-primary/10` class, which relies on CSS custom property color channels combined with an alpha modifier (`hsl(var(--primary) / 0.1)`). Many in-app WebView browsers (Comet, Perplexity, some older Android WebViews) do not correctly parse this syntax, causing the button to render as completely transparent -- effectively invisible.
+The navbar uses **Tailwind CSS responsive classes** (`hidden md:flex`, `md:hidden`) to show/hide desktop vs mobile elements. In WebView browsers like Comet, Perplexity, and some Edge configurations, Tailwind's responsive utility classes fail to apply correctly. The result: elements with `className="hidden md:flex"` stay permanently hidden (`display: none`), making all nav links, buttons, and the hamburger menu invisible.
 
-The same issue affects the hover state (`bg-primary/20`).
+The logo is the only thing visible because it has no Tailwind visibility classes -- it's always rendered with pure inline styles.
 
-## Fix
+## The Fix
 
-Replace all Tailwind opacity-modifier color classes in AppHeader (and AdminHeader for consistency) with **inline styles using solid fallback colors** -- the same hardening approach already applied to the header container itself.
+Remove ALL Tailwind responsive classes from NavbarPlinq and replace them with **JavaScript-based responsive detection** using the existing `useIsMobile()` hook. This makes visibility decisions in React logic rather than CSS, which is guaranteed to work in every browser.
 
-### Changes to `src/components/dashboard/AppHeader.tsx`
+### Changes to `src/components/landing/NavbarPlinq.tsx`
 
-1. Replace the avatar button's `bg-primary/10` class with an inline `style={{ backgroundColor: 'rgba(124, 58, 237, 0.1)' }}` (or a solid `#EDE9FE` equivalent).
-2. Add explicit inline `color`, `width`, `height`, `borderRadius`, and `display: flex` styles so no visual property depends solely on Tailwind classes that WebViews might strip.
-3. Add a visible **border** (`1px solid rgba(124, 58, 237, 0.2)`) so even if the background fails, the button outline is visible.
-4. For the dropdown menu, apply the same inline-style hardening: solid `backgroundColor: '#FFFFFF'`, `border`, `boxShadow`, and `position: absolute` as inline styles rather than relying on Tailwind's `bg-card`, `border-border`, `shadow-lg`.
+1. Import `useIsMobile` from `@/hooks/use-mobile`
+2. Replace every `className="hidden md:flex"` with conditional rendering: `{!isMobile && ( ... )}`
+3. Replace every `className="md:hidden"` with conditional rendering: `{isMobile && ( ... )}`
+4. Remove the `className="space-y-4"` and `className="space-y-2"` Tailwind classes from the mobile menu, replacing with inline `style` equivalents
+5. Remove ALL remaining Tailwind `className` usage (hover states like `hover:!text-[#7C3AED]`) and replace with inline `onMouseEnter`/`onMouseLeave` handlers or just remove them (hover effects are non-critical compared to visibility)
 
-### Changes to `src/components/admin/AdminHeader.tsx`
+### Specific replacements
 
-Apply the same inline-style hardening to the admin avatar button for consistency.
+| Current (broken in WebView) | Replacement |
+|---|---|
+| `className="hidden md:flex"` on desktop nav links div | `{!isMobile && <div style={{display:'flex', ...}}>}` |
+| `className="hidden md:flex"` on desktop right-side div | `{!isMobile && <div style={{display:'flex', ...}}>}` |
+| `className="md:hidden"` on hamburger button | `{isMobile && <button ...>}` |
+| `className="md:hidden"` on mobile menu panel | `{isMobile && <div ...>}` |
+| `className="space-y-4"` | `style={{ display:'flex', flexDirection:'column', gap: 16 }}` |
+| `className="space-y-2"` | `style={{ display:'flex', flexDirection:'column', gap: 8 }}` |
+| `className="hover:!text-[#7C3AED] transition-colors"` | Remove (or add JS hover handlers for non-critical polish) |
 
-### Changes to `src/components/landing/NavbarHonest.tsx` and `src/components/landing/Navbar.tsx`
+### Why this works
 
-Review and apply same fix if any navigation elements use opacity-modifier Tailwind classes.
+- `useIsMobile()` uses `window.matchMedia` and `window.innerWidth` -- native browser APIs that work in every browser including WebViews
+- React conditional rendering (`{condition && <element>}`) doesn't depend on CSS at all
+- This matches the existing pattern already used in the project memory: "navbar and headers use hardened styling... Tailwind's HSL-based opacity modifiers must be avoided"
 
-## Why Previous Fixes Did Not Work
+### Scope
 
-The previous "hardened styling" fix (z-index 9999, visibility, opacity, translateZ) was applied to the **header container** -- which is why the header bar itself shows up. But the **avatar button inside it** was never hardened. Its background color still uses Tailwind's HSL opacity syntax, so it renders as invisible in WebViews even though the header container around it is visible.
+Only `NavbarPlinq.tsx` needs this fix since it's the active navbar used on the landing page. The other navbar variants (Navbar.tsx, NavbarHonest.tsx) are inactive/unused.
 
 ## Technical Details
 
-| File | What changes |
-|---|---|
-| `src/components/dashboard/AppHeader.tsx` | Avatar button: replace Tailwind color classes with inline rgba/hex styles + visible border. Dropdown: inline background/border/shadow styles. |
-| `src/components/admin/AdminHeader.tsx` | Same avatar + dropdown hardening |
+```text
+Before:
+  <div className="hidden md:flex" style={{...}}>  --> WebView ignores Tailwind --> stays display:none
 
-No database changes needed. No new dependencies.
-
+After:
+  {!isMobile && (
+    <div style={{ display: 'flex', ... }}>  --> React controls visibility --> always works
+  )}
+```

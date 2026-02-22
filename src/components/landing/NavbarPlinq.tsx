@@ -45,8 +45,8 @@ const NavbarPlinq = () => {
   const navLinks = [
     { label: "How It Works", href: "#how-it-works" },
     { label: "Pricing", href: "#pricing" },
-    { label: "Tools", href: "/tools", isRoute: true },
-    { label: "Academy", href: "/academy", isRoute: true },
+    { label: "Safety Tips", href: "/safety-tips", isRoute: true },
+    { label: "Blog", href: "/blog", isRoute: true },
     { label: "FAQ", href: "#faq" },
   ];
 

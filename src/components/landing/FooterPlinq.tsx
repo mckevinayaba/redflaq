@@ -7,8 +7,8 @@ const FooterPlinq = () => {
   const productLinks = [
     { label: "How It Works", href: "#how-it-works" },
     { label: "Pricing", href: "#pricing" },
-    { label: "Safety Tools", href: "/tools" },
-    { label: "Safety Academy", href: "/academy" },
+    { label: "Safety Tips", href: "/safety-tips" },
+    { label: "Blog", href: "/blog" },
     { label: "Partners", href: "/partners" },
     { label: "FAQ", href: "#faq" },
   ];

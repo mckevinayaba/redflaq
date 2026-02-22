@@ -33,7 +33,7 @@ const RedFlagQuiz = () => {
       title="Is This a Red Flag? — Quick Safety Quiz"
       subtitle="Answer these questions honestly to help identify warning signs in a relationship or situation. Your answers are private and never stored."
       metaDescription="Free red flag quiz for South African women. Identify warning signs in relationships. Your answers stay private. From RedFlaq."
-      shareUrl="/tools/red-flag-quiz"
+      shareUrl="/safety-tips/red-flag-quiz"
     >
       <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         {questions.map((item, idx) => (

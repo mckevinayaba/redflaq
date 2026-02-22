@@ -46,21 +46,19 @@ export function useAuthGuard() {
       (purchases && purchases.length > 0) ||
       (manualPayments && manualPayments.some(p => (p.search_credits || 0) - (p.credits_used || 0) > 0));
 
-    if (!hasCredits) {
-      sessionStorage.setItem("fromCTA", "true");
-      navigate("/pricing");
-      return false;
+    if (hasCredits) {
+      // User has credits — go to real search
+      const pending = sessionStorage.getItem("pendingSearch");
+      if (pending) {
+        sessionStorage.removeItem("pendingSearch");
+      }
+      navigate("/dashboard/new-check");
+      return true;
     }
 
-    // User is fully authenticated, verified, and has credits
-    // Restore pending search if exists
-    const pending = sessionStorage.getItem("pendingSearch");
-    if (pending) {
-      sessionStorage.removeItem("pendingSearch");
-      navigate("/dashboard/new-check");
-    } else {
-      navigate("/dashboard/new-check");
-    }
+    // No credits — demo mode (Paystack not yet live)
+    // Send to demo search form
+    navigate("/dashboard/new-check?mode=demo");
     return true;
   };
 

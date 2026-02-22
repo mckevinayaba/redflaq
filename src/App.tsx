@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import SearchForm from "./pages/SearchFormHonest";
 import Results from "./pages/ResultsPageUpdated";
@@ -36,15 +36,16 @@ import DashboardNewCheck from "./pages/DashboardNewCheck";
 import DashboardReports from "./pages/DashboardReports";
 import DashboardAccount from "./pages/DashboardAccount";
 import DashboardHelp from "./pages/DashboardHelp";
-import Tools from "./pages/Tools";
+import SafetyTips from "./pages/SafetyTips";
 import FirstDateSafety from "./pages/tools/FirstDateSafety";
 import TenantSafety from "./pages/tools/TenantSafety";
 import DomesticWorkerSafety from "./pages/tools/DomesticWorkerSafety";
 import RedFlagQuiz from "./pages/tools/RedFlagQuiz";
-import Academy from "./pages/Academy";
-import AcademyArticle from "./pages/AcademyArticle";
+import Blog from "./pages/Blog";
+import BlogArticle from "./pages/BlogArticle";
 import Partners from "./pages/Partners";
 import PartnersApply from "./pages/PartnersApply";
+import DemoResult from "./pages/DemoResult";
 
 const queryClient = new QueryClient();
 
@@ -58,6 +59,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/search-form" element={<SearchForm />} />
           <Route path="/results" element={<Results />} />
+          <Route path="/demo-result" element={<DemoResult />} />
           <Route path="/receipt" element={<Receipt />} />
           <Route path="/about" element={<About />} />
           <Route path="/privacy" element={<Privacy />} />
@@ -72,15 +74,28 @@ const App = () => (
           <Route path="/dashboard/reports" element={<DashboardReports />} />
           <Route path="/dashboard/account" element={<DashboardAccount />} />
           <Route path="/dashboard/help" element={<DashboardHelp />} />
-          <Route path="/tools" element={<Tools />} />
-          <Route path="/tools/first-date-safety" element={<FirstDateSafety />} />
-          <Route path="/tools/tenant-safety" element={<TenantSafety />} />
-          <Route path="/tools/domestic-worker-safety" element={<DomesticWorkerSafety />} />
-          <Route path="/tools/red-flag-quiz" element={<RedFlagQuiz />} />
-          <Route path="/academy" element={<Academy />} />
-          <Route path="/academy/:slug" element={<AcademyArticle />} />
+          {/* Safety Tips (formerly Tools) */}
+          <Route path="/safety-tips" element={<SafetyTips />} />
+          <Route path="/safety-tips/first-date-safety" element={<FirstDateSafety />} />
+          <Route path="/safety-tips/tenant-safety" element={<TenantSafety />} />
+          <Route path="/safety-tips/domestic-worker-safety" element={<DomesticWorkerSafety />} />
+          <Route path="/safety-tips/red-flag-quiz" element={<RedFlagQuiz />} />
+          {/* Legacy /tools redirects */}
+          <Route path="/tools" element={<Navigate to="/safety-tips" replace />} />
+          <Route path="/tools/first-date-safety" element={<Navigate to="/safety-tips/first-date-safety" replace />} />
+          <Route path="/tools/tenant-safety" element={<Navigate to="/safety-tips/tenant-safety" replace />} />
+          <Route path="/tools/domestic-worker-safety" element={<Navigate to="/safety-tips/domestic-worker-safety" replace />} />
+          <Route path="/tools/red-flag-quiz" element={<Navigate to="/safety-tips/red-flag-quiz" replace />} />
+          {/* Blog (formerly Academy) */}
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogArticle />} />
+          {/* Legacy /academy redirects */}
+          <Route path="/academy" element={<Navigate to="/blog" replace />} />
+          <Route path="/academy/:slug" element={<Navigate to="/blog/:slug" replace />} />
+          {/* Partners */}
           <Route path="/partners" element={<Partners />} />
           <Route path="/partners/apply" element={<PartnersApply />} />
+          {/* Admin */}
           <Route path="/admin" element={<AdminDashboardNew />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/admin/users" element={<AdminUsersPage />} />

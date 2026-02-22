@@ -24,7 +24,7 @@ const DomesticWorkerSafety = () => {
       title="Domestic Worker & Nanny Safety Checklist — South Africa"
       subtitle="Hiring someone to work in your home or look after your children? Use this free checklist to make safe, informed decisions."
       metaDescription="Free domestic worker and nanny safety checklist for South Africa. Protect your family with practical hiring steps. From RedFlaq."
-      shareUrl="/tools/domestic-worker-safety"
+      shareUrl="/safety-tips/domestic-worker-safety"
     >
       <div style={{ marginBottom: 24 }}>
         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>

@@ -30,8 +30,8 @@ const ToolLayout = ({ title, subtitle, metaDescription, children, shareUrl }: To
     <div style={{ background: "#F7F4F0", minHeight: "100vh" }}>
       <NavbarPlinq />
       <div style={{ maxWidth: 720, margin: "0 auto", padding: "100px 24px 60px" }}>
-        <Link to="/tools" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: "0.1em", color: "#7C3AED", textDecoration: "none", textTransform: "uppercase", marginBottom: 16, display: "block" }}>
-          ← Back to Safety Tools
+        <Link to="/safety-tips" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: "0.1em", color: "#7C3AED", textDecoration: "none", textTransform: "uppercase", marginBottom: 16, display: "block" }}>
+          ← Back to Safety Tips
         </Link>
         <h1 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 36, color: "#2D2235", marginBottom: 12, lineHeight: 1.2 }}>
           {title}
@@ -46,10 +46,10 @@ const ToolLayout = ({ title, subtitle, metaDescription, children, shareUrl }: To
         <div style={{ background: "#FAF5FF", border: "2px solid #7C3AED", padding: 32, textAlign: "center", marginTop: 40, marginBottom: 32 }}>
           <Shield size={32} style={{ color: "#7C3AED", margin: "0 auto 12px" }} />
           <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 24, color: "#2D2235", marginBottom: 8 }}>
-            Ready to check someone's public record?
+            If anything feels off, check before you decide
           </h3>
           <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: "#78716C", marginBottom: 16 }}>
-            Run a RedFlaq safety check in under 60 seconds for R99.
+            Run a RedFlaq public-record safety check in under 60 seconds for R99.
           </p>
           <Link
             to="/search-form"

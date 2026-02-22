@@ -24,7 +24,7 @@ const FirstDateSafety = () => {
       title="First Date Safety Checklist — South Africa"
       subtitle="Going on a first date? Use this free checklist to protect yourself. Designed for South African women."
       metaDescription="Free first date safety checklist for South African women. Practical steps to stay safe when meeting someone new. From RedFlaq."
-      shareUrl="/tools/first-date-safety"
+      shareUrl="/safety-tips/first-date-safety"
     >
       <div style={{ marginBottom: 24 }}>
         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>

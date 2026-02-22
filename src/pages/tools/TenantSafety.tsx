@@ -24,7 +24,7 @@ const TenantSafety = () => {
       title="Tenant & Landlord Safety Checklist — South Africa"
       subtitle="Renting a property or accepting a new tenant? Use this free checklist to protect yourself from scams and unsafe situations."
       metaDescription="Free tenant and landlord safety checklist for South Africa. Protect yourself before signing a lease. From RedFlaq."
-      shareUrl="/tools/tenant-safety"
+      shareUrl="/safety-tips/tenant-safety"
     >
       <div style={{ marginBottom: 24 }}>
         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>

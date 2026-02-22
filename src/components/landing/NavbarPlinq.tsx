@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { Menu, X, LayoutDashboard, Settings, LogOut, Share2 } from "lucide-react";
-
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { useIsMobile } from "@/hooks/use-mobile";
 import ShareInviteModal from "@/components/ShareInviteModal";
 
 const NavbarPlinq = () => {
@@ -17,6 +17,7 @@ const NavbarPlinq = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const avatarRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -97,118 +98,116 @@ const NavbarPlinq = () => {
           </a>
 
           {/* Desktop nav links */}
-          <div className="hidden md:flex" style={{ alignItems: 'center', gap: 40 }}>
-            {navLinks.map((link) => (
-              <button
-                key={link.label}
-                onClick={() => scrollToSection(link.href)}
-                style={{ color: '#4B4453', fontSize: 14, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', fontFamily: "'Syne', sans-serif", background: 'none', border: 'none', cursor: 'pointer' }}
-                className="hover:!text-[#7C3AED] transition-colors"
-              >
-                {link.label}
-              </button>
-            ))}
-          </div>
+          {!isMobile && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
+              {navLinks.map((link) => (
+                <button
+                  key={link.label}
+                  onClick={() => scrollToSection(link.href)}
+                  style={{ color: '#4B4453', fontSize: 14, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', fontFamily: "'Syne', sans-serif", background: 'none', border: 'none', cursor: 'pointer' }}
+                >
+                  {link.label}
+                </button>
+              ))}
+            </div>
+          )}
 
           {/* Desktop right side */}
-          <div className="hidden md:flex" style={{ alignItems: 'center', gap: 16 }}>
-            {isAuthenticated ? (
-              <>
+          {!isMobile && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+              {isAuthenticated ? (
+                <>
+                  <button
+                    onClick={() => navigate('/dashboard')}
+                    style={{
+                      background: 'none', border: 'none', cursor: 'pointer',
+                      fontFamily: "'Syne', sans-serif", fontWeight: 600, fontSize: 13,
+                      letterSpacing: '0.05em', color: '#4B4453',
+                    }}
+                  >
+                    Dashboard
+                  </button>
+                  <div style={{ position: 'relative' }} ref={avatarRef}>
+                    <button
+                      onClick={() => setAvatarOpen(!avatarOpen)}
+                      style={{
+                        width: 34, height: 34, borderRadius: '50%', background: 'rgba(124,58,237,0.12)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 14,
+                        color: '#7C3AED', border: 'none', cursor: 'pointer',
+                      }}
+                    >
+                      {initial}
+                    </button>
+                    {avatarOpen && (
+                      <div style={{ position: 'absolute', right: 0, top: 42, width: 192, background: '#FFFFFF', border: '1px solid #D6D3CD', borderRadius: 8, boxShadow: '0 4px 16px rgba(0,0,0,0.10)', zIndex: 50, padding: '4px 0' }}>
+                        <button onClick={() => { navigate('/dashboard'); setAvatarOpen(false); }} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', width: '100%', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#2D2235' }}>
+                          <LayoutDashboard style={{ width: 16, height: 16, color: '#9B8FA3' }} /> Dashboard
+                        </button>
+                        <button onClick={() => { navigate('/dashboard/account'); setAvatarOpen(false); }} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', width: '100%', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#2D2235' }}>
+                          <Settings style={{ width: 16, height: 16, color: '#9B8FA3' }} /> Account
+                        </button>
+                        <div style={{ borderTop: '1px solid #D6D3CD', margin: '4px 0' }} />
+                        <button onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', width: '100%', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#DC2626' }}>
+                          <LogOut style={{ width: 16, height: 16 }} /> Log out
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </>
+              ) : (
                 <button
-                  onClick={() => navigate('/dashboard')}
+                  onClick={() => navigate('/signup?mode=signin')}
                   style={{
                     background: 'none', border: 'none', cursor: 'pointer',
                     fontFamily: "'Syne', sans-serif", fontWeight: 600, fontSize: 13,
                     letterSpacing: '0.05em', color: '#4B4453',
                   }}
-                  className="hover:!text-[#7C3AED] transition-colors"
                 >
-                  Dashboard
+                  Log In
                 </button>
-                <div style={{ position: 'relative' }} ref={avatarRef}>
-                  <button
-                    onClick={() => setAvatarOpen(!avatarOpen)}
-                    style={{
-                      width: 34, height: 34, borderRadius: '50%', background: 'rgba(124,58,237,0.12)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 14,
-                      color: '#7C3AED', border: 'none', cursor: 'pointer',
-                    }}
-                    className="hover:!bg-[rgba(124,58,237,0.22)] transition-colors"
-                  >
-                    {initial}
-                  </button>
-                  {avatarOpen && (
-                    <div style={{ position: 'absolute', right: 0, top: 42, width: 192, background: '#FFFFFF', border: '1px solid #D6D3CD', borderRadius: 8, boxShadow: '0 4px 16px rgba(0,0,0,0.10)', zIndex: 50, padding: '4px 0' }}>
-                      <button onClick={() => { navigate('/dashboard'); setAvatarOpen(false); }} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', width: '100%', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#2D2235' }} className="hover:!bg-[#F0ECE7] transition-colors">
-                        <LayoutDashboard style={{ width: 16, height: 16, color: '#9B8FA3' }} /> Dashboard
-                      </button>
-                      <button onClick={() => { navigate('/dashboard/account'); setAvatarOpen(false); }} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', width: '100%', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#2D2235' }} className="hover:!bg-[#F0ECE7] transition-colors">
-                        <Settings style={{ width: 16, height: 16, color: '#9B8FA3' }} /> Account
-                      </button>
-                      <div style={{ borderTop: '1px solid #D6D3CD', margin: '4px 0' }} />
-                      <button onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 16px', width: '100%', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#DC2626' }} className="hover:!bg-[#FEE2E2] transition-colors">
-                        <LogOut style={{ width: 16, height: 16 }} /> Log out
-                      </button>
-                    </div>
-                  )}
-                </div>
-              </>
-            ) : (
+              )}
               <button
-                onClick={() => navigate('/signup?mode=signin')}
+                onClick={handleVerifyNow}
                 style={{
-                  background: 'none', border: 'none', cursor: 'pointer',
-                  fontFamily: "'Syne', sans-serif", fontWeight: 600, fontSize: 13,
-                  letterSpacing: '0.05em', color: '#4B4453',
+                  background: '#7C3AED', color: 'white', padding: '8px 20px',
+                  fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13,
+                  letterSpacing: '0.08em', textTransform: 'uppercase', border: 'none', cursor: 'pointer',
                 }}
-                className="hover:!text-[#7C3AED] transition-colors"
               >
-                Log In
+                Verify Now
               </button>
-            )}
-            <button
-              onClick={handleVerifyNow}
-              style={{
-                background: '#7C3AED', color: 'white', padding: '8px 20px',
-                fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13,
-                letterSpacing: '0.08em', textTransform: 'uppercase', border: 'none', cursor: 'pointer',
-              }}
-              className="hover:!bg-[#6D28D9] transition-colors"
-            >
-              Verify Now
-            </button>
-            <button
-              onClick={() => setShareOpen(true)}
-              title="Share RedFlaq"
-              style={{
-                background: 'none', border: 'none', cursor: 'pointer', padding: 6,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}
-              className="hover:!text-[#7C3AED] transition-colors"
-            >
-              <Share2 style={{ width: 18, height: 18, color: '#4B4453' }} />
-            </button>
-          </div>
+              <button
+                onClick={() => setShareOpen(true)}
+                title="Share RedFlaq"
+                style={{
+                  background: 'none', border: 'none', cursor: 'pointer', padding: 6,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}
+              >
+                <Share2 style={{ width: 18, height: 18, color: '#4B4453' }} />
+              </button>
+            </div>
+          )}
 
           {/* Mobile hamburger */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden"
-            style={{ padding: 8, background: 'none', border: 'none', cursor: 'pointer' }}
-          >
-            {isMenuOpen
-              ? <X style={{ width: 24, height: 24, color: '#2D2235' }} />
-              : <Menu style={{ width: 24, height: 24, color: '#2D2235' }} />
-            }
-          </button>
+          {isMobile && (
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              style={{ padding: 8, background: 'none', border: 'none', cursor: 'pointer' }}
+            >
+              {isMenuOpen
+                ? <X style={{ width: 24, height: 24, color: '#2D2235' }} />
+                : <Menu style={{ width: 24, height: 24, color: '#2D2235' }} />
+              }
+            </button>
+          )}
         </div>
       </div>
 
       {/* Mobile menu */}
-      {isMenuOpen && (
+      {isMobile && isMenuOpen && (
         <div
-          className="md:hidden"
           style={{
             borderTop: '1.5px solid #D6D3CD',
             background: '#F7F4F0',
@@ -217,7 +216,7 @@ const NavbarPlinq = () => {
             zIndex: 2147483647,
           }}
         >
-          <div style={{ maxWidth: 1280, margin: '0 auto', padding: '16px 24px' }} className="space-y-4">
+          <div style={{ maxWidth: 1280, margin: '0 auto', padding: '16px 24px', display: 'flex', flexDirection: 'column', gap: 16 }}>
             {navLinks.map((link) => (
               <button
                 key={link.label}
@@ -228,7 +227,7 @@ const NavbarPlinq = () => {
               </button>
             ))}
             {isAuthenticated ? (
-              <div className="space-y-2">
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <button
                   onClick={() => { navigate('/dashboard'); setIsMenuOpen(false); }}
                   style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 0', color: '#7C3AED', fontFamily: "'Syne', sans-serif", fontWeight: 700, textTransform: 'uppercase', fontSize: 14, letterSpacing: '0.05em', background: 'none', border: 'none', cursor: 'pointer' }}

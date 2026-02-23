@@ -1,13 +1,13 @@
+import { useState } from "react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
+import { Heart } from "lucide-react";
+import ShareInviteModal from "@/components/ShareInviteModal";
 
 const FinalCTAPlinq = () => {
   const { guardedAction } = useAuthGuard();
   const { ref, isVisible } = useScrollReveal();
-
-  const handleVerify = () => {
-    guardedAction();
-  };
+  const [shareOpen, setShareOpen] = useState(false);
 
   return (
     <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{
@@ -37,14 +37,18 @@ const FinalCTAPlinq = () => {
         </p>
 
         <div className="flex flex-wrap justify-center gap-4">
-          <button onClick={handleVerify} className="btn-primary hover:-translate-y-0.5 hover:shadow-lg transition-all">
-            Verify Someone Now — R99
+          <button onClick={() => guardedAction()} className="btn-primary hover:-translate-y-0.5 hover:shadow-lg transition-all">
+            Run a Safety Check — R99
           </button>
-          <button onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })} className="btn-secondary hover:-translate-y-0.5 transition-all">
-            See How It Works
+          <button
+            onClick={() => setShareOpen(true)}
+            className="btn-secondary hover:-translate-y-0.5 transition-all inline-flex items-center gap-2"
+          >
+            <Heart className="h-4 w-4" /> Share RedFlaq
           </button>
         </div>
       </div>
+      <ShareInviteModal open={shareOpen} onOpenChange={setShareOpen} />
     </section>
   );
 };

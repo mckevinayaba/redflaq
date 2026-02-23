@@ -3,7 +3,9 @@ import { useParams, Link } from "react-router-dom";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
 import { supabase } from "@/integrations/supabase/client";
-import { Shield } from "lucide-react";
+import { Heart } from "lucide-react";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
+import ShareInviteModal from "@/components/ShareInviteModal";
 
 interface Article {
   id: string;
@@ -30,6 +32,8 @@ const BlogArticle = () => {
   const [article, setArticle] = useState<Article | null>(null);
   const [related, setRelated] = useState<{ id: string; title: string; slug: string }[]>([]);
   const [loading, setLoading] = useState(true);
+  const [shareOpen, setShareOpen] = useState(false);
+  const { guardedAction } = useAuthGuard();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -104,15 +108,27 @@ const BlogArticle = () => {
           dangerouslySetInnerHTML={{ __html: article.content }}
         />
 
-        {/* CTA */}
+        {/* Single CTA — auth-guarded + share */}
         <div style={{ background: "#FAF5FF", border: "2px solid #7C3AED", padding: 32, textAlign: "center", marginTop: 40 }}>
-          <Shield size={28} style={{ color: "#7C3AED", margin: "0 auto 8px" }} />
-          <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 22, color: "#2D2235", marginBottom: 8 }}>
-            Run a safety check now
+          <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 22, color: "#2D2235", marginBottom: 16 }}>
+            Ready to check someone?
           </h3>
-          <Link to="/" style={{ display: "inline-block", background: "#7C3AED", color: "white", padding: "12px 28px", fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, textDecoration: "none" }}>
-            Check Public Records →
-          </Link>
+          <div className="flex flex-wrap justify-center gap-3">
+            <button
+              onClick={() => guardedAction()}
+              style={{ display: "inline-block", background: "#7C3AED", color: "white", padding: "12px 28px", fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, border: "none", cursor: "pointer" }}
+              className="hover:opacity-90 transition-all"
+            >
+              Run a Safety Check — R99
+            </button>
+            <button
+              onClick={() => setShareOpen(true)}
+              className="inline-flex items-center gap-2 hover:opacity-90 transition-all"
+              style={{ background: "transparent", border: "2px solid #7C3AED", color: "#7C3AED", padding: "12px 28px", fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, cursor: "pointer" }}
+            >
+              <Heart className="h-4 w-4" /> Share RedFlaq
+            </button>
+          </div>
         </div>
 
         {relatedTool && (
@@ -149,6 +165,7 @@ const BlogArticle = () => {
         "publisher": { "@type": "Organization", "name": "RedFlaq", "url": "https://redflaq.com" },
       })}} />
 
+      <ShareInviteModal open={shareOpen} onOpenChange={setShareOpen} />
       <FooterPlinq />
     </div>
   );

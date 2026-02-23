@@ -56,7 +56,7 @@ export function useAuthGuard() {
       return true;
     }
 
-    // No credits — demo mode (Paystack not yet live)
+    // No credits — demo mode (PayFast payment available)
     // Send to demo search form
     navigate("/dashboard/new-check?mode=demo");
     return true;

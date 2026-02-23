@@ -46,6 +46,8 @@ import BlogArticle from "./pages/BlogArticle";
 import Partners from "./pages/Partners";
 import PartnersApply from "./pages/PartnersApply";
 import DemoResult from "./pages/DemoResult";
+import PaymentSuccess from "./pages/PaymentSuccess";
+import PaymentCancelled from "./pages/PaymentCancelled";
 
 const queryClient = new QueryClient();
 
@@ -60,6 +62,8 @@ const App = () => (
           <Route path="/search-form" element={<SearchForm />} />
           <Route path="/results" element={<Results />} />
           <Route path="/demo-result" element={<DemoResult />} />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/payment-cancelled" element={<PaymentCancelled />} />
           <Route path="/receipt" element={<Receipt />} />
           <Route path="/about" element={<About />} />
           <Route path="/privacy" element={<Privacy />} />

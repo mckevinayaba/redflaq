@@ -62,7 +62,9 @@ serve(async (req) => {
     // Generate a unique payment ID
     const paymentId = `RF-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
-    const baseUrl = "https://redflaq.lovable.app";
+    const baseUrl = Deno.env.get("APP_BASE_URL")
+      || req.headers.get("origin")
+      || "https://redflaq.lovable.app";
 
     // PayFast data — order matters for signature
     const pfData: Record<string, string> = {

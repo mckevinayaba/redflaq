@@ -75,17 +75,6 @@ const FooterNew = () => {
                   support@redflaq.com
                 </a>
               </li>
-              <li>
-                📱 WhatsApp:{" "}
-                <a 
-                  href="https://wa.me/27663365296" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="hover:text-white transition-colors"
-                >
-                  +27 66 336 5296
-                </a>
-              </li>
               <li>📍 Johannesburg, South Africa</li>
             </ul>
           </div>

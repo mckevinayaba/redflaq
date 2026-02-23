@@ -79,8 +79,6 @@ const FooterPlinq = () => {
             <h4 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, color: '#2D2235', fontSize: 14, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 16 }}>CONTACT</h4>
             <ul className="space-y-3">
               <li><a href="mailto:support@redflaq.com" style={linkStyle} className="hover:!text-[#7C3AED]">support@redflaq.com</a></li>
-              <li><a href="tel:+27663365296" style={linkStyle} className="hover:!text-[#7C3AED]">+27 66 336 5296</a></li>
-              <li><a href="https://wa.me/27663365296" style={linkStyle} className="hover:!text-[#7C3AED]">WhatsApp Us</a></li>
               <li><span style={{ ...linkStyle, cursor: 'default' }}>Johannesburg, South Africa</span></li>
             </ul>
 

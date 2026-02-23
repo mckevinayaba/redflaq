@@ -23,9 +23,7 @@ export default function DashboardHelp() {
             <a href="mailto:support@redflaq.com" className="flex items-center gap-3 text-primary hover:underline font-body text-sm">
               <Mail className="h-4 w-4" /> support@redflaq.com
             </a>
-            <div className="flex items-center gap-3 text-muted-foreground font-body text-sm">
-              <Phone className="h-4 w-4" /> Emergency: SAPS 10111 · Crime Stop 08600 10111
-            </div>
+            <p className="text-muted-foreground font-body text-xs mt-2">Emergency: SAPS 10111 · Crime Stop 08600 10111</p>
           </div>
         </div>
 

@@ -65,11 +65,6 @@ const FooterHonest = () => {
                   support@redflaq.com
                 </a>
               </li>
-              <li>
-                <a href="https://wa.me/27663365296" target="_blank" rel="noopener noreferrer" className="hover:text-background transition-colors">
-                  WhatsApp: +27 66 336 5296
-                </a>
-              </li>
               <li className="text-background/40">
                 Johannesburg, South Africa
               </li>

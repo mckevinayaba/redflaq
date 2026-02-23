@@ -118,16 +118,6 @@ export default function Dispute() {
                   support@redflaq.com
                 </Button>
               </a>
-              <a 
-                href="https://wa.me/27663365296"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Button variant="outline" className="w-full sm:w-auto bg-green-50 border-green-200 hover:bg-green-100">
-                  <MessageCircle className="w-4 h-4 text-green-600" />
-                  WhatsApp: +27 66 336 5296
-                </Button>
-              </a>
             </div>
           </section>
 

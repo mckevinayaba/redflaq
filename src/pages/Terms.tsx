@@ -101,7 +101,6 @@ export default function Terms() {
           </p>
           <ul>
             <li>Email: <a href="mailto:support@redflaq.com">support@redflaq.com</a></li>
-            <li>WhatsApp: <a href="https://wa.me/27663365296">+27 66 336 5296</a></li>
           </ul>
 
           <div className="mt-8 p-4 bg-purple-50 rounded-lg">

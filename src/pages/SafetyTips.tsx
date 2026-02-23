@@ -83,9 +83,9 @@ const SafetyTips = () => {
         <div style={{ marginTop: 48, padding: 32, background: "#EDE9E3", borderTop: "1.5px solid #D6D3CD" }}>
           <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: "#78716C", lineHeight: 1.8 }}>
             These free safety tips are part of RedFlaq's mission to make South Africa safer for women and communities.
-            Whether you need a first date safety checklist, a tenant background check guide, or help identifying red flags,
+          Whether you need a first date safety checklist, a tenant background check guide, or help identifying red flags,
             we've got you covered. If anything feels off, run a{" "}
-            <Link to="/" style={{ color: "#7C3AED", fontWeight: 700 }}>RedFlaq public-record safety check</Link> before you decide.
+            <Link to="/signup" style={{ color: "#7C3AED", fontWeight: 700 }}>RedFlaq public-record safety check</Link> before you decide.
           </p>
         </div>
       </div>

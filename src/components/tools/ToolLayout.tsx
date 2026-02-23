@@ -1,9 +1,11 @@
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 import { Link } from "react-router-dom";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
-import { Shield, Share2, Copy } from "lucide-react";
+import { Shield, Copy, Heart } from "lucide-react";
 import { toast } from "sonner";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
+import ShareInviteModal from "@/components/ShareInviteModal";
 
 interface ToolLayoutProps {
   title: string;
@@ -16,6 +18,8 @@ interface ToolLayoutProps {
 const ToolLayout = ({ title, subtitle, metaDescription, children, shareUrl }: ToolLayoutProps) => {
   const fullUrl = `https://redflaq.com${shareUrl}`;
   const shareText = `${title} — a free safety tool from RedFlaq 🇿🇦 ${fullUrl}`;
+  const { guardedAction } = useAuthGuard();
+  const [shareOpen, setShareOpen] = useState(false);
 
   const handleShare = (platform: string) => {
     const urls: Record<string, string> = {
@@ -42,7 +46,7 @@ const ToolLayout = ({ title, subtitle, metaDescription, children, shareUrl }: To
 
         {children}
 
-        {/* CTA */}
+        {/* CTA — auth-guarded + share */}
         <div style={{ background: "#FAF5FF", border: "2px solid #7C3AED", padding: 32, textAlign: "center", marginTop: 40, marginBottom: 32 }}>
           <Shield size={32} style={{ color: "#7C3AED", margin: "0 auto 12px" }} />
           <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 24, color: "#2D2235", marginBottom: 8 }}>
@@ -51,16 +55,26 @@ const ToolLayout = ({ title, subtitle, metaDescription, children, shareUrl }: To
           <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: "#78716C", marginBottom: 16 }}>
             Run a RedFlaq public-record safety check in under 60 seconds for R99.
           </p>
-          <Link
-            to="/search-form"
-            style={{
-              display: "inline-block", background: "#7C3AED", color: "white", padding: "14px 32px",
-              fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700, textDecoration: "none",
-              letterSpacing: "0.05em",
-            }}
-          >
-            Run a Safety Check →
-          </Link>
+          <div className="flex flex-wrap justify-center gap-3">
+            <button
+              onClick={() => guardedAction()}
+              style={{
+                display: "inline-block", background: "#7C3AED", color: "white", padding: "14px 32px",
+                fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700, border: "none", cursor: "pointer",
+                letterSpacing: "0.05em",
+              }}
+              className="hover:opacity-90 transition-all"
+            >
+              Run a Safety Check →
+            </button>
+            <button
+              onClick={() => setShareOpen(true)}
+              className="inline-flex items-center gap-2 hover:opacity-90 transition-all"
+              style={{ background: "transparent", border: "2px solid #7C3AED", color: "#7C3AED", padding: "14px 32px", fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700, cursor: "pointer" }}
+            >
+              <Heart className="h-4 w-4" /> Share RedFlaq
+            </button>
+          </div>
         </div>
 
         {/* Share this tool */}
@@ -78,6 +92,7 @@ const ToolLayout = ({ title, subtitle, metaDescription, children, shareUrl }: To
           </div>
         </div>
       </div>
+      <ShareInviteModal open={shareOpen} onOpenChange={setShareOpen} />
       <FooterPlinq />
     </div>
   );

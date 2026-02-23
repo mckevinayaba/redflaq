@@ -1,19 +1,13 @@
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
+import { useState } from "react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
+import { Heart } from "lucide-react";
+import ShareInviteModal from "@/components/ShareInviteModal";
 
 const CommunitySectionSA = () => {
-  const { isAuthenticated } = useAuth();
-  const navigate = useNavigate();
   const { ref, isVisible } = useScrollReveal();
-
-  const handleVerify = () => {
-    if (isAuthenticated) {
-      document.getElementById('search')?.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      navigate('/signup');
-    }
-  };
+  const { guardedAction } = useAuthGuard();
+  const [shareOpen, setShareOpen] = useState(false);
 
   return (
     <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#FAF5FF', padding: '40px 40px 48px' }}>
@@ -38,13 +32,23 @@ const CommunitySectionSA = () => {
           Built for women facing GBV first, but useful for anyone: flat‑mates, landlords, childcare providers, employers and more.
         </p>
 
-        <button onClick={handleVerify} style={{
-          background: '#7C3AED', color: 'white', padding: '16px 32px',
-          fontFamily: "'Syne', sans-serif", fontWeight: 700, border: 'none', cursor: 'pointer',
-        }} className="hover:!bg-[#6D28D9] transition-all hover:-translate-y-0.5 hover:shadow-lg">
-          Protect Yourself Now — R99
-        </button>
+        <div className="flex flex-wrap justify-center gap-3">
+          <button onClick={() => guardedAction()} style={{
+            background: '#7C3AED', color: 'white', padding: '16px 32px',
+            fontFamily: "'Syne', sans-serif", fontWeight: 700, border: 'none', cursor: 'pointer',
+          }} className="hover:!bg-[#6D28D9] transition-all hover:-translate-y-0.5 hover:shadow-lg">
+            Run a Safety Check — R99
+          </button>
+          <button
+            onClick={() => setShareOpen(true)}
+            className="inline-flex items-center gap-2 hover:-translate-y-0.5 transition-all"
+            style={{ background: 'transparent', border: '2px solid #7C3AED', color: '#7C3AED', padding: '16px 32px', fontFamily: "'Syne', sans-serif", fontWeight: 700, cursor: 'pointer' }}
+          >
+            <Heart className="h-4 w-4" /> Share RedFlaq
+          </button>
+        </div>
       </div>
+      <ShareInviteModal open={shareOpen} onOpenChange={setShareOpen} />
     </section>
   );
 };

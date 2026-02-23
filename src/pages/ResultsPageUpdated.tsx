@@ -8,6 +8,7 @@ import IdentityMatchSelector from "@/components/IdentityMatchSelector";
 import { type PersonRecord } from "@/utils/identityConfidence";
 import { supabase } from "@/integrations/supabase/client";
 import ShareInviteModal from "@/components/ShareInviteModal";
+import ShareControlsModal from "@/components/ShareControlsModal";
 
 interface WantedPerson {
   id: string;
@@ -160,6 +161,8 @@ const ResultsPageUpdated = () => {
   const [selectedMatch, setSelectedMatch] = useState<WantedPerson | null>(null);
   const [showMatchSelector, setShowMatchSelector] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
+  const [shareControlsOpen, setShareControlsOpen] = useState(false);
+  const [pendingDownload, setPendingDownload] = useState(false);
   const searchId = searchParams.get("search_id");
 
   useEffect(() => {
@@ -227,7 +230,7 @@ const ResultsPageUpdated = () => {
     fetchResults();
   }, [searchId, navigate]);
 
-  const handleDownload = async () => {
+  const doDownload = async () => {
     const element = document.querySelector('.results-container') as HTMLElement;
     if (element) {
       const html2pdf = (await import('html2pdf.js')).default;
@@ -238,6 +241,18 @@ const ResultsPageUpdated = () => {
         html2canvas: { scale: 2 },
         jsPDF: { unit: 'mm' as const, format: 'a4' as const, orientation: 'portrait' as const }
       }).from(element).save();
+    }
+  };
+
+  const handleDownload = () => {
+    setShareControlsOpen(true);
+    setPendingDownload(true);
+  };
+
+  const handleShareControlsAgree = () => {
+    if (pendingDownload) {
+      doDownload();
+      setPendingDownload(false);
     }
   };
 
@@ -334,8 +349,30 @@ const ResultsPageUpdated = () => {
             <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, color: 'var(--mid)', lineHeight: 1.7, marginBottom: 20 }}>
               We found {results.wantedPersonsCount} people with this name in public records. South Africa has many people with identical names. You MUST verify which person matches who you are searching for before making any decisions.
             </p>
-            <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700, color: '#DC2626', background: 'white', padding: 12, borderLeft: '3px solid #DC2626' }}>
-              Using information about the wrong person is illegal. Verify identity carefully using date of birth, location, and case details.
+            <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700, color: '#DC2626', background: 'white', padding: 16, borderLeft: '4px solid #DC2626', marginBottom: 24 }}>
+              Using information about the wrong person is illegal under POPIA. Verify identity carefully using date of birth, location, and case details.
+            </div>
+
+            {/* Verification Checklist */}
+            <div style={{ background: '#EFF6FF', padding: 24, border: '1.5px solid #3B82F6', marginBottom: 24 }}>
+              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 700, color: '#1E40AF', marginBottom: 12 }}>
+                How to Verify the Correct Person
+              </p>
+              {['Compare date of birth if known', 'Check police station location (does it match where they live?)', 'Look at case dates (were they in that area at that time?)', 'Compare photos if available (note: photos may be old)', 'Review case details and offense descriptions'].map(item => (
+                <p key={item} style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#4B4453', lineHeight: 2 }}>✓ {item}</p>
+              ))}
+              <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: '#DC2626', fontWeight: 600, marginTop: 16, letterSpacing: '0.05em' }}>
+                IF YOU CANNOT VERIFY WITH CONFIDENCE, DO NOT USE THIS INFORMATION
+              </p>
+            </div>
+
+            <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+              <button
+                onClick={() => navigate("/dashboard/new-check")}
+                style={{ border: '2px solid var(--ink)', background: 'transparent', color: 'var(--ink)', padding: '14px 24px', fontFamily: "'Syne', sans-serif", fontWeight: 600, cursor: 'pointer' }}
+              >
+                None of These Match
+              </button>
             </div>
           </div>
         )}
@@ -731,8 +768,6 @@ const ResultsPageUpdated = () => {
         </div>
       </div>
 
-      <ShareInviteModal open={shareOpen} onOpenChange={setShareOpen} />
-
       {/* Mobile responsive styles */}
       <style>{`
         @media (max-width: 768px) {
@@ -744,6 +779,14 @@ const ResultsPageUpdated = () => {
           .results-verification-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
+
+      <ShareControlsModal
+        open={shareControlsOpen}
+        onClose={() => { setShareControlsOpen(false); setPendingDownload(false); }}
+        onAgree={handleShareControlsAgree}
+      />
+
+      <ShareInviteModal open={shareOpen} onOpenChange={setShareOpen} />
 
       <DisputeModal
         isOpen={isDisputeModalOpen}

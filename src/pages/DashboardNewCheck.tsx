@@ -151,7 +151,7 @@ export default function DashboardNewCheck() {
           <div>
             <p className="font-body text-sm text-amber-900 font-semibold">Demo Mode</p>
             <p className="font-body text-xs text-amber-800 leading-relaxed">
-              You're trying the RedFlaq experience in demo mode. No real records will be checked. Real checks with Paystack are coming soon.
+              You're trying the RedFlaq experience in demo mode. No real records will be checked. Real checks with PayFast are coming soon.
             </p>
           </div>
         </div>

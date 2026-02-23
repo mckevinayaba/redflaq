@@ -152,7 +152,7 @@ const PricingPlinq = () => {
               fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#9CA3AF',
               border: '1px solid #E8E4DF', padding: '8px 16px', background: 'white',
             }}>
-              🔒 Secure Checkout · Paystack (Coming Soon)
+              🔒 Secure Checkout via PayFast
             </span>
           </div>
         </div>

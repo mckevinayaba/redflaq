@@ -80,7 +80,7 @@ export default function DemoResult() {
               Real public-record safety checks are coming soon!
             </p>
             <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: "#78716C", lineHeight: 1.6 }}>
-              Once Paystack is integrated, you'll be able to run real checks against SAPS, court records, and the Government Gazette for only R99.
+              Once PayFast is integrated, you'll be able to run real checks against SAPS, court records, and the Government Gazette for only R99.
             </p>
           </div>
 

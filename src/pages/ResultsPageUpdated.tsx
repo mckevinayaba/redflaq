@@ -9,6 +9,7 @@ import { type PersonRecord } from "@/utils/identityConfidence";
 import { supabase } from "@/integrations/supabase/client";
 import ShareInviteModal from "@/components/ShareInviteModal";
 import ShareControlsModal from "@/components/ShareControlsModal";
+import PostReportGuidance from "@/components/PostReportGuidance";
 
 interface WantedPerson {
   id: string;
@@ -728,6 +729,9 @@ const ResultsPageUpdated = () => {
             </div>
           </div>
         )}
+
+        {/* Post-report guidance */}
+        <PostReportGuidance riskLevel={results.riskLevel} />
 
         {/* Navigation buttons */}
         <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap', marginTop: 32 }}>

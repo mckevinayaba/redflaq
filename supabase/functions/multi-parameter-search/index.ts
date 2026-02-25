@@ -106,8 +106,12 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Server-side credit deduction
+    // ===== CREDIT VALIDATION (MANDATORY) =====
+    // Either payment_id or user_id with available credits required
+    let creditDeducted = false;
+
     if (payment_id) {
+      // Legacy flow: deduct from specific payment
       const { data: payment, error: fetchErr } = await supabase
         .from('manual_payments')
         .select('credits_used, search_credits, status')
@@ -117,6 +121,13 @@ serve(async (req) => {
       if (fetchErr || !payment) {
         return new Response(
           JSON.stringify({ success: false, error: 'Invalid payment ID' }),
+          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
+      if (payment.status !== 'verified') {
+        return new Response(
+          JSON.stringify({ success: false, error: 'Payment not yet verified' }),
           { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
@@ -140,6 +151,90 @@ serve(async (req) => {
           { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
+      creditDeducted = true;
+    } else if (user_id) {
+      // Dashboard flow: find user's email and check for any available credits
+      const { data: userData } = await supabase.auth.admin.getUserById(user_id);
+      if (!userData?.user?.email) {
+        return new Response(
+          JSON.stringify({ success: false, error: 'User not found' }),
+          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+      const userEmail = userData.user.email;
+
+      // Check purchases table first
+      const { data: purchases } = await supabase
+        .from('purchases')
+        .select('id, credits_remaining')
+        .eq('email', userEmail)
+        .eq('status', 'completed')
+        .gt('credits_remaining', 0)
+        .order('purchased_at', { ascending: true })
+        .limit(1);
+
+      if (purchases && purchases.length > 0) {
+        const { error: updateErr } = await supabase
+          .from('purchases')
+          .update({ credits_remaining: purchases[0].credits_remaining - 1 })
+          .eq('id', purchases[0].id);
+
+        if (updateErr) {
+          console.error('Purchase credit deduction error:', updateErr);
+          return new Response(
+            JSON.stringify({ success: false, error: 'Failed to deduct credit' }),
+            { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
+        creditDeducted = true;
+      }
+
+      // Check manual_payments if no purchase credits
+      if (!creditDeducted) {
+        const { data: manualPayments } = await supabase
+          .from('manual_payments')
+          .select('id, credits_used, search_credits, payment_id')
+          .eq('email', userEmail)
+          .eq('status', 'verified')
+          .order('created_at', { ascending: true });
+
+        const availablePayment = manualPayments?.find(
+          p => (p.search_credits || 0) - (p.credits_used || 0) > 0
+        );
+
+        if (availablePayment) {
+          const { error: updateErr } = await supabase
+            .from('manual_payments')
+            .update({ credits_used: (availablePayment.credits_used || 0) + 1 })
+            .eq('id', availablePayment.id);
+
+          if (updateErr) {
+            console.error('Manual payment credit deduction error:', updateErr);
+            return new Response(
+              JSON.stringify({ success: false, error: 'Failed to deduct credit' }),
+              { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+            );
+          }
+          creditDeducted = true;
+        }
+      }
+
+      if (!creditDeducted) {
+        return new Response(
+          JSON.stringify({ 
+            success: false, 
+            error: 'No credits available. Please purchase a check first.',
+            redirect: '/pricing'
+          }),
+          { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+    } else {
+      // No payment_id and no user_id — reject
+      return new Response(
+        JSON.stringify({ success: false, error: 'Authentication required to perform searches' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
     let matches: any[] = [];

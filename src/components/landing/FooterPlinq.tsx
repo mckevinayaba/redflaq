@@ -1,5 +1,6 @@
 import { useState } from "react";
 import ShareInviteModal from "@/components/ShareInviteModal";
+import EmergencyBanner from "@/components/EmergencyBanner";
 
 const FooterPlinq = () => {
   const [shareOpen, setShareOpen] = useState(false);
@@ -123,6 +124,7 @@ const FooterPlinq = () => {
         </div>
       </div>
     </footer>
+    <EmergencyBanner />
     <ShareInviteModal open={shareOpen} onOpenChange={setShareOpen} />
     </>
   );

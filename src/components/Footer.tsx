@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
+import EmergencyBanner from "@/components/EmergencyBanner";
 
 const Footer = () => {
   return (
+    <>
     <footer className="bg-[#5B21B6] text-[#DDD6FE] py-12">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-3 gap-8">
@@ -57,6 +59,8 @@ const Footer = () => {
         </div>
       </div>
     </footer>
+    <EmergencyBanner />
+    </>
   );
 };
 

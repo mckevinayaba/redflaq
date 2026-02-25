@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { Shield } from "lucide-react";
+import EmergencyBanner from "@/components/EmergencyBanner";
 
 const FooterNew = () => {
   const productLinks = [
@@ -18,6 +19,7 @@ const FooterNew = () => {
   ];
 
   return (
+    <>
     <footer className="bg-gray-800 text-gray-300 py-16">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-4 gap-12 mb-12">
@@ -95,6 +97,8 @@ const FooterNew = () => {
         </div>
       </div>
     </footer>
+    <EmergencyBanner />
+    </>
   );
 };
 

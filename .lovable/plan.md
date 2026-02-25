@@ -1,138 +1,42 @@
 
-# RedFlaq Full Platform Audit — Updated
 
-## What You Have Built
+# Email Delivery Status
 
-### Frontend Pages (45+ routes)
+## The Problem
 
-**Public Marketing & Content:**
-- Landing page (/) with LG-style visual redesign, organic frames, photo grid, ticker bar, trust bar, community section, founder section, testimonials, FAQ, pricing, final CTA
-- About (/about), Privacy (/privacy), Terms (/terms), Dispute (/dispute)
-- Pricing (/pricing) with 3 packages: R99/R249/R399
-- Blog (/blog) with 6 articles, individual article pages (/blog/:slug)
-- Safety Tips (/safety-tips) — fully built out with red flags, post-flag guidance, emergency resources (GBV Command Centre, Lifeline SA, TEARS Foundation, Protection Order info)
-- Conversation Guide (/conversation-guide) — standalone shareable resource with pre-conversation safety checklist, question cards, mistaken identity assessment, post-conversation outcomes, WhatsApp share
-- Partners page (/partners) + application form (/partners/apply)
-- Data Sources (/sources)
-- Demo result page (/demo-result)
-- Tools hub (/tools) with sub-pages: First Date Safety, Red Flag Quiz, Tenant Safety, Domestic Worker Safety
+The email **code** is built and ready — the `send-email` edge function exists and works. But the actual **RESEND_API_KEY secret is not configured** in your project. Without it, the function just logs emails to the console instead of sending them.
 
-**Auth & User:**
-- Signup/signin (/signup) with email verification flow
-- Email verification (/verify-email)
-- Password reset (/reset-password)
-- Welcome modal for first-time users
+Your admin dashboard correctly shows this warning. Here is what is missing:
 
-**User Dashboard (authenticated):**
-- Dashboard home (/dashboard) with check history, stats, referral tracker
-- New check form (/dashboard/new-check) with demo mode support and **server-side credit validation**
-- Reports history (/dashboard/reports)
-- Account settings (/dashboard/account)
-- Help (/dashboard/help)
+## What You Need To Do (outside Lovable)
 
-**Core Product:**
-- Results page (/results) with risk levels (RED/ORANGE/YELLOW/GREEN), identity match selector, PDF download, post-report guidance ("What do I do with this result?"), dispute buttons, share controls
-- Payment modal with PayFast integration
-- Payment success/cancelled pages
-- Receipt page
+1. Go to **https://resend.com** and create a free account (100 emails/day free tier)
+2. **Verify your domain** at https://resend.com/domains — add `redflaq.co.za` and set the DNS records they give you (SPF, DKIM, DMARC). Without this, emails from `noreply@redflaq.co.za` will be rejected
+3. **Create an API key** at https://resend.com/api-keys
+4. Come back here and I will store it as a secure secret
 
-**Admin Panel (10 pages):**
-- Admin dashboard (new + legacy)
-- User management, checks review, content management
-- Pricing management, analytics, system settings
-- Gazette management, scraper tools, import tools
-- Payment verification (with WhatsApp shortcut), merge review
-- Admin login with role-based access (owner/admin/support)
+## What I Will Do Once You Provide the Key
 
-**Global Elements:**
-- Emergency GBV banner on every page (0800 428 428) — non-dismissible, deep purple
-- Share/invite modal (WhatsApp, email, copy link)
-- Auth-guarded CTAs across all pages
+1. Store `RESEND_API_KEY` as a backend secret (accessible only by edge functions, never exposed to the browser)
+2. Update the admin dashboard to check the secret dynamically instead of showing a hardcoded warning
+3. The existing `send-email` function will immediately start working — no code changes needed, it already has the Resend integration built in
 
----
+## What Is Already Wired
 
-### Backend (Edge Functions — 14 functions)
+- `send-email` function: built, deployed, uses Resend API
+- `payfast-itn` webhook: calls `send-email` when payment is confirmed
+- Admin payment verification: calls `send-email` when manually approving payments
+- The `from` address is already set to `RedFlaq <noreply@redflaq.co.za>`
 
-| Function | Status | Purpose |
-|---|---|---|
-| `create-payfast-payment` | ✅ Built | Creates PayFast checkout session, stores pending payment |
-| `payfast-itn` | ✅ Built | Webhook handler for PayFast payment confirmation |
-| `multi-parameter-search` | ✅ Built + **Credit-gated** | Core search engine — 6 strategies, server-side credit deduction |
-| `submit-payment` | ✅ Built | Alternative payment submission |
-| `admin-verify-payment` | ✅ Built | Manual payment verification |
-| `verify-admin` | ✅ Built | Admin role checking |
-| `send-email` | ✅ Built | Email delivery via Resend |
-| `import-opensanctions` | ✅ Built | OpenSanctions data import |
-| `import-sapswanted` | ✅ Built | SAPS scraper import |
-| `import-wanted-persons` | ✅ Built | CSV import |
-| `scrape-saps-wanted` | ✅ Built | SAPS website scraper |
-| `scrape-saps-details` | ✅ Built | Individual detail scraper |
-| `index-saflii` | ✅ Built | SAFLII court judgment indexer |
-| `extract-gazette` | ✅ Built | Government Gazette extractor |
+## What Is NOT Yet Wired (will do after the key is added)
 
----
+- Search completion email (send results link after a check finishes)
+- Welcome email on signup
+- These are quick additions once the key is live
 
-### Database (17 tables)
+## Summary
 
-| Table | Records | Purpose | RLS Status |
-|---|---|---|---|
-| `wanted_persons` | 1,220 active | Core criminal records (SAPS) | ✅ Public read only |
-| `saflii_judgments` | 143 criminal | Court judgment records | ✅ Public read only |
-| `gazette_records` | 0 | Government Gazette (empty) | ✅ Public read only |
-| `searches` | 12 | Search history | ✅ Own + staff |
-| `profiles` | 1 | User profiles | ✅ Own + staff |
-| `manual_payments` | — | Payment tracking | ✅ **FIXED** Own + staff |
-| `purchases` | — | Credit tracking | ✅ **FIXED** Own + staff |
-| `disputes` | — | Record dispute system | ✅ **FIXED** Own + staff |
-| `referrals` | — | Referral programme | ✅ Own referrer |
-| `partners` | — | Partner applications | ✅ Staff view, public insert |
-| `academy_articles` | — | Blog/academy CMS | ✅ Published public, admin manage |
-| `admin_events` | — | Audit log | ✅ **FIXED** Staff only |
-| `duplicate_name_groups` | — | Dedup tracking | ✅ **FIXED** Staff only |
-| `human_verification_requests` | — | Manual review queue | ✅ **FIXED** Staff only |
-| `record_merge_log` | — | Record merging | ✅ **FIXED** Staff only |
-| `user_roles` | — | RBAC | ✅ Own + owner manage |
-| `site_settings` | — | CMS settings | ✅ Staff only |
+No code fix needed. You need to create a Resend account, verify the `redflaq.co.za` domain, get an API key, and give it to me. I will store it securely and emails will start flowing immediately.
 
----
+Would you like to proceed? Go set up Resend and come back with the API key.
 
-## What Was Fixed Today
-
-### ✅ RLS Security Lockdown (Critical Fix #1)
-- Replaced 12+ "always true" SELECT/UPDATE policies with properly scoped ones
-- `manual_payments`, `purchases`, `searches`: users can only see their own data (matched by email or user_id)
-- `disputes`: users see only their own disputes (by email)
-- `admin_events`, `duplicate_name_groups`, `human_verification_requests`, `record_merge_log`: staff-only access
-- `partners`: staff-only viewing (public insert for applications retained)
-- All write operations (INSERT/UPDATE) on sensitive tables now restricted to service_role (edge functions)
-
-### ✅ Credit Gate on Search (Critical Fix #2)
-- `multi-parameter-search` edge function now **requires credits** before executing
-- Checks `purchases` table first (PayFast flow), then `manual_payments` (legacy flow)
-- Returns 402 with redirect to /pricing if no credits available
-- Dashboard form handles no-credits gracefully with user-friendly error + redirect
-- No more free unlimited searches
-
----
-
-## Remaining Launch Checklist
-
-### Still Must-Do Before Launch:
-1. ~~Lock down RLS policies~~ ✅ DONE
-2. ~~Add credit-checking to dashboard search~~ ✅ DONE
-3. Wire up confirmation emails (payment + results) — `send-email` exists but not triggered
-4. Test PayFast end-to-end with a real R99 transaction
-5. Get 5 real humans to test the full flow
-6. Populate gazette records OR remove "3 data sources" claim
-
-### Should-Do Before Launch:
-7. Remove legacy /search-form route
-8. Add basic error monitoring
-9. Add rate limiting to search function
-10. Replace AI photos with real SA stock photos
-
-### Can Wait:
-- SEO meta tags
-- Analytics integration
-- Referral programme at-scale testing
-- Partner programme automated follow-up

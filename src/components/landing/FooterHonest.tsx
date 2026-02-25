@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import { Shield } from "lucide-react";
+import EmergencyBanner from "@/components/EmergencyBanner";
 
 const FooterHonest = () => {
   const currentYear = new Date().getFullYear();
 
   return (
+    <>
     <footer className="bg-foreground text-background py-16">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-4 gap-12 mb-12">
@@ -89,6 +91,8 @@ const FooterHonest = () => {
         </div>
       </div>
     </footer>
+    <EmergencyBanner />
+    </>
   );
 };
 

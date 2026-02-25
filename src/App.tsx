@@ -37,6 +37,7 @@ import DashboardReports from "./pages/DashboardReports";
 import DashboardAccount from "./pages/DashboardAccount";
 import DashboardHelp from "./pages/DashboardHelp";
 import SafetyTips from "./pages/SafetyTips";
+import ConversationGuide from "./pages/ConversationGuide";
 import FirstDateSafety from "./pages/tools/FirstDateSafety";
 import TenantSafety from "./pages/tools/TenantSafety";
 import DomesticWorkerSafety from "./pages/tools/DomesticWorkerSafety";
@@ -80,6 +81,7 @@ const App = () => (
           <Route path="/dashboard/help" element={<DashboardHelp />} />
           {/* Safety Tips (formerly Tools) */}
           <Route path="/safety-tips" element={<SafetyTips />} />
+          <Route path="/conversation-guide" element={<ConversationGuide />} />
           <Route path="/safety-tips/first-date-safety" element={<FirstDateSafety />} />
           <Route path="/safety-tips/tenant-safety" element={<TenantSafety />} />
           <Route path="/safety-tips/domestic-worker-safety" element={<DomesticWorkerSafety />} />

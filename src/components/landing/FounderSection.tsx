@@ -5,28 +5,21 @@ const FounderSection = () => {
   const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '40px 40px 48px' }}>
-      <div style={{ maxWidth: 800, margin: '0 auto' }}>
+    <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '80px 40px' }}>
+      <div style={{ maxWidth: 1000, margin: '0 auto' }}>
         <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 16 }}>
           Why I Built This
         </div>
 
         <h2 style={{
           fontFamily: "'DM Serif Display', serif",
-          fontSize: 'clamp(32px, 4vw, 44px)', color: '#2D2235', marginBottom: 32,
+          fontSize: 'clamp(32px, 4vw, 44px)', color: '#2D2235', marginBottom: 40,
         }}>
           About the <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>Founder</em>
         </h2>
 
-        <div className="flex flex-col md:flex-row gap-10 items-start">
-          <div style={{
-            width: 160, minWidth: 160, height: 160, borderRadius: '50%',
-            background: '#EDE9FE', border: '3px solid #7C3AED',
-            overflow: 'hidden', flexShrink: 0, margin: '0 auto',
-          }}>
-            <img src={founderPhoto} alt="McKevin Ayaba, Founder of RedFlaq" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-          </div>
-
+        <div className="grid grid-cols-1 md:grid-cols-[60%_40%] gap-10 items-start">
+          {/* Text left */}
           <div>
             <h3 style={{ fontFamily: "'Syne', sans-serif", fontSize: 22, fontWeight: 800, color: '#2D2235', marginBottom: 4 }}>
               McKevin Ayaba
@@ -45,6 +38,13 @@ const FounderSection = () => {
             <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: '#4B4453' }}>
               — McKevin Ayaba, Founder
             </p>
+          </div>
+
+          {/* Photo right — organic frame */}
+          <div className={`organic-frame-3 organic-scroll-in ${isVisible ? 'visible' : ''} mx-auto md:mx-0`}
+            style={{ width: '100%', maxWidth: 400, height: 480 }}
+          >
+            <img src={founderPhoto} alt="McKevin Ayaba, Founder of RedFlaq" />
           </div>
         </div>
 

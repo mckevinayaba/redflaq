@@ -3,6 +3,7 @@ import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import HeroPlinq from "@/components/landing/HeroPlinq";
 import TickerBar from "@/components/landing/TickerBar";
 import TrustBarPlinq from "@/components/landing/TrustBarPlinq";
+import PhotoGrid from "@/components/landing/PhotoGrid";
 
 import RealitySection from "@/components/landing/RealitySection";
 import BarrierSection from "@/components/landing/BarrierSection";
@@ -35,7 +36,7 @@ const Index = () => {
       <HeroPlinq />
       <TickerBar />
       <TrustBarPlinq />
-      
+      <PhotoGrid />
       <RealitySection />
       <BarrierSection />
       <SearchOptionsSection />
@@ -56,7 +57,9 @@ const Index = () => {
         </span>
       </div>
 
-      <TestimonialsSectionNew />
+      <div id="testimonials">
+        <TestimonialsSectionNew />
+      </div>
       <CommunitySectionSA />
       <WhyRedflaqSection />
       <FounderSection />

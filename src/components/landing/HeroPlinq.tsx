@@ -1,6 +1,7 @@
 import { Check } from "lucide-react";
 import { useCountUp } from "@/hooks/useCountUp";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
+import heroImage from "@/assets/hero-sa-woman.jpg";
 
 const HeroPlinq = () => {
   const { guardedAction } = useAuthGuard();
@@ -12,7 +13,7 @@ const HeroPlinq = () => {
 
   return (
     <section className="relative overflow-hidden" style={{ background: '#F7F4F0', minHeight: '100vh' }}>
-      <div className="grid lg:grid-cols-2 min-h-screen max-w-[1280px] mx-auto">
+      <div className="grid lg:grid-cols-[55%_45%] min-h-screen max-w-[1280px] mx-auto">
         {/* LEFT COLUMN */}
         <div className="pt-24 px-5 pb-10 lg:pt-40 lg:px-10 lg:pb-20">
           <div style={{
@@ -28,7 +29,7 @@ const HeroPlinq = () => {
             fontFamily: "'DM Serif Display', serif",
             lineHeight: 1.05,
             color: '#2D2235', marginBottom: 24,
-          }} className="text-[36px] sm:text-[44px] lg:text-[56px] xl:text-[72px]">
+          }} className="text-[36px] sm:text-[44px] lg:text-[56px] xl:text-[82px]">
             Before you give him a spare key,<br />
             give yourself <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>clarity.</em>
           </h1>
@@ -99,41 +100,42 @@ const HeroPlinq = () => {
           </div>
         </div>
 
-        {/* RIGHT COLUMN — GBV Stat Cards */}
-        <div className="flex flex-col justify-center px-5 pb-20 gap-4 lg:px-10 lg:pt-28 lg:pb-20">
-          <div className="scroll-reveal visible" style={{ background: 'white', border: '1.5px solid #EDE9FE', padding: '36px 32px' }}>
-            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#7C3AED', marginBottom: 8 }}>
-              SOUTH AFRICAN REALITY
-            </div>
-            <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 56, color: '#2D2235', lineHeight: 1 }}>
-              1 in <span style={{ color: '#7C3AED' }}>3</span>
-            </div>
-            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#4B4453', lineHeight: 1.6, marginTop: 12 }}>
-              South African women experience gender‑based violence in the hands of an intimate partner during their lifetime.
-            </p>
-            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#9CA3AF', marginTop: 12 }}>
-              SOURCE: STATS SA · DSTI 2024 GENDER REPORT
+        {/* RIGHT COLUMN — Hero Photo + Stats */}
+        <div className="flex flex-col justify-center items-center px-5 pb-20 gap-6 lg:px-10 lg:pt-28 lg:pb-20">
+          {/* Organic framed hero photo */}
+          <div className="organic-frame-1 organic-scroll-in visible w-full" style={{ maxWidth: 420, height: 500 }}>
+            <img
+              src={heroImage}
+              alt="South African woman looking thoughtfully out of a Johannesburg apartment window"
+              loading="eager"
+              width="896"
+              height="1152"
+            />
+          </div>
+
+          {/* Compact stat + quote below image */}
+          <div ref={statTwoRef} className="w-full" style={{ maxWidth: 420 }}>
+            <div style={{ background: 'white', border: '1.5px solid #EDE9FE', padding: '24px 24px' }}>
+              <div className="flex items-baseline gap-4 mb-2">
+                <span style={{ fontFamily: "'DM Serif Display', serif", fontSize: 40, color: '#7C3AED', lineHeight: 1 }}>
+                  {statTwo > 0 ? statTwo.toLocaleString() : '40,000'}+
+                </span>
+                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#9CA3AF', letterSpacing: '0.08em' }}>
+                  SEXUAL OFFENCES / YEAR
+                </span>
+              </div>
+              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#4B4453', lineHeight: 1.6 }}>
+                Many offenders had prior warnings in public records.
+              </p>
             </div>
           </div>
 
-          <div ref={statTwoRef} className="scroll-reveal visible" style={{ background: 'white', border: '1.5px solid #EDE9FE', padding: '36px 32px' }}>
-            <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 56, color: '#7C3AED', lineHeight: 1 }}>
-              {statTwo > 0 ? statTwo.toLocaleString() : '40,000'}+
-            </div>
-            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#4B4453', lineHeight: 1.6, marginTop: 12 }}>
-              Sexual offences reported every year. Many offenders had prior warnings in public records.
-            </p>
-            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#9CA3AF', marginTop: 12 }}>
-              SOURCE: SAPS ANNUAL CRIME STATISTICS
-            </div>
-          </div>
-
-          <div style={{ background: '#7C3AED', padding: '28px 32px' }}>
-            <p style={{ fontFamily: "'DM Serif Display', serif", fontSize: 20, color: 'white', lineHeight: 1.5, fontStyle: 'italic' }}>
+          <div style={{ background: '#7C3AED', padding: '20px 24px', maxWidth: 420 }} className="w-full">
+            <p style={{ fontFamily: "'DM Serif Display', serif", fontSize: 17, color: 'white', lineHeight: 1.5, fontStyle: 'italic' }}>
               We built RedFlaq so women and communities can access key public‑record warnings quickly and affordably.
             </p>
-            <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: 'rgba(255,255,255,0.6)', marginTop: 12, fontWeight: 600 }}>
-              — McKevin Ayaba, Founder of RedFlaq
+            <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: 'rgba(255,255,255,0.6)', marginTop: 8, fontWeight: 600 }}>
+              — McKevin Ayaba, Founder
             </div>
           </div>
         </div>

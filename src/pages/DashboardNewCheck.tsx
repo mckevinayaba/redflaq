@@ -105,6 +105,17 @@ export default function DashboardNewCheck() {
       });
 
       if (error) throw new Error(error.message);
+
+      // Handle no-credits response
+      if (data?.redirect === '/pricing') {
+        clearInterval(interval);
+        setProgress(0);
+        setIsSubmitting(false);
+        setFormError("You don't have any search credits. Please purchase a check first.");
+        setTimeout(() => navigate("/pricing"), 2000);
+        return;
+      }
+
       if (data?.success) {
         clearInterval(interval);
         setProgress(100);
@@ -119,6 +130,9 @@ export default function DashboardNewCheck() {
       const msg = err.message || "";
       if (msg.toLowerCase().includes("network") || msg.toLowerCase().includes("fetch")) {
         setFormError("We could not complete this search right now. You have not been charged. Please try again in a few minutes.");
+      } else if (msg.toLowerCase().includes("no credits") || msg.toLowerCase().includes("purchase")) {
+        setFormError("You don't have any search credits. Redirecting to pricing…");
+        setTimeout(() => navigate("/pricing"), 2000);
       } else {
         setFormError("We couldn't complete this search right now. You won't be charged for this attempt.");
       }

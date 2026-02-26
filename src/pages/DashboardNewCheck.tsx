@@ -32,7 +32,6 @@ export default function DashboardNewCheck() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const isDemoMode = searchParams.get("mode") === "demo";
 
   const [firstName, setFirstName] = useState("");
   const [surname, setSurname] = useState("");
@@ -70,21 +69,6 @@ export default function DashboardNewCheck() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
-
-    // Demo mode — skip real search, show demo result
-    if (isDemoMode) {
-      setIsSubmitting(true);
-      setProgress(0);
-      const interval = setInterval(() => {
-        setProgress((p) => (p >= 90 ? (clearInterval(interval), 90) : p + 5));
-      }, 200);
-      setTimeout(() => {
-        clearInterval(interval);
-        setProgress(100);
-        setTimeout(() => navigate("/demo-result"), 500);
-      }, 2000);
-      return;
-    }
 
     setIsSubmitting(true);
     setProgress(0);
@@ -159,17 +143,6 @@ export default function DashboardNewCheck() {
       <p className="font-mono text-[11px] tracking-widest text-muted-foreground uppercase mb-1">New check</p>
       <h1 className="font-heading text-2xl sm:text-3xl text-foreground mb-2 sm:mb-4">Start a new safety check</h1>
 
-      {isDemoMode && (
-        <div className="bg-amber-50 border border-amber-300 rounded-lg px-4 py-3 mb-6 flex items-start gap-3">
-          <span className="text-lg mt-0.5">🧪</span>
-          <div>
-            <p className="font-body text-sm text-amber-900 font-semibold">Demo Mode</p>
-            <p className="font-body text-xs text-amber-800 leading-relaxed">
-              You're trying the RedFlaq experience in demo mode. No real records will be checked. Real checks with PayFast are coming soon.
-            </p>
-          </div>
-        </div>
-      )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
         {/* Form */}
@@ -310,12 +283,12 @@ export default function DashboardNewCheck() {
                 {isSubmitting ? (
                   <>
                     <div className="w-5 h-5 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
-                    {isDemoMode ? "Generating demo report…" : "Checking records…"} {progress}%
+                    Checking records… {progress}%
                   </>
                 ) : (
                   <>
                     <Shield className="h-5 w-5" />
-                    {isDemoMode ? "Try demo check (free)" : "Verify this person — R99"}
+                    Verify this person
                   </>
                 )}
               </button>

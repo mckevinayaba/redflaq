@@ -56,9 +56,8 @@ export function useAuthGuard() {
       return true;
     }
 
-    // No credits — demo mode (PayFast payment available)
-    // Send to demo search form
-    navigate("/dashboard/new-check?mode=demo");
+    // No credits — send to pricing to purchase
+    navigate("/pricing");
     return true;
   };
 

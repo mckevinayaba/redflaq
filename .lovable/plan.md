@@ -1,21 +1,37 @@
 
 
-# Enable Stripe Integration
+## Problem Analysis
 
-## Steps
+Two critical issues are blocking the payment → search flow:
 
-1. **Enable the Stripe integration** — you'll be prompted to paste your Stripe secret key (starts with `sk_` or `rk_`). It will be stored securely as a backend-only secret, never visible in the browser.
+### Issue 1: Stripe Webhook Failing (ROOT CAUSE)
+The `stripe-webhook` function crashes on every Stripe event with:
+```
+SubtleCryptoProvider cannot be used in a synchronous context.
+Use `await constructEventAsync(...)` instead of `constructEvent(...)`
+```
+This means payments complete on Stripe's side but credits are **never allocated** — the `manual_payments` row stays `pending` and no `purchases` record is created.
 
-2. **Create a Stripe checkout backend function** — generates Stripe Checkout Sessions for your 3 packages (R99 / R249 / R399 in ZAR)
+### Issue 2: Search Error Handling
+When `multi-parameter-search` returns a 402 (no credits), the frontend `DashboardNewCheck` doesn't properly detect the redirect response from the edge function because `supabase.functions.invoke` wraps non-2xx responses as errors, so the `data?.redirect === '/pricing'` check never fires. The user sees a generic "We couldn't complete this search" instead of being redirected to pricing.
 
-3. **Create a Stripe webhook handler** — listens for `checkout.session.completed` events, credits the user's account (mirrors your existing PayFast ITN flow)
+---
 
-4. **Update PaymentModal** — add a "Pay with Card (Stripe)" button alongside the existing PayFast option
+## Implementation Plan
 
-5. **Update PaymentSuccess page** — handle Stripe's `?session_id=` return parameter alongside PayFast's `?payment_id=`
+### Step 1: Fix the Stripe webhook function
+In `supabase/functions/stripe-webhook/index.ts`:
+- Replace `stripe.webhooks.constructEvent(body, signature, webhookSecret)` with `await stripe.webhooks.constructEventAsync(body, signature, webhookSecret)`
+- This is the async-compatible method required in Deno's runtime
 
-## Security
-- Stripe secret key stored as a backend secret only
-- Webhook validates Stripe signatures server-side
-- No sensitive keys in frontend code
+### Step 2: Fix search error handling for no-credits case
+In `src/pages/DashboardNewCheck.tsx`:
+- Update the catch block to better detect 402/no-credits responses from the edge function
+- When `supabase.functions.invoke` returns a non-2xx status, the error object or data may contain the redirect info — handle both paths
+- Show a clear "No credits" message and redirect to `/pricing`
+
+### Step 3: Redeploy and verify
+- Deploy the fixed webhook
+- The next Stripe payment will properly trigger credit allocation
+- Searches will correctly redirect to pricing when credits are exhausted
 

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { X, Shield, Loader2 } from 'lucide-react';
+import { X, Shield, Loader2, CreditCard } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface PaymentModalProps {
@@ -14,6 +14,7 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
   const [email, setEmail] = useState('');
   const [selectedPackage, setSelectedPackage] = useState(packageType);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'payfast'>('stripe');
   const { toast } = useToast();
 
   const packages = {
@@ -24,7 +25,7 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
 
   const currentPackage = packages[selectedPackage];
 
-  const handlePayFast = async () => {
+  const handlePay = async () => {
     if (!email || !email.includes('@')) {
       toast({ title: 'Email required', description: 'Please enter a valid email address.', variant: 'destructive' });
       return;
@@ -33,19 +34,33 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
     setIsSubmitting(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke('create-payfast-payment', {
-        body: { email, package_type: currentPackage.type },
-      });
+      if (paymentMethod === 'stripe') {
+        const { data, error } = await supabase.functions.invoke('create-stripe-checkout', {
+          body: { email, package_type: currentPackage.type },
+        });
 
-      if (error) throw error;
+        if (error) throw error;
 
-      if (data?.redirect_url) {
-        window.location.href = data.redirect_url;
+        if (data?.url) {
+          window.location.href = data.url;
+        } else {
+          throw new Error('No checkout URL returned');
+        }
       } else {
-        throw new Error('No redirect URL returned');
+        const { data, error } = await supabase.functions.invoke('create-payfast-payment', {
+          body: { email, package_type: currentPackage.type },
+        });
+
+        if (error) throw error;
+
+        if (data?.redirect_url) {
+          window.location.href = data.redirect_url;
+        } else {
+          throw new Error('No redirect URL returned');
+        }
       }
     } catch (err: any) {
-      console.error('PayFast error:', err);
+      console.error('Payment error:', err);
       toast({
         title: 'Payment error',
         description: 'Could not initiate payment. Please try again.',
@@ -129,21 +144,52 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
             <p className="text-xs text-muted-foreground mt-1">Your receipt and search link will be sent here</p>
           </div>
 
+          {/* Payment method selector */}
+          <div className="mb-6">
+            <label className="block text-sm font-semibold text-foreground mb-2">Payment Method:</label>
+            <div className="grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => setPaymentMethod('stripe')}
+                className={`flex items-center justify-center gap-2 p-3 rounded-lg border-2 transition-colors text-sm font-medium ${
+                  paymentMethod === 'stripe'
+                    ? 'border-primary bg-primary/5 text-foreground'
+                    : 'border-border text-muted-foreground hover:border-primary/50'
+                }`}
+              >
+                <CreditCard className="w-4 h-4" />
+                Card (Stripe)
+              </button>
+              <button
+                type="button"
+                onClick={() => setPaymentMethod('payfast')}
+                className={`flex items-center justify-center gap-2 p-3 rounded-lg border-2 transition-colors text-sm font-medium ${
+                  paymentMethod === 'payfast'
+                    ? 'border-primary bg-primary/5 text-foreground'
+                    : 'border-border text-muted-foreground hover:border-primary/50'
+                }`}
+              >
+                <Shield className="w-4 h-4" />
+                PayFast (EFT)
+              </button>
+            </div>
+          </div>
+
           {/* Pay button */}
           <button
-            onClick={handlePayFast}
+            onClick={handlePay}
             disabled={isSubmitting || !email}
             className="w-full py-4 bg-primary hover:bg-primary/90 text-primary-foreground font-bold rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-lg text-lg flex items-center justify-center gap-3"
           >
             {isSubmitting ? (
               <>
                 <Loader2 className="w-5 h-5 animate-spin" />
-                Redirecting to PayFast…
+                Redirecting…
               </>
             ) : (
               <>
-                <Shield className="w-5 h-5" />
-                Pay Securely with PayFast
+                {paymentMethod === 'stripe' ? <CreditCard className="w-5 h-5" /> : <Shield className="w-5 h-5" />}
+                Pay Securely{paymentMethod === 'stripe' ? ' with Stripe' : ' with PayFast'}
               </>
             )}
           </button>
@@ -151,7 +197,7 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
           {/* Trust footer */}
           <div className="mt-6 p-4 bg-primary/5 border border-primary/20 rounded-lg">
             <p className="text-sm text-muted-foreground text-center mb-3">
-              🔒 You'll be redirected to PayFast's secure checkout page
+              🔒 You'll be redirected to {paymentMethod === 'stripe' ? "Stripe's" : "PayFast's"} secure checkout page
             </p>
             <div className="text-xs text-muted-foreground text-center border-t border-border pt-3">
               <p className="font-semibold text-foreground">🏢 Setup A Startup (Pty) Ltd</p>

@@ -4,6 +4,7 @@ import { CheckCircle2, ArrowRight } from "lucide-react";
 export default function PaymentSuccess() {
   const [searchParams] = useSearchParams();
   const paymentId = searchParams.get("payment_id");
+  const sessionId = searchParams.get("session_id");
 
   return (
     <div style={{ background: '#F7F4F0', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
@@ -22,6 +23,12 @@ export default function PaymentSuccess() {
           {paymentId && (
             <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#9CA3AF', marginBottom: 32 }}>
               Reference: {paymentId}
+            </p>
+          )}
+
+          {sessionId && !paymentId && (
+            <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#9CA3AF', marginBottom: 32 }}>
+              Session: {sessionId.slice(0, 20)}…
             </p>
           )}
 

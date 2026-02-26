@@ -41,3 +41,9 @@ verify_jwt = false
 
 [functions."index-saflii"]
 verify_jwt = false
+
+[functions."create-stripe-checkout"]
+verify_jwt = false
+
+[functions."stripe-webhook"]
+verify_jwt = false

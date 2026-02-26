@@ -92,6 +92,10 @@ export default function Signup() {
           });
           sessionStorage.removeItem("referrer_id");
         }
+        // Send welcome email (non-blocking)
+        supabase.functions.invoke('send-welcome-email', {
+          body: { email: email.trim(), full_name: fullName.trim() },
+        }).catch(() => {});
         setSignupSuccess(true);
         // Redirect to verify-email page after signup
         navigate("/verify-email");

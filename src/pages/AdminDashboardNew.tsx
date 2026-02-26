@@ -138,11 +138,11 @@ export default function AdminDashboardNew() {
               </Link>
             )}
 
-            <div className="flex items-center gap-3 p-4 rounded-xl border-2 border-amber-500 bg-amber-500/10">
-              <Mail className="h-5 w-5 text-amber-600 shrink-0" />
+            <div className="flex items-center gap-3 p-4 rounded-xl border-2 border-emerald-500 bg-emerald-500/10">
+              <Mail className="h-5 w-5 text-emerald-600 shrink-0" />
               <div>
-                <p className="font-heading text-sm text-foreground">Email delivery not configured</p>
-                <p className="font-body text-xs text-muted-foreground">Users are not receiving verification or payment emails. Add a RESEND_API_KEY secret to enable email delivery via Resend.com (free tier available).</p>
+                <p className="font-heading text-sm text-foreground">Email delivery active</p>
+                <p className="font-body text-xs text-muted-foreground">Transactional emails (payment confirmations, search results, welcome) are being sent via Resend.</p>
               </div>
             </div>
 

@@ -88,17 +88,24 @@ export default function DashboardNewCheck() {
         },
       });
 
-      if (error) throw new Error(error.message);
+      // supabase.functions.invoke returns error for non-2xx responses
+      // Check both data and error for no-credits / redirect signals
+      const noCredits =
+        data?.redirect === '/pricing' ||
+        error?.message?.toLowerCase()?.includes('no credits') ||
+        error?.message?.toLowerCase()?.includes('402') ||
+        (typeof error?.context?.body === 'string' && error.context.body.includes('redirect'));
 
-      // Handle no-credits response
-      if (data?.redirect === '/pricing') {
+      if (noCredits) {
         clearInterval(interval);
         setProgress(0);
         setIsSubmitting(false);
-        setFormError("You don't have any search credits. Please purchase a check first.");
+        setFormError("You don't have any search credits. Redirecting to pricing…");
         setTimeout(() => navigate("/pricing"), 2000);
         return;
       }
+
+      if (error) throw new Error(error.message);
 
       if (data?.success) {
         clearInterval(interval);
@@ -112,11 +119,11 @@ export default function DashboardNewCheck() {
       setProgress(0);
       setIsSubmitting(false);
       const msg = err.message || "";
-      if (msg.toLowerCase().includes("network") || msg.toLowerCase().includes("fetch")) {
-        setFormError("We could not complete this search right now. You have not been charged. Please try again in a few minutes.");
-      } else if (msg.toLowerCase().includes("no credits") || msg.toLowerCase().includes("purchase")) {
+      if (msg.toLowerCase().includes("no credits") || msg.toLowerCase().includes("purchase") || msg.toLowerCase().includes("402")) {
         setFormError("You don't have any search credits. Redirecting to pricing…");
         setTimeout(() => navigate("/pricing"), 2000);
+      } else if (msg.toLowerCase().includes("network") || msg.toLowerCase().includes("fetch")) {
+        setFormError("We could not complete this search right now. You have not been charged. Please try again in a few minutes.");
       } else {
         setFormError("We couldn't complete this search right now. You won't be charged for this attempt.");
       }

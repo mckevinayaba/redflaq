@@ -1,27 +1,17 @@
 
 
-## Why You're Not Receiving Emails
+## Issue
 
-The issue is clear from the backend logs. Your emails are failing with a **403 error** from Resend:
+The `send-email` edge function hardcodes `from: 'RedFlaq <noreply@redflaq.co.za>'` but your primary domain is `redflaq.com`. The `.co.za` domain isn't verified in Resend, which is why emails fail.
 
-> "The redflaq.co.za domain is not verified. Please, add and verify your domain on https://resend.com/domains"
+## Fix
 
-**Root cause:** The `send-email` function sends from `noreply@redflaq.co.za`, but the `redflaq.co.za` domain has not been verified in your Resend account. Resend blocks all emails from unverified domains.
+Update `supabase/functions/send-email/index.ts` to send from `noreply@redflaq.com` instead of `noreply@redflaq.co.za`.
 
-## How to Fix
+### Steps
+1. Change the `from` field in the Resend API call from `'RedFlaq <noreply@redflaq.co.za>'` to `'RedFlaq <noreply@redflaq.com>'`
+2. Deploy the updated edge function
 
-You have two options:
-
-### Option A: Verify `redflaq.co.za` in Resend (recommended)
-1. Log in to your [Resend dashboard](https://resend.com/domains)
-2. Add `redflaq.co.za` as a sending domain
-3. Add the required DNS records (SPF, DKIM, DMARC) to your domain registrar (GoDaddy)
-4. Wait for verification to complete — emails will start working immediately after
-
-### Option B: Temporary fix — use Resend's default sender
-If you want emails to work right now while you verify your domain, the `send-email` edge function can be updated to send from `onboarding@resend.dev` (Resend's free test domain). This works immediately but emails will come from a generic address instead of your brand.
-
-## No Code Changes Needed
-
-This is purely a domain configuration issue on the Resend side. Once `redflaq.co.za` is verified in Resend, all email flows (welcome, search results, discreet mode) will start working automatically.
+### Prerequisite
+The `redflaq.com` domain must be verified in your Resend account. If it isn't yet, you'll need to add it at [resend.com/domains](https://resend.com/domains) and add the required DNS records (SPF, DKIM) in GoDaddy.
 

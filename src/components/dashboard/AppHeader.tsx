@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useToast } from "@/hooks/use-toast";
 import { User, LayoutDashboard, LogOut, Settings, Shield } from "lucide-react";
+import redflaqLogo from "@/assets/redflaq-logo-official.png";
 
 
 export default function AppHeader() {
@@ -34,13 +35,8 @@ export default function AppHeader() {
   return (
     <header className="h-14 border-b border-border bg-card flex items-center justify-between px-4 lg:px-6 sticky top-0" style={{ zIndex: 9999, visibility: 'visible' as const, opacity: 1, backgroundColor: '#FFFFFF', WebkitBackfaceVisibility: 'hidden' as const, transform: 'translateZ(0)', WebkitTransform: 'translateZ(0)' }}>
       {/* Logo – opens homepage in new tab */}
-      <a href="/" target="_blank" rel="noopener noreferrer" className="flex items-center" style={{ gap: 14 }}>
-        <Shield style={{ width: 20, height: 20, color: '#7C3AED' }} />
-        <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 20 }}>
-          <span style={{ color: '#7C3AED' }}>Red</span>
-          <span style={{ color: '#2D2235' }}>Fla</span>
-          <span style={{ color: '#DC2626' }}>q</span>
-        </span>
+      <a href="/" target="_blank" rel="noopener noreferrer" className="flex items-center">
+        <img src={redflaqLogo} alt="RedFlaq" style={{ height: 30, width: 'auto', display: 'block' }} />
       </a>
 
       {/* Avatar dropdown */}

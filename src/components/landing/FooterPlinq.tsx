@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ShareInviteModal from "@/components/ShareInviteModal";
 import EmergencyBanner from "@/components/EmergencyBanner";
-import { Shield } from "lucide-react";
+import redflaqLogo from "@/assets/redflaq-logo-official.png";
 
 const FooterPlinq = () => {
   const [shareOpen, setShareOpen] = useState(false);
@@ -35,13 +35,8 @@ const FooterPlinq = () => {
         <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_1fr] gap-16 mb-12">
           {/* Column 1 - Logo */}
           <div>
-            <a href="/" className="flex items-center mb-4" style={{ gap: 14, textDecoration: 'none' }}>
-              <Shield style={{ width: 20, height: 20, color: '#7C3AED' }} />
-              <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 20 }}>
-                <span style={{ color: '#7C3AED' }}>Red</span>
-                <span style={{ color: '#2D2235' }}>Fla</span>
-                <span style={{ color: '#DC2626' }}>q</span>
-              </span>
+            <a href="/" className="flex items-center mb-4" style={{ textDecoration: 'none' }}>
+              <img src={redflaqLogo} alt="RedFlaq" style={{ height: 30, width: 'auto', display: 'block' }} />
             </a>
             <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', maxWidth: 300, lineHeight: 1.6 }}>
               South Africa's public-record safety check for women and communities — not a SAPS fingerprint check.

@@ -42,7 +42,9 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
         if (error) throw error;
 
         if (data?.url) {
-          window.location.href = data.url;
+          window.open(data.url, '_blank');
+          toast({ title: 'Checkout opened', description: 'Stripe checkout opened in a new tab.' });
+          onClose();
         } else {
           throw new Error('No checkout URL returned');
         }
@@ -54,7 +56,9 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
         if (error) throw error;
 
         if (data?.redirect_url) {
-          window.location.href = data.redirect_url;
+          window.open(data.redirect_url, '_blank');
+          toast({ title: 'Checkout opened', description: 'PayFast checkout opened in a new tab.' });
+          onClose();
         } else {
           throw new Error('No redirect URL returned');
         }

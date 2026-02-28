@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
 import { Users, Shield, BarChart3, Code } from "lucide-react";
+import womenAriseBadge from "@/assets/women-arise-power.jpg";
 
 const benefits = [
   { icon: <Shield size={24} style={{ color: "#7C3AED" }} />, title: "Protect your community", desc: "Give your members access to affordable, fast public-record safety checks." },
@@ -34,6 +35,59 @@ const Partners = () => (
       <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, color: "#78716C", lineHeight: 1.6, maxWidth: 600, marginBottom: 48 }}>
         Are you an organisation working to keep South Africans safe? Join our partner programme and give your members access to fast, affordable public-record safety checks.
       </p>
+
+      {/* Women Arise Badge — creative hero placement */}
+      <div style={{
+        position: 'relative',
+        margin: '0 auto 56px',
+        maxWidth: 520,
+        background: 'linear-gradient(135deg, #FAF5FF 0%, #EDE9FE 50%, #F5F3FF 100%)',
+        borderRadius: 24,
+        padding: '40px 32px 32px',
+        border: '2px solid #E9D5FF',
+        boxShadow: '0 20px 60px -15px rgba(124, 58, 237, 0.18), 0 0 0 1px rgba(124, 58, 237, 0.05)',
+        overflow: 'hidden',
+      }}>
+        {/* Decorative corner accents */}
+        <div style={{
+          position: 'absolute', top: 0, left: 0, width: 80, height: 80,
+          background: 'linear-gradient(135deg, #7C3AED 0%, transparent 60%)',
+          borderRadius: '24px 0 0 0', opacity: 0.08,
+        }} />
+        <div style={{
+          position: 'absolute', bottom: 0, right: 0, width: 80, height: 80,
+          background: 'linear-gradient(315deg, #7C3AED 0%, transparent 60%)',
+          borderRadius: '0 0 24px 0', opacity: 0.08,
+        }} />
+
+        <img
+          src={womenAriseBadge}
+          alt="Women Arise With Power — RedFlaq Partner Movement"
+          style={{
+            display: 'block',
+            width: '100%',
+            maxWidth: 360,
+            height: 'auto',
+            margin: '0 auto',
+            filter: 'drop-shadow(0 8px 24px rgba(124, 58, 237, 0.12))',
+          }}
+        />
+
+        {/* Subtle tagline below badge */}
+        <p style={{
+          fontFamily: "'JetBrains Mono', monospace",
+          fontSize: 10,
+          letterSpacing: '0.15em',
+          textTransform: 'uppercase',
+          color: '#7C3AED',
+          textAlign: 'center',
+          marginTop: 20,
+          marginBottom: 0,
+          opacity: 0.7,
+        }}>
+          Empowering communities · One check at a time
+        </p>
+      </div>
 
       {/* Benefits */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 24, marginBottom: 48 }}>

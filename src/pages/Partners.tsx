@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
 import { Users, Shield, BarChart3, Code } from "lucide-react";
-import womenAriseBadge from "@/assets/women-arise-power.jpg";
+import womenAriseBadge from "@/assets/women-arise-power.png";
 
 const benefits = [
   { icon: <Shield size={24} style={{ color: "#7C3AED" }} />, title: "Protect your community", desc: "Give your members access to affordable, fast public-record safety checks." },

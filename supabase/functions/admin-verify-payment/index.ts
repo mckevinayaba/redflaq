@@ -62,7 +62,7 @@ serve(async (req) => {
 
       // Send email notification
       if (payment?.email) {
-        const searchUrl = `https://redflaq.co.za/search-form?payment_id=${payment_id}`;
+        const searchUrl = `https://redflaq.com/search-form?payment_id=${payment_id}`;
         try {
           await supabase.functions.invoke('send-email', {
             body: {
@@ -98,7 +98,7 @@ serve(async (req) => {
                   
                   <hr style="border: none; border-top: 1px solid #E5E7EB; margin: 32px 0;" />
                   <p style="color: #999; font-size: 11px; text-align: center;">
-                    RedFlaq · South African Background Checks · <a href="https://redflaq.co.za/privacy" style="color: #999;">Privacy Policy</a> · <a href="https://redflaq.co.za/terms" style="color: #999;">Terms</a>
+                    RedFlaq · South African Background Checks · <a href="https://redflaq.com/privacy" style="color: #999;">Privacy Policy</a> · <a href="https://redflaq.com/terms" style="color: #999;">Terms</a>
                   </p>
                 </div>
               `,

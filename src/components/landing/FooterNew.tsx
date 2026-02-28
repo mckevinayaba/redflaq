@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import EmergencyBanner from "@/components/EmergencyBanner";
-import RedFlaqLogo from "@/components/RedFlaqLogo";
+import redflaqLogo from "@/assets/redflaq-logo-official.png";
 
 const FooterNew = () => {
   const productLinks = [
@@ -26,7 +26,7 @@ const FooterNew = () => {
           {/* Column 1: Brand */}
           <div>
             <div className="flex items-center mb-4">
-              <RedFlaqLogo height={30} inverted />
+              <img src={redflaqLogo} alt="RedFlaq" style={{ height: 36, width: 'auto', display: 'block', filter: 'brightness(0) invert(1)' }} />
             </div>
             <p className="text-sm">
               Making South Africa safer, one informed decision at a time.

@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useToast } from "@/hooks/use-toast";
 import { User, LayoutDashboard, LogOut, Settings, Shield } from "lucide-react";
-import RedFlaqLogo from "@/components/RedFlaqLogo";
+import redflaqLogo from "@/assets/redflaq-logo-official.png";
 
 
 export default function AppHeader() {
@@ -36,7 +36,7 @@ export default function AppHeader() {
     <header className="h-14 border-b border-border bg-card flex items-center justify-between px-4 lg:px-6 sticky top-0" style={{ zIndex: 9999, visibility: 'visible' as const, opacity: 1, backgroundColor: '#FFFFFF', WebkitBackfaceVisibility: 'hidden' as const, transform: 'translateZ(0)', WebkitTransform: 'translateZ(0)' }}>
       {/* Logo – opens homepage in new tab */}
       <a href="/" target="_blank" rel="noopener noreferrer" className="flex items-center">
-        <RedFlaqLogo height={30} />
+        <img src={redflaqLogo} alt="RedFlaq" style={{ height: 36, width: 'auto', display: 'block' }} />
       </a>
 
       {/* Avatar dropdown */}

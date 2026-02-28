@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { PaymentModal } from "@/components/PaymentModal";
-import RedFlaqLogo from "@/components/RedFlaqLogo";
+import redflaqLogo from "@/assets/redflaq-logo-official.png";
 
 const NavbarHonest = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -30,7 +30,7 @@ const NavbarHonest = () => {
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <a href="/" className="flex-shrink-0 flex items-center">
-              <RedFlaqLogo height={36} />
+              <img src={redflaqLogo} alt="RedFlaq" className="h-14 w-auto" />
             </a>
 
             {/* Desktop Navigation */}

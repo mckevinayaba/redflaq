@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Mail, ArrowLeft, Shield, Sparkles } from "lucide-react";
-import RedFlaqLogo from "@/components/RedFlaqLogo";
+import redflaqLogo from "@/assets/redflaq-logo-official.png";
 
 
 export default function Signup() {
@@ -223,7 +223,7 @@ export default function Signup() {
       <div style={{ maxWidth: 480, width: '100%' }}>
         {/* Logo */}
         <Link to="/" className="flex items-center mb-8 justify-center">
-          <RedFlaqLogo height={44} />
+          <img src={redflaqLogo} alt="RedFlaq" style={{ height: 56, width: 'auto', display: 'block' }} />
         </Link>
 
         <div style={{ background: 'white', border: '1.5px solid #D6D3CD', padding: 40 }}>

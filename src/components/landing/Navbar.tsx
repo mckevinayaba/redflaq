@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { PaymentModal } from "@/components/PaymentModal";
-import RedFlaqLogo from "@/components/RedFlaqLogo";
+import redflaqLogo from "@/assets/redflaq-logo-official.png";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -22,7 +22,7 @@ const Navbar = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex-shrink-0 flex items-center">
-            <RedFlaqLogo height={36} />
+            <img src={redflaqLogo} alt="RedFlaq" className="h-14 w-auto" />
           </Link>
 
           {/* Desktop Navigation */}

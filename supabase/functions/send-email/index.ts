@@ -50,7 +50,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'RedFlaq <noreply@redflaq.co.za>',
+        from: 'RedFlaq <noreply@redflaq.com>',
         to: [to],
         subject,
         html,

@@ -1,13 +1,26 @@
 
 
 ## Problem
-`window.location.href` redirect to `checkout.stripe.com` is blocked by the preview iframe sandbox. The Stripe API call succeeds (200, valid URL returned) but the browser can't navigate to the external domain inside the iframe.
+
+The `stripe-webhook` edge function processes successful payments (updates `manual_payments`, creates `purchases` record) but **never sends a confirmation email** to the customer. That's why you've paid 3 times and received nothing.
+
+The "processing" email was added to `multi-parameter-search` (which runs when a search starts), not when payment completes. There is no payment confirmation email in the Stripe flow at all.
 
 ## Fix
-Change the Stripe redirect in `PaymentModal.tsx` from `window.location.href` to `window.open(url, '_blank')` so checkout opens in a new tab. This works in both preview and production.
+
+Add a payment confirmation email to `supabase/functions/stripe-webhook/index.ts` that fires after `checkout.session.completed` is processed successfully.
 
 ### Steps
-1. In `src/components/PaymentModal.tsx`, replace `window.location.href = data.url` (Stripe) with `window.open(data.url, '_blank')`
-2. Do the same for the PayFast redirect (`window.location.href = data.redirect_url`)
-3. Optionally show a toast telling the user checkout opened in a new tab
+
+1. **In `stripe-webhook/index.ts`**, after the DB inserts (around line 91), invoke `send-email` with the `admin_password` to send a branded confirmation email to the customer:
+   - Subject: "Payment Confirmed — Your RedFlaq Safety Check Credits"
+   - HTML template showing: amount paid, credits received, package type, and a link to start a search
+   - Uses `Deno.env.get('ADMIN_PASSWORD')` for the `admin_password` field
+
+2. **Redeploy** the `stripe-webhook` edge function.
+
+### Email content
+- From: `hello@redflaq.com` (handled by `send-email`)
+- To: customer email from session metadata
+- Includes credits count, expiry info, and a CTA to start searching at `https://redflaq.com/search-form?payment_id={paymentId}`
 

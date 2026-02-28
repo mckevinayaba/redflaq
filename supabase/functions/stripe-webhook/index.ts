@@ -88,6 +88,61 @@ serve(async (req) => {
         },
       });
 
+      // Send confirmation email
+      if (email) {
+        const packageLabels: Record<string, string> = {
+          single: "Single Safety Check",
+          triple: "Safety Pack (3 Checks)",
+          five: "Family & Friends Pack (5 Checks)",
+        };
+        const packageLabel = packageLabels[packageType] || packageType;
+        const expiryLabel = expiresAt.toLocaleDateString("en-ZA", { year: "numeric", month: "long", day: "numeric" });
+
+        const emailHtml = `
+          <div style="font-family:Arial,sans-serif;max-width:560px;margin:0 auto;padding:24px;background:#ffffff;">
+            <div style="text-align:center;margin-bottom:24px;">
+              <h1 style="color:#dc2626;font-size:24px;margin:0;">RedFlaq</h1>
+            </div>
+            <h2 style="color:#111;font-size:20px;">Payment Confirmed ✅</h2>
+            <p style="color:#333;font-size:15px;line-height:1.6;">
+              Thank you for your purchase! Here's your receipt:
+            </p>
+            <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+              <tr><td style="padding:8px 0;color:#666;">Package</td><td style="padding:8px 0;font-weight:bold;text-align:right;">${packageLabel}</td></tr>
+              <tr><td style="padding:8px 0;color:#666;">Amount Paid</td><td style="padding:8px 0;font-weight:bold;text-align:right;">R${amountTotal.toFixed(2)}</td></tr>
+              <tr><td style="padding:8px 0;color:#666;">Credits</td><td style="padding:8px 0;font-weight:bold;text-align:right;">${credits}</td></tr>
+              <tr><td style="padding:8px 0;color:#666;">Valid Until</td><td style="padding:8px 0;font-weight:bold;text-align:right;">${expiryLabel}</td></tr>
+            </table>
+            <div style="text-align:center;margin:24px 0;">
+              <a href="https://redflaq.com/search-form?payment_id=${paymentId}" style="display:inline-block;background:#dc2626;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:bold;font-size:16px;">
+                Start Your Safety Check →
+              </a>
+            </div>
+            <p style="color:#999;font-size:12px;text-align:center;margin-top:32px;">
+              Payment ID: ${paymentId}<br/>
+              If you have questions, reply to this email or contact hello@redflaq.com
+            </p>
+          </div>
+        `;
+
+        try {
+          const emailRes = await fetch(`${supabaseUrl}/functions/v1/send-email`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              to: email,
+              subject: "Payment Confirmed — Your RedFlaq Safety Check Credits",
+              html: emailHtml,
+              admin_password: Deno.env.get("ADMIN_PASSWORD"),
+            }),
+          });
+          const emailData = await emailRes.json();
+          console.log("Confirmation email result:", emailData);
+        } catch (emailErr) {
+          console.error("Failed to send confirmation email:", emailErr);
+        }
+      }
+
       console.log("Stripe webhook processed for:", paymentId);
     }
 

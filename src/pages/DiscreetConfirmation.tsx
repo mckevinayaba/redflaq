@@ -3,6 +3,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
+import { Lock, Mail, Eye, EyeOff, ArrowLeft, Phone, RefreshCw } from "lucide-react";
 
 const DiscreetConfirmation = () => {
   const email = new URLSearchParams(window.location.search).get("email") || "your email";
@@ -12,13 +13,11 @@ const DiscreetConfirmation = () => {
   const [secondsAgo, setSecondsAgo] = useState(0);
   const [resending, setResending] = useState(false);
 
-  // Timer
   useEffect(() => {
     const interval = setInterval(() => setSecondsAgo((s) => s + 1), 1000);
     return () => clearInterval(interval);
   }, []);
 
-  // Auto-hide from dashboard if checked
   useEffect(() => {
     if (hideDashboard && searchId) {
       supabase
@@ -42,7 +41,6 @@ const DiscreetConfirmation = () => {
   const handleResend = async () => {
     setResending(true);
     try {
-      // Trigger resend by calling the edge function
       const { error } = await supabase.functions.invoke("multi-parameter-search", {
         body: {
           resend_email: true,
@@ -66,37 +64,60 @@ const DiscreetConfirmation = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center px-6">
-      <div className="max-w-lg w-full text-center space-y-8">
-        <div className="w-16 h-16 mx-auto rounded-full bg-primary/10 flex items-center justify-center">
-          <span className="text-3xl">🔒</span>
+    <div className="min-h-screen bg-background flex items-center justify-center px-4 py-12">
+      <div className="max-w-md w-full space-y-10">
+        
+        {/* Lock Icon — elegant circle */}
+        <div className="flex justify-center">
+          <div className="relative">
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary/15 to-primary/5 flex items-center justify-center border border-primary/10 shadow-[0_8px_32px_-8px_hsl(var(--primary)/0.2)]">
+              <Lock className="w-8 h-8 text-primary" strokeWidth={1.8} />
+            </div>
+            {/* Subtle pulse ring */}
+            <div className="absolute inset-0 rounded-full border border-primary/10 animate-ping opacity-20" style={{ animationDuration: '3s' }} />
+          </div>
         </div>
 
-        <h1 className="font-heading text-2xl sm:text-3xl text-foreground leading-snug">
-          Your results have been sent privately to{" "}
-          <span className="text-primary">{email}</span>.
-        </h1>
-
-        <p className="font-body text-base text-muted-foreground leading-relaxed">
-          Check your inbox when you're ready — there's no rush.
-        </p>
-
-        {/* Email sent timer */}
-        <div className="bg-muted/30 border border-border rounded-lg px-4 py-3 inline-flex flex-col items-center gap-2">
-          <p className="font-body text-sm text-muted-foreground">
-            📧 Email sent {formatTime(secondsAgo)}
+        {/* Heading */}
+        <div className="text-center space-y-4">
+          <h1 className="font-heading text-2xl sm:text-3xl text-foreground leading-tight tracking-tight">
+            Your results have been sent<br />privately to{" "}
+            <span className="text-primary font-semibold">{email}</span>.
+          </h1>
+          <p className="font-body text-base text-muted-foreground leading-relaxed max-w-sm mx-auto">
+            Check your inbox when you're ready — there's no rush.
           </p>
-          <button
-            onClick={handleResend}
-            disabled={resending}
-            className="font-body text-sm text-primary hover:underline disabled:opacity-50"
-          >
-            {resending ? "Resending…" : "Didn't receive it? Resend email"}
-          </button>
         </div>
 
-        {/* Hide from dashboard option */}
-        <div className="bg-muted/30 border border-border rounded-lg p-4 text-left">
+        {/* Email Status Card */}
+        <div className="bg-card border border-border rounded-2xl p-5 shadow-sm">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+              <Mail className="w-4 h-4 text-primary" />
+            </div>
+            <div>
+              <p className="font-body text-sm font-medium text-foreground">
+                Email delivered
+              </p>
+              <p className="font-body text-xs text-muted-foreground">
+                {formatTime(secondsAgo)}
+              </p>
+            </div>
+          </div>
+          <div className="border-t border-border pt-3">
+            <button
+              onClick={handleResend}
+              disabled={resending}
+              className="flex items-center gap-2 font-body text-sm text-primary hover:text-primary/80 transition-colors disabled:opacity-50 group"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${resending ? 'animate-spin' : 'group-hover:rotate-45 transition-transform'}`} />
+              {resending ? "Resending…" : "Didn't receive it? Resend"}
+            </button>
+          </div>
+        </div>
+
+        {/* Hide from Dashboard Card */}
+        <div className="bg-card border border-border rounded-2xl p-5 shadow-sm">
           <div className="flex items-start gap-3">
             <Checkbox
               id="hide-dashboard"
@@ -108,35 +129,64 @@ const DiscreetConfirmation = () => {
                   handleUnhide();
                 }
               }}
-              className="mt-0.5"
+              className="mt-0.5 border-primary/40 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
             />
-            <label htmlFor="hide-dashboard" className="cursor-pointer">
-              <p className="font-body text-sm text-foreground font-medium">
-                Hide this check from my dashboard
-              </p>
-              <p className="font-body text-xs text-muted-foreground mt-1">
+            <label htmlFor="hide-dashboard" className="cursor-pointer flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                {hideDashboard ? (
+                  <EyeOff className="w-4 h-4 text-muted-foreground" />
+                ) : (
+                  <Eye className="w-4 h-4 text-muted-foreground" />
+                )}
+                <p className="font-body text-sm text-foreground font-medium">
+                  Hide this check from my dashboard
+                </p>
+              </div>
+              <p className="font-body text-xs text-muted-foreground leading-relaxed pl-6">
                 You can still access the report from the email link
               </p>
             </label>
           </div>
         </div>
 
-        <hr className="border-border" />
+        {/* Divider */}
+        <div className="flex items-center gap-3">
+          <div className="h-px flex-1 bg-border" />
+          <span className="text-xs text-muted-foreground font-body">support</span>
+          <div className="h-px flex-1 bg-border" />
+        </div>
 
-        <p className="font-body text-sm text-muted-foreground">
-          🆘 If you need support right now, call GBV Command Centre:{" "}
-          <a href="tel:0800428428" className="font-bold text-foreground hover:underline">
-            0800 428 428
-          </a>{" "}
-          — Free · 24/7
-        </p>
+        {/* GBV Support */}
+        <div className="bg-destructive/5 border border-destructive/15 rounded-2xl p-5">
+          <div className="flex items-start gap-3">
+            <div className="w-9 h-9 rounded-full bg-destructive/10 flex items-center justify-center shrink-0 mt-0.5">
+              <Phone className="w-4 h-4 text-destructive" />
+            </div>
+            <div>
+              <p className="font-body text-sm text-foreground leading-relaxed">
+                If you need support right now, call the <strong>GBV Command Centre</strong>:
+              </p>
+              <a
+                href="tel:0800428428"
+                className="inline-block mt-2 font-heading text-lg font-bold text-foreground hover:text-primary transition-colors tracking-wide"
+              >
+                0800 428 428
+              </a>
+              <p className="font-body text-xs text-muted-foreground mt-1">Free · 24/7 · Confidential</p>
+            </div>
+          </div>
+        </div>
 
-        <a
-          href="/"
-          className="inline-block font-body text-sm text-muted-foreground hover:text-primary transition-colors"
-        >
-          ← Back to redflaq.com
-        </a>
+        {/* Back link */}
+        <div className="text-center pt-2">
+          <a
+            href="/"
+            className="inline-flex items-center gap-2 font-body text-sm text-muted-foreground hover:text-primary transition-colors group"
+          >
+            <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
+            Back to redflaq.com
+          </a>
+        </div>
       </div>
     </div>
   );

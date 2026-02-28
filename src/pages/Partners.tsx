@@ -40,7 +40,7 @@ const Partners = () => (
       <div style={{
         position: 'relative',
         margin: '0 auto 56px',
-        maxWidth: 520,
+        maxWidth: 260,
         background: 'linear-gradient(135deg, #FAF5FF 0%, #EDE9FE 50%, #F5F3FF 100%)',
         borderRadius: 24,
         padding: '40px 32px 32px',
@@ -66,7 +66,7 @@ const Partners = () => (
           style={{
             display: 'block',
             width: '100%',
-            maxWidth: 360,
+            maxWidth: 180,
             height: 'auto',
             margin: '0 auto',
             filter: 'drop-shadow(0 8px 24px rgba(124, 58, 237, 0.12))',

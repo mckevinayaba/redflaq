@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import RedFlaqLogo from "@/components/RedFlaqLogo";
 import { Menu, X, LayoutDashboard, Settings, LogOut, Share2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -96,11 +97,8 @@ const NavbarPlinq = () => {
     >
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', height: '100%' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '100%' }}>
-          <a href="/" style={{ display: 'flex', alignItems: 'center', gap: 0, textDecoration: 'none' }}>
-            <div style={{ width: 28, height: 28, background: '#7C3AED', borderRadius: 4, WebkitClipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'visible' }}>
-              <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 900, fontSize: 15, color: '#FFFFFF', lineHeight: 1 }}>R</span>
-            </div>
-            <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 18, letterSpacing: '0.1em', marginLeft: 1 }}><span style={{ color: '#7C3AED' }}>ed</span><span style={{ color: '#2D2235' }}>Flaq</span></span>
+          <a href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
+            <RedFlaqLogo />
           </a>
 
           {/* Desktop nav links */}

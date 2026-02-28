@@ -1,0 +1,48 @@
+import advocacyBadge from "@/assets/redflaq-advocacy-badge.png";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
+
+const AdvocacySection = () => {
+  const { guardedAction } = useAuthGuard();
+
+  return (
+    <section style={{ background: '#FAFAFA', padding: '56px 20px', borderTop: '1px solid #E5E2DD' }}>
+      <div style={{ maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
+        <img
+          src={advocacyBadge}
+          alt="RedFlaq – Standing for Women's Safety & GBV Prevention"
+          style={{ maxWidth: 280, height: 'auto', margin: '0 auto 28px' }}
+        />
+        <p style={{
+          fontFamily: "'Syne', sans-serif",
+          fontSize: 14,
+          lineHeight: 1.7,
+          color: '#78716C',
+          marginBottom: 28,
+        }}>
+          RedFlaq was built because safety should never be a privilege. Every check you run helps build a South Africa where women have access to the information they deserve.
+        </p>
+        <button
+          onClick={() => guardedAction()}
+          style={{
+            fontFamily: "'Syne', sans-serif",
+            fontWeight: 700,
+            fontSize: 15,
+            background: '#7C3AED',
+            color: '#fff',
+            border: 'none',
+            borderRadius: 8,
+            padding: '14px 32px',
+            cursor: 'pointer',
+            transition: 'background 0.2s',
+          }}
+          onMouseEnter={e => (e.currentTarget.style.background = '#6D28D9')}
+          onMouseLeave={e => (e.currentTarget.style.background = '#7C3AED')}
+        >
+          Verify Someone Now — R99
+        </button>
+      </div>
+    </section>
+  );
+};
+
+export default AdvocacySection;

@@ -22,7 +22,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
             <Shield className="h-8 w-8 text-purple-600" />
-            <span className="text-xl font-bold"><span style={{ color: '#7C3AED' }}>Red</span><span className="text-gray-900">Flaq</span></span>
+            <span className="text-xl font-bold"><span style={{ color: '#7C3AED' }}>Red</span><span className="text-gray-900">Fla<span style={{ color: '#DC2626' }}>q</span></span></span>
           </Link>
 
           {/* Desktop Navigation */}

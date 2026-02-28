@@ -32,7 +32,7 @@ const NavbarHonest = () => {
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <Shield className="h-5 w-5 text-primary-foreground" />
               </div>
-              <span className="font-heading font-bold text-xl"><span style={{ color: '#7C3AED' }}>Red</span><span className="text-foreground">Flaq</span></span>
+              <span className="font-heading font-bold text-xl"><span style={{ color: '#7C3AED' }}>Red</span><span className="text-foreground">Fla<span style={{ color: '#DC2626' }}>q</span></span></span>
             </a>
 
             {/* Desktop Navigation */}

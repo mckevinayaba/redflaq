@@ -3,7 +3,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "sonner";
-import { Lock, Mail, Eye, EyeOff, ArrowLeft, Phone, RefreshCw } from "lucide-react";
+import { Mail, Eye, EyeOff, ArrowLeft, Phone, RefreshCw } from "lucide-react";
+import redflaqLogo from "@/assets/redflaq-logo-official.png";
 
 const DiscreetConfirmation = () => {
   const email = new URLSearchParams(window.location.search).get("email") || "your email";
@@ -65,26 +66,20 @@ const DiscreetConfirmation = () => {
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4 py-12">
-      <div className="max-w-md w-full space-y-10">
+      <div className="max-w-sm w-full space-y-7">
         
-        {/* Lock Icon — elegant circle */}
+        {/* Logo */}
         <div className="flex justify-center">
-          <div className="relative">
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary/15 to-primary/5 flex items-center justify-center border border-primary/10 shadow-[0_8px_32px_-8px_hsl(var(--primary)/0.2)]">
-              <Lock className="w-8 h-8 text-primary" strokeWidth={1.8} />
-            </div>
-            {/* Subtle pulse ring */}
-            <div className="absolute inset-0 rounded-full border border-primary/10 animate-ping opacity-20" style={{ animationDuration: '3s' }} />
-          </div>
+          <img src={redflaqLogo} alt="RedFlaq" className="h-10" loading="eager" />
         </div>
 
         {/* Heading */}
-        <div className="text-center space-y-4">
-          <h1 className="font-heading text-2xl sm:text-3xl text-foreground leading-tight tracking-tight">
-            Your results have been sent<br />privately to{" "}
+        <div className="text-center space-y-3">
+          <h1 className="font-heading text-lg sm:text-xl text-foreground leading-snug tracking-tight">
+            Your results have been sent privately to{" "}
             <span className="text-primary font-semibold">{email}</span>.
           </h1>
-          <p className="font-body text-base text-muted-foreground leading-relaxed max-w-sm mx-auto">
+          <p className="font-body text-sm text-muted-foreground leading-relaxed">
             Check your inbox when you're ready — there's no rush.
           </p>
         </div>
@@ -117,7 +112,7 @@ const DiscreetConfirmation = () => {
         </div>
 
         {/* Hide from Dashboard Card */}
-        <div className="bg-card border border-border rounded-2xl p-5 shadow-sm">
+        <div className="bg-card border border-border rounded-2xl p-4 shadow-sm">
           <div className="flex items-start gap-3">
             <Checkbox
               id="hide-dashboard"
@@ -157,22 +152,22 @@ const DiscreetConfirmation = () => {
         </div>
 
         {/* GBV Support */}
-        <div className="bg-destructive/5 border border-destructive/15 rounded-2xl p-5">
+        <div className="bg-destructive/5 border border-destructive/15 rounded-2xl p-4">
           <div className="flex items-start gap-3">
             <div className="w-9 h-9 rounded-full bg-destructive/10 flex items-center justify-center shrink-0 mt-0.5">
               <Phone className="w-4 h-4 text-destructive" />
             </div>
             <div>
-              <p className="font-body text-sm text-foreground leading-relaxed">
+              <p className="font-body text-xs text-foreground leading-relaxed">
                 If you need support right now, call the <strong>GBV Command Centre</strong>:
               </p>
               <a
                 href="tel:0800428428"
-                className="inline-block mt-2 font-heading text-lg font-bold text-foreground hover:text-primary transition-colors tracking-wide"
+                className="inline-block mt-1.5 font-heading text-base font-bold text-foreground hover:text-primary transition-colors tracking-wide"
               >
                 0800 428 428
               </a>
-              <p className="font-body text-xs text-muted-foreground mt-1">Free · 24/7 · Confidential</p>
+              <p className="font-body text-[11px] text-muted-foreground mt-0.5">Free · 24/7 · Confidential</p>
             </div>
           </div>
         </div>

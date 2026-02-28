@@ -1,49 +1,26 @@
 
+## Logo "q" Color Change
 
-## Root Cause
+The RedFlaq wordmark appears in **10 files** across the codebase. In each case, the word "Flaq" is rendered as a single `<span>`. The change is to split "Flaq" into "Fla" + "q", where only the "q" gets `color: '#DC2626'` (red).
 
-All RLS policies on `purchases` and `manual_payments` are set as **RESTRICTIVE** (`Permissive: No`). Restrictive policies require **ALL** policies to pass simultaneously. A regular user can never satisfy both "Users can view own" AND "Staff can view all" at the same time, so they get 403.
+### Files to update
 
-The same issue affects the INSERT policy on `manual_payments`.
+There are two wordmark patterns used:
 
-## Fix
+**Pattern A** — `Red` + `Flaq` (used in navbars/footers with Shield icon):
+1. `src/components/landing/Navbar.tsx` (line 25)
+2. `src/components/landing/NavbarHonest.tsx` (line 35)
+3. `src/components/landing/FooterNew.tsx` (line 30)
+4. `src/components/landing/FooterHonest.tsx` (line 19)
+5. `src/components/Footer.tsx` (line 14)
 
-Drop and recreate the SELECT policies on both tables (and the INSERT policy on `manual_payments`) as **PERMISSIVE** policies instead of restrictive ones. The SQL logic stays identical — only the policy type changes.
+**Pattern B** — `R` icon + `ed` + `Flaq` (used in Plinq/dashboard/auth screens):
+6. `src/components/landing/NavbarPlinq.tsx` (line 103)
+7. `src/components/landing/FooterPlinq.tsx` (line 41)
+8. `src/components/dashboard/AppHeader.tsx` (line 40)
+9. `src/pages/Signup.tsx` (line 227)
+10. `src/pages/VerifyEmail.tsx` (line 68)
 
-### Migration SQL
+### Change applied to each
 
-```sql
--- Fix purchases SELECT policies
-DROP POLICY "Users can view own purchases" ON public.purchases;
-DROP POLICY "Staff can view all purchases" ON public.purchases;
-
-CREATE POLICY "Users can view own purchases" ON public.purchases
-  FOR SELECT TO authenticated
-  USING ((email)::text = (SELECT email FROM auth.users WHERE id = auth.uid())::text);
-
-CREATE POLICY "Staff can view all purchases" ON public.purchases
-  FOR SELECT TO authenticated
-  USING (has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'owner'::app_role) OR has_role(auth.uid(), 'support'::app_role));
-
--- Fix manual_payments SELECT policies
-DROP POLICY "Users can view own payments" ON public.manual_payments;
-DROP POLICY "Staff can view all payments" ON public.manual_payments;
-
-CREATE POLICY "Users can view own payments" ON public.manual_payments
-  FOR SELECT TO authenticated
-  USING ((email)::text = (SELECT email FROM auth.users WHERE id = auth.uid())::text);
-
-CREATE POLICY "Staff can view all payments" ON public.manual_payments
-  FOR SELECT TO authenticated
-  USING (has_role(auth.uid(), 'admin'::app_role) OR has_role(auth.uid(), 'owner'::app_role) OR has_role(auth.uid(), 'support'::app_role));
-
--- Fix manual_payments INSERT policy
-DROP POLICY "Authenticated users can insert own payments" ON public.manual_payments;
-
-CREATE POLICY "Authenticated users can insert own payments" ON public.manual_payments
-  FOR INSERT TO authenticated
-  WITH CHECK ((email)::text = (SELECT email FROM auth.users WHERE id = auth.uid())::text);
-```
-
-No code changes needed — `useAuthGuard` queries are correct, they're just being blocked by the restrictive policy type.
-
+Every instance of `>Flaq</span>` becomes `>Fla<span style={{ color: '#DC2626' }}>q</span></span>` — inserting a nested red `<span>` around just the letter "q". Nothing else changes: no font, weight, size, spacing, or icon modifications.

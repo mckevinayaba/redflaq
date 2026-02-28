@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Mail, ArrowRight } from "lucide-react";
-import RedFlaqLogo from "@/components/RedFlaqLogo";
+import redflaqLogo from "@/assets/redflaq-logo-official.png";
 
 export default function VerifyEmail() {
   const [resending, setResending] = useState(false);
@@ -63,7 +63,7 @@ export default function VerifyEmail() {
     <div style={{ background: '#F7F4F0', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
       <div style={{ maxWidth: 480, width: '100%' }}>
         <Link to="/" className="flex items-center mb-8 justify-center">
-          <RedFlaqLogo height={44} />
+          <img src={redflaqLogo} alt="RedFlaq" style={{ height: 56, width: 'auto', display: 'block' }} />
         </Link>
 
         <div style={{ background: 'white', border: '1.5px solid #D6D3CD', padding: 40, textAlign: 'center' }}>

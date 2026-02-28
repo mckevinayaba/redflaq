@@ -1,38 +1,34 @@
 
 
-## Replace Text Wordmark with Uploaded Logo Image
+## Why the PWA install prompt isn't showing
 
-The uploaded image (`RedFlaq_logo_1_official-2.png`) will replace the current Shield icon + text wordmark in all 10 files. The previous attempt failed likely due to image format/transparency issues. This time the image will be copied fresh and rendered at the same visual size as the current text logo.
+The PWA configuration via `vite-plugin-pwa` generates the manifest and service worker correctly, but there are two issues:
 
-### Steps
+1. **No install prompt UI**: The browser's `beforeinstallprompt` event fires silently. Without code to intercept it and show a custom install banner/button, users only see the tiny browser-native install icon (easily missed).
 
-1. **Copy the uploaded image** to `src/assets/redflaq-logo-official.png`
+2. **Preview URL limitation**: PWA install only works on HTTPS production URLs (e.g. `redflaq.lovable.app` or `redflaq.com`), not on preview URLs. The app must be published first.
 
-2. **Update all 10 files** to replace the Shield icon + text spans with an `<img>` tag:
-   - Import: `import redflaqLogo from "@/assets/redflaq-logo-official.png"`
-   - Remove `Shield` icon import (where no longer needed)
-   - Replace the logo markup with:
-     ```tsx
-     <img src={redflaqLogo} alt="RedFlaq" 
-       style={{ height: 36, width: 'auto', display: 'block' }} />
-     ```
-   - Desktop navbars: `height: 36px` (matches the visual weight of the current 22px text + icon)
-   - Mobile navbars: `height: 30px`
-   - Footers: `height: 30px`
-   - Signup/VerifyEmail: `height: 44px`
-   - AppHeader: `height: 30px`
+## Plan
 
-3. **Files to update:**
-   - `src/components/landing/NavbarPlinq.tsx`
-   - `src/components/landing/Navbar.tsx`
-   - `src/components/landing/NavbarHonest.tsx`
-   - `src/components/dashboard/AppHeader.tsx`
-   - `src/pages/Signup.tsx`
-   - `src/pages/VerifyEmail.tsx`
-   - `src/components/Footer.tsx`
-   - `src/components/landing/FooterNew.tsx`
-   - `src/components/landing/FooterHonest.tsx`
-   - `src/components/landing/FooterPlinq.tsx`
+### 1. Create a PWA install prompt hook (`src/hooks/usePWAInstall.ts`)
+- Listen for `beforeinstallprompt` event, store the deferred prompt
+- Detect if already installed via `display-mode: standalone`
+- Detect iOS (which doesn't fire `beforeinstallprompt`) and show manual instructions
+- Expose: `canInstall`, `isIOS`, `isInstalled`, `promptInstall()`
 
-4. **Footer consideration:** The footers have dark purple backgrounds — the logo text uses dark colors that may not be visible. Will add a CSS filter (`brightness(0) invert(1)`) or keep the text wordmark specifically for dark-background footers if needed.
+### 2. Create an install banner component (`src/components/PWAInstallBanner.tsx`)
+- Sticky bottom banner that appears when `canInstall` is true (Android/desktop Chrome)
+- On iOS: shows "Tap Share → Add to Home Screen" instructions
+- Dismissible (stores dismissal in localStorage for 7 days)
+- Purple branded styling with app icon and "Install RedFlaq" CTA button
+- Auto-hides if already installed
+
+### 3. Add the banner to the Index page and App layout
+- Import and render `<PWAInstallBanner />` in `src/pages/Index.tsx` (and optionally in `App.tsx` so it appears on all pages)
+
+### 4. No changes needed to vite.config.ts or index.html
+- The existing PWA manifest and service worker config are correct
+
+### Technical note
+- The install prompt will only appear on the **published** production URL over HTTPS. It will not work on the Lovable preview URL. After implementing, you'll need to publish the app and test on `redflaq.lovable.app` or `redflaq.com`.
 

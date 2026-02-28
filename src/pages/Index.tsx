@@ -19,6 +19,7 @@ import FAQPlinq from "@/components/landing/FAQPlinq";
 import FinalCTAPlinq from "@/components/landing/FinalCTAPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
 import ShareSection from "@/components/landing/ShareSection";
+import { PWAInstallBanner } from "@/components/PWAInstallBanner";
 
 const Index = () => {
   // Capture referral param
@@ -67,6 +68,7 @@ const Index = () => {
       <FinalCTAPlinq />
       <ShareSection />
       <FooterPlinq />
+      <PWAInstallBanner />
     </div>
   );
 };

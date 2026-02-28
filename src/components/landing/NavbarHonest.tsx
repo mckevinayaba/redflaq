@@ -30,7 +30,7 @@ const NavbarHonest = () => {
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <a href="/" className="flex-shrink-0 flex items-center">
-              <img src={redflaqLogo} alt="RedFlaq" className="h-14 w-auto" />
+              <img src={redflaqLogo} alt="RedFlaq - Instant Criminal Record Verification" className="h-11 md:h-14 w-auto" loading="eager" fetchPriority="high" />
             </a>
 
             {/* Desktop Navigation */}

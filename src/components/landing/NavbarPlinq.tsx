@@ -98,7 +98,7 @@ const NavbarPlinq = () => {
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', height: '100%' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '100%' }}>
           <a href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-            <img src={redflaqLogo} alt="RedFlaq - Instant Criminal Record Verification" style={{ height: isMobile ? 48 : 56, width: 'auto', display: 'block', flexShrink: 0 }} />
+            <img src={redflaqLogo} alt="RedFlaq - Instant Criminal Record Verification" loading="eager" fetchPriority="high" style={{ height: isMobile ? 44 : 56, width: 'auto', display: 'block', flexShrink: 0 }} />
           </a>
 
           {/* Desktop nav links */}

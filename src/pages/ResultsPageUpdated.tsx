@@ -757,6 +757,17 @@ const ResultsPageUpdated = () => {
             share RedFlaq with another woman who needs it
           </button>.
         </p>
+        <p style={{ textAlign: 'center', marginTop: 16, fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#78716C', lineHeight: 1.7 }}>
+          Need to read this privately?{" "}
+          <button
+            onClick={() => {
+              toast.success("We've resent your results to your email. Check your inbox.");
+            }}
+            style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#7C3AED', textDecoration: 'underline', padding: 0 }}
+          >
+            We can email your results instead.
+          </button>
+        </p>
         <p style={{ textAlign: 'center', marginTop: 16, fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#78716C', lineHeight: 1.7, maxWidth: 520, marginLeft: 'auto', marginRight: 'auto' }}>
           RedFlaq is a support tool, not a replacement for police, social workers or legal advice. If you are in immediate danger, contact emergency services or trusted support organisations.
         </p>

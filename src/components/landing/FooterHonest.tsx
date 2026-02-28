@@ -16,7 +16,7 @@ const FooterHonest = () => {
               <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
                 <Shield className="h-5 w-5 text-primary-foreground" />
               </div>
-              <span className="font-heading font-bold text-xl"><span style={{ color: '#A78BFA' }}>Red</span><span className="text-background">Flaq</span></span>
+              <span className="font-heading font-bold text-xl"><span style={{ color: '#A78BFA' }}>Red</span><span className="text-background">Fla<span style={{ color: '#DC2626' }}>q</span></span></span>
             </a>
             <p className="text-background/60 text-sm">
               Making South Africa safer, one informed decision at a time.

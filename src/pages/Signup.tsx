@@ -224,7 +224,7 @@ export default function Signup() {
           <div style={{ width: 28, height: 28, background: '#7C3AED', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 900, fontSize: 15, color: '#FFFFFF', lineHeight: 1 }}>R</span>
           </div>
-          <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 18, letterSpacing: '0.1em', marginLeft: 1 }}><span style={{ color: '#7C3AED' }}>ed</span><span style={{ color: '#2D2235' }}>Flaq</span></span>
+          <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 18, letterSpacing: '0.1em', marginLeft: 1 }}><span style={{ color: '#7C3AED' }}>ed</span><span style={{ color: '#2D2235' }}>Fla<span style={{ color: '#DC2626' }}>q</span></span></span>
         </Link>
 
         <div style={{ background: 'white', border: '1.5px solid #D6D3CD', padding: 40 }}>

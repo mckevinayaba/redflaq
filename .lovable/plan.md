@@ -1,34 +1,27 @@
 
 
-## Why the PWA install prompt isn't showing
+## Why You're Not Receiving Emails
 
-The PWA configuration via `vite-plugin-pwa` generates the manifest and service worker correctly, but there are two issues:
+The issue is clear from the backend logs. Your emails are failing with a **403 error** from Resend:
 
-1. **No install prompt UI**: The browser's `beforeinstallprompt` event fires silently. Without code to intercept it and show a custom install banner/button, users only see the tiny browser-native install icon (easily missed).
+> "The redflaq.co.za domain is not verified. Please, add and verify your domain on https://resend.com/domains"
 
-2. **Preview URL limitation**: PWA install only works on HTTPS production URLs (e.g. `redflaq.lovable.app` or `redflaq.com`), not on preview URLs. The app must be published first.
+**Root cause:** The `send-email` function sends from `noreply@redflaq.co.za`, but the `redflaq.co.za` domain has not been verified in your Resend account. Resend blocks all emails from unverified domains.
 
-## Plan
+## How to Fix
 
-### 1. Create a PWA install prompt hook (`src/hooks/usePWAInstall.ts`)
-- Listen for `beforeinstallprompt` event, store the deferred prompt
-- Detect if already installed via `display-mode: standalone`
-- Detect iOS (which doesn't fire `beforeinstallprompt`) and show manual instructions
-- Expose: `canInstall`, `isIOS`, `isInstalled`, `promptInstall()`
+You have two options:
 
-### 2. Create an install banner component (`src/components/PWAInstallBanner.tsx`)
-- Sticky bottom banner that appears when `canInstall` is true (Android/desktop Chrome)
-- On iOS: shows "Tap Share → Add to Home Screen" instructions
-- Dismissible (stores dismissal in localStorage for 7 days)
-- Purple branded styling with app icon and "Install RedFlaq" CTA button
-- Auto-hides if already installed
+### Option A: Verify `redflaq.co.za` in Resend (recommended)
+1. Log in to your [Resend dashboard](https://resend.com/domains)
+2. Add `redflaq.co.za` as a sending domain
+3. Add the required DNS records (SPF, DKIM, DMARC) to your domain registrar (GoDaddy)
+4. Wait for verification to complete — emails will start working immediately after
 
-### 3. Add the banner to the Index page and App layout
-- Import and render `<PWAInstallBanner />` in `src/pages/Index.tsx` (and optionally in `App.tsx` so it appears on all pages)
+### Option B: Temporary fix — use Resend's default sender
+If you want emails to work right now while you verify your domain, the `send-email` edge function can be updated to send from `onboarding@resend.dev` (Resend's free test domain). This works immediately but emails will come from a generic address instead of your brand.
 
-### 4. No changes needed to vite.config.ts or index.html
-- The existing PWA manifest and service worker config are correct
+## No Code Changes Needed
 
-### Technical note
-- The install prompt will only appear on the **published** production URL over HTTPS. It will not work on the Lovable preview URL. After implementing, you'll need to publish the app and test on `redflaq.lovable.app` or `redflaq.com`.
+This is purely a domain configuration issue on the Resend side. Once `redflaq.co.za` is verified in Resend, all email flows (welcome, search results, discreet mode) will start working automatically.
 

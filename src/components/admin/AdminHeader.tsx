@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import RedFlaqLogo from "@/components/RedFlaqLogo";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -40,7 +41,7 @@ export default function AdminHeader() {
     <header className="h-14 border-b border-border bg-card flex items-center justify-between px-4 lg:px-6 sticky top-0 z-40">
       <div className="flex items-center gap-3">
         <Link to="/admin" className="flex items-center gap-2">
-          <Shield className="h-5 w-5 text-primary" />
+          <RedFlaqLogo size="sm" />
           <span className="font-heading text-lg text-foreground tracking-wide">Admin</span>
         </Link>
         {role && roleBadge[role] && (

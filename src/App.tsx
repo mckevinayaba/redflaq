@@ -50,6 +50,7 @@ import DemoResult from "./pages/DemoResult";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentCancelled from "./pages/PaymentCancelled";
 import DiscreetConfirmation from "./pages/DiscreetConfirmation";
+import SecureReportView from "./pages/SecureReportView";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -65,6 +66,7 @@ const App = () => (
           <Route path="/demo-result" element={<DemoResult />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/discreet-sent" element={<DiscreetConfirmation />} />
+          <Route path="/reports/view/:token" element={<SecureReportView />} />
           <Route path="/payment-cancelled" element={<PaymentCancelled />} />
           <Route path="/receipt" element={<Receipt />} />
           <Route path="/about" element={<About />} />

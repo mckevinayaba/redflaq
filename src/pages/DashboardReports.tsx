@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import { FileText, Download, Filter, Shield } from "lucide-react";
+import { FileText, Download, Filter, Shield, EyeOff, Lock } from "lucide-react";
 
 interface SearchRecord {
   id: string;
@@ -14,6 +14,7 @@ interface SearchRecord {
   search_id: string;
   search_province: string | null;
   recommendation: string | null;
+  hidden_from_dashboard?: boolean;
 }
 
 const riskConfig: Record<string, { label: string; color: string; bg: string }> = {
@@ -29,6 +30,10 @@ export default function DashboardReports() {
   const [searches, setSearches] = useState<SearchRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [filterLevel, setFilterLevel] = useState("");
+  const [showHidden, setShowHidden] = useState(false);
+  const [passwordPrompt, setPasswordPrompt] = useState(false);
+  const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   useEffect(() => {
     if (!authLoading && !user) { navigate("/signup"); return; }
@@ -44,6 +49,35 @@ export default function DashboardReports() {
   };
 
   useEffect(() => { if (user) { setLoading(true); fetchSearches(); } }, [filterLevel]);
+
+  const hiddenCount = searches.filter((s: any) => s.hidden_from_dashboard).length;
+  const visibleSearches = showHidden
+    ? searches
+    : searches.filter((s: any) => !s.hidden_from_dashboard);
+
+  const handleShowHidden = () => {
+    if (showHidden) {
+      setShowHidden(false);
+      return;
+    }
+    setPasswordPrompt(true);
+  };
+
+  const handlePasswordSubmit = async () => {
+    if (!user?.email) return;
+    const { error } = await supabase.auth.signInWithPassword({
+      email: user.email,
+      password,
+    });
+    if (error) {
+      setPasswordError("Incorrect password. Please try again.");
+      return;
+    }
+    setPasswordPrompt(false);
+    setPassword("");
+    setPasswordError("");
+    setShowHidden(true);
+  };
 
   return (
     <DashboardLayout>
@@ -72,7 +106,58 @@ export default function DashboardReports() {
                 <option value="GREEN">Clear</option>
               </select>
             </div>
+
+            {/* Hidden checks toggle */}
+            {hiddenCount > 0 && (
+              <div className="mt-4 pt-4 border-t border-border">
+                <button
+                  onClick={handleShowHidden}
+                  className="flex items-center gap-2 w-full px-3 py-2 rounded-lg text-sm font-body text-muted-foreground hover:bg-muted/50 transition-colors"
+                >
+                  <EyeOff className="h-4 w-4" />
+                  {showHidden ? "Hide hidden checks" : `${hiddenCount} hidden check${hiddenCount !== 1 ? "s" : ""}`}
+                </button>
+              </div>
+            )}
           </div>
+
+          {/* Password prompt modal */}
+          {passwordPrompt && (
+            <div className="mt-4 bg-card rounded-xl border border-border p-5 shadow-sm">
+              <div className="flex items-center gap-2 mb-3">
+                <Lock className="h-4 w-4 text-primary" />
+                <span className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Verify identity</span>
+              </div>
+              <p className="font-body text-xs text-muted-foreground mb-3">
+                Enter your password to view hidden checks.
+              </p>
+              <input
+                type="password"
+                className="w-full px-3 py-2 border border-border rounded-lg font-body text-sm bg-background focus:outline-none focus:border-primary mb-2"
+                placeholder="Your password"
+                value={password}
+                onChange={(e) => { setPassword(e.target.value); setPasswordError(""); }}
+                onKeyDown={(e) => e.key === "Enter" && handlePasswordSubmit()}
+              />
+              {passwordError && (
+                <p className="font-body text-xs text-destructive mb-2">{passwordError}</p>
+              )}
+              <div className="flex gap-2">
+                <button
+                  onClick={handlePasswordSubmit}
+                  className="flex-1 px-3 py-2 bg-primary text-primary-foreground font-body text-sm font-medium rounded-lg hover:bg-primary/90"
+                >
+                  Verify
+                </button>
+                <button
+                  onClick={() => { setPasswordPrompt(false); setPassword(""); setPasswordError(""); }}
+                  className="px-3 py-2 border border-border font-body text-sm rounded-lg hover:bg-muted"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Reports */}
@@ -82,7 +167,7 @@ export default function DashboardReports() {
               <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-3" />
               <p className="font-body text-muted-foreground">Loading reports…</p>
             </div>
-          ) : searches.length === 0 ? (
+          ) : visibleSearches.length === 0 ? (
             <div className="bg-card rounded-xl border border-border p-12 text-center shadow-sm">
               <FileText className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
               <p className="font-heading text-lg text-foreground mb-2">No reports found</p>
@@ -97,13 +182,17 @@ export default function DashboardReports() {
               </Link>
             </div>
           ) : (
-            searches.map((s) => {
+            visibleSearches.map((s) => {
               const risk = riskConfig[s.risk_level] || riskConfig.GREEN;
+              const isHidden = (s as any).hidden_from_dashboard;
               return (
-                <div key={s.id} className="bg-card rounded-xl border border-border p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div key={s.id} className={`bg-card rounded-xl border border-border p-6 shadow-sm hover:shadow-md transition-shadow ${isHidden ? 'opacity-70 border-dashed' : ''}`}>
                   <div className="flex items-start justify-between mb-3">
                     <div>
-                      <h3 className="font-heading text-lg text-foreground">{s.search_name || "Unknown"}</h3>
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-heading text-lg text-foreground">{s.search_name || "Unknown"}</h3>
+                        {isHidden && <EyeOff className="h-3.5 w-3.5 text-muted-foreground" />}
+                      </div>
                       <p className="font-body text-sm text-muted-foreground">
                         {new Date(s.searched_at).toLocaleDateString("en-ZA", { day: "numeric", month: "long", year: "numeric" })}
                         {s.search_province && ` · ${s.search_province}`}

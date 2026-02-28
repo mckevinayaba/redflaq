@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import EmergencyBanner from "@/components/EmergencyBanner";
+import redflaqLogo from "@/assets/redflaq-logo.png";
 
 const Footer = () => {
   return (
@@ -10,9 +11,9 @@ const Footer = () => {
           
           {/* Column 1: Brand */}
           <div>
-            <h3 className="text-2xl font-bold mb-2">
-              💜 <span style={{ color: '#7C3AED' }}>Red</span><span className="text-white">Fla<span style={{ color: '#DC2626' }}>q</span></span>
-            </h3>
+            <div className="flex items-center gap-2 mb-2">
+              💜 <img src={redflaqLogo} alt="RedFlaq" style={{ width: 140, height: 38, objectFit: 'contain' }} />
+            </div>
             <p className="text-sm mb-4">
               A Setup A Startup Initiative
             </p>

@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Shield } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import redflaqLogo from "@/assets/redflaq-logo.png";
 import { PaymentModal } from "@/components/PaymentModal";
 
 const Navbar = () => {
@@ -20,9 +21,8 @@ const Navbar = () => {
       <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border shadow-sm">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
-            <Shield className="h-8 w-8 text-purple-600" />
-            <span className="text-xl font-bold"><span style={{ color: '#7C3AED' }}>Red</span><span className="text-gray-900">Fla<span style={{ color: '#DC2626' }}>q</span></span></span>
+          <Link to="/" className="flex items-center">
+            <img src={redflaqLogo} alt="RedFlaq" style={{ width: 160, height: 44, objectFit: 'contain' }} />
           </Link>
 
           {/* Desktop Navigation */}

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { Shield } from "lucide-react";
 import EmergencyBanner from "@/components/EmergencyBanner";
+import redflaqLogo from "@/assets/redflaq-logo.png";
 
 const FooterNew = () => {
   const productLinks = [
@@ -25,9 +25,8 @@ const FooterNew = () => {
         <div className="grid md:grid-cols-4 gap-12 mb-12">
           {/* Column 1: Brand */}
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <Shield className="h-8 w-8 text-purple-400" />
-              <span className="text-xl font-bold"><span style={{ color: '#A78BFA' }}>Red</span><span className="text-white">Fla<span style={{ color: '#DC2626' }}>q</span></span></span>
+            <div className="flex items-center mb-4">
+              <img src={redflaqLogo} alt="RedFlaq" style={{ width: 140, height: 38, objectFit: 'contain' }} />
             </div>
             <p className="text-sm">
               Making South Africa safer, one informed decision at a time.

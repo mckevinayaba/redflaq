@@ -22,7 +22,7 @@ const Navbar = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
           {/* Logo */}
           <Link to="/" className="flex-shrink-0 flex items-center">
-            <img src={redflaqLogo} alt="RedFlaq" className="h-14 w-auto" />
+            <img src={redflaqLogo} alt="RedFlaq - Instant Criminal Record Verification" className="h-11 md:h-14 w-auto" loading="eager" fetchPriority="high" />
           </Link>
 
           {/* Desktop Navigation */}

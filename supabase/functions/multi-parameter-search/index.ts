@@ -107,11 +107,26 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // ===== CREDIT VALIDATION (MANDATORY) =====
-    // Either payment_id or user_id with available credits required
+    // ===== STAFF BYPASS: Admin/Owner skip credit checks =====
+    let isStaff = false;
+    if (user_id) {
+      const { data: roleData } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user_id)
+        .in('role', ['admin', 'owner'])
+        .maybeSingle();
+      isStaff = !!roleData;
+    }
+
+    // ===== CREDIT VALIDATION (MANDATORY for non-staff) =====
     let creditDeducted = false;
 
-    if (payment_id) {
+    if (isStaff) {
+      // Staff bypass — virtual credit, no deduction
+      console.log('Staff bypass: skipping credit check for user', user_id);
+      creditDeducted = true;
+    } else if (payment_id) {
       // Legacy flow: deduct from specific payment
       const { data: payment, error: fetchErr } = await supabase
         .from('manual_payments')

@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import RedFlaqLogo from "@/components/RedFlaqLogo";
 import { ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
 import { PaymentModal } from "@/components/PaymentModal";
@@ -71,7 +70,10 @@ const Hero = () => {
 
         {/* Logo - Fade in from top */}
         <div className="mb-14 opacity-0 animate-fade-in-down delay-800">
-          <RedFlaqLogo size="lg" />
+          <h2 className="text-2xl md:text-3xl font-heading font-bold text-white inline-flex items-center gap-2">
+            <span>💜</span>
+            <span>REDFLAQ</span>
+          </h2>
         </div>
 
         {/* Main Headline - Updated copy */}

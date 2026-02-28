@@ -30,7 +30,7 @@ const NavbarHonest = () => {
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <a href="/" className="flex items-center">
-              <img src={redflaqLogo} alt="RedFlaq" style={{ width: 160, height: 44, objectFit: 'contain' }} />
+              <img src={redflaqLogo} alt="RedFlaq" className="h-9 md:h-[44px] w-auto block" />
             </a>
 
             {/* Desktop Navigation */}

@@ -222,7 +222,7 @@ export default function Signup() {
       <div style={{ maxWidth: 480, width: '100%' }}>
         {/* Logo */}
         <Link to="/" className="flex items-center mb-8 justify-center">
-          <img src={redflaqLogo} alt="RedFlaq" style={{ width: 160, height: 44, objectFit: 'contain' }} />
+          <img src={redflaqLogo} alt="RedFlaq" style={{ height: 44, width: 'auto', display: 'block' }} />
         </Link>
 
         <div style={{ background: 'white', border: '1.5px solid #D6D3CD', padding: 40 }}>

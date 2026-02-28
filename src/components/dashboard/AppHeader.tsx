@@ -35,7 +35,7 @@ export default function AppHeader() {
     <header className="h-14 border-b border-border bg-card flex items-center justify-between px-4 lg:px-6 sticky top-0" style={{ zIndex: 9999, visibility: 'visible' as const, opacity: 1, backgroundColor: '#FFFFFF', WebkitBackfaceVisibility: 'hidden' as const, transform: 'translateZ(0)', WebkitTransform: 'translateZ(0)' }}>
       {/* Logo – opens homepage in new tab */}
       <a href="/" target="_blank" rel="noopener noreferrer" className="flex items-center">
-        <img src={redflaqLogo} alt="RedFlaq" style={{ width: 140, height: 38, objectFit: 'contain' }} />
+        <img src={redflaqLogo} alt="RedFlaq" style={{ height: 36, width: 'auto', display: 'block' }} />
       </a>
 
       {/* Avatar dropdown */}

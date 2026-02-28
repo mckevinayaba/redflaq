@@ -602,6 +602,7 @@ export type Database = {
       searches: {
         Row: {
           created_at: string
+          hidden_from_dashboard: boolean
           id: string
           is_wanted: boolean
           matches_found: number
@@ -622,6 +623,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          hidden_from_dashboard?: boolean
           id?: string
           is_wanted?: boolean
           matches_found?: number
@@ -642,6 +644,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          hidden_from_dashboard?: boolean
           id?: string
           is_wanted?: boolean
           matches_found?: number
@@ -659,6 +662,36 @@ export type Database = {
           search_strategies?: string[] | null
           searched_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      secure_report_links: {
+        Row: {
+          created_at: string
+          expires_at: string
+          id: string
+          search_id: string
+          token: string
+          user_id: string
+          viewed: boolean
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          search_id: string
+          token: string
+          user_id: string
+          viewed?: boolean
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string
+          id?: string
+          search_id?: string
+          token?: string
+          user_id?: string
+          viewed?: boolean
         }
         Relationships: []
       }

@@ -563,9 +563,25 @@ serve(async (req) => {
         recommendation,
         needs_human_verification: needsHumanReview,
         searched_at: new Date().toISOString(),
+        hidden_from_dashboard: discreet_mode ? true : false,
       });
     } catch (e) {
       console.error('Failed to persist search:', e);
+    }
+
+    // Generate secure report link for discreet mode
+    let secureToken: string | null = null;
+    if (discreet_mode && user_id) {
+      try {
+        secureToken = crypto.randomUUID();
+        await supabase.from('secure_report_links').insert({
+          token: secureToken,
+          search_id: searchId,
+          user_id: user_id,
+        });
+      } catch (e) {
+        console.error('Failed to create secure report link:', e);
+      }
     }
 
     // Audit log
@@ -603,31 +619,49 @@ serve(async (req) => {
 
       if (recipientEmail) {
         const adminPassword = Deno.env.get('ADMIN_PASSWORD');
-        const resultsUrl = `https://redflaq.co.za/results?search_id=${searchId}`;
+        const resultsUrl = secureToken
+          ? `https://redflaq.co.za/reports/view/${secureToken}`
+          : `https://redflaq.co.za/results?search_id=${searchId}`;
         const riskColor = riskLevel === 'RED' ? '#DC2626' : riskLevel === 'ORANGE' ? '#EA580C' : riskLevel === 'YELLOW' ? '#CA8A04' : '#16A34A';
         const riskLabel = riskLevel === 'RED' ? 'High Risk' : riskLevel === 'ORANGE' ? 'Moderate Risk' : riskLevel === 'YELLOW' ? 'Low Risk' : 'Clear';
 
-        // Discreet Mode: neutral subject, no risk words, safety-first
+        // Generate initials for discreet subject line
+        const nameInitials = full_name
+          ? full_name.trim().split(/\s+/).map((w: string) => w[0]?.toUpperCase()).filter(Boolean).join('.')
+          : '';
+
+        // Discreet Mode: neutral subject with initials, preview text, no PDF, secure link
         const emailSubject = discreet_mode
-          ? 'Your RedFlaq report is ready'
+          ? `Your RedFlaq report is ready${nameInitials ? ` (${nameInitials}.)` : ''}`
           : `🔍 RedFlaq Results Ready — ${full_name || 'Your Search'}`;
+
+        const discreetPreviewText = 'Your RedFlaq report is ready to view when you&#39;re in a safe place.';
 
         const emailHtml = discreet_mode
           ? `
             <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
+              <div style="display:none;font-size:1px;color:#ffffff;line-height:1px;max-height:0px;max-width:0px;opacity:0;overflow:hidden;">
+                ${discreetPreviewText}${'&#847; &zwnj; &nbsp; '.repeat(30)}
+              </div>
+
               <div style="text-align: center; margin-bottom: 32px;">
                 <h1 style="font-size: 28px; color: #1a1a1a; margin: 0;">🔍 RedFlaq</h1>
                 <p style="color: #666; font-size: 14px; margin-top: 4px;">Background Verification Service</p>
               </div>
 
               <p style="color: #333; font-size: 15px; line-height: 1.8;">
-                Hi${full_name ? ` there` : ''},<br/><br/>
+                Hi there,<br/><br/>
                 Your RedFlaq safety check report is ready. Open it when you're ready and in a safe place to do so.
               </p>
 
               <div style="text-align: center; margin: 32px 0;">
-                <a href="${resultsUrl}" style="display: inline-block; background: #7C3AED; color: white; padding: 16px 40px; text-decoration: none; font-size: 16px; font-weight: 700; border-radius: 8px;">View Your Report →</a>
+                <a href="${resultsUrl}" style="display: inline-block; background: #7C3AED; color: white; padding: 16px 40px; text-decoration: none; font-size: 16px; font-weight: 700; border-radius: 8px;">View Your Report Securely →</a>
               </div>
+
+              <p style="color: #999; font-size: 12px; text-align: center; line-height: 1.6;">
+                This link works for 7 days and can only be viewed by you.<br/>
+                You must be logged in to your RedFlaq account to view it.
+              </p>
 
               <div style="background: #FEF3C7; border-left: 4px solid #CA8A04; padding: 16px; margin: 24px 0; border-radius: 0 8px 8px 0;">
                 <p style="color: #92400E; font-size: 13px; margin: 0; font-weight: 600;">⚠️ Keep this link private</p>

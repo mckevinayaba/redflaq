@@ -114,7 +114,7 @@ export default function DashboardNewCheck() {
         clearInterval(interval);
         setProgress(100);
         if (discreetMode) {
-          setTimeout(() => navigate(`/discreet-sent?email=${encodeURIComponent(user?.email || '')}`), 800);
+          setTimeout(() => navigate(`/discreet-sent?email=${encodeURIComponent(user?.email || '')}&search_id=${data.searchId}`), 800);
         } else {
           setTimeout(() => navigate(`/results?search_id=${data.searchId}`), 800);
         }

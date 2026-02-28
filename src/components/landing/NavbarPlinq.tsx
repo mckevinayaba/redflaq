@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Menu, X, LayoutDashboard, Settings, LogOut, Share2 } from "lucide-react";
-import redflaqLogo from "@/assets/redflaq-logo-official.png";
+import RedFlaqLogo from "@/components/RedFlaqLogo";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
@@ -98,7 +98,7 @@ const NavbarPlinq = () => {
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 24px', height: '100%' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '100%' }}>
           <a href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
-            <img src={redflaqLogo} alt="RedFlaq - Instant Criminal Record Verification" style={{ height: isMobile ? 48 : 56, width: 'auto', display: 'block', flexShrink: 0 }} />
+            <RedFlaqLogo height={isMobile ? 32 : 36} />
           </a>
 
           {/* Desktop nav links */}

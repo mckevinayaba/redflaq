@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import EmergencyBanner from "@/components/EmergencyBanner";
-import redflaqLogo from "@/assets/redflaq-logo-official.png";
+import RedFlaqLogo from "@/components/RedFlaqLogo";
 
 const Footer = () => {
   return (
@@ -12,7 +12,7 @@ const Footer = () => {
           {/* Column 1: Brand */}
           <div>
             <div className="flex items-center mb-2">
-              <img src={redflaqLogo} alt="RedFlaq" style={{ height: 30, width: 'auto', display: 'block', filter: 'brightness(0) invert(1)' }} />
+              <RedFlaqLogo height={30} inverted />
             </div>
             <p className="text-sm mb-4">
               A Setup A Startup Initiative

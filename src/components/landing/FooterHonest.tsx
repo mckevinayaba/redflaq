@@ -13,7 +13,7 @@ const FooterHonest = () => {
           {/* Brand */}
           <div className="md:col-span-1">
             <a href="/" className="flex items-center mb-4">
-              <img src={redflaqLogo} alt="RedFlaq" style={{ width: 140, height: 38, objectFit: 'contain' }} />
+              <img src={redflaqLogo} alt="RedFlaq" style={{ height: 36, width: 'auto', display: 'block' }} />
             </a>
             <p className="text-background/60 text-sm">
               Making South Africa safer, one informed decision at a time.

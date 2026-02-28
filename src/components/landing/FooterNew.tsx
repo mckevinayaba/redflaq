@@ -26,7 +26,7 @@ const FooterNew = () => {
           {/* Column 1: Brand */}
           <div>
             <div className="flex items-center mb-4">
-              <img src={redflaqLogo} alt="RedFlaq" style={{ width: 140, height: 38, objectFit: 'contain' }} />
+              <img src={redflaqLogo} alt="RedFlaq" style={{ height: 36, width: 'auto', display: 'block' }} />
             </div>
             <p className="text-sm">
               Making South Africa safer, one informed decision at a time.

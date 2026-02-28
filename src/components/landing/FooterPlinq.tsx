@@ -36,7 +36,7 @@ const FooterPlinq = () => {
           {/* Column 1 - Logo */}
           <div>
             <a href="/" className="flex items-center mb-4">
-              <img src={redflaqLogo} alt="RedFlaq" style={{ width: 160, height: 44, objectFit: 'contain' }} />
+              <img src={redflaqLogo} alt="RedFlaq" style={{ height: 36, width: 'auto', display: 'block' }} />
             </a>
             <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', maxWidth: 300, lineHeight: 1.6 }}>
               South Africa's public-record safety check for women and communities — not a SAPS fingerprint check.

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ShareInviteModal from "@/components/ShareInviteModal";
 import EmergencyBanner from "@/components/EmergencyBanner";
+import redflaqLogo from "@/assets/redflaq-logo.png";
 
 const FooterPlinq = () => {
   const [shareOpen, setShareOpen] = useState(false);
@@ -34,11 +35,8 @@ const FooterPlinq = () => {
         <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_1fr] gap-16 mb-12">
           {/* Column 1 - Logo */}
           <div>
-            <a href="/" className="flex items-center mb-4" style={{ gap: 0 }}>
-              <div style={{ width: 28, height: 28, background: '#7C3AED', borderRadius: 4, WebkitClipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 900, fontSize: 15, color: '#FFFFFF', lineHeight: 1 }}>R</span>
-              </div>
-              <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 18, letterSpacing: '0.1em', marginLeft: 1 }}><span style={{ color: '#7C3AED' }}>ed</span><span style={{ color: '#2D2235' }}>Fla<span style={{ color: '#DC2626' }}>q</span></span></span>
+            <a href="/" className="flex items-center mb-4">
+              <img src={redflaqLogo} alt="RedFlaq" style={{ width: 160, height: 44, objectFit: 'contain' }} />
             </a>
             <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', maxWidth: 300, lineHeight: 1.6 }}>
               South Africa's public-record safety check for women and communities — not a SAPS fingerprint check.

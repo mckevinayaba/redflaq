@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useToast } from "@/hooks/use-toast";
 import { User, LayoutDashboard, LogOut, Settings, Shield } from "lucide-react";
+import redflaqLogo from "@/assets/redflaq-logo.png";
 
 export default function AppHeader() {
   const { user } = useAuth();
@@ -33,11 +34,8 @@ export default function AppHeader() {
   return (
     <header className="h-14 border-b border-border bg-card flex items-center justify-between px-4 lg:px-6 sticky top-0" style={{ zIndex: 9999, visibility: 'visible' as const, opacity: 1, backgroundColor: '#FFFFFF', WebkitBackfaceVisibility: 'hidden' as const, transform: 'translateZ(0)', WebkitTransform: 'translateZ(0)' }}>
       {/* Logo – opens homepage in new tab */}
-      <a href="/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
-        <div className="w-7 h-7 bg-primary flex items-center justify-center" style={{ borderRadius: 4, WebkitClipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', overflow: 'visible' }}>
-          <span className="font-body font-black text-sm text-primary-foreground leading-none">R</span>
-        </div>
-        <span className="font-body font-extrabold text-lg tracking-widest"><span style={{ color: '#7C3AED' }}>ed</span><span className="text-foreground">Fla<span style={{ color: '#DC2626' }}>q</span></span></span>
+      <a href="/" target="_blank" rel="noopener noreferrer" className="flex items-center">
+        <img src={redflaqLogo} alt="RedFlaq" style={{ width: 140, height: 38, objectFit: 'contain' }} />
       </a>
 
       {/* Avatar dropdown */}

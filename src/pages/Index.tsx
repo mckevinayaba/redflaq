@@ -19,6 +19,7 @@ import FAQPlinq from "@/components/landing/FAQPlinq";
 import FinalCTAPlinq from "@/components/landing/FinalCTAPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
 import ShareSection from "@/components/landing/ShareSection";
+import AdvocacySection from "@/components/landing/AdvocacySection";
 import { PWAInstallBanner } from "@/components/PWAInstallBanner";
 
 const Index = () => {
@@ -67,6 +68,7 @@ const Index = () => {
       <FAQPlinq />
       <FinalCTAPlinq />
       <ShareSection />
+      <AdvocacySection />
       <FooterPlinq />
       <PWAInstallBanner />
     </div>

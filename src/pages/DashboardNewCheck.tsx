@@ -3,7 +3,8 @@ import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import { Shield, Clock, Lock, Heart, Info, AlertTriangle } from "lucide-react";
+import { Shield, Clock, Lock, Heart, Info, AlertTriangle, Eye, EyeOff } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import {
@@ -39,6 +40,7 @@ export default function DashboardNewCheck() {
   const [ageRange, setAgeRange] = useState("");
   const [reason, setReason] = useState("");
   const [consent, setConsent] = useState(false);
+  const [discreetMode, setDiscreetMode] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [progress, setProgress] = useState(0);
   const [formError, setFormError] = useState("");
@@ -85,6 +87,7 @@ export default function DashboardNewCheck() {
           full_name: fullName,
           province: province || undefined,
           user_id: user?.id,
+          discreet_mode: discreetMode,
         },
       });
 
@@ -110,7 +113,11 @@ export default function DashboardNewCheck() {
       if (data?.success) {
         clearInterval(interval);
         setProgress(100);
-        setTimeout(() => navigate(`/results?search_id=${data.searchId}`), 800);
+        if (discreetMode) {
+          setTimeout(() => navigate(`/discreet-sent?email=${encodeURIComponent(user?.email || '')}`), 800);
+        } else {
+          setTimeout(() => navigate(`/results?search_id=${data.searchId}`), 800);
+        }
       } else {
         throw new Error(data?.error || "Search failed");
       }
@@ -257,6 +264,26 @@ export default function DashboardNewCheck() {
                 <p className="font-body text-xs text-muted-foreground mt-1.5">
                   We ask for your reason to respect everyone's rights and stay POPIA‑aware.
                 </p>
+              </div>
+
+              {/* Discreet Mode Toggle */}
+              <div className="flex items-start gap-4 p-4 rounded-lg border border-border bg-muted/30">
+                <Switch
+                  id="discreet-mode"
+                  checked={discreetMode}
+                  onCheckedChange={setDiscreetMode}
+                  disabled={isSubmitting}
+                  className="mt-0.5"
+                />
+                <div className="flex-1 min-w-0">
+                  <label htmlFor="discreet-mode" className="font-body text-sm text-foreground cursor-pointer flex items-center gap-2 flex-wrap">
+                    {discreetMode ? <Lock className="h-4 w-4 text-primary shrink-0" /> : <EyeOff className="h-4 w-4 text-muted-foreground shrink-0" />}
+                    Send results to my email only (Discreet Mode)
+                  </label>
+                  <p className="font-body text-xs text-muted-foreground mt-1.5 leading-relaxed">
+                    Your results will not appear on screen. We'll email them to you privately so you can read them when it's safe to do so.
+                  </p>
+                </div>
               </div>
 
               {/* POPIA Consent */}

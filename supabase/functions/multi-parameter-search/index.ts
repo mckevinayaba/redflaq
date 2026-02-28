@@ -15,6 +15,7 @@ interface SearchParams {
   police_station?: string;
   payment_id?: string;
   user_id?: string;
+  discreet_mode?: boolean;
 }
 
 function normalizeName(name: string): string {
@@ -92,7 +93,7 @@ serve(async (req) => {
 
   try {
     const params: SearchParams = await req.json();
-    const { full_name, sa_id_number, date_of_birth, province, case_number, police_station, payment_id, user_id } = params;
+    const { full_name, sa_id_number, date_of_birth, province, case_number, police_station, payment_id, user_id, discreet_mode } = params;
 
     const hasAny = [full_name, sa_id_number, date_of_birth, case_number].some(v => v && v.length > 0);
     if (!hasAny) {
@@ -591,40 +592,80 @@ serve(async (req) => {
         const riskColor = riskLevel === 'RED' ? '#DC2626' : riskLevel === 'ORANGE' ? '#EA580C' : riskLevel === 'YELLOW' ? '#CA8A04' : '#16A34A';
         const riskLabel = riskLevel === 'RED' ? 'High Risk' : riskLevel === 'ORANGE' ? 'Moderate Risk' : riskLevel === 'YELLOW' ? 'Low Risk' : 'Clear';
 
+        // Discreet Mode: neutral subject, no risk words, safety-first
+        const emailSubject = discreet_mode
+          ? 'Your RedFlaq report is ready'
+          : `🔍 RedFlaq Results Ready — ${full_name || 'Your Search'}`;
+
+        const emailHtml = discreet_mode
+          ? `
+            <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
+              <div style="text-align: center; margin-bottom: 32px;">
+                <h1 style="font-size: 28px; color: #1a1a1a; margin: 0;">🔍 RedFlaq</h1>
+                <p style="color: #666; font-size: 14px; margin-top: 4px;">Background Verification Service</p>
+              </div>
+
+              <p style="color: #333; font-size: 15px; line-height: 1.8;">
+                Hi${full_name ? ` there` : ''},<br/><br/>
+                Your RedFlaq safety check report is ready. Open it when you're ready and in a safe place to do so.
+              </p>
+
+              <div style="text-align: center; margin: 32px 0;">
+                <a href="${resultsUrl}" style="display: inline-block; background: #7C3AED; color: white; padding: 16px 40px; text-decoration: none; font-size: 16px; font-weight: 700; border-radius: 8px;">View Your Report →</a>
+              </div>
+
+              <div style="background: #FEF3C7; border-left: 4px solid #CA8A04; padding: 16px; margin: 24px 0; border-radius: 0 8px 8px 0;">
+                <p style="color: #92400E; font-size: 13px; margin: 0; font-weight: 600;">⚠️ Keep this link private</p>
+                <p style="color: #92400E; font-size: 13px; margin: 4px 0 0;">This report contains sensitive information. Do not share it publicly.</p>
+              </div>
+
+              <hr style="border: none; border-top: 1px solid #E5E7EB; margin: 32px 0;" />
+              <p style="color: #666; font-size: 13px; text-align: center; line-height: 1.7;">
+                🆘 If you need support right now, call GBV Command Centre:<br/>
+                <strong><a href="tel:0800428428" style="color: #333; text-decoration: none;">0800 428 428</a></strong> — Free · 24/7 · Confidential
+              </p>
+              <hr style="border: none; border-top: 1px solid #E5E7EB; margin: 24px 0;" />
+              <p style="color: #999; font-size: 11px; text-align: center;">
+                RedFlaq · South African Background Checks · <a href="https://redflaq.co.za/privacy" style="color: #999;">Privacy Policy</a> · <a href="https://redflaq.co.za/terms" style="color: #999;">Terms</a>
+              </p>
+            </div>
+          `
+          : `
+            <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
+              <div style="text-align: center; margin-bottom: 32px;">
+                <h1 style="font-size: 28px; color: #1a1a1a; margin: 0;">🔍 RedFlaq</h1>
+                <p style="color: #666; font-size: 14px; margin-top: 4px;">Background Verification Service</p>
+              </div>
+
+              <div style="background: #F9FAFB; border: 2px solid ${riskColor}; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+                <h2 style="color: ${riskColor}; font-size: 20px; margin: 0 0 8px;">Result: ${riskLabel}</h2>
+                <p style="color: #333; font-size: 15px; margin: 0;">${matches.length} record${matches.length !== 1 ? 's' : ''} found for <strong>${full_name || 'your search'}</strong></p>
+              </div>
+
+              <p style="color: #333; font-size: 15px; line-height: 1.6;">Your background check is complete. View the full report below:</p>
+
+              <div style="text-align: center; margin: 32px 0;">
+                <a href="${resultsUrl}" style="display: inline-block; background: #7C3AED; color: white; padding: 16px 40px; text-decoration: none; font-size: 16px; font-weight: 700; border-radius: 8px;">View Full Report →</a>
+              </div>
+
+              <div style="background: #FEF3C7; border-left: 4px solid #CA8A04; padding: 16px; margin: 24px 0; border-radius: 0 8px 8px 0;">
+                <p style="color: #92400E; font-size: 13px; margin: 0; font-weight: 600;">⚠️ Keep this link private</p>
+                <p style="color: #92400E; font-size: 13px; margin: 4px 0 0;">This report contains sensitive information. Do not share it publicly.</p>
+              </div>
+
+              <hr style="border: none; border-top: 1px solid #E5E7EB; margin: 32px 0;" />
+              <p style="color: #999; font-size: 11px; text-align: center;">
+                RedFlaq · South African Background Checks · <a href="https://redflaq.co.za/privacy" style="color: #999;">Privacy Policy</a> · <a href="https://redflaq.co.za/terms" style="color: #999;">Terms</a>
+              </p>
+            </div>
+          `;
+
         await supabase.functions.invoke('send-email', {
           body: {
             admin_password: adminPassword,
             to: recipientEmail,
-            subject: `🔍 RedFlaq Results Ready — ${full_name || 'Your Search'}`,
-            html: `
-              <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
-                <div style="text-align: center; margin-bottom: 32px;">
-                  <h1 style="font-size: 28px; color: #1a1a1a; margin: 0;">🔍 RedFlaq</h1>
-                  <p style="color: #666; font-size: 14px; margin-top: 4px;">Background Verification Service</p>
-                </div>
-
-                <div style="background: #F9FAFB; border: 2px solid ${riskColor}; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
-                  <h2 style="color: ${riskColor}; font-size: 20px; margin: 0 0 8px;">Result: ${riskLabel}</h2>
-                  <p style="color: #333; font-size: 15px; margin: 0;">${matches.length} record${matches.length !== 1 ? 's' : ''} found for <strong>${full_name || 'your search'}</strong></p>
-                </div>
-
-                <p style="color: #333; font-size: 15px; line-height: 1.6;">Your background check is complete. View the full report below:</p>
-
-                <div style="text-align: center; margin: 32px 0;">
-                  <a href="${resultsUrl}" style="display: inline-block; background: #7C3AED; color: white; padding: 16px 40px; text-decoration: none; font-size: 16px; font-weight: 700; border-radius: 8px;">View Full Report →</a>
-                </div>
-
-                <div style="background: #FEF3C7; border-left: 4px solid #CA8A04; padding: 16px; margin: 24px 0; border-radius: 0 8px 8px 0;">
-                  <p style="color: #92400E; font-size: 13px; margin: 0; font-weight: 600;">⚠️ Keep this link private</p>
-                  <p style="color: #92400E; font-size: 13px; margin: 4px 0 0;">This report contains sensitive information. Do not share it publicly.</p>
-                </div>
-
-                <hr style="border: none; border-top: 1px solid #E5E7EB; margin: 32px 0;" />
-                <p style="color: #999; font-size: 11px; text-align: center;">
-                  RedFlaq · South African Background Checks · <a href="https://redflaq.co.za/privacy" style="color: #999;">Privacy Policy</a> · <a href="https://redflaq.co.za/terms" style="color: #999;">Terms</a>
-                </p>
-              </div>
-            `,
+            subject: emailSubject,
+            html: emailHtml,
           },
         });
       }

@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import EmergencyBanner from "@/components/EmergencyBanner";
-import { Shield } from "lucide-react";
+import redflaqLogo from "@/assets/redflaq-logo-official.png";
 
 const FooterHonest = () => {
   const currentYear = new Date().getFullYear();
@@ -12,13 +12,8 @@ const FooterHonest = () => {
         <div className="grid md:grid-cols-4 gap-12 mb-12">
           {/* Brand */}
           <div className="md:col-span-1">
-            <a href="/" className="flex items-center mb-4" style={{ gap: 14, textDecoration: 'none' }}>
-              <Shield style={{ width: 20, height: 20, color: '#A78BFA' }} />
-              <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 20 }}>
-                <span style={{ color: '#A78BFA' }}>Red</span>
-                <span className="text-background">Fla</span>
-                <span style={{ color: '#FCA5A5' }}>q</span>
-              </span>
+            <a href="/" className="flex items-center mb-4" style={{ textDecoration: 'none' }}>
+              <img src={redflaqLogo} alt="RedFlaq" style={{ height: 30, width: 'auto', display: 'block', filter: 'brightness(0) invert(1)' }} />
             </a>
             <p className="text-background/60 text-sm">
               Making South Africa safer, one informed decision at a time.

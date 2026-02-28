@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Shield } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { PaymentModal } from "@/components/PaymentModal";
+import redflaqLogo from "@/assets/redflaq-logo-official.png";
 
 const NavbarHonest = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,13 +29,8 @@ const NavbarHonest = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <a href="/" className="flex items-center gap-[14px]">
-              <Shield className="h-5 w-5 md:h-6 md:w-6 text-primary" />
-              <span className="font-extrabold text-[20px] md:text-[22px]" style={{ fontFamily: "'Syne', sans-serif" }}>
-                <span className="text-primary">Red</span>
-                <span className="text-foreground">Fla</span>
-                <span className="text-red-600">q</span>
-              </span>
+            <a href="/" className="flex items-center">
+              <img src={redflaqLogo} alt="RedFlaq" className="h-[30px] md:h-[36px] w-auto block" />
             </a>
 
             {/* Desktop Navigation */}

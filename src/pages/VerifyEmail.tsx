@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, ArrowRight, Shield } from "lucide-react";
+import { Mail, ArrowRight } from "lucide-react";
+import redflaqLogo from "@/assets/redflaq-logo-official.png";
 
 export default function VerifyEmail() {
   const [resending, setResending] = useState(false);
@@ -61,13 +62,8 @@ export default function VerifyEmail() {
   return (
     <div style={{ background: '#F7F4F0', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
       <div style={{ maxWidth: 480, width: '100%' }}>
-        <Link to="/" className="flex items-center mb-8 justify-center" style={{ gap: 14 }}>
-          <Shield style={{ width: 28, height: 28, color: '#7C3AED' }} />
-          <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 28 }}>
-            <span style={{ color: '#7C3AED' }}>Red</span>
-            <span style={{ color: '#2D2235' }}>Fla</span>
-            <span style={{ color: '#DC2626' }}>q</span>
-          </span>
+        <Link to="/" className="flex items-center mb-8 justify-center">
+          <img src={redflaqLogo} alt="RedFlaq" style={{ height: 44, width: 'auto', display: 'block' }} />
         </Link>
 
         <div style={{ background: 'white', border: '1.5px solid #D6D3CD', padding: 40, textAlign: 'center' }}>

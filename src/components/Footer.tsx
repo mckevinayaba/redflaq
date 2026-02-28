@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import EmergencyBanner from "@/components/EmergencyBanner";
-import { Shield } from "lucide-react";
+import redflaqLogo from "@/assets/redflaq-logo-official.png";
 
 const Footer = () => {
   return (
@@ -11,13 +11,8 @@ const Footer = () => {
           
           {/* Column 1: Brand */}
           <div>
-            <div className="flex items-center mb-2" style={{ gap: 14 }}>
-              💜 <Shield style={{ width: 20, height: 20, color: '#DDD6FE' }} />
-              <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 20, color: 'white' }}>
-                <span style={{ color: '#DDD6FE' }}>Red</span>
-                <span style={{ color: 'white' }}>Fla</span>
-                <span style={{ color: '#FCA5A5' }}>q</span>
-              </span>
+            <div className="flex items-center mb-2">
+              <img src={redflaqLogo} alt="RedFlaq" style={{ height: 30, width: 'auto', display: 'block', filter: 'brightness(0) invert(1)' }} />
             </div>
             <p className="text-sm mb-4">
               A Setup A Startup Initiative

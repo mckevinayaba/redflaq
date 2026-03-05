@@ -48,14 +48,16 @@ const Index = () => {
 
       {/* Social proof trust bar */}
       <div style={{
-        width: '100%', background: '#7C3AED', padding: '14px 20px', textAlign: 'center',
-        borderTop: '2px solid #6D28D9', borderBottom: '2px solid #6D28D9',
+        width: '100%',
+        background: 'linear-gradient(90deg, #7C3AED, #6D28D9, #7C3AED)',
+        padding: '14px 20px',
+        textAlign: 'center',
       }}>
         <span style={{
-          fontFamily: "'JetBrains Mono', monospace", fontSize: 11, fontWeight: 500,
+          fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 500,
           letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.9)',
         }}>
-          🛡️ 1,000+ checks done · No fingerprints. No waiting. No police station. Just clarity — in under 60 seconds.
+          1,000+ checks done <span style={{ opacity: 0.3, fontSize: 8, padding: '0 12px' }}>◆</span> No fingerprints. No waiting. No police station. Just clarity — in under 60 seconds.
         </span>
       </div>
 

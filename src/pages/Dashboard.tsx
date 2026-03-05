@@ -86,7 +86,10 @@ export default function Dashboard() {
   const latestSearch = searches[0];
   const latestRisk = latestSearch ? riskConfig[latestSearch.risk_level] || riskConfig.GREEN : null;
 
-  const firstName = profile?.full_name?.split(" ")[0] || "there";
+  const firstName = profile?.full_name?.split(" ")[0]
+    || user?.user_metadata?.full_name?.split(" ")[0]
+    || user?.email?.split("@")[0]
+    || "";
 
   return (
     <DashboardLayout>

@@ -825,6 +825,25 @@ const ResultsPageUpdated = () => {
                 {/* Identity Confidence */}
                 <div className="p-8 border-b border-border">
                   <h3 className="font-body text-base font-bold text-foreground mb-4">Identity Verification Confidence</h3>
+                  
+                  {/* ID Match Status */}
+                  {(person as any).id_match_status === 'exact_match' && (
+                    <div className="bg-green-50 border border-green-300 p-3 mb-4">
+                      <p className="font-body text-sm font-bold text-green-800">✓ ID number confirms: This is the same person</p>
+                    </div>
+                  )}
+                  {(person as any).id_match_status === 'mismatch' && (
+                    <div className="bg-red-50 border border-red-300 p-3 mb-4">
+                      <p className="font-body text-sm font-bold text-red-800">✗ Different ID number: This is likely NOT the same person</p>
+                      <p className="font-body text-xs text-red-600 mt-1">The ID number you provided does not match the ID on this record. This is most likely a different person with a similar name.</p>
+                    </div>
+                  )}
+                  {(person as any).id_match_status === 'partial_match' && (
+                    <div className="bg-yellow-50 border border-yellow-300 p-3 mb-4">
+                      <p className="font-body text-sm font-bold text-yellow-800">⚠️ Partial ID match (last 4 digits) — verify full ID for confirmation</p>
+                    </div>
+                  )}
+
                   <Progress value={confidence} className="h-3 mb-3" />
                   <p className={`font-body text-sm font-semibold mb-3 ${confidence >= 71 ? 'text-green-700' : confidence >= 41 ? 'text-orange-600' : 'text-destructive'}`}>
                     {confidence >= 71 ? '✓ HIGH CONFIDENCE — Strong identity indicators present' :

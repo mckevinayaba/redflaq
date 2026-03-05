@@ -245,7 +245,7 @@ const NavbarPlinq = () => {
               <button
                 key={link.label}
                 onClick={() => scrollToSection(link.href, (link as any).isRoute)}
-                style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 0', color: '#2D2235', fontFamily: "'Syne', sans-serif", fontWeight: 600, textTransform: 'uppercase', fontSize: 14, letterSpacing: '0.05em', background: 'none', border: 'none', cursor: 'pointer' }}
+                style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 0', color: '#2D2235', fontFamily: "'Syne', sans-serif", fontWeight: 600, fontSize: 14, letterSpacing: '0.02em', background: 'none', border: 'none', cursor: 'pointer' }}
               >
                 {link.label}
               </button>

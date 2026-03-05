@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { Lock } from "lucide-react";
+import { Lock, Mail, Clock, ShieldCheck } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
@@ -17,15 +17,26 @@ const SearchOptionsSection = () => {
   const searchReasons = ["Potential romantic partner", "Employee verification", "Childcare provider", "Tenant screening", "Business partner", "Other legitimate purpose"];
 
   const inputStyle: React.CSSProperties = {
-    background: 'white', border: '1.5px solid #D6D3CD', padding: '14px 16px',
-    fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#2D2235',
-    borderRadius: 0, width: '100%', outline: 'none',
+    background: 'rgba(255,255,255,0.06)',
+    border: '1.5px solid rgba(124,58,237,0.25)',
+    padding: '14px 16px',
+    fontFamily: "'Syne', sans-serif",
+    fontSize: 15,
+    color: 'white',
+    borderRadius: 12,
+    width: '100%',
+    outline: 'none',
+    transition: 'border-color 0.2s ease',
   };
 
   const labelStyle: React.CSSProperties = {
-    fontFamily: "'JetBrains Mono', monospace", fontSize: 11,
-    letterSpacing: '0.1em', textTransform: 'uppercase', color: '#4B4453',
-    display: 'block', marginBottom: 8,
+    fontFamily: "'JetBrains Mono', monospace",
+    fontSize: 11,
+    letterSpacing: '0.1em',
+    textTransform: 'uppercase',
+    color: 'rgba(255,255,255,0.5)',
+    display: 'block',
+    marginBottom: 8,
   };
 
   const handleDisabledClick = () => {
@@ -39,137 +50,183 @@ const SearchOptionsSection = () => {
   };
 
   return (
-    <>
-      <section id="search" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '48px 20px 56px' }}>
-        <div style={{ maxWidth: 800, margin: '0 auto' }}>
-          <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 16 }}>
-            Start Verifying
-          </div>
+    <section id="search" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '120px 20px' }}>
+      <div style={{ maxWidth: 800, margin: '0 auto' }}>
+        <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 16 }}>
+          Start Verifying
+        </div>
 
-          <h2 style={{
+        <h2 style={{
+          fontFamily: "'DM Serif Display', serif",
+          fontSize: 'clamp(36px, 4vw, 52px)',
+          maxWidth: 600,
+          color: '#1A1523',
+          marginBottom: 16,
+          letterSpacing: '-0.02em',
+        }}>
+          Check a person using their full name and province.
+        </h2>
+
+        <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#6B7280', marginBottom: 48, maxWidth: 600, lineHeight: 1.7 }}>
+          We scan South African public‑record warning lists for possible matches. Results shown instantly.
+        </p>
+
+        {/* Dark form card */}
+        <div style={{
+          background: 'linear-gradient(145deg, #0F0A1A, #1A1035)',
+          border: '1px solid rgba(124, 58, 237, 0.25)',
+          borderRadius: 24,
+          padding: '48px 32px',
+          boxShadow: '0 8px 48px rgba(124, 58, 237, 0.1), 0 0 0 1px rgba(124,58,237,0.08)',
+        }}>
+          <h3 style={{
             fontFamily: "'DM Serif Display', serif",
-            fontSize: 'clamp(36px, 4vw, 52px)', maxWidth: 600, color: '#2D2235', marginBottom: 16,
+            fontSize: 28,
+            color: 'white',
+            marginBottom: 8,
           }}>
-            Check a person using their full name and province.
-          </h2>
-
-          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#78716C', marginBottom: 48, maxWidth: 600 }}>
-            We scan South African public‑record warning lists for possible matches. Results shown instantly.
+            Person Search
+          </h3>
+          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.5)', marginBottom: 36 }}>
+            Results shown instantly and sent to your email. We're continuously improving accuracy, but no system can be perfect.
           </p>
 
-          {/* Search form */}
-          <div style={{ background: 'white', border: '1.5px solid #D6D3CD', padding: '40px 24px' }}>
-            <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, color: '#2D2235', marginBottom: 8 }}>
-              Person Search
-            </h3>
-            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', marginBottom: 32 }}>
-              Results shown instantly and sent to your email. We're continuously improving accuracy, but no system can be perfect.
-            </p>
+          <div className="space-y-5">
+            <div>
+              <label style={labelStyle}>Full Name *</label>
+              <input
+                ref={nameRef}
+                style={inputStyle}
+                placeholder="e.g. John David Mokoena"
+                onFocus={e => e.currentTarget.style.borderColor = '#7C3AED'}
+                onBlur={e => e.currentTarget.style.borderColor = 'rgba(124,58,237,0.25)'}
+              />
+            </div>
+            <div>
+              <label style={labelStyle}>Province (Optional)</label>
+              <select
+                style={{ ...inputStyle, appearance: 'none' }}
+                onFocus={e => e.currentTarget.style.borderColor = '#7C3AED'}
+                onBlur={e => e.currentTarget.style.borderColor = 'rgba(124,58,237,0.25)'}
+              >
+                <option value="">Select province</option>
+                {provinces.map(p => <option key={p} value={p}>{p}</option>)}
+              </select>
+            </div>
+            <div>
+              <label style={labelStyle}>Age Range (Optional)</label>
+              <select
+                style={{ ...inputStyle, appearance: 'none' }}
+                onFocus={e => e.currentTarget.style.borderColor = '#7C3AED'}
+                onBlur={e => e.currentTarget.style.borderColor = 'rgba(124,58,237,0.25)'}
+              >
+                <option value="">Select age range</option>
+                <option value="18-25">18–25</option>
+                <option value="26-35">26–35</option>
+                <option value="36-45">36–45</option>
+                <option value="46-55">46–55</option>
+                <option value="56+">56+</option>
+              </select>
+            </div>
+            <div>
+              <label style={labelStyle}>Reason for Search *</label>
+              <select
+                style={{ ...inputStyle, appearance: 'none' }}
+                onFocus={e => e.currentTarget.style.borderColor = '#7C3AED'}
+                onBlur={e => e.currentTarget.style.borderColor = 'rgba(124,58,237,0.25)'}
+              >
+                <option value="">Select reason</option>
+                {searchReasons.map(r => <option key={r} value={r}>{r}</option>)}
+              </select>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: 'rgba(255,255,255,0.3)', marginTop: 4, display: 'block' }}>
+                We ask this to comply with POPIA and protect everyone's rights
+              </span>
+            </div>
 
-            <div className="space-y-5">
-              <div>
-                <label style={labelStyle}>Full Name *</label>
-                <input ref={nameRef} style={inputStyle} placeholder="e.g. John David Mokoena" />
-              </div>
-              <div>
-                <label style={labelStyle}>Province (Optional)</label>
-                <select style={inputStyle}>
-                  <option value="">Select province</option>
-                  {provinces.map(p => <option key={p} value={p}>{p}</option>)}
-                </select>
-              </div>
-              <div>
-                <label style={labelStyle}>Age Range (Optional)</label>
-                <select style={inputStyle}>
-                  <option value="">Select age range</option>
-                  <option value="18-25">18–25</option>
-                  <option value="26-35">26–35</option>
-                  <option value="36-45">36–45</option>
-                  <option value="46-55">46–55</option>
-                  <option value="56+">56+</option>
-                </select>
-              </div>
-              <div>
-                <label style={labelStyle}>Reason for Search *</label>
-                <select style={inputStyle}>
-                  <option value="">Select reason</option>
-                  {searchReasons.map(r => <option key={r} value={r}>{r}</option>)}
-                </select>
-                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#9CA3AF', marginTop: 4, display: 'block' }}>
-                  We ask this to comply with POPIA and protect everyone's rights
-                </span>
-              </div>
+            {/* Consent */}
+            <div
+              ref={consentRef}
+              className={`flex items-start gap-3 pt-4 rounded-lg transition-all ${shakeConsent ? 'animate-shake' : ''}`}
+              style={{
+                border: showConsentHint ? '1.5px solid #DC2626' : '1.5px solid transparent',
+                padding: 12,
+                background: showConsentHint ? 'rgba(220,38,38,0.08)' : 'transparent',
+                borderRadius: 12,
+              }}
+            >
+              <Checkbox
+                id="consent"
+                checked={consentChecked}
+                onCheckedChange={(checked) => {
+                  setConsentChecked(checked as boolean);
+                  setShowConsentHint(false);
+                }}
+                className="mt-1"
+                style={{ accentColor: '#7C3AED' }}
+              />
+              <label htmlFor="consent" style={{
+                fontFamily: "'Syne', sans-serif", fontSize: 13, color: 'rgba(255,255,255,0.7)',
+                lineHeight: 1.5, cursor: 'pointer',
+              }}>
+                I confirm I have a legitimate reason to search this person and I agree to the{" "}
+                <a href="/terms" style={{ color: '#A855F7', textDecoration: 'underline' }}>Terms of Service</a> and{" "}
+                <a href="/privacy" style={{ color: '#A855F7', textDecoration: 'underline' }}>Privacy Policy</a>
+              </label>
+            </div>
 
-              {/* FIX 5: Consent ABOVE the CTA button */}
-              <div
-                ref={consentRef}
-                className={`flex items-start gap-3 pt-4 rounded transition-all ${shakeConsent ? 'animate-shake' : ''}`}
+            {showConsentHint && (
+              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#EF4444', marginTop: -8 }}>
+                ↑ Please confirm your reason and agree to the terms above to continue
+              </p>
+            )}
+
+            {/* Submit */}
+            <div onClick={!consentChecked ? handleDisabledClick : undefined}>
+              <button
+                onClick={() => consentChecked && guardedAction(nameRef.current?.value || "")}
+                disabled={!consentChecked}
                 style={{
-                  border: showConsentHint ? '1.5px solid #DC2626' : '1.5px solid transparent',
-                  padding: showConsentHint ? '12px' : '12px',
-                  background: showConsentHint ? '#FEF2F2' : 'transparent',
+                  width: '100%',
+                  background: consentChecked ? 'linear-gradient(135deg, #7C3AED, #A855F7)' : 'rgba(255,255,255,0.1)',
+                  color: 'white',
+                  padding: 20,
+                  fontFamily: "'Syne', sans-serif",
+                  fontSize: 16,
+                  fontWeight: 700,
+                  border: 'none',
+                  cursor: consentChecked ? 'pointer' : 'not-allowed',
+                  borderRadius: 50,
+                  transition: 'all 0.25s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 10,
+                  boxShadow: consentChecked ? '0 4px 24px rgba(124,58,237,0.35)' : 'none',
                 }}
               >
-                <Checkbox
-                  id="consent"
-                  checked={consentChecked}
-                  onCheckedChange={(checked) => {
-                    setConsentChecked(checked as boolean);
-                    setShowConsentHint(false);
-                  }}
-                  className="mt-1"
-                  style={{ accentColor: '#7C3AED' }}
-                />
-                <label htmlFor="consent" style={{
-                  fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#4B4453',
-                  lineHeight: 1.5, cursor: 'pointer',
+                <Lock style={{ width: 16, height: 16 }} />
+                Verify Someone Now — R99
+              </button>
+            </div>
+
+            {/* Form meta — icon chips */}
+            <div className="flex flex-wrap gap-4 pt-2">
+              {[
+                { Icon: Mail, text: "Results shown instantly & emailed" },
+                { Icon: Clock, text: "Usually within minutes" },
+                { Icon: ShieldCheck, text: "Confidential use only" },
+              ].map(({ Icon, text }) => (
+                <span key={text} className="flex items-center gap-1.5" style={{
+                  fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.35)',
                 }}>
-                  I confirm I have a legitimate reason to search this person and I agree to the{" "}
-                  <a href="/terms" style={{ color: '#7C3AED', textDecoration: 'underline' }}>Terms of Service</a> and{" "}
-                  <a href="/privacy" style={{ color: '#7C3AED', textDecoration: 'underline' }}>Privacy Policy</a>
-                </label>
-              </div>
-
-              {showConsentHint && (
-                <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#DC2626', marginTop: -8 }}>
-                  ↑ Please confirm your reason and agree to the terms above to continue
-                </p>
-              )}
-
-              {/* Submit */}
-              <div onClick={!consentChecked ? handleDisabledClick : undefined}>
-                <button
-                  onClick={() => consentChecked && guardedAction(nameRef.current?.value || "")}
-                  disabled={!consentChecked}
-                  style={{
-                    width: '100%', background: consentChecked ? '#7C3AED' : '#9CA3AF', color: 'white',
-                    padding: 18, fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 700,
-                    letterSpacing: '0.05em', border: 'none', cursor: consentChecked ? 'pointer' : 'not-allowed',
-                    transition: 'background 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-                  }}
-                  className={consentChecked ? 'hover:!bg-[#6D28D9]' : ''}
-                >
-                  <Lock style={{ width: 16, height: 16 }} />
-                  Verify Someone Now — R99
-                </button>
-              </div>
-
-              {/* Form meta */}
-              <div className="flex flex-wrap gap-4 pt-2">
-                {[["📧", "Results shown instantly & emailed"], ["⏱️", "Usually within minutes"], ["🔒", "Confidential use only"]].map(([icon, text]) => (
-                  <span key={text} className="flex items-center gap-1.5" style={{
-                    fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#9CA3AF',
-                  }}>
-                    {icon} {text}
-                  </span>
-                ))}
-              </div>
+                  <Icon style={{ width: 13, height: 13 }} /> {text}
+                </span>
+              ))}
             </div>
           </div>
         </div>
-      </section>
-
-    </>
+      </div>
+    </section>
   );
 };
 

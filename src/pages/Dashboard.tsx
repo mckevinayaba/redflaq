@@ -96,7 +96,7 @@ export default function Dashboard() {
       {/* Header */}
       <div className="mb-6 sm:mb-8">
         <p className="font-mono text-[11px] tracking-widest text-muted-foreground uppercase mb-1">Dashboard</p>
-        <h1 className="font-heading text-2xl sm:text-3xl text-foreground">Welcome back, {firstName}</h1>
+        <h1 className="font-heading text-2xl sm:text-3xl text-foreground">Welcome back{firstName ? `, ${firstName}` : ""}</h1>
       </div>
 
       {/* Top cards */}

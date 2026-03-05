@@ -289,7 +289,7 @@ const NavbarPlinq = () => {
             )}
             <button
               onClick={handleVerifyNow}
-              style={{ width: '100%', background: '#7C3AED', color: 'white', padding: 12, fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.08em', textTransform: 'uppercase', border: 'none', cursor: 'pointer' }}
+              style={{ width: '100%', background: '#7C3AED', color: 'white', padding: 12, fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.02em', border: 'none', cursor: 'pointer' }}
             >
               Verify Now
             </button>

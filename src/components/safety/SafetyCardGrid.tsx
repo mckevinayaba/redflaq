@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
+import { Phone, Heart, Home, Baby, CheckCircle, Scale } from "lucide-react";
 
 const cards = [
   {
-    emoji: "🆘",
+    icon: Phone,
     title: "Get Help Now",
     description: "Free GBV support in all 9 provinces",
     href: "/safety-tips#get-help",
@@ -10,31 +11,31 @@ const cards = [
     urgent: true,
   },
   {
-    emoji: "💑",
+    icon: Heart,
     title: "Dating Safety",
     description: "Meeting someone from online safely",
     href: "/safety-tips/first-date-safety",
   },
   {
-    emoji: "🏠",
+    icon: Home,
     title: "Roommate & Tenant Safety",
     description: "Verify before you move in",
     href: "/safety-tips/tenant-safety",
   },
   {
-    emoji: "👶",
+    icon: Baby,
     title: "Domestic Worker Safety",
     description: "Screening nannies and household staff",
     href: "/safety-tips/domestic-worker-safety",
   },
   {
-    emoji: "✅",
+    icon: CheckCircle,
     title: "Red Flag Quiz",
     description: "Test your safety awareness",
     href: "/safety-tips/red-flag-quiz",
   },
   {
-    emoji: "⚖️",
+    icon: Scale,
     title: "Protection Orders",
     description: "Free at any Magistrate's Court",
     href: "/safety-tips#protection-orders",
@@ -54,35 +55,78 @@ const SafetyCardGrid = () => {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-16">
-      {cards.map((card) => (
-        <Link
-          key={card.title}
-          to={card.href}
-          onClick={card.isAnchor ? (e) => handleAnchorClick(e, card.href) : undefined}
-          className={`group relative flex flex-col rounded-2xl border p-6 no-underline transition-all duration-200 hover:-translate-y-1 hover:shadow-lg ${
-            card.urgent
-              ? "bg-destructive border-destructive text-destructive-foreground shadow-md"
-              : "bg-card border-border text-card-foreground shadow-sm hover:border-primary/30"
-          }`}
-        >
-          <span className="text-3xl mb-3">{card.emoji}</span>
-          <h3 className={`font-heading text-lg font-bold mb-1.5 ${card.urgent ? "text-destructive-foreground" : "text-foreground"}`}>
-            {card.title}
-          </h3>
-          <p className={`font-body text-sm leading-relaxed flex-1 mb-4 ${card.urgent ? "text-destructive-foreground/85" : "text-muted-foreground"}`}>
-            {card.description}
-          </p>
-          <span
-            className={`inline-flex items-center text-xs font-semibold font-heading tracking-wide uppercase ${
-              card.urgent
-                ? "text-destructive-foreground/90"
-                : "text-primary group-hover:text-primary/80"
-            }`}
+      {cards.map((card) => {
+        const Icon = card.icon;
+        return (
+          <Link
+            key={card.title}
+            to={card.href}
+            onClick={card.isAnchor ? (e) => handleAnchorClick(e, card.href) : undefined}
+            className="group relative flex flex-col no-underline transition-all duration-300 hover:-translate-y-1.5"
+            style={{
+              borderRadius: 16,
+              padding: '28px 24px',
+              background: card.urgent
+                ? 'linear-gradient(135deg, #991B1B 0%, #DC2626 100%)'
+                : 'linear-gradient(135deg, #7C3AED 0%, #EDE9FE 100%)',
+              boxShadow: card.urgent
+                ? '0 4px 24px rgba(220, 38, 38, 0.18)'
+                : '0 4px 24px rgba(124, 58, 237, 0.08)',
+            }}
           >
-            {card.urgent ? "Get Help →" : "Learn More →"}
-          </span>
-        </Link>
-      ))}
+            {/* Icon circle */}
+            <div
+              className="flex items-center justify-center flex-shrink-0 mb-4"
+              style={{
+                width: 48,
+                height: 48,
+                borderRadius: '50%',
+                background: card.urgent ? 'rgba(255,255,255,0.2)' : 'rgba(124, 58, 237, 0.85)',
+              }}
+            >
+              <Icon size={24} color="#FFFFFF" strokeWidth={2} />
+            </div>
+
+            <h3
+              style={{
+                fontFamily: "'Syne', var(--font-heading)",
+                fontSize: 20,
+                fontWeight: 700,
+                color: card.urgent ? '#FFFFFF' : '#1F1F2E',
+                marginBottom: 6,
+              }}
+            >
+              {card.title}
+            </h3>
+
+            <p
+              style={{
+                fontSize: 14,
+                lineHeight: 1.6,
+                color: card.urgent ? 'rgba(255,255,255,0.9)' : '#6B7280',
+                flex: 1,
+                marginBottom: 16,
+              }}
+              className="font-body"
+            >
+              {card.description}
+            </p>
+
+            <span
+              className="inline-flex items-center justify-center self-start font-body font-semibold transition-all duration-200"
+              style={{
+                fontSize: 12,
+                padding: '6px 16px',
+                borderRadius: 999,
+                background: card.urgent ? 'rgba(255,255,255,0.25)' : '#7C3AED',
+                color: '#FFFFFF',
+              }}
+            >
+              {card.urgent ? "Get Help" : "Learn More"}
+            </span>
+          </Link>
+        );
+      })}
     </div>
   );
 };

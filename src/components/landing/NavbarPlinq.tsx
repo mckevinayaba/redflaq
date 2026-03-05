@@ -112,12 +112,12 @@ const NavbarPlinq = () => {
 
           {/* Desktop nav links */}
           {!isMobile && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
+             <div style={{ display: 'flex', alignItems: 'center', gap: 36, marginLeft: 56 }}>
               {navLinks.map((link) => (
                 <button
                   key={link.label}
                   onClick={() => scrollToSection(link.href, (link as any).isRoute)}
-                  style={{ color: '#4B4453', fontSize: 14, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', fontFamily: "'Syne', sans-serif", background: 'none', border: 'none', cursor: 'pointer' }}
+                  style={{ color: '#4B4453', fontSize: 14, fontWeight: 600, letterSpacing: '0.02em', fontFamily: "'Syne', sans-serif", background: 'none', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}
                 >
                   {link.label}
                 </button>
@@ -133,7 +133,7 @@ const NavbarPlinq = () => {
                 style={{
                   background: '#DC2626', color: 'white', padding: '7px 14px',
                   fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 12,
-                  letterSpacing: '0.06em', textTransform: 'uppercase', border: 'none',
+                  letterSpacing: '0.02em', border: 'none',
                   cursor: 'pointer', borderRadius: 6,
                 }}
               >
@@ -196,7 +196,7 @@ const NavbarPlinq = () => {
                 style={{
                   background: '#7C3AED', color: 'white', padding: '8px 20px',
                   fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13,
-                  letterSpacing: '0.08em', textTransform: 'uppercase', border: 'none', cursor: 'pointer',
+                  letterSpacing: '0.02em', border: 'none', cursor: 'pointer',
                 }}
               >
                 Verify Now
@@ -245,14 +245,14 @@ const NavbarPlinq = () => {
               <button
                 key={link.label}
                 onClick={() => scrollToSection(link.href, (link as any).isRoute)}
-                style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 0', color: '#2D2235', fontFamily: "'Syne', sans-serif", fontWeight: 600, textTransform: 'uppercase', fontSize: 14, letterSpacing: '0.05em', background: 'none', border: 'none', cursor: 'pointer' }}
+                style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 0', color: '#2D2235', fontFamily: "'Syne', sans-serif", fontWeight: 600, fontSize: 14, letterSpacing: '0.02em', background: 'none', border: 'none', cursor: 'pointer' }}
               >
                 {link.label}
               </button>
             ))}
             <button
               onClick={handleGetHelp}
-              style={{ width: '100%', background: '#DC2626', color: 'white', padding: 12, fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.06em', textTransform: 'uppercase', border: 'none', cursor: 'pointer', borderRadius: 6 }}
+              style={{ width: '100%', background: '#DC2626', color: 'white', padding: 12, fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.02em', border: 'none', cursor: 'pointer', borderRadius: 6 }}
             >
               🆘 Get Help
             </button>
@@ -260,7 +260,7 @@ const NavbarPlinq = () => {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <button
                   onClick={() => { navigate('/dashboard'); setIsMenuOpen(false); }}
-                  style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 0', color: '#7C3AED', fontFamily: "'Syne', sans-serif", fontWeight: 700, textTransform: 'uppercase', fontSize: 14, letterSpacing: '0.05em', background: 'none', border: 'none', cursor: 'pointer' }}
+                  style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 0', color: '#7C3AED', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 14, letterSpacing: '0.02em', background: 'none', border: 'none', cursor: 'pointer' }}
                 >
                   Dashboard
                 </button>
@@ -289,7 +289,7 @@ const NavbarPlinq = () => {
             )}
             <button
               onClick={handleVerifyNow}
-              style={{ width: '100%', background: '#7C3AED', color: 'white', padding: 12, fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.08em', textTransform: 'uppercase', border: 'none', cursor: 'pointer' }}
+              style={{ width: '100%', background: '#7C3AED', color: 'white', padding: 12, fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.02em', border: 'none', cursor: 'pointer' }}
             >
               Verify Now
             </button>

@@ -7,10 +7,10 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const PACKAGES: Record<string, { amountCents: number; credits: number; label: string }> = {
-  single: { amountCents: 9900, credits: 1, label: "1 Safety Check" },
-  triple: { amountCents: 24900, credits: 3, label: "3 Safety Checks" },
-  five: { amountCents: 39900, credits: 5, label: "5 Safety Checks" },
+const PACKAGES: Record<string, { amountCents: number; credits: number; label: string; type: string }> = {
+  single: { amountCents: 9900, credits: 1, label: "1 Safety Check", type: "single" },
+  triple: { amountCents: 24900, credits: 3, label: "3 Safety Checks", type: "triple" },
+  five: { amountCents: 39900, credits: 5, label: "5 Safety Checks", type: "five" },
 };
 
 serve(async (req) => {
@@ -44,7 +44,9 @@ serve(async (req) => {
     const paymentId = `RF-YOCO-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
     const origin = req.headers.get("origin") || "https://redflaq.lovable.app";
 
-    // Create Yoco checkout session
+    // Include package_type in success URL so the success page can show details optimistically
+    const successUrl = `${origin}/payment-success?payment_id=${paymentId}&email=${encodeURIComponent(email)}&package_type=${package_type}`;
+
     const yocoRes = await fetch("https://payments.yoco.com/api/checkouts", {
       method: "POST",
       headers: {
@@ -54,7 +56,7 @@ serve(async (req) => {
       body: JSON.stringify({
         amount: pkg.amountCents,
         currency: "ZAR",
-        successUrl: `${origin}/payment-success?payment_id=${paymentId}&email=${encodeURIComponent(email)}`,
+        successUrl,
         cancelUrl: `${origin}/payment-cancelled`,
         metadata: {
           payment_id: paymentId,
@@ -73,7 +75,6 @@ serve(async (req) => {
 
     const yocoData = await yocoRes.json();
 
-    // Store pending payment
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, supabaseKey);

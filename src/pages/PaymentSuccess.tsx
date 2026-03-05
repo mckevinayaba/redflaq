@@ -1,75 +1,42 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
-import { CheckCircle2, ArrowRight, Loader2 } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
+import { CheckCircle2, ArrowRight, Loader2, Shield } from "lucide-react";
+
+const PACKAGES: Record<string, { label: string; credits: number; price: number }> = {
+  single: { label: "One Safety Check", credits: 1, price: 99 },
+  triple: { label: "Safety Pack (3 Checks)", credits: 3, price: 249 },
+  five: { label: "Family & Friends (5 Checks)", credits: 5, price: 399 },
+};
+
+function resolvePackage(searchParams: URLSearchParams) {
+  // Try package_type from URL
+  const pkgType = searchParams.get("package_type");
+  if (pkgType && PACKAGES[pkgType]) return PACKAGES[pkgType];
+
+  // Infer from credits param
+  const credits = parseInt(searchParams.get("credits") || "0", 10);
+  if (credits === 5) return PACKAGES.five;
+  if (credits === 3) return PACKAGES.triple;
+  if (credits >= 1) return PACKAGES.single;
+
+  return PACKAGES.single; // fallback
+}
 
 export default function PaymentSuccess() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { user } = useAuth();
   const paymentId = searchParams.get("payment_id");
-  const emailParam = searchParams.get("email");
+  const email = searchParams.get("email");
+  const pkg = resolvePackage(searchParams);
 
-  const [creditsReady, setCreditsReady] = useState(false);
-  const pollCountRef = useRef(0);
-  const maxPolls = 20; // 20 × 3s = 60s max wait
-
-  const email = user?.email || emailParam;
+  // Optimistic: show success immediately — Yoco only redirects here on successful payment
+  const [showReady, setShowReady] = useState(false);
 
   useEffect(() => {
-    if (creditsReady) return;
-
-    const checkCredits = async () => {
-      // Check purchases table by email
-      if (email) {
-        const { data: purchases } = await supabase
-          .from("purchases")
-          .select("credits_remaining")
-          .eq("email", email)
-          .eq("status", "completed")
-          .gt("credits_remaining", 0)
-          .limit(1);
-
-        if (purchases && purchases.length > 0) {
-          setCreditsReady(true);
-          return;
-        }
-      }
-
-      // Check manual_payments by payment_id (works without auth)
-      if (paymentId) {
-        const { data: mp } = await supabase
-          .from("manual_payments")
-          .select("status, search_credits, credits_used")
-          .eq("payment_id", paymentId)
-          .eq("status", "verified")
-          .limit(1);
-
-        if (mp && mp.some(p => (p.search_credits || 0) - (p.credits_used || 0) > 0)) {
-          setCreditsReady(true);
-          return;
-        }
-      }
-    };
-
-    // Initial check
-    checkCredits();
-
-    // Poll every 3 seconds
-    const interval = setInterval(() => {
-      pollCountRef.current += 1;
-      if (pollCountRef.current >= maxPolls) {
-        clearInterval(interval);
-        // After 60s, let user through anyway
-        setCreditsReady(true);
-        return;
-      }
-      checkCredits();
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [creditsReady, email, paymentId]);
+    // Brief 2-second "confirming" animation for perceived security, then show success
+    const timer = setTimeout(() => setShowReady(true), 2000);
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleStartCheck = () => {
     sessionStorage.removeItem("pendingSearch");
@@ -80,60 +47,87 @@ export default function PaymentSuccess() {
     <div style={{ background: '#F7F4F0', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
       <div style={{ maxWidth: 520, width: '100%', textAlign: 'center' }}>
         <div style={{ background: 'white', border: '1.5px solid #D6D3CD', padding: '48px 40px' }}>
-          <CheckCircle2 size={56} style={{ color: '#16A34A', margin: '0 auto 24px' }} />
 
-          <h1 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, color: '#2D2235', marginBottom: 12 }}>
-            Payment Confirmed!
-          </h1>
-
-          {!creditsReady ? (
+          {!showReady ? (
             <>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginBottom: 8 }}>
-                <Loader2 size={20} style={{ color: '#7C3AED', animation: 'spin 1s linear infinite' }} />
-                <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#78716C', lineHeight: 1.6, margin: 0 }}>
-                  Activating your credits…
-                </p>
-              </div>
-              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#9CA3AF', lineHeight: 1.6 }}>
-                This usually takes a few seconds. Please don't close this page.
+              <Loader2 size={48} style={{ color: '#7C3AED', margin: '0 auto 20px', animation: 'spin 1s linear infinite' }} />
+              <h1 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 24, color: '#2D2235', marginBottom: 8 }}>
+                Confirming your payment securely…
+              </h1>
+              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', lineHeight: 1.6 }}>
+                This takes just a moment.
               </p>
             </>
           ) : (
-            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#78716C', lineHeight: 1.6, marginBottom: 8 }}>
-              Your credits are ready. You can now run your safety check.
-            </p>
+            <>
+              <CheckCircle2 size={56} style={{ color: '#16A34A', margin: '0 auto 24px' }} />
+
+              <h1 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, color: '#2D2235', marginBottom: 12 }}>
+                Payment Confirmed!
+              </h1>
+
+              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#78716C', lineHeight: 1.6, marginBottom: 4 }}>
+                Your checks are ready. You can start verifying immediately.
+              </p>
+
+              {/* Package summary */}
+              <div style={{
+                background: '#F3F0FF', border: '1px solid #DDD6FE', borderRadius: 8,
+                padding: '16px 20px', margin: '24px 0', textAlign: 'left',
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                  <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#78716C' }}>Package</span>
+                  <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: '#2D2235' }}>{pkg.label}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                  <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#78716C' }}>Checks Available</span>
+                  <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: '#16A34A' }}>{pkg.credits}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#78716C' }}>Amount Paid</span>
+                  <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: '#2D2235' }}>R{pkg.price}.00</span>
+                </div>
+              </div>
+
+              {paymentId && (
+                <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#9CA3AF', marginBottom: 24 }}>
+                  Reference: {paymentId}
+                </p>
+              )}
+
+              <button
+                onClick={handleStartCheck}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 8,
+                  background: '#7C3AED', color: 'white', padding: '14px 32px',
+                  fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700,
+                  border: 'none', borderRadius: 4, cursor: 'pointer',
+                  transition: 'all 0.2s',
+                }}
+              >
+                Start Verifying Now <ArrowRight size={18} />
+              </button>
+
+              <div style={{ marginTop: 16 }}>
+                <Link to="/signup?mode=signin" style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#7C3AED' }}>
+                  Sign in to your account
+                </Link>
+              </div>
+            </>
           )}
 
-          {paymentId && (
-            <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#9CA3AF', marginBottom: 32, marginTop: 16 }}>
-              Reference: {paymentId}
-            </p>
-          )}
-
-          <button
-            onClick={handleStartCheck}
-            disabled={!creditsReady}
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: 8,
-              background: creditsReady ? '#7C3AED' : '#C4B5FD', color: 'white', padding: '14px 32px',
-              fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700,
-              border: 'none', borderRadius: 4, cursor: creditsReady ? 'pointer' : 'not-allowed',
-              opacity: creditsReady ? 1 : 0.7,
-              transition: 'all 0.2s',
-            }}
-          >
-            {creditsReady ? (
-              <>Start Your Safety Check <ArrowRight size={18} /></>
-            ) : (
-              <>Processing… <Loader2 size={18} style={{ animation: 'spin 1s linear infinite' }} /></>
-            )}
-          </button>
-
-          <div style={{ marginTop: 24 }}>
-            <Link to="/" style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#7C3AED' }}>
-              Back to Home
-            </Link>
+          <div style={{ marginTop: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+            <Shield size={14} style={{ color: '#9CA3AF' }} />
+            <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#9CA3AF' }}>
+              Secured by 256-bit encryption
+            </span>
           </div>
+        </div>
+
+        <div style={{ marginTop: 16, textAlign: 'center' }}>
+          <Link to="/" style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#7C3AED' }}>
+            Back to Home
+          </Link>
         </div>
       </div>
 

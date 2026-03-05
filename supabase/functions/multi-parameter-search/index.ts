@@ -754,10 +754,11 @@ serve(async (req) => {
                 ${discreetPreviewText}${'&#847; &zwnj; &nbsp; '.repeat(30)}
               </div>
 
-              <div style="text-align: center; margin-bottom: 32px;">
-                <h1 style="font-size: 28px; color: #1a1a1a; margin: 0;">🔍 RedFlaq</h1>
-                <p style="color: #666; font-size: 14px; margin-top: 4px;">Background Verification Service</p>
-              </div>
+               <div style="text-align: center; margin-bottom: 32px;">
+                  <img src="https://redflaq.com/redflaq-icon.png" alt="RedFlaq" width="48" height="48" style="display: inline-block; margin-bottom: 12px; border-radius: 10px;" />
+                  <h1 style="font-size: 26px; color: #3B0764; margin: 0; font-family: 'Segoe UI', Arial, sans-serif;">RedFla<span style="color: #DC2626;">q</span></h1>
+                  <p style="color: #666; font-size: 13px; margin-top: 4px;">Background Verification Service</p>
+                </div>
 
               <p style="color: #333; font-size: 15px; line-height: 1.8;">
                 Hi there,<br/><br/>

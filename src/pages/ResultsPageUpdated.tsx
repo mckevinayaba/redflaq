@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import ShareInviteModal from "@/components/ShareInviteModal";
 import ShareControlsModal from "@/components/ShareControlsModal";
 import PostReportGuidance from "@/components/PostReportGuidance";
+import GetHelpModal from "@/components/GetHelpModal";
 
 interface WantedPerson {
   id: string;

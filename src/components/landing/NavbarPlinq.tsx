@@ -112,12 +112,12 @@ const NavbarPlinq = () => {
 
           {/* Desktop nav links */}
           {!isMobile && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 40 }}>
+             <div style={{ display: 'flex', alignItems: 'center', gap: 36, marginLeft: 56 }}>
               {navLinks.map((link) => (
                 <button
                   key={link.label}
                   onClick={() => scrollToSection(link.href, (link as any).isRoute)}
-                  style={{ color: '#4B4453', fontSize: 14, fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', fontFamily: "'Syne', sans-serif", background: 'none', border: 'none', cursor: 'pointer' }}
+                  style={{ color: '#4B4453', fontSize: 14, fontWeight: 600, letterSpacing: '0.02em', fontFamily: "'Syne', sans-serif", background: 'none', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}
                 >
                   {link.label}
                 </button>

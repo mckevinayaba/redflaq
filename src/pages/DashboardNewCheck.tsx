@@ -50,7 +50,7 @@ export default function DashboardNewCheck() {
   const [idNumber, setIdNumber] = useState("");
 
   // Fetch credit balance
-  useState(() => {
+  useEffect(() => {
     if (!user) return;
     const email = user.email || "";
     Promise.all([
@@ -63,7 +63,7 @@ export default function DashboardNewCheck() {
       setCreditsRemaining(total);
       if (total <= 0) navigate("/pricing");
     });
-  });
+  }, [user]);
 
   const sanitize = (s: string) => s.replace(/[<>"'`]/g, "").slice(0, 100);
 

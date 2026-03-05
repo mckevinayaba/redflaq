@@ -656,7 +656,7 @@ const ResultsPageUpdated = () => {
         )}
 
         {/* ─── WANTED PERSON CARDS ─── */}
-        {results.isWanted && results.wantedPersons.map((person, idx) => {
+        {hasRecords && results.wantedPersons.map((person, idx) => {
           const confidence = getConfidence(person);
           const daysAgo = getDaysAgo(person.updated_at);
           const isViolent = /murder|assault|rape|sexual|violence|attack|stab|shoot/i.test(person.charges);

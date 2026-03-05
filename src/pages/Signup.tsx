@@ -148,7 +148,7 @@ export default function Signup() {
             >
               Go to Dashboard instead
             </button>
-            {user?.email === "mckevin.ayaba@gmail.com" && (
+            {email.trim().toLowerCase() === "mckevin.ayaba@gmail.com" && (
               <button
                 onClick={() => navigate("/admin")}
                 className="font-body text-sm mt-2 flex items-center justify-center gap-1.5 mx-auto"

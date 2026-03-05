@@ -335,10 +335,15 @@ export default function Signup() {
                     }}
                     className="font-body text-[13px]" style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer' }}
                   >
-                    Forgot your password?
+               Forgot your password?
                   </button>
                 )}
               </div>
+
+              {/* Operated by notice */}
+              <p className="font-body text-center mt-5" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)' }}>
+                RedFlaq is operated by Setup A Startup (Pty) Ltd
+              </p>
             </>
           )}
         </div>

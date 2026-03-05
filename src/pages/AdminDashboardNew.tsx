@@ -59,7 +59,7 @@ export default function AdminDashboardNew() {
     const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
 
-    const [profilesRes, checksRes, checksTodayRes, paymentsRes, recentChecksRes, newSignupsRes, last30Checks, pendingRes] = await Promise.all([
+    const [profilesRes, checksRes, checksTodayRes, paymentsRes, recentChecksRes, newSignupsRes, last30Checks, pendingRes, allPaymentsRes, allPurchasesRes] = await Promise.all([
       supabase.from("profiles").select("*", { count: "exact", head: true }),
       supabase.from("searches").select("*", { count: "exact", head: true }),
       supabase.from("searches").select("*", { count: "exact", head: true }).gte("searched_at", startOfDay),
@@ -68,6 +68,8 @@ export default function AdminDashboardNew() {
       supabase.from("profiles").select("*", { count: "exact", head: true }).gte("created_at", sevenDaysAgo),
       supabase.from("searches").select("searched_at").gte("searched_at", thirtyDaysAgo).order("searched_at", { ascending: true }),
       supabase.from("manual_payments").select("*", { count: "exact", head: true }).eq("status", "pending"),
+      supabase.from("manual_payments").select("amount").eq("status", "verified"),
+      supabase.from("purchases").select("amount").eq("status", "completed"),
     ]);
 
     // Active users this month (distinct user_ids who ran checks)

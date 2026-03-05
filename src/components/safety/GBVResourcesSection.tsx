@@ -150,14 +150,26 @@ function ResourceCard({ r }: { r: ProvResource }) {
         <p className="font-body text-xs text-muted-foreground">{r.hours}</p>
       )}
       <div className="flex items-center gap-3 mt-1">
-        <a
-          href={`tel:${r.phone.replace(/\s/g, "")}`}
-          aria-label={`Call ${r.name}`}
-          className="inline-flex items-center gap-1.5 font-heading text-base font-bold text-primary hover:text-primary/80 transition-colors min-h-[44px]"
-        >
-          <Phone className="w-4 h-4 shrink-0" />
-          {r.phone}
-        </a>
+        {/\d/.test(r.phone) ? (
+          <a
+            href={`tel:${r.phone.replace(/\s/g, "")}`}
+            aria-label={`Call ${r.name}`}
+            className="inline-flex items-center gap-1.5 font-heading text-base font-bold text-primary hover:text-primary/80 transition-colors min-h-[44px]"
+          >
+            <Phone className="w-4 h-4 shrink-0" />
+            {r.phone}
+          </a>
+        ) : (
+          <a
+            href={`https://${r.phone}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Visit ${r.name}`}
+            className="inline-flex items-center gap-1.5 font-heading text-base font-bold text-primary hover:text-primary/80 transition-colors min-h-[44px] underline"
+          >
+            {r.phone}
+          </a>
+        )}
         {r.whatsapp && (
           <a
             href={`https://wa.me/${formatWhatsApp(r.whatsapp)}`}

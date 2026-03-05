@@ -14,6 +14,10 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
   const [email, setEmail] = useState('');
   const [selectedPackage, setSelectedPackage] = useState(packageType);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    setSelectedPackage(packageType);
+  }, [packageType]);
   const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'payfast'>('stripe');
   const { toast } = useToast();
 

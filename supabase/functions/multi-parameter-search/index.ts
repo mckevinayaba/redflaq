@@ -188,6 +188,15 @@ function calculateRiskScore(records: any[]): { score: number; factors: string[];
 
   score = Math.min(Math.round(score), 100);
 
+  // CRITICAL: If we have ANY records but score is still 0 (unrecognized charges),
+  // force minimum YELLOW so we NEVER show "NO PUBLIC RED FLAGS" alongside records.
+  if (records.length > 0 && score === 0) {
+    score = 10;
+    if (!factors.includes('Unclassified public record found')) {
+      factors.push('Unclassified public record found');
+    }
+  }
+
   let badgeLevel: string;
   if (score >= 50) badgeLevel = 'RED';
   else if (score >= 25) badgeLevel = 'ORANGE';

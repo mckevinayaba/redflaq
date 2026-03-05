@@ -272,7 +272,11 @@ const ResultsPageUpdated = () => {
 
   if (!results) return null;
 
-  const isClear = !results.isWanted;
+  // CRITICAL FIX: A result is only "clear" if ZERO records found AND risk level is GREEN
+  // Never show clear when ANY records exist, even with low confidence
+  const hasRecords = results.wantedPersonsCount > 0 || results.wantedPersons.length > 0;
+  const isClear = !hasRecords && results.riskLevel === 'GREEN';
+  const isUncertainMatch = hasRecords && results.wantedPersons.every(p => (p.confidence || 20) < 50);
   const isMultiple = results.wantedPersonsCount > 1;
   const searchDate = new Date(results.searchedAt).toLocaleDateString('en-ZA', { day: '2-digit', month: '2-digit', year: 'numeric' });
   const searchTime = new Date(results.searchedAt).toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' });

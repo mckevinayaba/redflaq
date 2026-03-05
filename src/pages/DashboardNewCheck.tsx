@@ -91,9 +91,11 @@ export default function DashboardNewCheck() {
     const fullName = `${sanitize(firstName).trim()} ${sanitize(surname).trim()}`;
 
     try {
+      const cleanedId = useIdNumber ? idNumber.replace(/\s/g, '') : undefined;
       const { data, error } = await supabase.functions.invoke("multi-parameter-search", {
         body: {
           full_name: fullName,
+          sa_id_number: cleanedId || undefined,
           province: province || undefined,
           user_id: user?.id,
           discreet_mode: discreetMode,

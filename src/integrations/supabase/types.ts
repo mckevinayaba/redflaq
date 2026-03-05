@@ -610,7 +610,9 @@ export type Database = {
           payment_id: string | null
           recommendation: string | null
           results: Json
+          risk_factors: string[] | null
           risk_level: string
+          risk_score: number | null
           search_case_number: string | null
           search_dob: string | null
           search_id: string
@@ -631,7 +633,9 @@ export type Database = {
           payment_id?: string | null
           recommendation?: string | null
           results?: Json
+          risk_factors?: string[] | null
           risk_level?: string
+          risk_score?: number | null
           search_case_number?: string | null
           search_dob?: string | null
           search_id: string
@@ -652,7 +656,9 @@ export type Database = {
           payment_id?: string | null
           recommendation?: string | null
           results?: Json
+          risk_factors?: string[] | null
           risk_level?: string
+          risk_score?: number | null
           search_case_number?: string | null
           search_dob?: string | null
           search_id?: string

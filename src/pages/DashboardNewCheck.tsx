@@ -44,6 +44,8 @@ export default function DashboardNewCheck() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [progress, setProgress] = useState(0);
   const [formError, setFormError] = useState("");
+  const [useIdNumber, setUseIdNumber] = useState(false);
+  const [idNumber, setIdNumber] = useState("");
 
   const sanitize = (s: string) => s.replace(/[<>"'`]/g, "").slice(0, 100);
 

@@ -305,19 +305,42 @@ const ResultsPageUpdated = () => {
 
   // Override risk badge: if records exist but riskLevel is GREEN, force to YELLOW
   const effectiveRiskLevel = (hasRecords && results.riskLevel === 'GREEN') ? 'YELLOW' : results.riskLevel;
+  
+  // Detect partial name matches (e.g., "Mckevin Ayaba" vs "MCKEVIN AYABA DORMITHIENE")
+  const searchName = results.fullName || results.searchIdentifier || '';
+  const partialNameMatches = results.wantedPersons.map(p => ({
+    person: p,
+    ...detectPartialNameMatch(searchName, p.full_name),
+  }));
+  const hasPartialNameMatch = partialNameMatches.some(m => m.isPartialMatch);
+
   const riskBadge = isUncertainMatch
-    ? { color: '#CA8A04', bg: '#FEFCE8', label: 'UNCERTAIN MATCH', icon: '⚠️', borderClass: 'border-yellow-500' }
+    ? hasPartialNameMatch
+      ? { color: '#D97706', bg: '#FFFBEB', label: 'UNCERTAIN MATCH — ADDITIONAL NAMES FOUND', icon: '⚠️', borderClass: 'border-amber-500' }
+      : { color: '#CA8A04', bg: '#FEFCE8', label: 'UNCERTAIN MATCH', icon: '⚠️', borderClass: 'border-yellow-500' }
     : getRiskBadge(effectiveRiskLevel);
+
   const riskExplainer = isUncertainMatch
-    ? {
-        title: 'We found records linked to a similar name, but we cannot confirm this is the same person. Match confidence is low — verify carefully before making any decisions.',
-        triggers: [
-          'Name similarity match only — no ID or additional data confirmed',
-          'This could be a different person with the same or similar name',
-          results.wantedPersonsCount > 1 ? `${results.wantedPersonsCount} possible matches found` : 'Single low-confidence match found',
-        ].filter(Boolean),
-        action: 'DO NOT assume this is the same person. Verify with date of birth, location, and case details. If unsure, request Human Verification or contact SAPS directly.',
-      }
+    ? hasPartialNameMatch
+      ? {
+          title: `We found someone whose name includes the names you searched for, plus ${partialNameMatches.find(m => m.isPartialMatch)?.additionalNames || 1} additional name(s). This is common in South Africa — many people use shortened versions of their full legal name in daily life.`,
+          triggers: [
+            `You searched: "${searchName}" — Record found: "${partialNameMatches.find(m => m.isPartialMatch)?.person.full_name}"`,
+            'Additional name(s) on the record could mean same person with full legal name, or a different person',
+            'No ID number provided for definitive verification',
+            !partialNameMatches.find(m => m.isPartialMatch)?.person.photo_url ? 'No photo available in database for visual confirmation' : null,
+          ].filter(Boolean),
+          action: 'Verify identity: Ask for their full legal name as it appears on their ID. If they confirm all names on the record, this is likely the same person. Read our Conversation Guide for how to ask tactfully.',
+        }
+      : {
+          title: 'We found records linked to a similar name, but we cannot confirm this is the same person. Match confidence is low — verify carefully before making any decisions.',
+          triggers: [
+            'Name similarity match only — no ID or additional data confirmed',
+            'This could be a different person with the same or similar name',
+            results.wantedPersonsCount > 1 ? `${results.wantedPersonsCount} possible matches found` : 'Single low-confidence match found',
+          ].filter(Boolean),
+          action: 'DO NOT assume this is the same person. Verify with date of birth, location, and case details. If unsure, request Human Verification or contact SAPS directly.',
+        }
     : getRiskExplainer(effectiveRiskLevel, results.wantedPersons);
 
   return (

@@ -80,9 +80,9 @@ const cardsByRisk: Record<string, { icon: string; heading: string; body: string;
     ],
   },
   GREEN: {
-    icon: "✅",
-    heading: "No warnings found — here's what to keep in mind.",
-    body: "No public-record warnings matched this name in the sources RedFlaq checks. This is good news — but a clear result is not a guarantee of someone's character. Always trust your instincts too.",
+    icon: "⚠️",
+    heading: "No records found — but this doesn't guarantee safety. Here's what to do next:",
+    body: "No public-record warnings matched this name in the sources RedFlaq checks. A clear result is NOT a guarantee of someone's character. In South Africa, only 8% of rape cases result in convictions. Always trust your instincts.",
     cards: [
       {
         icon: "🛡️",

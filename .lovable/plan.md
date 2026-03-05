@@ -2,54 +2,24 @@
 
 ## Problem
 
-The Tawk.to chat widget is:
-1. Auto-opening its chat window without user interaction
-2. Showing a proactive "We Are Here" popup message
-3. Displaying a "1 new message" notification badge above the navbar
+The catch-all error message on line 148 — "We couldn't complete this search right now. You won't be charged for this attempt." — is too vague. The edge function returns specific error messages (e.g., "Payment not yet verified", "Failed to deduct credit", "Authentication required", "User not found") but the frontend discards them and shows a generic message.
 
-All of these are controlled by Tawk.to's API settings.
+## Plan
 
-## Fix
+### Improve error handling in `src/pages/DashboardNewCheck.tsx` (lines 137-150)
 
-Add `Tawk_API` configuration in `index.html` to suppress all auto-popups:
+Replace the generic catch block with smarter error mapping that:
 
-1. **Set `Tawk_API.onLoad`** callback to:
-   - Minimize the widget on load (`Tawk_API.minimize()`)
-   - Hide the popup message (`Tawk_API.hideWidget()` is too aggressive — instead use `minimize`)
-2. **Set `Tawk_API.customStyle`** to hide the notification badge
-3. **Disable proactive chat triggers** by setting `Tawk_API.onBeforeLoad` to prevent auto-popup behaviors:
-   - `Tawk_API.visitor` settings won't help — the proactive messages ("We Are Here", auto-open) are configured in the Tawk.to dashboard under **Triggers**
-   
-### What we can control via code
+1. **Passes through the actual server error** when it's user-meaningful
+2. **Maps known error strings** to friendly messages:
+   - `"Payment not yet verified"` → "Your payment hasn't been verified yet. Please allow a few minutes for processing, then try again."
+   - `"Invalid payment ID"` → "We couldn't find a valid payment for your account. Please purchase a package first."
+   - `"Failed to deduct credit"` → "Something went wrong processing your credit. Please try again or contact support."
+   - `"Authentication required"` → "You need to be signed in to run a check. Please log in and try again."
+   - `"User not found"` → "We couldn't verify your account. Please log out, log back in, and try again."
+   - Network/fetch errors → keep existing message about trying again
+   - Unknown errors → "Something went wrong: [actual error]. You have not been charged. Please try again."
+3. **Always include the real error** in the displayed message so the user knows what happened, instead of a dead-end generic line
 
-In `index.html`, before the Tawk script loads, add:
-
-```javascript
-Tawk_API.onLoad = function() {
-  Tawk_API.minimize();
-};
-Tawk_API.onChatMessageVisitor = function() {};
-Tawk_API.onChatMessageSystem = function() {};
-```
-
-And add CSS to hide the unread badge:
-
-```css
-/* Hide Tawk notification badge */
-.tawk-min-container .tawk-badge {
-  display: none !important;
-}
-```
-
-### What requires Tawk.to dashboard changes
-
-The proactive "We Are Here" message and auto-open behavior are **Triggers** configured in the Tawk.to dashboard (Settings → Triggers). These cannot be fully suppressed from code alone. The `Tawk_API.minimize()` on load will close it if it auto-opens, but the trigger may still fire briefly.
-
-**Recommendation**: Go to your Tawk.to dashboard → Settings → Triggers → disable or delete the proactive greeting trigger. This is the only way to fully stop "We Are Here" and the auto-open.
-
-### Implementation steps
-
-1. Update `index.html`: Add `Tawk_API.onLoad` with `minimize()` call before the embed script
-2. Add CSS to hide the notification badge counter
-3. These changes will make the widget stay minimized and badge-free until a user explicitly clicks it
+This is a single-file change to the error handling block in `DashboardNewCheck.tsx`.
 

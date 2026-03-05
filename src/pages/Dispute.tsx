@@ -1,23 +1,22 @@
 import { Link } from "react-router-dom";
-import { ArrowLeft, AlertTriangle, Mail, MessageCircle, FileText } from "lucide-react";
+import { AlertTriangle, Mail, MessageCircle, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import NavbarPlinq from "@/components/landing/NavbarPlinq";
+import Footer from "@/components/Footer";
 
 export default function Dispute() {
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-primary text-white py-6">
+    <div className="min-h-screen flex flex-col" style={{ background: '#F7F4F0' }}>
+      <NavbarPlinq />
+      <div style={{ height: 80 }} />
+
+      <header className="bg-primary text-white py-10">
         <div className="max-w-4xl mx-auto px-6">
-          <Link to="/" className="inline-flex items-center gap-2 text-white/80 hover:text-white mb-4">
-            <ArrowLeft className="w-4 h-4" />
-            Back to Home
-          </Link>
           <h1 className="text-3xl font-bold font-heading">Dispute a Record</h1>
         </div>
       </header>
 
-      {/* Content */}
-      <main className="max-w-4xl mx-auto px-6 py-12">
+      <main className="max-w-4xl mx-auto px-6 py-12 flex-1">
         <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12 space-y-8">
           <div className="flex items-start gap-4 p-4 bg-amber-50 rounded-xl border border-amber-200">
             <AlertTriangle className="w-6 h-6 text-amber-600 flex-shrink-0 mt-1" />
@@ -31,105 +30,72 @@ export default function Dispute() {
           </div>
 
           <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Dispute Process</h2>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">Grounds for Dispute</h2>
+            <ul className="space-y-3 text-gray-700">
+              <li className="flex items-start gap-2">
+                <span className="text-primary font-bold">1.</span>
+                <span><strong>Mistaken Identity:</strong> The record belongs to someone else with a similar name</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-primary font-bold">2.</span>
+                <span><strong>Outdated Information:</strong> Charges were dropped, case dismissed, or record expunged</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-primary font-bold">3.</span>
+                <span><strong>Factual Error:</strong> Information in the record is incorrect</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <span className="text-primary font-bold">4.</span>
+                <span><strong>Privacy Violation:</strong> Record should not be publicly accessible</span>
+              </li>
+            </ul>
+          </section>
+
+          <section>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">How to File a Dispute</h2>
             <div className="space-y-4">
-              <div className="flex gap-4">
-                <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold flex-shrink-0">
-                  1
-                </div>
+              <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
+                <Mail className="w-5 h-5 text-primary flex-shrink-0 mt-1" />
                 <div>
-                  <h3 className="font-semibold text-gray-900">Click "Challenge This Result"</h3>
-                  <p className="text-gray-600">Found on any search result page</p>
+                  <h3 className="font-bold text-gray-900">Email Us</h3>
+                  <p className="text-gray-600 text-sm">
+                    Send details to <a href="mailto:disputes@redflaq.com" className="text-primary">disputes@redflaq.com</a>
+                  </p>
                 </div>
               </div>
-              <div className="flex gap-4">
-                <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold flex-shrink-0">
-                  2
-                </div>
+              <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
+                <FileText className="w-5 h-5 text-primary flex-shrink-0 mt-1" />
                 <div>
-                  <h3 className="font-semibold text-gray-900">Provide Your Reason</h3>
-                  <p className="text-gray-600">Select from common reasons or provide details</p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold flex-shrink-0">
-                  3
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">Upload Supporting Documents</h3>
-                  <p className="text-gray-600">Court orders, ID documents, or other proof (optional)</p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold flex-shrink-0">
-                  4
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">Submit Your Dispute</h3>
-                  <p className="text-gray-600">Include your email for updates</p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <div className="w-8 h-8 rounded-full bg-green-600 text-white flex items-center justify-center font-bold flex-shrink-0">
-                  5
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">We Review Within 5 Business Days</h3>
-                  <p className="text-gray-600">You'll receive an email with our decision</p>
+                  <h3 className="font-bold text-gray-900">Include Documentation</h3>
+                  <p className="text-gray-600 text-sm">
+                    Attach any evidence supporting your dispute (court documents, ID, etc.)
+                  </p>
                 </div>
               </div>
             </div>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">What Happens Next?</h2>
-            <ul className="space-y-3 text-gray-700">
-              <li className="flex items-start gap-3">
-                <FileText className="w-5 h-5 text-primary flex-shrink-0 mt-1" />
-                <span>We verify your claim against the original source</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <FileText className="w-5 h-5 text-primary flex-shrink-0 mt-1" />
-                <span>If incorrect, we remove or update the record</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <FileText className="w-5 h-5 text-primary flex-shrink-0 mt-1" />
-                <span>If accurate, we explain why it remains</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <FileText className="w-5 h-5 text-primary flex-shrink-0 mt-1" />
-                <span>You can appeal our decision within 14 days</span>
-              </li>
-            </ul>
-          </section>
-
-          <section className="bg-gray-50 rounded-xl p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">Contact Us Directly</h2>
-            <p className="text-gray-700 mb-4">
-              For urgent disputes or if you need help submitting:
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <a 
-                href="mailto:support@redflaq.com"
-                className="inline-flex items-center gap-2"
-              >
-                <Button variant="outline" className="w-full sm:w-auto">
-                  <Mail className="w-4 h-4" />
-                  support@redflaq.com
-                </Button>
-              </a>
+            <h2 className="text-xl font-bold text-gray-900 mb-4">What Happens Next</h2>
+            <div className="space-y-3 text-gray-700">
+              <p>1. We acknowledge your dispute within <strong>48 hours</strong></p>
+              <p>2. We investigate the claim against original source data</p>
+              <p>3. If valid, the record is corrected or removed within <strong>5 business days</strong></p>
+              <p>4. You receive written confirmation of the outcome</p>
             </div>
           </section>
 
-          <div className="text-center pt-4">
-            <Link to="/">
-              <Button size="lg" className="bg-primary hover:bg-primary/90">
-                Return to Home
+          <div className="text-center pt-4 space-y-2">
+            <Link to="/privacy">
+              <Button variant="outline" className="font-heading">
+                View Privacy Policy
               </Button>
             </Link>
           </div>
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 }

@@ -51,6 +51,15 @@ const NavbarPlinq = () => {
     { label: "FAQ", href: "#faq" },
   ];
 
+  const handleGetHelp = () => {
+    navigate('/safety-tips#get-help');
+    setIsMenuOpen(false);
+    setTimeout(() => {
+      const el = document.getElementById('get-help');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }, 300);
+  };
+
   const scrollToSection = (href: string, isRoute?: boolean) => {
     if (isRoute) {
       navigate(href);

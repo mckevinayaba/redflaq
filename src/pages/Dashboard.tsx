@@ -31,6 +31,7 @@ export default function Dashboard() {
   const [shareOpen, setShareOpen] = useState(false);
   const [referralCount, setReferralCount] = useState(0);
   const [freeChecksEarned, setFreeChecksEarned] = useState(0);
+  const [creditsRemaining, setCreditsRemaining] = useState(0);
 
   useEffect(() => {
     if (!authLoading && !user) {

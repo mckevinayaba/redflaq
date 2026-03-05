@@ -76,14 +76,117 @@ function getRecommendation(matches: any[]): string {
   return "Multiple weak matches. Human verification strongly recommended.";
 }
 
-function getRiskLevel(matches: any[]): string {
-  if (matches.length === 0) return 'GREEN';
-  const hasViolent = matches.some((m: any) => 
-    /murder|rape|sexual|assault|violence|attack|kidnap|firearm/i.test(m.charges || '')
-  );
-  if (hasViolent) return 'RED';
-  if (matches.length > 1 || matches[0]?.confidence >= 70) return 'ORANGE';
-  return 'YELLOW';
+function calculateRiskScore(records: any[]): { score: number; factors: string[]; badgeLevel: string } {
+  if (!records || records.length === 0) {
+    return { score: 0, factors: ['No public records found'], badgeLevel: 'GREEN' };
+  }
+
+  let score = 0;
+  const factors: string[] = [];
+
+  records.forEach((record: any) => {
+    const charges = (record.charges || record.offense || record.type || '').toLowerCase();
+    const offCats = (record.offense_categories_derived || record.offense_categories || []).map((c: string) => c.toLowerCase());
+    const allText = [charges, ...offCats].join(' ');
+
+    const dateStr = record.date_wanted || record.gazette_date;
+    let yearsAgo = 999;
+    if (dateStr) {
+      const d = new Date(dateStr);
+      if (!isNaN(d.getTime())) yearsAgo = (Date.now() - d.getTime()) / (1000 * 60 * 60 * 24 * 365);
+    }
+
+    // CRITICAL
+    if (/rape|sexual\s*offense|sexual\s*assault|child|molestation|indecent/.test(allText)) {
+      score += 50;
+      if (!factors.includes('Sexual offense or child-related crime')) factors.push('Sexual offense or child-related crime');
+    }
+    if (/murder|homicide|culpable/.test(allText)) {
+      score += 45;
+      if (!factors.includes('Violent crime against persons')) factors.push('Violent crime against persons');
+    }
+    if (/gbv|gender.based.violence/.test(allText) && /assault/.test(allText)) {
+      score += 40;
+      if (!factors.includes('Gender-based violence assault')) factors.push('Gender-based violence assault');
+    }
+
+    // HIGH
+    if (/assault|battery|gbh|bodily\s*harm/.test(allText) && !factors.includes('Assault or battery charges')) {
+      score += yearsAgo < 5 ? 35 : 20;
+      factors.push('Assault or battery charges');
+    }
+    if (/domestic|protection\s*order/.test(allText) && !factors.includes('Domestic violence or protection order')) {
+      score += 35;
+      factors.push('Domestic violence or protection order');
+    }
+    if (/stalk|harassment/.test(allText) && !factors.includes('Stalking or harassment')) {
+      score += 30;
+      factors.push('Stalking or harassment');
+    }
+    if (/kidnap|abduct|trafficking/.test(allText) && !factors.includes('Kidnapping or trafficking')) {
+      score += 35;
+      factors.push('Kidnapping or trafficking');
+    }
+
+    // MODERATE
+    if (/fraud|forgery|embezzlement|money\s*laundering|corruption/.test(allText) && !factors.includes('Fraud or financial crime')) {
+      score += yearsAgo < 3 ? 25 : 15;
+      factors.push('Fraud or financial crime');
+    }
+    if (/theft|robbery|burglary|housebreaking|steal|larceny/.test(allText) && !factors.includes('Theft or robbery charges')) {
+      score += yearsAgo < 3 ? 25 : 15;
+      factors.push('Theft or robbery charges');
+    }
+    if (/drug.*deal|dealing|narcotic/.test(allText) && !factors.includes('Drug dealing charges')) {
+      score += 20;
+      factors.push('Drug dealing charges');
+    }
+    if (/arson|malicious\s*damage/.test(allText) && !factors.includes('Arson or malicious damage')) {
+      score += 20;
+      factors.push('Arson or malicious damage');
+    }
+    if (/firearm|weapon|gun|ammunition/.test(allText) && !factors.includes('Firearms or weapons offense')) {
+      score += 20;
+      factors.push('Firearms or weapons offense');
+    }
+
+    // LOW
+    if (/dui|drunk\s*driv|driving\s*under/.test(allText) && !factors.includes('Drunk driving charges')) {
+      score += yearsAgo < 2 ? 10 : 5;
+      factors.push('Drunk driving charges');
+    }
+    if (/drug|dagga|cannabis/.test(allText) && !/deal/.test(allText) && !factors.includes('Drug possession')) {
+      score += 8;
+      factors.push('Drug possession');
+    }
+
+    // Recency
+    if (yearsAgo < 1 && !factors.includes('Very recent offense (within 12 months)')) {
+      score *= 1.3;
+      factors.push('Very recent offense (within 12 months)');
+    } else if (yearsAgo < 3 && !factors.includes('Recent offense (within 3 years)')) {
+      score *= 1.15;
+      factors.push('Recent offense (within 3 years)');
+    }
+  });
+
+  if (records.length >= 3 && !factors.includes('Pattern of multiple offenses')) {
+    score += 15;
+    factors.push('Pattern of multiple offenses');
+  } else if (records.length === 2 && !factors.includes('Multiple records found')) {
+    score += 8;
+    factors.push('Multiple records found');
+  }
+
+  score = Math.min(Math.round(score), 100);
+
+  let badgeLevel: string;
+  if (score >= 50) badgeLevel = 'RED';
+  else if (score >= 25) badgeLevel = 'ORANGE';
+  else if (score > 0) badgeLevel = 'YELLOW';
+  else badgeLevel = 'GREEN';
+
+  return { score, factors, badgeLevel };
 }
 
 serve(async (req) => {
@@ -541,7 +644,10 @@ serve(async (req) => {
     }
 
     const searchId = `search-${Date.now()}-${Math.random().toString(36).substring(7)}`;
-    const riskLevel = getRiskLevel(matches);
+    const riskResult = calculateRiskScore(matches);
+    const riskLevel = riskResult.badgeLevel;
+    const riskScore = riskResult.score;
+    const riskFactors = riskResult.factors;
     const recommendation = getRecommendation(matches);
 
     // Persist search results to database
@@ -558,6 +664,8 @@ serve(async (req) => {
         results: matches,
         matches_found: matches.length,
         risk_level: riskLevel,
+        risk_score: riskScore,
+        risk_factors: riskFactors,
         is_wanted: matches.length > 0,
         search_strategies: searchStrategies,
         recommendation,
@@ -790,7 +898,8 @@ serve(async (req) => {
         recommendation,
         isWanted: matches.length > 0,
         riskLevel,
-        riskScore: matches.length > 0 ? 100 : 0,
+        riskScore,
+        riskFactors,
         wantedPersonsCount: matches.length,
         wantedPersons: matches,
         hasMultipleMatches: matches.length > 1,

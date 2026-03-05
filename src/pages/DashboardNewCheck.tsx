@@ -61,8 +61,9 @@ export default function DashboardNewCheck() {
     }
     if (useIdNumber && idNumber.trim()) {
       const cleaned = idNumber.replace(/\s/g, '');
-      if (!/^\d{13}$/.test(cleaned)) {
-        setFormError("SA ID number must be exactly 13 digits.");
+      const validation = validateSAIDNumber(cleaned);
+      if (!validation.isValid) {
+        setFormError(validation.errors[0]);
         return false;
       }
     }

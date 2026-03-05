@@ -252,7 +252,7 @@ const NavbarPlinq = () => {
             ))}
             <button
               onClick={handleGetHelp}
-              style={{ width: '100%', background: '#DC2626', color: 'white', padding: 12, fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.06em', textTransform: 'uppercase', border: 'none', cursor: 'pointer', borderRadius: 6 }}
+              style={{ width: '100%', background: '#DC2626', color: 'white', padding: 12, fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.02em', border: 'none', cursor: 'pointer', borderRadius: 6 }}
             >
               🆘 Get Help
             </button>

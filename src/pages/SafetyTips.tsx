@@ -3,6 +3,7 @@ import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
 import SafetyCardGrid from "@/components/safety/SafetyCardGrid";
 import GBVResourcesSection from "@/components/safety/GBVResourcesSection";
+import ProvincialResourcesSection from "@/components/safety/ProvincialResourcesSection";
 import { Heart, Home, Users, HelpCircle, ShieldCheck, MessageSquare, Eye } from "lucide-react";
 
 const redFlags = [

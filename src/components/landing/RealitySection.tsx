@@ -1,78 +1,184 @@
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { useCountUp } from "@/hooks/useCountUp";
+import { AlertTriangle, TrendingUp } from "lucide-react";
 
 const RealitySection = () => {
   const { ref, isVisible } = useScrollReveal();
-  // Start from 35000 so the counter never shows misleadingly low numbers
   const { count: statTwo, ref: statRef } = useCountUp(40000, 2000);
 
   return (
-    <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '40px 40px 48px' }}>
+    <section
+      ref={ref}
+      className={`scroll-reveal ${isVisible ? 'visible' : ''}`}
+      style={{
+        background: 'linear-gradient(180deg, #0F0A1A 0%, #1A1035 100%)',
+        padding: '120px 24px',
+      }}
+    >
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 32 }}>
+        <div className="section-tag" style={{ color: '#A855F7', marginBottom: 40 }}>
           The South African Reality
         </div>
 
-        <div style={{ border: '1.5px solid #D6D3CD' }}>
-          <div style={{ borderBottom: '1.5px solid #D6D3CD', padding: '40px 48px' }}>
-            <h2 style={{
-              fontFamily: "'DM Serif Display', serif",
-              fontSize: 'clamp(36px, 4vw, 56px)', lineHeight: 1.1, color: '#2D2235',
-            }}>
-              Violence rarely begins<br />
-              with <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>violence.</em>
-            </h2>
-          </div>
+        {/* Headline */}
+        <h2 style={{
+          fontFamily: "'DM Serif Display', serif",
+          fontSize: 'clamp(36px, 4vw, 56px)',
+          lineHeight: 1.08,
+          color: 'white',
+          marginBottom: 56,
+          letterSpacing: '-0.02em',
+        }}>
+          Violence rarely begins<br />
+          with <em style={{ color: '#A855F7', fontStyle: 'italic' }}>violence.</em>
+        </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2" style={{ borderBottom: '1.5px solid #D6D3CD' }}>
-            <div style={{ padding: '36px 48px', borderRight: '1.5px solid #D6D3CD' }}>
-              {/* FIX 3: Do NOT animate this ratio — fade it in directly */}
+        {/* Bento grid stats */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5" style={{ marginBottom: 48 }}>
+          {/* Stat 1 — 1 in 3 */}
+          <div style={{
+            background: 'rgba(124, 58, 237, 0.08)',
+            border: '1px solid rgba(124, 58, 237, 0.2)',
+            borderRadius: 20,
+            padding: '44px 44px',
+            backdropFilter: 'blur(12px)',
+            position: 'relative',
+            overflow: 'hidden',
+          }}>
+            <div style={{
+              position: 'absolute', top: -20, right: -20,
+              width: 120, height: 120,
+              background: 'radial-gradient(circle, rgba(220,38,38,0.15), transparent 70%)',
+              filter: 'blur(24px)', pointerEvents: 'none',
+            }} />
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              <AlertTriangle style={{ width: 24, height: 24, color: '#EF4444', marginBottom: 16, opacity: 0.8 }} />
               <div
                 className={`transition-opacity duration-700 ${isVisible ? 'opacity-100' : 'opacity-0'}`}
-                style={{ fontFamily: "'DM Serif Display', serif", fontSize: 56, color: '#2D2235', lineHeight: 1 }}
+                style={{
+                  fontFamily: "'DM Serif Display', serif",
+                  fontSize: 64,
+                  color: 'white',
+                  lineHeight: 1,
+                  marginBottom: 16,
+                }}
               >
-                1 in <span style={{ color: '#7C3AED' }}>3</span>
+                1 in <span style={{ color: '#A855F7' }}>3</span>
               </div>
-              <div style={{ fontSize: 15, fontWeight: 600, color: '#2D2235', margin: '12px 0 8px' }}>
+              <p style={{
+                fontFamily: "'Syne', sans-serif",
+                fontSize: 15,
+                fontWeight: 500,
+                color: 'rgba(255,255,255,0.8)',
+                lineHeight: 1.6,
+                maxWidth: 380,
+                marginBottom: 16,
+              }}>
                 Women experience gender‑based violence in the hands of an intimate partner during their lifetime
-              </div>
-              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#9CA3AF', marginTop: 12 }}>
+              </p>
+              <span style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: 9,
+                color: 'rgba(255,255,255,0.35)',
+                letterSpacing: '0.1em',
+              }}>
                 STATS SA · DSTI 2024 GENDER REPORT
-              </div>
-            </div>
-
-            <div ref={statRef} style={{ padding: '36px 48px' }}>
-              <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 56, lineHeight: 1 }}>
-                {/* FIX 3: Start display from 35000 minimum so no misleading low numbers show */}
-                <span style={{ color: '#7C3AED' }}>{statTwo >= 35000 ? statTwo.toLocaleString() : '40,000'}+</span>
-              </div>
-              <div style={{ fontSize: 15, fontWeight: 600, color: '#2D2235', margin: '12px 0 8px' }}>
-                Sexual offences reported annually
-              </div>
-              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#9CA3AF', marginTop: 12 }}>
-                SAPS ANNUAL CRIME STATISTICS
-              </div>
+              </span>
             </div>
           </div>
 
-          <div style={{ padding: '40px 48px', background: '#FAF5FF', position: 'relative' }}>
-            <span style={{
-              fontFamily: "'DM Serif Display', serif", fontSize: 100, lineHeight: 0.6,
-              color: '#EDE9FE', position: 'absolute', top: 24, left: 36,
-            }}>"</span>
-            <p style={{
-              fontFamily: "'DM Serif Display', serif",
-              fontSize: 'clamp(18px, 2vw, 24px)', fontStyle: 'italic',
-              lineHeight: 1.5, color: '#2D2235', maxWidth: 700, marginLeft: 56,
-            }}>
-              It begins with information people didn't have. Patterns they couldn't verify. Warnings they were never shown. RedFlaq exists to close that gap.
-            </p>
+          {/* Stat 2 — 40,000+ */}
+          <div ref={statRef} style={{
+            background: 'rgba(124, 58, 237, 0.08)',
+            border: '1px solid rgba(124, 58, 237, 0.2)',
+            borderRadius: 20,
+            padding: '44px 44px',
+            backdropFilter: 'blur(12px)',
+            position: 'relative',
+            overflow: 'hidden',
+          }}>
             <div style={{
-              fontFamily: "'Syne', sans-serif", fontSize: 13, fontWeight: 600,
-              color: '#78716C', marginTop: 16, marginLeft: 56,
-            }}>
-              — McKevin Ayaba, Founder of RedFlaq
+              position: 'absolute', top: -20, right: -20,
+              width: 120, height: 120,
+              background: 'radial-gradient(circle, rgba(168,85,247,0.2), transparent 70%)',
+              filter: 'blur(24px)', pointerEvents: 'none',
+            }} />
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              <TrendingUp style={{ width: 24, height: 24, color: '#A855F7', marginBottom: 16, opacity: 0.8 }} />
+              <div style={{
+                fontFamily: "'DM Serif Display', serif",
+                fontSize: 64,
+                lineHeight: 1,
+                marginBottom: 16,
+              }}>
+                <span style={{
+                  color: '#A855F7',
+                  textShadow: '0 0 24px rgba(168,85,247,0.3)',
+                }}>
+                  {statTwo >= 35000 ? statTwo.toLocaleString() : '40,000'}+
+                </span>
+              </div>
+              <p style={{
+                fontFamily: "'Syne', sans-serif",
+                fontSize: 15,
+                fontWeight: 500,
+                color: 'rgba(255,255,255,0.8)',
+                lineHeight: 1.6,
+                maxWidth: 380,
+                marginBottom: 16,
+              }}>
+                Sexual offences reported annually
+              </p>
+              <span style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: 9,
+                color: 'rgba(255,255,255,0.35)',
+                letterSpacing: '0.1em',
+              }}>
+                SAPS ANNUAL CRIME STATISTICS
+              </span>
             </div>
+          </div>
+        </div>
+
+        {/* Founder quote — glassmorphism pull-quote */}
+        <div style={{
+          background: 'rgba(124, 58, 237, 0.06)',
+          border: '1px solid rgba(124, 58, 237, 0.2)',
+          borderLeft: '4px solid #7C3AED',
+          borderRadius: 16,
+          padding: '40px 48px',
+          position: 'relative',
+        }}>
+          <span style={{
+            fontFamily: "'DM Serif Display', serif",
+            fontSize: 80,
+            lineHeight: 0.5,
+            color: 'rgba(168,85,247,0.15)',
+            position: 'absolute',
+            top: 28,
+            left: 32,
+          }}>"</span>
+          <p style={{
+            fontFamily: "'DM Serif Display', serif",
+            fontSize: 'clamp(18px, 2vw, 24px)',
+            fontStyle: 'italic',
+            lineHeight: 1.5,
+            color: 'rgba(255,255,255,0.9)',
+            maxWidth: 700,
+            marginLeft: 40,
+          }}>
+            It begins with information people didn't have. Patterns they couldn't verify. Warnings they were never shown. RedFlaq exists to close that gap.
+          </p>
+          <div style={{
+            fontFamily: "'Syne', sans-serif",
+            fontSize: 13,
+            fontWeight: 600,
+            color: 'rgba(255,255,255,0.45)',
+            marginTop: 20,
+            marginLeft: 40,
+          }}>
+            — McKevin Ayaba, Founder of RedFlaq
           </div>
         </div>
       </div>

@@ -368,7 +368,94 @@ const ResultsPageUpdated = () => {
           riskLevel={results.riskLevel}
         />
 
-        {/* Safety Win Screen for clear/low risk results */}
+        {/* What This Means & What To Do Next */}
+        <div style={{ background: '#F9FAFB', borderRadius: 8, padding: 24, margin: '32px 0' }}>
+          <h3 style={{ margin: '0 0 16px', fontFamily: "'DM Serif Display', serif", fontSize: 20, color: '#111827' }}>
+            What This Means & What To Do Next
+          </h3>
+
+          {results.riskLevel !== 'RED' && results.riskLevel !== 'ORANGE' && results.riskLevel !== 'YELLOW' && results.wantedPersonsCount === 0 && (
+            <div>
+              <p style={{ margin: '12px 0', fontFamily: "'Syne', sans-serif", fontSize: 15, lineHeight: 1.6, color: '#374151' }}>
+                <strong>No Records Found:</strong> We searched South African criminal databases and found no warrants, court cases, or criminal records.
+              </p>
+              <p style={{ margin: '12px 0', fontFamily: "'Syne', sans-serif", fontSize: 15, lineHeight: 1.6, color: '#374151' }}>
+                <strong>Remember:</strong> This doesn't guarantee safety. Most harmful people have no criminal record.
+              </p>
+              <p style={{ margin: '12px 0', fontFamily: "'Syne', sans-serif", fontSize: 15, lineHeight: 1.6, color: '#374151', fontWeight: 700 }}>Next Steps:</p>
+              <ul style={{ margin: '12px 0', paddingLeft: 24, fontFamily: "'Syne', sans-serif", fontSize: 14, lineHeight: 1.8, color: '#374151' }}>
+                <li>Trust your instincts — if something feels off, it probably is</li>
+                <li>Ask for references from mutual contacts</li>
+                <li>Meet in public places for first meetings</li>
+                <li>Tell someone where you're going and when you'll be back</li>
+                <li>Keep your phone charged and accessible</li>
+              </ul>
+            </div>
+          )}
+
+          {results.riskLevel === 'YELLOW' && (
+            <div>
+              <p style={{ margin: '12px 0', fontFamily: "'Syne', sans-serif", fontSize: 15, lineHeight: 1.6, color: '#374151' }}>
+                <strong>Minor Concerns Found:</strong> We found some records, but they appear to be minor or older offenses.
+              </p>
+              <p style={{ margin: '12px 0', fontFamily: "'Syne', sans-serif", fontSize: 15, lineHeight: 1.6, color: '#374151', fontWeight: 700 }}>Next Steps:</p>
+              <ul style={{ margin: '12px 0', paddingLeft: 24, fontFamily: "'Syne', sans-serif", fontSize: 14, lineHeight: 1.8, color: '#374151' }}>
+                <li>Review the details carefully — consider type and timing of offense</li>
+                <li>Use extra caution in initial interactions</li>
+                <li>Meet only in public places</li>
+                <li>Tell someone where you're going</li>
+                <li>If this is for employment or roommate situation, consider asking about these records directly</li>
+              </ul>
+            </div>
+          )}
+
+          {results.riskLevel === 'ORANGE' && (
+            <div>
+              <p style={{ margin: '12px 0', fontFamily: "'Syne', sans-serif", fontSize: 15, lineHeight: 1.6, color: '#374151' }}>
+                <strong>Concerning Records Found:</strong> We found records that warrant serious caution.
+              </p>
+              <p style={{ margin: '12px 0', fontFamily: "'Syne', sans-serif", fontSize: 15, lineHeight: 1.6, color: '#374151', fontWeight: 700 }}>Next Steps:</p>
+              <ul style={{ margin: '12px 0', paddingLeft: 24, fontFamily: "'Syne', sans-serif", fontSize: 14, lineHeight: 1.8, color: '#374151' }}>
+                <li>Review all details carefully before making any decisions</li>
+                <li>If this is for dating: reconsider meeting this person</li>
+                <li>If this is for employment/roommate: seek alternative options if possible</li>
+                <li>If you must proceed: only meet in very public places, tell multiple people</li>
+                <li>Consider reaching out to a support service for advice (click "Get Help" above)</li>
+              </ul>
+            </div>
+          )}
+
+          {results.riskLevel === 'RED' && results.wantedPersonsCount > 0 && (
+            <div>
+              <p style={{ margin: '12px 0', fontFamily: "'Syne', sans-serif", fontSize: 15, lineHeight: 1.6, color: '#DC2626' }}>
+                <strong>⚠️ HIGH RISK — Serious Safety Concerns:</strong> We found records showing patterns of violence, domestic abuse, or serious crimes.
+              </p>
+              <p style={{ margin: '12px 0', fontFamily: "'Syne', sans-serif", fontSize: 15, lineHeight: 1.6, color: '#374151', fontWeight: 700 }}>Immediate Actions:</p>
+              <ul style={{ margin: '12px 0', paddingLeft: 24, fontFamily: "'Syne', sans-serif", fontSize: 14, lineHeight: 1.8, color: '#374151' }}>
+                <li><strong>Do NOT meet this person alone or in private</strong></li>
+                <li>If already in contact: end communication safely</li>
+                <li>If you feel threatened: call 10111 or 0800 428 428 immediately</li>
+                <li>Tell trusted friends/family about the situation</li>
+                <li>Save all communications as evidence</li>
+                <li>Click "Get Help Now" above to speak with a GBV counselor</li>
+              </ul>
+
+              {/* Critical footer for very high scores */}
+              <div style={{
+                marginTop: 20,
+                padding: 16,
+                background: '#FEE2E2',
+                borderLeft: '4px solid #DC2626',
+                borderRadius: 4,
+              }}>
+                <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700, color: '#991B1B', margin: 0, lineHeight: 1.6 }}>
+                  Your safety is more important than any relationship, job, or living situation. There are people ready to help you. You don't have to face this alone.
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+
         <SafetyWinScreen riskLevel={results.riskLevel} onClose={() => {}} />
 
         {/* Critical disclaimer for CLEAR results */}

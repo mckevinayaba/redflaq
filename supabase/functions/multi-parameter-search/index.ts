@@ -44,17 +44,19 @@ function categorizeOffense(charges: string): string[] {
   const categories: string[] = [];
   const lower = charges.toLowerCase();
   
-  if (/murder|homicide|culpable/.test(lower)) categories.push('Murder / Homicide');
-  if (/rape|sexual|indecent|molestation/.test(lower)) categories.push('Sexual Offense');
-  if (/assault|gbh|bodily harm|violence|attack/.test(lower)) categories.push('Assault / Violence');
-  if (/robbery|theft|steal|burglary|housebreaking|larceny/.test(lower)) categories.push('Robbery / Theft');
-  if (/fraud|forgery|corruption|bribery|embezzlement|money laundering/.test(lower)) categories.push('Fraud / Financial Crime');
-  if (/drug|narcotic|dagga|cannabis|cocaine|heroin|substance/.test(lower)) categories.push('Drug Offense');
-  if (/kidnap|abduct|trafficking/.test(lower)) categories.push('Kidnapping / Trafficking');
-  if (/arson|fire|malicious damage/.test(lower)) categories.push('Arson / Malicious Damage');
-  if (/firearm|weapon|gun|ammunition/.test(lower)) categories.push('Firearms / Weapons');
-  if (/domestic|protection order|gbv/.test(lower)) categories.push('Domestic / GBV');
+  if (/murder|homicide|culpable|moord|strafbare\s*manslag|doodslag/.test(lower)) categories.push('Murder / Homicide');
+  if (/rape|sexual|indecent|molestation|verkragting|ontug|kindermolestering|seksuele/.test(lower)) categories.push('Sexual Offense');
+  if (/assault|gbh|bodily harm|violence|attack|aanranding|ernstige\s*liggaamlike\s*leed|s&sb/.test(lower)) categories.push('Assault / Violence');
+  if (/robbery|theft|steal|burglary|housebreaking|larceny|diefstal|roof|inbraak|saakroof/.test(lower)) categories.push('Robbery / Theft');
+  if (/fraud|forgery|corruption|bribery|embezzlement|money laundering|bedrog|vervalsing|korrupsie|geldwassery|verduistering/.test(lower)) categories.push('Fraud / Financial Crime');
+  if (/drug|narcotic|dagga|cannabis|cocaine|heroin|substance|dwelms|dwelmhandel/.test(lower)) categories.push('Drug Offense');
+  if (/kidnap|abduct|trafficking|ontvoering|mensehandel/.test(lower)) categories.push('Kidnapping / Trafficking');
+  if (/arson|fire|malicious damage|brandstichting|kwaadwillige\s*saakbeskadiging/.test(lower)) categories.push('Arson / Malicious Damage');
+  if (/firearm|weapon|gun|ammunition|vuurwapen|wapen|ammunisie/.test(lower)) categories.push('Firearms / Weapons');
+  if (/domestic|protection order|gbv|beskermingsbevel|huishoudelike\s*geweld/.test(lower)) categories.push('Domestic / GBV');
   if (/sanction|terror|proliferation|fic/.test(lower)) categories.push('Sanctions / FIC');
+  if (/stalk|harassment|teistering|agtervolging|intimidasie/.test(lower)) categories.push('Stalking / Harassment');
+  if (/insolvency|insolvensie|sequestration|sekwestrasie|liquidation|likwidasie/.test(lower)) categories.push('Financial Court Order');
   
   if (categories.length === 0) categories.push('Other Criminal Offense');
   return categories;

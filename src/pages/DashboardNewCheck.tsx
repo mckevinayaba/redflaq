@@ -58,6 +58,13 @@ export default function DashboardNewCheck() {
       setFormError("Please enter the person's surname.");
       return false;
     }
+    if (useIdNumber && idNumber.trim()) {
+      const cleaned = idNumber.replace(/\s/g, '');
+      if (!/^\d{13}$/.test(cleaned)) {
+        setFormError("SA ID number must be exactly 13 digits.");
+        return false;
+      }
+    }
     if (!reason) {
       setFormError("Choose a reason for your search so we can stay compliant and protect everyone's rights.");
       return false;

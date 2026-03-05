@@ -54,7 +54,7 @@ const SafetyCardGrid = () => {
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-16">
+    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 mb-12 sm:mb-16">
       {cards.map((card) => {
         const Icon = card.icon;
         return (
@@ -65,49 +65,43 @@ const SafetyCardGrid = () => {
             className="group relative flex flex-col no-underline transition-all duration-300 hover:-translate-y-1.5"
             style={{
               borderRadius: 16,
-              padding: '28px 24px',
+              padding: '20px 16px',
               background: card.urgent
                 ? 'linear-gradient(135deg, #991B1B 0%, #DC2626 100%)'
-                : 'linear-gradient(135deg, #7C3AED 0%, #EDE9FE 100%)',
+                : '#FFFFFF',
+              border: card.urgent ? 'none' : '1px solid rgba(214,211,205,0.6)',
               boxShadow: card.urgent
                 ? '0 4px 24px rgba(220, 38, 38, 0.18)'
-                : '0 4px 24px rgba(124, 58, 237, 0.08)',
+                : '0 2px 12px rgba(0,0,0,0.04)',
             }}
           >
             {/* Icon circle */}
             <div
-              className="flex items-center justify-center flex-shrink-0 mb-4"
+              className="flex items-center justify-center flex-shrink-0 mb-3 sm:mb-4"
               style={{
-                width: 48,
-                height: 48,
-                borderRadius: '50%',
-                background: card.urgent ? 'rgba(255,255,255,0.2)' : 'rgba(124, 58, 237, 0.85)',
+                width: 40,
+                height: 40,
+                borderRadius: 12,
+                background: card.urgent ? 'rgba(255,255,255,0.2)' : 'rgba(124, 58, 237, 0.08)',
               }}
             >
-              <Icon size={24} color="#FFFFFF" strokeWidth={2} />
+              <Icon size={20} color={card.urgent ? '#FFFFFF' : '#7C3AED'} strokeWidth={2} />
             </div>
 
             <h3
+              className="font-body text-[15px] sm:text-lg font-bold mb-1 sm:mb-1.5"
               style={{
-                fontFamily: "'Syne', var(--font-heading)",
-                fontSize: 20,
-                fontWeight: 700,
                 color: card.urgent ? '#FFFFFF' : '#1F1F2E',
-                marginBottom: 6,
               }}
             >
               {card.title}
             </h3>
 
             <p
+              className="font-body text-[12px] sm:text-[13px] leading-relaxed flex-1 mb-3 sm:mb-4"
               style={{
-                fontSize: 14,
-                lineHeight: 1.6,
                 color: card.urgent ? 'rgba(255,255,255,0.9)' : '#6B7280',
-                flex: 1,
-                marginBottom: 16,
               }}
-              className="font-body"
             >
               {card.description}
             </p>
@@ -115,8 +109,8 @@ const SafetyCardGrid = () => {
             <span
               className="inline-flex items-center justify-center self-start font-body font-semibold transition-all duration-200"
               style={{
-                fontSize: 12,
-                padding: '6px 16px',
+                fontSize: 11,
+                padding: '5px 14px',
                 borderRadius: 999,
                 background: card.urgent ? 'rgba(255,255,255,0.25)' : '#7C3AED',
                 color: '#FFFFFF',

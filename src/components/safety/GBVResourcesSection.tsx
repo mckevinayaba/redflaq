@@ -3,26 +3,19 @@ import { Phone, MessageCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const provinces = [
-  "Gauteng",
-  "Western Cape",
-  "KwaZulu-Natal",
-  "Eastern Cape",
-  "Limpopo",
-  "Mpumalanga",
-  "Free State",
-  "North West",
-  "Northern Cape",
+  "Gauteng", "Western Cape", "KwaZulu-Natal", "Eastern Cape",
+  "Limpopo", "Mpumalanga", "Free State", "North West", "Northern Cape",
 ];
 
 const nationalResources = [
   { name: "GBV Command Centre", phone: "0800 428 428", hours: "24/7, Free", category: "crisis" },
   { name: "Stop Gender Violence", phone: "0800 150 150", hours: "24/7, Free", category: "crisis" },
-  { name: "TEARS Foundation", phone: "08000 83277", hours: "24/7, Free · USSD *134*7355#", category: "crisis" },
-  { name: "Lifeline SA Crisis Line", phone: "0861 322 322", hours: "24/7", category: "crisis" },
+  { name: "TEARS Foundation", phone: "08000 83277", hours: "24/7, Free · USSD *134*7355#", category: "support" },
+  { name: "Lifeline SA Crisis Line", phone: "0861 322 322", hours: "24/7", category: "counselling" },
   { name: "SAPS Emergency", phone: "10111", hours: "24/7", category: "crisis" },
   { name: "SADAG Mental Health", phone: "011 234 4837", hours: "8am–8pm", category: "counselling" },
-  { name: "Childline SA", phone: "116", hours: "24/7, Free", category: "crisis" },
-  { name: "Human Trafficking Hotline", phone: "0800 222 777", hours: "24/7, Free", category: "crisis" },
+  { name: "Childline SA", phone: "116", hours: "24/7, Free", category: "support" },
+  { name: "Human Trafficking Hotline", phone: "0800 222 777", hours: "24/7, Free", category: "support" },
 ];
 
 interface ProvResource {
@@ -124,37 +117,69 @@ const provincialResources: Record<string, ProvResource[]> = {
   ],
 };
 
-const categoryConfig: Record<string, { label: string; className: string }> = {
-  crisis: { label: "Crisis Line", className: "bg-destructive/10 text-destructive border-destructive/20" },
-  tcc: { label: "TCC", className: "bg-blue-100 text-blue-800 border-blue-200" },
-  counselling: { label: "Counselling", className: "bg-green-100 text-green-800 border-green-200" },
-  legal: { label: "Legal", className: "bg-purple-100 text-purple-800 border-purple-200" },
-  support: { label: "Support", className: "bg-gray-100 text-gray-700 border-gray-200" },
+const nationalBadgeConfig: Record<string, { label: string; bg: string; text: string }> = {
+  crisis: { label: "Emergency", bg: "rgba(239,68,68,0.15)", text: "#FCA5A5" },
+  counselling: { label: "Counselling", bg: "rgba(167,139,250,0.15)", text: "#C4B5FD" },
+  support: { label: "Support", bg: "rgba(45,212,191,0.15)", text: "#5EEAD4" },
 };
 
-function formatWhatsApp(phone: string): string {
-  return phone.replace(/\s/g, "");
-}
+const categoryLeftBorder: Record<string, string> = {
+  crisis: "#EF4444",
+  tcc: "#EF4444",
+  counselling: "#7C3AED",
+  legal: "#14B8A6",
+  support: "#6B7280",
+};
+
+const categoryBadgeConfig: Record<string, { label: string; bg: string; text: string }> = {
+  crisis: { label: "Crisis Line", bg: "rgba(239,68,68,0.1)", text: "#DC2626" },
+  tcc: { label: "TCC", bg: "rgba(239,68,68,0.1)", text: "#DC2626" },
+  counselling: { label: "Counselling", bg: "rgba(124,58,237,0.1)", text: "#7C3AED" },
+  legal: { label: "Legal", bg: "rgba(20,184,166,0.1)", text: "#14B8A6" },
+  support: { label: "Support", bg: "rgba(107,114,128,0.1)", text: "#6B7280" },
+};
 
 function ResourceCard({ r }: { r: ProvResource }) {
-  const cat = categoryConfig[r.category];
+  const badge = categoryBadgeConfig[r.category];
+  const borderColor = categoryLeftBorder[r.category];
+
   return (
-    <div className="bg-card border border-border rounded-xl p-5 shadow-sm flex flex-col gap-2">
-      <div className="flex items-start justify-between gap-2">
-        <h4 className="font-heading text-base font-bold text-foreground leading-snug">{r.name}</h4>
-        <Badge variant="outline" className={`shrink-0 text-[11px] ${cat.className}`}>
-          {cat.label}
-        </Badge>
+    <div
+      className="bg-white rounded-xl p-6 transition-all duration-300 hover:-translate-y-1 cursor-default group"
+      style={{
+        borderLeft: `4px solid ${borderColor}`,
+        boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
+      }}
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 24px rgba(124,58,237,0.15)";
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLElement).style.boxShadow = "0 1px 3px rgba(0,0,0,0.08)";
+      }}
+    >
+      <div className="flex items-start justify-between gap-2 mb-2">
+        <h4 className="font-heading text-[15px] font-bold leading-snug" style={{ color: "#1F1F2E" }}>
+          {r.name}
+        </h4>
+        <span
+          className="shrink-0 text-[11px] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap"
+          style={{ background: badge.bg, color: badge.text }}
+        >
+          {badge.label}
+        </span>
       </div>
+
       {r.hours && (
-        <p className="font-body text-xs text-muted-foreground">{r.hours}</p>
+        <p className="text-xs mb-2" style={{ color: "#6B7280" }}>{r.hours}</p>
       )}
+
       <div className="flex items-center gap-3 mt-1">
         {/\d/.test(r.phone) ? (
           <a
             href={`tel:${r.phone.replace(/\s/g, "")}`}
             aria-label={`Call ${r.name}`}
-            className="inline-flex items-center gap-1.5 font-heading text-base font-bold text-primary hover:text-primary/80 transition-colors min-h-[44px]"
+            className="inline-flex items-center gap-1.5 font-heading text-lg font-bold transition-colors min-h-[44px] hover:opacity-80"
+            style={{ color: "#7C3AED" }}
           >
             <Phone className="w-4 h-4 shrink-0" />
             {r.phone}
@@ -165,18 +190,19 @@ function ResourceCard({ r }: { r: ProvResource }) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`Visit ${r.name}`}
-            className="inline-flex items-center gap-1.5 font-heading text-base font-bold text-primary hover:text-primary/80 transition-colors min-h-[44px] underline"
+            className="inline-flex items-center gap-1.5 font-heading text-lg font-bold transition-colors min-h-[44px] underline hover:opacity-80"
+            style={{ color: "#7C3AED" }}
           >
             {r.phone}
           </a>
         )}
         {r.whatsapp && (
           <a
-            href={`https://wa.me/${formatWhatsApp(r.whatsapp)}`}
+            href={`https://wa.me/${r.whatsapp}`}
             target="_blank"
             rel="noopener noreferrer"
             aria-label={`WhatsApp ${r.name}`}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white min-h-[44px] transition-colors"
+            className="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold text-white min-h-[44px] transition-colors hover:opacity-90"
             style={{ background: "#25D366" }}
           >
             <MessageCircle className="w-3.5 h-3.5" />
@@ -190,108 +216,159 @@ function ResourceCard({ r }: { r: ProvResource }) {
 
 const GBVResourcesSection = () => {
   const [selectedProvince, setSelectedProvince] = useState<string | null>(null);
-
   const provincialList = selectedProvince ? provincialResources[selectedProvince] ?? [] : [];
 
   return (
-    <section id="get-help" className="mb-16 scroll-mt-24">
-      {/* Section header */}
-      <p className="font-mono text-[11px] tracking-[0.15em] text-destructive uppercase mb-2 font-semibold">
-        FIND HELP NEAR YOU
-      </p>
-      <h2 className="font-heading text-2xl sm:text-3xl text-foreground mb-2">
-        You are not alone. Help is available right now.
-      </h2>
-      <p className="font-body text-sm sm:text-base text-muted-foreground leading-relaxed max-w-[650px] mb-8">
-        All of these services are free, confidential, and staffed by trained professionals. You do not need to explain everything — you just need to reach out.
-      </p>
-
-      {/* National resources — always visible */}
-      <div className="rounded-xl border-2 border-destructive/30 p-6 mb-10" style={{ background: "#FEF2F2" }}>
-        <h3 className="font-heading text-lg sm:text-xl font-bold text-foreground mb-4 flex items-center gap-2">
-          🆘 Emergency Support — 24/7 — All South Africa
-        </h3>
-        <div className="grid sm:grid-cols-2 gap-3">
-          {nationalResources.map((r) => (
-            <div key={r.name} className="flex items-center justify-between gap-2 bg-white/80 rounded-lg px-4 py-3 border border-destructive/10">
-              <div className="min-w-0">
-                <p className="font-heading text-sm font-bold text-foreground truncate">{r.name}</p>
-                <p className="font-body text-xs text-muted-foreground">{r.hours}</p>
-              </div>
-              <a
-                href={`tel:${r.phone.replace(/\s/g, "")}`}
-                aria-label={`Call ${r.name}`}
-                className="inline-flex items-center gap-1 font-heading text-base font-bold text-destructive hover:text-destructive/80 transition-colors whitespace-nowrap min-h-[44px]"
-              >
-                <Phone className="w-4 h-4 shrink-0" />
-                {r.phone}
-              </a>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Province chips */}
-      <div className="mb-6">
-        <p className="font-heading text-sm font-bold text-foreground mb-3">
-          Select your province to find local resources
+    <section
+      id="get-help"
+      className="scroll-mt-24 py-20 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
+      style={{ background: "linear-gradient(180deg, #F5F3FF 0%, #FFFFFF 100%)" }}
+    >
+      <div className="max-w-5xl mx-auto">
+        {/* Section header */}
+        <p
+          className="text-xs font-semibold uppercase tracking-[0.15em] mb-3"
+          style={{ color: "#7C3AED" }}
+        >
+          Support Services
         </p>
-        <div className="flex flex-wrap gap-2">
-          {provinces.map((p) => {
-            const isActive = selectedProvince === p;
-            return (
-              <button
-                key={p}
-                onClick={() => setSelectedProvince(isActive ? null : p)}
-                aria-pressed={isActive}
-                className={`px-4 py-2.5 rounded-full font-body text-sm font-semibold transition-all min-h-[44px] border focus:outline-none focus:ring-2 focus:ring-primary/40 ${
-                  isActive
-                    ? "bg-primary text-primary-foreground border-primary shadow-md"
-                    : "bg-card text-foreground border-border hover:border-primary/40 hover:bg-accent/50"
-                }`}
-              >
-                {p}
-              </button>
-            );
-          })}
-        </div>
-      </div>
+        <h2
+          className="font-heading text-3xl sm:text-4xl font-bold mb-2"
+          style={{ color: "#1F1F2E" }}
+        >
+          Find Help Near You
+        </h2>
+        <p className="text-base mb-10 max-w-xl" style={{ color: "#6B7280", lineHeight: 1.6 }}>
+          Select your province. National helplines are always available.
+        </p>
 
-      {/* Provincial resources */}
-      {selectedProvince && (
-        <div className="animate-fade-in">
-          <h3 className="font-heading text-lg font-bold text-foreground mb-4 flex items-center gap-2">
-            📍 Resources in {selectedProvince}
+        {/* Province chips — horizontal scroll on mobile */}
+        <div className="mb-10 overflow-x-auto scrollbar-hide pb-2 -mx-1">
+          <div className="flex gap-2.5 px-1 min-w-max">
+            {provinces.map((p) => {
+              const isActive = selectedProvince === p;
+              return (
+                <button
+                  key={p}
+                  onClick={() => setSelectedProvince(isActive ? null : p)}
+                  aria-pressed={isActive}
+                  className="rounded-full text-sm font-medium transition-all duration-200 min-h-[44px] whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-offset-2"
+                  style={{
+                    padding: "10px 20px",
+                    background: isActive ? "#7C3AED" : "#FFFFFF",
+                    color: isActive ? "#FFFFFF" : "#7C3AED",
+                    border: isActive ? "1.5px solid #7C3AED" : "1.5px solid #7C3AED",
+                    boxShadow: isActive ? "0 4px 12px rgba(124,58,237,0.3)" : "none",
+                    fontWeight: isActive ? 600 : 500,
+                    cursor: "pointer",
+                  }}
+                >
+                  {p}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* National resources — dark immersive band */}
+        <div
+          className="rounded-2xl p-8 sm:p-10 mb-12"
+          style={{ background: "#1A0533" }}
+        >
+          <h3 className="font-heading text-lg font-bold text-white mb-6 flex items-center gap-2">
+            🆘 National Helplines — Available Everywhere, Always
           </h3>
-          {provincialList.length === 0 ? (
-            <div className="bg-card border border-border rounded-xl p-6 text-center">
-              <p className="font-body text-sm text-muted-foreground">
-                Limited local resources listed for this province. Please contact the{" "}
-                <a href="tel:0800428428" className="text-primary font-bold">GBV Command Centre (0800 428 428)</a> for 24/7 national support.
-              </p>
-            </div>
-          ) : (
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {provincialList.map((r) => (
-                <ResourceCard key={r.name} r={r} />
-              ))}
-            </div>
-          )}
+          <div className="grid sm:grid-cols-2 gap-4">
+            {nationalResources.map((r) => {
+              const badge = nationalBadgeConfig[r.category];
+              return (
+                <div
+                  key={r.name}
+                  className="flex items-center justify-between gap-3 rounded-xl px-5 py-4"
+                  style={{ background: "rgba(255,255,255,0.05)" }}
+                >
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2 mb-1">
+                      <p className="text-sm font-semibold text-white truncate">{r.name}</p>
+                      <span
+                        className="shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap"
+                        style={{ background: badge.bg, color: badge.text }}
+                      >
+                        {badge.label}
+                      </span>
+                    </div>
+                    <p className="text-xs" style={{ color: "#9CA3AF" }}>{r.hours}</p>
+                  </div>
+                  <a
+                    href={`tel:${r.phone.replace(/\s/g, "")}`}
+                    aria-label={`Call ${r.name}`}
+                    className="inline-flex items-center gap-1.5 font-heading text-base font-bold whitespace-nowrap min-h-[44px] transition-opacity hover:opacity-80"
+                    style={{ color: "#C4B5FD" }}
+                  >
+                    <Phone className="w-4 h-4 shrink-0" />
+                    {r.phone}
+                  </a>
+                </div>
+              );
+            })}
+          </div>
         </div>
-      )}
 
-      {/* Protection orders */}
-      <div id="protection-orders" className="mt-10 bg-card border border-border rounded-xl p-6 shadow-sm scroll-mt-24">
-        <h3 className="font-heading text-lg font-bold text-foreground mb-2">⚖️ Protection Orders</h3>
-        <p className="font-body text-sm text-muted-foreground leading-relaxed mb-3">
-          You have the legal right to apply for a protection order at any Magistrate's Court in South Africa at no cost. You do not need a lawyer.
-        </p>
-        <ul className="font-body text-sm text-muted-foreground space-y-1.5 list-disc pl-5">
-          <li>Available under the Domestic Violence Act (Act 116 of 1998)</li>
-          <li>Can be obtained on the same day in urgent cases</li>
-          <li>Covers physical, emotional, verbal, economic, and sexual abuse</li>
-          <li>Violation of a protection order is a criminal offence</li>
-        </ul>
+        {/* Provincial resources */}
+        {selectedProvince && (
+          <div
+            className="animate-fade-in"
+            style={{ animation: "fadeIn 0.3s ease-out" }}
+          >
+            <h3
+              className="font-heading text-2xl font-bold mb-6 flex items-center gap-2"
+              style={{ color: "#1F1F2E" }}
+            >
+              📍 Resources in {selectedProvince}
+            </h3>
+            {provincialList.length === 0 ? (
+              <div className="bg-white rounded-xl p-8 text-center" style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.08)" }}>
+                <p className="text-sm" style={{ color: "#6B7280" }}>
+                  Limited local resources listed for this province. Please contact the{" "}
+                  <a href="tel:0800428428" className="font-bold" style={{ color: "#7C3AED" }}>
+                    GBV Command Centre (0800 428 428)
+                  </a>{" "}
+                  for 24/7 national support.
+                </p>
+              </div>
+            ) : (
+              <div className="grid sm:grid-cols-2 gap-5">
+                {provincialList.map((r) => (
+                  <ResourceCard key={r.name} r={r} />
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Protection orders */}
+        <div
+          id="protection-orders"
+          className="mt-14 rounded-2xl p-8 scroll-mt-24"
+          style={{
+            background: "#FFFFFF",
+            boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
+            borderLeft: "4px solid #7C3AED",
+          }}
+        >
+          <h3 className="font-heading text-lg font-bold mb-3" style={{ color: "#1F1F2E" }}>
+            ⚖️ Protection Orders
+          </h3>
+          <p className="text-sm leading-relaxed mb-4" style={{ color: "#6B7280" }}>
+            You have the legal right to apply for a protection order at any Magistrate's Court in South Africa at no cost. You do not need a lawyer.
+          </p>
+          <ul className="text-sm space-y-2 list-disc pl-5" style={{ color: "#6B7280" }}>
+            <li>Available under the Domestic Violence Act (Act 116 of 1998)</li>
+            <li>Can be obtained on the same day in urgent cases</li>
+            <li>Covers physical, emotional, verbal, economic, and sexual abuse</li>
+            <li>Violation of a protection order is a criminal offence</li>
+          </ul>
+        </div>
       </div>
     </section>
   );

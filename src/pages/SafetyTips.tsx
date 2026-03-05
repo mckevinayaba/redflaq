@@ -49,12 +49,15 @@ const tips = [
 
 const SafetyTips = () => {
   return (
-    <div className="bg-background min-h-screen">
+    <div className="min-h-screen" style={{ background: 'linear-gradient(180deg, #F3EEFA 0%, #FAFAFA 320px)' }}>
       <NavbarPlinq />
       <div className="max-w-[900px] mx-auto px-6 pt-28 pb-16">
 
         {/* Hero */}
-        <p className="font-mono text-[11px] tracking-[0.15em] text-primary uppercase mb-2">SAFETY FIRST</p>
+        <p className="font-mono text-[11px] tracking-[0.15em] mb-2 flex items-center gap-2" style={{ color: '#7C3AED' }}>
+          <span style={{ width: 20, height: 2, background: '#7C3AED', display: 'inline-block', borderRadius: 2 }} />
+          Safety First
+        </p>
         <h1 className="font-heading text-3xl sm:text-[44px] text-foreground leading-tight mb-3">
           Information is the first step. Safety is the destination.
         </h1>

@@ -644,7 +644,10 @@ serve(async (req) => {
     }
 
     const searchId = `search-${Date.now()}-${Math.random().toString(36).substring(7)}`;
-    const riskLevel = getRiskLevel(matches);
+    const riskResult = calculateRiskScore(matches);
+    const riskLevel = riskResult.badgeLevel;
+    const riskScore = riskResult.score;
+    const riskFactors = riskResult.factors;
     const recommendation = getRecommendation(matches);
 
     // Persist search results to database

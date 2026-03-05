@@ -101,7 +101,7 @@ export default function PostReportGuidance({ riskLevel }: { riskLevel: string })
   return (
     <section className="mt-12 pt-10 border-t border-border">
       {/* Section heading */}
-      <h2 className="font-heading text-2xl sm:text-3xl text-foreground mb-2">{config.icon} What do I do with this result?</h2>
+      <h2 className="font-heading text-2xl sm:text-3xl text-foreground mb-2">⚠️ What do I do with this result?</h2>
       <h3 className="font-heading text-lg sm:text-xl text-foreground mb-2">{config.heading}</h3>
       <p className="font-body text-sm sm:text-base text-muted-foreground leading-relaxed mb-8 max-w-2xl">
         {config.body}

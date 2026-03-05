@@ -223,6 +223,7 @@ const ResultsPageUpdated = () => {
             searchedAt: data.searched_at,
             hasMultipleMatches: data.matches_found > 1,
             recommendation: data.recommendation || undefined,
+            searchProvince: data.search_province || undefined,
           });
 
           if (data.matches_found > 1) {

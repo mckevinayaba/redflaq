@@ -3,7 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
 import { supabase } from "@/integrations/supabase/client";
-import { Heart } from "lucide-react";
+import { Heart, ArrowLeft } from "lucide-react";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import ShareInviteModal from "@/components/ShareInviteModal";
 
@@ -75,9 +75,9 @@ const BlogArticle = () => {
     return (
       <div style={{ background: "#F7F4F0", minHeight: "100vh" }}>
         <NavbarPlinq />
-        <div style={{ maxWidth: 600, margin: "0 auto", padding: "120px 24px", textAlign: "center" }}>
-          <h1 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, color: "#2D2235" }}>Article not found</h1>
-          <Link to="/blog" style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: "#7C3AED", marginTop: 16, display: "inline-block" }}>← Back to Blog</Link>
+        <div className="max-w-[600px] mx-auto px-5 text-center" style={{ paddingTop: 140 }}>
+          <h1 className="font-heading text-2xl text-foreground mb-4">Article not found</h1>
+          <Link to="/blog" className="font-body text-sm" style={{ color: '#7C3AED' }}>← Back to Blog</Link>
         </div>
         <FooterPlinq />
       </div>
@@ -89,65 +89,91 @@ const BlogArticle = () => {
   return (
     <div style={{ background: "#F7F4F0", minHeight: "100vh" }}>
       <NavbarPlinq />
-      <article style={{ maxWidth: 720, margin: "0 auto", padding: "100px 24px 60px" }}>
-        <Link to="/blog" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: "0.1em", color: "#7C3AED", textDecoration: "none", textTransform: "uppercase", marginBottom: 16, display: "block" }}>
-          ← Back to Blog
-        </Link>
-        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: "0.1em", color: "#7C3AED", fontWeight: 600, textTransform: "uppercase" }}>
-          {article.category.replace(/-/g, " ")}
-        </span>
-        <h1 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 36, color: "#2D2235", margin: "8px 0 12px", lineHeight: 1.2 }}>
-          {article.title}
-        </h1>
-        <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#9CA3AF", marginBottom: 32 }}>
-          {article.author} · {new Date(article.created_at).toLocaleDateString("en-ZA")}
-        </p>
 
+      {/* Article header — dark */}
+      <section style={{
+        background: 'linear-gradient(135deg, #0F0A1A 0%, #1A1035 100%)',
+        paddingTop: 110, paddingBottom: 48,
+        position: 'relative', overflow: 'hidden',
+      }}>
+        <div style={{
+          position: 'absolute', bottom: -40, right: '10%', width: 200, height: 200,
+          background: 'radial-gradient(circle, rgba(124,58,237,0.15), transparent 70%)',
+          filter: 'blur(40px)', pointerEvents: 'none',
+        }} />
+        <div className="max-w-[720px] mx-auto px-5 sm:px-6 relative z-10">
+          <Link to="/blog" className="inline-flex items-center gap-1.5 font-mono text-[11px] tracking-[0.1em] mb-5" style={{ color: '#A855F7', textDecoration: 'none', textTransform: 'uppercase' }}>
+            <ArrowLeft className="w-3.5 h-3.5" /> Back to Blog
+          </Link>
+          <span className="block font-mono text-[10px] tracking-[0.1em] font-semibold mb-2" style={{ color: '#A855F7', textTransform: 'uppercase' }}>
+            {article.category.replace(/-/g, " ")}
+          </span>
+          <h1 className="font-heading text-[26px] sm:text-[36px] leading-[1.1] mb-3" style={{ color: '#FFFFFF', letterSpacing: '-0.02em' }}>
+            {article.title}
+          </h1>
+          <p className="font-mono text-[11px]" style={{ color: 'rgba(255,255,255,0.5)' }}>
+            {article.author} · {new Date(article.created_at).toLocaleDateString("en-ZA")}
+          </p>
+        </div>
+      </section>
+
+      <article className="max-w-[720px] mx-auto px-5 sm:px-6 py-10 sm:py-14">
         <div
-          style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: "#2D2235", lineHeight: 1.8 }}
+          className="font-body text-[15px] text-foreground leading-[1.8] prose-headings:font-heading prose-headings:text-foreground prose-a:text-primary"
+          style={{ fontFamily: "'Syne', sans-serif" }}
           dangerouslySetInnerHTML={{ __html: article.content }}
         />
 
-        {/* Single CTA — auth-guarded + share */}
-        <div style={{ background: "#FAF5FF", border: "2px solid #7C3AED", padding: 32, textAlign: "center", marginTop: 40 }}>
-          <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 22, color: "#2D2235", marginBottom: 16 }}>
-            Ready to check someone?
-          </h3>
-          <div className="flex flex-wrap justify-center gap-3">
-            <button
-              onClick={() => guardedAction()}
-              style={{ display: "inline-block", background: "#7C3AED", color: "white", padding: "12px 28px", fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, border: "none", cursor: "pointer" }}
-              className="hover:opacity-90 transition-all"
-            >
-              Run a Safety Check — R99
-            </button>
-            <button
-              onClick={() => setShareOpen(true)}
-              className="inline-flex items-center gap-2 hover:opacity-90 transition-all"
-              style={{ background: "transparent", border: "2px solid #7C3AED", color: "#7C3AED", padding: "12px 28px", fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, cursor: "pointer" }}
-            >
-              <Heart className="h-4 w-4" /> Share RedFlaq
-            </button>
+        {/* CTA — dark glassmorphism */}
+        <div className="mt-10 p-7 sm:p-10 text-center" style={{
+          background: 'linear-gradient(135deg, #0F0A1A 0%, #1A1035 100%)',
+          borderRadius: 20, position: 'relative', overflow: 'hidden',
+        }}>
+          <div style={{
+            position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+            width: '50%', height: '50%',
+            background: 'radial-gradient(circle, rgba(124,58,237,0.2), transparent 70%)',
+            filter: 'blur(30px)', pointerEvents: 'none',
+          }} />
+          <div className="relative z-10">
+            <h3 className="font-heading text-xl sm:text-2xl mb-4" style={{ color: '#FFFFFF' }}>Ready to check someone?</h3>
+            <div className="flex flex-col sm:flex-row justify-center gap-3">
+              <button
+                onClick={() => guardedAction()}
+                className="inline-flex items-center justify-center font-body font-bold text-[14px] transition-all"
+                style={{ background: '#7C3AED', color: '#FFFFFF', padding: '14px 28px', borderRadius: 50, border: 'none', cursor: 'pointer', boxShadow: '0 4px 16px rgba(124,58,237,0.3)' }}
+              >
+                Run a Safety Check — R99
+              </button>
+              <button
+                onClick={() => setShareOpen(true)}
+                className="inline-flex items-center justify-center gap-2 font-body font-bold text-[14px] transition-all"
+                style={{ background: 'transparent', border: '1.5px solid rgba(124,58,237,0.5)', color: '#A855F7', padding: '14px 28px', borderRadius: 50, cursor: 'pointer' }}
+              >
+                <Heart className="h-4 w-4" /> Share RedFlaq
+              </button>
+            </div>
           </div>
         </div>
 
         {relatedTool && (
-          <div style={{ background: "white", border: "1.5px solid #D6D3CD", padding: 20, marginTop: 24, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <div className="mt-5 flex items-center justify-between p-5" style={{
+            background: '#FFFFFF', border: '1px solid rgba(214,211,205,0.6)',
+            borderRadius: 14,
+          }}>
             <div>
-              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#9CA3AF", letterSpacing: "0.1em" }}>RELATED TIP</span>
-              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 600, color: "#2D2235" }}>{relatedTool.label}</p>
+              <span className="font-mono text-[10px] tracking-[0.1em]" style={{ color: '#9CA3AF', textTransform: 'uppercase' }}>Related Tip</span>
+              <p className="font-body text-sm font-semibold text-foreground">{relatedTool.label}</p>
             </div>
-            <Link to={relatedTool.href} style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: "#7C3AED", fontWeight: 700, textDecoration: "none" }}>Try it →</Link>
+            <Link to={relatedTool.href} className="font-body text-[13px] font-bold" style={{ color: '#7C3AED', textDecoration: 'none' }}>Try it →</Link>
           </div>
         )}
 
         {related.length > 0 && (
-          <div style={{ marginTop: 32 }}>
-            <h4 style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: "#2D2235", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: 16 }}>
-              Related Articles
-            </h4>
+          <div className="mt-8">
+            <h4 className="font-mono text-[11px] tracking-[0.1em] mb-4" style={{ color: '#A855F7', textTransform: 'uppercase' }}>Related Articles</h4>
             {related.map((r) => (
-              <Link key={r.id} to={`/blog/${r.slug}`} style={{ display: "block", padding: "12px 0", borderBottom: "1px solid #D6D3CD", fontFamily: "'Syne', sans-serif", fontSize: 14, color: "#7C3AED", textDecoration: "none", fontWeight: 600 }}>
+              <Link key={r.id} to={`/blog/${r.slug}`} className="block py-3 font-body text-sm font-semibold transition-colors" style={{ color: '#7C3AED', textDecoration: 'none', borderBottom: '1px solid rgba(214,211,205,0.5)' }}>
                 {r.title} →
               </Link>
             ))}

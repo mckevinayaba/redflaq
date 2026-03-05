@@ -1,5 +1,7 @@
 import { Link } from "react-router-dom";
 import { Shield, CheckCircle, Clock, AlertTriangle, ExternalLink, Database, Scale, FileText, Ban, Eye } from "lucide-react";
+import NavbarPlinq from "@/components/landing/NavbarPlinq";
+import FooterPlinq from "@/components/landing/FooterPlinq";
 
 interface DataSource {
   name: string;
@@ -20,66 +22,61 @@ const DATA_SOURCES: DataSource[] = [
     name: "South African Police Service (SAPS) — Wanted Persons List",
     shortName: "SAPS Wanted",
     url: "https://www.saps.gov.za/crimestop/wanted/list.php",
-    description: "Official SAPS wanted persons list including suspects and persons of interest across all nine provinces. Integrated via the OpenSanctions za_wanted dataset for daily updates.",
+    description: "Official SAPS wanted persons list including suspects and persons of interest across all nine provinces.",
     dataTypes: ["Wanted persons", "Suspect status", "Crime type", "Province", "Police station"],
-    legalBasis: "Published by the South African Police Service under the South African Police Service Act 68 of 1995. This is publicly accessible information intended for public safety.",
+    legalBasis: "Published by SAPS under the South African Police Service Act 68 of 1995.",
     updateFrequency: "Daily (automated)",
-    status: "active",
-    statusLabel: "Active & Updated",
-    icon: <Shield className="h-6 w-6" />,
-    trustLabel: "Source: South African Police Service (SAPS) — Official Government Record",
+    status: "active", statusLabel: "Active & Updated",
+    icon: <Shield className="h-5 w-5" />,
+    trustLabel: "Source: South African Police Service (SAPS)",
   },
   {
     name: "Southern African Legal Information Institute (SAFLII) — Court Judgments",
     shortName: "SAFLII Courts",
     url: "https://www.saflii.org",
-    description: "Criminal court judgments from all South African High Courts, Supreme Court of Appeal, and Constitutional Court. Full party names extracted from judgment bodies for accurate matching.",
-    dataTypes: ["Court judgments", "Party names (first + surname)", "Case numbers", "Crime type", "Court name", "Judgment date"],
-    legalBasis: "Court judgments are public records under the Promotion of Access to Information Act (PAIA) and the Open Justice principle. SAFLII is the official free legal information portal for Southern Africa.",
-    updateFrequency: "Nightly (automated, cycling through 14 courts)",
-    status: "active",
-    statusLabel: "Active & Updated",
-    icon: <Scale className="h-6 w-6" />,
-    trustLabel: "Source: Southern African Legal Information Institute (SAFLII) — Official Court Records",
+    description: "Criminal court judgments from all South African High Courts, Supreme Court of Appeal, and Constitutional Court.",
+    dataTypes: ["Court judgments", "Party names", "Case numbers", "Crime type", "Court name"],
+    legalBasis: "Public records under PAIA and the Open Justice principle.",
+    updateFrequency: "Nightly (automated)",
+    status: "active", statusLabel: "Active & Updated",
+    icon: <Scale className="h-5 w-5" />,
+    trustLabel: "Source: SAFLII — Official Court Records",
   },
   {
     name: "Government Gazette — Legal Notices (GPW)",
     shortName: "Govt Gazette",
     url: "https://www.gpwonline.co.za/egazettes/",
-    description: "Court-ordered insolvencies, sequestrations, rehabilitations, and fraud-related court orders published in Legal Gazettes A & B by the Government Printing Works.",
-    dataTypes: ["Insolvency orders", "Sequestration orders", "Rehabilitation notices", "Fraud court orders", "ID numbers (when published)"],
-    legalBasis: "Published by the Government Printing Works under the Government Printing Works Act. Legal Gazettes are official public notices with legal force.",
-    updateFrequency: "Manual upload by RedFlaq team (weekly as Gazettes are published)",
-    status: "coming_soon",
-    statusLabel: "Coming Soon",
-    icon: <FileText className="h-6 w-6" />,
-    trustLabel: "Source: Government Printing Works — Official Government Gazette",
+    description: "Court-ordered insolvencies, sequestrations, rehabilitations, and fraud-related court orders.",
+    dataTypes: ["Insolvency orders", "Sequestration orders", "Rehabilitation notices", "Fraud court orders"],
+    legalBasis: "Published by the Government Printing Works.",
+    updateFrequency: "Weekly (manual upload)",
+    status: "coming_soon", statusLabel: "Coming Soon",
+    icon: <FileText className="h-5 w-5" />,
+    trustLabel: "Source: Government Printing Works",
   },
   {
     name: "National Register for Sex Offenders (NRSO)",
     shortName: "NRSO",
     url: "https://www.justice.gov.za/vg/nrso.html",
-    description: "The national register of convicted sex offenders maintained by the Department of Justice. Legislative amendments to make this register publicly accessible are in progress (announced September 2025).",
+    description: "National register of convicted sex offenders maintained by the Department of Justice. Public access pending.",
     dataTypes: ["Registered sex offenders", "Conviction details", "Victim category"],
-    legalBasis: "Criminal Law (Sexual Offences and Related Matters) Amendment Act 32 of 2007. Public access pending legislative amendment.",
+    legalBasis: "Criminal Law (Sexual Offences) Amendment Act 32 of 2007.",
     updateFrequency: "Pending public access",
-    status: "pending",
-    statusLabel: "Pending Legislation",
-    icon: <Eye className="h-6 w-6" />,
-    trustLabel: "Source: Department of Justice and Constitutional Development — National Register for Sex Offenders",
+    status: "pending", statusLabel: "Pending Legislation",
+    icon: <Eye className="h-5 w-5" />,
+    trustLabel: "Source: Department of Justice",
   },
   {
     name: "OpenSanctions — PEPs and International Sanctions",
     shortName: "OpenSanctions",
     url: "https://www.opensanctions.org",
-    description: "Politically Exposed Persons (PEPs), international sanctions lists, and corruption-linked entities including State Capture-implicated individuals. Used for employer vetting and business partner checks.",
-    dataTypes: ["PEPs", "Sanctions lists", "Corruption links", "State Capture connections", "FIC sanctions"],
-    legalBasis: "Aggregated from publicly available government sanctions lists and international compliance databases. Data is provided under open data licenses.",
+    description: "PEPs, international sanctions lists, and corruption-linked entities including State Capture-implicated individuals.",
+    dataTypes: ["PEPs", "Sanctions lists", "Corruption links", "FIC sanctions"],
+    legalBasis: "Aggregated from publicly available government sanctions lists.",
     updateFrequency: "Daily (automated)",
-    status: "active",
-    statusLabel: "Active & Updated",
-    icon: <Database className="h-6 w-6" />,
-    trustLabel: "Source: OpenSanctions — International Compliance Database",
+    status: "active", statusLabel: "Active & Updated",
+    icon: <Database className="h-5 w-5" />,
+    trustLabel: "Source: OpenSanctions — Compliance Database",
   },
 ];
 
@@ -91,139 +88,141 @@ const EXCLUDED_SOURCES = [
   "Blogs, forums, or crowdsourced content",
 ];
 
-const StatusBadge = ({ status, label }: { status: string; label: string }) => {
-  const config = {
-    active: { bg: "bg-risk-green/10", text: "text-risk-green", icon: <CheckCircle className="h-3.5 w-3.5" /> },
-    coming_soon: { bg: "bg-amber-100", text: "text-amber-700", icon: <Clock className="h-3.5 w-3.5" /> },
-    pending: { bg: "bg-muted", text: "text-muted-foreground", icon: <AlertTriangle className="h-3.5 w-3.5" /> },
-  }[status] || { bg: "bg-muted", text: "text-muted-foreground", icon: null };
-
-  return (
-    <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-mono text-[10px] tracking-wider uppercase ${config.bg} ${config.text}`}>
-      {config.icon}
-      {label}
-    </span>
-  );
+const statusConfig: Record<string, { bg: string; text: string; icon: React.ReactNode }> = {
+  active: { bg: 'rgba(34,197,94,0.1)', text: '#22C55E', icon: <CheckCircle className="h-3.5 w-3.5" /> },
+  coming_soon: { bg: 'rgba(234,179,8,0.1)', text: '#EAB308', icon: <Clock className="h-3.5 w-3.5" /> },
+  pending: { bg: 'rgba(156,163,175,0.1)', text: '#9CA3AF', icon: <AlertTriangle className="h-3.5 w-3.5" /> },
 };
 
 export default function DataSources() {
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-card">
-        <div className="max-w-5xl mx-auto px-4 py-6 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <Shield className="h-5 w-5 text-primary-foreground" />
-            </div>
-            <span className="font-heading font-bold text-xl text-foreground">REDFLAQ</span>
-          </Link>
-          <Link to="/" className="font-body text-sm text-muted-foreground hover:text-foreground transition-colors">
-            ← Back to Home
-          </Link>
-        </div>
-      </header>
+    <div style={{ background: '#F7F4F0', minHeight: '100vh' }}>
+      <NavbarPlinq />
 
-      <main className="max-w-5xl mx-auto px-4 py-12">
-        {/* Intro */}
-        <div className="mb-12">
-          <p className="font-mono text-[11px] tracking-widest text-primary uppercase mb-2">Data Integrity</p>
-          <h1 className="font-heading text-3xl md:text-4xl text-foreground mb-4">
-            Our Data Sources
+      {/* Hero — dark */}
+      <section style={{
+        background: 'linear-gradient(135deg, #0F0A1A 0%, #1A1035 50%, #0F0A1A 100%)',
+        paddingTop: 120, paddingBottom: 64,
+        position: 'relative', overflow: 'hidden',
+      }}>
+        <div style={{
+          position: 'absolute', top: '30%', left: '50%', transform: 'translateX(-50%)',
+          width: '60%', height: '50%',
+          background: 'radial-gradient(ellipse, rgba(124,58,237,0.12) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }} />
+        <div className="max-w-[900px] mx-auto px-5 sm:px-6 relative z-10">
+          <p className="font-mono text-[11px] tracking-[0.15em] mb-4 flex items-center gap-3" style={{ color: '#A855F7' }}>
+            <span style={{ width: 24, height: 1, background: '#A855F7', display: 'inline-block' }} />
+            Data Integrity
+          </p>
+          <h1 className="font-heading text-[28px] sm:text-[40px] lg:text-[48px] leading-[1.05] mb-4" style={{ color: '#FFFFFF', letterSpacing: '-0.02em' }}>
+            Our <span style={{ color: '#A855F7' }}>data sources.</span>
           </h1>
-          <p className="font-body text-lg text-muted-foreground max-w-3xl leading-relaxed">
-            RedFlaq is built on a zero-tolerance policy for unverified data. Every record displayed has a traceable, 
-            auditable source from a South African government institution or officially recognised legal database. 
-            We do not aggregate social media, user-generated content, or unverified internet reports.
+          <p className="font-body text-[15px] sm:text-base leading-relaxed max-w-[560px]" style={{ color: 'rgba(255,255,255,0.6)' }}>
+            Every record has a traceable, auditable source from a South African government institution or officially recognised legal database.
           </p>
         </div>
+      </section>
 
-        {/* Data Verification Watermark */}
-        <div className="bg-primary/5 border border-primary/20 rounded-xl p-6 mb-12">
+      <main className="max-w-[900px] mx-auto px-5 sm:px-6 py-10 sm:py-14">
+
+        {/* Verification promise */}
+        <div className="p-5 sm:p-6 mb-10" style={{
+          background: 'rgba(124,58,237,0.04)', border: '1px solid rgba(124,58,237,0.12)', borderRadius: 16,
+        }}>
           <div className="flex items-start gap-3">
-            <Shield className="h-6 w-6 text-primary flex-shrink-0 mt-0.5" />
+            <Shield className="h-5 w-5 flex-shrink-0 mt-0.5" style={{ color: '#7C3AED' }} />
             <div>
               <h3 className="font-heading text-base text-foreground mb-1">Data Verification Promise</h3>
-              <p className="font-body text-sm text-muted-foreground leading-relaxed">
-                All records displayed on RedFlaq are sourced exclusively from verified South African government institutions, 
-                official court systems, and internationally recognised compliance databases. RedFlaq does not publish unverified, 
-                user-generated, or social media-sourced information.
+              <p className="font-body text-[13px] text-muted-foreground leading-relaxed">
+                All records are sourced exclusively from verified government institutions, official court systems, and internationally recognised compliance databases.
               </p>
             </div>
           </div>
         </div>
 
         {/* Sources */}
-        <div className="space-y-6 mb-16">
-          {DATA_SOURCES.map((source) => (
-            <div key={source.shortName} className="bg-card rounded-xl border border-border p-6 md:p-8 shadow-sm">
-              <div className="flex items-start justify-between gap-4 mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
-                    {source.icon}
+        <div className="space-y-4 sm:space-y-5 mb-12 sm:mb-14">
+          {DATA_SOURCES.map((source) => {
+            const sc = statusConfig[source.status];
+            return (
+              <div key={source.shortName} className="p-5 sm:p-7" style={{
+                background: '#FFFFFF', border: '1px solid rgba(214,211,205,0.6)',
+                borderRadius: 18, boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
+              }}>
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
+                  <div className="flex items-center gap-3">
+                    <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(124,58,237,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7C3AED', flexShrink: 0 }}>
+                      {source.icon}
+                    </div>
+                    <div className="min-w-0">
+                      <h2 className="font-heading text-base sm:text-lg text-foreground leading-snug">{source.name}</h2>
+                      <a href={source.url} target="_blank" rel="noopener noreferrer" className="font-body text-[11px] flex items-center gap-1 mt-0.5" style={{ color: '#7C3AED' }}>
+                        {source.url.replace('https://', '')} <ExternalLink className="h-3 w-3" />
+                      </a>
+                    </div>
+                  </div>
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-mono text-[10px] tracking-wider self-start whitespace-nowrap"
+                    style={{ background: sc.bg, color: sc.text, textTransform: 'uppercase' }}>
+                    {sc.icon} {source.statusLabel}
+                  </span>
+                </div>
+
+                <p className="font-body text-[13px] text-muted-foreground mb-4 leading-relaxed">{source.description}</p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3">
+                  <div>
+                    <p className="font-mono text-[10px] tracking-wider text-muted-foreground mb-1.5" style={{ textTransform: 'uppercase' }}>Data Types</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {source.dataTypes.map(dt => (
+                        <span key={dt} className="inline-block px-2 py-0.5 font-body text-[11px] text-foreground" style={{
+                          background: 'rgba(124,58,237,0.05)', borderRadius: 8,
+                        }}>{dt}</span>
+                      ))}
+                    </div>
                   </div>
                   <div>
-                    <h2 className="font-heading text-lg text-foreground">{source.name}</h2>
-                    <a href={source.url} target="_blank" rel="noopener noreferrer" className="font-body text-xs text-primary hover:underline flex items-center gap-1">
-                      {source.url} <ExternalLink className="h-3 w-3" />
-                    </a>
+                    <p className="font-mono text-[10px] tracking-wider text-muted-foreground mb-1.5" style={{ textTransform: 'uppercase' }}>Update Frequency</p>
+                    <p className="font-body text-[13px] text-foreground">{source.updateFrequency}</p>
+                  </div>
+                  <div>
+                    <p className="font-mono text-[10px] tracking-wider text-muted-foreground mb-1.5" style={{ textTransform: 'uppercase' }}>Trust Label</p>
+                    <p className="font-body text-[11px] text-foreground flex items-center gap-1">
+                      <CheckCircle className="h-3 w-3" style={{ color: '#22C55E' }} />
+                      {source.trustLabel}
+                    </p>
                   </div>
                 </div>
-                <StatusBadge status={source.status} label={source.statusLabel} />
-              </div>
 
-              <p className="font-body text-sm text-muted-foreground mb-4 leading-relaxed">{source.description}</p>
-
-              <div className="grid md:grid-cols-3 gap-4 mb-4">
-                <div>
-                  <p className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase mb-1.5">Data Types</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {source.dataTypes.map(dt => (
-                      <span key={dt} className="inline-block px-2 py-0.5 bg-muted rounded font-body text-xs text-foreground">{dt}</span>
-                    ))}
-                  </div>
-                </div>
-                <div>
-                  <p className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase mb-1.5">Update Frequency</p>
-                  <p className="font-body text-sm text-foreground">{source.updateFrequency}</p>
-                </div>
-                <div>
-                  <p className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase mb-1.5">Trust Label</p>
-                  <p className="font-body text-xs text-foreground flex items-center gap-1">
-                    <CheckCircle className="h-3 w-3 text-risk-green" />
-                    {source.trustLabel}
+                <details className="group">
+                  <summary className="font-mono text-[10px] tracking-wider cursor-pointer" style={{ color: '#A855F7', textTransform: 'uppercase' }}>
+                    Legal Basis ▸
+                  </summary>
+                  <p className="font-body text-[12px] text-muted-foreground mt-2 leading-relaxed pl-4" style={{ borderLeft: '2px solid rgba(124,58,237,0.2)' }}>
+                    {source.legalBasis}
                   </p>
-                </div>
+                </details>
               </div>
-
-              <details className="group">
-                <summary className="font-mono text-[10px] tracking-wider text-primary uppercase cursor-pointer hover:underline">
-                  Legal Basis ▸
-                </summary>
-                <p className="font-body text-xs text-muted-foreground mt-2 leading-relaxed pl-4 border-l-2 border-primary/20">
-                  {source.legalBasis}
-                </p>
-              </details>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Excluded Sources */}
-        <div className="bg-destructive/5 border border-destructive/20 rounded-xl p-6 md:p-8 mb-12">
+        <div className="p-5 sm:p-7 mb-10" style={{
+          background: 'rgba(239,68,68,0.03)', border: '1px solid rgba(239,68,68,0.15)', borderRadius: 18,
+        }}>
           <div className="flex items-center gap-3 mb-4">
-            <Ban className="h-6 w-6 text-destructive" />
-            <h2 className="font-heading text-lg text-foreground">Sources We Will NEVER Use</h2>
+            <Ban className="h-5 w-5" style={{ color: '#EF4444' }} />
+            <h2 className="font-heading text-base sm:text-lg text-foreground">Sources We Will Never Use</h2>
           </div>
-          <p className="font-body text-sm text-muted-foreground mb-4 leading-relaxed">
-            The following sources are permanently excluded from RedFlaq's data pipeline. Using unverified internet reports 
-            is the single biggest risk to legal standing, reputation, and POPIA compliance. One wrongful listing based on a 
-            social media accusation could result in a defamation lawsuit.
+          <p className="font-body text-[13px] text-muted-foreground mb-4 leading-relaxed">
+            Using unverified internet reports is the single biggest risk to legal standing and POPIA compliance.
           </p>
           <ul className="space-y-2">
             {EXCLUDED_SOURCES.map(s => (
-              <li key={s} className="flex items-center gap-2 font-body text-sm text-muted-foreground">
-                <Ban className="h-3.5 w-3.5 text-destructive flex-shrink-0" />
-                {s}
+              <li key={s} className="flex items-center gap-2 font-body text-[13px] text-muted-foreground">
+                <Ban className="h-3.5 w-3.5 flex-shrink-0" style={{ color: '#EF4444' }} /> {s}
               </li>
             ))}
           </ul>
@@ -231,16 +230,17 @@ export default function DataSources() {
 
         {/* Footer */}
         <div className="text-center">
-          <p className="font-body text-xs text-muted-foreground">
+          <p className="font-body text-[11px] text-muted-foreground">
             Last updated: {new Date().toLocaleDateString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric' })}
           </p>
-          <div className="flex justify-center gap-6 mt-4">
-            <Link to="/privacy" className="font-body text-xs text-primary hover:underline">Privacy Policy</Link>
-            <Link to="/terms" className="font-body text-xs text-primary hover:underline">Terms of Service</Link>
-            <Link to="/about" className="font-body text-xs text-primary hover:underline">About RedFlaq</Link>
+          <div className="flex justify-center gap-6 mt-3">
+            <Link to="/privacy" className="font-body text-[12px]" style={{ color: '#7C3AED' }}>Privacy Policy</Link>
+            <Link to="/terms" className="font-body text-[12px]" style={{ color: '#7C3AED' }}>Terms of Service</Link>
+            <Link to="/about" className="font-body text-[12px]" style={{ color: '#7C3AED' }}>About RedFlaq</Link>
           </div>
         </div>
       </main>
+      <FooterPlinq />
     </div>
   );
 }

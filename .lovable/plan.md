@@ -1,27 +1,55 @@
 
 
-## Issues Found in Email
+## Problem
 
-From the screenshot, I can see three problems:
+The Tawk.to chat widget is:
+1. Auto-opening its chat window without user interaction
+2. Showing a proactive "We Are Here" popup message
+3. Displaying a "1 new message" notification badge above the navbar
 
-1. **Broken logo image** -- The email references `https://redflaq.co.za/redflaq-logo-email.png` but the app is hosted at `redflaq.lovable.app`. The logo file exists in `public/` but the email URL points to a domain that likely doesn't serve it. Need to either use the Lovable published URL or host the logo on a reliable CDN/image host.
+All of these are controlled by Tawk.to's API settings.
 
-2. **Duplicated name in subject and body** -- Shows "Mckevin Ayaba Mckevin Ayaba". The `full_name` variable on line 93 of `DashboardNewCheck.tsx` constructs `firstName + surname`. This value is sent correctly as `full_name` to the edge function. The duplication likely comes from the email body on line 842: `${full_name || 'your search'}` -- which should be fine. I need to check if there's a form state issue where both `firstName` and `surname` contain the full name, OR the name is being doubled somewhere in the search flow. Most likely the user entered "Mckevin Ayaba" in first name AND "Mckevin Ayaba" in surname fields. However, the email subject line should handle this gracefully.
+## Fix
 
-3. **"Result: Clear" with "1 record found"** -- The email shows green "Result: Clear" but says "1 record found". This is the same contradictory bug from the results page. The edge function's `calculateRiskScore` should force minimum YELLOW when records exist (line 193), but the deployed version may not have this fix yet, or the function needs redeployment.
+Add `Tawk_API` configuration in `index.html` to suppress all auto-popups:
 
-## Plan
+1. **Set `Tawk_API.onLoad`** callback to:
+   - Minimize the widget on load (`Tawk_API.minimize()`)
+   - Hide the popup message (`Tawk_API.hideWidget()` is too aggressive — instead use `minimize`)
+2. **Set `Tawk_API.customStyle`** to hide the notification badge
+3. **Disable proactive chat triggers** by setting `Tawk_API.onBeforeLoad` to prevent auto-popup behaviors:
+   - `Tawk_API.visitor` settings won't help — the proactive messages ("We Are Here", auto-open) are configured in the Tawk.to dashboard under **Triggers**
+   
+### What we can control via code
 
-### Fix 1: Logo URL -- Use published Lovable URL
-- Change all email logo references from `https://redflaq.co.za/redflaq-logo-email.png` to `https://redflaq.lovable.app/redflaq-logo-email.png` in `supabase/functions/multi-parameter-search/index.ts` (lines 799 and 836)
-- Also update in `supabase/functions/send-welcome-email/index.ts`
+In `index.html`, before the Tawk script loads, add:
 
-### Fix 2: Email risk badge must match records
-- In the email HTML template (line 841), add logic: if `matches.length > 0` but `riskLabel` is still "Clear", override to at minimum "Low Risk" with yellow color. This mirrors the scoring fix but applies it directly to the email template as a safeguard.
+```javascript
+Tawk_API.onLoad = function() {
+  Tawk_API.minimize();
+};
+Tawk_API.onChatMessageVisitor = function() {};
+Tawk_API.onChatMessageSystem = function() {};
+```
 
-### Fix 3: Prevent name duplication  
-- Add a `deduplicateName` helper in the edge function that detects and removes repeated name segments before using `full_name` in the email subject/body (e.g., "Mckevin Ayaba Mckevin Ayaba" → "Mckevin Ayaba")
+And add CSS to hide the unread badge:
 
-### Fix 4: Redeploy edge function
-- Deploy the updated `multi-parameter-search` and `send-welcome-email` functions
+```css
+/* Hide Tawk notification badge */
+.tawk-min-container .tawk-badge {
+  display: none !important;
+}
+```
+
+### What requires Tawk.to dashboard changes
+
+The proactive "We Are Here" message and auto-open behavior are **Triggers** configured in the Tawk.to dashboard (Settings → Triggers). These cannot be fully suppressed from code alone. The `Tawk_API.minimize()` on load will close it if it auto-opens, but the trigger may still fire briefly.
+
+**Recommendation**: Go to your Tawk.to dashboard → Settings → Triggers → disable or delete the proactive greeting trigger. This is the only way to fully stop "We Are Here" and the auto-open.
+
+### Implementation steps
+
+1. Update `index.html`: Add `Tawk_API.onLoad` with `minimize()` call before the embed script
+2. Add CSS to hide the notification badge counter
+3. These changes will make the widget stay minimized and badge-free until a user explicitly clicks it
 

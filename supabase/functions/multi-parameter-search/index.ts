@@ -773,18 +773,34 @@ serve(async (req) => {
         const resultsUrl = secureToken
           ? `https://redflaq.com/reports/view/${secureToken}`
           : `https://redflaq.com/results?search_id=${searchId}`;
-        const riskColor = riskLevel === 'RED' ? '#DC2626' : riskLevel === 'ORANGE' ? '#EA580C' : riskLevel === 'YELLOW' ? '#CA8A04' : '#16A34A';
-        const riskLabel = riskLevel === 'RED' ? 'High Risk' : riskLevel === 'ORANGE' ? 'Moderate Risk' : riskLevel === 'YELLOW' ? 'Low Risk' : 'Clear';
+
+        // Safeguard: if records exist, never show "Clear"
+        const effectiveRiskLevel = (matches.length > 0 && riskLevel === 'GREEN') ? 'YELLOW' : riskLevel;
+        const riskColor = effectiveRiskLevel === 'RED' ? '#DC2626' : effectiveRiskLevel === 'ORANGE' ? '#EA580C' : effectiveRiskLevel === 'YELLOW' ? '#CA8A04' : '#16A34A';
+        const riskLabel = effectiveRiskLevel === 'RED' ? 'High Risk' : effectiveRiskLevel === 'ORANGE' ? 'Moderate Risk' : effectiveRiskLevel === 'YELLOW' ? 'Low Risk' : 'Clear';
+
+        // Deduplicate name (e.g. "Mckevin Ayaba Mckevin Ayaba" → "Mckevin Ayaba")
+        const deduplicateName = (name: string): string => {
+          const parts = name.trim().split(/\s+/);
+          if (parts.length >= 4 && parts.length % 2 === 0) {
+            const half = parts.length / 2;
+            const first = parts.slice(0, half).join(' ').toLowerCase();
+            const second = parts.slice(half).join(' ').toLowerCase();
+            if (first === second) return parts.slice(0, half).join(' ');
+          }
+          return name;
+        };
+        const displayName = full_name ? deduplicateName(full_name) : '';
 
         // Generate initials for discreet subject line
-        const nameInitials = full_name
-          ? full_name.trim().split(/\s+/).map((w: string) => w[0]?.toUpperCase()).filter(Boolean).join('.')
+        const nameInitials = displayName
+          ? displayName.trim().split(/\s+/).map((w: string) => w[0]?.toUpperCase()).filter(Boolean).join('.')
           : '';
 
         // Discreet Mode: neutral subject with initials, preview text, no PDF, secure link
         const emailSubject = discreet_mode
           ? `Your RedFlaq report is ready${nameInitials ? ` (${nameInitials}.)` : ''}`
-          : `RedFlaq Results Ready — ${full_name || 'Your Search'}`;
+          : `RedFlaq Results Ready — ${displayName || 'Your Search'}`;
 
         const discreetPreviewText = 'Your RedFlaq report is ready to view when you&#39;re in a safe place.';
 
@@ -796,7 +812,7 @@ serve(async (req) => {
               </div>
 
                <div style="text-align: center; margin-bottom: 32px;">
-                  <img src="https://redflaq.co.za/redflaq-logo-email.png" alt="RedFlaq" height="48" style="display: inline-block; margin-bottom: 12px; height: 48px; width: auto;" />
+                  <img src="https://redflaq.lovable.app/redflaq-logo-email.png" alt="RedFlaq" height="48" style="display: inline-block; margin-bottom: 12px; height: 48px; width: auto;" />
                   <p style="color: #666; font-size: 13px; margin-top: 4px;">Background Verification Service</p>
                 </div>
 
@@ -833,13 +849,13 @@ serve(async (req) => {
           : `
             <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
                <div style="text-align: center; margin-bottom: 32px;">
-                  <img src="https://redflaq.co.za/redflaq-logo-email.png" alt="RedFlaq" height="48" style="display: inline-block; margin-bottom: 12px; height: 48px; width: auto;" />
+                  <img src="https://redflaq.lovable.app/redflaq-logo-email.png" alt="RedFlaq" height="48" style="display: inline-block; margin-bottom: 12px; height: 48px; width: auto;" />
                   <p style="color: #666; font-size: 13px; margin-top: 4px;">Background Verification Service</p>
                 </div>
 
               <div style="background: #F9FAFB; border: 2px solid ${riskColor}; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
                 <h2 style="color: ${riskColor}; font-size: 20px; margin: 0 0 8px;">Result: ${riskLabel}</h2>
-                <p style="color: #333; font-size: 15px; margin: 0;">${matches.length} record${matches.length !== 1 ? 's' : ''} found for <strong>${full_name || 'your search'}</strong></p>
+                <p style="color: #333; font-size: 15px; margin: 0;">${matches.length} record${matches.length !== 1 ? 's' : ''} found for <strong>${displayName || 'your search'}</strong></p>
               </div>
 
               <p style="color: #333; font-size: 15px; line-height: 1.6;">Your background check is complete. View the full report below:</p>

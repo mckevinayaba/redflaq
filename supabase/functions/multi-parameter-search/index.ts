@@ -710,60 +710,7 @@ serve(async (req) => {
       console.error('Failed to log audit event:', e);
     }
 
-    // Send "processing" confirmation email immediately
-    try {
-      let processingEmail: string | null = null;
-      if (user_id) {
-        const { data: ud } = await supabase.auth.admin.getUserById(user_id);
-        processingEmail = ud?.user?.email || null;
-      } else if (payment_id) {
-        const { data: pd } = await supabase
-          .from('manual_payments')
-          .select('email')
-          .eq('payment_id', payment_id)
-          .single();
-        processingEmail = pd?.email || null;
-      }
-
-      if (processingEmail) {
-        const adminPw = Deno.env.get('ADMIN_PASSWORD');
-        await supabase.functions.invoke('send-email', {
-          body: {
-            admin_password: adminPw,
-            to: processingEmail,
-            subject: '🔍 Your RedFlaq Safety Check is Processing',
-            html: `
-              <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; background-color: #ffffff;">
-                <div style="text-align: center; margin-bottom: 32px;">
-                  <h1 style="font-size: 28px; color: #1a1a1a; margin: 0;">🔍 RedFlaq</h1>
-                  <p style="color: #666; font-size: 14px; margin-top: 4px;">Background Verification Service</p>
-                </div>
-
-                <div style="background: #F0F9FF; border: 2px solid #3B82F6; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
-                  <h2 style="color: #1D4ED8; font-size: 20px; margin: 0 0 8px;">Your Safety Check is Processing</h2>
-                  <p style="color: #333; font-size: 15px; margin: 0;">Thank you for using RedFlaq. Your background check has been submitted and is being processed.</p>
-                </div>
-
-                ${full_name ? `<p style="color: #333; font-size: 15px; line-height: 1.6;"><strong>What you checked:</strong> ${full_name}</p>` : ''}
-
-                <p style="color: #333; font-size: 15px; line-height: 1.6;">Results will be available shortly. We'll send you another email when your report is ready.</p>
-
-                <div style="text-align: center; margin: 32px 0;">
-                  <a href="https://redflaq.com" style="display: inline-block; background: #1a1a1a; color: white; padding: 14px 36px; text-decoration: none; font-size: 15px; font-weight: 700; border-radius: 8px;">Visit RedFlaq →</a>
-                </div>
-
-                <hr style="border: none; border-top: 1px solid #E5E7EB; margin: 32px 0;" />
-                <p style="color: #999; font-size: 11px; text-align: center;">
-                  RedFlaq is an initiative of Setup A Startup PTY Ltd. · <a href="mailto:hello@redflaq.com" style="color: #999;">hello@redflaq.com</a> · <a href="https://redflaq.com" style="color: #999;">redflaq.com</a>
-                </p>
-              </div>
-            `,
-          },
-        });
-      }
-    } catch (processingEmailErr) {
-      console.error('Processing confirmation email failed (non-blocking):', processingEmailErr);
-    }
+    // No "processing" email — results are instant, sent below
 
     // Send search completion email
     try {
@@ -796,7 +743,7 @@ serve(async (req) => {
         // Discreet Mode: neutral subject with initials, preview text, no PDF, secure link
         const emailSubject = discreet_mode
           ? `Your RedFlaq report is ready${nameInitials ? ` (${nameInitials}.)` : ''}`
-          : `🔍 RedFlaq Results Ready — ${full_name || 'Your Search'}`;
+          : `RedFlaq Results Ready — ${full_name || 'Your Search'}`;
 
         const discreetPreviewText = 'Your RedFlaq report is ready to view when you&#39;re in a safe place.';
 
@@ -807,10 +754,11 @@ serve(async (req) => {
                 ${discreetPreviewText}${'&#847; &zwnj; &nbsp; '.repeat(30)}
               </div>
 
-              <div style="text-align: center; margin-bottom: 32px;">
-                <h1 style="font-size: 28px; color: #1a1a1a; margin: 0;">🔍 RedFlaq</h1>
-                <p style="color: #666; font-size: 14px; margin-top: 4px;">Background Verification Service</p>
-              </div>
+               <div style="text-align: center; margin-bottom: 32px;">
+                  <img src="https://redflaq.com/redflaq-icon.png" alt="RedFlaq" width="48" height="48" style="display: inline-block; margin-bottom: 12px; border-radius: 10px;" />
+                  <h1 style="font-size: 26px; color: #3B0764; margin: 0; font-family: 'Segoe UI', Arial, sans-serif;">RedFla<span style="color: #DC2626;">q</span></h1>
+                  <p style="color: #666; font-size: 13px; margin-top: 4px;">Background Verification Service</p>
+                </div>
 
               <p style="color: #333; font-size: 15px; line-height: 1.8;">
                 Hi there,<br/><br/>
@@ -844,10 +792,11 @@ serve(async (req) => {
           `
           : `
             <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
-              <div style="text-align: center; margin-bottom: 32px;">
-                <h1 style="font-size: 28px; color: #1a1a1a; margin: 0;">🔍 RedFlaq</h1>
-                <p style="color: #666; font-size: 14px; margin-top: 4px;">Background Verification Service</p>
-              </div>
+               <div style="text-align: center; margin-bottom: 32px;">
+                  <img src="https://redflaq.com/redflaq-icon.png" alt="RedFlaq" width="48" height="48" style="display: inline-block; margin-bottom: 12px; border-radius: 10px;" />
+                  <h1 style="font-size: 26px; color: #3B0764; margin: 0; font-family: 'Segoe UI', Arial, sans-serif;">RedFla<span style="color: #DC2626;">q</span></h1>
+                  <p style="color: #666; font-size: 13px; margin-top: 4px;">Background Verification Service</p>
+                </div>
 
               <div style="background: #F9FAFB; border: 2px solid ${riskColor}; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
                 <h2 style="color: ${riskColor}; font-size: 20px; margin: 0 0 8px;">Result: ${riskLabel}</h2>

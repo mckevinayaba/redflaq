@@ -447,6 +447,7 @@ const ResultsPageUpdated = () => {
                     <li>If this is for employment/roommate: seek alternative options if possible</li>
                     <li>If you must proceed: only meet in very public places, tell multiple people</li>
                     <li>Consider reaching out to a support service for advice (click "Get Help" above)</li>
+                    <li><strong>Protection orders are FREE:</strong> If you feel threatened, you can apply for a protection order at any Magistrate's Court in South Africa at no cost. You do not need a lawyer. Court staff will help you complete the forms.</li>
                   </ul>
                 </div>
               </div>
@@ -464,6 +465,7 @@ const ResultsPageUpdated = () => {
                     <li><strong>Do NOT meet this person alone or in private</strong></li>
                     <li>If already in contact: end communication safely</li>
                     <li>If you feel threatened: call 10111 or 0800 428 428 immediately</li>
+                    <li><strong>FREE Protection Orders:</strong> Apply at any Magistrate's Court — no cost, no lawyer needed. The court can issue an emergency protection order the same day if you're in immediate danger.</li>
                     <li>Tell trusted friends/family about the situation</li>
                     <li>Save all communications as evidence</li>
                     <li>Click "Get Help Now" above to speak with a GBV counselor</li>

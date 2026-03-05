@@ -96,68 +96,74 @@ function calculateRiskScore(records: any[]): { score: number; factors: string[];
       if (!isNaN(d.getTime())) yearsAgo = (Date.now() - d.getTime()) / (1000 * 60 * 60 * 24 * 365);
     }
 
-    // CRITICAL
-    if (/rape|sexual\s*offense|sexual\s*assault|child|molestation|indecent/.test(allText)) {
+    // CRITICAL — includes Afrikaans terms, schedule codes
+    if (/rape|sexual\s*offense|sexual\s*assault|child|molestation|indecent|verkragting|ontug|kindermolestering|seksuele|schedule\s*1\b|(?:^|\s)s1(?:\s|$)/i.test(allText)) {
       score += 50;
       if (!factors.includes('Sexual offense or child-related crime')) factors.push('Sexual offense or child-related crime');
     }
-    if (/murder|homicide|culpable/.test(allText)) {
+    if (/murder|homicide|culpable|moord|strafbare\s*manslag|doodslag/i.test(allText)) {
       score += 45;
       if (!factors.includes('Violent crime against persons')) factors.push('Violent crime against persons');
     }
-    if (/gbv|gender.based.violence/.test(allText) && /assault/.test(allText)) {
+    if (/gbv|gender.based.violence|huishoudelike\s*geweld|geslagsgeweld/i.test(allText) && /assault|aanranding/i.test(allText)) {
       score += 40;
       if (!factors.includes('Gender-based violence assault')) factors.push('Gender-based violence assault');
     }
 
-    // HIGH
-    if (/assault|battery|gbh|bodily\s*harm/.test(allText) && !factors.includes('Assault or battery charges')) {
+    // HIGH — includes Afrikaans: aanranding, beskermingsbevel, teistering, ontvoering
+    if (/assault|battery|gbh|bodily\s*harm|aanranding|ernstige\s*liggaamlike\s*leed|s&sb/i.test(allText) && !factors.includes('Assault or battery charges')) {
       score += yearsAgo < 5 ? 35 : 20;
       factors.push('Assault or battery charges');
     }
-    if (/domestic|protection\s*order/.test(allText) && !factors.includes('Domestic violence or protection order')) {
+    if (/domestic|protection\s*order|beskermingsbevel|huishoudelike\s*geweld|act\s*116\s*of\s*1998|wet\s*116\s*van\s*1998/i.test(allText) && !factors.includes('Domestic violence or protection order')) {
       score += 35;
       factors.push('Domestic violence or protection order');
     }
-    if (/stalk|harassment/.test(allText) && !factors.includes('Stalking or harassment')) {
+    if (/stalk|harassment|teistering|agtervolging|intimidasie/i.test(allText) && !factors.includes('Stalking or harassment')) {
       score += 30;
       factors.push('Stalking or harassment');
     }
-    if (/kidnap|abduct|trafficking/.test(allText) && !factors.includes('Kidnapping or trafficking')) {
+    if (/kidnap|abduct|trafficking|ontvoering|mensehandel/i.test(allText) && !factors.includes('Kidnapping or trafficking')) {
       score += 35;
       factors.push('Kidnapping or trafficking');
     }
 
-    // MODERATE
-    if (/fraud|forgery|embezzlement|money\s*laundering|corruption/.test(allText) && !factors.includes('Fraud or financial crime')) {
+    // MODERATE — includes Afrikaans: bedrog, diefstal, roof, brandstichting, vuurwapen
+    if (/fraud|forgery|embezzlement|money\s*laundering|corruption|bedrog|vervalsing|korrupsie|geldwassery|verduistering/i.test(allText) && !factors.includes('Fraud or financial crime')) {
       score += yearsAgo < 3 ? 25 : 15;
       factors.push('Fraud or financial crime');
     }
-    if (/theft|robbery|burglary|housebreaking|steal|larceny/.test(allText) && !factors.includes('Theft or robbery charges')) {
+    if (/theft|robbery|burglary|housebreaking|steal|larceny|diefstal|roof|inbraak|saakroof/i.test(allText) && !factors.includes('Theft or robbery charges')) {
       score += yearsAgo < 3 ? 25 : 15;
       factors.push('Theft or robbery charges');
     }
-    if (/drug.*deal|dealing|narcotic/.test(allText) && !factors.includes('Drug dealing charges')) {
+    if (/drug.*deal|dealing|narcotic|dwelmhandel/i.test(allText) && !factors.includes('Drug dealing charges')) {
       score += 20;
       factors.push('Drug dealing charges');
     }
-    if (/arson|malicious\s*damage/.test(allText) && !factors.includes('Arson or malicious damage')) {
+    if (/arson|malicious\s*damage|brandstichting|kwaadwillige\s*saakbeskadiging/i.test(allText) && !factors.includes('Arson or malicious damage')) {
       score += 20;
       factors.push('Arson or malicious damage');
     }
-    if (/firearm|weapon|gun|ammunition/.test(allText) && !factors.includes('Firearms or weapons offense')) {
+    if (/firearm|weapon|gun|ammunition|vuurwapen|wapen|ammunisie/i.test(allText) && !factors.includes('Firearms or weapons offense')) {
       score += 20;
       factors.push('Firearms or weapons offense');
     }
 
-    // LOW
-    if (/dui|drunk\s*driv|driving\s*under/.test(allText) && !factors.includes('Drunk driving charges')) {
+    // LOW — includes Afrikaans: dronkbestuur, dwelms
+    if (/dui|drunk\s*driv|driving\s*under|dronkbestuur|bestuur\s*onder\s*invloed/i.test(allText) && !factors.includes('Drunk driving charges')) {
       score += yearsAgo < 2 ? 10 : 5;
       factors.push('Drunk driving charges');
     }
-    if (/drug|dagga|cannabis/.test(allText) && !/deal/.test(allText) && !factors.includes('Drug possession')) {
+    if (/drug|dagga|cannabis|dwelms/i.test(allText) && !/deal|handel/i.test(allText) && !factors.includes('Drug possession')) {
       score += 8;
       factors.push('Drug possession');
+    }
+
+    // Gazette-specific financial orders
+    if (/insolvency|insolvensie|sequestration|sekwestrasie|liquidation|likwidasie|rehabilitation|rehabilitasie/i.test(allText) && !factors.includes('Financial court order (Gazette)')) {
+      score += 10;
+      factors.push('Financial court order (Gazette)');
     }
 
     // Recency

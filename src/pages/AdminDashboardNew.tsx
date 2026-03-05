@@ -43,7 +43,7 @@ const riskPill: Record<string, { label: string; color: string; bg: string }> = {
 };
 
 export default function AdminDashboardNew() {
-  const [kpis, setKpis] = useState<KPIs>({ totalUsers: 0, newSignups7d: 0, activeUsersMonth: 0, totalChecks: 0, checksToday: 0, revenueMonth: 0 });
+  const [kpis, setKpis] = useState<KPIs>({ totalUsers: 0, newSignups7d: 0, activeUsersMonth: 0, totalChecks: 0, checksToday: 0, revenueMonth: 0, revenueAllTime: 0 });
   const [checks, setChecks] = useState<CheckRow[]>([]);
   const [dailyChecks, setDailyChecks] = useState<DailyCount[]>([]);
   const [loading, setLoading] = useState(true);

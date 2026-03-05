@@ -939,8 +939,8 @@ const ResultsPageUpdated = () => {
         onClose={() => { setIsDisputeModalOpen(false); setDisputeRecord(null); }}
         record={disputeRecord}
       />
+      <Footer />
     </div>
   );
-};
 
 export default ResultsPageUpdated;

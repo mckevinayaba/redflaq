@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { DisputeModal } from "@/components/DisputeModal";
-import SafetyWinScreen from "@/components/SafetyWinScreen";
+
 import { Progress } from "@/components/ui/progress";
 import IdentityMatchSelector from "@/components/IdentityMatchSelector";
 import { type PersonRecord } from "@/utils/identityConfidence";

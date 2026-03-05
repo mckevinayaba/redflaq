@@ -121,7 +121,23 @@ export default function DashboardNewCheck() {
         return;
       }
 
-      if (error) throw new Error(error.message);
+      if (error) {
+        // Extract actual error message from edge function response body
+        let actualMessage = error.message;
+        try {
+          const errorBody = await (error as any).context?.json();
+          if (errorBody?.error) actualMessage = errorBody.error;
+          if (errorBody?.redirect === '/pricing') {
+            clearInterval(interval);
+            setProgress(0);
+            setIsSubmitting(false);
+            setFormError("You don't have any search credits. Redirecting to pricing…");
+            setTimeout(() => navigate("/pricing"), 2000);
+            return;
+          }
+        } catch {}
+        throw new Error(actualMessage);
+      }
 
       if (data?.success) {
         clearInterval(interval);

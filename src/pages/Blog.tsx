@@ -47,72 +47,99 @@ const Blog = () => {
   return (
     <div style={{ background: "#F7F4F0", minHeight: "100vh" }}>
       <NavbarPlinq />
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: "100px 24px 60px" }}>
-        <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: "0.1em", color: "#9CA3AF", textTransform: "uppercase", marginBottom: 8 }}>
-          BLOG
-        </p>
-        <h1 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 40, color: "#2D2235", marginBottom: 12, lineHeight: 1.2 }}>
-          RedFlaq Blog: New Risks, Real Stories, Better Decisions
-        </h1>
-        <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, color: "#78716C", lineHeight: 1.6, maxWidth: 650, marginBottom: 32 }}>
-          Fresh information on scams, dating and tenant behaviours, GBV trends, and RedFlaq updates — helping South Africans make safer decisions.
-        </p>
 
-        {/* Category filters */}
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginBottom: 32 }}>
-          {categories.map((cat) => (
-            <button
-              key={cat.value}
-              onClick={() => setActiveCategory(cat.value)}
-              style={{
-                padding: "8px 16px",
-                background: activeCategory === cat.value ? "#7C3AED" : "white",
-                color: activeCategory === cat.value ? "white" : "#4B4453",
-                border: `1.5px solid ${activeCategory === cat.value ? "#7C3AED" : "#D6D3CD"}`,
-                fontFamily: "'Syne', sans-serif", fontSize: 12, fontWeight: 600,
-                cursor: "pointer",
-              }}
-            >
-              {cat.label}
-            </button>
-          ))}
+      {/* Hero — dark */}
+      <section style={{
+        background: 'linear-gradient(135deg, #0F0A1A 0%, #1A1035 50%, #0F0A1A 100%)',
+        paddingTop: 120, paddingBottom: 64,
+        position: 'relative', overflow: 'hidden',
+      }}>
+        <div style={{
+          position: 'absolute', top: '30%', left: '50%', transform: 'translateX(-50%)',
+          width: '60%', height: '50%',
+          background: 'radial-gradient(ellipse, rgba(124,58,237,0.12) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }} />
+        <div className="max-w-[900px] mx-auto px-5 sm:px-6 relative z-10">
+          <p className="font-mono text-[11px] tracking-[0.15em] mb-4 flex items-center gap-3" style={{ color: '#A855F7' }}>
+            <span style={{ width: 24, height: 1, background: '#A855F7', display: 'inline-block' }} />
+            Blog
+          </p>
+          <h1 className="font-heading text-[28px] sm:text-[40px] lg:text-[48px] leading-[1.05] mb-4" style={{ color: '#FFFFFF', letterSpacing: '-0.02em' }}>
+            New risks, real stories,<br />
+            <span style={{ color: '#A855F7' }}>better decisions.</span>
+          </h1>
+          <p className="font-body text-[15px] sm:text-base leading-relaxed max-w-[560px]" style={{ color: 'rgba(255,255,255,0.6)' }}>
+            Fresh information on scams, dating and tenant behaviours, GBV trends, and RedFlaq updates — helping South Africans make safer decisions.
+          </p>
+        </div>
+      </section>
+
+      <div className="max-w-[900px] mx-auto px-5 sm:px-6 py-10 sm:py-14">
+        {/* Category filters — horizontal scroll on mobile */}
+        <div className="mb-8 overflow-x-auto scrollbar-hide pb-2 -mx-1">
+          <div className="flex gap-2.5 px-1 min-w-max">
+            {categories.map((cat) => {
+              const isActive = activeCategory === cat.value;
+              return (
+                <button
+                  key={cat.value}
+                  onClick={() => setActiveCategory(cat.value)}
+                  className="transition-all duration-200 min-h-[44px] whitespace-nowrap"
+                  style={{
+                    padding: "10px 20px",
+                    background: isActive ? "#7C3AED" : "#FFFFFF",
+                    color: isActive ? "#FFFFFF" : "#4B4453",
+                    border: `1.5px solid ${isActive ? "#7C3AED" : "rgba(214,211,205,0.6)"}`,
+                    fontFamily: "'Syne', sans-serif", fontSize: 12, fontWeight: 600,
+                    cursor: "pointer", borderRadius: 50,
+                    boxShadow: isActive ? "0 4px 12px rgba(124,58,237,0.3)" : "none",
+                  }}
+                >
+                  {cat.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {loading ? (
-          <div style={{ textAlign: "center", padding: 40 }}>
+          <div style={{ textAlign: "center", padding: 60 }}>
             <div style={{ width: 32, height: 32, border: "3px solid #7C3AED", borderTopColor: "transparent", borderRadius: "50%", animation: "spin 1s linear infinite", margin: "0 auto" }} />
           </div>
         ) : filtered.length === 0 ? (
-          <div style={{ textAlign: "center", padding: 60, background: "white", border: "1.5px solid #D6D3CD" }}>
+          <div className="text-center p-10 sm:p-16" style={{
+            background: "#FFFFFF", border: "1px solid rgba(214,211,205,0.6)",
+            borderRadius: 20,
+          }}>
             <span style={{ fontSize: 40 }}>📝</span>
-            <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 22, color: "#2D2235", margin: "12px 0" }}>
-              Articles coming soon
-            </h3>
-            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: "#78716C" }}>
+            <h3 className="font-heading text-xl sm:text-2xl text-foreground mt-3 mb-2">Articles coming soon</h3>
+            <p className="font-body text-sm text-muted-foreground">
               We're working on safety guides and resources. Check back soon, or{" "}
               <Link to="/safety-tips" style={{ color: "#7C3AED", fontWeight: 700 }}>explore our free safety tips</Link>.
             </p>
           </div>
         ) : (
-          <div style={{ display: "grid", gap: 24 }}>
+          <div className="grid gap-4 sm:gap-5">
             {filtered.map((article) => (
               <Link
                 key={article.id}
                 to={`/blog/${article.slug}`}
-                style={{ display: "block", background: "white", border: "1.5px solid #D6D3CD", padding: 28, textDecoration: "none" }}
+                className="block no-underline transition-all duration-200 hover:-translate-y-1"
+                style={{
+                  background: "#FFFFFF", border: "1px solid rgba(214,211,205,0.6)",
+                  padding: '24px 20px', borderRadius: 18,
+                  boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
+                }}
               >
-                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: "0.1em", color: "#7C3AED", fontWeight: 600, textTransform: "uppercase" }}>
+                <span className="font-mono text-[10px] tracking-[0.1em] font-semibold" style={{ color: '#A855F7', textTransform: 'uppercase' }}>
                   {article.category.replace(/-/g, " ")}
                 </span>
-                <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 22, color: "#2D2235", margin: "6px 0 8px" }}>
-                  {article.title}
-                </h2>
+                <h2 className="font-heading text-lg sm:text-xl text-foreground mt-1 mb-2">{article.title}</h2>
                 {article.excerpt && (
-                  <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: "#78716C", lineHeight: 1.6 }}>
-                    {article.excerpt}
-                  </p>
+                  <p className="font-body text-[13px] sm:text-sm text-muted-foreground leading-relaxed">{article.excerpt}</p>
                 )}
-                <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#9CA3AF", marginTop: 12 }}>
+                <p className="font-mono text-[10px] mt-3" style={{ color: '#9CA3AF' }}>
                   {article.author} · {new Date(article.created_at).toLocaleDateString("en-ZA")}
                 </p>
               </Link>

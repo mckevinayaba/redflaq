@@ -448,7 +448,7 @@ const ResultsPageUpdated = () => {
           </button>
         )}
 
-        <GetHelpModal isOpen={helpModalOpen} onClose={() => setHelpModalOpen(false)} riskLevel={results.riskLevel} />
+        <GetHelpModal isOpen={helpModalOpen} onClose={() => setHelpModalOpen(false)} riskLevel={results.riskLevel} userProvince={(results as any).searchProvince} />
 
         {/* ─── WHAT THIS MEANS — GUIDED SECTION ─── */}
         <div className="bg-card border border-border overflow-hidden mb-8">

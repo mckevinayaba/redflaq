@@ -1,4 +1,5 @@
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import { ShieldAlert } from "lucide-react";
 
 const steps = [
   { num: "01", title: "You Provide Details", desc: "Enter their full name and province, and tell us why you're checking (dating, flat‑share, childcare, etc.)." },
@@ -11,7 +12,7 @@ const HowItWorksPlinq = () => {
   const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section id="how-it-works" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '48px 40px 56px' }}>
+    <section id="how-it-works" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '120px 24px' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 16 }}>
           The Process
@@ -19,44 +20,106 @@ const HowItWorksPlinq = () => {
 
         <h2 style={{
           fontFamily: "'DM Serif Display', serif",
-          fontSize: 'clamp(36px, 4vw, 52px)', maxWidth: 500, color: '#2D2235', marginBottom: 36,
+          fontSize: 'clamp(36px, 4vw, 52px)',
+          maxWidth: 500,
+          color: '#1A1523',
+          marginBottom: 56,
+          letterSpacing: '-0.02em',
         }}>
           Fast. Simple. <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>Public‑record based.</em>
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-4" style={{ border: '1.5px solid #D6D3CD' }}>
+        {/* Timeline layout */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-0 relative">
+          {/* Horizontal connector line (desktop) */}
+          <div className="hidden md:block absolute top-[52px] left-[12.5%] right-[12.5%] h-[2px]"
+            style={{ background: 'linear-gradient(90deg, #EDE9FE, #7C3AED, #EDE9FE)' }}
+          />
+
           {steps.map((step, i) => (
             <div
               key={step.num}
-              className="transition-colors hover:bg-[#FAF5FF]"
               style={{
-                padding: '36px 28px',
-                borderRight: i < steps.length - 1 ? '1.5px solid #D6D3CD' : 'none',
-                background: 'white',
+                padding: '0 20px',
+                textAlign: 'center',
+                position: 'relative',
               }}
             >
+              {/* Step circle */}
               <div style={{
-                fontFamily: "'DM Serif Display', serif", fontSize: 64, color: '#EDE9FE',
-                lineHeight: 1, marginBottom: 16,
+                width: 64,
+                height: 64,
+                borderRadius: '50%',
+                background: 'rgba(124, 58, 237, 0.08)',
+                border: '2px solid #7C3AED',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 24px',
+                position: 'relative',
+                zIndex: 2,
               }}>
-                {step.num}
+                <span style={{
+                  fontFamily: "'DM Serif Display', serif",
+                  fontSize: 24,
+                  color: '#7C3AED',
+                  fontWeight: 700,
+                }}>
+                  {step.num}
+                </span>
               </div>
+
               <div style={{
-                fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700,
-                color: '#2D2235', marginBottom: 10,
+                fontFamily: "'Syne', sans-serif",
+                fontSize: 16,
+                fontWeight: 700,
+                color: '#1A1523',
+                marginBottom: 10,
               }}>
                 {step.title}
               </div>
-              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#78716C', lineHeight: 1.6 }}>
+              <p style={{
+                fontFamily: "'Syne', sans-serif",
+                fontSize: 14,
+                color: '#6B7280',
+                lineHeight: 1.65,
+                maxWidth: 240,
+                margin: '0 auto',
+              }}>
                 {step.desc}
               </p>
+
+              {/* Vertical connector for mobile */}
+              {i < steps.length - 1 && (
+                <div className="md:hidden" style={{
+                  width: 2,
+                  height: 32,
+                  background: '#EDE9FE',
+                  margin: '16px auto',
+                }} />
+              )}
             </div>
           ))}
         </div>
 
-        <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#9CA3AF', textAlign: 'center', marginTop: 24 }}>
-          We never access private SAPS fingerprint or internal criminal record databases. RedFlaq only uses information that is already public.
-        </p>
+        {/* Disclaimer card */}
+        <div style={{
+          marginTop: 56,
+          background: 'rgba(124, 58, 237, 0.04)',
+          border: '1px solid rgba(124, 58, 237, 0.15)',
+          borderRadius: 12,
+          padding: '20px 28px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 14,
+          maxWidth: 640,
+          margin: '56px auto 0',
+        }}>
+          <ShieldAlert style={{ width: 20, height: 20, color: '#7C3AED', flexShrink: 0, opacity: 0.7 }} />
+          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#6B7280', lineHeight: 1.5 }}>
+            We never access private SAPS fingerprint or internal criminal record databases. RedFlaq only uses information that is already public.
+          </p>
+        </div>
       </div>
     </section>
   );

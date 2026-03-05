@@ -63,9 +63,6 @@ const FounderSection = () => {
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             {[
-              { label: "ASEB Summit & Awards", href: "https://www.asebsummit.com" },
-              { label: "ASEB Society", href: "https://www.asebsociety.com" },
-              { label: "Setup A Startup", href: "https://www.setupastartup.com" },
               { label: "KeaLeboga", href: "https://www.kealeboga.com" },
               { label: "Grieve.World", href: "https://www.grieve.world" },
             ].map(item => (

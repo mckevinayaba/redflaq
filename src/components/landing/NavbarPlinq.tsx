@@ -260,7 +260,7 @@ const NavbarPlinq = () => {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <button
                   onClick={() => { navigate('/dashboard'); setIsMenuOpen(false); }}
-                  style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 0', color: '#7C3AED', fontFamily: "'Syne', sans-serif", fontWeight: 700, textTransform: 'uppercase', fontSize: 14, letterSpacing: '0.05em', background: 'none', border: 'none', cursor: 'pointer' }}
+                  style={{ display: 'block', width: '100%', textAlign: 'left', padding: '8px 0', color: '#7C3AED', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 14, letterSpacing: '0.02em', background: 'none', border: 'none', cursor: 'pointer' }}
                 >
                   Dashboard
                 </button>

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { DisputeModal } from "@/components/DisputeModal";
-import SafetyWinScreen from "@/components/SafetyWinScreen";
+
 import { Progress } from "@/components/ui/progress";
 import IdentityMatchSelector from "@/components/IdentityMatchSelector";
 import { type PersonRecord } from "@/utils/identityConfidence";
@@ -456,7 +456,7 @@ const ResultsPageUpdated = () => {
           )}
         </div>
 
-        <SafetyWinScreen riskLevel={results.riskLevel} onClose={() => {}} />
+        {/* SafetyWinScreen removed — celebration messaging contradicts safety warnings */}
 
         {/* Critical disclaimer for CLEAR results */}
         {results.riskLevel !== 'RED' && results.riskLevel !== 'ORANGE' && results.riskLevel !== 'YELLOW' && results.wantedPersonsCount === 0 && (
@@ -880,13 +880,19 @@ const ResultsPageUpdated = () => {
         {/* Empty State */}
         {!results.isWanted && (
           <div style={{ border: '1.5px solid var(--ink)', background: 'var(--paper)', padding: 48, textAlign: 'center' }}>
-            <span style={{ fontSize: 48, display: 'block', marginBottom: 16 }}>✅</span>
             <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, color: 'var(--ink)', marginBottom: 12 }}>
-              No public red flags found
+              No Public Records Found
             </h3>
             <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, color: 'var(--mid)', lineHeight: 1.7, maxWidth: 520, margin: '0 auto 24px' }}>
-              We searched the South African SAPS wanted persons list, SAFLII court judgments, and FIC sanctions list and found no matches for this name as of {searchDate}. This does not mean "no criminal record" — only that no match was found in these specific public sources.
+              We searched South African databases and found no criminal records, warrants, or court cases for this name as of {searchDate}.
             </p>
+
+            <div style={{ background: '#FEF3C7', border: '2px solid #F59E0B', borderRadius: 8, padding: 16, maxWidth: 520, margin: '0 auto 24px', display: 'flex', alignItems: 'center', gap: 12, justifyContent: 'center' }}>
+              <span style={{ fontSize: 24 }}>⚠️</span>
+              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700, color: '#92400E', margin: 0 }}>
+                READ THE CRITICAL WARNING BELOW BEFORE PROCEEDING
+              </p>
+            </div>
 
             <div style={{ background: 'white', border: '1.5px solid var(--cream)', padding: 24, textAlign: 'left', maxWidth: 520, margin: '0 auto 24px' }}>
               <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: '#EA580C', marginBottom: 8 }}>
@@ -903,9 +909,12 @@ const ResultsPageUpdated = () => {
               </p>
             </div>
 
+            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#6B7280', maxWidth: 520, margin: '0 auto 16px', lineHeight: 1.6 }}>
+              This report shows public records searched. It is NOT a certificate of safety or character reference. Do not use it to prove someone is "safe" or "cleared."
+            </p>
             <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
               <button onClick={handleDownload} style={{ background: 'var(--ink)', color: 'var(--paper)', padding: '14px 28px', fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer' }}>
-                Download No-Record Certificate
+                Download Search Results (PDF)
               </button>
             </div>
           </div>

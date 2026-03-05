@@ -80,9 +80,9 @@ const cardsByRisk: Record<string, { icon: string; heading: string; body: string;
     ],
   },
   GREEN: {
-    icon: "✅",
-    heading: "No warnings found — here's what to keep in mind.",
-    body: "No public-record warnings matched this name in the sources RedFlaq checks. This is good news — but a clear result is not a guarantee of someone's character. Always trust your instincts too.",
+    icon: "⚠️",
+    heading: "No records found — but this doesn't guarantee safety. Here's what to do next:",
+    body: "No public-record warnings matched this name in the sources RedFlaq checks. A clear result is NOT a guarantee of someone's character. In South Africa, only 8% of rape cases result in convictions. Always trust your instincts.",
     cards: [
       {
         icon: "🛡️",
@@ -101,7 +101,7 @@ export default function PostReportGuidance({ riskLevel }: { riskLevel: string })
   return (
     <section className="mt-12 pt-10 border-t border-border">
       {/* Section heading */}
-      <h2 className="font-heading text-2xl sm:text-3xl text-foreground mb-2">{config.icon} What do I do with this result?</h2>
+      <h2 className="font-heading text-2xl sm:text-3xl text-foreground mb-2">⚠️ What do I do with this result?</h2>
       <h3 className="font-heading text-lg sm:text-xl text-foreground mb-2">{config.heading}</h3>
       <p className="font-body text-sm sm:text-base text-muted-foreground leading-relaxed mb-8 max-w-2xl">
         {config.body}

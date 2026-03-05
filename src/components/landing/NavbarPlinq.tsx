@@ -51,6 +51,15 @@ const NavbarPlinq = () => {
     { label: "FAQ", href: "#faq" },
   ];
 
+  const handleGetHelp = () => {
+    navigate('/safety-tips#get-help');
+    setIsMenuOpen(false);
+    setTimeout(() => {
+      const el = document.getElementById('get-help');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }, 300);
+  };
+
   const scrollToSection = (href: string, isRoute?: boolean) => {
     if (isRoute) {
       navigate(href);
@@ -118,7 +127,18 @@ const NavbarPlinq = () => {
 
           {/* Desktop right side */}
           {!isMobile && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <button
+                onClick={handleGetHelp}
+                style={{
+                  background: '#DC2626', color: 'white', padding: '7px 14px',
+                  fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 12,
+                  letterSpacing: '0.06em', textTransform: 'uppercase', border: 'none',
+                  cursor: 'pointer', borderRadius: 6,
+                }}
+              >
+                🆘 Get Help
+              </button>
               {isAuthenticated ? (
                 <>
                   <button
@@ -230,6 +250,12 @@ const NavbarPlinq = () => {
                 {link.label}
               </button>
             ))}
+            <button
+              onClick={handleGetHelp}
+              style={{ width: '100%', background: '#DC2626', color: 'white', padding: 12, fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.06em', textTransform: 'uppercase', border: 'none', cursor: 'pointer', borderRadius: 6 }}
+            >
+              🆘 Get Help
+            </button>
             {isAuthenticated ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <button

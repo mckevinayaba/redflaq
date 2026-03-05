@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
+import SafetyCardGrid from "@/components/safety/SafetyCardGrid";
+import GBVResourcesSection from "@/components/safety/GBVResourcesSection";
 import { Heart, Home, Users, HelpCircle } from "lucide-react";
 
 const redFlags = [
@@ -56,9 +58,15 @@ const SafetyTips = () => {
         <h1 className="font-heading text-3xl sm:text-[44px] text-foreground leading-tight mb-3">
           Information is the first step. Safety is the destination.
         </h1>
-        <p className="font-body text-base sm:text-lg text-muted-foreground leading-relaxed max-w-[650px] mb-16">
+        <p className="font-body text-base sm:text-lg text-muted-foreground leading-relaxed max-w-[650px] mb-10">
           RedFlaq gives you the signal. This page helps you know what to do with it — before, during, and after.
         </p>
+
+        {/* Card Grid */}
+        <SafetyCardGrid />
+
+        {/* GBV Resources Section */}
+        <GBVResourcesSection />
 
         {/* Section 1 — Before You Check */}
         <section className="mb-16">
@@ -130,43 +138,7 @@ const SafetyTips = () => {
           </div>
         </section>
 
-        {/* Section 3 — In Danger Now */}
-        <section id="danger" className="mb-16">
-          <p className="font-mono text-[11px] tracking-[0.15em] text-primary uppercase mb-2">IF YOU ARE IN DANGER</p>
-          <h2 className="font-heading text-2xl sm:text-3xl text-foreground mb-6">
-            You are not alone. Help is available right now.
-          </h2>
-
-          <div className="bg-primary rounded-xl p-8 text-center mb-6">
-            <p className="text-4xl mb-3">📞</p>
-            <p className="font-heading text-2xl text-primary-foreground mb-1">GBV Command Centre: 0800 428 428</p>
-            <p className="font-body text-sm text-primary-foreground/80">Free · Available 24/7 · Completely confidential</p>
-            <p className="font-body text-sm text-primary-foreground/70 mt-3 max-w-md mx-auto">
-              Staffed by trained counsellors. You do not have to explain everything. You just have to call.
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-3 gap-5">
-            <div className="bg-card border border-border rounded-xl p-6 shadow-sm text-center">
-              <h4 className="font-heading text-base text-foreground mb-1">Lifeline South Africa</h4>
-              <a href="tel:0861322322" className="font-body text-lg font-bold text-primary">0861 322 322</a>
-              <p className="font-body text-sm text-muted-foreground mt-1">Crisis counselling, 24/7</p>
-            </div>
-            <div className="bg-card border border-border rounded-xl p-6 shadow-sm text-center">
-              <h4 className="font-heading text-base text-foreground mb-1">TEARS Foundation</h4>
-              <p className="font-body text-sm font-bold text-primary">SMS 'Help' to 085 60 10 111</p>
-              <p className="font-body text-sm text-muted-foreground mt-1">GBV survivor support</p>
-            </div>
-            <div className="bg-card border border-border rounded-xl p-6 shadow-sm text-center">
-              <h4 className="font-heading text-base text-foreground mb-1">Protection Order</h4>
-              <p className="font-body text-sm text-muted-foreground mt-1">
-                You have the legal right to apply for a protection order at any Magistrate's Court in South Africa at no cost. You do not need a lawyer.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Section 4 — Clear Result */}
+        {/* Section 3 — Clear Result */}
         <section className="mb-16">
           <p className="font-mono text-[11px] tracking-[0.15em] text-primary uppercase mb-2">WHEN THE RESULT IS CLEAR</p>
           <h2 className="font-heading text-2xl sm:text-3xl text-foreground mb-2">

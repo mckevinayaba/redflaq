@@ -2,44 +2,54 @@
 
 ## Problem
 
-The search function works correctly on the backend, but **the frontend can't read error details from non-2xx responses**.
+The Tawk.to chat widget is:
+1. Auto-opening its chat window without user interaction
+2. Showing a proactive "We Are Here" popup message
+3. Displaying a "1 new message" notification badge above the navbar
 
-When `supabase.functions.invoke` gets a non-2xx response (402 no credits, 400 invalid payment, 401 auth required, etc.):
-- `data` is `null`
-- `error` is a `FunctionsHttpError` with `error.message` = `"Edge Function returned a non-2xx status code"` (generic)
-- The **actual error body** (containing "No credits available", "Payment not yet verified", etc.) is in `error.context` — a Response object that must be parsed with `await error.context.json()`
-
-The current code on line 124 does `throw new Error(error.message)` which throws the generic message. Then the error mapping tries to match "Edge Function returned a non-2xx status code" against patterns like "no credits" — **which never matches**. So it falls through to the generic catch-all.
-
-This is why the user sees vague errors even after the error mapping was added. The mapping is correct but it never receives the actual error strings from the backend.
+All of these are controlled by Tawk.to's API settings.
 
 ## Fix
 
-Single change in `src/pages/DashboardNewCheck.tsx` — after getting `error` from `supabase.functions.invoke`, parse the actual response body from `error.context` before throwing:
+Add `Tawk_API` configuration in `index.html` to suppress all auto-popups:
 
-```typescript
-// After the noCredits check, before line 124:
-if (error) {
-  // Extract actual error message from edge function response body
-  let actualMessage = error.message;
-  try {
-    const errorBody = await error.context?.json();
-    if (errorBody?.error) actualMessage = errorBody.error;
-    if (errorBody?.redirect === '/pricing') {
-      // No credits — redirect
-      clearInterval(interval);
-      setProgress(0);
-      setIsSubmitting(false);
-      setFormError("You don't have any search credits. Redirecting to pricing…");
-      setTimeout(() => navigate("/pricing"), 2000);
-      return;
-    }
-  } catch {}
-  throw new Error(actualMessage);
+1. **Set `Tawk_API.onLoad`** callback to:
+   - Minimize the widget on load (`Tawk_API.minimize()`)
+   - Hide the popup message (`Tawk_API.hideWidget()` is too aggressive — instead use `minimize`)
+2. **Set `Tawk_API.customStyle`** to hide the notification badge
+3. **Disable proactive chat triggers** by setting `Tawk_API.onBeforeLoad` to prevent auto-popup behaviors:
+   - `Tawk_API.visitor` settings won't help — the proactive messages ("We Are Here", auto-open) are configured in the Tawk.to dashboard under **Triggers**
+   
+### What we can control via code
+
+In `index.html`, before the Tawk script loads, add:
+
+```javascript
+Tawk_API.onLoad = function() {
+  Tawk_API.minimize();
+};
+Tawk_API.onChatMessageVisitor = function() {};
+Tawk_API.onChatMessageSystem = function() {};
+```
+
+And add CSS to hide the unread badge:
+
+```css
+/* Hide Tawk notification badge */
+.tawk-min-container .tawk-badge {
+  display: none !important;
 }
 ```
 
-This ensures the error mapping in the catch block receives the real backend message ("Payment not yet verified", "No credits available", etc.) instead of the generic supabase wrapper message.
+### What requires Tawk.to dashboard changes
 
-No other files need changes. The edge function and error mapping are both correct — only this bridge between them is broken.
+The proactive "We Are Here" message and auto-open behavior are **Triggers** configured in the Tawk.to dashboard (Settings → Triggers). These cannot be fully suppressed from code alone. The `Tawk_API.minimize()` on load will close it if it auto-opens, but the trigger may still fire briefly.
+
+**Recommendation**: Go to your Tawk.to dashboard → Settings → Triggers → disable or delete the proactive greeting trigger. This is the only way to fully stop "We Are Here" and the auto-open.
+
+### Implementation steps
+
+1. Update `index.html`: Add `Tawk_API.onLoad` with `minimize()` call before the embed script
+2. Add CSS to hide the notification badge counter
+3. These changes will make the widget stay minimized and badge-free until a user explicitly clicks it
 

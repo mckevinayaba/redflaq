@@ -35,7 +35,7 @@ const FounderSection = () => {
               lineHeight: 1.7, color: 'rgba(255,255,255,0.9)', borderLeft: '4px solid #7C3AED',
               paddingLeft: 24, margin: '0 0 24px 0',
             }}>
-              "I built RedFlaq after years of living in, working in, and building across South Africa. As the founder of the Africa Startup Ecosystem Builders Summit & Awards and Setup A Startup, I've spent years in communities across this country. I've seen first-hand what happens when people — especially women — don't have access to basic safety information. RedFlaq exists because safety should never be a privilege. Public information should be accessible to everyone, not just HR departments with big budgets."
+              "I built RedFlaq after years of living in, working in, and building across South Africa. I've spent years in communities across this country. I've seen first-hand what happens when people — especially women — don't have access to basic safety information. RedFlaq exists because safety should never be a privilege. Public information should be accessible to everyone, not just HR departments with big budgets."
             </blockquote>
             <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: 'rgba(255,255,255,0.5)' }}>
               — McKevin Ayaba, Founder

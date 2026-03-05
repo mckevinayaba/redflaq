@@ -58,6 +58,7 @@ interface SearchResultData {
   searchedAt: string;
   hasMultipleMatches?: boolean;
   recommendation?: string;
+  searchProvince?: string;
 }
 
 const getConfidence = (person: WantedPerson) => {

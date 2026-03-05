@@ -280,8 +280,23 @@ const ResultsPageUpdated = () => {
   const isMultiple = results.wantedPersonsCount > 1;
   const searchDate = new Date(results.searchedAt).toLocaleDateString('en-ZA', { day: '2-digit', month: '2-digit', year: 'numeric' });
   const searchTime = new Date(results.searchedAt).toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' });
-  const riskBadge = getRiskBadge(results.riskLevel);
-  const riskExplainer = getRiskExplainer(results.riskLevel, results.wantedPersons);
+
+  // Override risk badge: if records exist but riskLevel is GREEN, force to YELLOW
+  const effectiveRiskLevel = (hasRecords && results.riskLevel === 'GREEN') ? 'YELLOW' : results.riskLevel;
+  const riskBadge = isUncertainMatch
+    ? { color: '#CA8A04', bg: '#FEFCE8', label: 'UNCERTAIN MATCH', icon: '⚠️', borderClass: 'border-yellow-500' }
+    : getRiskBadge(effectiveRiskLevel);
+  const riskExplainer = isUncertainMatch
+    ? {
+        title: 'We found records linked to a similar name, but we cannot confirm this is the same person. Match confidence is low — verify carefully before making any decisions.',
+        triggers: [
+          'Name similarity match only — no ID or additional data confirmed',
+          'This could be a different person with the same or similar name',
+          results.wantedPersonsCount > 1 ? `${results.wantedPersonsCount} possible matches found` : 'Single low-confidence match found',
+        ].filter(Boolean),
+        action: 'DO NOT assume this is the same person. Verify with date of birth, location, and case details. If unsure, request Human Verification or contact SAPS directly.',
+      }
+    : getRiskExplainer(effectiveRiskLevel, results.wantedPersons);
 
   return (
     <div className="bg-background min-h-screen flex flex-col">

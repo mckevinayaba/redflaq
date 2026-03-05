@@ -109,8 +109,13 @@ export default function Dashboard() {
             </div>
             <span className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Your safety checks</span>
           </div>
-          <p className="font-heading text-4xl text-foreground">{searches.length}</p>
-          <p className="font-body text-sm text-muted-foreground mt-1">since you joined RedFlaq</p>
+          <p className="font-heading text-4xl text-foreground">{creditsRemaining}</p>
+          <p className="font-body text-sm text-muted-foreground mt-1">checks remaining</p>
+          {creditsRemaining === 0 && (
+            <Link to="/pricing" className="inline-flex items-center gap-1.5 mt-2 px-3 py-1.5 bg-primary text-primary-foreground font-body text-xs font-semibold rounded-lg hover:opacity-90 transition-colors">
+              Buy More Checks
+            </Link>
+          )}
         </div>
 
         {/* This month */}

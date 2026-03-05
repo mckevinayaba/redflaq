@@ -218,7 +218,25 @@ export default function DashboardNewCheck() {
   return (
     <DashboardLayout>
       <p className="font-mono text-[11px] tracking-widest text-muted-foreground uppercase mb-1">New check</p>
-      <h1 className="font-heading text-2xl sm:text-3xl text-foreground mb-2 sm:mb-4">Start a new safety check</h1>
+      <h1 className="font-heading text-2xl sm:text-3xl text-foreground mb-2">Start a new safety check</h1>
+
+      {/* Credit balance indicator */}
+      {creditsRemaining !== null && creditsRemaining > 0 && (
+        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-4" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
+          <Shield className="h-4 w-4 text-primary" />
+          <span className="font-body text-sm font-semibold text-primary">You have {creditsRemaining} check{creditsRemaining !== 1 ? "s" : ""} remaining</span>
+        </div>
+      )}
+      {creditsRemaining !== null && creditsRemaining <= 0 && (
+        <div className="flex items-center gap-3 p-4 rounded-xl border-2 border-destructive bg-destructive/10 mb-4">
+          <AlertTriangle className="h-5 w-5 text-destructive shrink-0" />
+          <div>
+            <p className="font-heading text-sm text-foreground">You have no checks remaining</p>
+            <p className="font-body text-xs text-muted-foreground">Purchase checks to continue.</p>
+          </div>
+          <Link to="/pricing" className="ml-auto px-4 py-2 bg-primary text-primary-foreground font-body text-xs font-semibold rounded-lg hover:opacity-90 transition-colors whitespace-nowrap">Buy Checks</Link>
+        </div>
+      )}
 
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">

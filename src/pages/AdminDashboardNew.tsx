@@ -117,6 +117,7 @@ export default function AdminDashboardNew() {
     { label: "Total Checks", value: kpis.totalChecks, icon: Search },
     { label: "Checks Today", value: kpis.checksToday, icon: BarChart3 },
     { label: "Revenue (Month)", value: `R${kpis.revenueMonth.toLocaleString()}`, icon: CreditCard },
+    { label: "Revenue (All Time)", value: `R${kpis.revenueAllTime.toLocaleString()}`, icon: CreditCard },
   ];
 
   return (

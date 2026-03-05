@@ -320,6 +320,54 @@ const ResultsPageUpdated = () => {
           </p>
         </div>
 
+        {/* Get Help Now Button */}
+        {results.riskLevel === 'RED' ? (
+          <button
+            onClick={() => setHelpModalOpen(true)}
+            style={{
+              width: '100%',
+              padding: 20,
+              background: '#DC2626',
+              color: 'white',
+              border: 'none',
+              borderRadius: 8,
+              fontFamily: "'Syne', sans-serif",
+              fontSize: 18,
+              fontWeight: 700,
+              cursor: 'pointer',
+              margin: '24px 0',
+              animation: 'pulse 2s infinite',
+            }}
+          >
+            🆘 Get Help Now — Speak to Someone
+          </button>
+        ) : (
+          <button
+            onClick={() => setHelpModalOpen(true)}
+            style={{
+              width: '100%',
+              padding: 16,
+              background: '#7C3AED',
+              color: 'white',
+              border: 'none',
+              borderRadius: 8,
+              fontFamily: "'Syne', sans-serif",
+              fontSize: 16,
+              fontWeight: 600,
+              cursor: 'pointer',
+              margin: '16px 0',
+            }}
+          >
+            Need Support? View Resources
+          </button>
+        )}
+
+        <GetHelpModal
+          isOpen={helpModalOpen}
+          onClose={() => setHelpModalOpen(false)}
+          riskLevel={results.riskLevel}
+        />
+
         {/* Safety Win Screen for clear/low risk results */}
         <SafetyWinScreen riskLevel={results.riskLevel} onClose={() => {}} />
 

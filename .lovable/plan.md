@@ -1,55 +1,44 @@
 
 
-## Problem
+## Fix: Payment Stuck on "Processing" Forever
 
-The Tawk.to chat widget is:
-1. Auto-opening its chat window without user interaction
-2. Showing a proactive "We Are Here" popup message
-3. Displaying a "1 new message" notification badge above the navbar
+### Root Causes (Two Issues)
 
-All of these are controlled by Tawk.to's API settings.
+**Issue 1 — Yoco webhook not receiving events:**
+Yes, you need to configure the webhook URL in your Yoco dashboard. Without it, payments are never marked as "verified" in the database, so credits are never activated. The webhook URL is:
+`https://gewwxdmxrwyosddczezg.supabase.co/functions/v1/yoco-webhook`
 
-## Fix
+**Issue 2 — PaymentSuccess page never unlocks (even after 60s timeout):**
+The page requires `user?.email` to start polling. But the checkout opens in a **new tab** (`window.open`), where the user may not be authenticated. If `user` is null, the polling never starts and the page stays on "Processing..." forever. The 60s auto-unlock never triggers.
 
-Add `Tawk_API` configuration in `index.html` to suppress all auto-popups:
+Additionally, the checkout opens in a new tab but the user doesn't know to return — the flow is disjointed.
 
-1. **Set `Tawk_API.onLoad`** callback to:
-   - Minimize the widget on load (`Tawk_API.minimize()`)
-   - Hide the popup message (`Tawk_API.hideWidget()` is too aggressive — instead use `minimize`)
-2. **Set `Tawk_API.customStyle`** to hide the notification badge
-3. **Disable proactive chat triggers** by setting `Tawk_API.onBeforeLoad` to prevent auto-popup behaviors:
-   - `Tawk_API.visitor` settings won't help — the proactive messages ("We Are Here", auto-open) are configured in the Tawk.to dashboard under **Triggers**
-   
-### What we can control via code
+---
 
-In `index.html`, before the Tawk script loads, add:
+### Plan
 
-```javascript
-Tawk_API.onLoad = function() {
-  Tawk_API.minimize();
-};
-Tawk_API.onChatMessageVisitor = function() {};
-Tawk_API.onChatMessageSystem = function() {};
+**1. Fix PaymentSuccess.tsx — remove auth dependency for polling**
+- Extract `email` from the URL search params (the `create-yoco-checkout` function already stores email in metadata and we have `payment_id`)
+- Poll `manual_payments` by `payment_id` directly instead of requiring auth email — this works because the webhook updates status to "verified" by payment_id
+- If no `user?.email` and no webhook has fired, fall back to checking `manual_payments` by `payment_id` only (no auth needed since `payment_id` is a secret token)
+- Keep the 60s timeout but make it actually work regardless of auth state
+
+**2. Fix PaymentModal.tsx — redirect in same tab**
+- Change `window.open(url, '_blank')` to `window.location.href = url` so the user stays in the same browsing context and returns to the success page authenticated
+
+**3. Fix the webhook to also update manual_payments credits**
+- Currently the webhook updates `manual_payments.status` to "verified" but the polling also checks `search_credits - credits_used > 0`. Ensure `search_credits` is properly set (it already is from `create-yoco-checkout`).
+
+**4. Add email as a URL param on success redirect**
+- In `create-yoco-checkout`, append `&email=` to the successUrl so PaymentSuccess can poll by email even without auth
+
+---
+
+### Yoco Dashboard Setup (Required)
+
+You must log into your Yoco Business Portal and add this webhook URL:
 ```
-
-And add CSS to hide the unread badge:
-
-```css
-/* Hide Tawk notification badge */
-.tawk-min-container .tawk-badge {
-  display: none !important;
-}
+https://gewwxdmxrwyosddczezg.supabase.co/functions/v1/yoco-webhook
 ```
-
-### What requires Tawk.to dashboard changes
-
-The proactive "We Are Here" message and auto-open behavior are **Triggers** configured in the Tawk.to dashboard (Settings → Triggers). These cannot be fully suppressed from code alone. The `Tawk_API.minimize()` on load will close it if it auto-opens, but the trigger may still fire briefly.
-
-**Recommendation**: Go to your Tawk.to dashboard → Settings → Triggers → disable or delete the proactive greeting trigger. This is the only way to fully stop "We Are Here" and the auto-open.
-
-### Implementation steps
-
-1. Update `index.html`: Add `Tawk_API.onLoad` with `minimize()` call before the embed script
-2. Add CSS to hide the notification badge counter
-3. These changes will make the widget stay minimized and badge-free until a user explicitly clicks it
+Subscribe to the `payment.succeeded` event. Without this, no payment will ever be verified automatically.
 

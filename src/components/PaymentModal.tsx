@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { X, Shield, Loader2, CreditCard } from 'lucide-react';
+import { X, Shield, Loader2, Lock } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface PaymentModalProps {
@@ -14,12 +14,11 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
   const [email, setEmail] = useState('');
   const [selectedPackage, setSelectedPackage] = useState(packageType);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     setSelectedPackage(packageType);
   }, [packageType]);
-  const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'payfast'>('stripe');
-  const { toast } = useToast();
 
   const packages = {
     single: { price: 99, credits: 1, label: 'R99 – 1 Safety Check', type: 'single', savings: undefined },
@@ -38,34 +37,18 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
     setIsSubmitting(true);
 
     try {
-      if (paymentMethod === 'stripe') {
-        const { data, error } = await supabase.functions.invoke('create-stripe-checkout', {
-          body: { email, package_type: currentPackage.type },
-        });
+      const { data, error } = await supabase.functions.invoke('create-yoco-checkout', {
+        body: { email, package_type: currentPackage.type },
+      });
 
-        if (error) throw error;
+      if (error) throw error;
 
-        if (data?.url) {
-          window.open(data.url, '_blank');
-          toast({ title: 'Checkout opened', description: 'Stripe checkout opened in a new tab.' });
-          onClose();
-        } else {
-          throw new Error('No checkout URL returned');
-        }
+      if (data?.redirectUrl) {
+        window.open(data.redirectUrl, '_blank');
+        toast({ title: 'Checkout opened', description: 'Secure checkout opened in a new tab.' });
+        onClose();
       } else {
-        const { data, error } = await supabase.functions.invoke('create-payfast-payment', {
-          body: { email, package_type: currentPackage.type },
-        });
-
-        if (error) throw error;
-
-        if (data?.redirect_url) {
-          window.open(data.redirect_url, '_blank');
-          toast({ title: 'Checkout opened', description: 'PayFast checkout opened in a new tab.' });
-          onClose();
-        } else {
-          throw new Error('No redirect URL returned');
-        }
+        throw new Error('No checkout URL returned');
       }
     } catch (err: any) {
       console.error('Payment error:', err);
@@ -96,9 +79,9 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
           {/* Header */}
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Shield className="w-8 h-8 text-primary" />
+              <Lock className="w-8 h-8 text-primary" />
             </div>
-            <h2 className="text-2xl font-bold text-foreground mb-2">Complete Your Payment</h2>
+            <h2 className="text-2xl font-bold text-foreground mb-2">Secure Checkout</h2>
             <p className="text-3xl font-bold text-primary">R{currentPackage.price}.00</p>
             <p className="text-sm text-muted-foreground">
               {currentPackage.credits} Safety Check{currentPackage.credits > 1 ? 's' : ''}
@@ -153,37 +136,6 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
             <p className="text-xs text-muted-foreground mt-1">Your receipt and search link will be sent here</p>
           </div>
 
-          {/* Payment method selector */}
-          <div className="mb-6">
-            <label className="block text-sm font-semibold text-foreground mb-2">Payment Method:</label>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => setPaymentMethod('stripe')}
-                className={`flex items-center justify-center gap-2 p-3 rounded-lg border-2 transition-colors text-sm font-medium ${
-                  paymentMethod === 'stripe'
-                    ? 'border-primary bg-primary/5 text-foreground'
-                    : 'border-border text-muted-foreground hover:border-primary/50'
-                }`}
-              >
-                <CreditCard className="w-4 h-4" />
-                Card (Stripe)
-              </button>
-              <button
-                type="button"
-                onClick={() => setPaymentMethod('payfast')}
-                className={`flex items-center justify-center gap-2 p-3 rounded-lg border-2 transition-colors text-sm font-medium ${
-                  paymentMethod === 'payfast'
-                    ? 'border-primary bg-primary/5 text-foreground'
-                    : 'border-border text-muted-foreground hover:border-primary/50'
-                }`}
-              >
-                <Shield className="w-4 h-4" />
-                PayFast (EFT)
-              </button>
-            </div>
-          </div>
-
           {/* Pay button */}
           <button
             onClick={handlePay}
@@ -197,17 +149,20 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
               </>
             ) : (
               <>
-                {paymentMethod === 'stripe' ? <CreditCard className="w-5 h-5" /> : <Shield className="w-5 h-5" />}
-                Pay Securely{paymentMethod === 'stripe' ? ' with Stripe' : ' with PayFast'}
+                <Lock className="w-5 h-5" />
+                Pay Securely – R{currentPackage.price}
               </>
             )}
           </button>
 
           {/* Trust footer */}
           <div className="mt-6 p-4 bg-primary/5 border border-primary/20 rounded-lg">
-            <p className="text-sm text-muted-foreground text-center mb-3">
-              🔒 You'll be redirected to {paymentMethod === 'stripe' ? "Stripe's" : "PayFast's"} secure checkout page
-            </p>
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <Shield className="w-4 h-4 text-primary" />
+              <p className="text-sm text-muted-foreground text-center">
+                256-bit encrypted · Secure checkout
+              </p>
+            </div>
             <div className="text-xs text-muted-foreground text-center border-t border-border pt-3">
               <p className="font-semibold text-foreground">🏢 Setup A Startup (Pty) Ltd</p>
               <p className="mt-1">Registered Business · Secure Processing</p>

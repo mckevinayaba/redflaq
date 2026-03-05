@@ -68,6 +68,7 @@ const provincialResources: Record<string, ProvResource[]> = {
   "KwaZulu-Natal": [
     { name: "FAMSA KZN Durban", phone: "031 303 1744", category: "counselling" },
     { name: "Sonke Gender Justice KZN", phone: "031 305 2105", category: "support" },
+    { name: "KZN Network on Violence Against Women", phone: "kznnetwork.co.za", category: "support" },
     { name: "Umlazi TCC (Prince Mshiyeni Hospital)", phone: "031 907 8496", hours: "24/7", category: "tcc" },
     { name: "Phoenix TCC (Mahatma Gandhi Hospital)", phone: "031 502 2338", hours: "24/7", category: "tcc" },
     { name: "Stanger TCC", phone: "032 437 6000", hours: "24/7", category: "tcc" },

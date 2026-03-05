@@ -663,7 +663,7 @@ serve(async (req) => {
         user_id: user_id || null,
         payment_id: payment_id || null,
         search_name: full_name || null,
-        search_id_number: sa_id_number || null,
+        search_id_number: null, // POPIA: Never store actual ID numbers
         search_dob: date_of_birth || null,
         search_province: province || null,
         search_case_number: case_number || null,

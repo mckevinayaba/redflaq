@@ -139,13 +139,30 @@ export default function DashboardNewCheck() {
       setProgress(0);
       setIsSubmitting(false);
       const msg = err.message || "";
-      if (msg.toLowerCase().includes("no credits") || msg.toLowerCase().includes("purchase") || msg.toLowerCase().includes("402")) {
-        setFormError("You don't have any search credits. Redirecting to pricing…");
-        setTimeout(() => navigate("/pricing"), 2000);
-      } else if (msg.toLowerCase().includes("network") || msg.toLowerCase().includes("fetch")) {
-        setFormError("We could not complete this search right now. You have not been charged. Please try again in a few minutes.");
+      const lower = msg.toLowerCase();
+
+      const errorMap: [string, string][] = [
+        ["no credits", "You don't have any search credits. Redirecting to pricing…"],
+        ["purchase", "You don't have any search credits. Redirecting to pricing…"],
+        ["402", "You don't have any search credits. Redirecting to pricing…"],
+        ["payment not yet verified", "Your payment hasn't been verified yet. Please allow a few minutes for processing, then try again."],
+        ["invalid payment", "We couldn't find a valid payment for your account. Please purchase a package first."],
+        ["failed to deduct", "Something went wrong processing your credit. Please try again or contact support."],
+        ["authentication required", "You need to be signed in to run a check. Please log in and try again."],
+        ["user not found", "We couldn't verify your account. Please log out, log back in, and try again."],
+        ["network", "We could not complete this search right now. You have not been charged. Please try again in a few minutes."],
+        ["fetch", "We could not complete this search right now. You have not been charged. Please try again in a few minutes."],
+      ];
+
+      const matched = errorMap.find(([key]) => lower.includes(key));
+
+      if (matched) {
+        setFormError(matched[1]);
+        if (lower.includes("no credits") || lower.includes("purchase") || lower.includes("402")) {
+          setTimeout(() => navigate("/pricing"), 2000);
+        }
       } else {
-        setFormError("We couldn't complete this search right now. You won't be charged for this attempt.");
+        setFormError(`Something went wrong: ${msg || "unknown error"}. You have not been charged. Please try again.`);
       }
     }
   };

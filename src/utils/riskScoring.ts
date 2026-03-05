@@ -155,6 +155,14 @@ export function calculateRiskScore(records: any[]): RiskAssessment {
   // Cap at 100
   score = Math.min(Math.round(score), 100);
 
+  // CRITICAL: If we have records but score is still 0, force minimum so we never show GREEN
+  if (records.length > 0 && score === 0) {
+    score = 10;
+    if (!factors.includes('Unclassified public record found')) {
+      factors.push('Unclassified public record found');
+    }
+  }
+
   // ── Map score to risk level and existing badge ──
   let level: RiskLevel;
   let explanation: string;

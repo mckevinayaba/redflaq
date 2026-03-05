@@ -77,6 +77,9 @@ export default function AdminDashboardNew() {
     const uniqueActive = new Set((activeData || []).map(r => r.user_id)).size;
 
     const revenue = (paymentsRes.data || []).reduce((sum, p) => sum + Number(p.amount), 0);
+    const allTimeManual = (allPaymentsRes.data || []).reduce((sum, p) => sum + Number(p.amount), 0);
+    const allTimePurchases = (allPurchasesRes.data || []).reduce((sum, p) => sum + Number(p.amount), 0);
+    const allTimeRevenue = allTimeManual + allTimePurchases;
 
     // Build daily chart data
     const dailyMap: Record<string, number> = {};

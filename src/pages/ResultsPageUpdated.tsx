@@ -10,6 +10,9 @@ import ShareInviteModal from "@/components/ShareInviteModal";
 import ShareControlsModal from "@/components/ShareControlsModal";
 import PostReportGuidance from "@/components/PostReportGuidance";
 import GetHelpModal from "@/components/GetHelpModal";
+import NavbarPlinq from "@/components/landing/NavbarPlinq";
+import Footer from "@/components/Footer";
+import { ArrowLeft, Plus } from "lucide-react";
 
 interface WantedPerson {
   id: string;

@@ -272,12 +272,31 @@ const ResultsPageUpdated = () => {
 
   if (!results) return null;
 
-  const isClear = !results.isWanted;
+  // CRITICAL FIX: A result is only "clear" if ZERO records found AND risk level is GREEN
+  // Never show clear when ANY records exist, even with low confidence
+  const hasRecords = results.wantedPersonsCount > 0 || results.wantedPersons.length > 0;
+  const isClear = !hasRecords && results.riskLevel === 'GREEN';
+  const isUncertainMatch = hasRecords && results.wantedPersons.every(p => (p.confidence || 20) < 50);
   const isMultiple = results.wantedPersonsCount > 1;
   const searchDate = new Date(results.searchedAt).toLocaleDateString('en-ZA', { day: '2-digit', month: '2-digit', year: 'numeric' });
   const searchTime = new Date(results.searchedAt).toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' });
-  const riskBadge = getRiskBadge(results.riskLevel);
-  const riskExplainer = getRiskExplainer(results.riskLevel, results.wantedPersons);
+
+  // Override risk badge: if records exist but riskLevel is GREEN, force to YELLOW
+  const effectiveRiskLevel = (hasRecords && results.riskLevel === 'GREEN') ? 'YELLOW' : results.riskLevel;
+  const riskBadge = isUncertainMatch
+    ? { color: '#CA8A04', bg: '#FEFCE8', label: 'UNCERTAIN MATCH', icon: '⚠️', borderClass: 'border-yellow-500' }
+    : getRiskBadge(effectiveRiskLevel);
+  const riskExplainer = isUncertainMatch
+    ? {
+        title: 'We found records linked to a similar name, but we cannot confirm this is the same person. Match confidence is low — verify carefully before making any decisions.',
+        triggers: [
+          'Name similarity match only — no ID or additional data confirmed',
+          'This could be a different person with the same or similar name',
+          results.wantedPersonsCount > 1 ? `${results.wantedPersonsCount} possible matches found` : 'Single low-confidence match found',
+        ].filter(Boolean),
+        action: 'DO NOT assume this is the same person. Verify with date of birth, location, and case details. If unsure, request Human Verification or contact SAPS directly.',
+      }
+    : getRiskExplainer(effectiveRiskLevel, results.wantedPersons);
 
   return (
     <div className="bg-background min-h-screen flex flex-col">
@@ -392,8 +411,8 @@ const ResultsPageUpdated = () => {
             <h3 className="font-heading text-lg text-foreground m-0">What This Means & What To Do Next</h3>
           </div>
           <div className="p-8">
-            {/* CLEAR */}
-            {isClear && (
+            {/* CLEAR — only when truly zero records */}
+            {isClear && !hasRecords && (
               <div className="space-y-4">
                 <p className="font-body text-[15px] leading-relaxed text-foreground">
                   <strong>No Records Found:</strong> We searched South African criminal databases and found no warrants, court cases, or criminal records.
@@ -409,6 +428,36 @@ const ResultsPageUpdated = () => {
                     <li>Meet in public places for first meetings</li>
                     <li>Tell someone where you're going and when you'll be back</li>
                     <li>Keep your phone charged and accessible</li>
+                  </ul>
+                </div>
+              </div>
+            )}
+
+            {/* UNCERTAIN MATCH */}
+            {isUncertainMatch && (
+              <div className="space-y-4">
+                <p className="font-body text-[15px] leading-relaxed text-orange-700 font-semibold">
+                  ⚠️ UNCERTAIN MATCH — Cannot Confirm Identity
+                </p>
+                <p className="font-body text-[15px] leading-relaxed text-foreground">
+                  We found someone with a similar name in our database, but match confidence is low. We <strong>cannot confirm</strong> if this is the same person you searched for.
+                </p>
+                <div className="bg-orange-50 border-l-4 border-orange-500 p-4">
+                  <p className="font-body text-sm font-bold text-orange-800 mb-2">⚠️ CRITICAL:</p>
+                  <ul className="space-y-1.5 pl-5 list-disc font-body text-sm text-orange-700 leading-relaxed">
+                    <li>This <strong>MIGHT</strong> be the person you're checking</li>
+                    <li>This <strong>MIGHT</strong> be a different person with a similar name</li>
+                    <li>DO NOT assume either way without verification</li>
+                  </ul>
+                </div>
+                <div>
+                  <p className="font-body text-[15px] font-bold text-foreground mb-2">Next Steps:</p>
+                  <ul className="space-y-2 pl-5 list-disc font-body text-sm text-muted-foreground leading-relaxed">
+                    <li>Verify with additional information (full legal name, date of birth, ID number)</li>
+                    <li>Contact SAPS directly for official confirmation</li>
+                    <li>If this IS the person: treat as a serious warning and prioritise safety</li>
+                    <li>If this is NOT the person: a clear result still doesn't guarantee safety</li>
+                    <li><strong>Protection orders are FREE:</strong> If you feel threatened, apply at any Magistrate's Court — no cost, no lawyer needed.</li>
                   </ul>
                 </div>
               </div>
@@ -607,7 +656,7 @@ const ResultsPageUpdated = () => {
         )}
 
         {/* ─── WANTED PERSON CARDS ─── */}
-        {results.isWanted && results.wantedPersons.map((person, idx) => {
+        {hasRecords && results.wantedPersons.map((person, idx) => {
           const confidence = getConfidence(person);
           const daysAgo = getDaysAgo(person.updated_at);
           const isViolent = /murder|assault|rape|sexual|violence|attack|stab|shoot/i.test(person.charges);
@@ -776,6 +825,25 @@ const ResultsPageUpdated = () => {
                 {/* Identity Confidence */}
                 <div className="p-8 border-b border-border">
                   <h3 className="font-body text-base font-bold text-foreground mb-4">Identity Verification Confidence</h3>
+                  
+                  {/* ID Match Status */}
+                  {(person as any).id_match_status === 'exact_match' && (
+                    <div className="bg-green-50 border border-green-300 p-3 mb-4">
+                      <p className="font-body text-sm font-bold text-green-800">✓ ID number confirms: This is the same person</p>
+                    </div>
+                  )}
+                  {(person as any).id_match_status === 'mismatch' && (
+                    <div className="bg-red-50 border border-red-300 p-3 mb-4">
+                      <p className="font-body text-sm font-bold text-red-800">✗ Different ID number: This is likely NOT the same person</p>
+                      <p className="font-body text-xs text-red-600 mt-1">The ID number you provided does not match the ID on this record. This is most likely a different person with a similar name.</p>
+                    </div>
+                  )}
+                  {(person as any).id_match_status === 'partial_match' && (
+                    <div className="bg-yellow-50 border border-yellow-300 p-3 mb-4">
+                      <p className="font-body text-sm font-bold text-yellow-800">⚠️ Partial ID match (last 4 digits) — verify full ID for confirmation</p>
+                    </div>
+                  )}
+
                   <Progress value={confidence} className="h-3 mb-3" />
                   <p className={`font-body text-sm font-semibold mb-3 ${confidence >= 71 ? 'text-green-700' : confidence >= 41 ? 'text-orange-600' : 'text-destructive'}`}>
                     {confidence >= 71 ? '✓ HIGH CONFIDENCE — Strong identity indicators present' :

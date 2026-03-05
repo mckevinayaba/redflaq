@@ -188,6 +188,15 @@ function calculateRiskScore(records: any[]): { score: number; factors: string[];
 
   score = Math.min(Math.round(score), 100);
 
+  // CRITICAL: If we have ANY records but score is still 0 (unrecognized charges),
+  // force minimum YELLOW so we NEVER show "NO PUBLIC RED FLAGS" alongside records.
+  if (records.length > 0 && score === 0) {
+    score = 10;
+    if (!factors.includes('Unclassified public record found')) {
+      factors.push('Unclassified public record found');
+    }
+  }
+
   let badgeLevel: string;
   if (score >= 50) badgeLevel = 'RED';
   else if (score >= 25) badgeLevel = 'ORANGE';
@@ -623,6 +632,30 @@ serve(async (req) => {
       seen.add(m.id);
       return true;
     });
+
+    // ── ID NUMBER CROSS-REFERENCE ──
+    // If user provided an ID number AND we found matches via name,
+    // adjust confidence based on whether IDs match or mismatch.
+    if (sa_id_number && matches.length > 0) {
+      matches = matches.map(m => {
+        if (m.id_number || m.sa_id_partial) {
+          if (m.id_number && m.id_number === sa_id_number) {
+            // Exact ID match → HIGH confidence
+            return { ...m, confidence: 95, match_type: 'id_confirmed', id_match_status: 'exact_match' };
+          } else if (m.id_number && m.id_number !== sa_id_number) {
+            // ID mismatch → likely different person
+            return { ...m, confidence: 5, match_type: 'id_mismatch', id_match_status: 'mismatch' };
+          } else if (m.sa_id_partial) {
+            const last4 = sa_id_number.slice(-4);
+            if (m.sa_id_partial === last4) {
+              return { ...m, confidence: Math.max(m.confidence, 75), match_type: 'id_partial_match', id_match_status: 'partial_match' };
+            }
+          }
+        }
+        // No ID on record → keep as-is but note no ID available for comparison
+        return { ...m, id_match_status: 'no_id_on_record' };
+      });
+    }
 
     // Sort by confidence
     matches.sort((a, b) => b.confidence - a.confidence);

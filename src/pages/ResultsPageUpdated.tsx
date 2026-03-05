@@ -64,6 +64,28 @@ const getConfidence = (person: WantedPerson) => {
   return person.confidence || 20;
 };
 
+const detectPartialNameMatch = (searchName: string, recordName: string) => {
+  const searchParts = searchName.trim().split(/\s+/).filter(Boolean);
+  const recordParts = recordName.trim().split(/\s+/).filter(Boolean);
+  
+  if (recordParts.length > searchParts.length) {
+    const searchNamesInRecord = searchParts.every(searchPart =>
+      recordParts.some(recordPart =>
+        recordPart.toLowerCase().includes(searchPart.toLowerCase())
+      )
+    );
+    if (searchNamesInRecord) {
+      return {
+        isPartialMatch: true,
+        additionalNames: recordParts.length - searchParts.length,
+        searchParts,
+        recordParts,
+      };
+    }
+  }
+  return { isPartialMatch: false, additionalNames: 0, searchParts, recordParts };
+};
+
 const getDaysAgo = (dateStr?: string) => {
   if (!dateStr) return null;
   const diff = Date.now() - new Date(dateStr).getTime();

@@ -233,7 +233,7 @@ export default function Signup() {
               marginBottom: 24, borderRadius: 4, fontFamily: "'Syne', sans-serif",
               fontSize: 14, color: '#7C3AED', fontWeight: 600, textAlign: 'center',
             }}>
-              🧪 Create a free RedFlaq account to try the safety check experience in demo mode. Real checks with PayFast are coming soon.
+              🧪 Create a free RedFlaq account to try the safety check experience in demo mode. Secure payment coming soon — full checks launching shortly.
             </div>
           )}
           {signupSuccess ? (

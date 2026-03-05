@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { CheckCircle2, ArrowRight, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -9,34 +9,35 @@ export default function PaymentSuccess() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const paymentId = searchParams.get("payment_id");
-  const sessionId = searchParams.get("session_id");
+  const emailParam = searchParams.get("email");
 
   const [creditsReady, setCreditsReady] = useState(false);
-  const [pollCount, setPollCount] = useState(0);
+  const pollCountRef = useRef(0);
   const maxPolls = 20; // 20 × 3s = 60s max wait
+
+  const email = user?.email || emailParam;
 
   useEffect(() => {
     if (creditsReady) return;
 
-    const email = user?.email;
-    if (!email) return;
-
     const checkCredits = async () => {
-      // Check purchases table
-      const { data: purchases } = await supabase
-        .from("purchases")
-        .select("credits_remaining")
-        .eq("email", email)
-        .eq("status", "completed")
-        .gt("credits_remaining", 0)
-        .limit(1);
+      // Check purchases table by email
+      if (email) {
+        const { data: purchases } = await supabase
+          .from("purchases")
+          .select("credits_remaining")
+          .eq("email", email)
+          .eq("status", "completed")
+          .gt("credits_remaining", 0)
+          .limit(1);
 
-      if (purchases && purchases.length > 0) {
-        setCreditsReady(true);
-        return;
+        if (purchases && purchases.length > 0) {
+          setCreditsReady(true);
+          return;
+        }
       }
 
-      // Also check manual_payments (Stripe stores here too)
+      // Check manual_payments by payment_id (works without auth)
       if (paymentId) {
         const { data: mp } = await supabase
           .from("manual_payments")
@@ -50,18 +51,17 @@ export default function PaymentSuccess() {
           return;
         }
       }
-
-      setPollCount(prev => prev + 1);
     };
 
-    // Initial check immediately
+    // Initial check
     checkCredits();
 
-    // Then poll every 3 seconds
+    // Poll every 3 seconds
     const interval = setInterval(() => {
-      if (pollCount >= maxPolls) {
+      pollCountRef.current += 1;
+      if (pollCountRef.current >= maxPolls) {
         clearInterval(interval);
-        // After 60s, let user through anyway — webhook may have failed
+        // After 60s, let user through anyway
         setCreditsReady(true);
         return;
       }
@@ -69,14 +69,10 @@ export default function PaymentSuccess() {
     }, 3000);
 
     return () => clearInterval(interval);
-  }, [user?.email, paymentId, creditsReady, pollCount]);
+  }, [creditsReady, email, paymentId]);
 
   const handleStartCheck = () => {
-    // Clear any pending search from session
-    const pending = sessionStorage.getItem("pendingSearch");
-    if (pending) {
-      sessionStorage.removeItem("pendingSearch");
-    }
+    sessionStorage.removeItem("pendingSearch");
     navigate("/dashboard/new-check");
   };
 
@@ -111,12 +107,6 @@ export default function PaymentSuccess() {
           {paymentId && (
             <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#9CA3AF', marginBottom: 32, marginTop: 16 }}>
               Reference: {paymentId}
-            </p>
-          )}
-
-          {sessionId && !paymentId && (
-            <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#9CA3AF', marginBottom: 32, marginTop: 16 }}>
-              Session: {sessionId.slice(0, 20)}…
             </p>
           )}
 

@@ -44,9 +44,7 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
       if (error) throw error;
 
       if (data?.redirectUrl) {
-        window.open(data.redirectUrl, '_blank');
-        toast({ title: 'Checkout opened', description: 'Secure checkout opened in a new tab.' });
-        onClose();
+        window.location.href = data.redirectUrl;
       } else {
         throw new Error('No checkout URL returned');
       }

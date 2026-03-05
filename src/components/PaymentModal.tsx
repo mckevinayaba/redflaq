@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { X, Shield, Loader2, CreditCard } from 'lucide-react';
@@ -14,6 +14,10 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
   const [email, setEmail] = useState('');
   const [selectedPackage, setSelectedPackage] = useState(packageType);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    setSelectedPackage(packageType);
+  }, [packageType]);
   const [paymentMethod, setPaymentMethod] = useState<'stripe' | 'payfast'>('stripe');
   const { toast } = useToast();
 
@@ -82,9 +86,10 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
       <div className="relative bg-background rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto animate-in zoom-in duration-300">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-muted-foreground hover:text-foreground transition-colors"
+          className="absolute top-3 right-3 w-9 h-9 flex items-center justify-center rounded-full bg-foreground/10 text-foreground hover:bg-foreground/20 transition-colors"
+          aria-label="Close"
         >
-          <X className="w-6 h-6" />
+          <X className="w-5 h-5" />
         </button>
 
         <div className="p-8">

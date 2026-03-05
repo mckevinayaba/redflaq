@@ -8,7 +8,7 @@ type PackageType = "single" | "3-pack" | "5-pack";
 
 const PricingPlinq = () => {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-  const [selectedPackage, setSelectedPackage] = useState<PackageType>("3-pack");
+  const [selectedPackage, setSelectedPackage] = useState<PackageType>("single");
   const { ref, isVisible } = useScrollReveal();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();

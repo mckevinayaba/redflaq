@@ -220,6 +220,40 @@ export default function DashboardNewCheck() {
                 RedFlaq only uses information that is already public, such as official warning lists. It does not access private SAPS fingerprint or internal criminal record databases.
               </p>
 
+              {/* Optional ID Number */}
+              <div className="p-4 rounded-lg bg-muted/40 border border-border">
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <Checkbox
+                    checked={useIdNumber}
+                    onCheckedChange={(c) => { setUseIdNumber(c === true); if (!c) setIdNumber(""); setFormError(""); }}
+                    disabled={isSubmitting}
+                  />
+                  <span className="font-body text-sm text-foreground font-medium">
+                    I have their ID number <span className="text-muted-foreground font-normal">(improves accuracy)</span>
+                  </span>
+                </label>
+                {useIdNumber && (
+                  <div className="mt-4 pl-7">
+                    <input
+                      className={`${inputClass} font-mono tracking-wider`}
+                      placeholder="e.g. 8001015009087"
+                      value={idNumber}
+                      onChange={(e) => {
+                        const v = e.target.value.replace(/[^0-9]/g, '').slice(0, 13);
+                        setIdNumber(v);
+                        setFormError("");
+                      }}
+                      maxLength={13}
+                      inputMode="numeric"
+                      disabled={isSubmitting}
+                    />
+                    <p className="font-body text-xs text-muted-foreground mt-1.5">
+                      13-digit South African ID number. This dramatically improves search accuracy and reduces false positives.
+                    </p>
+                  </div>
+                )}
+              </div>
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {/* Province */}
                 <div>

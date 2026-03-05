@@ -58,6 +58,7 @@ interface SearchResultData {
   searchedAt: string;
   hasMultipleMatches?: boolean;
   recommendation?: string;
+  searchProvince?: string;
 }
 
 const getConfidence = (person: WantedPerson) => {
@@ -223,6 +224,7 @@ const ResultsPageUpdated = () => {
             searchedAt: data.searched_at,
             hasMultipleMatches: data.matches_found > 1,
             recommendation: data.recommendation || undefined,
+            searchProvince: data.search_province || undefined,
           });
 
           if (data.matches_found > 1) {
@@ -448,7 +450,7 @@ const ResultsPageUpdated = () => {
           </button>
         )}
 
-        <GetHelpModal isOpen={helpModalOpen} onClose={() => setHelpModalOpen(false)} riskLevel={results.riskLevel} />
+        <GetHelpModal isOpen={helpModalOpen} onClose={() => setHelpModalOpen(false)} riskLevel={results.riskLevel} userProvince={(results as any).searchProvince} />
 
         {/* ─── WHAT THIS MEANS — GUIDED SECTION ─── */}
         <div className="bg-card border border-border overflow-hidden mb-8">

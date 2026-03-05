@@ -226,6 +226,60 @@ export type Database = {
         }
         Relationships: []
       }
+      gbv_resources: {
+        Row: {
+          address: string | null
+          city: string | null
+          created_at: string
+          description: string | null
+          hours: string | null
+          icon: string | null
+          id: string
+          name: string
+          notes: string | null
+          phone: string
+          priority: number | null
+          province: string | null
+          services: string[] | null
+          type: string
+          whatsapp: string | null
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          created_at?: string
+          description?: string | null
+          hours?: string | null
+          icon?: string | null
+          id?: string
+          name: string
+          notes?: string | null
+          phone: string
+          priority?: number | null
+          province?: string | null
+          services?: string[] | null
+          type: string
+          whatsapp?: string | null
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          created_at?: string
+          description?: string | null
+          hours?: string | null
+          icon?: string | null
+          id?: string
+          name?: string
+          notes?: string | null
+          phone?: string
+          priority?: number | null
+          province?: string | null
+          services?: string[] | null
+          type?: string
+          whatsapp?: string | null
+        }
+        Relationships: []
+      }
       human_verification_requests: {
         Row: {
           additional_info: string | null

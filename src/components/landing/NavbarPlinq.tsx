@@ -127,7 +127,18 @@ const NavbarPlinq = () => {
 
           {/* Desktop right side */}
           {!isMobile && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <button
+                onClick={handleGetHelp}
+                style={{
+                  background: '#DC2626', color: 'white', padding: '7px 14px',
+                  fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 12,
+                  letterSpacing: '0.06em', textTransform: 'uppercase', border: 'none',
+                  cursor: 'pointer', borderRadius: 6,
+                }}
+              >
+                🆘 Get Help
+              </button>
               {isAuthenticated ? (
                 <>
                   <button

@@ -849,13 +849,13 @@ serve(async (req) => {
           : `
             <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
                <div style="text-align: center; margin-bottom: 32px;">
-                  <img src="https://redflaq.co.za/redflaq-logo-email.png" alt="RedFlaq" height="48" style="display: inline-block; margin-bottom: 12px; height: 48px; width: auto;" />
+                  <img src="https://redflaq.lovable.app/redflaq-logo-email.png" alt="RedFlaq" height="48" style="display: inline-block; margin-bottom: 12px; height: 48px; width: auto;" />
                   <p style="color: #666; font-size: 13px; margin-top: 4px;">Background Verification Service</p>
                 </div>
 
               <div style="background: #F9FAFB; border: 2px solid ${riskColor}; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
                 <h2 style="color: ${riskColor}; font-size: 20px; margin: 0 0 8px;">Result: ${riskLabel}</h2>
-                <p style="color: #333; font-size: 15px; margin: 0;">${matches.length} record${matches.length !== 1 ? 's' : ''} found for <strong>${full_name || 'your search'}</strong></p>
+                <p style="color: #333; font-size: 15px; margin: 0;">${matches.length} record${matches.length !== 1 ? 's' : ''} found for <strong>${displayName || 'your search'}</strong></p>
               </div>
 
               <p style="color: #333; font-size: 15px; line-height: 1.6;">Your background check is complete. View the full report below:</p>

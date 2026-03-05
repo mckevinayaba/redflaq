@@ -942,5 +942,6 @@ const ResultsPageUpdated = () => {
       <Footer />
     </div>
   );
+};
 
 export default ResultsPageUpdated;

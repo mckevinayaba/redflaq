@@ -148,6 +148,15 @@ export default function Signup() {
             >
               Go to Dashboard instead
             </button>
+            {email.trim().toLowerCase() === "mckevin.ayaba@gmail.com" && (
+              <button
+                onClick={() => navigate("/admin")}
+                className="font-body text-sm mt-2 flex items-center justify-center gap-1.5 mx-auto"
+                style={{ background: 'none', border: 'none', color: '#A855F7', cursor: 'pointer' }}
+              >
+                <Shield size={14} /> Go to Admin Dashboard
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -335,10 +344,15 @@ export default function Signup() {
                     }}
                     className="font-body text-[13px]" style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.4)', cursor: 'pointer' }}
                   >
-                    Forgot your password?
+               Forgot your password?
                   </button>
                 )}
               </div>
+
+              {/* Operated by notice */}
+              <p className="font-body text-center mt-5" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)' }}>
+                RedFlaq is operated by Setup A Startup (Pty) Ltd
+              </p>
             </>
           )}
         </div>

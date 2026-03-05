@@ -743,7 +743,7 @@ serve(async (req) => {
         // Discreet Mode: neutral subject with initials, preview text, no PDF, secure link
         const emailSubject = discreet_mode
           ? `Your RedFlaq report is ready${nameInitials ? ` (${nameInitials}.)` : ''}`
-          : `🔍 RedFlaq Results Ready — ${full_name || 'Your Search'}`;
+          : `RedFlaq Results Ready — ${full_name || 'Your Search'}`;
 
         const discreetPreviewText = 'Your RedFlaq report is ready to view when you&#39;re in a safe place.';
 

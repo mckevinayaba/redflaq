@@ -16,6 +16,7 @@ interface KPIs {
   totalChecks: number;
   checksToday: number;
   revenueMonth: number;
+  revenueAllTime: number;
 }
 
 interface CheckRow {

@@ -186,7 +186,91 @@ const ConversationGuide = () => {
           </div>
         </section>
 
-        {/* Section 7 — After the Conversation */}
+        {/* Section 7 — Asking About Full Names */}
+        <section className="mb-16" id="names">
+          <SectionLabel label="VERIFYING FULL NAMES" />
+          <h2 className="font-heading text-2xl sm:text-3xl text-foreground mb-2">How to ask about full names without causing alarm.</h2>
+          <p className="font-body text-sm sm:text-base text-muted-foreground leading-relaxed max-w-[650px] mb-8">
+            Background checks can reveal additional names people don't commonly use. Many South Africans use 2 names publicly but have 3–4 names on their ID. Here's how to verify tactfully.
+          </p>
+
+          {/* Dating / Social */}
+          <div className="bg-card border border-border rounded-xl p-6 shadow-sm mb-5">
+            <h4 className="font-heading text-base text-foreground mb-4">For Dating / Social Situations</h4>
+            <p className="font-mono text-[10px] tracking-[0.12em] text-primary uppercase mb-3">Natural conversation starters</p>
+            {[
+              "I realised I don't know your full name — what's on your ID?",
+              "When we video call, can you show me your ID for a sec? I do it for everyone I meet online for safety.",
+              "My friends always joke about my full name being so long — what about yours?",
+            ].map(q => <QuoteCard key={q} text={q} />)}
+            <p className="font-mono text-[10px] tracking-[0.12em] text-destructive uppercase mt-4 mb-2">What sounds suspicious — avoid these</p>
+            <ul className="font-body text-sm text-muted-foreground leading-relaxed space-y-1.5 pl-5 list-disc">
+              <li>"Are you [full legal name from the record]?"</li>
+              <li>"I ran a background check and found..."</li>
+              <li>Directly revealing you searched them</li>
+            </ul>
+          </div>
+
+          {/* Employment / Tenancy */}
+          <div className="bg-card border border-border rounded-xl p-6 shadow-sm mb-5">
+            <h4 className="font-heading text-base text-foreground mb-4">For Employment / Tenancy</h4>
+            <p className="font-body text-sm text-muted-foreground mb-3">Professional approach — this is expected, no explanation needed:</p>
+            {[
+              "For our records, we'll need a copy of your ID — it's standard for all applicants.",
+              "Please provide your full legal name as it appears on your ID for the lease agreement.",
+            ].map(q => <QuoteCard key={q} text={q} />)}
+          </div>
+
+          {/* Roommate */}
+          <div className="bg-card border border-border rounded-xl p-6 shadow-sm mb-5">
+            <h4 className="font-heading text-base text-foreground mb-4">For Roommate / Shared Living</h4>
+            <p className="font-body text-sm text-muted-foreground mb-3">Casual but clear — mutual exchange makes it feel less like you're singling them out:</p>
+            {[
+              "Since we're signing a lease together, let's exchange IDs so we both have each other's info.",
+              "Want to swap ID photos? I always do this with roommates for safety.",
+            ].map(q => <QuoteCard key={q} text={q} />)}
+          </div>
+
+          {/* Red Flags in Response */}
+          <div className="grid sm:grid-cols-2 gap-5 mb-6">
+            <div className="bg-card border border-border border-l-4 border-l-destructive rounded-xl p-6 shadow-sm">
+              <h4 className="font-heading text-base text-foreground mb-4">⚠️ Warning signs in their response</h4>
+              {[
+                "Refuses to share full legal name",
+                "Gets defensive or angry at a simple request",
+                "Offers fake or altered ID",
+                "Story about names keeps changing",
+                "Avoids showing ID while asking to see yours",
+              ].map(s => (
+                <p key={s} className="font-body text-sm text-muted-foreground leading-loose flex items-start gap-2">
+                  <span className="text-destructive flex-shrink-0">✗</span> {s}
+                </p>
+              ))}
+              <p className="font-body text-sm font-semibold text-destructive mt-3">If you see these responses → Reconsider proceeding.</p>
+            </div>
+            <div className="bg-card border border-border border-l-4 border-l-success rounded-xl p-6 shadow-sm">
+              <h4 className="font-heading text-base text-foreground mb-4">✓ Normal, healthy responses</h4>
+              {[
+                '"Oh sure, my full name is [3-4 names]"',
+                '"Yeah my ID has my Xhosa names — I just use [shorter version] usually"',
+                "Shows ID without hesitation",
+                "Explains name difference calmly and openly",
+              ].map(s => (
+                <p key={s} className="font-body text-sm text-muted-foreground leading-loose flex items-start gap-2">
+                  <span className="text-success flex-shrink-0">✓</span> {s}
+                </p>
+              ))}
+            </div>
+          </div>
+
+          <div className="bg-purple-100 rounded-xl p-6">
+            <p className="font-body text-sm sm:text-base text-foreground leading-relaxed">
+              <strong>Remember:</strong> Most people understand that asking for full legal names is normal for employment, tenancy, financial transactions, and meeting strangers from online. If someone makes you feel bad for basic safety verification — that itself is concerning.
+            </p>
+          </div>
+        </section>
+
+        {/* Section 8 — After the Conversation */}
         <section className="mb-16">
           <SectionLabel label="AFTER YOU TALK" />
           <h2 className="font-heading text-2xl sm:text-3xl text-foreground mb-2">Whatever you decide — you made an informed choice. That matters.</h2>

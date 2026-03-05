@@ -64,6 +64,28 @@ const getConfidence = (person: WantedPerson) => {
   return person.confidence || 20;
 };
 
+const detectPartialNameMatch = (searchName: string, recordName: string) => {
+  const searchParts = searchName.trim().split(/\s+/).filter(Boolean);
+  const recordParts = recordName.trim().split(/\s+/).filter(Boolean);
+  
+  if (recordParts.length > searchParts.length) {
+    const searchNamesInRecord = searchParts.every(searchPart =>
+      recordParts.some(recordPart =>
+        recordPart.toLowerCase().includes(searchPart.toLowerCase())
+      )
+    );
+    if (searchNamesInRecord) {
+      return {
+        isPartialMatch: true,
+        additionalNames: recordParts.length - searchParts.length,
+        searchParts,
+        recordParts,
+      };
+    }
+  }
+  return { isPartialMatch: false, additionalNames: 0, searchParts, recordParts };
+};
+
 const getDaysAgo = (dateStr?: string) => {
   if (!dateStr) return null;
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -283,19 +305,42 @@ const ResultsPageUpdated = () => {
 
   // Override risk badge: if records exist but riskLevel is GREEN, force to YELLOW
   const effectiveRiskLevel = (hasRecords && results.riskLevel === 'GREEN') ? 'YELLOW' : results.riskLevel;
+  
+  // Detect partial name matches (e.g., "Mckevin Ayaba" vs "MCKEVIN AYABA DORMITHIENE")
+  const searchName = results.fullName || results.searchIdentifier || '';
+  const partialNameMatches = results.wantedPersons.map(p => ({
+    person: p,
+    ...detectPartialNameMatch(searchName, p.full_name),
+  }));
+  const hasPartialNameMatch = partialNameMatches.some(m => m.isPartialMatch);
+
   const riskBadge = isUncertainMatch
-    ? { color: '#CA8A04', bg: '#FEFCE8', label: 'UNCERTAIN MATCH', icon: '⚠️', borderClass: 'border-yellow-500' }
+    ? hasPartialNameMatch
+      ? { color: '#D97706', bg: '#FFFBEB', label: 'UNCERTAIN MATCH — ADDITIONAL NAMES FOUND', icon: '⚠️', borderClass: 'border-amber-500' }
+      : { color: '#CA8A04', bg: '#FEFCE8', label: 'UNCERTAIN MATCH', icon: '⚠️', borderClass: 'border-yellow-500' }
     : getRiskBadge(effectiveRiskLevel);
+
   const riskExplainer = isUncertainMatch
-    ? {
-        title: 'We found records linked to a similar name, but we cannot confirm this is the same person. Match confidence is low — verify carefully before making any decisions.',
-        triggers: [
-          'Name similarity match only — no ID or additional data confirmed',
-          'This could be a different person with the same or similar name',
-          results.wantedPersonsCount > 1 ? `${results.wantedPersonsCount} possible matches found` : 'Single low-confidence match found',
-        ].filter(Boolean),
-        action: 'DO NOT assume this is the same person. Verify with date of birth, location, and case details. If unsure, request Human Verification or contact SAPS directly.',
-      }
+    ? hasPartialNameMatch
+      ? {
+          title: `We found someone whose name includes the names you searched for, plus ${partialNameMatches.find(m => m.isPartialMatch)?.additionalNames || 1} additional name(s). This is common in South Africa — many people use shortened versions of their full legal name in daily life.`,
+          triggers: [
+            `You searched: "${searchName}" — Record found: "${partialNameMatches.find(m => m.isPartialMatch)?.person.full_name}"`,
+            'Additional name(s) on the record could mean same person with full legal name, or a different person',
+            'No ID number provided for definitive verification',
+            !partialNameMatches.find(m => m.isPartialMatch)?.person.photo_url ? 'No photo available in database for visual confirmation' : null,
+          ].filter(Boolean),
+          action: 'Verify identity: Ask for their full legal name as it appears on their ID. If they confirm all names on the record, this is likely the same person. Read our Conversation Guide for how to ask tactfully.',
+        }
+      : {
+          title: 'We found records linked to a similar name, but we cannot confirm this is the same person. Match confidence is low — verify carefully before making any decisions.',
+          triggers: [
+            'Name similarity match only — no ID or additional data confirmed',
+            'This could be a different person with the same or similar name',
+            results.wantedPersonsCount > 1 ? `${results.wantedPersonsCount} possible matches found` : 'Single low-confidence match found',
+          ].filter(Boolean),
+          action: 'DO NOT assume this is the same person. Verify with date of birth, location, and case details. If unsure, request Human Verification or contact SAPS directly.',
+        }
     : getRiskExplainer(effectiveRiskLevel, results.wantedPersons);
 
   return (
@@ -433,8 +478,99 @@ const ResultsPageUpdated = () => {
               </div>
             )}
 
-            {/* UNCERTAIN MATCH */}
-            {isUncertainMatch && (
+            {/* UNCERTAIN MATCH — PARTIAL NAME */}
+            {isUncertainMatch && hasPartialNameMatch && (() => {
+              const match = partialNameMatches.find(m => m.isPartialMatch);
+              return (
+                <div className="space-y-5">
+                  <p className="font-body text-[15px] leading-relaxed text-amber-700 font-semibold">
+                    ⚠️ UNCERTAIN MATCH — Additional Names Found
+                  </p>
+
+                  {/* Name comparison */}
+                  <div className="bg-amber-50 border border-amber-200 p-5 space-y-2">
+                    <div className="flex items-start gap-3">
+                      <span className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase w-28 flex-shrink-0 pt-0.5">You searched:</span>
+                      <span className="font-body text-base font-bold text-foreground">{searchName}</span>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase w-28 flex-shrink-0 pt-0.5">We found:</span>
+                      <span className="font-body text-base font-bold text-foreground">{match?.person.full_name}</span>
+                    </div>
+                  </div>
+
+                  {/* This could mean */}
+                  <div>
+                    <p className="font-body text-[15px] font-bold text-foreground mb-3">This could mean:</p>
+                    <div className="space-y-3">
+                      <div className="border-l-4 border-green-500 bg-green-50 p-4">
+                        <p className="font-body text-sm text-green-800">
+                          <strong>✓ Same person</strong> — Many South Africans use shortened versions of their full legal name. 
+                          "{searchName}" might be how this person is known publicly, while "{match?.person.full_name}" is their full legal name on their ID.
+                        </p>
+                      </div>
+                      <div className="border-l-4 border-destructive bg-red-50 p-4">
+                        <p className="font-body text-sm text-red-800">
+                          <strong>✗ Different person</strong> — Someone else who happens to share these names.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-orange-50 border-l-4 border-orange-500 p-4">
+                    <p className="font-body text-sm font-bold text-orange-800 mb-1">
+                      Because {!match?.person.photo_url ? 'there is no photo in the database and ' : ''}you didn't provide an ID number, we cannot confirm which scenario applies.
+                    </p>
+                  </div>
+
+                  {/* How to verify — if you know this person */}
+                  <div>
+                    <p className="font-body text-[15px] font-bold text-foreground mb-2">How To Verify — If You Know This Person:</p>
+                    <ol className="space-y-2 pl-5 list-decimal font-body text-sm text-muted-foreground leading-relaxed">
+                      <li><strong>Ask about their full legal name</strong> — "What's your full name as it appears on your ID?"
+                        <br/><span className="text-xs text-muted-foreground">If they say all {match?.recordParts.length || 3} names → Likely same person. If they only give {match?.searchParts.length || 2} names → May be different person.</span>
+                      </li>
+                      <li><strong>Run another check with their 13-digit SA ID number</strong> for a definitive match</li>
+                      <li><strong>Ask about date of birth</strong> — If it matches details on the record → Same person</li>
+                      <li><strong>Request to see their ID</strong> (for employment/tenancy situations) — Full legal name on ID will resolve uncertainty</li>
+                    </ol>
+                  </div>
+
+                  {/* Conversation guide CTA */}
+                  <a
+                    href="/conversation-guide"
+                    className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-6 py-3 font-body text-sm font-bold no-underline hover:bg-primary/90 transition-colors"
+                  >
+                    📖 Read the Conversation Guide — How to ask tactfully
+                  </a>
+
+                  {/* If you DON'T know them */}
+                  <div>
+                    <p className="font-body text-[15px] font-bold text-foreground mb-2">If You Do NOT Know This Person Yet:</p>
+                    <ul className="space-y-1.5 pl-5 list-disc font-body text-sm text-muted-foreground leading-relaxed">
+                      <li><strong>DO NOT assume</strong> this record belongs to them without confirmation</li>
+                      <li><strong>DO NOT ignore</strong> the record — treat as a potential warning</li>
+                      <li>Meet in public places and take normal safety precautions</li>
+                      <li>Ask for their full legal name and verify before proceeding</li>
+                      <li>If they refuse to share their full name → That itself is a red flag</li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-destructive/10 border-l-4 border-destructive p-4">
+                    <p className="font-body text-sm font-bold text-destructive">
+                      Important: Even if you confirm this IS the same person, the record shows they are flagged. Follow all safety guidance below.
+                    </p>
+                  </div>
+
+                  <p className="font-body text-xs text-muted-foreground">
+                    <strong>Protection orders are FREE:</strong> If you feel threatened, apply at any Magistrate's Court — no cost, no lawyer needed.
+                  </p>
+                </div>
+              );
+            })()}
+
+            {/* UNCERTAIN MATCH — GENERIC (not partial name) */}
+            {isUncertainMatch && !hasPartialNameMatch && (
               <div className="space-y-4">
                 <p className="font-body text-[15px] leading-relaxed text-orange-700 font-semibold">
                   ⚠️ UNCERTAIN MATCH — Cannot Confirm Identity

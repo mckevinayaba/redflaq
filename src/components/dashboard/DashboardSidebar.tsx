@@ -18,7 +18,7 @@ export default function DashboardSidebar() {
   const location = useLocation();
 
   return (
-    <aside className="w-64 min-h-full bg-purple-50 border-r border-border flex flex-col">
+    <aside className="w-64 min-h-full border-r border-border flex flex-col" style={{ background: 'linear-gradient(180deg, #F5F3FF 0%, #EDE9FE 100%)' }}>
       {/* Menu */}
       <nav className="flex-1 px-3 pt-6 space-y-1">
         {menuItems.map((item) => {
@@ -27,11 +27,14 @@ export default function DashboardSidebar() {
             <Link
               key={item.path}
               to={item.path}
-              className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-body font-medium transition-all ${
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-body font-medium transition-all ${
                 isActive
                   ? "bg-primary text-primary-foreground shadow-sm"
-                  : "text-muted-foreground hover:bg-purple-100 hover:text-foreground"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
+              style={!isActive ? { background: 'transparent' } : {}}
+              onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.background = 'rgba(124,58,237,0.08)'; }}
+              onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
             >
               <item.icon className="h-4 w-4" />
               {item.title}
@@ -41,7 +44,7 @@ export default function DashboardSidebar() {
       </nav>
 
       {/* GBV stat */}
-      <div className="mx-4 mb-4 p-4 bg-purple-100 rounded-lg">
+      <div className="mx-3 mb-4 p-4 rounded-xl" style={{ background: 'rgba(124,58,237,0.08)', border: '1px solid rgba(124,58,237,0.12)' }}>
         <div className="flex items-center gap-2 mb-2">
           <Heart className="h-4 w-4 text-primary" />
           <span className="font-mono text-[10px] tracking-wider text-primary uppercase">Safety first</span>

@@ -5,13 +5,17 @@ const WhyRedflaqSection = () => {
   const { ref, isVisible } = useScrollReveal();
 
   const cards = [
-    { Icon: Shield, title: "Public Records Only", desc: "We never create data. We surface what already exists in public‑record warning lists.", glow: 'rgba(124,58,237,0.2)' },
-    { Icon: Lock, title: "POPIA‑Aware", desc: "Every search requires a legitimate purpose and consent. We minimise data and respect everyone's rights.", glow: 'rgba(168,85,247,0.2)' },
-    { Icon: Eye, title: "Confidential Use", desc: "The person you check is not notified. Results are for your safety decisions, not public shaming.", glow: 'rgba(109,40,217,0.2)' },
+    { Icon: Shield, title: "Public Records Only", desc: "We never create data. We surface what already exists in public‑record warning lists." },
+    { Icon: Lock, title: "POPIA‑Aware", desc: "Every search requires a legitimate purpose and consent. We minimise data and respect everyone's rights." },
+    { Icon: Eye, title: "Confidential Use", desc: "The person you check is not notified. Results are for your safety decisions, not public shaming." },
   ];
 
   return (
-    <section id="about" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '120px 24px' }}>
+    <section id="about" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{
+      background: 'linear-gradient(180deg, #F3F0FF 0%, #EDE9FE 50%, #F7F4F0 100%)',
+      padding: '100px 24px 120px',
+      marginTop: 0,
+    }}>
       <div style={{ maxWidth: 800, margin: '0 auto' }}>
         <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 'clamp(36px, 4vw, 48px)', color: '#1A1523', textAlign: 'center', marginBottom: 24, letterSpacing: '-0.02em' }}>
           Why RedFlaq <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>Exists</em>
@@ -35,16 +39,15 @@ const WhyRedflaqSection = () => {
           Because information creates safety. And safety should never be a privilege.
         </p>
 
-        {/* Principle cards — dark bento style */}
+        {/* Principle cards — white elevated style */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {cards.map(card => (
             <div key={card.title} style={{
-              background: 'linear-gradient(145deg, #0F0A1A, #1A1035)',
-              border: '1px solid rgba(124,58,237,0.2)',
-              padding: '32px 28px',
-              borderRadius: 16,
-              position: 'relative',
-              overflow: 'hidden',
+              background: '#FFFFFF',
+              border: '1px solid rgba(124,58,237,0.12)',
+              padding: '36px 28px',
+              borderRadius: 20,
+              boxShadow: '0 4px 24px rgba(124,58,237,0.08)',
               transition: 'transform 0.3s ease, box-shadow 0.3s ease',
             }}
               onMouseEnter={e => {
@@ -53,20 +56,20 @@ const WhyRedflaqSection = () => {
               }}
               onMouseLeave={e => {
                 e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.boxShadow = '0 4px 24px rgba(124,58,237,0.08)';
               }}
             >
-              {/* Icon glow */}
+              {/* Icon on purple-tinted circle */}
               <div style={{
-                position: 'absolute', top: 0, left: 0, width: 80, height: 80,
-                background: `radial-gradient(circle, ${card.glow}, transparent 70%)`,
-                filter: 'blur(20px)', pointerEvents: 'none',
-              }} />
-              <div style={{ position: 'relative', zIndex: 1 }}>
-                <card.Icon style={{ width: 28, height: 28, color: '#A855F7', marginBottom: 16 }} />
-                <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 700, color: 'white', marginBottom: 10 }}>{card.title}</div>
-                <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.6)', lineHeight: 1.65 }}>{card.desc}</p>
+                width: 52, height: 52, borderRadius: 16,
+                background: 'rgba(124,58,237,0.08)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                marginBottom: 20,
+              }}>
+                <card.Icon style={{ width: 24, height: 24, color: '#7C3AED' }} />
               </div>
+              <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 17, fontWeight: 700, color: '#1A1523', marginBottom: 10 }}>{card.title}</div>
+              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#6B7280', lineHeight: 1.65 }}>{card.desc}</p>
             </div>
           ))}
         </div>

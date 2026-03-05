@@ -3,6 +3,7 @@ import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
 import SafetyCardGrid from "@/components/safety/SafetyCardGrid";
 import GBVResourcesSection from "@/components/safety/GBVResourcesSection";
+import ProvincialResourcesSection from "@/components/safety/ProvincialResourcesSection";
 import { Heart, Home, Users, HelpCircle, ShieldCheck, MessageSquare, Eye } from "lucide-react";
 
 const redFlags = [
@@ -102,6 +103,9 @@ const SafetyTips = () => {
 
         {/* GBV Resources Section */}
         <GBVResourcesSection />
+
+        {/* Provincial Support Resources */}
+        <ProvincialResourcesSection />
 
         {/* Section 1 — Before You Check — Dark */}
         <section className="mb-12 sm:mb-16 -mx-5 sm:-mx-6 px-5 sm:px-6 py-12 sm:py-16" style={{

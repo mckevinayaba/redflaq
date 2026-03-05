@@ -33,7 +33,7 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen" style={{ background: '#F7F4F0' }}>
+    <div className="min-h-screen" style={{ background: '#F7F4F0', overflowX: 'hidden' }}>
       <NavbarPlinq />
       <HeroPlinq />
       <TickerBar />

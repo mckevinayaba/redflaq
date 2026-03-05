@@ -45,7 +45,7 @@ const Blog = () => {
   const filtered = activeCategory === "all" ? articles : articles.filter((a) => a.category === activeCategory);
 
   return (
-    <div style={{ background: "#F7F4F0", minHeight: "100vh" }}>
+    <div style={{ background: "#F7F4F0", minHeight: "100vh", overflowX: "hidden" }}>
       <NavbarPlinq />
 
       {/* Hero — dark */}

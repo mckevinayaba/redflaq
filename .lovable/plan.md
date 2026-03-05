@@ -1,45 +1,55 @@
 
 
-## Fix: Mobile Horizontal Shifting (Left-Right Bounce)
+## Problem
 
-The site shifts horizontally on mobile because multiple elements overflow the viewport width, and there is no global overflow guard. Here is what needs to be fixed:
+The Tawk.to chat widget is:
+1. Auto-opening its chat window without user interaction
+2. Showing a proactive "We Are Here" popup message
+3. Displaying a "1 new message" notification badge above the navbar
 
----
+All of these are controlled by Tawk.to's API settings.
 
-### Root Cause
+## Fix
 
-On mobile, several elements extend beyond the screen width. Without `overflow-x: hidden` on the page wrapper, the browser allows horizontal scrolling, causing the "shifting left and right" effect when scrolling or interacting.
+Add `Tawk_API` configuration in `index.html` to suppress all auto-popups:
 
-**Main offenders:**
-- The **ticker bar animation** (`TickerBar.tsx`) renders duplicate inline content that extends far beyond the viewport with no `overflow: hidden` on its parent
-- The **hero section grid** (`lg:grid-cols-[55%_45%]`) can push content wider than 100vw on certain screen sizes
-- The **footer grid** (`md:grid-cols-[2fr_1fr_1fr_1fr]`) can overflow on narrow screens
-- Sections with `position: absolute` decorative elements (purple glows) extending outside their containers
-- The social proof trust bar in `Index.tsx` has no overflow clipping
+1. **Set `Tawk_API.onLoad`** callback to:
+   - Minimize the widget on load (`Tawk_API.minimize()`)
+   - Hide the popup message (`Tawk_API.hideWidget()` is too aggressive — instead use `minimize`)
+2. **Set `Tawk_API.customStyle`** to hide the notification badge
+3. **Disable proactive chat triggers** by setting `Tawk_API.onBeforeLoad` to prevent auto-popup behaviors:
+   - `Tawk_API.visitor` settings won't help — the proactive messages ("We Are Here", auto-open) are configured in the Tawk.to dashboard under **Triggers**
+   
+### What we can control via code
 
----
+In `index.html`, before the Tawk script loads, add:
 
-### Plan
+```javascript
+Tawk_API.onLoad = function() {
+  Tawk_API.minimize();
+};
+Tawk_API.onChatMessageVisitor = function() {};
+Tawk_API.onChatMessageSystem = function() {};
+```
 
-**1. Add global overflow-x guard in `index.css`**
-- Add `overflow-x: hidden` to `html` and `body` elements to prevent any horizontal scroll site-wide
-- This is the single most impactful fix — it stops the shifting immediately
+And add CSS to hide the unread badge:
 
-**2. Fix the TickerBar component**
-- Ensure the outer container has `overflow: hidden` (it does, but verify the `width: 100%` isn't being overridden)
+```css
+/* Hide Tawk notification badge */
+.tawk-min-container .tawk-badge {
+  display: none !important;
+}
+```
 
-**3. Constrain the Index page wrapper**
-- Add `overflow-x: hidden` to the root `<div>` in `Index.tsx` (and other page wrappers like `Blog.tsx`, `SafetyTips.tsx`)
+### What requires Tawk.to dashboard changes
 
-**4. Constrain hero section**
-- Add `overflow: hidden` to the hero `<section>` in `HeroPlinq.tsx` (already has it via className but verify inline style doesn't override)
+The proactive "We Are Here" message and auto-open behavior are **Triggers** configured in the Tawk.to dashboard (Settings → Triggers). These cannot be fully suppressed from code alone. The `Tawk_API.minimize()` on load will close it if it auto-opens, but the trigger may still fire briefly.
 
-**5. Fix footer grid for mobile**
-- The footer uses `grid-cols-[2fr_1fr_1fr_1fr]` which stacks on mobile via `grid-cols-1` — verify this works correctly
+**Recommendation**: Go to your Tawk.to dashboard → Settings → Triggers → disable or delete the proactive greeting trigger. This is the only way to fully stop "We Are Here" and the auto-open.
 
----
+### Implementation steps
 
-### Summary
-
-The primary fix is adding `overflow-x: hidden` to `html` and `body` in the global CSS. This is a one-line change that prevents all horizontal shifting. The additional component-level fixes add defence-in-depth so no single element can cause overflow even if the global guard is somehow bypassed.
+1. Update `index.html`: Add `Tawk_API.onLoad` with `minimize()` call before the embed script
+2. Add CSS to hide the notification badge counter
+3. These changes will make the widget stay minimized and badge-free until a user explicitly clicks it
 

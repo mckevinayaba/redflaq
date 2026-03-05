@@ -250,6 +250,12 @@ const NavbarPlinq = () => {
                 {link.label}
               </button>
             ))}
+            <button
+              onClick={handleGetHelp}
+              style={{ width: '100%', background: '#DC2626', color: 'white', padding: 12, fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, letterSpacing: '0.06em', textTransform: 'uppercase', border: 'none', cursor: 'pointer', borderRadius: 6 }}
+            >
+              🆘 Get Help
+            </button>
             {isAuthenticated ? (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <button

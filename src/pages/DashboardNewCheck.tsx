@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { validateSAIDNumber } from "@/utils/idValidation";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";

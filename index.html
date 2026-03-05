@@ -49,33 +49,38 @@
       </div>
     </noscript>
     <script type="module" src="/src/main.tsx"></script>
-    <!--Start of Tawk.to Script-->
-    <script type="text/javascript">
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    Tawk_API.onLoad = function() {
-      Tawk_API.minimize();
-    };
-    Tawk_API.onChatMessageVisitor = function() {};
-    Tawk_API.onChatMessageSystem = function() {};
-    (function(){
-    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-    s1.async=true;
-    s1.src='https://embed.tawk.to/69a33fb19825341c3747b8d9/1jiir1jor';
-    s1.charset='UTF-8';
-    s1.setAttribute('crossorigin','*');
-    s0.parentNode.insertBefore(s1,s0);
-    })();
-    </script>
-    <!--End of Tawk.to Script-->
+    <!-- Floating Contact Button -->
     <style>
-      /* Position Tawk.to widget above GBV emergency banner */
-      iframe[title="chat widget"] {
-        bottom: 70px !important;
+      .rf-contact-fab {
+        position: fixed;
+        bottom: 80px;
+        right: 20px;
+        z-index: 9999;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: #7C3AED;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 14px rgba(124,58,237,0.4);
+        text-decoration: none;
+        transition: transform 0.2s, box-shadow 0.2s;
+        border: none;
+        cursor: pointer;
       }
-      /* Hide Tawk notification badge */
-      .tawk-min-container .tawk-badge {
-        display: none !important;
+      .rf-contact-fab:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(124,58,237,0.5);
+      }
+      .rf-contact-fab svg {
+        width: 24px;
+        height: 24px;
       }
     </style>
+    <a href="mailto:support@redflaq.com" class="rf-contact-fab" aria-label="Contact Us" title="Contact Us">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+    </a>
   </body>
 </html>

@@ -60,6 +60,7 @@ serve(async (req) => {
         "Authorization": `Bearer ${yocoSecretKey}`,
       },
       body: JSON.stringify({
+        name: "RedFlaq Payment Webhook",
         url: webhookUrl,
         events: ["payment.succeeded", "payment.failed"],
       }),

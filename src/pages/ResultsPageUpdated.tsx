@@ -191,7 +191,7 @@ const ResultsPageUpdated = () => {
             fullName: data.search_name || '',
             idNumber: data.search_id_number || '',
             riskLevel: data.risk_level,
-            riskScore: data.is_wanted ? 100 : 0,
+            riskScore: (data as any).risk_score ?? (data.is_wanted ? 100 : 0),
             isWanted: data.is_wanted,
             wantedPersonsCount: data.matches_found,
             wantedPersons: parsedResults || [],

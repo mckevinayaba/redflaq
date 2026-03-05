@@ -16,6 +16,7 @@ interface KPIs {
   totalChecks: number;
   checksToday: number;
   revenueMonth: number;
+  revenueAllTime: number;
 }
 
 interface CheckRow {
@@ -42,7 +43,7 @@ const riskPill: Record<string, { label: string; color: string; bg: string }> = {
 };
 
 export default function AdminDashboardNew() {
-  const [kpis, setKpis] = useState<KPIs>({ totalUsers: 0, newSignups7d: 0, activeUsersMonth: 0, totalChecks: 0, checksToday: 0, revenueMonth: 0 });
+  const [kpis, setKpis] = useState<KPIs>({ totalUsers: 0, newSignups7d: 0, activeUsersMonth: 0, totalChecks: 0, checksToday: 0, revenueMonth: 0, revenueAllTime: 0 });
   const [checks, setChecks] = useState<CheckRow[]>([]);
   const [dailyChecks, setDailyChecks] = useState<DailyCount[]>([]);
   const [loading, setLoading] = useState(true);
@@ -59,7 +60,7 @@ export default function AdminDashboardNew() {
     const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
 
-    const [profilesRes, checksRes, checksTodayRes, paymentsRes, recentChecksRes, newSignupsRes, last30Checks, pendingRes] = await Promise.all([
+    const [profilesRes, checksRes, checksTodayRes, paymentsRes, recentChecksRes, newSignupsRes, last30Checks, pendingRes, allPaymentsRes, allPurchasesRes] = await Promise.all([
       supabase.from("profiles").select("*", { count: "exact", head: true }),
       supabase.from("searches").select("*", { count: "exact", head: true }),
       supabase.from("searches").select("*", { count: "exact", head: true }).gte("searched_at", startOfDay),
@@ -68,6 +69,8 @@ export default function AdminDashboardNew() {
       supabase.from("profiles").select("*", { count: "exact", head: true }).gte("created_at", sevenDaysAgo),
       supabase.from("searches").select("searched_at").gte("searched_at", thirtyDaysAgo).order("searched_at", { ascending: true }),
       supabase.from("manual_payments").select("*", { count: "exact", head: true }).eq("status", "pending"),
+      supabase.from("manual_payments").select("amount").eq("status", "verified"),
+      supabase.from("purchases").select("amount").eq("status", "completed"),
     ]);
 
     // Active users this month (distinct user_ids who ran checks)
@@ -75,6 +78,9 @@ export default function AdminDashboardNew() {
     const uniqueActive = new Set((activeData || []).map(r => r.user_id)).size;
 
     const revenue = (paymentsRes.data || []).reduce((sum, p) => sum + Number(p.amount), 0);
+    const allTimeManual = (allPaymentsRes.data || []).reduce((sum, p) => sum + Number(p.amount), 0);
+    const allTimePurchases = (allPurchasesRes.data || []).reduce((sum, p) => sum + Number(p.amount), 0);
+    const allTimeRevenue = allTimeManual + allTimePurchases;
 
     // Build daily chart data
     const dailyMap: Record<string, number> = {};
@@ -96,6 +102,7 @@ export default function AdminDashboardNew() {
       totalChecks: checksRes.count || 0,
       checksToday: checksTodayRes.count || 0,
       revenueMonth: revenue,
+      revenueAllTime: allTimeRevenue,
     });
     setChecks((recentChecksRes.data as CheckRow[]) || []);
     setDailyChecks(dailyArr);
@@ -110,6 +117,7 @@ export default function AdminDashboardNew() {
     { label: "Total Checks", value: kpis.totalChecks, icon: Search },
     { label: "Checks Today", value: kpis.checksToday, icon: BarChart3 },
     { label: "Revenue (Month)", value: `R${kpis.revenueMonth.toLocaleString()}`, icon: CreditCard },
+    { label: "Revenue (All Time)", value: `R${kpis.revenueAllTime.toLocaleString()}`, icon: CreditCard },
   ];
 
   return (

@@ -31,6 +31,7 @@ export default function Dashboard() {
   const [shareOpen, setShareOpen] = useState(false);
   const [referralCount, setReferralCount] = useState(0);
   const [freeChecksEarned, setFreeChecksEarned] = useState(0);
+  const [creditsRemaining, setCreditsRemaining] = useState(0);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -43,10 +44,13 @@ export default function Dashboard() {
   }, [user, authLoading]);
 
   const fetchData = async () => {
-    const [{ data: profileData }, { data: searchData }, { data: referralData }] = await Promise.all([
+    const email = user!.email || "";
+    const [{ data: profileData }, { data: searchData }, { data: referralData }, { data: purchasesData }, { data: manualData }] = await Promise.all([
       supabase.from("profiles").select("full_name").eq("user_id", user!.id).maybeSingle(),
       supabase.from("searches").select("*").eq("user_id", user!.id).order("searched_at", { ascending: false }).limit(20),
       supabase.from("referrals").select("id, status").eq("referrer_user_id", user!.id),
+      supabase.from("purchases").select("credits_remaining").eq("email", email).eq("status", "completed"),
+      supabase.from("manual_payments").select("search_credits, credits_used").eq("email", email).eq("status", "verified"),
     ]);
     setProfile(profileData);
     setSearches(searchData || []);
@@ -54,6 +58,12 @@ export default function Dashboard() {
     const converted = refs.filter(r => r.status === "signed_up" || r.status === "paid");
     setReferralCount(converted.length);
     setFreeChecksEarned(Math.floor(converted.length / 3));
+
+    // Calculate remaining credits
+    const purchaseCredits = (purchasesData || []).reduce((sum, p) => sum + (p.credits_remaining || 0), 0);
+    const manualCredits = (manualData || []).reduce((sum, p) => sum + ((p.search_credits || 0) - (p.credits_used || 0)), 0);
+    setCreditsRemaining(purchaseCredits + manualCredits);
+
     setLoading(false);
   };
 
@@ -76,14 +86,17 @@ export default function Dashboard() {
   const latestSearch = searches[0];
   const latestRisk = latestSearch ? riskConfig[latestSearch.risk_level] || riskConfig.GREEN : null;
 
-  const firstName = profile?.full_name?.split(" ")[0] || "there";
+  const firstName = profile?.full_name?.split(" ")[0]
+    || user?.user_metadata?.full_name?.split(" ")[0]
+    || user?.email?.split("@")[0]
+    || "";
 
   return (
     <DashboardLayout>
       {/* Header */}
       <div className="mb-6 sm:mb-8">
         <p className="font-mono text-[11px] tracking-widest text-muted-foreground uppercase mb-1">Dashboard</p>
-        <h1 className="font-heading text-2xl sm:text-3xl text-foreground">Welcome back, {firstName}</h1>
+        <h1 className="font-heading text-2xl sm:text-3xl text-foreground">Welcome back{firstName ? `, ${firstName}` : ""}</h1>
       </div>
 
       {/* Top cards */}
@@ -96,8 +109,13 @@ export default function Dashboard() {
             </div>
             <span className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Your safety checks</span>
           </div>
-          <p className="font-heading text-4xl text-foreground">{searches.length}</p>
-          <p className="font-body text-sm text-muted-foreground mt-1">since you joined RedFlaq</p>
+          <p className="font-heading text-4xl text-foreground">{creditsRemaining}</p>
+          <p className="font-body text-sm text-muted-foreground mt-1">checks remaining</p>
+          {creditsRemaining === 0 && (
+            <Link to="/pricing" className="inline-flex items-center gap-1.5 mt-2 px-3 py-1.5 bg-primary text-primary-foreground font-body text-xs font-semibold rounded-lg hover:opacity-90 transition-colors">
+              Buy More Checks
+            </Link>
+          )}
         </div>
 
         {/* This month */}

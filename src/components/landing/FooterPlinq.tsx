@@ -73,8 +73,12 @@ const FooterPlinq = () => {
                 <li><span style={{ ...linkStyle, cursor: 'default' }}>Johannesburg, South Africa</span></li>
               </ul>
               <div style={{ marginTop: 20, display: 'flex', gap: 16 }}>
-                {["X", "LinkedIn", "Instagram"].map(s => (
-                  <a key={s} href="#" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.35)', textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#A855F7'} onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.35)'}>{s}</a>
+                {[
+                  { label: "X", href: "https://x.com/redflaq" },
+                  { label: "LinkedIn", href: "https://www.linkedin.com/company/redflaq" },
+                  { label: "Instagram", href: "https://www.instagram.com/redflaq" },
+                ].map(s => (
+                  <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.35)', textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#A855F7'} onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.35)'}>{s.label}</a>
                 ))}
               </div>
             </div>

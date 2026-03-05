@@ -321,6 +321,50 @@ const ResultsPageUpdated = () => {
         {/* Safety Win Screen for clear/low risk results */}
         <SafetyWinScreen riskLevel={results.riskLevel} onClose={() => {}} />
 
+        {/* Critical disclaimer for CLEAR results */}
+        {results.riskLevel !== 'RED' && results.riskLevel !== 'ORANGE' && results.riskLevel !== 'YELLOW' && results.wantedPersonsCount === 0 && (
+          <div style={{
+            background: '#FEF3C7',
+            border: '2px solid #F59E0B',
+            borderRadius: 8,
+            padding: 24,
+            margin: '24px 0',
+            display: 'flex',
+            gap: 16,
+          }}>
+            <span style={{ fontSize: 32, flexShrink: 0 }}>⚠️</span>
+            <div>
+              <h3 style={{ margin: '0 0 12px', fontFamily: "'DM Serif Display', serif", fontSize: 18, color: '#92400E' }}>
+                IMPORTANT: What "CLEAR" Really Means
+              </h3>
+              <p style={{ margin: '8px 0', fontFamily: "'Syne', sans-serif", fontSize: 15, lineHeight: 1.6, color: '#78350F' }}>
+                <strong>No public records found does NOT mean this person is safe.</strong>
+              </p>
+              <p style={{ margin: '8px 0', fontFamily: "'Syne', sans-serif", fontSize: 14, lineHeight: 1.6, color: '#78350F' }}>
+                In South Africa, only 8% of rape cases result in convictions. Most people who cause harm have never been arrested or convicted.
+              </p>
+              <p style={{ margin: '8px 0', fontFamily: "'Syne', sans-serif", fontSize: 14, lineHeight: 1.6, color: '#78350F' }}>
+                <strong>A CLEAR result means:</strong> We found no criminal records, warrants, or court cases in the South African public databases we searched.
+              </p>
+              <p style={{ margin: '8px 0', fontFamily: "'Syne', sans-serif", fontSize: 14, lineHeight: 1.6, color: '#78350F' }}>
+                <strong>It does NOT mean:</strong> This person has never hurt anyone, has no history of abuse, or is guaranteed to be safe.
+              </p>
+              <p style={{
+                margin: '16px 0 0',
+                paddingTop: 16,
+                borderTop: '1px solid #FCD34D',
+                fontFamily: "'Syne', sans-serif",
+                fontSize: 14,
+                fontWeight: 700,
+                lineHeight: 1.6,
+                color: '#78350F',
+              }}>
+                Always: Trust your instincts. Ask for references. Meet in public places. Tell someone where you're going.
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Identity Match Selector for multiple matches */}
         {showMatchSelector && isMultiple && !selectedMatch && (
           <IdentityMatchSelector

@@ -148,6 +148,15 @@ export default function Signup() {
             >
               Go to Dashboard instead
             </button>
+            {user?.email === "mckevin.ayaba@gmail.com" && (
+              <button
+                onClick={() => navigate("/admin")}
+                className="font-body text-sm mt-2 flex items-center justify-center gap-1.5 mx-auto"
+                style={{ background: 'none', border: 'none', color: '#A855F7', cursor: 'pointer' }}
+              >
+                <Shield size={14} /> Go to Admin Dashboard
+              </button>
+            )}
           </div>
         </div>
       </div>

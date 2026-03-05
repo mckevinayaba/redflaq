@@ -13,73 +13,155 @@ const HeroPlinq = () => {
 
   return (
     <section className="relative overflow-hidden" style={{ background: '#F7F4F0', minHeight: '100vh' }}>
-      <div className="grid lg:grid-cols-[55%_45%] min-h-screen max-w-[1280px] mx-auto">
+      {/* Subtle radial gradient glow behind hero */}
+      <div
+        style={{
+          position: 'absolute',
+          top: '10%',
+          left: '30%',
+          width: '70%',
+          height: '80%',
+          background: 'radial-gradient(ellipse at 60% 40%, rgba(124,58,237,0.08) 0%, rgba(220,38,38,0.03) 40%, transparent 70%)',
+          pointerEvents: 'none',
+          zIndex: 0,
+        }}
+      />
+
+      <div className="grid lg:grid-cols-[55%_45%] min-h-screen max-w-[1280px] mx-auto relative z-10">
         {/* LEFT COLUMN */}
-        <div className="pt-24 px-5 pb-10 lg:pt-40 lg:px-10 lg:pb-20">
+        <div className="pt-24 px-5 pb-10 lg:pt-40 lg:px-10 lg:pb-20" style={{ maxWidth: 640 }}>
+          {/* Badge — sleek pill with heart icon */}
           <div style={{
-            background: '#FAF5FF', border: '1px solid #EDE9FE', padding: '6px 14px',
-            display: 'inline-flex', alignItems: 'center', gap: 8,
-            fontFamily: "'Syne', sans-serif", fontSize: 13, fontWeight: 600,
-            color: '#7C3AED', marginBottom: 32,
+            background: 'rgba(124, 58, 237, 0.06)',
+            border: '1px solid rgba(124, 58, 237, 0.15)',
+            padding: '8px 18px',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 8,
+            borderRadius: 50,
+            fontFamily: "'Syne', sans-serif",
+            fontSize: 13,
+            fontWeight: 600,
+            color: '#7C3AED',
+            marginBottom: 36,
           }}>
-            💜 Built for South African women facing GBV. Available to all.
+            <span style={{ fontSize: 14 }}>♡</span>
+            Built for South African women facing GBV
           </div>
 
+          {/* Headline — larger, tighter */}
           <h1 style={{
             fontFamily: "'DM Serif Display', serif",
-            lineHeight: 1.05,
-            color: '#2D2235', marginBottom: 24,
-          }} className="text-[36px] sm:text-[44px] lg:text-[56px] xl:text-[82px]">
+            lineHeight: 1.02,
+            color: '#1A1523',
+            marginBottom: 28,
+            letterSpacing: '-0.02em',
+          }} className="text-[38px] sm:text-[48px] lg:text-[60px] xl:text-[72px]">
             Before you give him a spare key,<br />
             give yourself <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>clarity.</em>
           </h1>
 
           <p style={{
-            fontFamily: "'Syne', sans-serif", fontWeight: 400,
-            lineHeight: 1.7, color: '#4B4453', maxWidth: 480, marginBottom: 12,
-          }} className="text-base lg:text-lg">
+            fontFamily: "'Syne', sans-serif",
+            fontWeight: 400,
+            lineHeight: 1.7,
+            color: '#4B4453',
+            maxWidth: 500,
+            marginBottom: 12,
+            fontSize: 17,
+          }}>
             RedFlaq searches South African criminal records so you can make informed decisions about who to trust with your life, home, or business. Instant. Confidential. R99.
           </p>
 
-          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', marginBottom: 32, maxWidth: 480, lineHeight: 1.6 }}>
+          <p style={{
+            fontFamily: "'Syne', sans-serif",
+            fontSize: 14,
+            color: '#78716C',
+            marginBottom: 36,
+            maxWidth: 500,
+            lineHeight: 1.6,
+          }}>
             Not a full criminal record check. A fast public‑record safety check with a clear report in under 60 seconds.
           </p>
 
-          <div className="flex flex-wrap gap-x-6 gap-y-2" style={{ marginBottom: 36 }}>
+          {/* Value props */}
+          <div className="flex flex-wrap gap-x-6 gap-y-3" style={{ marginBottom: 40 }}>
             {["Results in under 60 seconds", "Public records only", "100% confidential", "POPIA‑aware use"].map(item => (
-              <div key={item} className="flex items-center gap-2" style={{ fontSize: 14, color: '#4B4453' }}>
-                <Check className="h-4 w-4" style={{ color: '#7C3AED' }} />
+              <div key={item} className="flex items-center gap-2" style={{ fontSize: 14, color: '#4B4453', fontFamily: "'Syne', sans-serif" }}>
+                <div style={{
+                  width: 20, height: 20, borderRadius: '50%',
+                  background: 'rgba(124,58,237,0.1)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  flexShrink: 0,
+                }}>
+                  <Check className="h-3 w-3" style={{ color: '#7C3AED' }} />
+                </div>
                 <span>{item}</span>
               </div>
             ))}
           </div>
 
+          {/* CTAs — pill-shaped */}
           <div className="flex flex-col sm:flex-row gap-4">
             <button
               onClick={handleVerify}
-              className="hover:opacity-90 transition-all hover:-translate-y-0.5 hover:shadow-lg"
               style={{
-                background: '#7C3AED', color: '#FFFFFF', padding: '16px 36px',
-                fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 15,
-                border: '2px solid #7C3AED', cursor: 'pointer',
+                background: '#7C3AED',
+                color: '#FFFFFF',
+                padding: '18px 40px',
+                fontFamily: "'Syne', sans-serif",
+                fontWeight: 700,
+                fontSize: 15,
+                border: 'none',
+                cursor: 'pointer',
+                borderRadius: 50,
+                boxShadow: '0 4px 20px rgba(124, 58, 237, 0.3)',
+                transition: 'all 0.25s ease',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = '#6D28D9';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 6px 28px rgba(124, 58, 237, 0.4)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = '#7C3AED';
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 20px rgba(124, 58, 237, 0.3)';
               }}
             >
               Verify Someone Now — R99
             </button>
             <button
               onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
-              className="hover:!bg-[#7C3AED] hover:!text-white transition-all hover:-translate-y-0.5"
               style={{
-                background: 'transparent', color: '#7C3AED', padding: '16px 36px',
-                fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 15,
-                border: '2px solid #7C3AED', cursor: 'pointer',
+                background: 'transparent',
+                color: '#7C3AED',
+                padding: '18px 40px',
+                fontFamily: "'Syne', sans-serif",
+                fontWeight: 700,
+                fontSize: 15,
+                border: '2px solid #7C3AED',
+                cursor: 'pointer',
+                borderRadius: 50,
+                transition: 'all 0.25s ease',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = '#7C3AED';
+                e.currentTarget.style.color = '#FFFFFF';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.color = '#7C3AED';
+                e.currentTarget.style.transform = 'translateY(0)';
               }}
             >
               See How It Works
             </button>
           </div>
 
-          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', marginTop: 24 }}>
+          {/* Login link */}
+          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', marginTop: 28 }}>
             Already have an account?{" "}
             <button
               onClick={() => {
@@ -92,7 +174,8 @@ const HeroPlinq = () => {
             </button>
           </p>
 
-          <div className="flex items-center gap-3" style={{ marginTop: 24 }}>
+          {/* Disclaimer */}
+          <div className="flex items-center gap-3" style={{ marginTop: 28 }}>
             <div style={{ width: 32, height: 1, background: '#D6D3CD' }} />
             <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#9CA3AF', letterSpacing: '0.08em' }}>
               FOR YOUR PROTECTION · NOT FOR HARASSMENT OR REVENGE
@@ -100,41 +183,100 @@ const HeroPlinq = () => {
           </div>
         </div>
 
-        {/* RIGHT COLUMN — Hero Photo + Stats */}
+        {/* RIGHT COLUMN — Hero Photo + Glassmorphism Cards */}
         <div className="flex flex-col justify-center items-center px-5 pb-20 gap-6 lg:px-10 lg:pt-28 lg:pb-20">
-          {/* Organic framed hero photo */}
-          <div className="organic-frame-1 organic-scroll-in visible w-full" style={{ maxWidth: 420, height: 500 }}>
-            <img
-              src={heroImage}
-              alt="South African woman looking thoughtfully out of a Johannesburg apartment window"
-              loading="eager"
-              width="896"
-              height="1152"
-            />
+          {/* Hero photo with purple glow ring */}
+          <div style={{ position: 'relative', maxWidth: 420, width: '100%' }}>
+            {/* Glow ring behind image */}
+            <div style={{
+              position: 'absolute',
+              inset: -8,
+              borderRadius: '40% 60% 55% 45% / 45% 55% 45% 55%',
+              background: 'linear-gradient(135deg, rgba(124,58,237,0.25), rgba(168,85,247,0.15), rgba(124,58,237,0.2))',
+              filter: 'blur(16px)',
+              zIndex: 0,
+            }} />
+            <div
+              className="organic-frame-1 organic-scroll-in visible w-full"
+              style={{ height: 500, position: 'relative', zIndex: 1 }}
+            >
+              <img
+                src={heroImage}
+                alt="South African woman looking thoughtfully out of a Johannesburg apartment window"
+                loading="eager"
+                width="896"
+                height="1152"
+              />
+            </div>
           </div>
 
-          {/* Compact stat + quote below image */}
+          {/* Glassmorphism stat card */}
           <div ref={statTwoRef} className="w-full" style={{ maxWidth: 420 }}>
-            <div style={{ background: 'white', border: '1.5px solid #EDE9FE', padding: '24px 24px' }}>
+            <div style={{
+              background: 'rgba(15, 10, 26, 0.92)',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              border: '1px solid rgba(124, 58, 237, 0.3)',
+              padding: '28px 28px',
+              borderRadius: 16,
+              boxShadow: '0 8px 32px rgba(0,0,0,0.2), inset 0 1px 0 rgba(124,58,237,0.1)',
+            }}>
               <div className="flex items-baseline gap-4 mb-2">
-                <span style={{ fontFamily: "'DM Serif Display', serif", fontSize: 40, color: '#7C3AED', lineHeight: 1 }}>
+                <span style={{
+                  fontFamily: "'DM Serif Display', serif",
+                  fontSize: 44,
+                  color: '#A855F7',
+                  lineHeight: 1,
+                  textShadow: '0 0 24px rgba(168,85,247,0.3)',
+                }}>
                   {statTwo > 0 ? statTwo.toLocaleString() : '40,000'}+
                 </span>
-                <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#9CA3AF', letterSpacing: '0.08em' }}>
+                <span style={{
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontSize: 9,
+                  color: 'rgba(255,255,255,0.5)',
+                  letterSpacing: '0.08em',
+                }}>
                   SEXUAL OFFENCES / YEAR
                 </span>
               </div>
-              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#4B4453', lineHeight: 1.6 }}>
+              <p style={{
+                fontFamily: "'Syne', sans-serif",
+                fontSize: 13,
+                color: 'rgba(255,255,255,0.7)',
+                lineHeight: 1.6,
+              }}>
                 Many offenders had prior warnings in public records.
               </p>
             </div>
           </div>
 
-          <div style={{ background: '#7C3AED', padding: '20px 24px', maxWidth: 420 }} className="w-full">
-            <p style={{ fontFamily: "'DM Serif Display', serif", fontSize: 17, color: 'white', lineHeight: 1.5, fontStyle: 'italic' }}>
+          {/* Glassmorphism founder quote card */}
+          <div style={{
+            background: 'linear-gradient(135deg, rgba(124,58,237,0.95), rgba(109,40,217,0.95))',
+            backdropFilter: 'blur(12px)',
+            padding: '24px 28px',
+            maxWidth: 420,
+            borderRadius: 16,
+            border: '1px solid rgba(168,85,247,0.3)',
+            boxShadow: '0 8px 32px rgba(124,58,237,0.2)',
+          }} className="w-full">
+            <p style={{
+              fontFamily: "'DM Serif Display', serif",
+              fontSize: 17,
+              color: 'white',
+              lineHeight: 1.5,
+              fontStyle: 'italic',
+            }}>
               We built RedFlaq so women and communities can access key public‑record warnings quickly and affordably.
             </p>
-            <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: 'rgba(255,255,255,0.6)', marginTop: 8, fontWeight: 600 }}>
+            <div style={{
+              fontFamily: "'Syne', sans-serif",
+              fontSize: 12,
+              color: 'rgba(255,255,255,0.6)',
+              marginTop: 10,
+              fontWeight: 600,
+            }}>
               — McKevin Ayaba, Founder
             </div>
           </div>

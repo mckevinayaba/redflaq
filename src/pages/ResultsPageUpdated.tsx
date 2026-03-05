@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import ShareInviteModal from "@/components/ShareInviteModal";
 import ShareControlsModal from "@/components/ShareControlsModal";
 import PostReportGuidance from "@/components/PostReportGuidance";
+import GetHelpModal from "@/components/GetHelpModal";
 
 interface WantedPerson {
   id: string;
@@ -164,6 +165,7 @@ const ResultsPageUpdated = () => {
   const [shareOpen, setShareOpen] = useState(false);
   const [shareControlsOpen, setShareControlsOpen] = useState(false);
   const [pendingDownload, setPendingDownload] = useState(false);
+  const [helpModalOpen, setHelpModalOpen] = useState(false);
   const searchId = searchParams.get("search_id");
 
   useEffect(() => {
@@ -317,6 +319,54 @@ const ResultsPageUpdated = () => {
             RedFlaq uses South African public‑record warning lists. It is not a full SAPS criminal record.
           </p>
         </div>
+
+        {/* Get Help Now Button */}
+        {results.riskLevel === 'RED' ? (
+          <button
+            onClick={() => setHelpModalOpen(true)}
+            style={{
+              width: '100%',
+              padding: 20,
+              background: '#DC2626',
+              color: 'white',
+              border: 'none',
+              borderRadius: 8,
+              fontFamily: "'Syne', sans-serif",
+              fontSize: 18,
+              fontWeight: 700,
+              cursor: 'pointer',
+              margin: '24px 0',
+              animation: 'pulse 2s infinite',
+            }}
+          >
+            🆘 Get Help Now — Speak to Someone
+          </button>
+        ) : (
+          <button
+            onClick={() => setHelpModalOpen(true)}
+            style={{
+              width: '100%',
+              padding: 16,
+              background: '#7C3AED',
+              color: 'white',
+              border: 'none',
+              borderRadius: 8,
+              fontFamily: "'Syne', sans-serif",
+              fontSize: 16,
+              fontWeight: 600,
+              cursor: 'pointer',
+              margin: '16px 0',
+            }}
+          >
+            Need Support? View Resources
+          </button>
+        )}
+
+        <GetHelpModal
+          isOpen={helpModalOpen}
+          onClose={() => setHelpModalOpen(false)}
+          riskLevel={results.riskLevel}
+        />
 
         {/* Safety Win Screen for clear/low risk results */}
         <SafetyWinScreen riskLevel={results.riskLevel} onClose={() => {}} />

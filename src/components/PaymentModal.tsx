@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { X, Shield, Loader2, Lock } from 'lucide-react';
@@ -14,11 +14,22 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
   const [email, setEmail] = useState('');
   const [selectedPackage, setSelectedPackage] = useState(packageType);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showRedirect, setShowRedirect] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
     setSelectedPackage(packageType);
   }, [packageType]);
+
+  // Escape key to close
+  useEffect(() => {
+    if (!isOpen) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [isOpen, onClose]);
 
   const packages = {
     single: { price: 99, credits: 1, label: 'R99 – 1 Safety Check', type: 'single', savings: undefined },
@@ -28,6 +39,10 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
 
   const currentPackage = packages[selectedPackage];
 
+  const handleBackdropClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) onClose();
+  }, [onClose]);
+
   const handlePay = async () => {
     if (!email || !email.includes('@')) {
       toast({ title: 'Email required', description: 'Please enter a valid email address.', variant: 'destructive' });
@@ -35,6 +50,7 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
     }
 
     setIsSubmitting(true);
+    setShowRedirect(true);
 
     try {
       const { data, error } = await supabase.functions.invoke('create-yoco-checkout', {
@@ -44,36 +60,62 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
       if (error) throw error;
 
       if (data?.redirectUrl) {
-        window.location.href = data.redirectUrl;
+        // Brief pause to show redirect message
+        setTimeout(() => {
+          window.location.href = data.redirectUrl;
+        }, 1500);
       } else {
         throw new Error('No checkout URL returned');
       }
     } catch (err: any) {
       console.error('Payment error:', err);
+      setShowRedirect(false);
       toast({
         title: 'Payment error',
         description: 'Could not initiate payment. Please try again.',
         variant: 'destructive',
       });
-    } finally {
       setIsSubmitting(false);
     }
   };
 
   if (!isOpen) return null;
 
+  // Redirect transition screen
+  if (showRedirect) {
+    return createPortal(
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 animate-in fade-in duration-300">
+        <div className="bg-background rounded-2xl shadow-2xl max-w-md w-full p-10 text-center animate-in zoom-in duration-300">
+          <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-5">
+            <Lock className="w-8 h-8 text-primary animate-pulse" />
+          </div>
+          <h3 className="text-xl font-bold text-foreground mb-3">Redirecting to Secure Payment</h3>
+          <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+            You are being securely redirected to our payment partner <strong className="text-foreground">Yoco</strong>. You will see <strong className="text-foreground">Setup A Startup (Pty) Ltd</strong> — this is RedFlaq's registered company. Your payment is fully protected.
+          </p>
+          <Loader2 className="w-6 h-6 animate-spin text-primary mx-auto" />
+        </div>
+      </div>,
+      document.body
+    );
+  }
+
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 animate-in fade-in duration-300">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 animate-in fade-in duration-300"
+      onClick={handleBackdropClick}
+    >
       <div className="relative bg-background rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto animate-in zoom-in duration-300">
+        {/* Close button — always visible, high z-index */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 w-9 h-9 flex items-center justify-center rounded-full bg-foreground/10 text-foreground hover:bg-foreground/20 transition-colors"
+          className="absolute top-3 right-3 z-[60] w-9 h-9 min-w-[32px] min-h-[32px] flex items-center justify-center rounded-full bg-foreground/90 text-background hover:bg-foreground transition-colors shadow-lg"
           aria-label="Close"
         >
           <X className="w-5 h-5" />
         </button>
 
-        <div className="p-8">
+        <div className="p-8 pt-14">
           {/* Header */}
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -134,6 +176,16 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
             <p className="text-xs text-muted-foreground mt-1">Your receipt and search link will be sent here</p>
           </div>
 
+          {/* Trust disclosure — above pay button */}
+          <div className="mb-4 p-3 rounded-lg border border-primary/20 bg-primary/5">
+            <div className="flex gap-2.5 items-start">
+              <Shield className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+              <p className="text-[13px] leading-relaxed text-muted-foreground">
+                RedFlaq is proudly operated by <strong className="text-foreground">Setup A Startup (Pty) Ltd</strong>, a registered South African company. When you proceed to payment, you will see "Setup A Startup (Pty) Ltd" on the Yoco payment screen — this is correct and expected. Your payment is safe and secure.
+              </p>
+            </div>
+          </div>
+
           {/* Pay button */}
           <button
             onClick={handlePay}
@@ -162,7 +214,7 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
               </p>
             </div>
             <div className="text-xs text-muted-foreground text-center border-t border-border pt-3">
-              <p className="font-semibold text-foreground">🏢 Setup A Startup (Pty) Ltd</p>
+              <p className="font-semibold text-foreground">🏢 RedFlaq by Setup A Startup (Pty) Ltd</p>
               <p className="mt-1">Registered Business · Secure Processing</p>
             </div>
           </div>

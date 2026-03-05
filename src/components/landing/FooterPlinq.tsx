@@ -72,13 +72,13 @@ const FooterPlinq = () => {
                 <li><a href="mailto:support@redflaq.com" style={linkStyle} onMouseEnter={e => e.currentTarget.style.color = '#A855F7'} onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.5)'}>support@redflaq.com</a></li>
                 <li><span style={{ ...linkStyle, cursor: 'default' }}>Johannesburg, South Africa</span></li>
               </ul>
-              <div style={{ marginTop: 20, display: 'flex', gap: 16 }}>
+              <div style={{ marginTop: 20, display: 'flex', gap: 20, flexWrap: 'wrap' }}>
                 {[
-                  { label: "X", href: "https://x.com/redflaq" },
-                  { label: "LinkedIn", href: "https://www.linkedin.com/company/redflaq" },
-                  { label: "Instagram", href: "https://www.instagram.com/redflaq" },
+                  { label: "Facebook", href: "https://www.facebook.com/RedFlaqSafety/" },
+                  { label: "Instagram", href: "https://www.instagram.com/redflaqsafety/" },
+                  { label: "LinkedIn", href: "https://www.linkedin.com/company/redflaq/" },
                 ].map(s => (
-                  <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.35)', textDecoration: 'none', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color = '#A855F7'} onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.35)'}>{s.label}</a>
+                  <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.6)', textDecoration: 'none', transition: 'color 0.2s', display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(168,85,247,0.08)', border: '1px solid rgba(168,85,247,0.15)', padding: '6px 14px', borderRadius: 50 }} onMouseEnter={e => { e.currentTarget.style.color = '#fff'; e.currentTarget.style.background = 'rgba(168,85,247,0.2)'; }} onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.6)'; e.currentTarget.style.background = 'rgba(168,85,247,0.08)'; }}>{s.label}</a>
                 ))}
               </div>
             </div>

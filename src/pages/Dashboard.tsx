@@ -44,10 +44,13 @@ export default function Dashboard() {
   }, [user, authLoading]);
 
   const fetchData = async () => {
-    const [{ data: profileData }, { data: searchData }, { data: referralData }] = await Promise.all([
+    const email = user!.email || "";
+    const [{ data: profileData }, { data: searchData }, { data: referralData }, { data: purchasesData }, { data: manualData }] = await Promise.all([
       supabase.from("profiles").select("full_name").eq("user_id", user!.id).maybeSingle(),
       supabase.from("searches").select("*").eq("user_id", user!.id).order("searched_at", { ascending: false }).limit(20),
       supabase.from("referrals").select("id, status").eq("referrer_user_id", user!.id),
+      supabase.from("purchases").select("credits_remaining").eq("email", email).eq("status", "completed"),
+      supabase.from("manual_payments").select("search_credits, credits_used").eq("email", email).eq("status", "verified"),
     ]);
     setProfile(profileData);
     setSearches(searchData || []);
@@ -55,6 +58,12 @@ export default function Dashboard() {
     const converted = refs.filter(r => r.status === "signed_up" || r.status === "paid");
     setReferralCount(converted.length);
     setFreeChecksEarned(Math.floor(converted.length / 3));
+
+    // Calculate remaining credits
+    const purchaseCredits = (purchasesData || []).reduce((sum, p) => sum + (p.credits_remaining || 0), 0);
+    const manualCredits = (manualData || []).reduce((sum, p) => sum + ((p.search_credits || 0) - (p.credits_used || 0)), 0);
+    setCreditsRemaining(purchaseCredits + manualCredits);
+
     setLoading(false);
   };
 

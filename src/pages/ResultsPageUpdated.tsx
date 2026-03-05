@@ -456,7 +456,7 @@ const ResultsPageUpdated = () => {
           )}
         </div>
 
-        <SafetyWinScreen riskLevel={results.riskLevel} onClose={() => {}} />
+        {/* SafetyWinScreen removed — celebration messaging contradicts safety warnings */}
 
         {/* Critical disclaimer for CLEAR results */}
         {results.riskLevel !== 'RED' && results.riskLevel !== 'ORANGE' && results.riskLevel !== 'YELLOW' && results.wantedPersonsCount === 0 && (

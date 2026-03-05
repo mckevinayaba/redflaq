@@ -54,73 +54,122 @@ const SafetyCardGrid = () => {
   };
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5 mb-12 sm:mb-16">
-      {cards.map((card) => {
-        const Icon = card.icon;
-        return (
-          <Link
-            key={card.title}
-            to={card.href}
-            onClick={card.isAnchor ? (e) => handleAnchorClick(e, card.href) : undefined}
-            className="group relative flex flex-col no-underline transition-all duration-300 hover:-translate-y-1.5"
-            style={{
-              borderRadius: 16,
-              padding: '20px 16px',
-              background: card.urgent
-                ? 'linear-gradient(135deg, #991B1B 0%, #DC2626 100%)'
-                : '#FFFFFF',
-              border: card.urgent ? 'none' : '1px solid rgba(214,211,205,0.6)',
-              boxShadow: card.urgent
-                ? '0 4px 24px rgba(220, 38, 38, 0.18)'
-                : '0 2px 12px rgba(0,0,0,0.04)',
-            }}
-          >
-            {/* Icon circle */}
-            <div
-              className="flex items-center justify-center flex-shrink-0 mb-3 sm:mb-4"
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: 12,
-                background: card.urgent ? 'rgba(255,255,255,0.2)' : 'rgba(124, 58, 237, 0.08)',
-              }}
-            >
-              <Icon size={20} color={card.urgent ? '#FFFFFF' : '#7C3AED'} strokeWidth={2} />
-            </div>
+    <div className="-mx-5 sm:-mx-6 px-5 sm:px-6 py-12 sm:py-16 mb-12 sm:mb-16" style={{
+      background: 'linear-gradient(135deg, #0F0A1A 0%, #1A1035 100%)',
+      borderRadius: 24,
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
+      {/* Glow */}
+      <div style={{
+        position: 'absolute', top: '30%', left: '50%', transform: 'translateX(-50%)',
+        width: '70%', height: '50%',
+        background: 'radial-gradient(ellipse, rgba(124,58,237,0.12) 0%, transparent 70%)',
+        pointerEvents: 'none',
+      }} />
 
-            <h3
-              className="font-body text-[15px] sm:text-lg font-bold mb-1 sm:mb-1.5"
-              style={{
-                color: card.urgent ? '#FFFFFF' : '#1F1F2E',
-              }}
-            >
-              {card.title}
-            </h3>
+      <div className="relative z-10">
+        <p className="font-mono text-[11px] tracking-[0.15em] mb-3 flex items-center gap-3" style={{ color: '#A855F7' }}>
+          <span style={{ width: 24, height: 1, background: '#A855F7', display: 'inline-block' }} />
+          Safety Resources
+        </p>
+        <h2 className="font-heading text-[24px] sm:text-[32px] mb-8 leading-tight" style={{ color: '#FFFFFF' }}>
+          Tools to keep you safe
+        </h2>
 
-            <p
-              className="font-body text-[12px] sm:text-[13px] leading-relaxed flex-1 mb-3 sm:mb-4"
-              style={{
-                color: card.urgent ? 'rgba(255,255,255,0.9)' : '#6B7280',
-              }}
-            >
-              {card.description}
-            </p>
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
+          {cards.map((card) => {
+            const Icon = card.icon;
+            return (
+              <Link
+                key={card.title}
+                to={card.href}
+                onClick={card.isAnchor ? (e) => handleAnchorClick(e, card.href) : undefined}
+                className="group relative flex flex-col no-underline transition-all duration-300 hover:-translate-y-1.5"
+                style={{
+                  borderRadius: 20,
+                  padding: '24px 20px',
+                  background: card.urgent
+                    ? 'linear-gradient(135deg, #991B1B 0%, #DC2626 100%)'
+                    : 'rgba(255,255,255,0.04)',
+                  border: card.urgent
+                    ? '1px solid rgba(220,38,38,0.4)'
+                    : '1px solid rgba(124,58,237,0.15)',
+                  boxShadow: card.urgent
+                    ? '0 4px 30px rgba(220,38,38,0.25), inset 0 1px 0 rgba(255,255,255,0.1)'
+                    : '0 2px 12px rgba(0,0,0,0.1)',
+                  backdropFilter: 'blur(8px)',
+                }}
+                onMouseEnter={e => {
+                  if (!card.urgent) {
+                    e.currentTarget.style.borderColor = 'rgba(124,58,237,0.4)';
+                    e.currentTarget.style.boxShadow = '0 8px 32px rgba(124,58,237,0.2)';
+                  } else {
+                    e.currentTarget.style.boxShadow = '0 8px 40px rgba(220,38,38,0.35), inset 0 1px 0 rgba(255,255,255,0.1)';
+                  }
+                }}
+                onMouseLeave={e => {
+                  if (!card.urgent) {
+                    e.currentTarget.style.borderColor = 'rgba(124,58,237,0.15)';
+                    e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.1)';
+                  } else {
+                    e.currentTarget.style.boxShadow = '0 4px 30px rgba(220,38,38,0.25), inset 0 1px 0 rgba(255,255,255,0.1)';
+                  }
+                }}
+              >
+                {/* Urgent card glow */}
+                {card.urgent && (
+                  <div style={{
+                    position: 'absolute', top: -20, right: -20, width: 120, height: 120,
+                    background: 'radial-gradient(circle, rgba(239,68,68,0.3), transparent 70%)',
+                    filter: 'blur(20px)', pointerEvents: 'none',
+                  }} />
+                )}
 
-            <span
-              className="inline-flex items-center justify-center self-start font-body font-semibold transition-all duration-200"
-              style={{
-                fontSize: 11,
-                padding: '5px 14px',
-                borderRadius: 999,
-                background: card.urgent ? 'rgba(255,255,255,0.25)' : '#7C3AED',
-                color: '#FFFFFF',
-              }}
-            >
-              {card.urgent ? "Get Help" : "Learn More"}
-            </span>
-          </Link>
-        );
-      })}
+                {/* Icon circle */}
+                <div
+                  className="flex items-center justify-center flex-shrink-0 mb-3 sm:mb-4 relative z-10"
+                  style={{
+                    width: 44,
+                    height: 44,
+                    borderRadius: 14,
+                    background: card.urgent ? 'rgba(255,255,255,0.2)' : 'rgba(124,58,237,0.12)',
+                  }}
+                >
+                  <Icon size={20} color={card.urgent ? '#FFFFFF' : '#A855F7'} strokeWidth={2} />
+                </div>
+
+                <h3
+                  className="font-body text-[15px] sm:text-lg font-bold mb-1 sm:mb-1.5 relative z-10"
+                  style={{ color: '#FFFFFF' }}
+                >
+                  {card.title}
+                </h3>
+
+                <p
+                  className="font-body text-[12px] sm:text-[13px] leading-relaxed flex-1 mb-3 sm:mb-4 relative z-10"
+                  style={{ color: card.urgent ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.5)' }}
+                >
+                  {card.description}
+                </p>
+
+                <span
+                  className="inline-flex items-center justify-center self-start font-body font-semibold transition-all duration-200 relative z-10"
+                  style={{
+                    fontSize: 11,
+                    padding: '6px 16px',
+                    borderRadius: 999,
+                    background: card.urgent ? 'rgba(255,255,255,0.25)' : '#7C3AED',
+                    color: '#FFFFFF',
+                  }}
+                >
+                  {card.urgent ? "Get Help" : "Learn More"}
+                </span>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 };

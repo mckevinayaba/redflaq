@@ -104,6 +104,9 @@ const SafetyTips = () => {
         {/* GBV Resources Section */}
         <GBVResourcesSection />
 
+        {/* Provincial Support Resources */}
+        <ProvincialResourcesSection />
+
         {/* Section 1 — Before You Check — Dark */}
         <section className="mb-12 sm:mb-16 -mx-5 sm:-mx-6 px-5 sm:px-6 py-12 sm:py-16" style={{
           background: 'linear-gradient(135deg, #0F0A1A 0%, #1A1035 100%)',

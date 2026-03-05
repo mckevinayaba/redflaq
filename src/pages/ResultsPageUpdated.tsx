@@ -165,6 +165,7 @@ const ResultsPageUpdated = () => {
   const [shareOpen, setShareOpen] = useState(false);
   const [shareControlsOpen, setShareControlsOpen] = useState(false);
   const [pendingDownload, setPendingDownload] = useState(false);
+  const [helpModalOpen, setHelpModalOpen] = useState(false);
   const searchId = searchParams.get("search_id");
 
   useEffect(() => {

@@ -49,6 +49,22 @@ export default function DashboardNewCheck() {
   const [useIdNumber, setUseIdNumber] = useState(false);
   const [idNumber, setIdNumber] = useState("");
 
+  // Fetch credit balance
+  useState(() => {
+    if (!user) return;
+    const email = user.email || "";
+    Promise.all([
+      supabase.from("purchases").select("credits_remaining").eq("email", email).eq("status", "completed"),
+      supabase.from("manual_payments").select("search_credits, credits_used").eq("email", email).eq("status", "verified"),
+    ]).then(([{ data: p }, { data: m }]) => {
+      const pc = (p || []).reduce((s, r) => s + (r.credits_remaining || 0), 0);
+      const mc = (m || []).reduce((s, r) => s + ((r.search_credits || 0) - (r.credits_used || 0)), 0);
+      const total = pc + mc;
+      setCreditsRemaining(total);
+      if (total <= 0) navigate("/pricing");
+    });
+  });
+
   const sanitize = (s: string) => s.replace(/[<>"'`]/g, "").slice(0, 100);
 
   const validate = (): boolean => {

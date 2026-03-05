@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { DisputeModal } from "@/components/DisputeModal";
-
 import { Progress } from "@/components/ui/progress";
 import IdentityMatchSelector from "@/components/IdentityMatchSelector";
 import { type PersonRecord } from "@/utils/identityConfidence";
@@ -100,13 +99,13 @@ const getSourceTrustBadge = (person: WantedPerson): { icon: string; label: strin
 const getRiskBadge = (riskLevel: string) => {
   switch (riskLevel) {
     case 'RED':
-      return { color: '#7C3AED', bg: '#FAF5FF', label: 'SERIOUS RED FLAG', icon: '🟣' };
+      return { color: 'hsl(var(--purple))', bg: 'hsl(var(--purple-50))', label: 'SERIOUS RED FLAG', icon: '🟣', borderClass: 'border-purple-600' };
     case 'ORANGE':
-      return { color: '#D97706', bg: '#FFFBEB', label: 'MEDIUM RISK', icon: '🟠' };
+      return { color: 'hsl(var(--gold))', bg: 'hsl(var(--purple-50))', label: 'MEDIUM RISK', icon: '🟠', borderClass: 'border-orange-500' };
     case 'YELLOW':
-      return { color: '#CA8A04', bg: '#FEFCE8', label: 'ELEVATED', icon: '🟡' };
+      return { color: '#CA8A04', bg: '#FEFCE8', label: 'ELEVATED', icon: '🟡', borderClass: 'border-yellow-500' };
     default:
-      return { color: '#6B7280', bg: '#F9FAFB', label: 'NO PUBLIC RED FLAGS', icon: '✅' };
+      return { color: 'hsl(var(--muted-foreground))', bg: 'hsl(var(--background))', label: 'NO PUBLIC RED FLAGS', icon: '—', borderClass: 'border-border' };
   }
 };
 
@@ -146,7 +145,7 @@ const getRiskExplainer = (riskLevel: string, persons: WantedPerson[]) => {
       };
     default:
       return {
-        title: 'We did not find matching public‑record warnings for this name in the sources we currently check. This does not guarantee safety, but no visible red flags were found.',
+        title: 'We did not find matching public‑record warnings for this name in the sources we currently check. This does not guarantee safety. Read the critical warning below before proceeding.',
         triggers: ['No active warrants, sanctions, or legal notices found in searched databases'],
         action: 'A clean result does not mean "no criminal record" — it means no match in these public sources. Always trust your instincts and take normal precautions.',
       };
@@ -177,7 +176,6 @@ const ResultsPageUpdated = () => {
 
     const fetchResults = async () => {
       try {
-        // Fetch from database
         const { data, error } = await supabase
           .from('searches')
           .select('*')
@@ -206,7 +204,6 @@ const ResultsPageUpdated = () => {
             setShowMatchSelector(true);
           }
         } else {
-          // Fallback: check sessionStorage for just-completed searches
           const storedResult = sessionStorage.getItem("searchResult");
           if (storedResult) {
             const parsed = JSON.parse(storedResult);
@@ -261,10 +258,10 @@ const ResultsPageUpdated = () => {
 
   if (loading) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--paper)' }}>
-        <div style={{ textAlign: 'center' }}>
-          <div style={{ width: 48, height: 48, border: '3px solid var(--purple-mid)', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite', margin: '0 auto 16px' }} />
-          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, color: 'var(--mid)' }}>Loading results...</p>
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center">
+          <div className="w-12 h-12 border-[3px] border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="font-body text-base text-muted-foreground">Loading results...</p>
         </div>
       </div>
     );
@@ -272,6 +269,7 @@ const ResultsPageUpdated = () => {
 
   if (!results) return null;
 
+  const isClear = !results.isWanted;
   const isMultiple = results.wantedPersonsCount > 1;
   const searchDate = new Date(results.searchedAt).toLocaleDateString('en-ZA', { day: '2-digit', month: '2-digit', year: 'numeric' });
   const searchTime = new Date(results.searchedAt).toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' });
@@ -279,230 +277,252 @@ const ResultsPageUpdated = () => {
   const riskExplainer = getRiskExplainer(results.riskLevel, results.wantedPersons);
 
   return (
-    <div style={{ background: 'var(--paper)', minHeight: '100vh', padding: '120px 24px 80px' }}>
-      <div className="results-container" style={{ maxWidth: 900, margin: '0 auto' }}>
+    <div className="bg-background min-h-screen">
+      {/* Top bar */}
+      <div className="bg-foreground text-background">
+        <div className="max-w-[900px] mx-auto px-6 py-3 flex items-center justify-between">
+          <span className="font-mono text-[10px] tracking-[0.15em] uppercase opacity-70">
+            RedFlaq · Search Report
+          </span>
+          <span className="font-mono text-[10px] tracking-[0.1em] opacity-50">
+            {searchDate} · {searchTime}
+          </span>
+        </div>
+      </div>
 
-        {/* Breadcrumb */}
-        <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: 'var(--muted)', letterSpacing: '0.1em', marginBottom: 24 }}>
-          SEARCH RESULTS · {(results.searchType || 'person').toUpperCase().replace('_', ' ')} · {searchDate} {searchTime}
-        </p>
+      <div className="results-container max-w-[900px] mx-auto px-6 pt-10 pb-20">
 
-        {/* Risk Level Summary */}
-        <div style={{ background: riskBadge.bg, border: `2px solid ${riskBadge.color}`, padding: 32, marginBottom: 32 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-            <span style={{ fontSize: 32 }}>{riskBadge.icon}</span>
-            <div>
-              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: '0.1em', color: riskBadge.color, fontWeight: 700 }}>{riskBadge.label}</span>
-              <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 24, color: 'var(--ink)', margin: '4px 0 0' }}>
-                {results.fullName || results.searchIdentifier}
-              </h2>
+        {/* ─── RISK LEVEL HEADER ─── */}
+        <div
+          className="border-2 overflow-hidden mb-8"
+          style={{ borderColor: riskBadge.color }}
+        >
+          {/* Colored top strip */}
+          <div className="px-8 py-3" style={{ background: riskBadge.color }}>
+            <span className="font-mono text-[11px] tracking-[0.15em] text-white font-bold">
+              {riskBadge.label}
+            </span>
+          </div>
+
+          <div className="p-8 bg-card">
+            {/* Name */}
+            <h1 className="font-heading text-3xl sm:text-4xl text-foreground mb-3 leading-tight">
+              {results.fullName || results.searchIdentifier}
+            </h1>
+
+            {/* Explainer */}
+            <p className="font-body text-[15px] leading-relaxed text-muted-foreground mb-6 max-w-2xl">
+              {riskExplainer.title}
+            </p>
+
+            {/* Triggers */}
+            <div className="mb-6">
+              <p className="font-mono text-[10px] tracking-[0.12em] text-muted-foreground mb-2 uppercase">What triggered this</p>
+              <ul className="space-y-1.5">
+                {riskExplainer.triggers.map((t, i) => (
+                  <li key={i} className="font-body text-sm text-foreground flex items-start gap-2">
+                    <span className="mt-1.5 w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: riskBadge.color }} />
+                    {t}
+                  </li>
+                ))}
+              </ul>
             </div>
-          </div>
 
-          <h3 style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 700, color: riskBadge.color, marginBottom: 12 }}>
-            {riskExplainer.title}
-          </h3>
-          
-          <div style={{ marginBottom: 16 }}>
-            <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.1em', color: 'var(--muted)', marginBottom: 8 }}>WHAT TRIGGERED THIS:</p>
-            <ul style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'var(--mid)', lineHeight: 1.8, listStyle: 'disc', paddingLeft: 20, margin: 0 }}>
-              {riskExplainer.triggers.map((t, i) => <li key={i}>{t}</li>)}
-            </ul>
-          </div>
+            {/* Action box */}
+            <div className="border-l-[3px] pl-5 py-3" style={{ borderColor: riskBadge.color, background: `${riskBadge.color}08` }}>
+              <p className="font-mono text-[10px] tracking-[0.1em] text-muted-foreground mb-1 uppercase">What you should do</p>
+              <p className="font-body text-sm font-semibold text-foreground leading-relaxed">{riskExplainer.action}</p>
+            </div>
 
-          <div style={{ background: 'white', padding: 16, borderLeft: `3px solid ${riskBadge.color}` }}>
-            <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.1em', color: 'var(--muted)', marginBottom: 4 }}>WHAT YOU SHOULD DO:</p>
-            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 600, color: 'var(--ink)' }}>{riskExplainer.action}</p>
+            <p className="font-mono text-[10px] tracking-[0.08em] text-muted-foreground mt-5 opacity-70">
+              RedFlaq uses South African public‑record warning lists. It is not a full SAPS criminal record.
+            </p>
           </div>
-
-          <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.08em', color: 'var(--muted)', marginTop: 16 }}>
-            RedFlaq uses South African public‑record warning lists. It is not a full SAPS criminal record.
-          </p>
         </div>
 
-        {/* Get Help Now Button */}
+        {/* ─── GET HELP BUTTON ─── */}
         {results.riskLevel === 'RED' ? (
           <button
             onClick={() => setHelpModalOpen(true)}
-            style={{
-              width: '100%',
-              padding: 20,
-              background: '#DC2626',
-              color: 'white',
-              border: 'none',
-              borderRadius: 8,
-              fontFamily: "'Syne', sans-serif",
-              fontSize: 18,
-              fontWeight: 700,
-              cursor: 'pointer',
-              margin: '24px 0',
-              animation: 'pulse 2s infinite',
-            }}
+            className="w-full py-5 bg-destructive text-destructive-foreground border-none font-body text-lg font-bold cursor-pointer mb-8 animate-pulse"
           >
             🆘 Get Help Now — Speak to Someone
           </button>
         ) : (
           <button
             onClick={() => setHelpModalOpen(true)}
-            style={{
-              width: '100%',
-              padding: 16,
-              background: '#7C3AED',
-              color: 'white',
-              border: 'none',
-              borderRadius: 8,
-              fontFamily: "'Syne', sans-serif",
-              fontSize: 16,
-              fontWeight: 600,
-              cursor: 'pointer',
-              margin: '16px 0',
-            }}
+            className="w-full py-4 bg-primary text-primary-foreground border-none font-body text-base font-semibold cursor-pointer mb-8 hover:bg-primary/90 transition-colors"
           >
             Need Support? View Resources
           </button>
         )}
 
-        <GetHelpModal
-          isOpen={helpModalOpen}
-          onClose={() => setHelpModalOpen(false)}
-          riskLevel={results.riskLevel}
-        />
+        <GetHelpModal isOpen={helpModalOpen} onClose={() => setHelpModalOpen(false)} riskLevel={results.riskLevel} />
 
-        {/* What This Means & What To Do Next */}
-        <div style={{ background: '#F9FAFB', borderRadius: 8, padding: 24, margin: '32px 0' }}>
-          <h3 style={{ margin: '0 0 16px', fontFamily: "'DM Serif Display', serif", fontSize: 20, color: '#111827' }}>
-            What This Means & What To Do Next
-          </h3>
-
-          {results.riskLevel !== 'RED' && results.riskLevel !== 'ORANGE' && results.riskLevel !== 'YELLOW' && results.wantedPersonsCount === 0 && (
-            <div>
-              <p style={{ margin: '12px 0', fontFamily: "'Syne', sans-serif", fontSize: 15, lineHeight: 1.6, color: '#374151' }}>
-                <strong>No Records Found:</strong> We searched South African criminal databases and found no warrants, court cases, or criminal records.
-              </p>
-              <p style={{ margin: '12px 0', fontFamily: "'Syne', sans-serif", fontSize: 15, lineHeight: 1.6, color: '#374151' }}>
-                <strong>Remember:</strong> This doesn't guarantee safety. Most harmful people have no criminal record.
-              </p>
-              <p style={{ margin: '12px 0', fontFamily: "'Syne', sans-serif", fontSize: 15, lineHeight: 1.6, color: '#374151', fontWeight: 700 }}>Next Steps:</p>
-              <ul style={{ margin: '12px 0', paddingLeft: 24, fontFamily: "'Syne', sans-serif", fontSize: 14, lineHeight: 1.8, color: '#374151' }}>
-                <li>Trust your instincts — if something feels off, it probably is</li>
-                <li>Ask for references from mutual contacts</li>
-                <li>Meet in public places for first meetings</li>
-                <li>Tell someone where you're going and when you'll be back</li>
-                <li>Keep your phone charged and accessible</li>
-              </ul>
-            </div>
-          )}
-
-          {results.riskLevel === 'YELLOW' && (
-            <div>
-              <p style={{ margin: '12px 0', fontFamily: "'Syne', sans-serif", fontSize: 15, lineHeight: 1.6, color: '#374151' }}>
-                <strong>Minor Concerns Found:</strong> We found some records, but they appear to be minor or older offenses.
-              </p>
-              <p style={{ margin: '12px 0', fontFamily: "'Syne', sans-serif", fontSize: 15, lineHeight: 1.6, color: '#374151', fontWeight: 700 }}>Next Steps:</p>
-              <ul style={{ margin: '12px 0', paddingLeft: 24, fontFamily: "'Syne', sans-serif", fontSize: 14, lineHeight: 1.8, color: '#374151' }}>
-                <li>Review the details carefully — consider type and timing of offense</li>
-                <li>Use extra caution in initial interactions</li>
-                <li>Meet only in public places</li>
-                <li>Tell someone where you're going</li>
-                <li>If this is for employment or roommate situation, consider asking about these records directly</li>
-              </ul>
-            </div>
-          )}
-
-          {results.riskLevel === 'ORANGE' && (
-            <div>
-              <p style={{ margin: '12px 0', fontFamily: "'Syne', sans-serif", fontSize: 15, lineHeight: 1.6, color: '#374151' }}>
-                <strong>Concerning Records Found:</strong> We found records that warrant serious caution.
-              </p>
-              <p style={{ margin: '12px 0', fontFamily: "'Syne', sans-serif", fontSize: 15, lineHeight: 1.6, color: '#374151', fontWeight: 700 }}>Next Steps:</p>
-              <ul style={{ margin: '12px 0', paddingLeft: 24, fontFamily: "'Syne', sans-serif", fontSize: 14, lineHeight: 1.8, color: '#374151' }}>
-                <li>Review all details carefully before making any decisions</li>
-                <li>If this is for dating: reconsider meeting this person</li>
-                <li>If this is for employment/roommate: seek alternative options if possible</li>
-                <li>If you must proceed: only meet in very public places, tell multiple people</li>
-                <li>Consider reaching out to a support service for advice (click "Get Help" above)</li>
-              </ul>
-            </div>
-          )}
-
-          {results.riskLevel === 'RED' && results.wantedPersonsCount > 0 && (
-            <div>
-              <p style={{ margin: '12px 0', fontFamily: "'Syne', sans-serif", fontSize: 15, lineHeight: 1.6, color: '#DC2626' }}>
-                <strong>⚠️ HIGH RISK — Serious Safety Concerns:</strong> We found records showing patterns of violence, domestic abuse, or serious crimes.
-              </p>
-              <p style={{ margin: '12px 0', fontFamily: "'Syne', sans-serif", fontSize: 15, lineHeight: 1.6, color: '#374151', fontWeight: 700 }}>Immediate Actions:</p>
-              <ul style={{ margin: '12px 0', paddingLeft: 24, fontFamily: "'Syne', sans-serif", fontSize: 14, lineHeight: 1.8, color: '#374151' }}>
-                <li><strong>Do NOT meet this person alone or in private</strong></li>
-                <li>If already in contact: end communication safely</li>
-                <li>If you feel threatened: call 10111 or 0800 428 428 immediately</li>
-                <li>Tell trusted friends/family about the situation</li>
-                <li>Save all communications as evidence</li>
-                <li>Click "Get Help Now" above to speak with a GBV counselor</li>
-              </ul>
-
-              {/* Critical footer for very high scores */}
-              <div style={{
-                marginTop: 20,
-                padding: 16,
-                background: '#FEE2E2',
-                borderLeft: '4px solid #DC2626',
-                borderRadius: 4,
-              }}>
-                <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700, color: '#991B1B', margin: 0, lineHeight: 1.6 }}>
-                  Your safety is more important than any relationship, job, or living situation. There are people ready to help you. You don't have to face this alone.
+        {/* ─── WHAT THIS MEANS — GUIDED SECTION ─── */}
+        <div className="bg-card border border-border overflow-hidden mb-8">
+          <div className="px-8 py-3 bg-muted border-b border-border">
+            <h3 className="font-heading text-lg text-foreground m-0">What This Means & What To Do Next</h3>
+          </div>
+          <div className="p-8">
+            {/* CLEAR */}
+            {isClear && (
+              <div className="space-y-4">
+                <p className="font-body text-[15px] leading-relaxed text-foreground">
+                  <strong>No Records Found:</strong> We searched South African criminal databases and found no warrants, court cases, or criminal records.
                 </p>
+                <p className="font-body text-[15px] leading-relaxed text-foreground">
+                  <strong>Remember:</strong> This doesn't guarantee safety. Most harmful people have no criminal record.
+                </p>
+                <div>
+                  <p className="font-body text-[15px] font-bold text-foreground mb-2">Next Steps:</p>
+                  <ul className="space-y-2 pl-5 list-disc font-body text-sm text-muted-foreground leading-relaxed">
+                    <li>Trust your instincts — if something feels off, it probably is</li>
+                    <li>Ask for references from mutual contacts</li>
+                    <li>Meet in public places for first meetings</li>
+                    <li>Tell someone where you're going and when you'll be back</li>
+                    <li>Keep your phone charged and accessible</li>
+                  </ul>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+
+            {/* YELLOW */}
+            {results.riskLevel === 'YELLOW' && (
+              <div className="space-y-4">
+                <p className="font-body text-[15px] leading-relaxed text-foreground">
+                  <strong>Minor Concerns Found:</strong> We found some records, but they appear to be minor or older offenses.
+                </p>
+                <div>
+                  <p className="font-body text-[15px] font-bold text-foreground mb-2">Next Steps:</p>
+                  <ul className="space-y-2 pl-5 list-disc font-body text-sm text-muted-foreground leading-relaxed">
+                    <li>Review the details carefully — consider type and timing of offense</li>
+                    <li>Use extra caution in initial interactions</li>
+                    <li>Meet only in public places</li>
+                    <li>Tell someone where you're going</li>
+                    <li>If this is for employment or roommate situation, consider asking about these records directly</li>
+                  </ul>
+                </div>
+              </div>
+            )}
+
+            {/* ORANGE */}
+            {results.riskLevel === 'ORANGE' && (
+              <div className="space-y-4">
+                <p className="font-body text-[15px] leading-relaxed text-foreground">
+                  <strong>Concerning Records Found:</strong> We found records that warrant serious caution.
+                </p>
+                <div>
+                  <p className="font-body text-[15px] font-bold text-foreground mb-2">Next Steps:</p>
+                  <ul className="space-y-2 pl-5 list-disc font-body text-sm text-muted-foreground leading-relaxed">
+                    <li>Review all details carefully before making any decisions</li>
+                    <li>If this is for dating: reconsider meeting this person</li>
+                    <li>If this is for employment/roommate: seek alternative options if possible</li>
+                    <li>If you must proceed: only meet in very public places, tell multiple people</li>
+                    <li>Consider reaching out to a support service for advice (click "Get Help" above)</li>
+                  </ul>
+                </div>
+              </div>
+            )}
+
+            {/* RED */}
+            {results.riskLevel === 'RED' && results.wantedPersonsCount > 0 && (
+              <div className="space-y-4">
+                <p className="font-body text-[15px] leading-relaxed text-destructive font-semibold">
+                  ⚠️ HIGH RISK — Serious Safety Concerns: We found records showing patterns of violence, domestic abuse, or serious crimes.
+                </p>
+                <div>
+                  <p className="font-body text-[15px] font-bold text-foreground mb-2">Immediate Actions:</p>
+                  <ul className="space-y-2 pl-5 list-disc font-body text-sm text-foreground leading-relaxed">
+                    <li><strong>Do NOT meet this person alone or in private</strong></li>
+                    <li>If already in contact: end communication safely</li>
+                    <li>If you feel threatened: call 10111 or 0800 428 428 immediately</li>
+                    <li>Tell trusted friends/family about the situation</li>
+                    <li>Save all communications as evidence</li>
+                    <li>Click "Get Help Now" above to speak with a GBV counselor</li>
+                  </ul>
+                </div>
+                <div className="bg-destructive/10 border-l-4 border-destructive p-4 mt-2">
+                  <p className="font-body text-[15px] font-bold text-destructive leading-relaxed m-0">
+                    Your safety is more important than any relationship, job, or living situation. There are people ready to help you. You don't have to face this alone.
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* SafetyWinScreen removed — celebration messaging contradicts safety warnings */}
-
-        {/* Critical disclaimer for CLEAR results */}
-        {results.riskLevel !== 'RED' && results.riskLevel !== 'ORANGE' && results.riskLevel !== 'YELLOW' && results.wantedPersonsCount === 0 && (
-          <div style={{
-            background: '#FEF3C7',
-            border: '2px solid #F59E0B',
-            borderRadius: 8,
-            padding: 24,
-            margin: '24px 0',
-            display: 'flex',
-            gap: 16,
-          }}>
-            <span style={{ fontSize: 32, flexShrink: 0 }}>⚠️</span>
-            <div>
-              <h3 style={{ margin: '0 0 12px', fontFamily: "'DM Serif Display', serif", fontSize: 18, color: '#92400E' }}>
-                IMPORTANT: What "CLEAR" Really Means
-              </h3>
-              <p style={{ margin: '8px 0', fontFamily: "'Syne', sans-serif", fontSize: 15, lineHeight: 1.6, color: '#78350F' }}>
-                <strong>No public records found does NOT mean this person is safe.</strong>
+        {/* ─── CRITICAL WARNING (CLEAR only) ─── */}
+        {isClear && (
+          <div className="border-2 border-yellow-500 bg-yellow-50 overflow-hidden mb-8">
+            <div className="bg-yellow-500 px-8 py-3 flex items-center gap-3">
+              <span className="text-white text-lg">⚠️</span>
+              <span className="font-body text-sm font-bold text-white tracking-wide uppercase">
+                Critical Warning — Read Before Proceeding
+              </span>
+            </div>
+            <div className="p-8 space-y-4">
+              <p className="font-body text-[15px] leading-relaxed text-yellow-900 font-semibold">
+                No public records found does NOT mean this person is safe.
               </p>
-              <p style={{ margin: '8px 0', fontFamily: "'Syne', sans-serif", fontSize: 14, lineHeight: 1.6, color: '#78350F' }}>
+              <p className="font-body text-sm leading-relaxed text-yellow-800">
                 In South Africa, only 8% of rape cases result in convictions. Most people who cause harm have never been arrested or convicted.
               </p>
-              <p style={{ margin: '8px 0', fontFamily: "'Syne', sans-serif", fontSize: 14, lineHeight: 1.6, color: '#78350F' }}>
-                <strong>A CLEAR result means:</strong> We found no criminal records, warrants, or court cases in the South African public databases we searched.
-              </p>
-              <p style={{ margin: '8px 0', fontFamily: "'Syne', sans-serif", fontSize: 14, lineHeight: 1.6, color: '#78350F' }}>
-                <strong>It does NOT mean:</strong> This person has never hurt anyone, has no history of abuse, or is guaranteed to be safe.
-              </p>
-              <p style={{
-                margin: '16px 0 0',
-                paddingTop: 16,
-                borderTop: '1px solid #FCD34D',
-                fontFamily: "'Syne', sans-serif",
-                fontSize: 14,
-                fontWeight: 700,
-                lineHeight: 1.6,
-                color: '#78350F',
-              }}>
-                Always: Trust your instincts. Ask for references. Meet in public places. Tell someone where you're going.
-              </p>
+              <div className="grid sm:grid-cols-2 gap-4 pt-2">
+                <div className="bg-white/60 p-4 border border-yellow-200">
+                  <p className="font-mono text-[10px] tracking-[0.1em] text-yellow-700 uppercase mb-2 font-bold">A clear result means</p>
+                  <p className="font-body text-sm text-yellow-800 leading-relaxed">
+                    We found no criminal records, warrants, or court cases in the South African public databases we searched.
+                  </p>
+                </div>
+                <div className="bg-white/60 p-4 border border-yellow-200">
+                  <p className="font-mono text-[10px] tracking-[0.1em] text-yellow-700 uppercase mb-2 font-bold">It does NOT mean</p>
+                  <p className="font-body text-sm text-yellow-800 leading-relaxed">
+                    This person has never hurt anyone, has no history of abuse, or is guaranteed to be safe.
+                  </p>
+                </div>
+              </div>
+              <div className="pt-3 border-t border-yellow-300">
+                <p className="font-body text-sm font-bold text-yellow-900 leading-relaxed">
+                  Always: Trust your instincts. Ask for references. Meet in public places. Tell someone where you're going.
+                </p>
+              </div>
             </div>
           </div>
         )}
 
-        {/* Identity Match Selector for multiple matches */}
+        {/* ─── EMPTY STATE (CLEAR) ─── */}
+        {isClear && (
+          <div className="bg-card border border-border overflow-hidden mb-8">
+            <div className="p-8 text-center">
+              <div className="bg-muted border border-border p-5 max-w-lg mx-auto mb-6">
+                <p className="font-mono text-[10px] tracking-[0.1em] text-muted-foreground uppercase mb-2 font-bold">This does not guarantee</p>
+                <ul className="font-body text-sm text-muted-foreground leading-relaxed space-y-1.5 text-left pl-5 list-disc">
+                  <li>No criminal history exists</li>
+                  <li>No unreported incidents occurred</li>
+                  <li>Complete safety or trustworthiness</li>
+                  <li>All public records were searched</li>
+                </ul>
+                <p className="font-body text-xs text-muted-foreground mt-4 text-left leading-relaxed">
+                  Public records are not comprehensive. They don't show sealed records, juvenile cases, recent crimes not yet in databases, protection orders, or private conduct. Always combine this search with your own judgment, references, and personal verification.
+                </p>
+              </div>
+
+              {/* PDF disclaimer */}
+              <p className="font-body text-xs text-muted-foreground max-w-lg mx-auto mb-4 leading-relaxed">
+                This report shows public records searched. It is NOT a certificate of safety or character reference. Do not use it to prove someone is "safe" or "cleared."
+              </p>
+              <button
+                onClick={handleDownload}
+                className="bg-foreground text-background px-7 py-3.5 font-body text-sm font-bold border-none cursor-pointer hover:opacity-90 transition-opacity"
+              >
+                Download Search Results (PDF)
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ─── IDENTITY MATCH SELECTOR ─── */}
         {showMatchSelector && isMultiple && !selectedMatch && (
           <IdentityMatchSelector
             matches={results.wantedPersons as unknown as PersonRecord[]}
@@ -521,37 +541,35 @@ const ResultsPageUpdated = () => {
           />
         )}
 
-        {/* Multiple Matches Warning */}
+        {/* ─── MULTIPLE MATCHES WARNING ─── */}
         {isMultiple && !showMatchSelector && (
-          <div style={{ background: '#FEF2F2', border: '2px solid #DC2626', padding: 32, marginBottom: 32 }}>
-            <span style={{ fontSize: 40 }}>⚠️</span>
-            <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, color: '#DC2626', margin: '12px 0' }}>
-              Multiple Possible Matches Found
-            </h2>
-            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, color: 'var(--mid)', lineHeight: 1.7, marginBottom: 20 }}>
-              We found {results.wantedPersonsCount} people with this name in public records. South Africa has many people with identical names. You MUST verify which person matches who you are searching for before making any decisions.
-            </p>
-            <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700, color: '#DC2626', background: 'white', padding: 16, borderLeft: '4px solid #DC2626', marginBottom: 24 }}>
-              Using information about the wrong person is illegal under POPIA. Verify identity carefully using date of birth, location, and case details.
+          <div className="border-2 border-destructive bg-destructive/5 overflow-hidden mb-8">
+            <div className="bg-destructive px-8 py-3">
+              <span className="font-body text-sm font-bold text-white">⚠️ Multiple Possible Matches Found</span>
             </div>
-
-            {/* Verification Checklist */}
-            <div style={{ background: '#EFF6FF', padding: 24, border: '1.5px solid #3B82F6', marginBottom: 24 }}>
-              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 700, color: '#1E40AF', marginBottom: 12 }}>
-                How to Verify the Correct Person
+            <div className="p-8">
+              <p className="font-body text-base text-muted-foreground leading-relaxed mb-5">
+                We found {results.wantedPersonsCount} people with this name in public records. South Africa has many people with identical names. You MUST verify which person matches who you are searching for before making any decisions.
               </p>
-              {['Compare date of birth if known', 'Check police station location (does it match where they live?)', 'Look at case dates (were they in that area at that time?)', 'Compare photos if available (note: photos may be old)', 'Review case details and offense descriptions'].map(item => (
-                <p key={item} style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#4B4453', lineHeight: 2 }}>✓ {item}</p>
-              ))}
-              <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: '#DC2626', fontWeight: 600, marginTop: 16, letterSpacing: '0.05em' }}>
-                IF YOU CANNOT VERIFY WITH CONFIDENCE, DO NOT USE THIS INFORMATION
-              </p>
-            </div>
+              <div className="bg-destructive/10 border-l-4 border-destructive p-4 mb-6">
+                <p className="font-body text-sm font-bold text-destructive">
+                  Using information about the wrong person is illegal under POPIA. Verify identity carefully using date of birth, location, and case details.
+                </p>
+              </div>
 
-            <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+              <div className="bg-blue-50 border border-blue-200 p-6 mb-6">
+                <p className="font-body text-base font-bold text-blue-800 mb-3">How to Verify the Correct Person</p>
+                {['Compare date of birth if known', 'Check police station location (does it match where they live?)', 'Look at case dates (were they in that area at that time?)', 'Compare photos if available (note: photos may be old)', 'Review case details and offense descriptions'].map(item => (
+                  <p key={item} className="font-body text-sm text-blue-700 leading-relaxed py-0.5">✓ {item}</p>
+                ))}
+                <p className="font-mono text-[11px] text-destructive font-bold mt-4 tracking-wide">
+                  IF YOU CANNOT VERIFY WITH CONFIDENCE, DO NOT USE THIS INFORMATION
+                </p>
+              </div>
+
               <button
                 onClick={() => navigate("/dashboard/new-check")}
-                style={{ border: '2px solid var(--ink)', background: 'transparent', color: 'var(--ink)', padding: '14px 24px', fontFamily: "'Syne', sans-serif", fontWeight: 600, cursor: 'pointer' }}
+                className="border-2 border-foreground bg-transparent text-foreground px-6 py-3.5 font-body text-sm font-semibold cursor-pointer hover:bg-foreground hover:text-background transition-colors"
               >
                 None of These Match
               </button>
@@ -559,7 +577,7 @@ const ResultsPageUpdated = () => {
           </div>
         )}
 
-        {/* Wanted Person Cards */}
+        {/* ─── WANTED PERSON CARDS ─── */}
         {results.isWanted && results.wantedPersons.map((person, idx) => {
           const confidence = getConfidence(person);
           const daysAgo = getDaysAgo(person.updated_at);
@@ -570,90 +588,73 @@ const ResultsPageUpdated = () => {
           const trustBadge = getSourceTrustBadge(person);
 
           return (
-            <div key={person.id}>
+            <div key={person.id} className="mb-8">
               {isMultiple && idx > 0 && (
-                <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: 'var(--muted)', textAlign: 'center', margin: '24px 0' }}>
-                  ── Not the same person ──
-                </p>
+                <p className="font-body text-xs text-muted-foreground text-center my-6">── Not the same person ──</p>
               )}
 
-              <div style={{ border: '1.5px solid var(--ink)', background: 'white', marginBottom: 24 }}>
-
-                {/* Header */}
-                <div style={{ padding: 32, borderBottom: '1.5px solid var(--cream)', position: 'relative' }}>
+              <div className="border border-foreground bg-card overflow-hidden">
+                {/* Card Header */}
+                <div className="p-8 border-b border-border relative">
                   {isMultiple && (
-                    <span style={{ position: 'absolute', top: 16, right: 16, background: '#7C3AED', color: 'white', fontFamily: "'JetBrains Mono', monospace", fontSize: 10, padding: '4px 12px' }}>
+                    <span className="absolute top-4 right-4 bg-primary text-primary-foreground font-mono text-[10px] px-3 py-1 tracking-wide">
                       MATCH {idx + 1} OF {results.wantedPersonsCount}
                     </span>
                   )}
-                  <span style={{
-                    display: 'inline-block', padding: '6px 16px', marginBottom: 16,
-                    fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: '0.1em',
-                    textTransform: 'uppercase', fontWeight: 600,
-                    background: person.source_dataset === 'saflii' ? '#1E40AF' : isViolent ? '#7C3AED' : person.legal_status === 'wanted' || !person.legal_status ? '#D97706' : '#6B7280',
-                    color: 'white',
-                  }}>
-                    {person.source_dataset === 'saflii' ? `⚖️ COURT JUDGMENT FOUND — ${person.charges}` : person.legal_status === 'wanted' || !person.legal_status ? `WANTED — ${person.charges}` : person.court_case_number ? 'COURT RECORD FOUND' : 'LEGAL NOTICE FOUND'}
+                  <span
+                    className="inline-block px-4 py-1.5 mb-4 font-mono text-[11px] tracking-[0.1em] uppercase font-semibold text-white"
+                    style={{
+                      background: person.source_dataset === 'saflii' ? '#1E40AF' : isViolent ? 'hsl(var(--purple))' : person.legal_status === 'wanted' || !person.legal_status ? 'hsl(var(--gold))' : 'hsl(var(--muted-foreground))',
+                    }}
+                  >
+                    {person.source_dataset === 'saflii' ? `⚖️ COURT JUDGMENT — ${person.charges}` : person.legal_status === 'wanted' || !person.legal_status ? `WANTED — ${person.charges}` : person.court_case_number ? 'COURT RECORD FOUND' : 'LEGAL NOTICE FOUND'}
                   </span>
-                  <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 32, color: 'var(--ink)', lineHeight: 1.2, marginBottom: 8 }}>
+                  <h2 className="font-heading text-3xl text-foreground leading-tight mb-2">
                     {person.full_name}
                   </h2>
                   {person.aliases && person.aliases.length > 0 && (
-                    <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: 'var(--muted)', marginBottom: 4 }}>
-                      Also known as: {person.aliases.join(', ')}
-                    </p>
+                    <p className="font-body text-xs text-muted-foreground mb-1">Also known as: {person.aliases.join(', ')}</p>
                   )}
                   {results.idNumber && (
-                    <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'var(--muted)' }}>
-                      ID: {redactId(results.idNumber)}
-                    </p>
+                    <p className="font-body text-sm text-muted-foreground">ID: {redactId(results.idNumber)}</p>
                   )}
                 </div>
 
-                {/* Trust Badge */}
-                <div style={{ padding: '12px 32px', borderBottom: '1.5px solid var(--cream)', display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
-                  <span style={{
-                    display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 12px',
-                    fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.08em',
-                    background: `${trustBadge.color}10`, color: trustBadge.color, fontWeight: 700, border: `1px solid ${trustBadge.color}30`,
-                  }}>
+                {/* Trust Badge & Tags */}
+                <div className="px-8 py-3 border-b border-border flex flex-wrap gap-2 items-center bg-muted/50">
+                  <span
+                    className="inline-flex items-center gap-1.5 px-3 py-1 font-mono text-[10px] tracking-wide font-bold border"
+                    style={{ background: `${trustBadge.color}10`, color: trustBadge.color, borderColor: `${trustBadge.color}30` }}
+                  >
                     {trustBadge.icon} {trustBadge.label} · TRUST: {trustBadge.level}
                   </span>
-
-                  {/* Crime Type Tags */}
                   {offenseCategories.map((cat, i) => (
-                    <span key={i} style={{
-                      display: 'inline-block', padding: '4px 12px',
-                      fontFamily: "'JetBrains Mono', monospace", fontSize: 11,
-                      background: isViolent ? '#F3E8FF' : '#FEF3C7',
-                      color: isViolent ? '#6D28D9' : '#92400E',
-                      fontWeight: 600,
-                    }}>
+                    <span key={i} className={`inline-block px-3 py-1 font-mono text-[11px] font-semibold ${isViolent ? 'bg-purple-100 text-purple-700' : 'bg-yellow-50 text-yellow-800'}`}>
                       {cat}
                     </span>
                   ))}
                 </div>
 
-                {/* Photo & Details */}
-                <div className="results-photo-grid" style={{ padding: 32, display: 'grid', gridTemplateColumns: '200px 1fr', gap: 32 }}>
+                {/* Photo & Details Grid */}
+                <div className="results-photo-grid p-8 grid grid-cols-[200px_1fr] gap-8">
                   <div>
                     {person.photo_url ? (
                       <>
-                        <div style={{ width: 200, height: 200, border: '1.5px solid var(--cream)', overflow: 'hidden' }}>
-                          <img src={person.photo_url} alt={person.full_name} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(40%)' }} />
+                        <div className="w-[200px] h-[200px] border border-border overflow-hidden">
+                          <img src={person.photo_url} alt={person.full_name} className="w-full h-full object-cover grayscale-[40%]" />
                         </div>
-                        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: 'var(--muted)', display: 'block', marginTop: 8 }}>Photo source: {sourceLabel}</span>
-                        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#EA580C', display: 'block', marginTop: 4 }}>Photos may be outdated. Do not rely on photo alone.</span>
+                        <span className="font-mono text-[10px] text-muted-foreground block mt-2">Source: {sourceLabel}</span>
+                        <span className="font-mono text-[10px] text-orange-600 block mt-1">Photos may be outdated. Do not rely on photo alone.</span>
                       </>
                     ) : (
-                      <div style={{ width: 200, height: 200, background: '#F5F5F4', border: '1.5px solid var(--cream)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-                        <span style={{ fontSize: 64, color: '#D1D5DB' }}>👤</span>
-                        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: 'var(--muted)', marginTop: 8 }}>No photo available</span>
+                      <div className="w-[200px] h-[200px] bg-muted border border-border flex items-center justify-center flex-col">
+                        <span className="text-6xl text-muted-foreground/30">👤</span>
+                        <span className="font-mono text-[11px] text-muted-foreground mt-2">No photo</span>
                       </div>
                     )}
                   </div>
 
-                  <div>
+                  <div className="space-y-4">
                     {[
                       { label: 'ALLEGED OFFENSE', value: person.charges, highlight: isViolent },
                       { label: 'GENDER', value: person.gender ? person.gender.charAt(0).toUpperCase() + person.gender.slice(1) : null },
@@ -665,59 +666,46 @@ const ResultsPageUpdated = () => {
                       { label: 'DATE LISTED', value: person.date_wanted ? new Date(person.date_wanted).toLocaleDateString('en-ZA') : null },
                       { label: 'DATA SOURCE', value: sourceLabel },
                     ].filter(d => d.value).map(d => (
-                      <div key={d.label} style={{ marginBottom: 16 }}>
-                        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--muted)', display: 'block', marginBottom: 4 }}>{d.label}</span>
-                        <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: d.highlight ? '#DC2626' : 'var(--ink)', fontWeight: d.highlight ? 700 : 500 }}>{d.value}</span>
+                      <div key={d.label}>
+                        <span className="font-mono text-[10px] tracking-[0.1em] uppercase text-muted-foreground block mb-1">{d.label}</span>
+                        <span className={`font-body text-[15px] ${d.highlight ? 'text-destructive font-bold' : 'text-foreground font-medium'}`}>{d.value}</span>
                       </div>
                     ))}
-
-                    {/* View on official source link */}
                     {officialUrl && (
-                      <div style={{ marginTop: 8 }}>
-                        <a
-                          href={officialUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          style={{
-                            display: 'inline-flex', alignItems: 'center', gap: 6,
-                            fontFamily: "'JetBrains Mono', monospace", fontSize: 12,
-                            color: '#2563EB', textDecoration: 'underline',
-                          }}
-                        >
-                          🔗 View on official source →
-                        </a>
-                      </div>
+                      <a href={officialUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 font-mono text-xs text-blue-600 underline mt-2">
+                        🔗 View on official source →
+                      </a>
                     )}
                   </div>
                 </div>
 
-                {/* What This Means */}
-                <div style={{ padding: 32, background: person.source_dataset === 'saflii' ? '#EFF6FF' : '#FFFBEB', borderTop: '1.5px solid var(--cream)', borderBottom: '1.5px solid var(--cream)' }}>
-                  <h3 style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 700, color: person.source_dataset === 'saflii' ? '#1E40AF' : 'var(--gold)', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
+                {/* What This Means (per-card) */}
+                <div className={`p-8 border-t border-b border-border ${person.source_dataset === 'saflii' ? 'bg-blue-50' : 'bg-yellow-50'}`}>
+                  <h3 className={`font-body text-base font-bold mb-3 flex items-center gap-2 ${person.source_dataset === 'saflii' ? 'text-blue-800' : 'text-yellow-800'}`}>
                     {person.source_dataset === 'saflii' ? '⚖️ What This Means' : '⚠️ What This Means'}
                   </h3>
-                  <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: 'var(--mid)', lineHeight: 1.7 }}>
+                  <p className="font-body text-[15px] text-muted-foreground leading-relaxed">
                     {person.source_dataset === 'saflii'
-                      ? `A criminal court judgment was found on SAFLII (Southern African Legal Information Institute) involving a person with this name. The judgment is from ${(person as any).saflii_court_code ? `the ${person.court_name}` : 'a South African High Court'}${(person as any).saflii_year ? ` (${(person as any).saflii_year})` : ''}. This is a public court record — not a RedFlaq determination.`
-                      : person.source_dataset === 'za_fic_sanctions' 
-                        ? `This person appears on the Financial Intelligence Centre (FIC) sanctions list. This indicates they are subject to financial restrictions or watchlist monitoring as of ${person.updated_at ? new Date(person.updated_at).toLocaleDateString('en-ZA') : 'recently'}.`
+                      ? `A criminal court judgment was found on SAFLII involving a person with this name. The judgment is from ${(person as any).saflii_court_code ? `the ${person.court_name}` : 'a South African High Court'}${(person as any).saflii_year ? ` (${(person as any).saflii_year})` : ''}. This is a public court record — not a RedFlaq determination.`
+                      : person.source_dataset === 'za_fic_sanctions'
+                        ? `This person appears on the FIC sanctions list. This indicates they are subject to financial restrictions or watchlist monitoring as of ${person.updated_at ? new Date(person.updated_at).toLocaleDateString('en-ZA') : 'recently'}.`
                         : `An active arrest warrant is listed on the SAPS wanted persons database as of ${person.updated_at ? new Date(person.updated_at).toLocaleDateString('en-ZA') : 'recently'}.`
                     }
                   </p>
                   {person.source_dataset === 'saflii' && (
-                    <div style={{ background: 'white', padding: 16, borderLeft: '3px solid #1E40AF', marginTop: 16 }}>
-                      <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: '#1E40AF', marginBottom: 8 }}>Important Limitations:</p>
-                      <ul style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'var(--mid)', lineHeight: 1.8, listStyle: 'disc', paddingLeft: 20, margin: 0 }}>
+                    <div className="bg-white border-l-[3px] border-blue-700 p-4 mt-4">
+                      <p className="font-body text-sm font-bold text-blue-800 mb-2">Important Limitations:</p>
+                      <ul className="font-body text-sm text-muted-foreground leading-relaxed list-disc pl-5 space-y-1">
                         <li>Only High Court and above — most GBV cases start in Magistrate Courts (not on SAFLII)</li>
                         <li>Not every conviction produces a written judgment</li>
-                        <li>Name-only matching means this may be a different person with the same name</li>
+                        <li>Name-only matching means this may be a different person</li>
                         <li>Courts may anonymise parties in certain cases</li>
                       </ul>
                     </div>
                   )}
-                  <div style={{ background: 'white', padding: 16, borderLeft: '3px solid #EA580C', marginTop: 16 }}>
-                    <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: '#DC2626', marginBottom: 8 }}>This Does NOT Confirm:</p>
-                    <ul style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'var(--mid)', lineHeight: 1.8, listStyle: 'disc', paddingLeft: 20, margin: 0 }}>
+                  <div className="bg-white border-l-[3px] border-orange-500 p-4 mt-4">
+                    <p className="font-body text-sm font-bold text-destructive mb-2">This Does NOT Confirm:</p>
+                    <ul className="font-body text-sm text-muted-foreground leading-relaxed list-disc pl-5 space-y-1">
                       <li>Whether this person is currently wanted or sanctioned</li>
                       <li>Whether they have been arrested or cleared</li>
                       <li>Current bail, custody, or legal status</li>
@@ -725,17 +713,15 @@ const ResultsPageUpdated = () => {
                       <li>Any conviction — only allegations</li>
                     </ul>
                   </div>
-                  <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', marginTop: 12, fontStyle: 'italic' }}>
-                    Public records are not updated in real-time. This listing may be outdated. The person may have been arrested, case may have progressed, or warrant may have been withdrawn.
+                  <p className="font-body text-sm text-muted-foreground mt-3 italic">
+                    Public records are not updated in real-time. This listing may be outdated.
                   </p>
                 </div>
 
-                {/* Verification Info */}
-                <div style={{ padding: 32, background: '#EFF6FF', borderBottom: '1.5px solid var(--cream)' }}>
-                  <h3 style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 700, color: '#1E40AF', display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-                    ✓ Verification Information
-                  </h3>
-                  <div className="results-verification-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+                {/* Verification Grid */}
+                <div className="p-8 bg-blue-50 border-b border-border">
+                  <h3 className="font-body text-base font-bold text-blue-800 flex items-center gap-2 mb-4">✓ Verification Information</h3>
+                  <div className="results-verification-grid grid grid-cols-2 gap-5">
                     {[
                       { label: 'SOURCE', value: sourceLabel },
                       { label: 'LAST VERIFIED', value: person.updated_at ? `${new Date(person.updated_at).toLocaleDateString('en-ZA')} (${daysAgo} days ago)` : 'Recently' },
@@ -744,14 +730,14 @@ const ResultsPageUpdated = () => {
                       { label: 'RECORD ID', value: person.id.slice(0, 8) },
                     ].map(item => (
                       <div key={item.label}>
-                        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#6B7280', display: 'block', marginBottom: 4 }}>{item.label}</span>
-                        <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'var(--ink)', fontWeight: 500 }}>{item.value}</span>
+                        <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground block mb-1">{item.label}</span>
+                        <span className="font-body text-sm text-foreground font-medium">{item.value}</span>
                       </div>
                     ))}
                   </div>
                   {daysAgo !== null && daysAgo > 7 && (
-                    <div style={{ background: '#FEF2F2', padding: 12, borderLeft: '3px solid #DC2626', marginTop: 16 }}>
-                      <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#DC2626', fontWeight: 600 }}>
+                    <div className="bg-destructive/10 border-l-[3px] border-destructive p-3 mt-4">
+                      <span className="font-body text-xs text-destructive font-semibold">
                         ⚠️ This data is {daysAgo} days old and may be outdated. Verify current status with SAPS directly.
                       </span>
                     </div>
@@ -759,36 +745,25 @@ const ResultsPageUpdated = () => {
                 </div>
 
                 {/* Identity Confidence */}
-                <div style={{ padding: 32, borderBottom: '1.5px solid var(--cream)' }}>
-                  <h3 style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 700, color: 'var(--ink)', marginBottom: 16 }}>
-                    Identity Verification Confidence
-                  </h3>
-                  <Progress
-                    value={confidence}
-                    className="h-3 mb-3"
-                    style={{ background: 'var(--cream)' }}
-                  />
-                  <p style={{
-                    fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 600, marginBottom: 12,
-                    color: confidence >= 71 ? 'var(--green)' : confidence >= 41 ? '#EA580C' : '#DC2626',
-                  }}>
+                <div className="p-8 border-b border-border">
+                  <h3 className="font-body text-base font-bold text-foreground mb-4">Identity Verification Confidence</h3>
+                  <Progress value={confidence} className="h-3 mb-3" />
+                  <p className={`font-body text-sm font-semibold mb-3 ${confidence >= 71 ? 'text-green-700' : confidence >= 41 ? 'text-orange-600' : 'text-destructive'}`}>
                     {confidence >= 71 ? '✓ HIGH CONFIDENCE — Strong identity indicators present' :
                      confidence >= 41 ? '⚠️ MEDIUM CONFIDENCE — Verify with additional data' :
                      '⚠️ LOW CONFIDENCE — Additional verification required'}
                   </p>
                   {confidence < 70 && (
-                    <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: 'var(--mid)', lineHeight: 1.6 }}>
+                    <p className="font-body text-xs text-muted-foreground leading-relaxed">
                       This match is based on name only. South Africa has many people with identical names. DO NOT assume this is the correct person without verifying date of birth, location, and other details.
                     </p>
                   )}
                 </div>
 
-                {/* Safety Warning */}
-                <div style={{ padding: 32, background: '#FAF5FF', borderBottom: '1.5px solid var(--cream)', borderLeft: '4px solid #7C3AED' }}>
-                  <h3 style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 700, color: '#7C3AED', display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
-                    💜 Safety First
-                  </h3>
-                  <ul style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'var(--mid)', lineHeight: 1.8, listStyle: 'none', padding: 0, margin: 0 }}>
+                {/* Safety First */}
+                <div className="p-8 bg-purple-50 border-b border-border border-l-4 border-l-primary">
+                  <h3 className="font-body text-base font-bold text-primary flex items-center gap-2 mb-3">💜 Safety First</h3>
+                  <ul className="font-body text-sm text-muted-foreground leading-relaxed space-y-2">
                     <li>❌ Do NOT confront this person yourself</li>
                     <li>❌ Do NOT meet them alone or in a private location</li>
                     <li>✅ Share this report with a trusted friend or family member</li>
@@ -798,57 +773,47 @@ const ResultsPageUpdated = () => {
                   </ul>
                 </div>
 
-                {/* Contact Section */}
-                <div style={{ padding: 32, background: '#F9FAFB' }}>
-                  <h3 style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 700, color: 'var(--ink)', marginBottom: 16 }}>
-                    📞 For Current Case Status, Contact:
-                  </h3>
-                  <div className="results-contact-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
-                    <div style={{ background: 'white', padding: 20, border: '1.5px solid var(--cream)' }}>
-                      <span style={{ fontSize: 24 }}>🚨</span>
-                      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, textTransform: 'uppercase', color: 'var(--muted)', display: 'block', marginTop: 8 }}>EMERGENCY</span>
-                      <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 700, color: '#DC2626', display: 'block' }}>10111</span>
-                      <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#78716C' }}>SAPS Emergency</span>
-                    </div>
-                    <div style={{ background: 'white', padding: 20, border: '1.5px solid var(--cream)' }}>
-                      <span style={{ fontSize: 24 }}>📞</span>
-                      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, textTransform: 'uppercase', color: 'var(--muted)', display: 'block', marginTop: 8 }}>CRIME STOP</span>
-                      <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 700, color: 'var(--ink)', display: 'block' }}>08600 10111</span>
-                      <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#78716C' }}>Anonymous Tips</span>
-                    </div>
-                    <div style={{ background: 'white', padding: 20, border: '1.5px solid var(--cream)' }}>
-                      <span style={{ fontSize: 24 }}>🏢</span>
-                      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, textTransform: 'uppercase', color: 'var(--muted)', display: 'block', marginTop: 8 }}>POLICE STATION</span>
-                      <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 600, color: 'var(--ink)', display: 'block' }}>{person.police_station || 'Contact local station'}</span>
-                      <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#78716C' }}>Contact for case details</span>
-                    </div>
+                {/* Emergency Contacts */}
+                <div className="p-8 bg-muted border-b border-border">
+                  <h3 className="font-body text-base font-bold text-foreground mb-4">📞 For Current Case Status, Contact:</h3>
+                  <div className="results-contact-grid grid grid-cols-3 gap-4">
+                    {[
+                      { emoji: '🚨', label: 'EMERGENCY', value: '10111', sub: 'SAPS Emergency', isRed: true },
+                      { emoji: '📞', label: 'CRIME STOP', value: '08600 10111', sub: 'Anonymous Tips', isRed: false },
+                      { emoji: '🏢', label: 'POLICE STATION', value: person.police_station || 'Contact local station', sub: 'Contact for case details', isRed: false },
+                    ].map(c => (
+                      <div key={c.label} className="bg-card p-5 border border-border">
+                        <span className="text-2xl">{c.emoji}</span>
+                        <span className="font-mono text-[10px] uppercase text-muted-foreground block mt-2">{c.label}</span>
+                        <span className={`font-body text-lg font-bold block ${c.isRed ? 'text-destructive' : 'text-foreground'}`}>{c.value}</span>
+                        <span className="font-body text-xs text-muted-foreground">{c.sub}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
-                {/* Action Buttons */}
-                <div className="results-actions" style={{ padding: 32, borderTop: '1.5px solid var(--ink)', display: 'flex', gap: 16, flexWrap: 'wrap' }}>
-                  <button onClick={handleDownload} style={{ background: 'var(--ink)', color: 'var(--paper)', padding: '14px 28px', fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer' }}>
+                {/* Actions */}
+                <div className="results-actions p-8 border-t border-foreground flex gap-4 flex-wrap">
+                  <button onClick={handleDownload} className="bg-foreground text-background px-7 py-3.5 font-body text-sm font-bold border-none cursor-pointer hover:opacity-90 transition-opacity">
                     Download Full Report
                   </button>
-                  <button onClick={() => { setDisputeRecord(person); setIsDisputeModalOpen(true); }} style={{ border: '2px solid var(--ink)', background: 'transparent', color: 'var(--ink)', padding: '14px 28px', fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, cursor: 'pointer' }}>
+                  <button onClick={() => { setDisputeRecord(person); setIsDisputeModalOpen(true); }} className="border-2 border-foreground bg-transparent text-foreground px-7 py-3.5 font-body text-sm font-bold cursor-pointer hover:bg-foreground hover:text-background transition-colors">
                     Challenge This Result
                   </button>
                   {officialUrl && (
-                    <a href={officialUrl} target="_blank" rel="noopener noreferrer" style={{ border: '2px solid var(--ink)', background: 'transparent', color: 'var(--ink)', padding: '14px 28px', fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, cursor: 'pointer', textDecoration: 'none', display: 'inline-block' }}>
+                    <a href={officialUrl} target="_blank" rel="noopener noreferrer" className="border-2 border-foreground bg-transparent text-foreground px-7 py-3.5 font-body text-sm font-bold cursor-pointer no-underline inline-block hover:bg-foreground hover:text-background transition-colors">
                       View Official Source
                     </a>
                   )}
                 </div>
 
                 {/* Legal Footer */}
-                <div style={{ padding: 32, background: '#FEF2F2', borderTop: '1.5px solid #DC2626' }}>
-                  <h4 style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: '#DC2626', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
-                    ⚖️ Important Legal Notice
-                  </h4>
-                  <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: 'var(--mid)', lineHeight: 1.8 }}>
+                <div className="p-8 bg-destructive/5 border-t-2 border-destructive">
+                  <h4 className="font-body text-sm font-bold text-destructive mb-3 flex items-center gap-2">⚖️ Important Legal Notice</h4>
+                  <p className="font-body text-xs text-muted-foreground leading-relaxed">
                     RedFlaq reports public records only, sourced from SAPS wanted persons lists, SAFLII court judgments, and FIC sanctions data via OpenSanctions. This is not a determination of guilt. Legal proceedings are ongoing until concluded by a court of law. Always verify current status with official sources before making any decisions.
                     <br /><br />
-                    DO NOT use this information to harass, discriminate against, defame, or harm this person. Unlawful use of this information is prohibited and prosecutable under South African law, including under POPIA (Protection of Personal Information Act) and the Harassment Act.
+                    DO NOT use this information to harass, discriminate against, defame, or harm this person. Unlawful use of this information is prohibited and prosecutable under South African law, including under POPIA and the Harassment Act.
                     <br /><br />
                     RedFlaq is not a replacement for SAPS, the courts, or any official authority. We provide no guarantee of completeness — records may be missing, outdated, or belong to a different person with the same name.
                     <br /><br />
@@ -862,114 +827,65 @@ const ResultsPageUpdated = () => {
 
         {/* Multi-match verification helper */}
         {isMultiple && (
-          <div style={{ background: 'var(--cream)', padding: 32, border: '1.5px solid var(--ink)', marginTop: 8 }}>
-            <h3 style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 700, color: 'var(--ink)', marginBottom: 16 }}>
-              How to Verify the Correct Person
-            </h3>
-            <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: 'var(--mid)', lineHeight: 1.8 }}>
+          <div className="bg-muted border border-foreground p-8 mt-2 mb-8">
+            <h3 className="font-body text-lg font-bold text-foreground mb-4">How to Verify the Correct Person</h3>
+            <div className="font-body text-[15px] text-muted-foreground leading-relaxed space-y-1">
               {['Compare date of birth if known', 'Check police station location (does it match where they live/lived?)', 'Look at case dates (were they in that area at that time?)', 'Compare photos if available (note: photos may be old)', 'Check case number format and court references'].map(item => (
-                <p key={item} style={{ marginBottom: 4 }}>✓ {item}</p>
+                <p key={item}>✓ {item}</p>
               ))}
             </div>
-            <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: 'var(--muted)', marginTop: 16, letterSpacing: '0.05em' }}>
+            <p className="font-mono text-[11px] text-muted-foreground mt-4 tracking-wide">
               IF YOU CANNOT VERIFY WITH CONFIDENCE, DO NOT USE THIS INFORMATION. CONTACT SAPS DIRECTLY OR REQUEST HUMAN VERIFICATION FROM REDFLAQ.
             </p>
-          </div>
-        )}
-
-        {/* Empty State */}
-        {!results.isWanted && (
-          <div style={{ border: '1.5px solid var(--ink)', background: 'var(--paper)', padding: 48, textAlign: 'center' }}>
-            <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, color: 'var(--ink)', marginBottom: 12 }}>
-              No Public Records Found
-            </h3>
-            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, color: 'var(--mid)', lineHeight: 1.7, maxWidth: 520, margin: '0 auto 24px' }}>
-              We searched South African databases and found no criminal records, warrants, or court cases for this name as of {searchDate}.
-            </p>
-
-            <div style={{ background: '#FEF3C7', border: '2px solid #F59E0B', borderRadius: 8, padding: 16, maxWidth: 520, margin: '0 auto 24px', display: 'flex', alignItems: 'center', gap: 12, justifyContent: 'center' }}>
-              <span style={{ fontSize: 24 }}>⚠️</span>
-              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700, color: '#92400E', margin: 0 }}>
-                READ THE CRITICAL WARNING BELOW BEFORE PROCEEDING
-              </p>
-            </div>
-
-            <div style={{ background: 'white', border: '1.5px solid var(--cream)', padding: 24, textAlign: 'left', maxWidth: 520, margin: '0 auto 24px' }}>
-              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: '#EA580C', marginBottom: 8 }}>
-                This Does NOT Guarantee:
-              </p>
-              <ul style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'var(--mid)', lineHeight: 1.8, listStyle: 'disc', paddingLeft: 20, margin: '0 0 12px' }}>
-                <li>No criminal history exists</li>
-                <li>No unreported incidents occurred</li>
-                <li>Complete safety or trustworthiness</li>
-                <li>All public records were searched</li>
-              </ul>
-              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'var(--mid)', marginTop: 12 }}>
-                Public records are not comprehensive. They don't show sealed records, juvenile cases, recent crimes not yet in databases, protection orders, or private conduct. Always combine this search with your own judgment, references, and personal verification. If something feels wrong, trust that feeling.
-              </p>
-            </div>
-
-            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#6B7280', maxWidth: 520, margin: '0 auto 16px', lineHeight: 1.6 }}>
-              This report shows public records searched. It is NOT a certificate of safety or character reference. Do not use it to prove someone is "safe" or "cleared."
-            </p>
-            <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
-              <button onClick={handleDownload} style={{ background: 'var(--ink)', color: 'var(--paper)', padding: '14px 28px', fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer' }}>
-                Download Search Results (PDF)
-              </button>
-            </div>
           </div>
         )}
 
         {/* Post-report guidance */}
         <PostReportGuidance riskLevel={results.riskLevel} />
 
-        {/* Navigation buttons */}
-        <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap', marginTop: 32 }}>
-          <button
-            onClick={() => navigate("/dashboard/new-check")}
-            style={{ background: '#7C3AED', color: 'white', padding: '14px 28px', fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer' }}
-          >
-            Run another safety check
-          </button>
-          <button
-            onClick={() => navigate("/dashboard")}
-            style={{ border: '2px solid var(--ink)', background: 'transparent', color: 'var(--ink)', padding: '14px 28px', fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, cursor: 'pointer' }}
-          >
-            Back to Dashboard
-          </button>
-        </div>
-        <p style={{ textAlign: 'center', marginTop: 20, fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#78716C' }}>
-          If this helped you, you can{" "}
-          <button
-            onClick={() => setShareOpen(true)}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontSize: 13, fontWeight: 700, color: '#7C3AED', textDecoration: 'underline', padding: 0 }}
-          >
-            share RedFlaq with another woman who needs it
-          </button>.
-        </p>
-        <p style={{ textAlign: 'center', marginTop: 16, fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#78716C', lineHeight: 1.7 }}>
-          Need to read this privately?{" "}
-          <button
-            onClick={() => {
-              toast.success("We've resent your results to your email. Check your inbox.");
-            }}
-            style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#7C3AED', textDecoration: 'underline', padding: 0 }}
-          >
-            We can email your results instead.
-          </button>
-        </p>
-        <p style={{ textAlign: 'center', marginTop: 16, fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#78716C', lineHeight: 1.7, maxWidth: 520, marginLeft: 'auto', marginRight: 'auto' }}>
-          RedFlaq is a support tool, not a replacement for police, social workers or legal advice. If you are in immediate danger, contact emergency services or trusted support organisations.
-        </p>
-        <div style={{ textAlign: 'center', marginTop: 16 }}>
-          <a
-            href="/"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#78716C' }}
-          >
-            ← Back to redflaq.com homepage
-          </a>
+        {/* ─── FOOTER ACTIONS ─── */}
+        <div className="mt-10 pt-8 border-t border-border">
+          <div className="flex gap-4 justify-center flex-wrap mb-6">
+            <button
+              onClick={() => navigate("/dashboard/new-check")}
+              className="bg-primary text-primary-foreground px-7 py-3.5 font-body text-sm font-bold border-none cursor-pointer hover:bg-primary/90 transition-colors"
+            >
+              Run another safety check
+            </button>
+            <button
+              onClick={() => navigate("/dashboard")}
+              className="border-2 border-foreground bg-transparent text-foreground px-7 py-3.5 font-body text-sm font-bold cursor-pointer hover:bg-foreground hover:text-background transition-colors"
+            >
+              Back to Dashboard
+            </button>
+          </div>
+
+          <p className="text-center font-body text-xs text-muted-foreground mb-3">
+            If this helped you, you can{" "}
+            <button
+              onClick={() => setShareOpen(true)}
+              className="bg-none border-none cursor-pointer font-body text-xs font-bold text-primary underline p-0"
+            >
+              share RedFlaq with another woman who needs it
+            </button>.
+          </p>
+          <p className="text-center font-body text-xs text-muted-foreground leading-relaxed mb-3">
+            Need to read this privately?{" "}
+            <button
+              onClick={() => toast.success("We've resent your results to your email. Check your inbox.")}
+              className="bg-none border-none cursor-pointer font-body text-xs text-primary underline p-0"
+            >
+              We can email your results instead.
+            </button>
+          </p>
+          <p className="text-center font-body text-[11px] text-muted-foreground leading-relaxed max-w-lg mx-auto mb-4">
+            RedFlaq is a support tool, not a replacement for police, social workers or legal advice. If you are in immediate danger, contact emergency services or trusted support organisations.
+          </p>
+          <div className="text-center">
+            <a href="/" className="font-body text-xs text-muted-foreground hover:text-foreground transition-colors">
+              ← Back to redflaq.com homepage
+            </a>
+          </div>
         </div>
       </div>
 
@@ -990,9 +906,7 @@ const ResultsPageUpdated = () => {
         onClose={() => { setShareControlsOpen(false); setPendingDownload(false); }}
         onAgree={handleShareControlsAgree}
       />
-
       <ShareInviteModal open={shareOpen} onOpenChange={setShareOpen} />
-
       <DisputeModal
         isOpen={isDisputeModalOpen}
         onClose={() => { setIsDisputeModalOpen(false); setDisputeRecord(null); }}

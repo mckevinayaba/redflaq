@@ -664,6 +664,8 @@ serve(async (req) => {
         results: matches,
         matches_found: matches.length,
         risk_level: riskLevel,
+        risk_score: riskScore,
+        risk_factors: riskFactors,
         is_wanted: matches.length > 0,
         search_strategies: searchStrategies,
         recommendation,

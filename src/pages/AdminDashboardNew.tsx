@@ -102,6 +102,7 @@ export default function AdminDashboardNew() {
       totalChecks: checksRes.count || 0,
       checksToday: checksTodayRes.count || 0,
       revenueMonth: revenue,
+      revenueAllTime: allTimeRevenue,
     });
     setChecks((recentChecksRes.data as CheckRow[]) || []);
     setDailyChecks(dailyArr);

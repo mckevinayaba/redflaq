@@ -1,55 +1,32 @@
 
 
-## Problem
+## Assessment
 
-The Tawk.to chat widget is:
-1. Auto-opening its chat window without user interaction
-2. Showing a proactive "We Are Here" popup message
-3. Displaying a "1 new message" notification badge above the navbar
+The `GBVResourcesSection.tsx` component already implements nearly everything in Prompt 1:
 
-All of these are controlled by Tawk.to's API settings.
+- All 9 province chips (clickable, single-select, no default)
+- All national resources with `tel:` links
+- All provincial resources for all 9 provinces with `tel:` links
+- WhatsApp button for Rape Crisis Cape Town
+- Category badges (Crisis, TCC, Counselling, Legal, Support)
+- Accessibility: `aria-pressed`, `aria-label`, 44px min touch targets
+- Mobile: chips wrap, cards stack vertically
+- Fade-in animation on province selection
 
-## Fix
+**One missing item**: "KZN Network on Violence Against Women: kznnetwork.co.za" is listed in Prompt 1 but not in the component's KZN data.
 
-Add `Tawk_API` configuration in `index.html` to suppress all auto-popups:
+## Plan
 
-1. **Set `Tawk_API.onLoad`** callback to:
-   - Minimize the widget on load (`Tawk_API.minimize()`)
-   - Hide the popup message (`Tawk_API.hideWidget()` is too aggressive — instead use `minimize`)
-2. **Set `Tawk_API.customStyle`** to hide the notification badge
-3. **Disable proactive chat triggers** by setting `Tawk_API.onBeforeLoad` to prevent auto-popup behaviors:
-   - `Tawk_API.visitor` settings won't help — the proactive messages ("We Are Here", auto-open) are configured in the Tawk.to dashboard under **Triggers**
-   
-### What we can control via code
+**Single change** in `src/components/safety/GBVResourcesSection.tsx`:
 
-In `index.html`, before the Tawk script loads, add:
+Add the KZN Network entry to the `"KwaZulu-Natal"` array in `provincialResources`. Since it's a website (not a phone number), render it as an external link rather than a `tel:` link.
 
-```javascript
-Tawk_API.onLoad = function() {
-  Tawk_API.minimize();
-};
-Tawk_API.onChatMessageVisitor = function() {};
-Tawk_API.onChatMessageSystem = function() {};
+```typescript
+// Add to KZN array:
+{ name: "KZN Network on Violence Against Women", phone: "kznnetwork.co.za", category: "support" }
 ```
 
-And add CSS to hide the unread badge:
+Update the `ResourceCard` component to detect non-phone entries (no digits in the phone field) and render as an external `https://` link instead of `tel:`.
 
-```css
-/* Hide Tawk notification badge */
-.tawk-min-container .tawk-badge {
-  display: none !important;
-}
-```
-
-### What requires Tawk.to dashboard changes
-
-The proactive "We Are Here" message and auto-open behavior are **Triggers** configured in the Tawk.to dashboard (Settings → Triggers). These cannot be fully suppressed from code alone. The `Tawk_API.minimize()` on load will close it if it auto-opens, but the trigger may still fire briefly.
-
-**Recommendation**: Go to your Tawk.to dashboard → Settings → Triggers → disable or delete the proactive greeting trigger. This is the only way to fully stop "We Are Here" and the auto-open.
-
-### Implementation steps
-
-1. Update `index.html`: Add `Tawk_API.onLoad` with `minimize()` call before the embed script
-2. Add CSS to hide the notification badge counter
-3. These changes will make the widget stay minimized and badge-free until a user explicitly clicks it
+No other changes needed. The structure, data, and functionality from Prompt 1 are already built and integrated into the Safety Tips page.
 

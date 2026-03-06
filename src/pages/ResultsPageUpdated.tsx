@@ -346,44 +346,29 @@ const ResultsPageUpdated = () => {
     : getRiskExplainer(effectiveRiskLevel, results.wantedPersons);
 
   return (
-    <div className="bg-background min-h-screen flex flex-col">
+    <div className="bg-background min-h-screen flex flex-col overflow-x-hidden">
       <NavbarPlinq />
-      {/* Spacer for fixed navbar */}
       <div style={{ height: 80 }} />
 
-      {/* Back to Dashboard bar */}
       <div className="bg-muted border-b border-border">
-        <div className="max-w-[900px] mx-auto px-6 py-3 flex items-center justify-between">
-          <button
-            onClick={() => navigate('/dashboard')}
-            className="flex items-center gap-2 text-sm font-body font-semibold text-muted-foreground hover:text-foreground transition-colors"
-            style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-          >
+        <div className="max-w-[900px] mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+          <button onClick={() => navigate('/dashboard')} className="flex items-center gap-2 text-sm font-body font-semibold text-muted-foreground hover:text-foreground transition-colors" style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
             <ArrowLeft className="h-4 w-4" /> Back to Dashboard
           </button>
-          <button
-            onClick={() => navigate('/dashboard/new-check')}
-            className="flex items-center gap-2 text-sm font-body font-semibold text-primary hover:text-primary/80 transition-colors"
-            style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-          >
+          <button onClick={() => navigate('/dashboard/new-check')} className="flex items-center gap-2 text-sm font-body font-semibold text-primary hover:text-primary/80 transition-colors" style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
             <Plus className="h-4 w-4" /> Run Another Check
           </button>
         </div>
       </div>
 
-      {/* Top bar */}
       <div className="bg-foreground text-background">
-        <div className="max-w-[900px] mx-auto px-6 py-3 flex items-center justify-between">
-          <span className="font-mono text-[10px] tracking-[0.15em] uppercase opacity-70">
-            RedFlaq · Search Report
-          </span>
-          <span className="font-mono text-[10px] tracking-[0.1em] opacity-50">
-            {searchDate} · {searchTime}
-          </span>
+        <div className="max-w-[900px] mx-auto px-4 sm:px-6 py-3 flex items-center justify-between flex-wrap gap-1">
+          <span className="font-mono text-[10px] tracking-[0.15em] uppercase opacity-70">RedFlaq · Search Report</span>
+          <span className="font-mono text-[10px] tracking-[0.1em] opacity-50">{searchDate} · {searchTime}</span>
         </div>
       </div>
 
-      <div className="results-container max-w-[900px] mx-auto px-6 pt-10 pb-20 flex-1">
+      <div className="results-container max-w-[900px] mx-auto px-4 sm:px-6 pt-6 sm:pt-10 pb-20 flex-1 w-full" style={{ maxWidth: '100%', overflowWrap: 'break-word', wordBreak: 'break-word' }}>
 
         {/* ─── RISK LEVEL HEADER ─── */}
         <div

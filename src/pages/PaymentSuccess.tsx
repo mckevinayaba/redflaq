@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
-import { CheckCircle2, ArrowRight, Loader2, Shield } from "lucide-react";
+import { CheckCircle2, ArrowRight, Loader2, Shield, AlertTriangle } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 const PACKAGES: Record<string, { label: string; credits: number; price: number }> = {
   single: { label: "One Safety Check", credits: 1, price: 99 },

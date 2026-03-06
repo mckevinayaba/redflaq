@@ -43,7 +43,6 @@ export default function ClaimReference() {
 
       if (!purchase && !manual) {
         setResult({ type: "error", message: "Reference not found. Check your confirmation email or contact support@redflaq.com" });
-        // Log attempt
         await supabase.from("reference_claim_logs" as any).insert({
           reference_number: ref, user_id: userId, outcome: "not_found", credits_added: 0,
         });
@@ -51,11 +50,11 @@ export default function ClaimReference() {
         return;
       }
 
-      const record = purchase || manual;
       const isPurchase = !!purchase;
+      const record = purchase || manual;
       const creditsLeft = isPurchase
-        ? (record.credits_remaining || 0)
-        : ((record.search_credits || 0) - (record.credits_used || 0));
+        ? ((record as any).credits_remaining || 0)
+        : (((record as any).search_credits || 0) - ((record as any).credits_used || 0));
 
       if (creditsLeft <= 0) {
         setResult({ type: "error", message: "You have already used all checks from this payment. Purchase more checks to continue." });

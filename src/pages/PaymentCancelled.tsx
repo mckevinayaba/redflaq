@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { XCircle, ArrowLeft, Shield } from "lucide-react";
-import PaymentModal from "@/components/PaymentModal";
+import { PaymentModal } from "@/components/PaymentModal";
 
 export default function PaymentCancelled() {
   const [retryOpen, setRetryOpen] = useState(false);

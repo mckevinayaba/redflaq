@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Shield, X } from "lucide-react";
-import PaymentModal from "@/components/PaymentModal";
+import { PaymentModal } from "@/components/PaymentModal";
 
 interface BuyChecksModalProps {
   open: boolean;

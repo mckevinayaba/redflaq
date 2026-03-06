@@ -99,7 +99,7 @@ const Index = () => {
           fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 500,
           letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.9)',
         }}>
-          1,000+ checks done <span style={{ opacity: 0.3, fontSize: 8, padding: '0 12px' }}>◆</span> No fingerprints. No waiting. No police station. Just clarity — in under 60 seconds.
+          Trusted by women across South Africa <span style={{ opacity: 0.3, fontSize: 8, padding: '0 12px' }}>◆</span> No fingerprints. No waiting. No police station. Just clarity — in under 60 seconds.
         </span>
       </div>
 

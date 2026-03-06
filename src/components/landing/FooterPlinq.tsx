@@ -31,9 +31,9 @@ const FooterPlinq = () => {
 
   return (
     <>
-      <footer style={{ background: 'linear-gradient(180deg, #0F0A1A, #110D1F)', padding: '80px 24px 40px' }}>
+      <footer style={{ background: 'linear-gradient(180deg, #0F0A1A, #110D1F)', padding: '60px 20px 32px', overflowX: 'hidden' as const }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-          <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_1fr] gap-16 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[2fr_1fr_1fr_1fr] gap-10 md:gap-16 mb-12">
             <div>
               <a href="/" className="flex items-center mb-4" style={{ textDecoration: 'none' }}>
                 <img src={redflaqLogo} alt="RedFlaq" style={{ height: 36, width: 'auto', display: 'block', filter: 'brightness(0) invert(1)' }} />
@@ -74,7 +74,7 @@ const FooterPlinq = () => {
               </ul>
               <div style={{ marginTop: 24 }}>
                 <h4 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, color: 'rgba(255,255,255,0.8)', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 12 }}>Follow RedFlaq</h4>
-                <div style={{ display: 'flex', gap: 10 }}>
+                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                   {[
                     { icon: 'facebook', href: "https://www.facebook.com/RedFlaqSafety/", path: "M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" },
                     { icon: 'instagram', href: "https://www.instagram.com/redflaqsafety/", paths: ["M2 6a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v12a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4z", "M12 9a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"], circle: true },
@@ -89,10 +89,12 @@ const FooterPlinq = () => {
                       rel="noopener noreferrer"
                       aria-label={s.icon}
                       style={{
-                        width: 36, height: 36, borderRadius: '50%',
+                        width: 40, height: 40, borderRadius: '50%',
                         background: 'rgba(255,255,255,0.08)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         transition: 'all 0.2s ease', textDecoration: 'none',
+                        WebkitTapHighlightColor: 'transparent',
+                        minWidth: 40, minHeight: 40,
                       }}
                       onMouseEnter={e => { e.currentTarget.style.background = '#7C3AED'; e.currentTarget.style.transform = 'scale(1.1)'; }}
                       onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.transform = 'scale(1)'; }}
@@ -126,9 +128,9 @@ const FooterPlinq = () => {
             </p>
           </div>
 
-          <div className="flex flex-wrap justify-between items-center gap-4" style={{ borderTop: '1px solid rgba(124,58,237,0.1)', paddingTop: 32 }}>
+          <div className="flex flex-col sm:flex-row flex-wrap justify-between items-center gap-4 text-center sm:text-left" style={{ borderTop: '1px solid rgba(124,58,237,0.1)', paddingTop: 32 }}>
             <div>
-              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.3)', display: 'block' }}>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.3)', display: 'block', wordBreak: 'break-word' as const }}>
                 © 2026 RedFlaq · All rights reserved · Public records only · POPIA‑aware
               </span>
               <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: 'rgba(255,255,255,0.25)', marginTop: 4, display: 'block' }}>

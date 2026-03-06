@@ -33,7 +33,7 @@ const FooterPlinq = () => {
     <>
       <footer style={{ background: 'linear-gradient(180deg, #0F0A1A, #110D1F)', padding: '60px 20px 32px', overflowX: 'hidden' as const }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-          <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_1fr] gap-16 mb-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[2fr_1fr_1fr_1fr] gap-10 md:gap-16 mb-12">
             <div>
               <a href="/" className="flex items-center mb-4" style={{ textDecoration: 'none' }}>
                 <img src={redflaqLogo} alt="RedFlaq" style={{ height: 36, width: 'auto', display: 'block', filter: 'brightness(0) invert(1)' }} />

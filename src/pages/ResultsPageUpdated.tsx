@@ -922,7 +922,7 @@ const ResultsPageUpdated = () => {
                 {/* Verification Grid */}
                 <div className="p-8 bg-blue-50 border-b border-border">
                   <h3 className="font-body text-base font-bold text-blue-800 flex items-center gap-2 mb-4">✓ Verification Information</h3>
-                  <div className="results-verification-grid grid grid-cols-2 gap-5">
+                  <div className="results-verification-grid grid grid-cols-1 sm:grid-cols-2 gap-5">
                     {[
                       { label: 'SOURCE', value: sourceLabel },
                       { label: 'LAST VERIFIED', value: person.updated_at ? `${new Date(person.updated_at).toLocaleDateString('en-ZA')} (${daysAgo} days ago)` : 'Recently' },

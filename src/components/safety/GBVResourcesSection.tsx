@@ -284,12 +284,12 @@ const GBVResourcesSection = () => {
               return (
                 <div
                   key={r.name}
-                  className="flex items-center justify-between gap-3 rounded-xl px-5 py-4"
+                  className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 rounded-xl px-5 py-4"
                   style={{ background: "rgba(255,255,255,0.05)" }}
                 >
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <p className="text-sm font-semibold text-white truncate">{r.name}</p>
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2 mb-1">
+                      <p className="text-sm font-semibold text-white">{r.name}</p>
                       <span
                         className="shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap"
                         style={{ background: badge.bg, color: badge.text }}
@@ -302,7 +302,7 @@ const GBVResourcesSection = () => {
                   <a
                     href={`tel:${r.phone.replace(/\s/g, "")}`}
                     aria-label={`Call ${r.name}`}
-                    className="inline-flex items-center gap-1.5 font-heading text-base font-bold whitespace-nowrap min-h-[44px] transition-opacity hover:opacity-80"
+                    className="inline-flex items-center gap-1.5 font-heading text-base font-bold whitespace-nowrap min-h-[44px] transition-opacity hover:opacity-80 shrink-0"
                     style={{ color: "#C4B5FD" }}
                   >
                     <Phone className="w-4 h-4 shrink-0" />

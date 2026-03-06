@@ -66,19 +66,26 @@ export default function VerifyEmail() {
           <img src={redflaqLogo} alt="RedFlaq" style={{ height: 56, width: 'auto', display: 'block' }} />
         </Link>
 
-        <div style={{ background: 'white', border: '1.5px solid #D6D3CD', padding: 40, textAlign: 'center' }}>
-          <div style={{ width: 64, height: 64, background: '#F3F0FF', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 24px' }}>
-            <Mail size={32} style={{ color: '#7C3AED' }} />
+          <div style={{
+            background: 'rgba(124,58,237,0.04)', border: '1px solid rgba(124,58,237,0.15)',
+            borderRadius: 24, padding: '48px 32px', backdropFilter: 'blur(16px)', textAlign: 'center',
+          }}>
+          <div style={{ width: 72, height: 72, background: 'rgba(124,58,237,0.15)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 28px' }}>
+            <Mail size={36} style={{ color: '#A855F7' }} />
           </div>
 
-          <h1 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, color: '#2D2235', marginBottom: 8 }}>
+          <h1 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 30, color: '#FFFFFF', marginBottom: 12 }}>
             Check your inbox
           </h1>
 
-          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', lineHeight: 1.6, marginBottom: 32 }}>
-            We've sent a verification link to{" "}
-            <strong style={{ color: '#2D2235' }}>{email}</strong>.
-            Click the link to activate your account.
+          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, marginBottom: 8 }}>
+            We sent a confirmation email to{" "}
+            <strong style={{ color: '#FFFFFF' }}>{email}</strong>.
+            Click the link in the email to activate your account before signing in.
+          </p>
+
+          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: 'rgba(255,255,255,0.4)', lineHeight: 1.6, marginBottom: 32 }}>
+            Can't find it? Check your <strong style={{ color: 'rgba(255,255,255,0.55)' }}>spam</strong> or <strong style={{ color: 'rgba(255,255,255,0.55)' }}>junk</strong> folder.
           </p>
 
           <button
@@ -86,10 +93,10 @@ export default function VerifyEmail() {
             style={{
               width: '100%', background: '#7C3AED', color: 'white', padding: 16,
               fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700,
-              border: 'none', cursor: 'pointer', borderRadius: 4,
+              border: 'none', cursor: 'pointer', borderRadius: 50,
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+              boxShadow: '0 4px 20px rgba(124,58,237,0.35)',
             }}
-            className="hover:!bg-[#6D28D9] transition-colors"
           >
             Already verified? Continue <ArrowRight size={16} />
           </button>
@@ -98,18 +105,19 @@ export default function VerifyEmail() {
             onClick={handleResend}
             disabled={resending}
             style={{
-              background: 'none', border: '1.5px solid #D6D3CD', padding: '12px 24px',
+              background: 'transparent', border: '1.5px solid rgba(124,58,237,0.3)',
+              padding: '14px 24px',
               fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 600,
-              color: '#7C3AED', cursor: resending ? 'not-allowed' : 'pointer',
-              width: '100%', marginTop: 12, opacity: resending ? 0.7 : 1, borderRadius: 4,
+              color: '#A855F7', cursor: resending ? 'not-allowed' : 'pointer',
+              width: '100%', marginTop: 12, opacity: resending ? 0.7 : 1, borderRadius: 50,
             }}
           >
-            {resending ? "Sending..." : "Resend verification email"}
+            {resending ? "Sending..." : "Resend confirmation email"}
           </button>
         </div>
 
         <div className="text-center mt-6">
-          <Link to="/" style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#78716C' }}>← Back to home</Link>
+          <Link to="/signup?mode=signin" style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: 'rgba(255,255,255,0.5)' }}>← Back to sign in</Link>
         </div>
       </div>
     </div>

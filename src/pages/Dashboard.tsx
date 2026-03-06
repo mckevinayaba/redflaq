@@ -268,13 +268,23 @@ export default function Dashboard() {
 
       {/* Quick actions */}
       <div className="flex flex-wrap gap-4">
-        <Link
-          to="/dashboard/new-check"
-          className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-body font-bold text-sm rounded-lg hover:opacity-90 transition-colors shadow-sm"
-        >
-          <Shield className="h-4 w-4" />
-          Run a new safety check
-        </Link>
+        {creditsRemaining > 0 ? (
+          <Link
+            to="/dashboard/new-check"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-body font-bold text-sm rounded-lg hover:opacity-90 transition-colors shadow-sm"
+          >
+            <Shield className="h-4 w-4" />
+            Run a new safety check
+          </Link>
+        ) : (
+          <button
+            onClick={() => setBuyModalOpen(true)}
+            className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-body font-bold text-sm rounded-lg hover:opacity-90 transition-colors shadow-sm"
+          >
+            <Shield className="h-4 w-4" />
+            Buy More Checks
+          </button>
+        )}
         <button
           onClick={() => setShareOpen(true)}
           className="inline-flex items-center gap-2 px-6 py-3 border border-border text-foreground font-body font-medium text-sm rounded-lg hover:bg-muted transition-colors"

@@ -471,6 +471,31 @@ nav, header {
     from { height: var(--radix-accordion-content-height); opacity: 1; }
     to { height: 0; opacity: 0; }
   }
+
+  /* Cross-browser backdrop-filter with vendor prefixes */
+  .backdrop-blur-sm {
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+  }
+  .backdrop-blur {
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+  .backdrop-blur-md {
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+  .backdrop-blur-lg {
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+  }
+
+  /* Scrollable containers — iOS smooth scroll */
+  .overflow-y-auto,
+  .overflow-x-auto,
+  .overflow-auto {
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 /* Ensure navbar is always visible — max specificity for in-app browsers */
@@ -478,4 +503,29 @@ nav, header {
   visibility: visible !important;
   opacity: 1 !important;
   display: block !important;
+}
+
+/* Safari position:sticky fix */
+@supports (-webkit-touch-callout: none) {
+  .sticky {
+    position: -webkit-sticky;
+    position: sticky;
+  }
+}
+
+/* clip-path fallback for older browsers */
+@supports not (clip-path: polygon(0 0)) {
+  [style*="clip-path"],
+  [style*="ClipPath"] {
+    border-radius: 4px !important;
+    -webkit-clip-path: none !important;
+    clip-path: none !important;
+  }
+}
+
+/* Samsung Internet / Opera Mini safe gradients */
+@supports not (background: linear-gradient(135deg, red, blue)) {
+  .animate-gradient {
+    background: #7C3AED !important;
+  }
 }

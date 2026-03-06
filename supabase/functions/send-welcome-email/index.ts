@@ -55,14 +55,14 @@ serve(async (req) => {
               <p style="color: #333; font-size: 14px; margin: 0;">✅ Get a clear risk report you can share</p>
             </div>
             <div style="text-align: center; margin: 32px 0;">
-              <a href="https://redflaq.co.za/dashboard/new-check" style="display: inline-block; background: #7C3AED; color: white; padding: 16px 40px; text-decoration: none; font-size: 16px; font-weight: 700; border-radius: 8px;">Run Your First Check →</a>
+              <a href="https://redflaq.com/dashboard/new-check" style="display: inline-block; background: #7C3AED; color: white; padding: 16px 40px; text-decoration: none; font-size: 16px; font-weight: 700; border-radius: 8px;">Run Your First Check →</a>
             </div>
             <p style="color: #666; font-size: 13px; line-height: 1.6;">
-              Questions? Reply to this email or visit <a href="https://redflaq.co.za" style="color: #7C3AED;">redflaq.co.za</a>
+              Questions? Reply to this email or visit <a href="https://redflaq.com" style="color: #7C3AED;">redflaq.com</a>
             </p>
             <hr style="border: none; border-top: 1px solid #E5E7EB; margin: 32px 0;" />
             <p style="color: #999; font-size: 11px; text-align: center;">
-              RedFlaq · South African Background Checks · <a href="https://redflaq.co.za/privacy" style="color: #999;">Privacy Policy</a> · <a href="https://redflaq.co.za/terms" style="color: #999;">Terms</a>
+              RedFlaq · South African Background Checks · <a href="https://redflaq.com/privacy" style="color: #999;">Privacy Policy</a> · <a href="https://redflaq.com/terms" style="color: #999;">Terms</a>
             </p>
           </div>
         `,

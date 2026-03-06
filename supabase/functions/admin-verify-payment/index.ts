@@ -93,7 +93,7 @@ serve(async (req) => {
                   </div>
                   
                   <p style="color: #666; font-size: 13px; line-height: 1.6;">
-                    If you did not make this purchase, please contact us at support@redflaq.co.za
+                    If you did not make this purchase, please contact us at support@redflaq.com
                   </p>
                   
                   <hr style="border: none; border-top: 1px solid #E5E7EB; margin: 32px 0;" />

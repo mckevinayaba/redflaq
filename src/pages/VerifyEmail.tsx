@@ -60,7 +60,7 @@ export default function VerifyEmail() {
   };
 
   return (
-    <div style={{ background: '#F7F4F0', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+    <div style={{ background: 'linear-gradient(135deg, #0F0A1A 0%, #1A1035 50%, #0F0A1A 100%)', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
       <div style={{ maxWidth: 480, width: '100%' }}>
         <Link to="/" className="flex items-center mb-8 justify-center">
           <img src={redflaqLogo} alt="RedFlaq" style={{ height: 56, width: 'auto', display: 'block' }} />

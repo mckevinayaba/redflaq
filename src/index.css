@@ -441,14 +441,6 @@ nav, header {
   opacity: 1 !important;
 }
 
-@supports not (clip-path: polygon(0 0)) {
-  [style*="clip-path"],
-  [style*="ClipPath"] {
-    border-radius: 4px !important;
-    -webkit-clip-path: none !important;
-    clip-path: none !important;
-  }
-}
 
 @layer utilities {
   /* Shake animation for consent hint */

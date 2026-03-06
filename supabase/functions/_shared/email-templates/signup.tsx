@@ -4,7 +4,6 @@ import * as React from 'npm:react@18.3.1'
 
 import {
   Body,
-  Button,
   Container,
   Head,
   Heading,
@@ -12,7 +11,10 @@ import {
   Img,
   Link,
   Preview,
+  Section,
   Text,
+  Button,
+  Hr,
 } from 'npm:@react-email/components@0.0.22'
 
 interface SignupEmailProps {
@@ -30,44 +32,61 @@ export const SignupEmail = ({
 }: SignupEmailProps) => (
   <Html lang="en" dir="ltr">
     <Head />
-    <Preview>Confirm your email to activate your RedFlaq account 🛡️</Preview>
+    <Preview>Welcome to RedFlaq — one click to activate your account 💜</Preview>
     <Body style={main}>
-      <Container style={container}>
-        <Img
-          src="https://redflaq.lovable.app/redflaq-logo-email.png"
-          alt="RedFlaq"
-          height="44"
-          style={{ margin: '0 0 8px' }}
-        />
-        <Text style={subtitle}>Public Record Safety Check · South Africa</Text>
-        <Heading style={h1}>Confirm your email</Heading>
-        <Text style={text}>
-          Thank you for joining{' '}
-          <Link href={siteUrl} style={link}>
-            <strong>RedFlaq</strong>
-          </Link>
-          . To activate your account, please confirm your email address (
-          <Link href={`mailto:${recipient}`} style={link}>
-            {recipient}
-          </Link>
-          ) by clicking the button below. It takes one second.
-        </Text>
-        <Button style={button} href={confirmationUrl}>
-          Confirm Your Email →
-        </Button>
-        <Text style={mutedNote}>
-          If you did not create a RedFlaq account, you can safely ignore this email.
-        </Text>
-        <Text style={divider}>―</Text>
-        <Text style={sectionHeading}>Once confirmed, you can:</Text>
-        <Text style={listItem}>✅ Run a public-record safety check in under 60 seconds</Text>
-        <Text style={listItem}>✅ Get a clear risk report for R99</Text>
-        <Text style={listItem}>✅ Keep your search 100% confidential</Text>
-        <Text style={footerBrand}>
-          RedFlaq is operated by Setup A Startup (Pty) Ltd · South Africa ·{' '}
-          <Link href="https://redflaq.com/privacy" style={footerLink}>Privacy</Link> ·{' '}
-          <Link href="https://redflaq.com/terms" style={footerLink}>Terms</Link>
-        </Text>
+      <Container style={outerWrapper}>
+        <Container style={card}>
+          {/* HEADER */}
+          <Section style={header}>
+            <Img
+              src="https://redflaq.lovable.app/redflaq-logo-email.png"
+              alt="RedFlaq"
+              height="44"
+              style={{ margin: '0 auto 12px', display: 'block' }}
+            />
+            <Text style={headerSubtitle}>Public Record Safety Check · South Africa</Text>
+          </Section>
+
+          {/* BODY */}
+          <Section style={body}>
+            <Heading style={h1}>Welcome! 💜</Heading>
+            <Text style={paragraph}>
+              Thank you for joining RedFlaq. Click the button below to confirm your email and activate your account — it takes one second.
+            </Text>
+
+            {/* CTA BUTTON */}
+            <Section style={buttonWrapper}>
+              <Button style={ctaButton} href={confirmationUrl}>
+                Confirm Your Email →
+              </Button>
+            </Section>
+
+            <Text style={mutedCenter}>
+              If you did not create a RedFlaq account, you can safely ignore this email.
+            </Text>
+
+            <Hr style={divider} />
+
+            {/* WHAT YOU CAN DO */}
+            <Text style={sectionLabel}>Once confirmed, you can:</Text>
+            <Section style={benefitsBox}>
+              <Text style={benefitItem}>✅ &nbsp;Run a public-record safety check in under 60 seconds</Text>
+              <Text style={benefitItem}>✅ &nbsp;Get a clear risk report for R99</Text>
+              <Text style={benefitItem}>✅ &nbsp;Keep your search 100% confidential</Text>
+            </Section>
+          </Section>
+
+          {/* FOOTER */}
+          <Section style={footer}>
+            <Text style={footerText}>
+              Questions? Reply to this email or visit{' '}
+              <Link href="https://redflaq.com" style={footerLink}>redflaq.com</Link>
+            </Text>
+            <Text style={footerMuted}>
+              RedFlaq is operated by Setup A Startup (Pty) Ltd · Johannesburg, South Africa
+            </Text>
+          </Section>
+        </Container>
       </Container>
     </Body>
   </Html>
@@ -75,40 +94,131 @@ export const SignupEmail = ({
 
 export default SignupEmail
 
-const main = { backgroundColor: '#ffffff', fontFamily: "'Syne', 'Segoe UI', Arial, sans-serif" }
-const container = { padding: '40px 28px' }
-const subtitle = {
+/* ─── Styles ─── */
+const main = {
+  backgroundColor: '#f9f7f5',
+  fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
+}
+
+const outerWrapper = {
+  padding: '40px 20px',
+}
+
+const card = {
+  maxWidth: '560px',
+  margin: '0 auto',
+  backgroundColor: '#ffffff',
+  borderRadius: '16px',
+  overflow: 'hidden' as const,
+  boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+}
+
+const header = {
+  backgroundColor: '#1a0a2e',
+  padding: '32px 40px 24px',
+  textAlign: 'center' as const,
+}
+
+const headerSubtitle = {
+  margin: '0',
+  color: 'rgba(255,255,255,0.6)',
   fontSize: '13px',
-  color: '#78716C',
-  letterSpacing: '0.02em',
-  margin: '0 0 28px',
+  letterSpacing: '1px',
+  textTransform: 'uppercase' as const,
 }
+
+const body = {
+  padding: '40px 40px 32px',
+}
+
 const h1 = {
-  fontSize: '24px',
-  fontWeight: 'bold' as const,
-  fontFamily: "'DM Serif Display', Georgia, serif",
-  color: '#0F0A1A',
   margin: '0 0 16px',
+  fontSize: '26px',
+  fontWeight: '700' as const,
+  color: '#1a0a2e',
+  lineHeight: '1.3',
 }
-const text = {
-  fontSize: '15px',
-  color: '#4B4453',
-  lineHeight: '1.7',
-  margin: '0 0 28px',
+
+const paragraph = {
+  margin: '0 0 24px',
+  fontSize: '16px',
+  color: '#444444',
+  lineHeight: '1.6',
 }
-const link = { color: '#7C3AED', textDecoration: 'underline' }
-const button = {
+
+const buttonWrapper = {
+  textAlign: 'center' as const,
+  padding: '8px 0 32px',
+}
+
+const ctaButton = {
+  display: 'inline-block' as const,
   backgroundColor: '#7C3AED',
   color: '#ffffff',
-  fontSize: '15px',
-  fontWeight: '700' as const,
+  fontSize: '16px',
+  fontWeight: '600' as const,
+  textDecoration: 'none',
+  padding: '16px 40px',
   borderRadius: '50px',
-  padding: '14px 32px',
+  letterSpacing: '0.3px',
+}
+
+const mutedCenter = {
+  margin: '0 0 32px',
+  fontSize: '13px',
+  color: '#999999',
+  textAlign: 'center' as const,
+}
+
+const divider = {
+  border: 'none',
+  borderTop: '1px solid #eeeeee',
+  margin: '0 0 28px',
+}
+
+const sectionLabel = {
+  margin: '0 0 14px',
+  fontSize: '14px',
+  fontWeight: '700' as const,
+  color: '#1a0a2e',
+  textTransform: 'uppercase' as const,
+  letterSpacing: '0.5px',
+}
+
+const benefitsBox = {
+  backgroundColor: '#f3f0ff',
+  borderRadius: '12px',
+  padding: '20px 24px',
+}
+
+const benefitItem = {
+  padding: '6px 0',
+  fontSize: '15px',
+  color: '#333333',
+  margin: '0',
+}
+
+const footer = {
+  backgroundColor: '#f3f0ff',
+  padding: '24px 40px',
+  borderTop: '1px solid #e8e4f4',
+}
+
+const footerText = {
+  margin: '0 0 6px',
+  fontSize: '13px',
+  color: '#666666',
+  textAlign: 'center' as const,
+}
+
+const footerLink = {
+  color: '#7C3AED',
   textDecoration: 'none',
 }
-const mutedNote = { fontSize: '13px', color: '#78716C', margin: '28px 0 0', lineHeight: '1.6' }
-const divider = { fontSize: '13px', color: '#D6D3D1', margin: '24px 0', textAlign: 'center' as const }
-const sectionHeading = { fontSize: '14px', color: '#1a1a1a', fontWeight: '700' as const, margin: '0 0 8px' }
-const listItem = { fontSize: '14px', color: '#4B4453', margin: '0 0 4px', lineHeight: '1.6' }
-const footerBrand = { fontSize: '11px', color: '#A8A29E', margin: '28px 0 0', borderTop: '1px solid #E7E5E4', paddingTop: '16px' }
-const footerLink = { color: '#A8A29E', textDecoration: 'underline' }
+
+const footerMuted = {
+  margin: '0',
+  fontSize: '12px',
+  color: '#999999',
+  textAlign: 'center' as const,
+}

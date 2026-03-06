@@ -77,6 +77,8 @@ const FooterPlinq = () => {
                   { label: "Facebook", href: "https://www.facebook.com/RedFlaqSafety/" },
                   { label: "Instagram", href: "https://www.instagram.com/redflaqsafety/" },
                   { label: "LinkedIn", href: "https://www.linkedin.com/company/redflaq/" },
+                  { label: "X", href: "https://x.com/RedFlaqSafety" },
+                  { label: "TikTok", href: "https://www.tiktok.com/@redflaqsafety" },
                 ].map(s => (
                   <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.6)', textDecoration: 'none', transition: 'color 0.2s', display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(168,85,247,0.08)', border: '1px solid rgba(168,85,247,0.15)', padding: '6px 14px', borderRadius: 50 }} onMouseEnter={e => { e.currentTarget.style.color = '#fff'; e.currentTarget.style.background = 'rgba(168,85,247,0.2)'; }} onMouseLeave={e => { e.currentTarget.style.color = 'rgba(255,255,255,0.6)'; e.currentTarget.style.background = 'rgba(168,85,247,0.08)'; }}>{s.label}</a>
                 ))}

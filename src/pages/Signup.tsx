@@ -121,7 +121,7 @@ export default function Signup() {
     if (mode === "signup") {
       const { error } = await supabase.auth.signUp({
         email: email.trim(), password,
-        options: { data: { full_name: fullName.trim() }, emailRedirectTo: `${window.location.origin}/signup?mode=signin&confirmed=true` },
+        options: { data: { full_name: fullName.trim() }, emailRedirectTo: `https://redflaq.com/?confirmed=true` },
       });
       if (error) {
         toast({ title: "Sign up failed", description: error.message, variant: "destructive" });

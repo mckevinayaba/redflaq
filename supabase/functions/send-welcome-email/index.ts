@@ -30,39 +30,53 @@ serve(async (req) => {
     const now = new Date();
     const sastTime = now.toLocaleString("en-ZA", { timeZone: "Africa/Johannesburg" });
 
-    // 1. Welcome email to user
+    // 1. Welcome email to user — tells them to confirm their email
     await supabase.functions.invoke('send-email', {
       body: {
         admin_password: adminPassword,
         to: email,
-        subject: `Welcome to RedFlaq, ${firstName} 🛡️`,
+        subject: `Welcome to RedFlaq, ${firstName} — one step to go`,
         html: `
-          <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
-            <div style="text-align: center; margin-bottom: 32px;">
-              <img src="https://redflaq.lovable.app/redflaq-logo-email.png" alt="RedFlaq" height="48" style="display: inline-block; margin-bottom: 12px; height: 48px; width: auto;" />
-              <p style="color: #666; font-size: 14px; margin-top: 4px;">Background Verification Service</p>
+          <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; background: #ffffff;">
+            <div style="text-align: center; margin-bottom: 28px;">
+              <img src="https://redflaq.lovable.app/redflaq-logo-email.png" alt="RedFlaq" height="48" style="display: inline-block; margin-bottom: 8px; height: 48px; width: auto;" />
+              <p style="color: #78716C; font-size: 13px; margin: 4px 0 0; letter-spacing: 0.02em;">Public Record Safety Check · South Africa</p>
             </div>
-            <h2 style="font-size: 24px; color: #1a1a1a; margin: 0 0 16px;">Welcome, ${firstName}!</h2>
-            <p style="color: #333; font-size: 15px; line-height: 1.7; margin-bottom: 16px;">
-              You've taken the first step to protecting yourself and your loved ones. RedFlaq checks public records across South Africa to help you make safer decisions.
-            </p>
+
+            <h2 style="font-size: 24px; color: #1a1a1a; margin: 0 0 16px; font-family: Georgia, serif;">Welcome, ${firstName}! One step to go.</h2>
+
             <p style="color: #333; font-size: 15px; line-height: 1.7; margin-bottom: 24px;">
-              Here's what you can do:
+              Thank you for joining RedFlaq. To activate your account, please confirm your email address by clicking the button in the <strong>separate confirmation email</strong> we just sent you. It takes one second.
             </p>
-            <div style="background: #F9FAFB; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
-              <p style="color: #333; font-size: 14px; margin: 0 0 8px;">✅ Run a background check in under 60 seconds</p>
-              <p style="color: #333; font-size: 14px; margin: 0 0 8px;">✅ Search across SAPS, court records &amp; gazette data</p>
-              <p style="color: #333; font-size: 14px; margin: 0;">✅ Get a clear risk report you can share</p>
+
+            <div style="text-align: center; margin: 28px 0;">
+              <div style="display: inline-block; background: #F3F0FF; border: 1px solid #E9E0FF; border-radius: 12px; padding: 20px 28px;">
+                <p style="color: #7C3AED; font-size: 14px; font-weight: 700; margin: 0 0 4px;">📧 Check your inbox now</p>
+                <p style="color: #78716C; font-size: 13px; margin: 0;">Look for an email with the subject "Confirm your email"</p>
+              </div>
             </div>
-            <div style="text-align: center; margin: 32px 0;">
-              <a href="https://redflaq.com/dashboard/new-check" style="display: inline-block; background: #7C3AED; color: white; padding: 16px 40px; text-decoration: none; font-size: 16px; font-weight: 700; border-radius: 8px;">Run Your First Check →</a>
+
+            <p style="color: #78716C; font-size: 13px; line-height: 1.6; margin-bottom: 28px; text-align: center;">
+              Check your <strong>spam</strong> or <strong>junk</strong> folder if you don't see it within 2 minutes.
+            </p>
+
+            <hr style="border: none; border-top: 1px solid #E5E7EB; margin: 28px 0;" />
+
+            <p style="color: #333; font-size: 14px; font-weight: 700; margin: 0 0 12px;">Once confirmed, you can:</p>
+            <div style="margin-bottom: 24px;">
+              <p style="color: #333; font-size: 14px; margin: 0 0 6px;">✅ Run a public-record safety check in under 60 seconds</p>
+              <p style="color: #333; font-size: 14px; margin: 0 0 6px;">✅ Get a clear risk report for R99</p>
+              <p style="color: #333; font-size: 14px; margin: 0;">✅ Keep your search 100% confidential</p>
             </div>
+
             <p style="color: #666; font-size: 13px; line-height: 1.6;">
               Questions? Reply to this email or visit <a href="https://redflaq.com" style="color: #7C3AED;">redflaq.com</a>
             </p>
-            <hr style="border: none; border-top: 1px solid #E5E7EB; margin: 32px 0;" />
+
+            <hr style="border: none; border-top: 1px solid #E5E7EB; margin: 28px 0;" />
             <p style="color: #999; font-size: 11px; text-align: center;">
-              RedFlaq · South African Background Checks · <a href="https://redflaq.com/privacy" style="color: #999;">Privacy Policy</a> · <a href="https://redflaq.com/terms" style="color: #999;">Terms</a>
+              RedFlaq is operated by Setup A Startup (Pty) Ltd · South Africa<br />
+              <a href="https://redflaq.com/privacy" style="color: #999;">Privacy Policy</a> · <a href="https://redflaq.com/terms" style="color: #999;">Terms</a>
             </p>
           </div>
         `,

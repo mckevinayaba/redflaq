@@ -36,6 +36,7 @@ export default function DashboardNewCheck() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [creditsRemaining, setCreditsRemaining] = useState<number | null>(null);
+  const [buyModalOpen, setBuyModalOpen] = useState(false);
 
   const [firstName, setFirstName] = useState("");
   const [surname, setSurname] = useState("");

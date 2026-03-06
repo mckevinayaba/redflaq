@@ -36,6 +36,7 @@ import DashboardNewCheck from "./pages/DashboardNewCheck";
 import DashboardReports from "./pages/DashboardReports";
 import DashboardAccount from "./pages/DashboardAccount";
 import DashboardHelp from "./pages/DashboardHelp";
+import ClaimReference from "./pages/ClaimReference";
 import SafetyTips from "./pages/SafetyTips";
 import ConversationGuide from "./pages/ConversationGuide";
 import FirstDateSafety from "./pages/tools/FirstDateSafety";

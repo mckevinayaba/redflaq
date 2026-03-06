@@ -8,9 +8,9 @@ interface BuyChecksModalProps {
 }
 
 const PACKAGES = [
-  { key: "single", label: "1 Safety Check", price: 99, credits: 1 },
-  { key: "triple", label: "3 Safety Checks", price: 249, credits: 3, popular: true },
-  { key: "five", label: "5 Safety Checks", price: 399, credits: 5 },
+  { key: "single" as const, label: "1 Safety Check", price: 99, credits: 1 },
+  { key: "3-pack" as const, label: "3 Safety Checks", price: 249, credits: 3, popular: true },
+  { key: "5-pack" as const, label: "5 Safety Checks", price: 399, credits: 5 },
 ];
 
 export default function BuyChecksModal({ open, onOpenChange }: BuyChecksModalProps) {

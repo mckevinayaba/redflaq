@@ -89,9 +89,12 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
           <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-5">
             <Lock className="w-8 h-8 text-primary animate-pulse" />
           </div>
-          <h3 className="text-xl font-bold text-foreground mb-3">Redirecting to Secure Payment</h3>
-          <p className="text-sm text-muted-foreground leading-relaxed mb-4">
-            You are being securely redirected to our payment partner <strong className="text-foreground">Yoco</strong>. You will see <strong className="text-foreground">Setup A Startup (Pty) Ltd</strong> — this is RedFlaq's registered company. Your payment is fully protected.
+           <h3 className="text-xl font-bold text-foreground mb-3">Redirecting to Secure Payment</h3>
+          <p className="text-sm text-muted-foreground leading-relaxed mb-2">
+            You are being securely redirected to our payment partner <strong className="text-foreground">Yoco</strong>. You will see <strong className="text-foreground">Setup A Startup (Pty) Ltd</strong> — this is RedFlaq's registered company.
+          </p>
+          <p className="text-sm font-semibold text-foreground mb-4">
+            💳 Tip: On the payment screen, tap <strong>"Card"</strong> to pay with Visa, Mastercard or Amex.
           </p>
           <Loader2 className="w-6 h-6 animate-spin text-primary mx-auto" />
         </div>

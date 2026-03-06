@@ -227,16 +227,32 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // ===== STAFF BYPASS: Admin/Owner skip credit checks =====
+    // ===== STAFF/ADMIN BYPASS: Check by role AND by email =====
+    const ADMIN_EMAIL = 'mckevin.ayaba@gmail.com';
     let isStaff = false;
+    let userEmail: string | null = null;
+
     if (user_id) {
-      const { data: roleData } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', user_id)
-        .in('role', ['admin', 'owner'])
-        .maybeSingle();
-      isStaff = !!roleData;
+      // Get user email for admin check
+      const { data: userData } = await supabase.auth.admin.getUserById(user_id);
+      userEmail = userData?.user?.email || null;
+
+      // Admin email bypass
+      if (userEmail === ADMIN_EMAIL) {
+        isStaff = true;
+        console.log('Admin email bypass for', ADMIN_EMAIL);
+      }
+
+      // Also check role-based bypass
+      if (!isStaff) {
+        const { data: roleData } = await supabase
+          .from('user_roles')
+          .select('role')
+          .eq('user_id', user_id)
+          .in('role', ['admin', 'owner'])
+          .maybeSingle();
+        isStaff = !!roleData;
+      }
     }
 
     // ===== CREDIT VALIDATION (MANDATORY for non-staff) =====
@@ -290,14 +306,16 @@ serve(async (req) => {
       creditDeducted = true;
     } else if (user_id) {
       // Dashboard flow: find user's email and check for any available credits
-      const { data: userData } = await supabase.auth.admin.getUserById(user_id);
-      if (!userData?.user?.email) {
+      if (!userEmail) {
+        const { data: userData2 } = await supabase.auth.admin.getUserById(user_id);
+        userEmail = userData2?.user?.email || null;
+      }
+      if (!userEmail) {
         return new Response(
           JSON.stringify({ success: false, error: 'User not found' }),
           { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
-      const userEmail = userData.user.email;
 
       // Check purchases table first
       const { data: purchases } = await supabase

@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useCredits } from "@/hooks/useCredits";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Shield, BarChart3, CheckCircle2, ArrowRight, Heart, Users } from "lucide-react";
 import ShareInviteModal from "@/components/ShareInviteModal";
 import BuyChecksModal from "@/components/BuyChecksModal";
+import MyPayments from "@/components/dashboard/MyPayments";
 
 interface SearchRecord {
   id: string;
@@ -26,33 +28,25 @@ const riskConfig: Record<string, { label: string; color: string; bg: string }> =
 export default function Dashboard() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
+  const { credits: creditsRemaining } = useCredits(user?.email, user?.id);
   const [searches, setSearches] = useState<SearchRecord[]>([]);
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<{ full_name: string | null } | null>(null);
   const [shareOpen, setShareOpen] = useState(false);
   const [referralCount, setReferralCount] = useState(0);
   const [freeChecksEarned, setFreeChecksEarned] = useState(0);
-  const [creditsRemaining, setCreditsRemaining] = useState(0);
   const [buyModalOpen, setBuyModalOpen] = useState(false);
 
   useEffect(() => {
-    if (!authLoading && !user) {
-      navigate("/signup");
-      return;
-    }
-    if (user) {
-      fetchData();
-    }
+    if (!authLoading && !user) { navigate("/signup"); return; }
+    if (user) { fetchData(); }
   }, [user, authLoading]);
 
   const fetchData = async () => {
-    const email = user!.email || "";
-    const [{ data: profileData }, { data: searchData }, { data: referralData }, { data: purchasesData }, { data: manualData }] = await Promise.all([
+    const [{ data: profileData }, { data: searchData }, { data: referralData }] = await Promise.all([
       supabase.from("profiles").select("full_name").eq("user_id", user!.id).maybeSingle(),
       supabase.from("searches").select("*").eq("user_id", user!.id).order("searched_at", { ascending: false }).limit(20),
       supabase.from("referrals").select("id, status").eq("referrer_user_id", user!.id),
-      supabase.from("purchases").select("credits_remaining").eq("email", email).eq("status", "completed"),
-      supabase.from("manual_payments").select("search_credits, credits_used").eq("email", email).eq("status", "verified"),
     ]);
     setProfile(profileData);
     setSearches(searchData || []);
@@ -60,12 +54,6 @@ export default function Dashboard() {
     const converted = refs.filter(r => r.status === "signed_up" || r.status === "paid");
     setReferralCount(converted.length);
     setFreeChecksEarned(Math.floor(converted.length / 3));
-
-    // Calculate remaining credits
-    const purchaseCredits = (purchasesData || []).reduce((sum, p) => sum + (p.credits_remaining || 0), 0);
-    const manualCredits = (manualData || []).reduce((sum, p) => sum + ((p.search_credits || 0) - (p.credits_used || 0)), 0);
-    setCreditsRemaining(purchaseCredits + manualCredits);
-
     setLoading(false);
   };
 
@@ -95,7 +83,6 @@ export default function Dashboard() {
 
   return (
     <DashboardLayout>
-      {/* Header */}
       <div className="mb-6 sm:mb-8">
         <p className="font-mono text-[11px] tracking-widest text-muted-foreground uppercase mb-1">Dashboard</p>
         <h1 className="font-heading text-2xl sm:text-3xl text-foreground">Welcome back{firstName ? `, ${firstName}` : ""}</h1>
@@ -103,7 +90,6 @@ export default function Dashboard() {
 
       {/* Top cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-5 mb-6 sm:mb-8">
-        {/* Total checks */}
         <div className="bg-card rounded-xl border border-border p-6 shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
@@ -111,16 +97,15 @@ export default function Dashboard() {
             </div>
             <span className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Your safety checks</span>
           </div>
-          <p className="font-heading text-4xl text-foreground">{creditsRemaining}</p>
+          <p className="font-heading text-4xl text-foreground">{creditsRemaining ?? 0}</p>
           <p className="font-body text-sm text-muted-foreground mt-1">checks remaining</p>
-          {creditsRemaining === 0 && (
-            <Link to="/pricing" className="inline-flex items-center gap-1.5 mt-2 px-3 py-1.5 bg-primary text-primary-foreground font-body text-xs font-semibold rounded-lg hover:opacity-90 transition-colors">
+          {(creditsRemaining ?? 0) === 0 && (
+            <button onClick={() => setBuyModalOpen(true)} className="inline-flex items-center gap-1.5 mt-2 px-3 py-1.5 bg-primary text-primary-foreground font-body text-xs font-semibold rounded-lg hover:opacity-90 transition-colors">
               Buy More Checks
-            </Link>
+            </button>
           )}
         </div>
 
-        {/* This month */}
         <div className="bg-card rounded-xl border border-border p-6 shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
@@ -134,7 +119,6 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* Latest result */}
         <div className="bg-card rounded-xl border border-border p-6 shadow-sm hover:shadow-md transition-shadow">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
@@ -144,15 +128,8 @@ export default function Dashboard() {
           </div>
           {latestSearch ? (
             <>
-              <span
-                className="inline-block px-3 py-1 rounded-full font-mono text-xs font-semibold mb-2"
-                style={{ color: latestRisk?.color, background: latestRisk?.bg }}
-              >
-                {latestRisk?.label}
-              </span>
-              <p className="font-body text-sm text-muted-foreground">
-                Last: {latestSearch.search_name || "Unknown"} ({new Date(latestSearch.searched_at).toLocaleDateString("en-ZA")})
-              </p>
+              <span className="inline-block px-3 py-1 rounded-full font-mono text-xs font-semibold mb-2" style={{ color: latestRisk?.color, background: latestRisk?.bg }}>{latestRisk?.label}</span>
+              <p className="font-body text-sm text-muted-foreground">Last: {latestSearch.search_name || "Unknown"} ({new Date(latestSearch.searched_at).toLocaleDateString("en-ZA")})</p>
             </>
           ) : (
             <p className="font-body text-sm text-muted-foreground">No checks yet</p>
@@ -160,47 +137,36 @@ export default function Dashboard() {
         </div>
       </div>
 
+      {/* My Payments section */}
+      {user?.email && <MyPayments email={user.email} />}
+
       {/* Recent checks table */}
       <div className="bg-card rounded-xl border border-border shadow-sm mb-6 sm:mb-8">
         <div className="px-4 sm:px-6 py-4 border-b border-border flex items-center justify-between">
           <h2 className="font-heading text-base sm:text-lg text-foreground">Recent checks</h2>
           {searches.length > 0 && (
-            <Link to="/dashboard/reports" className="font-body text-sm text-primary hover:underline flex items-center gap-1">
-              View all <ArrowRight className="h-3 w-3" />
-            </Link>
+            <Link to="/dashboard/reports" className="font-body text-sm text-primary hover:underline flex items-center gap-1">View all <ArrowRight className="h-3 w-3" /></Link>
           )}
         </div>
         {searches.length === 0 ? (
           <div className="px-6 py-12 text-center">
-          <Shield className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
+            <Shield className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
             <p className="font-heading text-lg text-foreground mb-2">No safety checks yet</p>
-            <p className="font-body text-sm text-muted-foreground mb-4 max-w-md mx-auto">
-              When you run your first safety check, you'll see all your results here — with dates, risk levels and downloadable reports.
-            </p>
-            <Link
-              to="/dashboard/new-check"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-body font-semibold text-sm rounded-lg hover:opacity-90 transition-colors"
-            >
-              <Shield className="h-4 w-4" />
-              Run your first safety check
+            <p className="font-body text-sm text-muted-foreground mb-4 max-w-md mx-auto">When you run your first safety check, you'll see all your results here.</p>
+            <Link to="/dashboard/new-check" className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-body font-semibold text-sm rounded-lg hover:opacity-90 transition-colors">
+              <Shield className="h-4 w-4" /> Run your first safety check
             </Link>
           </div>
         ) : (
           <>
-            {/* Mobile card view */}
             <div className="sm:hidden divide-y divide-border">
               {searches.slice(0, 10).map((s) => {
                 const risk = riskConfig[s.risk_level] || riskConfig.GREEN;
                 return (
                   <div key={s.id} className="px-4 py-4 space-y-2">
                     <div className="flex items-start justify-between">
-                      <div>
-                        <p className="font-body text-sm text-foreground font-medium">{s.search_name || "—"}</p>
-                        <p className="font-body text-xs text-muted-foreground">{new Date(s.searched_at).toLocaleDateString("en-ZA")}</p>
-                      </div>
-                      <span className="inline-block px-2.5 py-0.5 rounded-full font-mono text-[10px] font-semibold" style={{ color: risk.color, background: risk.bg }}>
-                        {risk.label}
-                      </span>
+                      <div><p className="font-body text-sm text-foreground font-medium">{s.search_name || "—"}</p><p className="font-body text-xs text-muted-foreground">{new Date(s.searched_at).toLocaleDateString("en-ZA")}</p></div>
+                      <span className="inline-block px-2.5 py-0.5 rounded-full font-mono text-[10px] font-semibold" style={{ color: risk.color, background: risk.bg }}>{risk.label}</span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="font-mono text-xs text-muted-foreground">{s.matches_found} match{s.matches_found !== 1 ? "es" : ""}</span>
@@ -210,18 +176,15 @@ export default function Dashboard() {
                 );
               })}
             </div>
-            {/* Desktop table view */}
             <div className="hidden sm:block overflow-x-auto">
               <table className="w-full">
-                <thead>
-                  <tr className="border-b border-border">
-                    <th className="text-left px-6 py-3 font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Person</th>
-                    <th className="text-left px-6 py-3 font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Date</th>
-                    <th className="text-left px-6 py-3 font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Result</th>
-                    <th className="text-left px-6 py-3 font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Matches</th>
-                    <th className="text-right px-6 py-3"></th>
-                  </tr>
-                </thead>
+                <thead><tr className="border-b border-border">
+                  <th className="text-left px-6 py-3 font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Person</th>
+                  <th className="text-left px-6 py-3 font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Date</th>
+                  <th className="text-left px-6 py-3 font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Result</th>
+                  <th className="text-left px-6 py-3 font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Matches</th>
+                  <th className="text-right px-6 py-3"></th>
+                </tr></thead>
                 <tbody>
                   {searches.slice(0, 10).map((s) => {
                     const risk = riskConfig[s.risk_level] || riskConfig.GREEN;
@@ -229,15 +192,9 @@ export default function Dashboard() {
                       <tr key={s.id} className="border-b border-border last:border-0 hover:bg-muted transition-colors">
                         <td className="px-6 py-4 font-body text-sm text-foreground font-medium">{s.search_name || "—"}</td>
                         <td className="px-6 py-4 font-body text-sm text-muted-foreground">{new Date(s.searched_at).toLocaleDateString("en-ZA")}</td>
-                        <td className="px-6 py-4">
-                          <span className="inline-block px-3 py-1 rounded-full font-mono text-[10px] font-semibold" style={{ color: risk.color, background: risk.bg }}>
-                            {risk.label}
-                          </span>
-                        </td>
+                        <td className="px-6 py-4"><span className="inline-block px-3 py-1 rounded-full font-mono text-[10px] font-semibold" style={{ color: risk.color, background: risk.bg }}>{risk.label}</span></td>
                         <td className="px-6 py-4 font-mono text-sm text-muted-foreground">{s.matches_found}</td>
-                        <td className="px-6 py-4 text-right">
-                          <Link to={`/results?search_id=${s.search_id}`} className="font-body text-sm text-primary hover:underline">View report</Link>
-                        </td>
+                        <td className="px-6 py-4 text-right"><Link to={`/results?search_id=${s.search_id}`} className="font-body text-sm text-primary hover:underline">View report</Link></td>
                       </tr>
                     );
                   })}
@@ -268,37 +225,22 @@ export default function Dashboard() {
 
       {/* Quick actions */}
       <div className="flex flex-wrap gap-4">
-        {creditsRemaining > 0 ? (
-          <Link
-            to="/dashboard/new-check"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-body font-bold text-sm rounded-lg hover:opacity-90 transition-colors shadow-sm"
-          >
-            <Shield className="h-4 w-4" />
-            Run a new safety check
+        {(creditsRemaining ?? 0) > 0 ? (
+          <Link to="/dashboard/new-check" className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-body font-bold text-sm rounded-lg hover:opacity-90 transition-colors shadow-sm">
+            <Shield className="h-4 w-4" /> Run a new safety check
           </Link>
         ) : (
-          <button
-            onClick={() => setBuyModalOpen(true)}
-            className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-body font-bold text-sm rounded-lg hover:opacity-90 transition-colors shadow-sm"
-          >
-            <Shield className="h-4 w-4" />
-            Buy More Checks
+          <button onClick={() => setBuyModalOpen(true)} className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-body font-bold text-sm rounded-lg hover:opacity-90 transition-colors shadow-sm">
+            <Shield className="h-4 w-4" /> Buy More Checks
           </button>
         )}
-        <button
-          onClick={() => setShareOpen(true)}
-          className="inline-flex items-center gap-2 px-6 py-3 border border-border text-foreground font-body font-medium text-sm rounded-lg hover:bg-muted transition-colors"
-        >
-          <Heart className="h-4 w-4" />
-          Invite a friend to RedFlaq
+        <button onClick={() => setShareOpen(true)} className="inline-flex items-center gap-2 px-6 py-3 border border-border text-foreground font-body font-medium text-sm rounded-lg hover:bg-muted transition-colors">
+          <Heart className="h-4 w-4" /> Invite a friend to RedFlaq
         </button>
       </div>
 
-      {/* Support link */}
       <div className="mt-4 text-center">
-        <a href="mailto:support@redflaq.com" className="font-body text-xs text-muted-foreground hover:text-primary transition-colors">
-          Payment issue? Contact support@redflaq.com
-        </a>
+        <a href="mailto:support@redflaq.com" className="font-body text-xs text-muted-foreground hover:text-primary transition-colors">Payment issue? Contact support@redflaq.com</a>
       </div>
 
       <ShareInviteModal open={shareOpen} onOpenChange={setShareOpen} />

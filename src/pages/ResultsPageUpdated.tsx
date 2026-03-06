@@ -346,44 +346,29 @@ const ResultsPageUpdated = () => {
     : getRiskExplainer(effectiveRiskLevel, results.wantedPersons);
 
   return (
-    <div className="bg-background min-h-screen flex flex-col">
+    <div className="bg-background min-h-screen flex flex-col overflow-x-hidden">
       <NavbarPlinq />
-      {/* Spacer for fixed navbar */}
       <div style={{ height: 80 }} />
 
-      {/* Back to Dashboard bar */}
       <div className="bg-muted border-b border-border">
-        <div className="max-w-[900px] mx-auto px-6 py-3 flex items-center justify-between">
-          <button
-            onClick={() => navigate('/dashboard')}
-            className="flex items-center gap-2 text-sm font-body font-semibold text-muted-foreground hover:text-foreground transition-colors"
-            style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-          >
+        <div className="max-w-[900px] mx-auto px-4 sm:px-6 py-3 flex items-center justify-between">
+          <button onClick={() => navigate('/dashboard')} className="flex items-center gap-2 text-sm font-body font-semibold text-muted-foreground hover:text-foreground transition-colors" style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
             <ArrowLeft className="h-4 w-4" /> Back to Dashboard
           </button>
-          <button
-            onClick={() => navigate('/dashboard/new-check')}
-            className="flex items-center gap-2 text-sm font-body font-semibold text-primary hover:text-primary/80 transition-colors"
-            style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-          >
+          <button onClick={() => navigate('/dashboard/new-check')} className="flex items-center gap-2 text-sm font-body font-semibold text-primary hover:text-primary/80 transition-colors" style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
             <Plus className="h-4 w-4" /> Run Another Check
           </button>
         </div>
       </div>
 
-      {/* Top bar */}
       <div className="bg-foreground text-background">
-        <div className="max-w-[900px] mx-auto px-6 py-3 flex items-center justify-between">
-          <span className="font-mono text-[10px] tracking-[0.15em] uppercase opacity-70">
-            RedFlaq · Search Report
-          </span>
-          <span className="font-mono text-[10px] tracking-[0.1em] opacity-50">
-            {searchDate} · {searchTime}
-          </span>
+        <div className="max-w-[900px] mx-auto px-4 sm:px-6 py-3 flex items-center justify-between flex-wrap gap-1">
+          <span className="font-mono text-[10px] tracking-[0.15em] uppercase opacity-70">RedFlaq · Search Report</span>
+          <span className="font-mono text-[10px] tracking-[0.1em] opacity-50">{searchDate} · {searchTime}</span>
         </div>
       </div>
 
-      <div className="results-container max-w-[900px] mx-auto px-6 pt-10 pb-20 flex-1">
+      <div className="results-container max-w-[900px] mx-auto px-4 sm:px-6 pt-6 sm:pt-10 pb-20 flex-1 w-full" style={{ maxWidth: '100%', overflowWrap: 'break-word', wordBreak: 'break-word' }}>
 
         {/* ─── RISK LEVEL HEADER ─── */}
         <div
@@ -852,18 +837,18 @@ const ResultsPageUpdated = () => {
                 </div>
 
                 {/* Photo & Details Grid */}
-                <div className="results-photo-grid p-8 grid grid-cols-[200px_1fr] gap-8">
+                <div className="results-photo-grid p-4 sm:p-8 grid grid-cols-1 sm:grid-cols-[200px_1fr] gap-6 sm:gap-8">
                   <div>
                     {person.photo_url ? (
                       <>
-                        <div className="w-[200px] h-[200px] border border-border overflow-hidden">
+                        <div className="w-full sm:w-[200px] h-[200px] border border-border overflow-hidden">
                           <img src={person.photo_url} alt={person.full_name} className="w-full h-full object-cover grayscale-[40%]" />
                         </div>
                         <span className="font-mono text-[10px] text-muted-foreground block mt-2">Source: {sourceLabel}</span>
                         <span className="font-mono text-[10px] text-orange-600 block mt-1">Photos may be outdated. Do not rely on photo alone.</span>
                       </>
                     ) : (
-                      <div className="w-[200px] h-[200px] bg-muted border border-border flex items-center justify-center flex-col">
+                      <div className="w-full sm:w-[200px] h-[200px] bg-muted border border-border flex items-center justify-center flex-col">
                         <span className="text-6xl text-muted-foreground/30">👤</span>
                         <span className="font-mono text-[11px] text-muted-foreground mt-2">No photo</span>
                       </div>
@@ -937,7 +922,7 @@ const ResultsPageUpdated = () => {
                 {/* Verification Grid */}
                 <div className="p-8 bg-blue-50 border-b border-border">
                   <h3 className="font-body text-base font-bold text-blue-800 flex items-center gap-2 mb-4">✓ Verification Information</h3>
-                  <div className="results-verification-grid grid grid-cols-2 gap-5">
+                  <div className="results-verification-grid grid grid-cols-1 sm:grid-cols-2 gap-5">
                     {[
                       { label: 'SOURCE', value: sourceLabel },
                       { label: 'LAST VERIFIED', value: person.updated_at ? `${new Date(person.updated_at).toLocaleDateString('en-ZA')} (${daysAgo} days ago)` : 'Recently' },

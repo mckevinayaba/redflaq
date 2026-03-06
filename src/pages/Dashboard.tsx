@@ -33,6 +33,7 @@ export default function Dashboard() {
   const [referralCount, setReferralCount] = useState(0);
   const [freeChecksEarned, setFreeChecksEarned] = useState(0);
   const [creditsRemaining, setCreditsRemaining] = useState(0);
+  const [buyModalOpen, setBuyModalOpen] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) {

@@ -837,7 +837,7 @@ const ResultsPageUpdated = () => {
                 </div>
 
                 {/* Photo & Details Grid */}
-                <div className="results-photo-grid p-8 grid grid-cols-[200px_1fr] gap-8">
+                <div className="results-photo-grid p-4 sm:p-8 grid grid-cols-1 sm:grid-cols-[200px_1fr] gap-6 sm:gap-8">
                   <div>
                     {person.photo_url ? (
                       <>

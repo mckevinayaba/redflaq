@@ -841,14 +841,14 @@ const ResultsPageUpdated = () => {
                   <div>
                     {person.photo_url ? (
                       <>
-                        <div className="w-[200px] h-[200px] border border-border overflow-hidden">
+                        <div className="w-full sm:w-[200px] h-[200px] border border-border overflow-hidden">
                           <img src={person.photo_url} alt={person.full_name} className="w-full h-full object-cover grayscale-[40%]" />
                         </div>
                         <span className="font-mono text-[10px] text-muted-foreground block mt-2">Source: {sourceLabel}</span>
                         <span className="font-mono text-[10px] text-orange-600 block mt-1">Photos may be outdated. Do not rely on photo alone.</span>
                       </>
                     ) : (
-                      <div className="w-[200px] h-[200px] bg-muted border border-border flex items-center justify-center flex-col">
+                      <div className="w-full sm:w-[200px] h-[200px] bg-muted border border-border flex items-center justify-center flex-col">
                         <span className="text-6xl text-muted-foreground/30">👤</span>
                         <span className="font-mono text-[11px] text-muted-foreground mt-2">No photo</span>
                       </div>

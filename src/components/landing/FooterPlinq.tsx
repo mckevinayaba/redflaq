@@ -89,10 +89,12 @@ const FooterPlinq = () => {
                       rel="noopener noreferrer"
                       aria-label={s.icon}
                       style={{
-                        width: 36, height: 36, borderRadius: '50%',
+                        width: 40, height: 40, borderRadius: '50%',
                         background: 'rgba(255,255,255,0.08)',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         transition: 'all 0.2s ease', textDecoration: 'none',
+                        WebkitTapHighlightColor: 'transparent',
+                        minWidth: 40, minHeight: 40,
                       }}
                       onMouseEnter={e => { e.currentTarget.style.background = '#7C3AED'; e.currentTarget.style.transform = 'scale(1.1)'; }}
                       onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.transform = 'scale(1)'; }}

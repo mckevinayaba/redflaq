@@ -31,7 +31,7 @@ const FooterPlinq = () => {
 
   return (
     <>
-      <footer style={{ background: 'linear-gradient(180deg, #0F0A1A, #110D1F)', padding: '80px 24px 40px' }}>
+      <footer style={{ background: 'linear-gradient(180deg, #0F0A1A, #110D1F)', padding: '60px 20px 32px', overflowX: 'hidden' as const }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr_1fr_1fr] gap-16 mb-12">
             <div>

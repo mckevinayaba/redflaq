@@ -70,7 +70,7 @@ const HeroPlinq = () => {
             marginBottom: 12,
             fontSize: 17,
           }}>
-            RedFlaq searches South African criminal records so you can make informed decisions about who to trust with your life, home, or business. Instant. Confidential. R99.
+            RedFlaq searches South African public-record warning lists so you can make informed decisions about who to trust with your life, home, or business. Instant. Confidential. R99.
           </p>
 
           <p style={{

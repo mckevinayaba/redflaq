@@ -131,7 +131,7 @@ export default function Signup() {
           await supabase.from("referrals").insert({ referrer_user_id: referrerId, referred_email: email.trim(), status: "signed_up" });
           sessionStorage.removeItem("referrer_id");
         }
-        supabase.functions.invoke('send-welcome-email', { body: { email: email.trim(), full_name: fullName.trim() } }).catch(() => {});
+        // Welcome content is now part of the confirmation email — no separate welcome email needed
         setSignupSuccess(true);
       }
     } else {

@@ -105,20 +105,20 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
 
   return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 animate-in fade-in duration-300"
+      style={{ position: 'fixed', inset: 0, zIndex: 2147483647, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16, background: 'rgba(0,0,0,0.7)' }}
       onClick={handleBackdropClick}
     >
-      <div className="relative bg-background rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto animate-in zoom-in duration-300" style={{ WebkitOverflowScrolling: 'touch' }}>
-        {/* Close button — always visible, high z-index */}
+      <div className="relative bg-background rounded-2xl shadow-2xl max-w-md w-full" style={{ maxHeight: '90vh', overflowY: 'auto', WebkitOverflowScrolling: 'touch' as any }}>
+        {/* Close button — always visible, cleared below navbar */}
         <button
           onClick={onClose}
-          className="absolute top-3 right-3 z-[60] w-9 h-9 min-w-[32px] min-h-[32px] flex items-center justify-center rounded-full bg-foreground/90 text-background hover:bg-foreground transition-colors shadow-lg"
+          style={{ position: 'sticky', top: 0, zIndex: 10, float: 'right', margin: '12px 12px 0 0', width: 44, height: 44, minWidth: 44, minHeight: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', background: 'rgba(0,0,0,0.85)', color: '#fff', border: 'none', cursor: 'pointer', boxShadow: '0 2px 8px rgba(0,0,0,0.3)' }}
           aria-label="Close"
         >
           <X className="w-5 h-5" />
         </button>
 
-        <div className="p-8 pt-14">
+        <div className="p-8 pt-4" style={{ clear: 'both' }}>
           {/* Header */}
           <div className="text-center mb-8">
             <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">

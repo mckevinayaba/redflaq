@@ -79,8 +79,8 @@ const FooterPlinq = () => {
                     { icon: 'facebook', href: "https://www.facebook.com/RedFlaqSafety/", path: "M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" },
                     { icon: 'instagram', href: "https://www.instagram.com/redflaqsafety/", paths: ["M2 6a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v12a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4z", "M12 9a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"], circle: true },
                     { icon: 'linkedin', href: "https://www.linkedin.com/company/redflaq/", paths: ["M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z", "M2 9h4v12H2z"], circle2: true },
-                    { icon: 'x', href: "https://x.com/RedFlaqSafety" },
                     { icon: 'tiktok', href: "https://www.tiktok.com/@redflaqsafety" },
+                    { icon: 'x', href: "https://x.com/RedFlaqSafety" },
                   ].map(s => (
                     <a
                       key={s.icon}

@@ -104,7 +104,7 @@ export default function SecureReportView() {
         </p>
         <p className="font-body text-sm text-muted-foreground">
           Need help? Contact us at{" "}
-          <a href="mailto:support@redflaq.co.za" className="text-primary hover:underline">support@redflaq.co.za</a>
+          <a href="mailto:support@redflaq.com" className="text-primary hover:underline">support@redflaq.com</a>
         </p>
       </div>
     </div>

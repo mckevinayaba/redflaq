@@ -20,10 +20,7 @@ interface MagicLinkEmailProps {
   confirmationUrl: string
 }
 
-export const MagicLinkEmail = ({
-  siteName,
-  confirmationUrl,
-}: MagicLinkEmailProps) => (
+export const MagicLinkEmail = ({ siteName, confirmationUrl }: MagicLinkEmailProps) => (
   <Html lang="en" dir="ltr">
     <Head />
     <Preview>Your RedFlaq login link</Preview>
@@ -31,36 +28,19 @@ export const MagicLinkEmail = ({
       <Container style={outerWrapper}>
         <Container style={card}>
           <Section style={header}>
-            <Img
-              src="https://redflaq.lovable.app/redflaq-logo-email.png"
-              alt="RedFlaq"
-              height="44"
-              style={{ margin: '0 auto 12px', display: 'block' }}
-            />
+            <Img src="https://redflaq.lovable.app/redflaq-logo-email.png" alt="RedFlaq" height="44" style={{ margin: '0 auto 12px', display: 'block' }} />
             <Text style={headerSubtitle}>Secure Login</Text>
           </Section>
-
           <Section style={body}>
             <Heading style={h1}>Your login link</Heading>
-            <Text style={paragraph}>
-              Click the button below to log in to RedFlaq. This link will expire shortly.
-            </Text>
-
+            <Text style={paragraph}>Click the button below to log in to RedFlaq. This link will expire shortly.</Text>
             <Section style={buttonWrapper}>
-              <Button style={ctaButton} href={confirmationUrl}>
-                Log In →
-              </Button>
+              <Button style={ctaButton} href={confirmationUrl}>Log In →</Button>
             </Section>
-
-            <Text style={mutedCenter}>
-              If you didn't request this link, you can safely ignore this email.
-            </Text>
+            <Text style={mutedCenter}>If you didn't request this link, you can safely ignore this email.</Text>
           </Section>
-
           <Section style={footer}>
-            <Text style={footerMuted}>
-              RedFlaq is operated by Setup A Startup (Pty) Ltd · Johannesburg, South Africa
-            </Text>
+            <Text style={footerMuted}>RedFlaq is operated by Setup A Startup (Pty) Ltd · Johannesburg, South Africa</Text>
           </Section>
         </Container>
       </Container>

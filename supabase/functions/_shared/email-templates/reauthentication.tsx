@@ -26,28 +26,17 @@ export const ReauthenticationEmail = ({ token }: ReauthenticationEmailProps) => 
       <Container style={outerWrapper}>
         <Container style={card}>
           <Section style={header}>
-            <Img
-              src="https://redflaq.lovable.app/redflaq-logo-email.png"
-              alt="RedFlaq"
-              height="44"
-              style={{ margin: '0 auto 12px', display: 'block' }}
-            />
+            <Img src="https://redflaq.lovable.app/redflaq-logo-email.png" alt="RedFlaq" height="44" style={{ margin: '0 auto 12px', display: 'block' }} />
             <Text style={headerSubtitle}>Verification</Text>
           </Section>
-
           <Section style={body}>
             <Heading style={h1}>Your verification code</Heading>
             <Text style={paragraph}>Use the code below to confirm your identity:</Text>
             <Text style={codeStyle}>{token}</Text>
-            <Text style={mutedCenter}>
-              This code will expire shortly. If you didn't request this, you can safely ignore this email.
-            </Text>
+            <Text style={mutedCenter}>This code will expire shortly. If you didn't request this, you can safely ignore this email.</Text>
           </Section>
-
           <Section style={footer}>
-            <Text style={footerMuted}>
-              RedFlaq is operated by Setup A Startup (Pty) Ltd · Johannesburg, South Africa
-            </Text>
+            <Text style={footerMuted}>RedFlaq is operated by Setup A Startup (Pty) Ltd · Johannesburg, South Africa</Text>
           </Section>
         </Container>
       </Container>

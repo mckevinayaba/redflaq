@@ -1,32 +1,55 @@
 
 
-## The Real Problem
+## Problem
 
-After thorough investigation, here is the definitive status:
+The Tawk.to chat widget is:
+1. Auto-opening its chat window without user interaction
+2. Showing a proactive "We Are Here" popup message
+3. Displaying a "1 new message" notification badge above the navbar
 
-- **Domain `notify.redflaq.com`**: Verified and ready
-- **`auth-email-hook` function**: Deployed, code is correct, boots successfully
-- **HTTP requests to the function**: **ZERO** — ever
-- **Auth events routed to the hook**: **ZERO**
+All of these are controlled by Tawk.to's API settings.
 
-The function exists but auth events are never routed to it. The `scaffold_auth_email_templates` tool is the mechanism that registers the hook with the email routing system — without it, the function is just sitting there unused.
+## Fix
 
-## Fix Plan
+Add `Tawk_API` configuration in `index.html` to suppress all auto-popups:
 
-### Step 1: Re-scaffold to force registration
-Call `scaffold_auth_email_templates` — this is the only way to register the hook. If it warns about existing templates, approve the overwrite. This is the critical step.
+1. **Set `Tawk_API.onLoad`** callback to:
+   - Minimize the widget on load (`Tawk_API.minimize()`)
+   - Hide the popup message (`Tawk_API.hideWidget()` is too aggressive — instead use `minimize`)
+2. **Set `Tawk_API.customStyle`** to hide the notification badge
+3. **Disable proactive chat triggers** by setting `Tawk_API.onBeforeLoad` to prevent auto-popup behaviors:
+   - `Tawk_API.visitor` settings won't help — the proactive messages ("We Are Here", auto-open) are configured in the Tawk.to dashboard under **Triggers**
+   
+### What we can control via code
 
-### Step 2: Re-apply custom branded signup template
-After scaffold overwrites the files, restore `signup.tsx` with the RedFlaq branding (dark header, logo, purple CTA button, benefits section).
+In `index.html`, before the Tawk script loads, add:
 
-### Step 3: Restore subject lines and config
-Update `auth-email-hook/index.ts` with the custom subject lines and RedFlaq domain config (SITE_NAME, SENDER_DOMAIN, ROOT_DOMAIN, FROM_DOMAIN).
+```javascript
+Tawk_API.onLoad = function() {
+  Tawk_API.minimize();
+};
+Tawk_API.onChatMessageVisitor = function() {};
+Tawk_API.onChatMessageSystem = function() {};
+```
 
-### Step 4: Deploy
-Call `deploy_edge_functions(["auth-email-hook"])` to push the registered function live.
+And add CSS to hide the unread badge:
 
-### Step 5: Verify with a test signup
-After deployment, check edge function logs for actual "Received auth event" entries — not just boot/shutdown cycles.
+```css
+/* Hide Tawk notification badge */
+.tawk-min-container .tawk-badge {
+  display: none !important;
+}
+```
 
-This is the same plan as before. The key difference this time: I will execute each step immediately and verify the registration took effect by checking for HTTP requests in the edge logs after deployment.
+### What requires Tawk.to dashboard changes
+
+The proactive "We Are Here" message and auto-open behavior are **Triggers** configured in the Tawk.to dashboard (Settings → Triggers). These cannot be fully suppressed from code alone. The `Tawk_API.minimize()` on load will close it if it auto-opens, but the trigger may still fire briefly.
+
+**Recommendation**: Go to your Tawk.to dashboard → Settings → Triggers → disable or delete the proactive greeting trigger. This is the only way to fully stop "We Are Here" and the auto-open.
+
+### Implementation steps
+
+1. Update `index.html`: Add `Tawk_API.onLoad` with `minimize()` call before the embed script
+2. Add CSS to hide the notification badge counter
+3. These changes will make the widget stay minimized and badge-free until a user explicitly clicks it
 

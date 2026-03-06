@@ -22,11 +22,7 @@ interface InviteEmailProps {
   confirmationUrl: string
 }
 
-export const InviteEmail = ({
-  siteName,
-  siteUrl,
-  confirmationUrl,
-}: InviteEmailProps) => (
+export const InviteEmail = ({ siteName, siteUrl, confirmationUrl }: InviteEmailProps) => (
   <Html lang="en" dir="ltr">
     <Head />
     <Preview>You've been invited to join RedFlaq</Preview>
@@ -34,38 +30,21 @@ export const InviteEmail = ({
       <Container style={outerWrapper}>
         <Container style={card}>
           <Section style={header}>
-            <Img
-              src="https://redflaq.lovable.app/redflaq-logo-email.png"
-              alt="RedFlaq"
-              height="44"
-              style={{ margin: '0 auto 12px', display: 'block' }}
-            />
-            <Text style={headerSubtitle}>You're Invited</Text>
+            <Img src="https://redflaq.lovable.app/redflaq-logo-email.png" alt="RedFlaq" height="44" style={{ margin: '0 auto 12px', display: 'block' }} />
+            <Text style={headerSubtitle}>Invitation</Text>
           </Section>
-
           <Section style={body}>
             <Heading style={h1}>You've been invited</Heading>
             <Text style={paragraph}>
-              You've been invited to join{' '}
-              <Link href={siteUrl} style={linkStyle}>RedFlaq</Link>.
-              Click the button below to accept and create your account.
+              You've been invited to join <Link href={siteUrl} style={linkStyle}><strong>RedFlaq</strong></Link>. Click the button below to accept and create your account.
             </Text>
-
             <Section style={buttonWrapper}>
-              <Button style={ctaButton} href={confirmationUrl}>
-                Accept Invitation →
-              </Button>
+              <Button style={ctaButton} href={confirmationUrl}>Accept Invitation →</Button>
             </Section>
-
-            <Text style={mutedCenter}>
-              If you weren't expecting this invitation, you can safely ignore this email.
-            </Text>
+            <Text style={mutedCenter}>If you weren't expecting this invitation, you can safely ignore this email.</Text>
           </Section>
-
           <Section style={footer}>
-            <Text style={footerMuted}>
-              RedFlaq is operated by Setup A Startup (Pty) Ltd · Johannesburg, South Africa
-            </Text>
+            <Text style={footerMuted}>RedFlaq is operated by Setup A Startup (Pty) Ltd · Johannesburg, South Africa</Text>
           </Section>
         </Container>
       </Container>
@@ -83,7 +62,7 @@ const headerSubtitle = { margin: '0', color: 'rgba(255,255,255,0.6)', fontSize: 
 const body = { padding: '40px 40px 32px' }
 const h1 = { margin: '0 0 16px', fontSize: '26px', fontWeight: '700' as const, color: '#1a0a2e', lineHeight: '1.3' }
 const paragraph = { margin: '0 0 24px', fontSize: '16px', color: '#444444', lineHeight: '1.6' }
-const linkStyle = { color: '#7C3AED', textDecoration: 'underline' }
+const linkStyle = { color: '#7C3AED', textDecoration: 'none' }
 const buttonWrapper = { textAlign: 'center' as const, padding: '8px 0 32px' }
 const ctaButton = { display: 'inline-block' as const, backgroundColor: '#7C3AED', color: '#ffffff', fontSize: '16px', fontWeight: '600' as const, textDecoration: 'none', padding: '16px 40px', borderRadius: '50px' }
 const mutedCenter = { margin: '0', fontSize: '13px', color: '#999999', textAlign: 'center' as const }

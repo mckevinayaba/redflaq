@@ -46,7 +46,7 @@ export default function PaymentCancelled() {
         </div>
       </div>
 
-      <PaymentModal isOpen={retryOpen} onClose={() => setRetryOpen(false)} selectedPackage="single" />
+      <PaymentModal isOpen={retryOpen} onClose={() => setRetryOpen(false)} packageType="single" />
     </div>
   );
 }

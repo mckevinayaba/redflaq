@@ -128,9 +128,9 @@ const FooterPlinq = () => {
             </p>
           </div>
 
-          <div className="flex flex-wrap justify-between items-center gap-4" style={{ borderTop: '1px solid rgba(124,58,237,0.1)', paddingTop: 32 }}>
+          <div className="flex flex-col sm:flex-row flex-wrap justify-between items-center gap-4 text-center sm:text-left" style={{ borderTop: '1px solid rgba(124,58,237,0.1)', paddingTop: 32 }}>
             <div>
-              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.3)', display: 'block' }}>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.3)', display: 'block', wordBreak: 'break-word' as const }}>
                 © 2026 RedFlaq · All rights reserved · Public records only · POPIA‑aware
               </span>
               <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: 'rgba(255,255,255,0.25)', marginTop: 4, display: 'block' }}>

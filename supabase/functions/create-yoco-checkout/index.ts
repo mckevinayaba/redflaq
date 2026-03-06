@@ -58,6 +58,7 @@ serve(async (req) => {
         currency: "ZAR",
         successUrl,
         cancelUrl: `${origin}/payment-cancelled`,
+        showPaymentMethods: true,
         metadata: {
           payment_id: paymentId,
           package_type,

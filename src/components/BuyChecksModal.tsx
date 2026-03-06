@@ -19,7 +19,7 @@ export default function BuyChecksModal({ open, onOpenChange }: BuyChecksModalPro
 
   if (!open) return null;
 
-  const handleSelect = (key: string) => {
+  const handleSelect = (key: "single" | "3-pack" | "5-pack") => {
     setSelectedPkg(key);
     setPaymentOpen(true);
   };

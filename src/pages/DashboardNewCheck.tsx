@@ -63,7 +63,7 @@ export default function DashboardNewCheck() {
       const mc = (m || []).reduce((s, r) => s + ((r.search_credits || 0) - (r.credits_used || 0)), 0);
       const total = pc + mc;
       setCreditsRemaining(total);
-      if (total <= 0) navigate("/pricing");
+      // Don't auto-redirect; show inline modal instead
     });
   }, [user]);
 

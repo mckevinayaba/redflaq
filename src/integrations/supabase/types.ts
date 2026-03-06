@@ -352,6 +352,9 @@ export type Database = {
           payment_method: string | null
           proof_url: string | null
           reference: string | null
+          reference_claimed: boolean | null
+          reference_claimed_at: string | null
+          reference_claimed_by: string | null
           search_credits: number | null
           status: string | null
           verified_at: string | null
@@ -369,6 +372,9 @@ export type Database = {
           payment_method?: string | null
           proof_url?: string | null
           reference?: string | null
+          reference_claimed?: boolean | null
+          reference_claimed_at?: string | null
+          reference_claimed_by?: string | null
           search_credits?: number | null
           status?: string | null
           verified_at?: string | null
@@ -386,6 +392,9 @@ export type Database = {
           payment_method?: string | null
           proof_url?: string | null
           reference?: string | null
+          reference_claimed?: boolean | null
+          reference_claimed_at?: string | null
+          reference_claimed_by?: string | null
           search_credits?: number | null
           status?: string | null
           verified_at?: string | null
@@ -485,6 +494,9 @@ export type Database = {
           paypal_transaction_id: string | null
           purchase_id: string
           purchased_at: string | null
+          reference_claimed: boolean | null
+          reference_claimed_at: string | null
+          reference_claimed_by: string | null
           status: string | null
         }
         Insert: {
@@ -500,6 +512,9 @@ export type Database = {
           paypal_transaction_id?: string | null
           purchase_id: string
           purchased_at?: string | null
+          reference_claimed?: boolean | null
+          reference_claimed_at?: string | null
+          reference_claimed_by?: string | null
           status?: string | null
         }
         Update: {
@@ -515,6 +530,9 @@ export type Database = {
           paypal_transaction_id?: string | null
           purchase_id?: string
           purchased_at?: string | null
+          reference_claimed?: boolean | null
+          reference_claimed_at?: string | null
+          reference_claimed_by?: string | null
           status?: string | null
         }
         Relationships: []
@@ -565,6 +583,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      reference_claim_logs: {
+        Row: {
+          created_at: string
+          credits_added: number | null
+          id: string
+          outcome: string
+          reference_number: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          credits_added?: number | null
+          id?: string
+          outcome: string
+          reference_number: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          credits_added?: number | null
+          id?: string
+          outcome?: string
+          reference_number?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       referrals: {
         Row: {

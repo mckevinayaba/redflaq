@@ -36,6 +36,7 @@ import DashboardNewCheck from "./pages/DashboardNewCheck";
 import DashboardReports from "./pages/DashboardReports";
 import DashboardAccount from "./pages/DashboardAccount";
 import DashboardHelp from "./pages/DashboardHelp";
+import ClaimReference from "./pages/ClaimReference";
 import SafetyTips from "./pages/SafetyTips";
 import ConversationGuide from "./pages/ConversationGuide";
 import FirstDateSafety from "./pages/tools/FirstDateSafety";
@@ -82,6 +83,7 @@ const App = () => (
           <Route path="/dashboard/reports" element={<DashboardReports />} />
           <Route path="/dashboard/account" element={<DashboardAccount />} />
           <Route path="/dashboard/help" element={<DashboardHelp />} />
+          <Route path="/dashboard/claim" element={<ClaimReference />} />
           {/* Safety Tips (formerly Tools) */}
           <Route path="/safety-tips" element={<SafetyTips />} />
           <Route path="/conversation-guide" element={<ConversationGuide />} />

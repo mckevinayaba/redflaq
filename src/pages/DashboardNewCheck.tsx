@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Shield, Clock, Lock, Heart, Info, AlertTriangle, Eye, EyeOff } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import BuyChecksModal from "@/components/BuyChecksModal";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import {
@@ -35,6 +36,7 @@ export default function DashboardNewCheck() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const [creditsRemaining, setCreditsRemaining] = useState<number | null>(null);
+  const [buyModalOpen, setBuyModalOpen] = useState(false);
 
   const [firstName, setFirstName] = useState("");
   const [surname, setSurname] = useState("");
@@ -61,7 +63,7 @@ export default function DashboardNewCheck() {
       const mc = (m || []).reduce((s, r) => s + ((r.search_credits || 0) - (r.credits_used || 0)), 0);
       const total = pc + mc;
       setCreditsRemaining(total);
-      if (total <= 0) navigate("/pricing");
+      // Don't auto-redirect; show inline modal instead
     });
   }, [user]);
 
@@ -232,9 +234,9 @@ export default function DashboardNewCheck() {
           <AlertTriangle className="h-5 w-5 text-destructive shrink-0" />
           <div>
             <p className="font-heading text-sm text-foreground">You have no checks remaining</p>
-            <p className="font-body text-xs text-muted-foreground">Purchase checks to continue.</p>
+            <p className="font-body text-xs text-muted-foreground">Purchase checks to continue verifying.</p>
           </div>
-          <Link to="/pricing" className="ml-auto px-4 py-2 bg-primary text-primary-foreground font-body text-xs font-semibold rounded-lg hover:opacity-90 transition-colors whitespace-nowrap">Buy Checks</Link>
+          <button onClick={() => setBuyModalOpen(true)} className="ml-auto px-4 py-2 bg-primary text-primary-foreground font-body text-xs font-semibold rounded-lg hover:opacity-90 transition-colors whitespace-nowrap">Buy Checks</button>
         </div>
       )}
 
@@ -502,6 +504,19 @@ export default function DashboardNewCheck() {
           </div>
         </div>
       </div>
+
+      {/* Support link */}
+      <div className="mt-6 text-center">
+        <a href="mailto:support@redflaq.com" className="font-body text-xs text-muted-foreground hover:text-primary transition-colors">
+          Payment issue? Contact support@redflaq.com
+        </a>
+        {" · "}
+        <Link to="/dashboard/claim" className="font-body text-xs text-muted-foreground hover:text-primary transition-colors">
+          Have a payment reference? Claim your checks
+        </Link>
+      </div>
+
+      <BuyChecksModal open={buyModalOpen} onOpenChange={setBuyModalOpen} />
     </DashboardLayout>
   );
 }

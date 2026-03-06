@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Shield, BarChart3, CheckCircle2, ArrowRight, Heart, Users } from "lucide-react";
 import ShareInviteModal from "@/components/ShareInviteModal";
+import BuyChecksModal from "@/components/BuyChecksModal";
 
 interface SearchRecord {
   id: string;
@@ -32,6 +33,7 @@ export default function Dashboard() {
   const [referralCount, setReferralCount] = useState(0);
   const [freeChecksEarned, setFreeChecksEarned] = useState(0);
   const [creditsRemaining, setCreditsRemaining] = useState(0);
+  const [buyModalOpen, setBuyModalOpen] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -266,13 +268,23 @@ export default function Dashboard() {
 
       {/* Quick actions */}
       <div className="flex flex-wrap gap-4">
-        <Link
-          to="/dashboard/new-check"
-          className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-body font-bold text-sm rounded-lg hover:opacity-90 transition-colors shadow-sm"
-        >
-          <Shield className="h-4 w-4" />
-          Run a new safety check
-        </Link>
+        {creditsRemaining > 0 ? (
+          <Link
+            to="/dashboard/new-check"
+            className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-body font-bold text-sm rounded-lg hover:opacity-90 transition-colors shadow-sm"
+          >
+            <Shield className="h-4 w-4" />
+            Run a new safety check
+          </Link>
+        ) : (
+          <button
+            onClick={() => setBuyModalOpen(true)}
+            className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-body font-bold text-sm rounded-lg hover:opacity-90 transition-colors shadow-sm"
+          >
+            <Shield className="h-4 w-4" />
+            Buy More Checks
+          </button>
+        )}
         <button
           onClick={() => setShareOpen(true)}
           className="inline-flex items-center gap-2 px-6 py-3 border border-border text-foreground font-body font-medium text-sm rounded-lg hover:bg-muted transition-colors"
@@ -282,7 +294,15 @@ export default function Dashboard() {
         </button>
       </div>
 
+      {/* Support link */}
+      <div className="mt-4 text-center">
+        <a href="mailto:support@redflaq.com" className="font-body text-xs text-muted-foreground hover:text-primary transition-colors">
+          Payment issue? Contact support@redflaq.com
+        </a>
+      </div>
+
       <ShareInviteModal open={shareOpen} onOpenChange={setShareOpen} />
+      <BuyChecksModal open={buyModalOpen} onOpenChange={setBuyModalOpen} />
     </DashboardLayout>
   );
 }

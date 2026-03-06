@@ -157,7 +157,7 @@ function ResourceCard({ r }: { r: ProvResource }) {
         (e.currentTarget as HTMLElement).style.boxShadow = "0 1px 3px rgba(0,0,0,0.08)";
       }}
     >
-      <div className="flex items-start justify-between gap-2 mb-2">
+      <div className="flex flex-wrap items-start justify-between gap-2 mb-2">
         <h4 className="font-heading text-[15px] font-bold leading-snug" style={{ color: "#1F1F2E" }}>
           {r.name}
         </h4>

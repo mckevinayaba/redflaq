@@ -221,6 +221,16 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
               <p className="mt-1">Registered Business · Secure Processing</p>
             </div>
           </div>
+
+          {/* Cancel link — secondary exit */}
+          <div className="mt-6 text-center">
+            <button
+              onClick={onClose}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 13, color: '#9CA3AF', textDecoration: 'underline', padding: '8px 16px', minHeight: 44 }}
+            >
+              Cancel and go back
+            </button>
+          </div>
         </div>
       </div>
     </div>,

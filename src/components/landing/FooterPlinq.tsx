@@ -74,7 +74,7 @@ const FooterPlinq = () => {
               </ul>
               <div style={{ marginTop: 24 }}>
                 <h4 style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, color: 'rgba(255,255,255,0.8)', fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 12 }}>Follow RedFlaq</h4>
-                <div style={{ display: 'flex', gap: 10 }}>
+                <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                   {[
                     { icon: 'facebook', href: "https://www.facebook.com/RedFlaqSafety/", path: "M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" },
                     { icon: 'instagram', href: "https://www.instagram.com/redflaqsafety/", paths: ["M2 6a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v12a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4z", "M12 9a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"], circle: true },

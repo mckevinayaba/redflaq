@@ -11,7 +11,6 @@ export default function ResetPassword() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    // Check for recovery token in URL hash
     const hash = window.location.hash;
     if (hash.includes("type=recovery")) {
       setReady(true);
@@ -33,38 +32,84 @@ export default function ResetPassword() {
     setLoading(false);
   };
 
-  const inputStyle: React.CSSProperties = {
-    background: 'white', border: '1.5px solid #D6D3CD', padding: '14px 16px',
-    fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#2D2235',
-    width: '100%', outline: 'none',
-  };
-
   return (
-    <div style={{ background: '#F7F4F0', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+    <div style={{
+      background: '#1a0a2e',
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: 24,
+    }}>
       <div style={{ maxWidth: 480, width: '100%' }}>
-        <Link to="/" className="flex items-center mb-8 justify-center" style={{ gap: 0 }}>
-          <div style={{ width: 28, height: 28, background: '#7C3AED', clipPath: 'polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 900, fontSize: 15, color: '#FFFFFF', lineHeight: 1 }}>R</span>
-          </div>
-          <span style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 18, letterSpacing: '0.1em', color: '#2D2235', marginLeft: 1 }}>EDFLAQ</span>
+        <Link to="/" className="flex items-center mb-8 justify-center" style={{ gap: 8 }}>
+          <img
+            src="/redflaq-icon.png"
+            alt="RedFlaq"
+            style={{ height: 32 }}
+          />
+          <span style={{
+            fontFamily: "'Syne', sans-serif",
+            fontWeight: 800,
+            fontSize: 20,
+            letterSpacing: '0.1em',
+            color: '#FFFFFF',
+          }}>
+            REDFLAQ
+          </span>
         </Link>
 
-        <div style={{ background: 'white', border: '1.5px solid #D6D3CD', padding: 40 }}>
-          <h1 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, color: '#2D2235', marginBottom: 8 }}>
+        <div style={{
+          background: '#ffffff',
+          borderRadius: 16,
+          padding: 40,
+          boxShadow: '0 4px 24px rgba(0,0,0,0.2)',
+        }}>
+          <h1 style={{
+            fontFamily: "'DM Serif Display', serif",
+            fontSize: 28,
+            color: '#1a0a2e',
+            marginBottom: 8,
+          }}>
             Set new password
           </h1>
-          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', marginBottom: 32 }}>
-            {ready ? "Enter your new password below." : "This link may have expired. Request a new one from your account settings."}
+          <p style={{
+            fontFamily: "'Syne', sans-serif",
+            fontSize: 14,
+            color: '#78716C',
+            marginBottom: 32,
+          }}>
+            {ready
+              ? "Enter your new password below."
+              : "This link may have expired. Request a new one from your account settings."}
           </p>
 
           {ready && (
             <form onSubmit={handleSubmit} className="space-y-5">
               <div>
-                <label style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#4B4453', display: 'block', marginBottom: 8 }}>
+                <label style={{
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontSize: 11,
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  color: '#4B4453',
+                  display: 'block',
+                  marginBottom: 8,
+                }}>
                   New Password *
                 </label>
                 <input
-                  style={inputStyle}
+                  style={{
+                    background: 'white',
+                    border: '1.5px solid #D6D3CD',
+                    padding: '14px 16px',
+                    fontFamily: "'Syne', sans-serif",
+                    fontSize: 15,
+                    color: '#2D2235',
+                    width: '100%',
+                    outline: 'none',
+                    borderRadius: 8,
+                  }}
                   type="password"
                   placeholder="At least 6 characters"
                   value={password}
@@ -77,9 +122,16 @@ export default function ResetPassword() {
                 type="submit"
                 disabled={loading || password.length < 6}
                 style={{
-                  width: '100%', background: '#7C3AED', color: 'white', padding: 16,
-                  fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700,
-                  border: 'none', cursor: loading ? 'not-allowed' : 'pointer',
+                  width: '100%',
+                  background: '#7C3AED',
+                  color: 'white',
+                  padding: 16,
+                  fontFamily: "'Syne', sans-serif",
+                  fontSize: 15,
+                  fontWeight: 700,
+                  border: 'none',
+                  borderRadius: 50,
+                  cursor: loading ? 'not-allowed' : 'pointer',
                   opacity: loading ? 0.7 : 1,
                 }}
               >
@@ -90,7 +142,13 @@ export default function ResetPassword() {
         </div>
 
         <div className="text-center mt-6">
-          <Link to="/signup" style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#78716C' }}>← Back to sign in</Link>
+          <Link to="/signup" style={{
+            fontFamily: "'Syne', sans-serif",
+            fontSize: 13,
+            color: 'rgba(255,255,255,0.6)',
+          }}>
+            ← Back to sign in
+          </Link>
         </div>
       </div>
     </div>

@@ -102,7 +102,7 @@ const App = () => (
           <Route path="/blog/:slug" element={<BlogArticle />} />
           {/* Legacy /academy redirects */}
           <Route path="/academy" element={<Navigate to="/blog" replace />} />
-          <Route path="/academy/:slug" element={<Navigate to="/blog/:slug" replace />} />
+          <Route path="/academy/:slug" element={<AcademyRedirect />} />
           {/* Partners */}
           <Route path="/partners" element={<Partners />} />
           <Route path="/partners/apply" element={<PartnersApply />} />

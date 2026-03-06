@@ -26,22 +26,25 @@ function resolvePackage(searchParams: URLSearchParams) {
 export default function PaymentSuccess() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
   const paymentId = searchParams.get("payment_id");
   const email = searchParams.get("email");
   const pkg = resolvePackage(searchParams);
 
-  // Optimistic: show success immediately — Yoco only redirects here on successful payment
   const [showReady, setShowReady] = useState(false);
 
   useEffect(() => {
-    // Brief 2-second "confirming" animation for perceived security, then show success
     const timer = setTimeout(() => setShowReady(true), 2000);
     return () => clearTimeout(timer);
   }, []);
 
   const handleStartCheck = () => {
     sessionStorage.removeItem("pendingSearch");
-    navigate("/dashboard/new-check");
+    if (!user) {
+      navigate("/signup?redirect=/dashboard/new-check");
+    } else {
+      navigate("/dashboard/new-check");
+    }
   };
 
   return (

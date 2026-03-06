@@ -302,6 +302,7 @@ export default function Dashboard() {
       </div>
 
       <ShareInviteModal open={shareOpen} onOpenChange={setShareOpen} />
+      <BuyChecksModal open={buyModalOpen} onOpenChange={setBuyModalOpen} />
     </DashboardLayout>
   );
 }

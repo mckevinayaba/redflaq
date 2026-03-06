@@ -108,7 +108,7 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 animate-in fade-in duration-300"
       onClick={handleBackdropClick}
     >
-      <div className="relative bg-background rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto animate-in zoom-in duration-300">
+      <div className="relative bg-background rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto animate-in zoom-in duration-300" style={{ WebkitOverflowScrolling: 'touch' }}>
         {/* Close button — always visible, high z-index */}
         <button
           onClick={onClose}

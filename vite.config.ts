@@ -10,6 +10,9 @@ export default defineConfig(({ mode }) => ({
     host: "::",
     port: 8080,
   },
+  build: {
+    target: ['es2015', 'chrome79', 'firefox78', 'safari13', 'edge88'],
+  },
   plugins: [
     react(),
     mode === "development" && componentTagger(),

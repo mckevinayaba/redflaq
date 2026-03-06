@@ -107,6 +107,8 @@
     -ms-text-size-adjust: 100%;
     overflow-x: hidden;
     width: 100%;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
   }
 
   #root {
@@ -121,10 +123,74 @@
     color: #0D0B0E;
     overflow-x: hidden;
     width: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'DM Serif Display', serif;
+  }
+
+  /* Safari/iOS form element fixes */
+  input, textarea, select, button {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: 0;
+  }
+  input[type="radio"],
+  input[type="checkbox"] {
+    -webkit-appearance: auto;
+    -moz-appearance: auto;
+    appearance: auto;
+  }
+  button {
+    border-radius: inherit;
+  }
+
+  /* Prevent iOS Safari auto-zoom on input focus */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="tel"],
+  input[type="number"],
+  input[type="search"],
+  input[type="url"],
+  textarea,
+  select {
+    font-size: 16px !important;
+  }
+  @media (min-width: 768px) {
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="tel"],
+    input[type="number"],
+    input[type="search"],
+    input[type="url"],
+    textarea,
+    select {
+      font-size: inherit !important;
+    }
+  }
+
+  /* Safari autofill styling override */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  select:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 1000px hsl(var(--background)) inset !important;
+    -webkit-text-fill-color: hsl(var(--foreground)) !important;
+    transition: background-color 5000s ease-in-out 0s;
+  }
+
+  /* Minimum touch targets on mobile */
+  @media (max-width: 767px) {
+    button, a, [role="button"] {
+      min-height: 44px;
+    }
   }
 }
 
@@ -375,14 +441,6 @@ nav, header {
   opacity: 1 !important;
 }
 
-@supports not (clip-path: polygon(0 0)) {
-  [style*="clip-path"],
-  [style*="ClipPath"] {
-    border-radius: 4px !important;
-    -webkit-clip-path: none !important;
-    clip-path: none !important;
-  }
-}
 
 @layer utilities {
   /* Shake animation for consent hint */
@@ -405,6 +463,31 @@ nav, header {
     from { height: var(--radix-accordion-content-height); opacity: 1; }
     to { height: 0; opacity: 0; }
   }
+
+  /* Cross-browser backdrop-filter with vendor prefixes */
+  .backdrop-blur-sm {
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+  }
+  .backdrop-blur {
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+  .backdrop-blur-md {
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+  .backdrop-blur-lg {
+    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(16px);
+  }
+
+  /* Scrollable containers — iOS smooth scroll */
+  .overflow-y-auto,
+  .overflow-x-auto,
+  .overflow-auto {
+    -webkit-overflow-scrolling: touch;
+  }
 }
 
 /* Ensure navbar is always visible — max specificity for in-app browsers */
@@ -412,4 +495,29 @@ nav, header {
   visibility: visible !important;
   opacity: 1 !important;
   display: block !important;
+}
+
+/* Safari position:sticky fix */
+@supports (-webkit-touch-callout: none) {
+  .sticky {
+    position: -webkit-sticky;
+    position: sticky;
+  }
+}
+
+/* clip-path fallback for older browsers */
+@supports not (clip-path: polygon(0 0)) {
+  [style*="clip-path"],
+  [style*="ClipPath"] {
+    border-radius: 4px !important;
+    -webkit-clip-path: none !important;
+    clip-path: none !important;
+  }
+}
+
+/* Samsung Internet / Opera Mini safe gradients */
+@supports not (background: linear-gradient(135deg, red, blue)) {
+  .animate-gradient {
+    background: #7C3AED !important;
+  }
 }

@@ -100,8 +100,22 @@ const redactId = (id?: string) => {
 
 const getOfficialSourceUrl = (person: WantedPerson): string | null => {
   if (person.detail_page_url) return person.detail_page_url;
-  if (person.source_url && person.source_url !== 'https://www.saps.gov.za/crimestop/wanted/list.php') return person.source_url;
-  if (person.source_urls && person.source_urls.length > 0) return person.source_urls[0];
+  // For za_wanted, derive SAPS detail URL from OpenSanctions entity ID as fallback
+  if (person.source_url) {
+    const zaWantedMatch = person.source_url.match(/za-wanted-(\d+)/);
+    if (zaWantedMatch) {
+      return `https://www.saps.gov.za/crimestop/wanted/detail.php?bid=${zaWantedMatch[1]}`;
+    }
+    if (person.source_url !== 'https://www.saps.gov.za/crimestop/wanted/list.php') return person.source_url;
+  }
+  if (person.source_urls && person.source_urls.length > 0) {
+    // Check source_urls for OpenSanctions za-wanted links and convert them too
+    for (const url of person.source_urls) {
+      const match = url.match(/za-wanted-(\d+)/);
+      if (match) return `https://www.saps.gov.za/crimestop/wanted/detail.php?bid=${match[1]}`;
+    }
+    return person.source_urls[0];
+  }
   if (person.source_dataset === 'za_wanted') return 'https://www.saps.gov.za/crimestop/wanted/list.php';
   return null;
 };

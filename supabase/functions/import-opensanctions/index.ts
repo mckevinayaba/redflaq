@@ -110,6 +110,16 @@ async function importDataset(
         if (m) yearOfBirth = parseInt(m[1]);
       }
 
+      // For za_wanted, derive SAPS detail URL from entity ID (za-wanted-XXXXX → bid=XXXXX)
+      const opensanctionsUrl = `https://www.opensanctions.org/entities/${entityId}/`;
+      let primaryUrl = opensanctionsUrl;
+      let detailPageUrl: string | null = null;
+      const bidMatch = entityId.match(/^za-wanted-(\d+)$/);
+      if (bidMatch) {
+        primaryUrl = `https://www.saps.gov.za/crimestop/wanted/detail.php?bid=${bidMatch[1]}`;
+        detailPageUrl = primaryUrl;
+      }
+
       records.push({
         full_name: name.toUpperCase(),
         first_name: first_name?.toUpperCase() || null,
@@ -118,8 +128,9 @@ async function importDataset(
         aliases,
         country: 'South Africa',
         source_dataset: dataset.name,
-        source_urls: [`https://www.opensanctions.org/entities/${entityId}/`],
-        source_url: `https://www.opensanctions.org/entities/${entityId}/`,
+        source_urls: [primaryUrl, opensanctionsUrl],
+        source_url: primaryUrl,
+        detail_page_url: detailPageUrl,
         charges: sanctions || `Listed in ${dataset.name}`,
         offense_categories: mapOffenseCategory(sanctions, dataset.name),
         legal_status: dataset.name === 'za_fic_sanctions' ? 'sanctioned' : 'wanted',

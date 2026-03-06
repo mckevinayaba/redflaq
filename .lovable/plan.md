@@ -1,55 +1,44 @@
 
 
+# Fix Broken Source Links in Search Results
+
 ## Problem
+The `za_wanted` records (450 entries) store OpenSanctions entity URLs as their source links (e.g., `opensanctions.org/entities/za-wanted-20646/`). Many of these return 404 — OpenSanctions removes/rotates entity pages. Users clicking "View Official Source" see a broken page.
 
-The Tawk.to chat widget is:
-1. Auto-opening its chat window without user interaction
-2. Showing a proactive "We Are Here" popup message
-3. Displaying a "1 new message" notification badge above the navbar
+## Root Cause
+The `import-opensanctions` function generates source URLs pointing to OpenSanctions entity pages. But the **actual** authoritative source is the SAPS detail page. OpenSanctions even links back to it: `https://www.saps.gov.za/crimestop/wanted/detail.php?bid=XXXXX` where the bid number is embedded in the entity ID (`za-wanted-XXXXX`).
 
-All of these are controlled by Tawk.to's API settings.
+## Data Audit by Dataset
+| Dataset | Count | Current source_url | Status |
+|---------|-------|--------------------|--------|
+| `sapswanted_manual` | 40 | SAPS detail pages | Working |
+| `sapswanted_netlify` | 7 | SAPS detail pages | Working |
+| `za_wanted` | 450 | OpenSanctions entity URLs | **Many broken (404)** |
+| `za_fic_sanctions` | 723 | OpenSanctions entity URLs | Working (stable IDs) |
 
-## Fix
+## Fix Plan
 
-Add `Tawk_API` configuration in `index.html` to suppress all auto-popups:
+### 1. Database migration — fix existing `za_wanted` records
+Update all 450 `za_wanted` records to use SAPS detail URLs derived from the entity ID:
+- Extract the bid number from source_url: `za-wanted-XXXXX` → `XXXXX`
+- Set `detail_page_url` = `https://www.saps.gov.za/crimestop/wanted/detail.php?bid=XXXXX`
+- Set `source_url` = same SAPS URL
+- Update `source_urls` array accordingly
 
-1. **Set `Tawk_API.onLoad`** callback to:
-   - Minimize the widget on load (`Tawk_API.minimize()`)
-   - Hide the popup message (`Tawk_API.hideWidget()` is too aggressive — instead use `minimize`)
-2. **Set `Tawk_API.customStyle`** to hide the notification badge
-3. **Disable proactive chat triggers** by setting `Tawk_API.onBeforeLoad` to prevent auto-popup behaviors:
-   - `Tawk_API.visitor` settings won't help — the proactive messages ("We Are Here", auto-open) are configured in the Tawk.to dashboard under **Triggers**
-   
-### What we can control via code
+### 2. Update `import-opensanctions/index.ts` — fix future imports
+For the `za_wanted` dataset, generate SAPS detail URLs instead of OpenSanctions URLs:
+- Extract bid from entity ID (`za-wanted-XXXXX` → `XXXXX`)
+- Store `detail_page_url` and `source_url` as SAPS detail page
+- Keep OpenSanctions URL as a secondary reference in `source_urls`
 
-In `index.html`, before the Tawk script loads, add:
+### 3. Update `getOfficialSourceUrl` in `ResultsPageUpdated.tsx`
+Add a safety fallback: if the source URL contains `opensanctions.org` and the dataset is `za_wanted`, derive the SAPS URL from the entity ID as a last resort. This protects against any records missed by the migration.
 
-```javascript
-Tawk_API.onLoad = function() {
-  Tawk_API.minimize();
-};
-Tawk_API.onChatMessageVisitor = function() {};
-Tawk_API.onChatMessageSystem = function() {};
-```
+### 4. Update `getSourceLabel` for `za_fic_sanctions`
+For FIC sanctions records, the OpenSanctions links work but the label should clarify the source. No URL changes needed for this dataset.
 
-And add CSS to hide the unread badge:
-
-```css
-/* Hide Tawk notification badge */
-.tawk-min-container .tawk-badge {
-  display: none !important;
-}
-```
-
-### What requires Tawk.to dashboard changes
-
-The proactive "We Are Here" message and auto-open behavior are **Triggers** configured in the Tawk.to dashboard (Settings → Triggers). These cannot be fully suppressed from code alone. The `Tawk_API.minimize()` on load will close it if it auto-opens, but the trigger may still fire briefly.
-
-**Recommendation**: Go to your Tawk.to dashboard → Settings → Triggers → disable or delete the proactive greeting trigger. This is the only way to fully stop "We Are Here" and the auto-open.
-
-### Implementation steps
-
-1. Update `index.html`: Add `Tawk_API.onLoad` with `minimize()` call before the embed script
-2. Add CSS to hide the notification badge counter
-3. These changes will make the widget stay minimized and badge-free until a user explicitly clicks it
+### Files to modify
+- `supabase/functions/import-opensanctions/index.ts` — fix URL generation for future imports
+- `src/pages/ResultsPageUpdated.tsx` — add fallback URL derivation
+- New SQL migration — bulk-fix 450 existing `za_wanted` records
 

@@ -234,9 +234,9 @@ export default function DashboardNewCheck() {
           <AlertTriangle className="h-5 w-5 text-destructive shrink-0" />
           <div>
             <p className="font-heading text-sm text-foreground">You have no checks remaining</p>
-            <p className="font-body text-xs text-muted-foreground">Purchase checks to continue.</p>
+            <p className="font-body text-xs text-muted-foreground">Purchase checks to continue verifying.</p>
           </div>
-          <Link to="/pricing" className="ml-auto px-4 py-2 bg-primary text-primary-foreground font-body text-xs font-semibold rounded-lg hover:opacity-90 transition-colors whitespace-nowrap">Buy Checks</Link>
+          <button onClick={() => setBuyModalOpen(true)} className="ml-auto px-4 py-2 bg-primary text-primary-foreground font-body text-xs font-semibold rounded-lg hover:opacity-90 transition-colors whitespace-nowrap">Buy Checks</button>
         </div>
       )}
 

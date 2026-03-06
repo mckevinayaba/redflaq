@@ -14,7 +14,7 @@ const PACKAGES = [
 ];
 
 export default function BuyChecksModal({ open, onOpenChange }: BuyChecksModalProps) {
-  const [selectedPkg, setSelectedPkg] = useState<string | null>(null);
+  const [selectedPkg, setSelectedPkg] = useState<"single" | "3-pack" | "5-pack" | null>(null);
   const [paymentOpen, setPaymentOpen] = useState(false);
 
   if (!open) return null;

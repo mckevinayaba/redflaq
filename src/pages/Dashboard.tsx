@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Shield, BarChart3, CheckCircle2, ArrowRight, Heart, Users } from "lucide-react";
 import ShareInviteModal from "@/components/ShareInviteModal";
+import BuyChecksModal from "@/components/BuyChecksModal";
 
 interface SearchRecord {
   id: string;

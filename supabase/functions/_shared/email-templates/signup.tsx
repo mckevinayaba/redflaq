@@ -36,7 +36,6 @@ export const SignupEmail = ({
     <Body style={main}>
       <Container style={outerWrapper}>
         <Container style={card}>
-          {/* HEADER */}
           <Section style={header}>
             <Img
               src="https://redflaq.lovable.app/redflaq-logo-email.png"
@@ -47,14 +46,12 @@ export const SignupEmail = ({
             <Text style={headerSubtitle}>Public Record Safety Check · South Africa</Text>
           </Section>
 
-          {/* BODY */}
           <Section style={body}>
             <Heading style={h1}>Welcome! 💜</Heading>
             <Text style={paragraph}>
               Thank you for joining RedFlaq. Click the button below to confirm your email and activate your account — it takes one second.
             </Text>
 
-            {/* CTA BUTTON */}
             <Section style={buttonWrapper}>
               <Button style={ctaButton} href={confirmationUrl}>
                 Confirm Your Email →
@@ -67,7 +64,6 @@ export const SignupEmail = ({
 
             <Hr style={divider} />
 
-            {/* WHAT YOU CAN DO */}
             <Text style={sectionLabel}>Once confirmed, you can:</Text>
             <Section style={benefitsBox}>
               <Text style={benefitItem}>✅ &nbsp;Run a public-record safety check in under 60 seconds</Text>
@@ -76,7 +72,6 @@ export const SignupEmail = ({
             </Section>
           </Section>
 
-          {/* FOOTER */}
           <Section style={footer}>
             <Text style={footerText}>
               Questions? Reply to this email or visit{' '}
@@ -94,9 +89,8 @@ export const SignupEmail = ({
 
 export default SignupEmail
 
-/* ─── Styles ─── */
 const main = {
-  backgroundColor: '#f9f7f5',
+  backgroundColor: '#ffffff',
   fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
 }
 

@@ -109,13 +109,19 @@ export default function PaymentSuccess() {
                   transition: 'all 0.2s',
                 }}
               >
-                Start Verifying Now <ArrowRight size={18} />
+                {user ? "Start Verifying Now" : "Sign In to Access Your Checks"} <ArrowRight size={18} />
               </button>
 
-              <div style={{ marginTop: 16 }}>
-                <Link to="/signup?mode=signin" style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#7C3AED' }}>
-                  Sign in to your account
-                </Link>
+              {!user && (
+                <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#78716C', marginTop: 12 }}>
+                  Sign in to access your purchased checks.
+                </p>
+              )}
+
+              <div style={{ marginTop: 16, padding: '12px 16px', background: '#FEF3C7', borderRadius: 8 }}>
+                <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#92400E', lineHeight: 1.5 }}>
+                  <strong>Note:</strong> Your payment was confirmed. If your checks haven't appeared yet, they'll be added within 30 seconds. Refresh your dashboard if needed.
+                </p>
               </div>
             </>
           )}

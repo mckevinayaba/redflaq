@@ -282,6 +282,13 @@ export default function Dashboard() {
         </button>
       </div>
 
+      {/* Support link */}
+      <div className="mt-4 text-center">
+        <a href="mailto:support@redflaq.com" className="font-body text-xs text-muted-foreground hover:text-primary transition-colors">
+          Payment issue? Contact support@redflaq.com
+        </a>
+      </div>
+
       <ShareInviteModal open={shareOpen} onOpenChange={setShareOpen} />
     </DashboardLayout>
   );

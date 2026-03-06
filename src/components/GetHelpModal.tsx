@@ -116,7 +116,7 @@ export default function GetHelpModal({ isOpen, onClose, riskLevel, userProvince 
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 bg-black/70 flex items-center justify-center z-[1000] p-5"
+      style={{ position: 'fixed', inset: 0, zIndex: 2147483647, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, background: 'rgba(0,0,0,0.7)' }}
     >
       <div
         onClick={e => e.stopPropagation()}

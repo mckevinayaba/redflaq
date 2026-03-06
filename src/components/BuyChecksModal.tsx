@@ -70,7 +70,7 @@ export default function BuyChecksModal({ open, onOpenChange }: BuyChecksModalPro
         <PaymentModal
           isOpen={paymentOpen}
           onClose={() => { setPaymentOpen(false); setSelectedPkg(null); }}
-          selectedPackage={selectedPkg}
+          packageType={selectedPkg}
         />
       )}
     </>

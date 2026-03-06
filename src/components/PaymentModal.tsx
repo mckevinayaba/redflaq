@@ -84,7 +84,7 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
   // Redirect transition screen
   if (showRedirect) {
     return createPortal(
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 animate-in fade-in duration-300">
+      <div style={{ position: 'fixed', inset: 0, zIndex: 2147483647, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16, background: 'rgba(0,0,0,0.7)' }}>
         <div className="bg-background rounded-2xl shadow-2xl max-w-md w-full p-10 text-center animate-in zoom-in duration-300">
           <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-5">
             <Lock className="w-8 h-8 text-primary animate-pulse" />

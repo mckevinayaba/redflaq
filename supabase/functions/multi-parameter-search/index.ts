@@ -306,14 +306,16 @@ serve(async (req) => {
       creditDeducted = true;
     } else if (user_id) {
       // Dashboard flow: find user's email and check for any available credits
-      const { data: userData } = await supabase.auth.admin.getUserById(user_id);
-      if (!userData?.user?.email) {
+      if (!userEmail) {
+        const { data: userData2 } = await supabase.auth.admin.getUserById(user_id);
+        userEmail = userData2?.user?.email || null;
+      }
+      if (!userEmail) {
         return new Response(
           JSON.stringify({ success: false, error: 'User not found' }),
           { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
-      const userEmail = userData.user.email;
 
       // Check purchases table first
       const { data: purchases } = await supabase

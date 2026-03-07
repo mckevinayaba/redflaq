@@ -107,7 +107,7 @@ const Index = () => {
       </div>
       <CommunitySectionSA />
       <WhyRedflaqSection />
-      <FounderSection />
+      
       <FAQPlinq />
       <FinalCTAPlinq />
       <ShareSection />

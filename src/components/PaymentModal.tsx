@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { X, Shield, Loader2, Lock } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/useAuth';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -11,6 +12,7 @@ interface PaymentModalProps {
 }
 
 export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: PaymentModalProps) => {
+  const { user } = useAuth();
   const [email, setEmail] = useState('');
   const [selectedPackage, setSelectedPackage] = useState(packageType);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -20,6 +22,13 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
   useEffect(() => {
     setSelectedPackage(packageType);
   }, [packageType]);
+
+  // Auto-fill email from logged-in user
+  useEffect(() => {
+    if (user?.email && !email) {
+      setEmail(user.email);
+    }
+  }, [user]);
 
   // Escape key to close
   useEffect(() => {
@@ -171,12 +180,16 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
             <input
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => !user?.email && setEmail(e.target.value)}
               placeholder="your@email.com"
               className="w-full px-4 py-3 rounded-lg border-2 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-colors bg-background text-foreground"
               required
+              readOnly={!!user?.email}
+              style={user?.email ? { opacity: 0.7, cursor: 'not-allowed' } : undefined}
             />
-            <p className="text-xs text-muted-foreground mt-1">Your receipt and search link will be sent here</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              {user?.email ? 'Linked to your account' : 'Your receipt and search link will be sent here'}
+            </p>
           </div>
 
           {/* Trust disclosure — above pay button */}

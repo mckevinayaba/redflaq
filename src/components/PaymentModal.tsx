@@ -23,6 +23,13 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
     setSelectedPackage(packageType);
   }, [packageType]);
 
+  // Auto-fill email from logged-in user
+  useEffect(() => {
+    if (user?.email && !email) {
+      setEmail(user.email);
+    }
+  }, [user]);
+
   // Escape key to close
   useEffect(() => {
     if (!isOpen) return;

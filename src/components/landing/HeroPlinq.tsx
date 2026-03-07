@@ -30,6 +30,27 @@ const HeroPlinq = () => {
       <div className="grid lg:grid-cols-[55%_45%] min-h-screen max-w-[1280px] mx-auto relative z-10">
         {/* LEFT COLUMN */}
         <div className="pt-24 px-5 pb-10 lg:pt-40 lg:px-10 lg:pb-20" style={{ maxWidth: 640 }}>
+          {/* IWD Campaign Tag */}
+          <div style={{
+            background: 'linear-gradient(135deg, rgba(168,85,247,0.15), rgba(124,58,237,0.1))',
+            border: '1px solid rgba(168,85,247,0.25)',
+            padding: '5px 14px',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 6,
+            borderRadius: 50,
+            fontFamily: "'JetBrains Mono', monospace",
+            fontSize: 10,
+            fontWeight: 500,
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: '#A855F7',
+            marginBottom: 10,
+            boxShadow: '0 0 16px rgba(168,85,247,0.15)',
+          }}>
+            Happy International Women's Day · Launching RedFlaq for Her Safety
+          </div>
+
           {/* Badge — sleek pill with heart icon */}
           <div style={{
             background: 'rgba(124, 58, 237, 0.06)',

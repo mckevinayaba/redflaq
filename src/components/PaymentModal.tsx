@@ -180,12 +180,16 @@ export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: Paymen
             <input
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => !user?.email && setEmail(e.target.value)}
               placeholder="your@email.com"
               className="w-full px-4 py-3 rounded-lg border-2 border-border focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-colors bg-background text-foreground"
               required
+              readOnly={!!user?.email}
+              style={user?.email ? { opacity: 0.7, cursor: 'not-allowed' } : undefined}
             />
-            <p className="text-xs text-muted-foreground mt-1">Your receipt and search link will be sent here</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              {user?.email ? 'Linked to your account' : 'Your receipt and search link will be sent here'}
+            </p>
           </div>
 
           {/* Trust disclosure — above pay button */}

@@ -37,8 +37,11 @@ const WhyRedflaqSection = () => {
             <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: '#1A1523', marginBottom: 4 }}>
               Nthabi Montsho
             </div>
-            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.06em', color: '#7C3AED', marginBottom: 16, lineHeight: 1.5 }}>
+            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.06em', color: '#7C3AED', marginBottom: 8, lineHeight: 1.5 }}>
               Survivor, GBV Advocate & TV Host · Brand Ambassador, RedFlaq
+            </div>
+            <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#7C3AED', marginBottom: 16, fontStyle: 'italic', lineHeight: 1.5 }}>
+              Author of <em>"Women Arise with Power"</em>, a book about her life story as a survivor of GBV
             </div>
             <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#4B4453', lineHeight: 1.7, marginBottom: 12, textAlign: 'left' }}>
               Nthabi Montsho is a force behind South Africa's fight against GBV. She is the founder of Women Arise with Power, a non‑profit helping survivors rebuild their lives, and the author of <em>Women Arise with Power</em>, a powerful account of her own journey as a GBV survivor. As the host of Women Arise with Power on Soweto TV and a Mail & Guardian Women of Power (2022) and She Awards (2024) winner, she uses her platform to push for safety, justice, and dignity for women.

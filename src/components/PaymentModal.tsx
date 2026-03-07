@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { X, Shield, Loader2, Lock } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/hooks/useAuth';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -11,6 +12,7 @@ interface PaymentModalProps {
 }
 
 export const PaymentModal = ({ isOpen, onClose, packageType = 'single' }: PaymentModalProps) => {
+  const { user } = useAuth();
   const [email, setEmail] = useState('');
   const [selectedPackage, setSelectedPackage] = useState(packageType);
   const [isSubmitting, setIsSubmitting] = useState(false);

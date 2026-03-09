@@ -175,7 +175,39 @@ export default function Dashboard() {
       {/* My Payments section */}
       {user?.email && <MyPayments email={user.email} />}
 
-      {/* Recent checks table */}
+      {/* Recent Journal Entries */}
+      <div className="bg-card rounded-xl border border-border shadow-sm mb-6 sm:mb-8">
+        <div className="px-4 sm:px-6 py-4 border-b border-border flex items-center justify-between">
+          <h2 className="font-heading text-base sm:text-lg text-foreground">Recent Journal Entries</h2>
+          {recentJournal.length > 0 && (
+            <Link to="/dashboard/journal" className="font-body text-sm text-primary hover:underline flex items-center gap-1">View all <ArrowRight className="h-3 w-3" /></Link>
+          )}
+        </div>
+        {recentJournal.length === 0 ? (
+          <div className="px-6 py-8 text-center">
+            <BookOpen className="h-8 w-8 text-muted-foreground mx-auto mb-3" />
+            <p className="font-body text-sm text-muted-foreground mb-3">No journal entries yet. Document your first incident.</p>
+            <Link to="/dashboard/journal/new" className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground font-body font-semibold text-sm rounded-lg hover:opacity-90 transition-colors">
+              <BookOpen className="h-4 w-4" /> Create First Entry
+            </Link>
+          </div>
+        ) : (
+          <div className="divide-y divide-border">
+            {recentJournal.map(j => (
+              <Link key={j.id} to={`/dashboard/journal/${j.id}`} className="block px-4 sm:px-6 py-4 hover:bg-muted transition-colors">
+                <p className="font-body text-xs text-muted-foreground mb-1">
+                  📅 {new Date(j.entry_date).toLocaleDateString("en-ZA", { year: "numeric", month: "short", day: "numeric" })}
+                </p>
+                <p className="font-body text-sm text-foreground line-clamp-1">
+                  {j.incident_description.slice(0, 100)}{j.incident_description.length > 100 ? "..." : ""}
+                </p>
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
+
+
       <div className="bg-card rounded-xl border border-border shadow-sm mb-6 sm:mb-8">
         <div className="px-4 sm:px-6 py-4 border-b border-border flex items-center justify-between">
           <h2 className="font-heading text-base sm:text-lg text-foreground">Recent checks</h2>

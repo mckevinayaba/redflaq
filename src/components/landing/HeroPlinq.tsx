@@ -45,7 +45,7 @@ const HeroPlinq = () => {
             marginBottom: 36,
           }}>
             <span style={{ fontSize: 14 }}>♡</span>
-            Built for South African women facing GBV
+            Built for South African women facing GBVF
           </div>
 
           {/* Headline */}

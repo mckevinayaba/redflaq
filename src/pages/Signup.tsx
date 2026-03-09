@@ -151,7 +151,7 @@ export default function Signup() {
           else if (!hasCredits) {
             const firstName = freshUser.user_metadata?.full_name?.split(" ")[0] || "";
             if (firstName) { setWelcomeName(firstName); setShowWelcome(true); }
-            else navigate("/dashboard/new-check");
+            else navigate("/dashboard");
           } else {
             const pending = sessionStorage.getItem("pendingSearch");
             if (pending) { sessionStorage.removeItem("pendingSearch"); sessionStorage.removeItem("fromCTA"); }

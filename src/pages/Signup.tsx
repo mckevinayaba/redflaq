@@ -190,16 +190,16 @@ export default function Signup() {
               Welcome to RedFlaq, {welcomeName}
             </h1>
             <p className="font-body text-[15px] leading-relaxed mb-8" style={{ color: 'rgba(255,255,255,0.6)' }}>
-              Let's run your first safety check. It takes less than 60 seconds and costs R99.
+              Your free safety account is ready. Start by documenting an incident, running a safety check, or exploring your dashboard.
             </p>
-            <button onClick={() => navigate("/dashboard/new-check")}
+            <button onClick={() => navigate("/dashboard")}
               className="w-full font-body font-bold text-[15px] flex items-center justify-center gap-2 transition-all"
               style={{ background: '#7C3AED', color: 'white', padding: '16px 24px', border: 'none', cursor: 'pointer', borderRadius: 50, boxShadow: '0 4px 20px rgba(124,58,237,0.35)' }}>
-              <Shield size={18} /> Run a safety check now
+              <Shield size={18} /> Go to Dashboard
             </button>
-            <button onClick={() => navigate("/dashboard")}
+            <button onClick={() => navigate("/dashboard/journal/new")}
               className="font-body text-sm mt-4" style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer' }}>
-              Go to Dashboard instead
+              Or document an incident →
             </button>
           </div>
         </div>

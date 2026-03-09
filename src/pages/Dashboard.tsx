@@ -44,13 +44,15 @@ export default function Dashboard() {
   }, [user, authLoading]);
 
   const fetchData = async () => {
-    const [{ data: profileData }, { data: searchData }, { data: referralData }] = await Promise.all([
+    const [{ data: profileData }, { data: searchData }, { data: referralData }, { data: journalData }] = await Promise.all([
       supabase.from("profiles").select("full_name").eq("user_id", user!.id).maybeSingle(),
       supabase.from("searches").select("*").eq("user_id", user!.id).order("searched_at", { ascending: false }).limit(20),
       supabase.from("referrals").select("id, status").eq("referrer_user_id", user!.id),
+      supabase.from("journal_entries").select("id, entry_date, incident_description").eq("user_id", user!.id).order("entry_date", { ascending: false }).limit(3),
     ]);
     setProfile(profileData);
     setSearches(searchData || []);
+    setRecentJournal(journalData || []);
     const refs = referralData || [];
     const converted = refs.filter(r => r.status === "signed_up" || r.status === "paid");
     setReferralCount(converted.length);

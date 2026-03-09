@@ -388,58 +388,41 @@ const NavbarPlinq = () => {
 
               {isAuthenticated ? (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  <button
-                    onClick={() => { navigate('/dashboard'); setIsMenuOpen(false); }}
-                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '10px 0', color: '#7C3AED', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 14, background: 'none', border: 'none', cursor: 'pointer' }}
-                  >
+                  <button onClick={() => { navigate('/dashboard'); setIsMenuOpen(false); }}
+                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '10px 0', color: '#7C3AED', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 14, background: 'none', border: 'none', cursor: 'pointer' }}>
                     Dashboard
                   </button>
-                  <button
-                    onClick={() => { handleLogout(); setIsMenuOpen(false); }}
-                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '10px 0', color: '#DC2626', fontFamily: "'Syne', sans-serif", fontWeight: 500, fontSize: 14, background: 'none', border: 'none', cursor: 'pointer' }}
-                  >
+                  <button onClick={() => { navigate('/dashboard/journal'); setIsMenuOpen(false); }}
+                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '10px 0', color: '#4B4453', fontFamily: "'Syne', sans-serif", fontWeight: 500, fontSize: 14, background: 'none', border: 'none', cursor: 'pointer' }}>
+                    My Safety Journal
+                  </button>
+                  <button onClick={() => { navigate('/dashboard/reports'); setIsMenuOpen(false); }}
+                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '10px 0', color: '#4B4453', fontFamily: "'Syne', sans-serif", fontWeight: 500, fontSize: 14, background: 'none', border: 'none', cursor: 'pointer' }}>
+                    My Saved Checks
+                  </button>
+                  <button onClick={handleVerifyNow}
+                    style={{ width: '100%', background: '#7C3AED', color: 'white', padding: '14px 20px', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer', borderRadius: 50, boxShadow: '0 2px 12px rgba(124,58,237,0.25)' }}>
+                    Verify Now
+                  </button>
+                  <button onClick={() => { handleLogout(); setIsMenuOpen(false); }}
+                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '10px 0', color: '#DC2626', fontFamily: "'Syne', sans-serif", fontWeight: 500, fontSize: 14, background: 'none', border: 'none', cursor: 'pointer' }}>
                     Log Out
                   </button>
                 </div>
               ) : (
-                <div style={{ display: 'flex', gap: 10 }}>
-                  <button
-                    onClick={() => { navigate('/signup?mode=signin'); setIsMenuOpen(false); }}
-                    style={{
-                      flex: 1, background: 'transparent', color: '#4B4453',
-                      padding: '14px 16px', fontFamily: "'Syne', sans-serif",
-                      fontWeight: 600, fontSize: 13, border: '1.5px solid rgba(214,211,205,0.7)',
-                      cursor: 'pointer', borderRadius: 50,
-                    }}
-                  >
-                    Log In
-                  </button>
-                  <button
-                    onClick={() => { navigate('/signup'); setIsMenuOpen(false); }}
-                    style={{
-                      flex: 1, background: 'transparent', color: '#7C3AED',
-                      padding: '14px 16px', fontFamily: "'Syne', sans-serif",
-                      fontWeight: 700, fontSize: 13, border: '1.5px solid #7C3AED',
-                      cursor: 'pointer', borderRadius: 50,
-                    }}
-                  >
-                    Sign Up Free
-                  </button>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  <div style={{ display: 'flex', gap: 10 }}>
+                    <button onClick={() => { navigate('/signup?mode=signin'); setIsMenuOpen(false); }}
+                      style={{ flex: 1, background: 'transparent', color: '#4B4453', padding: '14px 16px', fontFamily: "'Syne', sans-serif", fontWeight: 600, fontSize: 13, border: '1.5px solid rgba(214,211,205,0.7)', cursor: 'pointer', borderRadius: 50 }}>
+                      Log In
+                    </button>
+                    <button onClick={() => { navigate('/signup'); setIsMenuOpen(false); }}
+                      style={{ flex: 1, background: 'transparent', color: '#7C3AED', padding: '14px 16px', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, border: '1.5px solid #7C3AED', cursor: 'pointer', borderRadius: 50 }}>
+                      Sign Up Free
+                    </button>
+                  </div>
                 </div>
-              )}
-
-              <button
-                onClick={handleVerifyNow}
-                style={{
-                  width: '100%', background: '#7C3AED', color: 'white',
-                  padding: '14px 20px', fontFamily: "'Syne', sans-serif",
-                  fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer',
-                  borderRadius: 50,
-                  boxShadow: '0 2px 12px rgba(124, 58, 237, 0.25)',
-                }}
-              >
-                Verify Now
-              </button>
+              )
             </div>
           </div>
         </div>

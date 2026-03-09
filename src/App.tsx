@@ -93,7 +93,12 @@ const App = () => (
           <Route path="/dashboard/reports" element={<DashboardReports />} />
           <Route path="/dashboard/account" element={<DashboardAccount />} />
           <Route path="/dashboard/help" element={<DashboardHelp />} />
-          <Route path="/dashboard/claim" element={<ClaimReference />} />
+           <Route path="/dashboard/claim" element={<ClaimReference />} />
+          {/* Journal */}
+          <Route path="/dashboard/journal" element={<JournalList />} />
+          <Route path="/dashboard/journal/new" element={<JournalNew />} />
+          <Route path="/dashboard/journal/export" element={<JournalExport />} />
+          <Route path="/dashboard/journal/:id" element={<JournalDetail />} />
           {/* Safety Tips (formerly Tools) */}
           <Route path="/safety-tips" element={<SafetyTips />} />
           <Route path="/conversation-guide" element={<ConversationGuide />} />

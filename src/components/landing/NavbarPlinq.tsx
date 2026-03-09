@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Menu, X, LayoutDashboard, Settings, LogOut, Share2, Flag } from "lucide-react";
+import { Menu, X, LayoutDashboard, Settings, LogOut, Share2, Flag, BookOpen, FileText, ChevronDown } from "lucide-react";
 import redflaqLogo from "@/assets/redflaq-logo-official.png";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";

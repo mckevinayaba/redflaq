@@ -66,7 +66,6 @@ const HeroPlinq = () => {
             <span style={{ fontSize: 14 }}>♡</span>
             Built for South African women facing GBVF
           </div>
-          </div>
 
           {/* Headline */}
           <h1 style={{

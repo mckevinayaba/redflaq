@@ -339,6 +339,83 @@ export type Database = {
           },
         ]
       }
+      journal_entries: {
+        Row: {
+          created_at: string | null
+          entry_date: string
+          entry_time: string
+          id: string
+          incident_description: string
+          injuries_damage: string | null
+          location: string | null
+          updated_at: string | null
+          user_id: string
+          witnesses: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          entry_date: string
+          entry_time: string
+          id?: string
+          incident_description: string
+          injuries_damage?: string | null
+          location?: string | null
+          updated_at?: string | null
+          user_id: string
+          witnesses?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          entry_date?: string
+          entry_time?: string
+          id?: string
+          incident_description?: string
+          injuries_damage?: string | null
+          location?: string | null
+          updated_at?: string | null
+          user_id?: string
+          witnesses?: string | null
+        }
+        Relationships: []
+      }
+      journal_evidence: {
+        Row: {
+          entry_id: string
+          file_name: string
+          file_size: number
+          file_type: string
+          file_url: string
+          id: string
+          uploaded_at: string | null
+        }
+        Insert: {
+          entry_id: string
+          file_name: string
+          file_size: number
+          file_type: string
+          file_url: string
+          id?: string
+          uploaded_at?: string | null
+        }
+        Update: {
+          entry_id?: string
+          file_name?: string
+          file_size?: number
+          file_type?: string
+          file_url?: string
+          id?: string
+          uploaded_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "journal_evidence_entry_id_fkey"
+            columns: ["entry_id"]
+            isOneToOne: false
+            referencedRelation: "journal_entries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       manual_payments: {
         Row: {
           amount: number

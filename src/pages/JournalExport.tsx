@@ -159,7 +159,7 @@ export default function JournalExport() {
     document.body.appendChild(container);
 
     try {
-      await html2pdf().set({
+      await (html2pdf() as any).set({
         margin: [10, 10, 10, 10],
         filename: `SafetyJournal_${userName.replace(/\s+/g, "_")}_${new Date().toISOString().split("T")[0]}.pdf`,
         image: { type: "jpeg", quality: 0.95 },

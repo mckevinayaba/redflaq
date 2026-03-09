@@ -58,6 +58,10 @@ import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentCancelled from "./pages/PaymentCancelled";
 import DiscreetConfirmation from "./pages/DiscreetConfirmation";
 import SecureReportView from "./pages/SecureReportView";
+import JournalList from "./pages/JournalList";
+import JournalNew from "./pages/JournalNew";
+import JournalDetail from "./pages/JournalDetail";
+import JournalExport from "./pages/JournalExport";
 const queryClient = new QueryClient();
 
 const App = () => (

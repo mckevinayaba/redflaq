@@ -9,8 +9,7 @@ const RealitySection = () => {
   return (
     <section
       ref={ref}
-      className={`scroll-reveal ${isVisible ? 'visible' : ''}`}
-      className="py-12 md:py-20 px-6"
+      className={`scroll-reveal ${isVisible ? 'visible' : ''} py-12 md:py-20 px-6`}
       style={{ background: 'linear-gradient(180deg, #0F0A1A 0%, #1A1035 100%)' }}
     >
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>

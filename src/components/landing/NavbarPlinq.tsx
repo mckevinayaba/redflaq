@@ -12,12 +12,14 @@ import ShareInviteModal from "@/components/ShareInviteModal";
 const NavbarPlinq = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [avatarOpen, setAvatarOpen] = useState(false);
+  const [safetyOpen, setSafetyOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const avatarRef = useRef<HTMLDivElement>(null);
+  const safetyRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
 
   useEffect(() => {

@@ -29,26 +29,7 @@ const HeroPlinq = () => {
       <div className="grid lg:grid-cols-[55%_45%] min-h-screen max-w-[1280px] mx-auto relative z-10">
         {/* LEFT COLUMN */}
         <div className="pt-24 px-5 pb-10 lg:pt-40 lg:px-10 lg:pb-20" style={{ maxWidth: 640 }}>
-          {/* Women's Day badge */}
-          <div style={{
-            background: 'linear-gradient(135deg, rgba(220,38,38,0.08), rgba(124,58,237,0.08))',
-            border: '1px solid rgba(220,38,38,0.2)',
-            padding: '6px 16px',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 8,
-            borderRadius: 50,
-            fontFamily: "'JetBrains Mono', monospace",
-            fontSize: 11,
-            fontWeight: 500,
-            letterSpacing: '0.04em',
-            color: '#DC2626',
-            marginBottom: 16,
-          }}>
-            Happy International Women's Day · Launching RedFlaq for Her Safety
-          </div>
-
-          {/* Positioning badge */}
+          {/* Positioning pill */}
           <div style={{
             background: 'rgba(124, 58, 237, 0.06)',
             border: '1px solid rgba(124, 58, 237, 0.15)',
@@ -61,37 +42,36 @@ const HeroPlinq = () => {
             fontSize: 13,
             fontWeight: 600,
             color: '#7C3AED',
-            marginBottom: 36,
+            marginBottom: 20,
           }}>
             <span style={{ fontSize: 14 }}>♡</span>
             Built for South African women facing GBVF
           </div>
 
-          {/* Headline */}
-          <h1 style={{
-            fontFamily: "'DM Serif Display', serif",
-            lineHeight: 1.02,
-            color: '#1A1523',
-            marginBottom: 12,
-            letterSpacing: '-0.02em',
-          }} className="text-[38px] sm:text-[48px] lg:text-[60px] xl:text-[72px]">
-            Before you give him a spare key,<br />
-            give yourself <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>clarity.</em>
-          </h1>
-
-          {/* NEW positioning sub-line */}
+          {/* Sub-line — immediately under the pill */}
           <p style={{
             fontFamily: "'Syne', sans-serif",
             fontSize: 18,
             fontWeight: 500,
             color: '#4B5563',
             lineHeight: '28px',
-            marginTop: 12,
-            marginBottom: 16,
+            marginBottom: 20,
             maxWidth: 500,
           }}>
             Built for South African women facing GBVF. Designed for anyone protecting the people they love.
           </p>
+
+          {/* Headline */}
+          <h1 style={{
+            fontFamily: "'DM Serif Display', serif",
+            lineHeight: 1.02,
+            color: '#1A1523',
+            marginBottom: 20,
+            letterSpacing: '-0.02em',
+          }} className="text-[38px] sm:text-[48px] lg:text-[60px] xl:text-[72px]">
+            Before you give him a spare key,<br />
+            give yourself <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>clarity.</em>
+          </h1>
 
           <p style={{
             fontFamily: "'Syne', sans-serif",
@@ -99,7 +79,7 @@ const HeroPlinq = () => {
             lineHeight: 1.7,
             color: '#4B4453',
             maxWidth: 500,
-            marginBottom: 12,
+            marginBottom: 16,
             fontSize: 17,
           }}>
             RedFlaq searches South African public-record warning lists so you can make informed decisions about who to trust with your life, home, or business. Instant. Confidential. R99.

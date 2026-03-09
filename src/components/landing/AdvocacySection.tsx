@@ -5,7 +5,7 @@ const AdvocacySection = () => {
   const { guardedAction } = useAuthGuard();
 
   return (
-    <section style={{ background: '#F7F4F0', padding: '80px 20px', borderTop: '1px solid rgba(124,58,237,0.1)' }}>
+    <section className="py-12 md:py-20 px-5" style={{ background: '#F7F4F0', borderTop: '1px solid rgba(124,58,237,0.1)' }}>
       <div style={{ maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
         <img src={advocacyBadge} alt="RedFlaq – Standing for Women's Safety & GBV Prevention" style={{ maxWidth: 280, height: 'auto', margin: '0 auto 28px' }} />
         <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, lineHeight: 1.7, color: '#6B7280', marginBottom: 28 }}>

@@ -13,10 +13,8 @@ const WhyRedflaqSection = () => {
   ];
 
   return (
-    <section id="about" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{
+    <section id="about" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''} py-12 md:py-20 px-6`} style={{
       background: 'linear-gradient(180deg, #0F0A1A 0%, #1A1035 50%, #0F0A1A 100%)',
-      padding: '100px 24px 120px',
-      marginTop: 0,
     }}>
       <div style={{ maxWidth: 900, margin: '0 auto' }}>
         <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 'clamp(36px, 4vw, 48px)', color: '#FFFFFF', textAlign: 'center', marginBottom: 24, letterSpacing: '-0.02em' }}>

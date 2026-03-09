@@ -14,7 +14,7 @@ const FinalCTAPlinq = () => {
     <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ position: 'relative', overflow: 'hidden', minHeight: 500 }}>
       <div style={{ position: 'absolute', inset: 0, zIndex: 0, backgroundImage: `url(${skylineImg})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
       <div style={{ position: 'absolute', inset: 0, zIndex: 1, background: 'linear-gradient(180deg, rgba(15,10,26,0.85), rgba(26,16,53,0.9))' }} />
-      <div style={{ position: 'relative', zIndex: 2, maxWidth: 700, margin: '0 auto', textAlign: 'center', padding: '120px 24px' }}>
+      <div className="py-12 md:py-20 px-6" style={{ position: 'relative', zIndex: 2, maxWidth: 700, margin: '0 auto', textAlign: 'center' }}>
         <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 'clamp(36px, 5vw, 64px)', lineHeight: 1.08, color: 'white', marginBottom: 20, letterSpacing: '-0.02em' }}>
           Before you trust,<br /><em style={{ fontStyle: 'italic' }}>verify.</em>
         </h2>

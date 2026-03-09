@@ -11,7 +11,7 @@ const ShareSection = () => {
   const handleEmail = () => { window.open(`mailto:?subject=${encodeURIComponent("Check out RedFlaq — public-record safety checks")}&body=${encodeURIComponent(`${INVITE_TEXT} ${SHARE_URL}`)}`, "_blank"); };
 
   return (
-    <section style={{ background: '#F7F4F0', padding: '80px 20px' }}>
+    <section className="py-12 md:py-20 px-5" style={{ background: '#F7F4F0' }}>
       <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
         <Heart className="h-8 w-8 mx-auto mb-4" style={{ color: '#7C3AED' }} />
         <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, color: '#1A1523', marginBottom: 12 }}>Share RedFlaq</h3>

@@ -44,7 +44,7 @@ const WhoRedflaqHelps = () => {
   const navigate = useNavigate();
 
   return (
-    <section style={{ background: '#F7F4F0', padding: '120px 24px' }}>
+    <section style={{ background: '#F7F4F0' }} className="py-12 md:py-20 px-6">
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <h2 style={{
           fontFamily: "'DM Serif Display', serif",

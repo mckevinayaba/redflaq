@@ -12,7 +12,7 @@ const HowItWorksPlinq = () => {
   const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section id="how-it-works" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ background: '#F7F4F0', padding: '120px 24px' }}>
+    <section id="how-it-works" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''} py-12 md:py-20 px-6`} style={{ background: '#F7F4F0' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 16 }}>
           The Process

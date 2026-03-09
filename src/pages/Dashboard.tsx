@@ -88,7 +88,39 @@ export default function Dashboard() {
     <DashboardLayout>
       <div className="mb-6 sm:mb-8">
         <p className="font-mono text-[11px] tracking-widest text-muted-foreground uppercase mb-1">Dashboard</p>
-        <h1 className="font-heading text-2xl sm:text-3xl text-foreground">Welcome back{firstName ? `, ${firstName}` : ""}</h1>
+        <h1 className="font-heading text-2xl sm:text-3xl text-foreground">Welcome to your Safety Dashboard</h1>
+        <p className="font-body text-sm text-muted-foreground mt-1">From here you can document incidents, run safety checks and find help if you or someone you love is at risk.</p>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 sm:mb-8">
+        <Link to="/dashboard/new-check" className="bg-card rounded-xl border border-border p-5 hover:shadow-md transition-shadow flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
+            <Shield className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <p className="font-heading text-sm text-foreground">Run Safety Check</p>
+            <p className="font-body text-xs text-muted-foreground">Check someone in under 60 seconds</p>
+          </div>
+        </Link>
+        <Link to="/dashboard/journal/new" className="bg-card rounded-xl border border-border p-5 hover:shadow-md transition-shadow flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
+            <BookOpen className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <p className="font-heading text-sm text-foreground">Document an Incident</p>
+            <p className="font-body text-xs text-muted-foreground">Record what happened privately</p>
+          </div>
+        </Link>
+        <Link to="/safety-tips#get-help" className="bg-card rounded-xl border border-border p-5 hover:shadow-md transition-shadow flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'hsl(var(--risk-danger) / 0.1)' }}>
+            <Flag className="h-5 w-5" style={{ color: 'hsl(var(--risk-danger))' }} />
+          </div>
+          <div>
+            <p className="font-heading text-sm text-foreground">Get Help Now</p>
+            <p className="font-body text-xs text-muted-foreground">Helplines and emergency resources</p>
+          </div>
+        </Link>
       </div>
 
       {/* Top cards */}

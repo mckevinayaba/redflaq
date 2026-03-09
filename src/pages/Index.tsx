@@ -5,6 +5,7 @@ import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import HeroPlinq from "@/components/landing/HeroPlinq";
 import FreeAccountSection from "@/components/landing/FreeAccountSection";
 import WhoRedflaqHelps from "@/components/landing/WhoRedflaqHelps";
+import ProtectionOrdersSection from "@/components/landing/ProtectionOrdersSection";
 import WhyRedflaqExists from "@/components/landing/WhyRedflaqExists";
 import MidPageSignupStrip from "@/components/landing/MidPageSignupStrip";
 import HowItWorksPlinq from "@/components/landing/HowItWorksPlinq";
@@ -72,23 +73,26 @@ const Index = () => {
       {/* 3. Who RedFlaq Helps */}
       <WhoRedflaqHelps />
 
-      {/* 4. Why RedFlaq Exists (updated from "The South African Reality") */}
+      {/* 4. Protection Orders & Evidence Collection (NEW) */}
+      <ProtectionOrdersSection />
+
+      {/* 5. Why RedFlaq Exists */}
       <WhyRedflaqExists />
 
-      {/* 5. Mid-Page Signup Strip */}
+      {/* 6. Mid-Page Signup Strip */}
       <MidPageSignupStrip />
 
-      {/* 6. How It Works */}
+      {/* 7. How It Works */}
       <div id="how-it-works">
         <HowItWorksPlinq />
       </div>
 
-      {/* 7. Pricing */}
+      {/* 8. Pricing */}
       <div id="pricing">
         <PricingPlinq />
       </div>
 
-      {/* 8. Footer */}
+      {/* 9. Footer */}
       <FooterPlinq />
       <PWAInstallBanner />
     </div>

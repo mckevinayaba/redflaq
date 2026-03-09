@@ -13,7 +13,6 @@ const HeroPlinq = () => {
 
   return (
     <section className="relative overflow-hidden" style={{ background: '#F7F4F0', minHeight: '100vh' }}>
-      {/* Subtle radial gradient glow behind hero */}
       <div
         style={{
           position: 'absolute',
@@ -30,27 +29,6 @@ const HeroPlinq = () => {
       <div className="grid lg:grid-cols-[55%_45%] min-h-screen max-w-[1280px] mx-auto relative z-10">
         {/* LEFT COLUMN */}
         <div className="pt-24 px-5 pb-10 lg:pt-40 lg:px-10 lg:pb-20" style={{ maxWidth: 640 }}>
-          {/* IWD Campaign Tag */}
-          <div style={{
-            background: 'linear-gradient(135deg, rgba(168,85,247,0.15), rgba(124,58,237,0.1))',
-            border: '1px solid rgba(168,85,247,0.25)',
-            padding: '5px 14px',
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: 6,
-            borderRadius: 50,
-            fontFamily: "'JetBrains Mono', monospace",
-            fontSize: 10,
-            fontWeight: 500,
-            letterSpacing: '0.1em',
-            textTransform: 'uppercase',
-            color: '#A855F7',
-            marginBottom: 10,
-            boxShadow: '0 0 16px rgba(168,85,247,0.15)',
-          }}>
-            Happy International Women's Day · Launching RedFlaq for Her Safety
-          </div>
-
           {/* Badge — sleek pill with heart icon */}
           <div style={{
             background: 'rgba(124, 58, 237, 0.06)',
@@ -70,17 +48,31 @@ const HeroPlinq = () => {
             Built for South African women facing GBV
           </div>
 
-          {/* Headline — larger, tighter */}
+          {/* Headline */}
           <h1 style={{
             fontFamily: "'DM Serif Display', serif",
             lineHeight: 1.02,
             color: '#1A1523',
-            marginBottom: 28,
+            marginBottom: 12,
             letterSpacing: '-0.02em',
           }} className="text-[38px] sm:text-[48px] lg:text-[60px] xl:text-[72px]">
             Before you give him a spare key,<br />
             give yourself <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>clarity.</em>
           </h1>
+
+          {/* NEW positioning sub-line */}
+          <p style={{
+            fontFamily: "'Syne', sans-serif",
+            fontSize: 18,
+            fontWeight: 500,
+            color: '#4B5563',
+            lineHeight: '28px',
+            marginTop: 12,
+            marginBottom: 16,
+            maxWidth: 500,
+          }}>
+            Built for South African women facing GBVF. Designed for anyone protecting the people they love.
+          </p>
 
           <p style={{
             fontFamily: "'Syne', sans-serif",
@@ -122,7 +114,7 @@ const HeroPlinq = () => {
             ))}
           </div>
 
-          {/* CTAs — pill-shaped */}
+          {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-4">
             <button
               onClick={handleVerify}
@@ -185,8 +177,9 @@ const HeroPlinq = () => {
           <p style={{
             fontFamily: "'Syne', sans-serif",
             fontSize: 14,
-            color: '#6B7280',
-            marginTop: 8,
+            color: '#4B5563',
+            marginTop: 12,
+            lineHeight: '20px',
             textAlign: 'center',
             maxWidth: 500,
           }}>
@@ -216,11 +209,9 @@ const HeroPlinq = () => {
           </div>
         </div>
 
-        {/* RIGHT COLUMN — Hero Photo + Glassmorphism Cards */}
+        {/* RIGHT COLUMN */}
         <div className="flex flex-col justify-center items-center px-5 pb-20 gap-6 lg:px-10 lg:pt-28 lg:pb-20">
-          {/* Hero photo with purple glow ring */}
           <div style={{ position: 'relative', maxWidth: 420, width: '100%' }}>
-            {/* Glow ring behind image */}
             <div style={{
               position: 'absolute',
               inset: -8,
@@ -243,7 +234,6 @@ const HeroPlinq = () => {
             </div>
           </div>
 
-          {/* Glassmorphism stat card */}
           <div ref={statTwoRef} className="w-full" style={{ maxWidth: 420 }}>
             <div style={{
               background: 'rgba(15, 10, 26, 0.92)',
@@ -284,7 +274,6 @@ const HeroPlinq = () => {
             </div>
           </div>
 
-          {/* Glassmorphism founder quote card */}
           <div style={{
             background: 'linear-gradient(135deg, rgba(124,58,237,0.95), rgba(109,40,217,0.95))',
             backdropFilter: 'blur(12px)',

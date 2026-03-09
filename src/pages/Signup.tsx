@@ -340,7 +340,7 @@ export default function Signup() {
                 </div>
               ))}
             </div>
-          )
+          )}
 
           {/* Email not confirmed warning */}
           {emailNotConfirmed && (

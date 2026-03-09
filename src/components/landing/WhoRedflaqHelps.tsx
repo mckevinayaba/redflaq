@@ -1,44 +1,41 @@
 import { useNavigate } from "react-router-dom";
+import { Users, Heart, Home, Briefcase } from "lucide-react";
 
 const personas = [
   {
-    icon: "👩",
-    title: "WOMEN NAVIGATING GBVF RISKS",
+    icon: Users,
+    title: "Women navigating GBVF risks",
     bullets: [
       "Dating app matches before meeting in person",
-      "New romantic partners before getting serious",
-      "Roommates before moving in together",
-      "Anyone who makes you feel unsafe",
+      "New partners before getting serious or moving in",
+      "Anyone whose behaviour is making you feel unsafe",
     ],
   },
   {
-    icon: "👨‍👩‍👧‍👦",
-    title: "PARENTS PROTECTING CHILDREN",
+    icon: Heart,
+    title: "Parents protecting children",
     bullets: [
-      "School transport drivers",
-      "Nannies and childcare providers",
-      "Sports coaches and tutors",
-      "Children's partners",
+      "School transport and lift-club drivers",
+      "Nannies, au pairs and childcare providers",
+      "Coaches, tutors and adults around your children",
     ],
   },
   {
-    icon: "🏠",
-    title: "TENANTS & LANDLORDS",
+    icon: Home,
+    title: "Tenants & landlords",
     bullets: [
-      "Landlords before signing a lease",
-      "Property managers and estate agents",
-      "Roommates and flatmates",
-      "Neighbors if you feel unsafe",
+      "Landlords and property managers before you sign",
+      "Tenants before you hand over keys",
+      "Flatmates in shared accommodation",
     ],
   },
   {
-    icon: "💼",
-    title: "EMPLOYERS & BUSINESSES",
+    icon: Briefcase,
+    title: "Employers & households",
     bullets: [
-      "Domestic workers (cleaners, gardeners)",
-      "Contractors and service providers",
-      "Employees in sensitive roles",
-      "In-home services",
+      "Domestic workers and in-home service providers",
+      "Contractors working inside your home",
+      "Staff in sensitive roles around people or money",
     ],
   },
 ];
@@ -47,12 +44,13 @@ const WhoRedflaqHelps = () => {
   const navigate = useNavigate();
 
   return (
-    <section style={{ background: '#FFFFFF', padding: '80px 24px' }} className="py-[60px] md:py-[80px]">
+    <section style={{ background: '#F7F4F0', padding: '120px 24px' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <h2 style={{
           fontFamily: "'DM Serif Display', serif",
-          fontSize: 'clamp(28px, 3.5vw, 44px)',
-          color: '#1A1523',
+          fontSize: 'clamp(28px, 4vw, 40px)',
+          fontWeight: 700,
+          color: '#111827',
           textAlign: 'center',
           marginBottom: 12,
           letterSpacing: '-0.02em',
@@ -61,50 +59,78 @@ const WhoRedflaqHelps = () => {
         </h2>
         <p style={{
           fontFamily: "'Syne', sans-serif",
-          fontSize: 16,
-          color: '#6B7280',
+          fontSize: 18,
+          color: '#4B5563',
           textAlign: 'center',
-          marginBottom: 48,
+          marginBottom: 56,
+          maxWidth: 700,
+          marginLeft: 'auto',
+          marginRight: 'auto',
         }}>
-          Built for women facing GBVF. Engineered for everyone protecting loved ones.
+          Built for women facing GBVF. Engineered for everyone protecting loved ones in South Africa.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6" style={{ marginBottom: 40 }}>
-          {personas.map((p) => (
-            <div key={p.title} style={{
-              background: '#F9FAFB',
-              borderRadius: 12,
-              padding: 32,
-              border: '1px solid #F3F4F6',
-            }}>
-              <span style={{ fontSize: 48, display: 'block', marginBottom: 16 }}>{p.icon}</span>
-              <h3 style={{
-                fontFamily: "'Syne', sans-serif",
-                fontWeight: 700,
-                fontSize: 15,
-                color: '#1A1523',
-                marginBottom: 16,
-                letterSpacing: '0.04em',
-              }}>
-                {p.title}
-              </h3>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {p.bullets.map((b) => (
-                  <li key={b} style={{
-                    fontFamily: "'Syne', sans-serif",
-                    fontSize: 14,
-                    lineHeight: 1.6,
-                    color: '#4B4453',
-                    paddingLeft: 20,
-                    position: 'relative',
-                  }}>
-                    <span style={{ position: 'absolute', left: 0, color: '#7C3AED' }}>•</span>
-                    {b}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5" style={{ marginBottom: 40 }}>
+          {personas.map((p) => {
+            const Icon = p.icon;
+            return (
+              <div
+                key={p.title}
+                style={{
+                  background: 'linear-gradient(145deg, #0F0A1A, #1A1035)',
+                  borderRadius: 20,
+                  padding: '48px 32px',
+                  border: '1px solid rgba(124,58,237,0.2)',
+                  boxShadow: '0 4px 24px rgba(0,0,0,0.1)',
+                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.boxShadow = '0 12px 40px rgba(124,58,237,0.2)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.transform = 'none';
+                  e.currentTarget.style.boxShadow = '0 4px 24px rgba(0,0,0,0.1)';
+                }}
+              >
+                <div style={{
+                  width: 48, height: 48, borderRadius: '50%',
+                  background: '#EDE9FE',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  marginBottom: 20,
+                }}>
+                  <Icon size={24} color="#7C3AED" aria-label={p.title} />
+                </div>
+                <h3 style={{
+                  fontFamily: "'Syne', sans-serif",
+                  fontWeight: 800,
+                  fontSize: 20,
+                  color: 'white',
+                  marginBottom: 20,
+                }}>
+                  {p.title}
+                </h3>
+                <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 0 }}>
+                  {p.bullets.map((b) => (
+                    <li key={b} style={{
+                      fontFamily: "'Syne', sans-serif",
+                      fontSize: 13,
+                      lineHeight: 1.6,
+                      color: 'rgba(255,255,255,0.8)',
+                      borderBottom: '1px solid rgba(255,255,255,0.08)',
+                      padding: '12px 0',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 10,
+                    }}>
+                      <span style={{ color: '#A855F7', flexShrink: 0 }}>•</span>
+                      {b}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
         </div>
 
         <div style={{ textAlign: 'center' }}>

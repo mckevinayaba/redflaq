@@ -1,18 +1,19 @@
 import { useNavigate } from "react-router-dom";
+import { FileText, Search, AlertCircle, Check } from "lucide-react";
 
 const features = [
   {
-    icon: "📝",
+    icon: FileText,
     title: "My Safety Journal",
     description: "A private, time-stamped journal where you can record incidents, worries and patterns. Add photos, videos or audio, and export your entries to share with a lawyer, social worker or trusted person. Only you can see your journal when logged in.",
   },
   {
-    icon: "🔍",
+    icon: Search,
     title: "Saved Checks",
     description: "Keep a history of everyone you have checked on RedFlaq. Re-download reports, show them to someone you trust, and track your own safety decisions over time.",
   },
   {
-    icon: "🆘",
+    icon: AlertCircle,
     title: "All Safety Resources",
     description: "Instant access to GBV helplines, provincial resources, protection order information and practical safety tips for dating, parenting, tenants, domestic workers and more in South Africa.",
   },
@@ -22,8 +23,10 @@ const FreeAccountSection = () => {
   const navigate = useNavigate();
 
   return (
-    <section style={{ background: '#F5F3FF', padding: '80px 24px' }} className="py-[60px] md:py-[80px]">
+    <section style={{ background: '#F5F3FF', padding: '120px 24px' }} className="py-[60px] md:py-[120px]">
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 16, textAlign: 'center' }}>Free Account</div>
+
         <h2 style={{
           fontFamily: "'DM Serif Display', serif",
           fontSize: 'clamp(28px, 3.5vw, 44px)',
@@ -36,42 +39,69 @@ const FreeAccountSection = () => {
         </h2>
         <p style={{
           fontFamily: "'Syne', sans-serif",
-          fontSize: 16,
+          fontSize: 15,
           color: '#6B7280',
           textAlign: 'center',
-          marginBottom: 48,
+          maxWidth: 520,
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          lineHeight: 1.7,
+          marginBottom: 56,
         }}>
           No credit card required. Always free.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6" style={{ marginBottom: 40 }}>
-          {features.map((f) => (
-            <div key={f.title} style={{
-              background: '#FFFFFF',
-              borderRadius: 12,
-              padding: 32,
-              boxShadow: '0 1px 8px rgba(0,0,0,0.06)',
-            }}>
-              <span style={{ fontSize: 48, display: 'block', marginBottom: 16 }}>{f.icon}</span>
-              <h3 style={{
-                fontFamily: "'Syne', sans-serif",
-                fontWeight: 700,
-                fontSize: 18,
-                color: '#1A1523',
-                marginBottom: 12,
-              }}>
-                {f.title}
-              </h3>
-              <p style={{
-                fontFamily: "'Syne', sans-serif",
-                fontSize: 14,
-                lineHeight: 1.7,
-                color: '#4B4453',
-              }}>
-                {f.description}
-              </p>
-            </div>
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5" style={{ marginBottom: 40 }}>
+          {features.map((f) => {
+            const Icon = f.icon;
+            return (
+              <div
+                key={f.title}
+                style={{
+                  background: 'linear-gradient(145deg, #0F0A1A, #1A1035)',
+                  borderRadius: 20,
+                  padding: '48px 32px',
+                  border: '1px solid rgba(124,58,237,0.2)',
+                  boxShadow: '0 4px 24px rgba(0,0,0,0.1)',
+                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.transform = 'translateY(-4px)';
+                  e.currentTarget.style.boxShadow = '0 12px 40px rgba(124,58,237,0.2)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.transform = 'none';
+                  e.currentTarget.style.boxShadow = '0 4px 24px rgba(0,0,0,0.1)';
+                }}
+              >
+                <div style={{
+                  width: 48, height: 48, borderRadius: '50%',
+                  background: '#EDE9FE',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  marginBottom: 20,
+                }}>
+                  <Icon size={24} color="#7C3AED" aria-label={f.title} />
+                </div>
+                <h3 style={{
+                  fontFamily: "'Syne', sans-serif",
+                  fontWeight: 800,
+                  fontSize: 20,
+                  color: 'white',
+                  marginBottom: 12,
+                }}>
+                  {f.title}
+                </h3>
+                <p style={{
+                  fontFamily: "'Syne', sans-serif",
+                  fontSize: 13,
+                  lineHeight: 1.7,
+                  color: 'rgba(255,255,255,0.7)',
+                }}>
+                  {f.description}
+                </p>
+              </div>
+            );
+          })}
         </div>
 
         <div style={{ textAlign: 'center' }}>

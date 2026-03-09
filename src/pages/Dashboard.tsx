@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useCredits } from "@/hooks/useCredits";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import { Shield, BarChart3, CheckCircle2, ArrowRight, Heart, Users } from "lucide-react";
+import { Shield, BarChart3, CheckCircle2, ArrowRight, Heart, Users, BookOpen, Flag } from "lucide-react";
 import ShareInviteModal from "@/components/ShareInviteModal";
 import BuyChecksModal from "@/components/BuyChecksModal";
 import MyPayments from "@/components/dashboard/MyPayments";
@@ -36,6 +36,7 @@ export default function Dashboard() {
   const [referralCount, setReferralCount] = useState(0);
   const [freeChecksEarned, setFreeChecksEarned] = useState(0);
   const [buyModalOpen, setBuyModalOpen] = useState(false);
+  const [recentJournal, setRecentJournal] = useState<{ id: string; entry_date: string; incident_description: string }[]>([]);
 
   useEffect(() => {
     if (!authLoading && !user) { navigate("/signup"); return; }
@@ -43,13 +44,15 @@ export default function Dashboard() {
   }, [user, authLoading]);
 
   const fetchData = async () => {
-    const [{ data: profileData }, { data: searchData }, { data: referralData }] = await Promise.all([
+    const [{ data: profileData }, { data: searchData }, { data: referralData }, { data: journalData }] = await Promise.all([
       supabase.from("profiles").select("full_name").eq("user_id", user!.id).maybeSingle(),
       supabase.from("searches").select("*").eq("user_id", user!.id).order("searched_at", { ascending: false }).limit(20),
       supabase.from("referrals").select("id, status").eq("referrer_user_id", user!.id),
+      supabase.from("journal_entries").select("id, entry_date, incident_description").eq("user_id", user!.id).order("entry_date", { ascending: false }).limit(3),
     ]);
     setProfile(profileData);
     setSearches(searchData || []);
+    setRecentJournal(journalData || []);
     const refs = referralData || [];
     const converted = refs.filter(r => r.status === "signed_up" || r.status === "paid");
     setReferralCount(converted.length);
@@ -85,7 +88,39 @@ export default function Dashboard() {
     <DashboardLayout>
       <div className="mb-6 sm:mb-8">
         <p className="font-mono text-[11px] tracking-widest text-muted-foreground uppercase mb-1">Dashboard</p>
-        <h1 className="font-heading text-2xl sm:text-3xl text-foreground">Welcome back{firstName ? `, ${firstName}` : ""}</h1>
+        <h1 className="font-heading text-2xl sm:text-3xl text-foreground">Welcome to your Safety Dashboard</h1>
+        <p className="font-body text-sm text-muted-foreground mt-1">From here you can document incidents, run safety checks and find help if you or someone you love is at risk.</p>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 sm:mb-8">
+        <Link to="/dashboard/new-check" className="bg-card rounded-xl border border-border p-5 hover:shadow-md transition-shadow flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
+            <Shield className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <p className="font-heading text-sm text-foreground">Run Safety Check</p>
+            <p className="font-body text-xs text-muted-foreground">Check someone in under 60 seconds</p>
+          </div>
+        </Link>
+        <Link to="/dashboard/journal/new" className="bg-card rounded-xl border border-border p-5 hover:shadow-md transition-shadow flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
+            <BookOpen className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <p className="font-heading text-sm text-foreground">Document an Incident</p>
+            <p className="font-body text-xs text-muted-foreground">Record what happened privately</p>
+          </div>
+        </Link>
+        <Link to="/safety-tips#get-help" className="bg-card rounded-xl border border-border p-5 hover:shadow-md transition-shadow flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'hsl(var(--risk-danger) / 0.1)' }}>
+            <Flag className="h-5 w-5" style={{ color: 'hsl(var(--risk-danger))' }} />
+          </div>
+          <div>
+            <p className="font-heading text-sm text-foreground">Get Help Now</p>
+            <p className="font-body text-xs text-muted-foreground">Helplines and emergency resources</p>
+          </div>
+        </Link>
       </div>
 
       {/* Top cards */}
@@ -140,7 +175,39 @@ export default function Dashboard() {
       {/* My Payments section */}
       {user?.email && <MyPayments email={user.email} />}
 
-      {/* Recent checks table */}
+      {/* Recent Journal Entries */}
+      <div className="bg-card rounded-xl border border-border shadow-sm mb-6 sm:mb-8">
+        <div className="px-4 sm:px-6 py-4 border-b border-border flex items-center justify-between">
+          <h2 className="font-heading text-base sm:text-lg text-foreground">Recent Journal Entries</h2>
+          {recentJournal.length > 0 && (
+            <Link to="/dashboard/journal" className="font-body text-sm text-primary hover:underline flex items-center gap-1">View all <ArrowRight className="h-3 w-3" /></Link>
+          )}
+        </div>
+        {recentJournal.length === 0 ? (
+          <div className="px-6 py-8 text-center">
+            <BookOpen className="h-8 w-8 text-muted-foreground mx-auto mb-3" />
+            <p className="font-body text-sm text-muted-foreground mb-3">No journal entries yet. Document your first incident.</p>
+            <Link to="/dashboard/journal/new" className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground font-body font-semibold text-sm rounded-lg hover:opacity-90 transition-colors">
+              <BookOpen className="h-4 w-4" /> Create First Entry
+            </Link>
+          </div>
+        ) : (
+          <div className="divide-y divide-border">
+            {recentJournal.map(j => (
+              <Link key={j.id} to={`/dashboard/journal/${j.id}`} className="block px-4 sm:px-6 py-4 hover:bg-muted transition-colors">
+                <p className="font-body text-xs text-muted-foreground mb-1">
+                  📅 {new Date(j.entry_date).toLocaleDateString("en-ZA", { year: "numeric", month: "short", day: "numeric" })}
+                </p>
+                <p className="font-body text-sm text-foreground line-clamp-1">
+                  {j.incident_description.slice(0, 100)}{j.incident_description.length > 100 ? "..." : ""}
+                </p>
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
+
+
       <div className="bg-card rounded-xl border border-border shadow-sm mb-6 sm:mb-8">
         <div className="px-4 sm:px-6 py-4 border-b border-border flex items-center justify-between">
           <h2 className="font-heading text-base sm:text-lg text-foreground">Recent checks</h2>

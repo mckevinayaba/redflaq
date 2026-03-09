@@ -151,7 +151,7 @@ export default function Signup() {
           else if (!hasCredits) {
             const firstName = freshUser.user_metadata?.full_name?.split(" ")[0] || "";
             if (firstName) { setWelcomeName(firstName); setShowWelcome(true); }
-            else navigate("/dashboard/new-check");
+            else navigate("/dashboard");
           } else {
             const pending = sessionStorage.getItem("pendingSearch");
             if (pending) { sessionStorage.removeItem("pendingSearch"); sessionStorage.removeItem("fromCTA"); }
@@ -190,16 +190,16 @@ export default function Signup() {
               Welcome to RedFlaq, {welcomeName}
             </h1>
             <p className="font-body text-[15px] leading-relaxed mb-8" style={{ color: 'rgba(255,255,255,0.6)' }}>
-              Let's run your first safety check. It takes less than 60 seconds and costs R99.
+              Your free safety account is ready. Start by documenting an incident, running a safety check, or exploring your dashboard.
             </p>
-            <button onClick={() => navigate("/dashboard/new-check")}
+            <button onClick={() => navigate("/dashboard")}
               className="w-full font-body font-bold text-[15px] flex items-center justify-center gap-2 transition-all"
               style={{ background: '#7C3AED', color: 'white', padding: '16px 24px', border: 'none', cursor: 'pointer', borderRadius: 50, boxShadow: '0 4px 20px rgba(124,58,237,0.35)' }}>
-              <Shield size={18} /> Run a safety check now
+              <Shield size={18} /> Go to Dashboard
             </button>
-            <button onClick={() => navigate("/dashboard")}
+            <button onClick={() => navigate("/dashboard/journal/new")}
               className="font-body text-sm mt-4" style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer' }}>
-              Go to Dashboard instead
+              Or document an incident →
             </button>
           </div>
         </div>
@@ -314,11 +314,33 @@ export default function Signup() {
           )}
 
           <h1 className="font-heading text-[26px] sm:text-[30px] mb-2" style={{ color: '#FFFFFF' }}>
-            {mode === "signup" ? "Create your free account" : "Welcome back"}
+            {mode === "signup" ? "Create your free safety account" : "Welcome back"}
           </h1>
           <p className="font-body text-sm mb-6" style={{ color: 'rgba(255,255,255,0.5)' }}>
-            {mode === "signup" ? "Sign up to start verifying someone." : "Sign in to continue."}
+            {mode === "signup" ? "No credit card required. Built for South African women and communities." : "Sign in to continue."}
           </p>
+
+          {/* What You Get — signup only */}
+          {mode === "signup" && (
+            <div style={{ display: 'grid', gap: 12, marginBottom: 24 }}>
+              {[
+                { icon: "📝", title: "My Safety Journal", desc: "A private, time-stamped journal where you can record incidents, worries and patterns. Add photos, videos or audio, and export your entries to share with a lawyer, social worker or trusted person." },
+                { icon: "🔍", title: "Saved Checks", desc: "Keep a history of everyone you have checked on RedFlaq. Re-download reports, show them to someone you trust, and track your own safety decisions over time." },
+                { icon: "🆘", title: "All Safety Resources", desc: "Instant access to GBV helplines, provincial resources, protection order information and practical safety tips for dating, parenting, tenants, domestic workers and more." },
+              ].map((card) => (
+                <div key={card.title} style={{
+                  background: 'rgba(124,58,237,0.06)', border: '1px solid rgba(124,58,237,0.15)',
+                  borderRadius: 12, padding: '14px 16px', display: 'flex', gap: 12, alignItems: 'flex-start',
+                }}>
+                  <span style={{ fontSize: 20, flexShrink: 0, marginTop: 2 }}>{card.icon}</span>
+                  <div>
+                    <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, fontWeight: 700, color: '#FFFFFF', marginBottom: 4 }}>{card.title}</p>
+                    <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: 'rgba(255,255,255,0.5)', lineHeight: 1.6 }}>{card.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* Email not confirmed warning */}
           {emailNotConfirmed && (
@@ -450,9 +472,11 @@ export default function Signup() {
           </form>
 
           {mode === "signup" && (
-            <p className="font-body text-[12px] mt-4 leading-relaxed" style={{ color: 'rgba(255,255,255,0.35)' }}>
-              We ask for your full name to keep your account secure. Your details never appear in any report.
-            </p>
+            <>
+              <p className="font-body text-[12px] mt-4 leading-relaxed" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                Your data is encrypted and private. RedFlaq never shares your journal or check history without your permission, except where required by South African law.
+              </p>
+            </>
           )}
 
           <div className="mt-5 text-center flex flex-col gap-2">

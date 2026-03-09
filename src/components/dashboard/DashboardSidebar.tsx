@@ -5,11 +5,13 @@ import {
   FileText,
   Settings,
   Heart,
+  BookOpen,
 } from "lucide-react";
 
 const menuItems = [
   { title: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
   { title: "New Safety Check", path: "/dashboard/new-check", icon: Shield },
+  { title: "My Safety Journal", path: "/dashboard/journal", icon: BookOpen },
   { title: "My Reports", path: "/dashboard/reports", icon: FileText },
   { title: "Account", path: "/dashboard/account", icon: Settings },
 ];
@@ -22,7 +24,7 @@ export default function DashboardSidebar() {
       {/* Menu */}
       <nav className="flex-1 px-3 pt-6 space-y-1">
         {menuItems.map((item) => {
-          const isActive = location.pathname === item.path;
+          const isActive = location.pathname === item.path || (item.path === "/dashboard/journal" && location.pathname.startsWith("/dashboard/journal"));
           return (
             <Link
               key={item.path}

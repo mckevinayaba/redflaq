@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { Menu, X, LayoutDashboard, Settings, LogOut, Share2, Flag } from "lucide-react";
+import { Menu, X, LayoutDashboard, Settings, LogOut, Share2, Flag, BookOpen, FileText, ChevronDown } from "lucide-react";
 import redflaqLogo from "@/assets/redflaq-logo-official.png";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
@@ -12,17 +12,20 @@ import ShareInviteModal from "@/components/ShareInviteModal";
 const NavbarPlinq = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [avatarOpen, setAvatarOpen] = useState(false);
+  const [safetyOpen, setSafetyOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const avatarRef = useRef<HTMLDivElement>(null);
+  const safetyRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (avatarRef.current && !avatarRef.current.contains(e.target as Node)) setAvatarOpen(false);
+      if (safetyRef.current && !safetyRef.current.contains(e.target as Node)) setSafetyOpen(false);
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
@@ -179,17 +182,50 @@ const NavbarPlinq = () => {
 
               {isAuthenticated ? (
                 <>
-                  <button
-                    onClick={() => navigate('/dashboard')}
-                    className="nav-link-hover"
-                    style={{
-                      background: 'none', border: 'none', cursor: 'pointer',
-                      fontFamily: "'Syne', sans-serif", fontWeight: 500, fontSize: 13,
-                      color: '#4B4453', padding: '4px 0', position: 'relative',
-                    }}
-                  >
-                    Dashboard
-                  </button>
+                  {/* My Safety dropdown */}
+                  <div style={{ position: 'relative' }} ref={safetyRef}>
+                    <button
+                      onClick={() => setSafetyOpen(!safetyOpen)}
+                      className="nav-link-hover"
+                      style={{
+                        background: 'none', border: 'none', cursor: 'pointer',
+                        fontFamily: "'Syne', sans-serif", fontWeight: 500, fontSize: 13,
+                        color: '#4B4453', padding: '4px 0', position: 'relative',
+                        display: 'flex', alignItems: 'center', gap: 4,
+                      }}
+                    >
+                      My Safety <ChevronDown style={{ width: 14, height: 14, transition: 'transform 0.2s', transform: safetyOpen ? 'rotate(180deg)' : 'rotate(0)' }} />
+                    </button>
+                    {safetyOpen && (
+                      <div style={{
+                        position: 'absolute', left: 0, top: 36, width: 220,
+                        background: 'rgba(255,255,255,0.95)', backdropFilter: 'blur(12px)',
+                        border: '1px solid rgba(214,211,205,0.6)', borderRadius: 12,
+                        boxShadow: '0 8px 32px rgba(0,0,0,0.12)', zIndex: 50, padding: '6px 0',
+                      }}>
+                        <button onClick={() => { navigate('/dashboard'); setSafetyOpen(false); }} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '11px 18px', width: '100%', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#2D2235', fontWeight: 500, borderRadius: 8, transition: 'background 0.15s' }}
+                          onMouseEnter={e => e.currentTarget.style.background = 'rgba(124,58,237,0.06)'}
+                          onMouseLeave={e => e.currentTarget.style.background = 'none'}
+                        >
+                          <LayoutDashboard style={{ width: 16, height: 16, color: '#9B8FA3' }} /> Dashboard
+                        </button>
+                        <button onClick={() => { navigate('/dashboard/journal'); setSafetyOpen(false); }} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '11px 18px', width: '100%', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#2D2235', fontWeight: 500, borderRadius: 8, transition: 'background 0.15s' }}
+                          onMouseEnter={e => e.currentTarget.style.background = 'rgba(124,58,237,0.06)'}
+                          onMouseLeave={e => e.currentTarget.style.background = 'none'}
+                        >
+                          <BookOpen style={{ width: 16, height: 16, color: '#9B8FA3' }} /> My Safety Journal
+                        </button>
+                        <button onClick={() => { navigate('/dashboard/reports'); setSafetyOpen(false); }} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '11px 18px', width: '100%', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#2D2235', fontWeight: 500, borderRadius: 8, transition: 'background 0.15s' }}
+                          onMouseEnter={e => e.currentTarget.style.background = 'rgba(124,58,237,0.06)'}
+                          onMouseLeave={e => e.currentTarget.style.background = 'none'}
+                        >
+                          <FileText style={{ width: 16, height: 16, color: '#9B8FA3' }} /> My Saved Checks
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Avatar dropdown */}
                   <div style={{ position: 'relative' }} ref={avatarRef}>
                     <button
                       onClick={() => setAvatarOpen(!avatarOpen)}
@@ -213,17 +249,11 @@ const NavbarPlinq = () => {
                         border: '1px solid rgba(214,211,205,0.6)', borderRadius: 12,
                         boxShadow: '0 8px 32px rgba(0,0,0,0.12)', zIndex: 50, padding: '6px 0',
                       }}>
-                        <button onClick={() => { navigate('/dashboard'); setAvatarOpen(false); }} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '11px 18px', width: '100%', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#2D2235', fontWeight: 500, borderRadius: 8, transition: 'background 0.15s' }}
-                          onMouseEnter={e => e.currentTarget.style.background = 'rgba(124,58,237,0.06)'}
-                          onMouseLeave={e => e.currentTarget.style.background = 'none'}
-                        >
-                          <LayoutDashboard style={{ width: 16, height: 16, color: '#9B8FA3' }} /> Dashboard
-                        </button>
                         <button onClick={() => { navigate('/dashboard/account'); setAvatarOpen(false); }} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '11px 18px', width: '100%', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#2D2235', fontWeight: 500, borderRadius: 8, transition: 'background 0.15s' }}
                           onMouseEnter={e => e.currentTarget.style.background = 'rgba(124,58,237,0.06)'}
                           onMouseLeave={e => e.currentTarget.style.background = 'none'}
                         >
-                          <Settings style={{ width: 16, height: 16, color: '#9B8FA3' }} /> Account
+                          <Settings style={{ width: 16, height: 16, color: '#9B8FA3' }} /> Account Settings
                         </button>
                         <div style={{ borderTop: '1px solid rgba(214,211,205,0.5)', margin: '4px 12px' }} />
                         <button onClick={handleLogout} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '11px 18px', width: '100%', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#DC2626', fontWeight: 500, borderRadius: 8, transition: 'background 0.15s' }}
@@ -235,51 +265,51 @@ const NavbarPlinq = () => {
                       </div>
                     )}
                   </div>
+
+                  {/* Verify Now — only for logged-in */}
+                  <button
+                    onClick={handleVerifyNow}
+                    style={{
+                      background: '#7C3AED', color: 'white', padding: '10px 24px',
+                      fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13,
+                      letterSpacing: '0.02em', border: 'none', cursor: 'pointer', borderRadius: 50,
+                      transition: 'background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease',
+                      boxShadow: '0 2px 12px rgba(124, 58, 237, 0.25)',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.background = '#6D28D9'; e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(124,58,237,0.35)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = '#7C3AED'; e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 2px 12px rgba(124,58,237,0.25)'; }}
+                  >
+                    Verify Now
+                  </button>
                 </>
               ) : (
-                <button
-                  onClick={() => navigate('/signup?mode=signin')}
-                  className="nav-link-hover"
-                  style={{
-                    background: 'none', border: 'none', cursor: 'pointer',
-                    fontFamily: "'Syne', sans-serif", fontWeight: 500, fontSize: 13,
-                    color: '#4B4453', padding: '4px 0', position: 'relative',
-                  }}
-                >
-                  Log In
-                </button>
+                <>
+                  <button
+                    onClick={() => navigate('/signup?mode=signin')}
+                    className="nav-link-hover"
+                    style={{
+                      background: 'none', border: 'none', cursor: 'pointer',
+                      fontFamily: "'Syne', sans-serif", fontWeight: 500, fontSize: 13,
+                      color: '#4B4453', padding: '4px 0', position: 'relative',
+                    }}
+                  >
+                    Log In
+                  </button>
+                  <button
+                    onClick={() => navigate('/signup')}
+                    style={{
+                      background: 'transparent', color: '#7C3AED', padding: '10px 24px',
+                      fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13,
+                      border: '1.5px solid #7C3AED', cursor: 'pointer', borderRadius: 50,
+                      transition: 'background 0.2s ease, transform 0.2s ease',
+                    }}
+                    onMouseEnter={e => { e.currentTarget.style.background = 'rgba(124,58,237,0.06)'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.transform = 'translateY(0)'; }}
+                  >
+                    Sign Up Free
+                  </button>
+                </>
               )}
-
-              {/* Verify Now — purple pill CTA */}
-              <button
-                onClick={handleVerifyNow}
-                style={{
-                  background: '#7C3AED',
-                  color: 'white',
-                  padding: '10px 24px',
-                  fontFamily: "'Syne', sans-serif",
-                  fontWeight: 700,
-                  fontSize: 13,
-                  letterSpacing: '0.02em',
-                  border: 'none',
-                  cursor: 'pointer',
-                  borderRadius: 50,
-                  transition: 'background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease',
-                  boxShadow: '0 2px 12px rgba(124, 58, 237, 0.25)',
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.background = '#6D28D9';
-                  e.currentTarget.style.transform = 'translateY(-1px)';
-                  e.currentTarget.style.boxShadow = '0 4px 20px rgba(124, 58, 237, 0.35)';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.background = '#7C3AED';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 2px 12px rgba(124, 58, 237, 0.25)';
-                }}
-              >
-                Verify Now
-              </button>
 
               {/* Share icon */}
               <button
@@ -358,58 +388,41 @@ const NavbarPlinq = () => {
 
               {isAuthenticated ? (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  <button
-                    onClick={() => { navigate('/dashboard'); setIsMenuOpen(false); }}
-                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '10px 0', color: '#7C3AED', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 14, background: 'none', border: 'none', cursor: 'pointer' }}
-                  >
+                  <button onClick={() => { navigate('/dashboard'); setIsMenuOpen(false); }}
+                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '10px 0', color: '#7C3AED', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 14, background: 'none', border: 'none', cursor: 'pointer' }}>
                     Dashboard
                   </button>
-                  <button
-                    onClick={() => { handleLogout(); setIsMenuOpen(false); }}
-                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '10px 0', color: '#DC2626', fontFamily: "'Syne', sans-serif", fontWeight: 500, fontSize: 14, background: 'none', border: 'none', cursor: 'pointer' }}
-                  >
+                  <button onClick={() => { navigate('/dashboard/journal'); setIsMenuOpen(false); }}
+                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '10px 0', color: '#4B4453', fontFamily: "'Syne', sans-serif", fontWeight: 500, fontSize: 14, background: 'none', border: 'none', cursor: 'pointer' }}>
+                    My Safety Journal
+                  </button>
+                  <button onClick={() => { navigate('/dashboard/reports'); setIsMenuOpen(false); }}
+                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '10px 0', color: '#4B4453', fontFamily: "'Syne', sans-serif", fontWeight: 500, fontSize: 14, background: 'none', border: 'none', cursor: 'pointer' }}>
+                    My Saved Checks
+                  </button>
+                  <button onClick={handleVerifyNow}
+                    style={{ width: '100%', background: '#7C3AED', color: 'white', padding: '14px 20px', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer', borderRadius: 50, boxShadow: '0 2px 12px rgba(124,58,237,0.25)' }}>
+                    Verify Now
+                  </button>
+                  <button onClick={() => { handleLogout(); setIsMenuOpen(false); }}
+                    style={{ display: 'block', width: '100%', textAlign: 'left', padding: '10px 0', color: '#DC2626', fontFamily: "'Syne', sans-serif", fontWeight: 500, fontSize: 14, background: 'none', border: 'none', cursor: 'pointer' }}>
                     Log Out
                   </button>
                 </div>
               ) : (
-                <div style={{ display: 'flex', gap: 10 }}>
-                  <button
-                    onClick={() => { navigate('/signup?mode=signin'); setIsMenuOpen(false); }}
-                    style={{
-                      flex: 1, background: 'transparent', color: '#4B4453',
-                      padding: '14px 16px', fontFamily: "'Syne', sans-serif",
-                      fontWeight: 600, fontSize: 13, border: '1.5px solid rgba(214,211,205,0.7)',
-                      cursor: 'pointer', borderRadius: 50,
-                    }}
-                  >
-                    Log In
-                  </button>
-                  <button
-                    onClick={() => { navigate('/signup'); setIsMenuOpen(false); }}
-                    style={{
-                      flex: 1, background: 'transparent', color: '#7C3AED',
-                      padding: '14px 16px', fontFamily: "'Syne', sans-serif",
-                      fontWeight: 700, fontSize: 13, border: '1.5px solid #7C3AED',
-                      cursor: 'pointer', borderRadius: 50,
-                    }}
-                  >
-                    Sign Up Free
-                  </button>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  <div style={{ display: 'flex', gap: 10 }}>
+                    <button onClick={() => { navigate('/signup?mode=signin'); setIsMenuOpen(false); }}
+                      style={{ flex: 1, background: 'transparent', color: '#4B4453', padding: '14px 16px', fontFamily: "'Syne', sans-serif", fontWeight: 600, fontSize: 13, border: '1.5px solid rgba(214,211,205,0.7)', cursor: 'pointer', borderRadius: 50 }}>
+                      Log In
+                    </button>
+                    <button onClick={() => { navigate('/signup'); setIsMenuOpen(false); }}
+                      style={{ flex: 1, background: 'transparent', color: '#7C3AED', padding: '14px 16px', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, border: '1.5px solid #7C3AED', cursor: 'pointer', borderRadius: 50 }}>
+                      Sign Up Free
+                    </button>
+                  </div>
                 </div>
               )}
-
-              <button
-                onClick={handleVerifyNow}
-                style={{
-                  width: '100%', background: '#7C3AED', color: 'white',
-                  padding: '14px 20px', fontFamily: "'Syne', sans-serif",
-                  fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer',
-                  borderRadius: 50,
-                  boxShadow: '0 2px 12px rgba(124, 58, 237, 0.25)',
-                }}
-              >
-                Verify Now
-              </button>
             </div>
           </div>
         </div>

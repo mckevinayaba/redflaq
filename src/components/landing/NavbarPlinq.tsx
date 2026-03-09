@@ -25,6 +25,7 @@ const NavbarPlinq = () => {
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (avatarRef.current && !avatarRef.current.contains(e.target as Node)) setAvatarOpen(false);
+      if (safetyRef.current && !safetyRef.current.contains(e.target as Node)) setSafetyOpen(false);
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);

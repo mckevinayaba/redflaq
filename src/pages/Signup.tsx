@@ -472,9 +472,11 @@ export default function Signup() {
           </form>
 
           {mode === "signup" && (
-            <p className="font-body text-[12px] mt-4 leading-relaxed" style={{ color: 'rgba(255,255,255,0.35)' }}>
-              We ask for your full name to keep your account secure. Your details never appear in any report.
-            </p>
+            <>
+              <p className="font-body text-[12px] mt-4 leading-relaxed" style={{ color: 'rgba(255,255,255,0.35)' }}>
+                Your data is encrypted and private. RedFlaq never shares your journal or check history without your permission, except where required by South African law.
+              </p>
+            </>
           )}
 
           <div className="mt-5 text-center flex flex-col gap-2">

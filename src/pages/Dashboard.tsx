@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useCredits } from "@/hooks/useCredits";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import { Shield, BarChart3, CheckCircle2, ArrowRight, Heart, Users } from "lucide-react";
+import { Shield, BarChart3, CheckCircle2, ArrowRight, Heart, Users, BookOpen, Flag } from "lucide-react";
 import ShareInviteModal from "@/components/ShareInviteModal";
 import BuyChecksModal from "@/components/BuyChecksModal";
 import MyPayments from "@/components/dashboard/MyPayments";

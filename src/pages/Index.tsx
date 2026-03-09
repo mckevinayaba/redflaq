@@ -3,31 +3,19 @@ import { Link, useSearchParams } from "react-router-dom";
 import { Check, X } from "lucide-react";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import HeroPlinq from "@/components/landing/HeroPlinq";
-import TickerBar from "@/components/landing/TickerBar";
-import TrustBarPlinq from "@/components/landing/TrustBarPlinq";
-import PhotoGrid from "@/components/landing/PhotoGrid";
-
-import RealitySection from "@/components/landing/RealitySection";
-import BarrierSection from "@/components/landing/BarrierSection";
-import SearchOptionsSection from "@/components/landing/SearchOptionsSection";
+import FreeAccountSection from "@/components/landing/FreeAccountSection";
+import WhoRedflaqHelps from "@/components/landing/WhoRedflaqHelps";
+import WhyRedflaqExists from "@/components/landing/WhyRedflaqExists";
+import MidPageSignupStrip from "@/components/landing/MidPageSignupStrip";
 import HowItWorksPlinq from "@/components/landing/HowItWorksPlinq";
-import RiskLevelsSection from "@/components/landing/RiskLevelsSection";
 import PricingPlinq from "@/components/landing/PricingPlinq";
-import CommunitySectionSA from "@/components/landing/CommunitySectionSA";
-import WhyRedflaqSection from "@/components/landing/WhyRedflaqSection";
-import TestimonialsSectionNew from "@/components/landing/TestimonialsSectionNew";
-import FAQPlinq from "@/components/landing/FAQPlinq";
-import FinalCTAPlinq from "@/components/landing/FinalCTAPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
-import ShareSection from "@/components/landing/ShareSection";
-import AdvocacySection from "@/components/landing/AdvocacySection";
 import { PWAInstallBanner } from "@/components/PWAInstallBanner";
 
 const Index = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [showConfirmedBanner, setShowConfirmedBanner] = useState(false);
 
-  // Capture referral param & check for email confirmation redirect
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const ref = params.get("ref");
@@ -36,11 +24,9 @@ const Index = () => {
     }
     if (params.get("confirmed") === "true") {
       setShowConfirmedBanner(true);
-      // Clean URL
       const newParams = new URLSearchParams(params);
       newParams.delete("confirmed");
       setSearchParams(newParams, { replace: true });
-      // Auto-dismiss after 10 seconds
       const timer = setTimeout(() => setShowConfirmedBanner(false), 10000);
       return () => clearTimeout(timer);
     }
@@ -48,7 +34,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen" style={{ background: '#F7F4F0', overflowX: 'hidden' }}>
-      {/* Email confirmed banner */}
       {showConfirmedBanner && (
         <div style={{
           position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999,
@@ -75,43 +60,35 @@ const Index = () => {
           </button>
         </div>
       )}
+
       <NavbarPlinq />
+
+      {/* 1. Hero */}
       <HeroPlinq />
-      <TickerBar />
-      <TrustBarPlinq />
-      <PhotoGrid />
-      <RealitySection />
-      <BarrierSection />
-      <SearchOptionsSection />
-      <HowItWorksPlinq />
-      <RiskLevelsSection />
-      <PricingPlinq />
 
-      {/* Social proof trust bar */}
-      <div style={{
-        width: '100%',
-        background: 'linear-gradient(90deg, #7C3AED, #6D28D9, #7C3AED)',
-        padding: '14px 20px',
-        textAlign: 'center',
-      }}>
-        <span style={{
-          fontFamily: "'JetBrains Mono', monospace", fontSize: 12, fontWeight: 500,
-          letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.9)',
-        }}>
-          Trusted by women across South Africa <span style={{ opacity: 0.3, fontSize: 8, padding: '0 12px' }}>◆</span> No fingerprints. No waiting. No police station. Just clarity — in under 60 seconds.
-        </span>
+      {/* 2. Create Your Free Safety Account */}
+      <FreeAccountSection />
+
+      {/* 3. Who RedFlaq Helps */}
+      <WhoRedflaqHelps />
+
+      {/* 4. Why RedFlaq Exists (updated from "The South African Reality") */}
+      <WhyRedflaqExists />
+
+      {/* 5. Mid-Page Signup Strip */}
+      <MidPageSignupStrip />
+
+      {/* 6. How It Works */}
+      <div id="how-it-works">
+        <HowItWorksPlinq />
       </div>
 
-      <div id="testimonials">
-        <TestimonialsSectionNew />
+      {/* 7. Pricing */}
+      <div id="pricing">
+        <PricingPlinq />
       </div>
-      <CommunitySectionSA />
-      <WhyRedflaqSection />
-      
-      <FAQPlinq />
-      <FinalCTAPlinq />
-      <ShareSection />
-      <AdvocacySection />
+
+      {/* 8. Footer */}
       <FooterPlinq />
       <PWAInstallBanner />
     </div>

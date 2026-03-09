@@ -181,6 +181,18 @@ const HeroPlinq = () => {
             </button>
           </div>
 
+          {/* Free account nudge */}
+          <p style={{
+            fontFamily: "'Syne', sans-serif",
+            fontSize: 14,
+            color: '#6B7280',
+            marginTop: 8,
+            textAlign: 'center',
+            maxWidth: 500,
+          }}>
+            Create a free safety account to save checks and use My Safety Journal. No card required.
+          </p>
+
           {/* Login link */}
           <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', marginTop: 28 }}>
             Already have an account?{" "}

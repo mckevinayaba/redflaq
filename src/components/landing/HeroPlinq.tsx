@@ -29,7 +29,26 @@ const HeroPlinq = () => {
       <div className="grid lg:grid-cols-[55%_45%] min-h-screen max-w-[1280px] mx-auto relative z-10">
         {/* LEFT COLUMN */}
         <div className="pt-24 px-5 pb-10 lg:pt-40 lg:px-10 lg:pb-20" style={{ maxWidth: 640 }}>
-          {/* Badge — sleek pill with heart icon */}
+          {/* Women's Day badge */}
+          <div style={{
+            background: 'linear-gradient(135deg, rgba(220,38,38,0.08), rgba(124,58,237,0.08))',
+            border: '1px solid rgba(220,38,38,0.2)',
+            padding: '6px 16px',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 8,
+            borderRadius: 50,
+            fontFamily: "'JetBrains Mono', monospace",
+            fontSize: 11,
+            fontWeight: 500,
+            letterSpacing: '0.04em',
+            color: '#DC2626',
+            marginBottom: 16,
+          }}>
+            Happy International Women's Day · Launching RedFlaq for Her Safety
+          </div>
+
+          {/* Positioning badge */}
           <div style={{
             background: 'rgba(124, 58, 237, 0.06)',
             border: '1px solid rgba(124, 58, 237, 0.15)',
@@ -45,7 +64,7 @@ const HeroPlinq = () => {
             marginBottom: 36,
           }}>
             <span style={{ fontSize: 14 }}>♡</span>
-            Built for South African women facing GBV
+            Built for South African women facing GBVF
           </div>
 
           {/* Headline */}

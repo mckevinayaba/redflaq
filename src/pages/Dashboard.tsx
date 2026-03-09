@@ -36,6 +36,7 @@ export default function Dashboard() {
   const [referralCount, setReferralCount] = useState(0);
   const [freeChecksEarned, setFreeChecksEarned] = useState(0);
   const [buyModalOpen, setBuyModalOpen] = useState(false);
+  const [recentJournal, setRecentJournal] = useState<{ id: string; entry_date: string; incident_description: string }[]>([]);
 
   useEffect(() => {
     if (!authLoading && !user) { navigate("/signup"); return; }

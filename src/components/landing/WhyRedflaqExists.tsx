@@ -10,10 +10,8 @@ const WhyRedflaqExists = () => {
     <section
       ref={ref}
       className={`scroll-reveal ${isVisible ? 'visible' : ''}`}
-      style={{
-        background: 'linear-gradient(180deg, #0F0A1A 0%, #1A1035 100%)',
-        padding: '120px 24px',
-      }}
+      className="py-12 md:py-20 px-6"
+      style={{ background: 'linear-gradient(180deg, #0F0A1A 0%, #1A1035 100%)' }}
     >
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <div className="section-tag" style={{ color: '#A855F7', marginBottom: 40 }}>

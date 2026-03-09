@@ -23,7 +23,7 @@ const FreeAccountSection = () => {
   const navigate = useNavigate();
 
   return (
-    <section style={{ background: '#F5F3FF', padding: '120px 24px' }} className="py-[60px] md:py-[120px]">
+    <section style={{ background: '#F5F3FF' }} className="py-12 md:py-20 px-6">
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 16, textAlign: 'center' }}>Free Account</div>
 

@@ -21,9 +21,8 @@ const FAQPlinq = () => {
   ];
 
   return (
-    <section id="faq" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{
+    <section id="faq" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''} py-12 md:py-20 px-6`} style={{
       background: 'linear-gradient(180deg, #0F0A1A 0%, #110D1F 100%)',
-      padding: '120px 24px',
     }}>
       <div style={{ maxWidth: 700, margin: '0 auto' }}>
         <div className="section-tag justify-center" style={{ color: '#A855F7', marginBottom: 16 }}>FAQ</div>

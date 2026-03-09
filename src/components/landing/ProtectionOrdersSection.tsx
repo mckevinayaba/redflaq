@@ -32,7 +32,7 @@ const ProtectionOrdersSection = () => {
   const navigate = useNavigate();
 
   return (
-    <section style={{ background: '#F5F3FF', padding: '80px 24px' }} className="py-[60px] md:py-[80px]">
+    <section style={{ background: '#F5F3FF' }} className="py-12 md:py-20 px-6">
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] gap-12 lg:gap-16">
           {/* LEFT COLUMN */}

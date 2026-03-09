@@ -11,10 +11,8 @@ const CommunitySectionSA = () => {
   const [shareOpen, setShareOpen] = useState(false);
 
   return (
-    <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{
+    <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''} py-12 md:py-20 px-6`} style={{
       background: 'linear-gradient(145deg, #0F0A1A, #1A1035)',
-      padding: '120px 24px 100px',
-      marginBottom: 0,
     }}>
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">

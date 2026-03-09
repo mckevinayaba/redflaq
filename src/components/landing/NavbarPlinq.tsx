@@ -422,7 +422,7 @@ const NavbarPlinq = () => {
                     </button>
                   </div>
                 </div>
-              )
+              )}
             </div>
           </div>
         </div>

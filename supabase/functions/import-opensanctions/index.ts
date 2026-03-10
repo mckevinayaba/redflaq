@@ -110,9 +110,9 @@ async function importDataset(
         if (m) yearOfBirth = parseInt(m[1]);
       }
 
-      // Use OpenSanctions entity page as the primary URL (contains full details, photos, and verified source links)
-      const opensanctionsUrl = `https://www.opensanctions.org/entities/${entityId}/`;
-      const primaryUrl = opensanctionsUrl;
+      // Use SAPS list page as fallback (individual SAPS detail pages can't be reliably derived from OpenSanctions IDs)
+      const sapsListUrl = 'https://www.saps.gov.za/crimestop/wanted/list.php';
+      const primaryUrl = sapsListUrl;
       const detailPageUrl: string | null = null;
 
       records.push({

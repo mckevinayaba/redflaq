@@ -110,15 +110,10 @@ async function importDataset(
         if (m) yearOfBirth = parseInt(m[1]);
       }
 
-      // For za_wanted, derive SAPS detail URL from entity ID (za-wanted-XXXXX → bid=XXXXX)
+      // Use OpenSanctions entity page as the primary URL (contains full details, photos, and verified source links)
       const opensanctionsUrl = `https://www.opensanctions.org/entities/${entityId}/`;
-      let primaryUrl = opensanctionsUrl;
-      let detailPageUrl: string | null = null;
-      const bidMatch = entityId.match(/^za-wanted-(\d+)$/);
-      if (bidMatch) {
-        primaryUrl = `https://www.saps.gov.za/crimestop/wanted/detail.php?bid=${bidMatch[1]}`;
-        detailPageUrl = primaryUrl;
-      }
+      const primaryUrl = opensanctionsUrl;
+      const detailPageUrl: string | null = null;
 
       records.push({
         full_name: name.toUpperCase(),

@@ -1,34 +1,55 @@
 
 
-## Plan: Fix SAPS Detail Links (They Actually Work)
+## Problem
 
-### Root Cause
+The Tawk.to chat widget is:
+1. Auto-opening its chat window without user interaction
+2. Showing a proactive "We Are Here" popup message
+3. Displaying a "1 new message" notification badge above the navbar
 
-The SAPS `detail.php?bid=` URLs **work correctly**. Image-81 proves it: `bid=20646` shows Mabila Nkosinathi with full crime details, station, case number, etc.
+All of these are controlled by Tawk.to's API settings.
 
-The OpenSanctions entity ID `za-wanted-20646` contains the **actual SAPS bid** (`20646`). We broke this in previous fixes by:
+## Fix
 
-1. **`ResultsPageUpdated.tsx`** — The `isBrokenUrl` function blocks ALL `detail.php?bid=` URLs, forcing the fallback to the generic list page (image-80)
-2. **`multi-parameter-search/index.ts`** — Strategy 7 no longer constructs the SAPS detail URL from the entity ID
-3. **`import-opensanctions/index.ts`** — The bulk import saves the list page URL instead of constructing `detail.php?bid=` URLs
+Add `Tawk_API` configuration in `index.html` to suppress all auto-popups:
 
-### Fix (3 files)
+1. **Set `Tawk_API.onLoad`** callback to:
+   - Minimize the widget on load (`Tawk_API.minimize()`)
+   - Hide the popup message (`Tawk_API.hideWidget()` is too aggressive — instead use `minimize`)
+2. **Set `Tawk_API.customStyle`** to hide the notification badge
+3. **Disable proactive chat triggers** by setting `Tawk_API.onBeforeLoad` to prevent auto-popup behaviors:
+   - `Tawk_API.visitor` settings won't help — the proactive messages ("We Are Here", auto-open) are configured in the Tawk.to dashboard under **Triggers**
+   
+### What we can control via code
 
-**1. `src/pages/ResultsPageUpdated.tsx`** — Remove the broken URL filter
-- Delete the `isBrokenUrl` helper that blocks `detail.php?bid=` URLs
-- Allow `detail_page_url` and `source_url` containing `detail.php?bid=` to pass through normally
-- Keep filtering only `opensanctions.org/entities/za-wanted-` (those 404)
+In `index.html`, before the Tawk script loads, add:
 
-**2. `supabase/functions/multi-parameter-search/index.ts`** — Restore SAPS detail URL construction in Strategy 7
-- For `za_wanted` results, extract the bid from entity ID (`za-wanted-XXXXX` → `XXXXX`)
-- Set `sourceUrl` to `https://www.saps.gov.za/crimestop/wanted/detail.php?bid=XXXXX`
+```javascript
+Tawk_API.onLoad = function() {
+  Tawk_API.minimize();
+};
+Tawk_API.onChatMessageVisitor = function() {};
+Tawk_API.onChatMessageSystem = function() {};
+```
 
-**3. `supabase/functions/import-opensanctions/index.ts`** — Fix bulk import URLs
-- Construct `detail.php?bid=` URLs from the entity ID during import
-- Store the correct detail URL in `source_url` and `detail_page_url`
+And add CSS to hide the unread badge:
 
-**4. Database cleanup** — Update existing `wanted_persons` records from `source_dataset = 'za_wanted'` that have the list page as their `source_url`, reconstructing the detail URL where possible from any stored entity ID or name match.
+```css
+/* Hide Tawk notification badge */
+.tawk-min-container .tawk-badge {
+  display: none !important;
+}
+```
 
-### Result
-Clicking "View on official source" for a SAPS result will open the person's actual SAPS detail page (like image-81) with photo, crime, station, case number — not the generic list.
+### What requires Tawk.to dashboard changes
+
+The proactive "We Are Here" message and auto-open behavior are **Triggers** configured in the Tawk.to dashboard (Settings → Triggers). These cannot be fully suppressed from code alone. The `Tawk_API.minimize()` on load will close it if it auto-opens, but the trigger may still fire briefly.
+
+**Recommendation**: Go to your Tawk.to dashboard → Settings → Triggers → disable or delete the proactive greeting trigger. This is the only way to fully stop "We Are Here" and the auto-open.
+
+### Implementation steps
+
+1. Update `index.html`: Add `Tawk_API.onLoad` with `minimize()` call before the embed script
+2. Add CSS to hide the notification badge counter
+3. These changes will make the widget stay minimized and badge-free until a user explicitly clicks it
 

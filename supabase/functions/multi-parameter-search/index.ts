@@ -713,8 +713,13 @@ serve(async (req) => {
               let sourceUrl = bestSourceUrl || (entity.id ? `https://api.opensanctions.org/entities/${entity.id}` : null);
               if (datasetsArr.includes('za_wanted')) {
                 sourceDataset = 'za_wanted';
-                // Use actual source URL from entity properties (e.g. real SAPS page)
-                if (!sourceUrl) sourceUrl = 'https://www.saps.gov.za/crimestop/wanted/list.php';
+                // Construct SAPS detail page URL from entity ID (za-wanted-XXXXX → bid=XXXXX)
+                const bidMatch = (entity.id || '').match(/za-wanted-(\d+)/);
+                if (bidMatch) {
+                  sourceUrl = `https://www.saps.gov.za/crimestop/wanted/detail.php?bid=${bidMatch[1]}`;
+                } else if (!sourceUrl) {
+                  sourceUrl = 'https://www.saps.gov.za/crimestop/wanted/list.php';
+                }
               } else if (datasetsArr.includes('za_fic_sanctions')) {
                 sourceDataset = 'za_fic_sanctions';
               }

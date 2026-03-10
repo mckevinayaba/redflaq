@@ -99,27 +99,28 @@ const redactId = (id?: string) => {
 };
 
 const getOfficialSourceUrl = (person: WantedPerson): string | null => {
-  // Helper: check if URL is a broken/unusable link
-  const isBrokenUrl = (url: string) => 
-    url.includes('detail.php?bid=') || 
-    url.includes('opensanctions.org/entities/za-wanted-');
-  
+  // Only filter OpenSanctions entity page URLs (those 404). SAPS detail.php?bid= URLs work correctly.
+  const isBrokenUrl = (url: string) => url.includes('opensanctions.org/entities/za-wanted-');
+
   // Check detail_page_url first
-  if (person.detail_page_url && !isBrokenUrl(person.detail_page_url)) return person.detail_page_url;
-  
+  if (person.detail_page_url && !isBrokenUrl(person.detail_page_url) &&
+      person.detail_page_url !== 'https://www.saps.gov.za/crimestop/wanted/list.php') {
+    return person.detail_page_url;
+  }
+
   // Check source_url
-  if (person.source_url && !isBrokenUrl(person.source_url) && 
+  if (person.source_url && !isBrokenUrl(person.source_url) &&
       person.source_url !== 'https://www.saps.gov.za/crimestop/wanted/list.php') {
     return person.source_url;
   }
-  
+
   // Check source_urls array for any valid URL
   if (person.source_urls && person.source_urls.length > 0) {
     for (const url of person.source_urls) {
       if (!isBrokenUrl(url) && url !== 'https://www.saps.gov.za/crimestop/wanted/list.php') return url;
     }
   }
-  
+
   // Fallback for za_wanted: link to the SAPS wanted list page
   if (person.source_dataset === 'za_wanted') return 'https://www.saps.gov.za/crimestop/wanted/list.php';
   return null;

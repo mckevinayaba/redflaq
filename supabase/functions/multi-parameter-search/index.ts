@@ -700,11 +700,8 @@ serve(async (req) => {
               let sourceUrl = defaultUrl;
               if (datasetsArr.includes('za_wanted')) {
                 sourceDataset = 'za_wanted';
-                // Extract numeric ID for direct SAPS link (e.g. za-wanted-20646 -> 20646)
-                const bidMatch = entity.id?.match(/za-wanted-(\d+)/);
-                if (bidMatch) {
-                  sourceUrl = `https://www.saps.gov.za/crimestop/wanted/detail.php?bid=${bidMatch[1]}`;
-                }
+                // Use OpenSanctions entity page which contains verified details and links back to SAPS
+                // (SAPS bid numbers don't match OpenSanctions entity IDs)
               } else if (datasetsArr.includes('za_fic_sanctions')) {
                 sourceDataset = 'za_fic_sanctions';
               }

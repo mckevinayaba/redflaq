@@ -123,7 +123,7 @@ async function importDataset(
         aliases,
         country: 'South Africa',
         source_dataset: dataset.name,
-        source_urls: [primaryUrl, opensanctionsUrl],
+        source_urls: [primaryUrl],
         source_url: primaryUrl,
         detail_page_url: detailPageUrl,
         charges: sanctions || `Listed in ${dataset.name}`,

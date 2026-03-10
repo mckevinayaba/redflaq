@@ -110,10 +110,19 @@ async function importDataset(
         if (m) yearOfBirth = parseInt(m[1]);
       }
 
-      // Use SAPS list page as fallback (individual SAPS detail pages can't be reliably derived from OpenSanctions IDs)
+      // Construct SAPS detail page URL from entity ID (za-wanted-XXXXX → bid=XXXXX)
       const sapsListUrl = 'https://www.saps.gov.za/crimestop/wanted/list.php';
-      const primaryUrl = sapsListUrl;
-      const detailPageUrl: string | null = null;
+      let primaryUrl = sapsListUrl;
+      let detailPageUrl: string | null = null;
+      
+      if (dataset.name === 'za_wanted') {
+        const bidMatch = entityId.match(/za-wanted-(\d+)/);
+        if (bidMatch) {
+          const detailUrl = `https://www.saps.gov.za/crimestop/wanted/detail.php?bid=${bidMatch[1]}`;
+          primaryUrl = detailUrl;
+          detailPageUrl = detailUrl;
+        }
+      }
 
       records.push({
         full_name: name.toUpperCase(),

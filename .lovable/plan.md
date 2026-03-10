@@ -2,25 +2,54 @@
 
 ## Problem
 
-The `getOfficialSourceUrl` function in `ResultsPageUpdated.tsx` (lines 101-121) converts OpenSanctions entity URLs (e.g., containing `za-wanted-20646`) into SAPS `detail.php?bid=20646` URLs. But these IDs don't match — the SAPS page comes up empty. This affects **both** live API results and bulk-imported records.
+The Tawk.to chat widget is:
+1. Auto-opening its chat window without user interaction
+2. Showing a proactive "We Are Here" popup message
+3. Displaying a "1 new message" notification badge above the navbar
 
-Additionally, the `import-opensanctions` bulk import function (line 117-121) saves broken SAPS URLs into the database during import.
+All of these are controlled by Tawk.to's API settings.
 
 ## Fix
 
-### 1. `src/pages/ResultsPageUpdated.tsx` — Remove broken SAPS URL conversion
+Add `Tawk_API` configuration in `index.html` to suppress all auto-popups:
 
-Replace the `getOfficialSourceUrl` function to stop converting `za-wanted-XXXXX` IDs into SAPS `detail.php?bid=` URLs. Instead:
-- If `detail_page_url` exists, use it (unchanged)
-- If `source_url` contains `za-wanted-`, convert it to the OpenSanctions entity page (`https://www.opensanctions.org/entities/za-wanted-XXXXX/`) which has the full record with photos and verified details
-- Same for `source_urls` array entries
-- For `za_wanted` records with no usable URL, fall back to the SAPS **list** page (unchanged)
+1. **Set `Tawk_API.onLoad`** callback to:
+   - Minimize the widget on load (`Tawk_API.minimize()`)
+   - Hide the popup message (`Tawk_API.hideWidget()` is too aggressive — instead use `minimize`)
+2. **Set `Tawk_API.customStyle`** to hide the notification badge
+3. **Disable proactive chat triggers** by setting `Tawk_API.onBeforeLoad` to prevent auto-popup behaviors:
+   - `Tawk_API.visitor` settings won't help — the proactive messages ("We Are Here", auto-open) are configured in the Tawk.to dashboard under **Triggers**
+   
+### What we can control via code
 
-### 2. `supabase/functions/import-opensanctions/index.ts` — Fix bulk import URLs
+In `index.html`, before the Tawk script loads, add:
 
-Update lines 117-121 to save OpenSanctions entity URLs instead of broken SAPS `detail.php?bid=` URLs during bulk import. This fixes the root cause for locally stored records.
+```javascript
+Tawk_API.onLoad = function() {
+  Tawk_API.minimize();
+};
+Tawk_API.onChatMessageVisitor = function() {};
+Tawk_API.onChatMessageSystem = function() {};
+```
 
-### 3. Database cleanup (optional, recommended)
+And add CSS to hide the unread badge:
 
-Run a migration to update existing `wanted_persons` rows that have broken `saps.gov.za/crimestop/wanted/detail.php?bid=` URLs, converting them to their correct OpenSanctions entity page URLs.
+```css
+/* Hide Tawk notification badge */
+.tawk-min-container .tawk-badge {
+  display: none !important;
+}
+```
+
+### What requires Tawk.to dashboard changes
+
+The proactive "We Are Here" message and auto-open behavior are **Triggers** configured in the Tawk.to dashboard (Settings → Triggers). These cannot be fully suppressed from code alone. The `Tawk_API.minimize()` on load will close it if it auto-opens, but the trigger may still fire briefly.
+
+**Recommendation**: Go to your Tawk.to dashboard → Settings → Triggers → disable or delete the proactive greeting trigger. This is the only way to fully stop "We Are Here" and the auto-open.
+
+### Implementation steps
+
+1. Update `index.html`: Add `Tawk_API.onLoad` with `minimize()` call before the embed script
+2. Add CSS to hide the notification badge counter
+3. These changes will make the widget stay minimized and badge-free until a user explicitly clicks it
 

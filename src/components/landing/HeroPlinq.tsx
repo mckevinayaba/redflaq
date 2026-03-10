@@ -33,33 +33,21 @@ const HeroPlinq = () => {
           <div style={{
             background: 'rgba(124, 58, 237, 0.06)',
             border: '1px solid rgba(124, 58, 237, 0.15)',
-            padding: '8px 18px',
+            padding: '10px 20px',
             display: 'inline-flex',
             alignItems: 'center',
             gap: 8,
-            borderRadius: 50,
+            borderRadius: 24,
             fontFamily: "'Syne', sans-serif",
             fontSize: 13,
             fontWeight: 600,
             color: '#7C3AED',
             marginBottom: 20,
+            lineHeight: 1.5,
           }}>
-            <span style={{ fontSize: 14 }}>♡</span>
-            Built for South African women facing GBVF
-          </div>
-
-          {/* Sub-line — immediately under the pill */}
-          <p style={{
-            fontFamily: "'Syne', sans-serif",
-            fontSize: 18,
-            fontWeight: 500,
-            color: '#4B5563',
-            lineHeight: '28px',
-            marginBottom: 20,
-            maxWidth: 500,
-          }}>
+            <span style={{ fontSize: 14, flexShrink: 0 }}>♡</span>
             Built for South African women facing GBVF. Designed for anyone protecting the people they love.
-          </p>
+          </div>
 
           {/* Headline */}
           <h1 style={{

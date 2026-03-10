@@ -1,55 +1,50 @@
 
 
-## Problem
+## Plan: Integrate OpenSanctions Live Search API
 
-The Tawk.to chat widget is:
-1. Auto-opening its chat window without user interaction
-2. Showing a proactive "We Are Here" popup message
-3. Displaying a "1 new message" notification badge above the navbar
+### What This Does
+Add a new "Strategy 7" to the `multi-parameter-search` edge function that queries the OpenSanctions `/match` API in real-time when a user runs a check. This runs alongside your existing local database searches, giving users the freshest possible data from 80+ datasets.
 
-All of these are controlled by Tawk.to's API settings.
+### How It Works
 
-## Fix
-
-Add `Tawk_API` configuration in `index.html` to suppress all auto-popups:
-
-1. **Set `Tawk_API.onLoad`** callback to:
-   - Minimize the widget on load (`Tawk_API.minimize()`)
-   - Hide the popup message (`Tawk_API.hideWidget()` is too aggressive — instead use `minimize`)
-2. **Set `Tawk_API.customStyle`** to hide the notification badge
-3. **Disable proactive chat triggers** by setting `Tawk_API.onBeforeLoad` to prevent auto-popup behaviors:
-   - `Tawk_API.visitor` settings won't help — the proactive messages ("We Are Here", auto-open) are configured in the Tawk.to dashboard under **Triggers**
-   
-### What we can control via code
-
-In `index.html`, before the Tawk script loads, add:
-
-```javascript
-Tawk_API.onLoad = function() {
-  Tawk_API.minimize();
-};
-Tawk_API.onChatMessageVisitor = function() {};
-Tawk_API.onChatMessageSystem = function() {};
+```text
+User runs a check
+    ├── Strategy 1-6: Search local DB (wanted_persons, saflii, gazette) ← existing
+    └── Strategy 7 (NEW): Query OpenSanctions /match API live
+         ├── Send name + birth date + nationality to API
+         ├── Get back fuzzy-matched entities with scores
+         ├── Filter for SA-relevant results (score > 0.5)
+         ├── Merge into results, deduplicate against local matches
+         └── Include source URLs and dataset info
 ```
 
-And add CSS to hide the unread badge:
+### Technical Changes
 
-```css
-/* Hide Tawk notification badge */
-.tawk-min-container .tawk-badge {
-  display: none !important;
-}
-```
+**1. Store the API key as a secret**
+- Use the secrets tool to save `OPENSANCTIONS_API_KEY` with the key from your screenshot.
 
-### What requires Tawk.to dashboard changes
+**2. Update `multi-parameter-search/index.ts`**
+- Add a new async function `queryOpenSanctionsLive(name, birthDate?)` that:
+  - Calls `POST https://api.opensanctions.org/match/default` with `Authorization: ApiKey {key}`
+  - Sends a query-by-example payload: `{ schema: "Person", properties: { name: [...], birthDate: [...], country: ["za"] } }`
+  - Filters results by score threshold (>0.5) to avoid noise
+  - Maps results to the same format as local matches with `source_dataset: 'opensanctions_live'` and `match_type: 'opensanctions_api'`
+- Add "Strategy 7" block after the gazette search (Strategy 6) that calls this function when `full_name` is provided
+- Deduplicate against existing local matches (by normalized name) to avoid showing the same person twice
+- Confidence mapping: OpenSanctions score 0.9+ → 85 confidence, 0.7-0.9 → 65, 0.5-0.7 → 45
 
-The proactive "We Are Here" message and auto-open behavior are **Triggers** configured in the Tawk.to dashboard (Settings → Triggers). These cannot be fully suppressed from code alone. The `Tawk_API.minimize()` on load will close it if it auto-opens, but the trigger may still fire briefly.
+**3. Update results page (minor)**
+- The `ResultsPageUpdated.tsx` already handles different `source_dataset` values — `opensanctions_live` results will display with appropriate source attribution
+- Add "OpenSanctions API" as a recognized source label alongside existing SAPS/SAFLII/Gazette labels
 
-**Recommendation**: Go to your Tawk.to dashboard → Settings → Triggers → disable or delete the proactive greeting trigger. This is the only way to fully stop "We Are Here" and the auto-open.
+**4. Update Data Sources page**
+- Update the OpenSanctions entry on `/sources` to reflect it's now a live API integration (not just bulk import), and note the broader dataset coverage
 
-### Implementation steps
+### What We Keep
+- The existing bulk CSV import (`import-opensanctions`) stays — it populates your local `wanted_persons` table for fast offline matching
+- The live API acts as a supplementary layer catching anything the local database might miss
 
-1. Update `index.html`: Add `Tawk_API.onLoad` with `minimize()` call before the embed script
-2. Add CSS to hide the notification badge counter
-3. These changes will make the widget stay minimized and badge-free until a user explicitly clicks it
+### API Usage
+- With 25,000 req/month and one API call per user search, you can handle ~833 searches/day — more than enough for current scale
+- Each search makes exactly 1 API call to the `/match` endpoint
 

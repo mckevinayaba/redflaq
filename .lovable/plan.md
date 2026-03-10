@@ -2,54 +2,17 @@
 
 ## Problem
 
-The Tawk.to chat widget is:
-1. Auto-opening its chat window without user interaction
-2. Showing a proactive "We Are Here" popup message
-3. Displaying a "1 new message" notification badge above the navbar
-
-All of these are controlled by Tawk.to's API settings.
+The SAPS detail URL (`detail.php?bid=20646`) is constructed by extracting the number from the OpenSanctions entity ID (`za-wanted-20646`). But this number is OpenSanctions' internal ID — it does NOT correspond to the SAPS website's `bid` parameter. So the link opens a blank/empty SAPS page.
 
 ## Fix
 
-Add `Tawk_API` configuration in `index.html` to suppress all auto-popups:
+**`supabase/functions/multi-parameter-search/index.ts`** — Remove the broken SAPS URL construction and use the OpenSanctions entity page as the source link instead. The OpenSanctions page (`opensanctions.org/entities/za-wanted-20646/`) actually contains the record details, photos, and links back to the original SAPS listing.
 
-1. **Set `Tawk_API.onLoad`** callback to:
-   - Minimize the widget on load (`Tawk_API.minimize()`)
-   - Hide the popup message (`Tawk_API.hideWidget()` is too aggressive — instead use `minimize`)
-2. **Set `Tawk_API.customStyle`** to hide the notification badge
-3. **Disable proactive chat triggers** by setting `Tawk_API.onBeforeLoad` to prevent auto-popup behaviors:
-   - `Tawk_API.visitor` settings won't help — the proactive messages ("We Are Here", auto-open) are configured in the Tawk.to dashboard under **Triggers**
-   
-### What we can control via code
+Specifically:
+- Remove lines 703-707 (the `bidMatch` logic that builds the fake SAPS URL)
+- For `za_wanted` results, set `sourceUrl` to the OpenSanctions entity page: `https://www.opensanctions.org/entities/${entity.id}/`
+- Keep `source_dataset: 'za_wanted'` so the UI still shows "Official SAPS Database · TRUST: HIGH" branding
+- Change the link label in `ResultsPageUpdated.tsx` from "View on official source" to "View record details" for `za_wanted` results sourced via API, so users aren't confused about landing on OpenSanctions instead of SAPS directly
 
-In `index.html`, before the Tawk script loads, add:
-
-```javascript
-Tawk_API.onLoad = function() {
-  Tawk_API.minimize();
-};
-Tawk_API.onChatMessageVisitor = function() {};
-Tawk_API.onChatMessageSystem = function() {};
-```
-
-And add CSS to hide the unread badge:
-
-```css
-/* Hide Tawk notification badge */
-.tawk-min-container .tawk-badge {
-  display: none !important;
-}
-```
-
-### What requires Tawk.to dashboard changes
-
-The proactive "We Are Here" message and auto-open behavior are **Triggers** configured in the Tawk.to dashboard (Settings → Triggers). These cannot be fully suppressed from code alone. The `Tawk_API.minimize()` on load will close it if it auto-opens, but the trigger may still fire briefly.
-
-**Recommendation**: Go to your Tawk.to dashboard → Settings → Triggers → disable or delete the proactive greeting trigger. This is the only way to fully stop "We Are Here" and the auto-open.
-
-### Implementation steps
-
-1. Update `index.html`: Add `Tawk_API.onLoad` with `minimize()` call before the embed script
-2. Add CSS to hide the notification badge counter
-3. These changes will make the widget stay minimized and badge-free until a user explicitly clicks it
+This is the correct approach because OpenSanctions already verifies and links back to the original SAPS source on their entity pages.
 

@@ -688,11 +688,26 @@ serve(async (req) => {
               if (score >= 0.9) confidence = 85;
               else if (score >= 0.7) confidence = 65;
 
-              const datasets = (entity.datasets || []).join(', ');
+              const datasetsArr = entity.datasets || [];
+              const datasets = datasetsArr.join(', ');
               const entityCountries = entity.properties?.country || [];
               const entityBirthDate = entity.properties?.birthDate?.[0] || null;
               const entityAliases = entity.properties?.alias || [];
-              const entityUrl = entity.id ? `https://www.opensanctions.org/entities/${entity.id}/` : null;
+              const defaultUrl = entity.id ? `https://www.opensanctions.org/entities/${entity.id}/` : null;
+
+              // Map to original source based on datasets
+              let sourceDataset = 'opensanctions_live';
+              let sourceUrl = defaultUrl;
+              if (datasetsArr.includes('za_wanted')) {
+                sourceDataset = 'za_wanted';
+                // Extract numeric ID for direct SAPS link (e.g. za-wanted-20646 -> 20646)
+                const bidMatch = entity.id?.match(/za-wanted-(\d+)/);
+                if (bidMatch) {
+                  sourceUrl = `https://www.saps.gov.za/crimestop/wanted/detail.php?bid=${bidMatch[1]}`;
+                }
+              } else if (datasetsArr.includes('za_fic_sanctions')) {
+                sourceDataset = 'za_fic_sanctions';
+              }
 
               // Extract names
               const nameParts = entityName.trim().split(/\s+/);
@@ -719,10 +734,10 @@ serve(async (req) => {
                 first_name: firstName,
                 surname: surname,
                 charges: entity.properties?.notes?.[0] || `Listed in: ${datasets || 'OpenSanctions'}`,
-                source_dataset: 'opensanctions_live',
-                source_url: entityUrl,
-                detail_page_url: entityUrl,
-                source_urls: entityUrl ? [entityUrl] : [],
+                source_dataset: sourceDataset,
+                source_url: sourceUrl,
+                detail_page_url: sourceUrl,
+                source_urls: sourceUrl ? [sourceUrl] : [],
                 match_type: 'opensanctions_api',
                 confidence,
                 legal_status: legalStatus,

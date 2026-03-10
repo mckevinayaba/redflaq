@@ -693,15 +693,28 @@ serve(async (req) => {
               const entityCountries = entity.properties?.country || [];
               const entityBirthDate = entity.properties?.birthDate?.[0] || null;
               const entityAliases = entity.properties?.alias || [];
-              const defaultUrl = entity.id ? `https://www.opensanctions.org/entities/${entity.id}/` : null;
+              
+              // Log full entity for debugging source URL extraction
+              console.log(`OpenSanctions entity ${entity.id}:`, JSON.stringify({
+                datasets: datasetsArr,
+                properties_keys: Object.keys(entity.properties || {}),
+                sourceUrl: entity.properties?.sourceUrl,
+                wikidataId: entity.properties?.wikidataId,
+                topics: entity.properties?.topics,
+              }));
+
+              // Extract the actual source URL from entity properties (this is the real SAPS/original page URL)
+              const entitySourceUrls = entity.properties?.sourceUrl || [];
+              const sapsSourceUrl = entitySourceUrls.find((u: string) => u.includes('saps.gov.za'));
+              const bestSourceUrl = sapsSourceUrl || entitySourceUrls[0] || null;
 
               // Map to original source based on datasets
               let sourceDataset = 'opensanctions_live';
-              let sourceUrl = defaultUrl;
+              let sourceUrl = bestSourceUrl || (entity.id ? `https://api.opensanctions.org/entities/${entity.id}` : null);
               if (datasetsArr.includes('za_wanted')) {
                 sourceDataset = 'za_wanted';
-                // Use OpenSanctions entity page which contains verified details and links back to SAPS
-                // (SAPS bid numbers don't match OpenSanctions entity IDs)
+                // Use actual source URL from entity properties (e.g. real SAPS page)
+                if (!sourceUrl) sourceUrl = 'https://www.saps.gov.za/crimestop/wanted/list.php';
               } else if (datasetsArr.includes('za_fic_sanctions')) {
                 sourceDataset = 'za_fic_sanctions';
               }

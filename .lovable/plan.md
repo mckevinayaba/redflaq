@@ -1,55 +1,16 @@
 
 
-## Problem
+## Plan: Update Hero Pill Text
 
-The Tawk.to chat widget is:
-1. Auto-opening its chat window without user interaction
-2. Showing a proactive "We Are Here" popup message
-3. Displaying a "1 new message" notification badge above the navbar
+**Current state**: The hero has two separate elements:
+1. A pill badge: `♡ Built for South African women facing GBVF`
+2. A sub-line paragraph below it: `Built for South African women facing GBVF. Designed for anyone protecting the people they love.`
 
-All of these are controlled by Tawk.to's API settings.
+**Changes**:
+1. **Update the pill text** (line 48) to contain the full message: `Built for South African women facing GBVF. Designed for anyone protecting the people they love.`
+2. **Remove the separate sub-line paragraph** (lines 51-61) since its content is now merged into the pill
+3. The pill keeps its existing purple styling (`#7C3AED` text, light purple background, pill shape with `♡` icon)
+4. May need to slightly adjust pill padding/border-radius since the text is longer — possibly change from `borderRadius: 50` (circle ends) to `borderRadius: 24` (rounded rectangle) so it wraps nicely on mobile
 
-## Fix
-
-Add `Tawk_API` configuration in `index.html` to suppress all auto-popups:
-
-1. **Set `Tawk_API.onLoad`** callback to:
-   - Minimize the widget on load (`Tawk_API.minimize()`)
-   - Hide the popup message (`Tawk_API.hideWidget()` is too aggressive — instead use `minimize`)
-2. **Set `Tawk_API.customStyle`** to hide the notification badge
-3. **Disable proactive chat triggers** by setting `Tawk_API.onBeforeLoad` to prevent auto-popup behaviors:
-   - `Tawk_API.visitor` settings won't help — the proactive messages ("We Are Here", auto-open) are configured in the Tawk.to dashboard under **Triggers**
-   
-### What we can control via code
-
-In `index.html`, before the Tawk script loads, add:
-
-```javascript
-Tawk_API.onLoad = function() {
-  Tawk_API.minimize();
-};
-Tawk_API.onChatMessageVisitor = function() {};
-Tawk_API.onChatMessageSystem = function() {};
-```
-
-And add CSS to hide the unread badge:
-
-```css
-/* Hide Tawk notification badge */
-.tawk-min-container .tawk-badge {
-  display: none !important;
-}
-```
-
-### What requires Tawk.to dashboard changes
-
-The proactive "We Are Here" message and auto-open behavior are **Triggers** configured in the Tawk.to dashboard (Settings → Triggers). These cannot be fully suppressed from code alone. The `Tawk_API.minimize()` on load will close it if it auto-opens, but the trigger may still fire briefly.
-
-**Recommendation**: Go to your Tawk.to dashboard → Settings → Triggers → disable or delete the proactive greeting trigger. This is the only way to fully stop "We Are Here" and the auto-open.
-
-### Implementation steps
-
-1. Update `index.html`: Add `Tawk_API.onLoad` with `minimize()` call before the embed script
-2. Add CSS to hide the notification badge counter
-3. These changes will make the widget stay minimized and badge-free until a user explicitly clicks it
+**Files to edit**: `src/components/landing/HeroPlinq.tsx` — lines 33-61
 

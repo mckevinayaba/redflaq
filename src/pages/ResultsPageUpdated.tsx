@@ -890,7 +890,7 @@ const ResultsPageUpdated = () => {
                     ))}
                     {officialUrl && (
                       <a href={officialUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 font-mono text-xs text-blue-600 underline mt-2">
-                        🔗 View on official source →
+                        🔗 {(person as any).match_type === 'opensanctions_api' ? 'View record details' : 'View on official source'} →
                       </a>
                     )}
                   </div>

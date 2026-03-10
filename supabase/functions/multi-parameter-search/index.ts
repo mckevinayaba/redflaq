@@ -608,7 +608,6 @@ serve(async (req) => {
 
       if (gazetteMatches && gazetteMatches.length > 0) {
         for (const gr of gazetteMatches) {
-          // Require both first name and surname to match for gazette records
           const grFirstLower = (gr.first_name || '').toLowerCase();
           const grSurnameLower = (gr.surname || '').toLowerCase();
           const firstNameMatch = searchFirstName && grFirstLower.includes(searchFirstName);
@@ -639,6 +638,108 @@ serve(async (req) => {
               gazette_date: gr.gazette_date,
             });
           }
+        }
+      }
+    }
+
+    // Strategy 7: OpenSanctions Live API
+    if (full_name) {
+      const opensanctionsApiKey = Deno.env.get('OPENSANCTIONS_API_KEY');
+      if (opensanctionsApiKey) {
+        searchStrategies.push('opensanctions_live');
+        try {
+          const properties: Record<string, string[]> = {
+            name: [full_name],
+            country: ['za'],
+          };
+          if (date_of_birth) properties.birthDate = [date_of_birth];
+
+          const osResponse = await fetch('https://api.opensanctions.org/match/default', {
+            method: 'POST',
+            headers: {
+              'Authorization': `ApiKey ${opensanctionsApiKey}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              queries: {
+                q1: {
+                  schema: 'Person',
+                  properties,
+                },
+              },
+            }),
+          });
+
+          if (osResponse.ok) {
+            const osData = await osResponse.json();
+            const osResults = osData?.responses?.q1?.results || [];
+
+            for (const entity of osResults) {
+              const score = entity.score || 0;
+              if (score < 0.5) continue;
+
+              const entityName = (entity.properties?.name?.[0] || entity.caption || '').toUpperCase();
+              const entityNormalized = normalizeName(entityName);
+
+              // Deduplicate against local matches
+              if (matches.some(m => normalizeName(m.full_name || '') === entityNormalized)) continue;
+
+              let confidence = 45;
+              if (score >= 0.9) confidence = 85;
+              else if (score >= 0.7) confidence = 65;
+
+              const datasets = (entity.datasets || []).join(', ');
+              const entityCountries = entity.properties?.country || [];
+              const entityBirthDate = entity.properties?.birthDate?.[0] || null;
+              const entityAliases = entity.properties?.alias || [];
+              const entityUrl = entity.id ? `https://www.opensanctions.org/entities/${entity.id}/` : null;
+
+              // Extract names
+              const nameParts = entityName.trim().split(/\s+/);
+              const firstName = nameParts[0] || null;
+              const surname = nameParts.length > 1 ? nameParts[nameParts.length - 1] : null;
+
+              // Determine legal status from datasets
+              let legalStatus = 'flagged';
+              let riskLevel = 'orange';
+              if (datasets.includes('sanction') || datasets.includes('fic')) {
+                legalStatus = 'sanctioned';
+                riskLevel = 'high';
+              } else if (datasets.includes('wanted') || datasets.includes('crime')) {
+                legalStatus = 'wanted';
+                riskLevel = 'red';
+              } else if (datasets.includes('pep')) {
+                legalStatus = 'pep';
+                riskLevel = 'orange';
+              }
+
+              matches.push({
+                id: entity.id || `os-live-${Date.now()}-${Math.random().toString(36).substring(7)}`,
+                full_name: entityName,
+                first_name: firstName,
+                surname: surname,
+                charges: entity.properties?.notes?.[0] || `Listed in: ${datasets || 'OpenSanctions'}`,
+                source_dataset: 'opensanctions_live',
+                source_url: entityUrl,
+                detail_page_url: entityUrl,
+                source_urls: entityUrl ? [entityUrl] : [],
+                match_type: 'opensanctions_api',
+                confidence,
+                legal_status: legalStatus,
+                risk_level: riskLevel,
+                country: entityCountries[0] || 'South Africa',
+                aliases: entityAliases,
+                year_of_birth: entityBirthDate ? parseInt(entityBirthDate.match(/(\d{4})/)?.[1] || '0') || null : null,
+                offense_categories: categorizeOffense(entity.properties?.notes?.[0] || datasets),
+                opensanctions_score: score,
+                opensanctions_datasets: datasets,
+              });
+            }
+          } else {
+            console.error(`OpenSanctions API error: ${osResponse.status} ${osResponse.statusText}`);
+          }
+        } catch (osErr) {
+          console.error('OpenSanctions live query failed (non-blocking):', osErr);
         }
       }
     }

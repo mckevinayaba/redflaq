@@ -125,6 +125,7 @@ const getSourceLabel = (person: WantedPerson): string => {
   if (person.source_dataset === 'za_fic_sanctions') return 'FIC Sanctions List';
   if (person.source_dataset === 'saflii') return 'SAFLII Court Judgment';
   if (person.source_dataset === 'gazette') return 'Government Gazette — Financial Court Order';
+  if (person.source_dataset === 'opensanctions_live') return 'OpenSanctions — Live API';
   return 'South African Public Records';
 };
 
@@ -133,6 +134,7 @@ const getSourceTrustBadge = (person: WantedPerson): { icon: string; label: strin
   if (person.source_dataset === 'za_fic_sanctions') return { icon: '💰', label: 'FIC Sanctions — Government', level: 'HIGH', color: '#DC2626' };
   if (person.source_dataset === 'saflii') return { icon: '⚖️', label: 'Court Record — SAFLII', level: 'MEDIUM', color: '#1E40AF' };
   if (person.source_dataset === 'gazette') return { icon: '📰', label: 'Government Gazette', level: 'MEDIUM', color: '#D97706' };
+  if (person.source_dataset === 'opensanctions_live') return { icon: '🌐', label: 'OpenSanctions — Verified API', level: 'HIGH', color: '#7C3AED' };
   return { icon: '📋', label: 'Public Record', level: 'STANDARD', color: '#6B7280' };
 };
 

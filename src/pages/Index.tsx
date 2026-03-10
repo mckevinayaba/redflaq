@@ -84,8 +84,6 @@ const Index = () => {
       {/* 2. Ticker Bar */}
       <TickerBar />
 
-      {/* 3. Stats Bar */}
-      <StatsBar />
 
       {/* 4. Create Your Free Safety Account */}
       <FreeAccountSection />

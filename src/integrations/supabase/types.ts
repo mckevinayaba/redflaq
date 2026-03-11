@@ -348,6 +348,7 @@ export type Database = {
           incident_description: string
           injuries_damage: string | null
           location: string | null
+          subject_person: string | null
           updated_at: string | null
           user_id: string
           witnesses: string | null
@@ -360,6 +361,7 @@ export type Database = {
           incident_description: string
           injuries_damage?: string | null
           location?: string | null
+          subject_person?: string | null
           updated_at?: string | null
           user_id: string
           witnesses?: string | null
@@ -372,6 +374,7 @@ export type Database = {
           incident_description?: string
           injuries_damage?: string | null
           location?: string | null
+          subject_person?: string | null
           updated_at?: string | null
           user_id?: string
           witnesses?: string | null

@@ -62,6 +62,16 @@ const HeroPlinq = () => {
           </h1>
 
           <p style={{
+            fontFamily: "'DM Serif Display', serif",
+            lineHeight: 1.15,
+            color: '#1A1523',
+            marginBottom: 20,
+            letterSpacing: '-0.01em',
+          }} className="text-[22px] sm:text-[26px] lg:text-[32px] xl:text-[36px]">
+            Before you trust anyone with your home, children, or safety — check public records first.
+          </p>
+
+          <p style={{
             fontFamily: "'Syne', sans-serif",
             fontWeight: 400,
             lineHeight: 1.7,

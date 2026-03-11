@@ -89,9 +89,6 @@ const WhyRedflaqSection = () => {
               <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#C4B5FD', marginBottom: 16, fontStyle: 'italic', lineHeight: 1.5 }}>
                 Founder of ASEB Society, operating across 44+ African countries.
               </div>
-              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7, marginBottom: 16 }}>
-                McKevin Ayaba is a technology entrepreneur and ecosystem builder who has spent more than a decade building infrastructure for African startups. As Chief Product Officer of RedFlaq, he leads product architecture, technology development and strategic partnerships.
-              </p>
               <blockquote style={{ fontFamily: "'DM Serif Display', serif", fontSize: 14, fontStyle: 'italic', color: '#C4B5FD', lineHeight: 1.6, borderLeft: '3px solid #7C3AED', paddingLeft: 16 }}>
                 "Traditional background check services exist, but they are slow, bureaucratic and designed for businesses, not individuals. RedFlaq was created so women and communities can access key public‑record warnings quickly and affordably."
               </blockquote>

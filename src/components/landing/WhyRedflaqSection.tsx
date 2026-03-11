@@ -75,12 +75,7 @@ const WhyRedflaqSection = () => {
           padding: '40px 36px',
           marginBottom: 48,
         }}>
-          <div className="flex flex-col md:flex-row items-start gap-8">
-            <div style={{ flexShrink: 0 }}>
-              <div style={{ width: 120, height: 120, borderRadius: '45% 55% 50% 50% / 50% 45% 55% 50%', overflow: 'hidden', boxShadow: '0 8px 32px rgba(124,58,237,0.3)' }}>
-                <img src={founderPhoto} alt="McKevin Ayaba, Co-Founder & CPO of RedFlaq" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              </div>
-            </div>
+          <div>
             <div>
               <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: '#FFFFFF', marginBottom: 4 }}>
                 McKevin Ayaba

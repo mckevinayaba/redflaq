@@ -138,9 +138,6 @@ const Index = () => {
       {/* 17. Mid-Page Signup Strip */}
       <MidPageSignupStrip />
 
-      {/* 18. Why RedFlaq Section (Full) */}
-      <WhyRedflaqSection />
-
       {/* 19. FAQ */}
       <FAQPlinq />
 

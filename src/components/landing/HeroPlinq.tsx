@@ -286,7 +286,7 @@ const HeroPlinq = () => {
               marginTop: 10,
               fontWeight: 600,
             }}>
-              — McKevin Ayaba, Founder
+              — RedFlaq Founding Team
             </div>
           </div>
         </div>

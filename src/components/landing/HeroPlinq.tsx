@@ -58,7 +58,9 @@ const HeroPlinq = () => {
               >
                 <Heart className="h-4 w-4 flex-shrink-0" />
                 <span>
-                  Built in South Africa for people living with GBV and violence — and everyone protecting their loved ones.
+                  Built for South African women facing GBVF.
+                  <br className="hidden sm:inline" />
+                  {" "}Designed for anyone protecting their loved ones.
                 </span>
               </span>
             </div>

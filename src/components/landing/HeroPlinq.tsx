@@ -1,240 +1,295 @@
-import { useEffect, useState } from "react";
 import { Check } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
+import { useCountUp } from "@/hooks/useCountUp";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
+import heroImage from "@/assets/hero-sa-woman.jpg";
 
 const HeroPlinq = () => {
-  const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const t = setTimeout(() => setVisible(true), 50);
-    return () => clearTimeout(t);
-  }, []);
+  const { guardedAction } = useAuthGuard();
+  const { count: statTwo, ref: statTwoRef } = useCountUp(40000, 2000);
 
   const handleVerify = () => {
-    if (isAuthenticated) {
-      navigate("/dashboard/new-check");
-    } else {
-      navigate("/signup?intent=verify");
-    }
+    guardedAction();
   };
 
-  const stats = [
-    "Results in under 60 seconds",
-    "Public records only",
-    "100% confidential",
-    "POPIA-aware use",
-  ];
-
   return (
-    <section
-      className="relative overflow-hidden"
-      style={{
-        background: "linear-gradient(180deg, rgba(237,233,254,0.3) 0%, #FFFFFF 100%)",
-        minHeight: "100vh",
-      }}
-    >
-      <div className="max-w-[1200px] mx-auto px-5 md:px-10 py-10 md:py-16 lg:py-20 flex flex-col items-center text-center">
-        {/* Badge */}
-        <div
-          className="transition-all duration-300 ease-out"
-          style={{
-            opacity: visible ? 1 : 0,
-            transform: visible ? "translateY(0)" : "translateY(-12px)",
-          }}
-        >
-          <span
-            className="inline-block rounded-3xl px-5 py-2.5 text-sm font-semibold leading-relaxed"
-            style={{
-              background: "#EDE9FE",
-              color: "#7C3AED",
-              fontFamily: "'Syne', sans-serif",
-            }}
-          >
-            Built in South Africa for anyone facing GBV and violence —
-            <br className="hidden sm:inline" />
-            {" "}and everyone protecting their loved ones.
-          </span>
-        </div>
+    <section className="relative overflow-hidden" style={{ background: '#F7F4F0', minHeight: '100vh' }}>
+      <div
+        style={{
+          position: 'absolute',
+          top: '10%',
+          left: '30%',
+          width: '70%',
+          height: '80%',
+          background: 'radial-gradient(ellipse at 60% 40%, rgba(124,58,237,0.08) 0%, rgba(220,38,38,0.03) 40%, transparent 70%)',
+          pointerEvents: 'none',
+          zIndex: 0,
+        }}
+      />
 
-        {/* Primary Headline */}
-        <h1
-          className="mt-8 text-[36px] sm:text-[48px] md:text-[56px] lg:text-[68px] transition-all duration-[400ms] ease-out"
-          style={{
+      <div className="grid lg:grid-cols-[55%_45%] min-h-screen max-w-[1280px] mx-auto relative z-10">
+        {/* LEFT COLUMN */}
+        <div className="pt-24 px-5 pb-10 lg:pt-40 lg:px-10 lg:pb-20" style={{ maxWidth: 640 }}>
+          {/* Positioning pill */}
+          <div style={{
+            background: 'rgba(124, 58, 237, 0.06)',
+            border: '1px solid rgba(124, 58, 237, 0.15)',
+            padding: '10px 20px',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: 8,
+            borderRadius: 24,
+            fontFamily: "'Syne', sans-serif",
+            fontSize: 13,
+            fontWeight: 600,
+            color: '#7C3AED',
+            marginBottom: 20,
+            lineHeight: 1.5,
+          }}>
+            <span style={{ fontSize: 14, flexShrink: 0 }}>♡</span>
+            <span>Built for South African women facing GBVF.<br />Designed for anyone protecting their loved ones.</span>
+          </div>
+
+          {/* Headline */}
+          <h1 style={{
             fontFamily: "'DM Serif Display', serif",
-            fontWeight: 700,
-            lineHeight: 1.1,
-            color: "#1E1B4B",
-            letterSpacing: "-0.02em",
-            opacity: visible ? 1 : 0,
-            transform: visible ? "translateY(0)" : "translateY(16px)",
-            transitionDelay: "100ms",
-          }}
-        >
-          Before you give him a spare key,
-          <br />
-          give yourself <em style={{ color: "#7C3AED", fontStyle: "italic" }}>clarity.</em>
-        </h1>
+            lineHeight: 1.02,
+            color: '#1A1523',
+            marginBottom: 20,
+            letterSpacing: '-0.02em',
+          }} className="text-[38px] sm:text-[48px] lg:text-[60px] xl:text-[72px]">
+            Before you give him a spare key,<br />
+            give yourself <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>clarity.</em>
+          </h1>
 
-        {/* Secondary Headline */}
-        <h2
-          className="mt-4 text-[22px] sm:text-[28px] md:text-[36px] lg:text-[44px] transition-all duration-[400ms] ease-out"
-          style={{
-            fontFamily: "'DM Serif Display', serif",
-            fontWeight: 500,
-            lineHeight: 1.15,
-            color: "#334155",
-            opacity: visible ? 1 : 0,
-            transform: visible ? "translateY(0)" : "translateY(16px)",
-            transitionDelay: "150ms",
-          }}
-        >
-          Before you trust anyone with your home, children, or safety — verify first.
-        </h2>
-
-        {/* Sub-headline */}
-        <p
-          className="mt-6 text-base md:text-lg lg:text-xl max-w-[700px] transition-all duration-500 ease-out"
-          style={{
+          <p style={{
             fontFamily: "'Syne', sans-serif",
             fontWeight: 400,
             lineHeight: 1.7,
-            color: "#475569",
-            opacity: visible ? 1 : 0,
-            transform: visible ? "translateY(0)" : "translateY(12px)",
-            transitionDelay: "200ms",
-          }}
-        >
-          RedFlaq searches South African public-record warning lists so you can make
-          informed decisions about who to trust. Instant. Confidential. R99.
-        </p>
+            color: '#4B4453',
+            maxWidth: 500,
+            marginBottom: 16,
+            fontSize: 17,
+          }}>
+            RedFlaq searches South African public-record warning lists so you can make informed decisions about who to trust with your life, home, or business. Instant. Confidential. R99.
+          </p>
 
-        {/* Supporting Text */}
-        <p
-          className="mt-4 text-sm md:text-base max-w-[600px] transition-all duration-500 ease-out"
-          style={{
+          <p style={{
             fontFamily: "'Syne', sans-serif",
-            fontWeight: 400,
-            color: "#64748B",
+            fontSize: 14,
+            color: '#78716C',
+            marginBottom: 36,
+            maxWidth: 500,
             lineHeight: 1.6,
-            opacity: visible ? 1 : 0,
-            transform: visible ? "translateY(0)" : "translateY(12px)",
-            transitionDelay: "250ms",
-          }}
-        >
-          Not a full criminal record check. A fast public-record safety check with
-          a clear report in under 60 seconds.
-        </p>
+          }}>
+            Not a full criminal record check. A fast public‑record safety check with a clear report in under 60 seconds.
+          </p>
 
-        {/* Stats Bar */}
-        <div
-          className="mt-6 overflow-x-auto w-full transition-all duration-[400ms] ease-out"
-          style={{
-            opacity: visible ? 1 : 0,
-            transform: visible ? "translateY(0)" : "translateY(16px)",
-            transitionDelay: "300ms",
-          }}
-        >
-          <div
-            className="inline-flex items-center gap-3 md:gap-4 px-6 py-3 rounded-xl mx-auto whitespace-nowrap"
-            style={{ background: "#EDE9FE" }}
-          >
-            {stats.map((s, i) => (
-              <span key={s} className="inline-flex items-center gap-3 md:gap-4">
-                <span
-                  className="text-sm font-medium flex items-center gap-1.5"
-                  style={{ color: "#7C3AED", fontFamily: "'Syne', sans-serif" }}
-                >
-                  <Check className="h-3.5 w-3.5 flex-shrink-0" />
-                  {s}
-                </span>
-                {i < stats.length - 1 && (
-                  <span style={{ color: "#7C3AED", opacity: 0.4 }}>•</span>
-                )}
-              </span>
+          {/* Value props */}
+          <div className="flex flex-wrap gap-x-6 gap-y-3" style={{ marginBottom: 40 }}>
+            {["Results in under 60 seconds", "Public records only", "100% confidential", "POPIA‑aware use"].map(item => (
+              <div key={item} className="flex items-center gap-2" style={{ fontSize: 14, color: '#4B4453', fontFamily: "'Syne', sans-serif" }}>
+                <div style={{
+                  width: 20, height: 20, borderRadius: '50%',
+                  background: 'rgba(124,58,237,0.1)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  flexShrink: 0,
+                }}>
+                  <Check className="h-3 w-3" style={{ color: '#7C3AED' }} />
+                </div>
+                <span>{item}</span>
+              </div>
             ))}
           </div>
-        </div>
 
-        {/* CTA Buttons */}
-        <div
-          className="mt-8 flex flex-col sm:flex-row items-center gap-4 transition-all duration-500 ease-out"
-          style={{
-            opacity: visible ? 1 : 0,
-            transform: visible ? "translateY(0)" : "translateY(16px)",
-            transitionDelay: "400ms",
-          }}
-        >
-          <button
-            onClick={handleVerify}
-            className="w-full sm:w-auto px-8 py-4 rounded-xl text-base font-semibold cursor-pointer transition-all duration-200 ease-out hover:-translate-y-0.5"
-            style={{
-              background: "#7C3AED",
-              color: "#FFFFFF",
-              border: "none",
-              fontFamily: "'Syne', sans-serif",
-              boxShadow: "0 4px 16px rgba(124,58,237,0.25)",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "#6D28D9";
-              e.currentTarget.style.boxShadow = "0 8px 16px rgba(124,58,237,0.2)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "#7C3AED";
-              e.currentTarget.style.boxShadow = "0 4px 16px rgba(124,58,237,0.25)";
-            }}
-          >
-            Verify Someone Now — R99
-          </button>
-          <button
-            onClick={() => navigate("/signup")}
-            className="w-full sm:w-auto px-8 py-4 rounded-xl text-base font-semibold cursor-pointer transition-all duration-200 ease-out hover:-translate-y-0.5"
-            style={{
-              background: "#FFFFFF",
-              color: "#7C3AED",
-              border: "2px solid #7C3AED",
-              fontFamily: "'Syne', sans-serif",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "#EDE9FE";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "#FFFFFF";
-            }}
-          >
-            Create Free Safety Account
-          </button>
-        </div>
+          {/* CTAs */}
+          <div className="flex flex-col sm:flex-row gap-4">
+            <button
+              onClick={handleVerify}
+              style={{
+                background: '#7C3AED',
+                color: '#FFFFFF',
+                padding: '18px 40px',
+                fontFamily: "'Syne', sans-serif",
+                fontWeight: 700,
+                fontSize: 15,
+                border: 'none',
+                cursor: 'pointer',
+                borderRadius: 50,
+                boxShadow: '0 4px 20px rgba(124, 58, 237, 0.3)',
+                transition: 'all 0.25s ease',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = '#6D28D9';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 6px 28px rgba(124, 58, 237, 0.4)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = '#7C3AED';
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 20px rgba(124, 58, 237, 0.3)';
+              }}
+            >
+              Verify Someone Now — R99
+            </button>
+            <button
+              onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
+              style={{
+                background: 'transparent',
+                color: '#7C3AED',
+                padding: '18px 40px',
+                fontFamily: "'Syne', sans-serif",
+                fontWeight: 700,
+                fontSize: 15,
+                border: '2px solid #7C3AED',
+                cursor: 'pointer',
+                borderRadius: 50,
+                transition: 'all 0.25s ease',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = '#7C3AED';
+                e.currentTarget.style.color = '#FFFFFF';
+                e.currentTarget.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.color = '#7C3AED';
+                e.currentTarget.style.transform = 'translateY(0)';
+              }}
+            >
+              See How It Works
+            </button>
+          </div>
 
-        {/* Trust Line */}
-        <p
-          className="mt-4 text-sm max-w-[500px]"
-          style={{
+          {/* Free account nudge */}
+          <p style={{
             fontFamily: "'Syne', sans-serif",
-            color: "#64748B",
-            lineHeight: 1.6,
-          }}
-        >
-          Create a free safety account to save checks and use My Safety Journal.
-          No card required.{" "}
-          <span className="inline">
+            fontSize: 14,
+            color: '#4B5563',
+            marginTop: 12,
+            lineHeight: '20px',
+            textAlign: 'center',
+            maxWidth: 500,
+          }}>
+            Create a free safety account to save checks and use My Safety Journal. No card required.
+          </p>
+
+          {/* Login link */}
+          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', marginTop: 28 }}>
             Already have an account?{" "}
             <button
-              onClick={() => navigate("/signup?mode=signin")}
-              className="bg-transparent border-none cursor-pointer p-0 underline-offset-2 hover:underline"
-              style={{
-                fontFamily: "'Syne', sans-serif",
-                fontSize: 14,
-                fontWeight: 600,
-                color: "#7C3AED",
+              onClick={() => {
+                sessionStorage.setItem("fromCTA", "true");
+                window.location.href = '/signup?mode=signin';
               }}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: '#7C3AED', textDecoration: 'underline', padding: 0 }}
             >
               Log in here
             </button>
-          </span>
-        </p>
+          </p>
+
+          {/* Disclaimer */}
+          <div className="flex items-center gap-3" style={{ marginTop: 28 }}>
+            <div style={{ width: 32, height: 1, background: '#D6D3CD' }} />
+            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#9CA3AF', letterSpacing: '0.08em' }}>
+              FOR YOUR PROTECTION · NOT FOR HARASSMENT OR REVENGE
+            </span>
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN */}
+        <div className="flex flex-col justify-center items-center px-5 pb-20 gap-6 lg:px-10 lg:pt-28 lg:pb-20">
+          <div style={{ position: 'relative', maxWidth: 420, width: '100%' }}>
+            <div style={{
+              position: 'absolute',
+              inset: -8,
+              borderRadius: '40% 60% 55% 45% / 45% 55% 45% 55%',
+              background: 'linear-gradient(135deg, rgba(124,58,237,0.25), rgba(168,85,247,0.15), rgba(124,58,237,0.2))',
+              filter: 'blur(16px)',
+              zIndex: 0,
+            }} />
+            <div
+              className="organic-frame-1 organic-scroll-in visible w-full"
+              style={{ height: 500, position: 'relative', zIndex: 1 }}
+            >
+              <img
+                src={heroImage}
+                alt="South African woman looking thoughtfully out of a Johannesburg apartment window"
+                loading="eager"
+                width="896"
+                height="1152"
+              />
+            </div>
+          </div>
+
+          <div ref={statTwoRef} className="w-full" style={{ maxWidth: 420 }}>
+            <div style={{
+              background: 'rgba(15, 10, 26, 0.92)',
+              backdropFilter: 'blur(16px)',
+              WebkitBackdropFilter: 'blur(16px)',
+              border: '1px solid rgba(124, 58, 237, 0.3)',
+              padding: '28px 28px',
+              borderRadius: 16,
+              boxShadow: '0 8px 32px rgba(0,0,0,0.2), inset 0 1px 0 rgba(124,58,237,0.1)',
+            }}>
+              <div className="flex items-baseline gap-4 mb-2">
+                <span style={{
+                  fontFamily: "'DM Serif Display', serif",
+                  fontSize: 44,
+                  color: '#A855F7',
+                  lineHeight: 1,
+                  textShadow: '0 0 24px rgba(168,85,247,0.3)',
+                }}>
+                  {statTwo > 0 ? statTwo.toLocaleString() : '40,000'}+
+                </span>
+                <span style={{
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontSize: 9,
+                  color: 'rgba(255,255,255,0.5)',
+                  letterSpacing: '0.08em',
+                }}>
+                  SEXUAL OFFENCES / YEAR
+                </span>
+              </div>
+              <p style={{
+                fontFamily: "'Syne', sans-serif",
+                fontSize: 13,
+                color: 'rgba(255,255,255,0.7)',
+                lineHeight: 1.6,
+              }}>
+                Many offenders had prior warnings in public records.
+              </p>
+            </div>
+          </div>
+
+          <div style={{
+            background: 'linear-gradient(135deg, rgba(124,58,237,0.95), rgba(109,40,217,0.95))',
+            backdropFilter: 'blur(12px)',
+            padding: '24px 28px',
+            maxWidth: 420,
+            borderRadius: 16,
+            border: '1px solid rgba(168,85,247,0.3)',
+            boxShadow: '0 8px 32px rgba(124,58,237,0.2)',
+          }} className="w-full">
+            <p style={{
+              fontFamily: "'DM Serif Display', serif",
+              fontSize: 17,
+              color: 'white',
+              lineHeight: 1.5,
+              fontStyle: 'italic',
+            }}>
+              We built RedFlaq so women and communities can access key public‑record warnings quickly and affordably.
+            </p>
+            <div style={{
+              fontFamily: "'Syne', sans-serif",
+              fontSize: 12,
+              color: 'rgba(255,255,255,0.6)',
+              marginTop: 10,
+              fontWeight: 600,
+            }}>
+              — McKevin Ayaba, Founder
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

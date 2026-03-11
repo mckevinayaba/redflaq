@@ -157,7 +157,7 @@ const BarrierSection = () => {
             color: 'white',
             marginBottom: 24,
           }}>
-            RedFlaq makes it <em style={{ fontStyle: 'italic' }}>R99 and minutes.</em>
+            Traditional checks are costly, take days, and come with too much bureaucracy. RedFlaq does it for <em style={{ fontStyle: 'italic' }}>R99 in under 60 seconds.</em>
           </p>
           <button
             onClick={() => guardedAction()}

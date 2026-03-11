@@ -46,7 +46,7 @@ const HeroPlinq = () => {
             lineHeight: 1.5,
           }}>
             <span style={{ fontSize: 14, flexShrink: 0 }}>♡</span>
-            <span>Built in South Africa for people living with GBV and violence —<br />and everyone protecting their loved ones.</span>
+            <span>Built in South Africa for people facing GBV and violence —<br />and anyone protecting their loved ones.</span>
           </div>
 
           {/* Headline */}
@@ -60,6 +60,16 @@ const HeroPlinq = () => {
             Before you give him a spare key,<br />
             give yourself <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>clarity.</em>
           </h1>
+
+          <p style={{
+            fontFamily: "'DM Serif Display', serif",
+            lineHeight: 1.15,
+            color: '#1A1523',
+            marginBottom: 20,
+            letterSpacing: '-0.01em',
+          }} className="text-[22px] sm:text-[26px] lg:text-[32px] xl:text-[36px]">
+            Before you trust anyone with your home, children, or safety — check public records first.
+          </p>
 
           <p style={{
             fontFamily: "'Syne', sans-serif",

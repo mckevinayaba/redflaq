@@ -87,7 +87,7 @@ const WhyRedflaqSection = () => {
                 Technology Entrepreneur · Co‑Founder & CPO, RedFlaq
               </div>
               <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#C4B5FD', marginBottom: 16, fontStyle: 'italic', lineHeight: 1.5 }}>
-                Founder of ASEB Society, operating across 44+ African countries.
+                Founder of ASEB Society.
               </div>
               <blockquote style={{ fontFamily: "'DM Serif Display', serif", fontSize: 14, fontStyle: 'italic', color: '#C4B5FD', lineHeight: 1.6, borderLeft: '3px solid #7C3AED', paddingLeft: 16 }}>
                 "Traditional background check services exist, but they are slow, bureaucratic and designed for businesses, not individuals. RedFlaq was created so women and communities can access key public‑record warnings quickly and affordably."

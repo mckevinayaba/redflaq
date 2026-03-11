@@ -20,6 +20,7 @@ import PricingPlinq from "@/components/landing/PricingPlinq";
 import TestimonialsSectionNew from "@/components/landing/TestimonialsSectionNew";
 import CommunitySectionSA from "@/components/landing/CommunitySectionSA";
 import WhyRedflaqSection from "@/components/landing/WhyRedflaqSection";
+import CommunityImageStrip from "@/components/landing/CommunityImageStrip";
 import FAQPlinq from "@/components/landing/FAQPlinq";
 import FinalCTAPlinq from "@/components/landing/FinalCTAPlinq";
 import ShareSection from "@/components/landing/ShareSection";
@@ -128,6 +129,9 @@ const Index = () => {
       <div id="testimonials">
         <TestimonialsSectionNew />
       </div>
+
+      {/* Community images */}
+      <CommunityImageStrip />
 
       {/* 15. Community CTA */}
       <CommunitySectionSA />

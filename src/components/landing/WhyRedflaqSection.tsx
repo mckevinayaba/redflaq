@@ -42,6 +42,9 @@ const WhyRedflaqSection = () => {
             <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#C4B5FD', marginBottom: 16, fontStyle: 'italic', lineHeight: 1.5 }}>
               Author of <em>"Women Arise with Power"</em>, her life story as a GBV survivor.
             </div>
+            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7, marginBottom: 12, textAlign: 'left' }}>
+              Nthabi Montsho is a force behind South Africa's fight against GBV. She is the founder of Women Arise with Power, a non‑profit helping survivors rebuild their lives, and the author of <em>Women Arise with Power</em>, a powerful account of her own journey as a GBV survivor. As the host of <em>Women Arise with Power</em> on Soweto TV and a Mail &amp; Guardian Women of Power (2022) and She Awards (2024) winner, she uses her platform to push for safety, justice, and dignity for women. Nthabi stands with RedFlaq because survivors should not be the only ones carrying the burden of safety — our tools, data, and systems must do their part too.
+            </p>
             <blockquote style={{ fontFamily: "'DM Serif Display', serif", fontSize: 14, fontStyle: 'italic', color: '#C4B5FD', lineHeight: 1.6, borderLeft: '3px solid #7C3AED', paddingLeft: 16, textAlign: 'left' }}>
               "I survived what many women do not. If one public‑record warning can stop another woman from living my story, then tools like RedFlaq are not a luxury — they are a necessity."
             </blockquote>

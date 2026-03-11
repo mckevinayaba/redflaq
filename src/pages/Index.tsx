@@ -130,6 +130,9 @@ const Index = () => {
         <TestimonialsSectionNew />
       </div>
 
+      {/* Community images */}
+      <CommunityImageStrip />
+
       {/* 15. Community CTA */}
       <CommunitySectionSA />
 

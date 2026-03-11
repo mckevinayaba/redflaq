@@ -1,16 +1,16 @@
 import { useNavigate } from "react-router-dom";
-import { FileText, Search, AlertCircle, Check } from "lucide-react";
+import { FileText, Search, AlertCircle, Lock } from "lucide-react";
 
 const features = [
   {
     icon: FileText,
     title: "My Safety Journal",
-    description: "A private, time-stamped journal where you can record incidents, worries and patterns. Add photos, videos or audio, and export your entries to share with a lawyer, social worker or trusted person. Only you can see your journal when logged in.",
+    description: "A private, time‑stamped journal where you can record incidents, worries and patterns. Add photos, videos or audio, and export your entries to share with a lawyer, social worker or trusted person. Only you can see your journal when logged in.",
   },
   {
     icon: Search,
     title: "Saved Checks",
-    description: "Keep a history of everyone you have checked on RedFlaq. Re-download reports, show them to someone you trust, and track your own safety decisions over time.",
+    description: "Keep a history of everyone you have checked on RedFlaq. Re‑download reports, show them to someone you trust, and track your own safety decisions over time.",
   },
   {
     icon: AlertCircle,
@@ -48,7 +48,7 @@ const FreeAccountSection = () => {
           lineHeight: 1.7,
           marginBottom: 56,
         }}>
-          No credit card required. Always free.
+          No credit card required. Built for South African women and communities.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5" style={{ marginBottom: 40 }}>
@@ -104,7 +104,7 @@ const FreeAccountSection = () => {
           })}
         </div>
 
-        <div style={{ textAlign: 'center' }}>
+        <div style={{ textAlign: 'center', marginBottom: 32 }}>
           <button
             onClick={() => navigate('/signup')}
             style={{
@@ -125,6 +125,23 @@ const FreeAccountSection = () => {
           >
             Sign Up Free
           </button>
+        </div>
+
+        {/* Trust line */}
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+          maxWidth: 640, margin: '0 auto',
+        }}>
+          <Lock size={14} color="#9CA3AF" style={{ flexShrink: 0 }} />
+          <p style={{
+            fontFamily: "'Syne', sans-serif",
+            fontSize: 12,
+            color: '#9CA3AF',
+            lineHeight: 1.6,
+            textAlign: 'center',
+          }}>
+            Your data is encrypted and private. RedFlaq never shares your journal or check history without your permission, except where required by South African law.
+          </p>
         </div>
       </div>
     </section>

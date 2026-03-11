@@ -1,10 +1,11 @@
 import { useNavigate } from "react-router-dom";
-import { Users, Heart, Home, Briefcase } from "lucide-react";
+import { ShieldCheck, Users, Shield, Home, Briefcase, HandHeart } from "lucide-react";
 
 const personas = [
   {
-    icon: Users,
+    icon: ShieldCheck,
     title: "Women navigating GBVF risks",
+    prominent: true,
     bullets: [
       "Dating app matches before meeting in person",
       "New partners before getting serious or moving in",
@@ -12,12 +13,22 @@ const personas = [
     ],
   },
   {
-    icon: Heart,
+    icon: Users,
     title: "Parents protecting children",
     bullets: [
-      "School transport and lift-club drivers",
+      "School transport and lift‑club drivers",
       "Nannies, au pairs and childcare providers",
       "Coaches, tutors and adults around your children",
+    ],
+  },
+  {
+    icon: Shield,
+    title: "Protective family members",
+    bullets: [
+      "Verify caregivers around your children and elders",
+      "Check partners entering your family's life",
+      "Screen anyone around vulnerable family members",
+      "Being protective isn't controlling when it's grounded in respect and information.",
     ],
   },
   {
@@ -33,9 +44,18 @@ const personas = [
     icon: Briefcase,
     title: "Employers & households",
     bullets: [
-      "Domestic workers and in-home service providers",
+      "Domestic workers and in‑home service providers",
       "Contractors working inside your home",
       "Staff in sensitive roles around people or money",
+    ],
+  },
+  {
+    icon: HandHeart,
+    title: "Support for all",
+    bullets: [
+      "Whether you're a woman, man, queer person or child — abuse thrives in silence.",
+      "My Safety Journal is private documentation for anyone who needs a record of what they're living through.",
+      "You deserve to be taken seriously.",
     ],
   },
 ];
@@ -55,7 +75,7 @@ const WhoRedflaqHelps = () => {
           marginBottom: 12,
           letterSpacing: '-0.02em',
         }}>
-          Who RedFlaq Helps
+          Trusting relationships begin with <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>information.</em>
         </h2>
         <p style={{
           fontFamily: "'Syne', sans-serif",
@@ -67,10 +87,10 @@ const WhoRedflaqHelps = () => {
           marginLeft: 'auto',
           marginRight: 'auto',
         }}>
-          Built for women facing GBVF. Engineered for everyone protecting loved ones in South Africa.
+          One safety tool for every trust decision you make.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5" style={{ marginBottom: 40 }}>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" style={{ marginBottom: 40 }}>
           {personas.map((p) => {
             const Icon = p.icon;
             return (
@@ -80,8 +100,8 @@ const WhoRedflaqHelps = () => {
                   background: 'linear-gradient(145deg, #0F0A1A, #1A1035)',
                   borderRadius: 20,
                   padding: '48px 32px',
-                  border: '1px solid rgba(124,58,237,0.2)',
-                  boxShadow: '0 4px 24px rgba(0,0,0,0.1)',
+                  border: p.prominent ? '1.5px solid rgba(124,58,237,0.4)' : '1px solid rgba(124,58,237,0.2)',
+                  boxShadow: p.prominent ? '0 4px 32px rgba(124,58,237,0.15)' : '0 4px 24px rgba(0,0,0,0.1)',
                   transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                 }}
                 onMouseEnter={e => {
@@ -90,7 +110,7 @@ const WhoRedflaqHelps = () => {
                 }}
                 onMouseLeave={e => {
                   e.currentTarget.style.transform = 'none';
-                  e.currentTarget.style.boxShadow = '0 4px 24px rgba(0,0,0,0.1)';
+                  e.currentTarget.style.boxShadow = p.prominent ? '0 4px 32px rgba(124,58,237,0.15)' : '0 4px 24px rgba(0,0,0,0.1)';
                 }}
               >
                 <div style={{
@@ -120,10 +140,10 @@ const WhoRedflaqHelps = () => {
                       borderBottom: '1px solid rgba(255,255,255,0.08)',
                       padding: '12px 0',
                       display: 'flex',
-                      alignItems: 'center',
+                      alignItems: 'flex-start',
                       gap: 10,
                     }}>
-                      <span style={{ color: '#A855F7', flexShrink: 0 }}>•</span>
+                      <span style={{ color: '#A855F7', flexShrink: 0, marginTop: 2 }}>•</span>
                       {b}
                     </li>
                   ))}
@@ -132,6 +152,19 @@ const WhoRedflaqHelps = () => {
             );
           })}
         </div>
+
+        {/* Bottom text */}
+        <p style={{
+          fontFamily: "'Syne', sans-serif",
+          fontSize: 14,
+          color: '#6B7280',
+          textAlign: 'center',
+          maxWidth: 700,
+          margin: '0 auto 32px',
+          lineHeight: 1.7,
+        }}>
+          Built in South Africa for South Africans. Grounded in GBVF realities. Powered by public‑record data. Designed to protect women and communities first.
+        </p>
 
         <div style={{ textAlign: 'center' }}>
           <button

@@ -123,9 +123,18 @@ export default function JournalList() {
       <div className="mb-6">
         <p className="font-mono text-[11px] tracking-widest text-muted-foreground uppercase mb-1">My Safety Journal</p>
         <h1 className="font-heading text-2xl sm:text-3xl text-foreground mb-2">My Safety Journal</h1>
-        <p className="font-body text-sm text-muted-foreground max-w-2xl">
-          A private, time-stamped journal to help you remember and organise incidents of abuse. You can export your entries to share with a lawyer, social worker, or trusted contact.
+        <p className="font-body text-sm text-muted-foreground max-w-2xl mb-3">
+          Private documentation for anyone experiencing abuse.
         </p>
+        <p className="font-body text-sm text-muted-foreground max-w-2xl mb-4">
+          Whether you're a woman, man, queer person, child or elder — abuse thrives in silence. My Safety Journal helps you quietly record what is happening while it is still fresh, so you are not left with only your memory later.
+        </p>
+        <ul className="font-body text-sm text-muted-foreground max-w-2xl space-y-1.5 list-disc list-inside">
+          <li>Record incidents with dates, times and details in your own words.</li>
+          <li>Upload photos, videos or voice recordings of injuries, damage or threats.</li>
+          <li>Save screenshots of messages, emails and social‑media posts.</li>
+          <li>Export everything to share with lawyers, police or trusted contacts when you're ready.</li>
+        </ul>
       </div>
 
       {/* Actions */}

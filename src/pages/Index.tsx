@@ -93,10 +93,13 @@ const Index = () => {
       {/* 5. Who RedFlaq Helps */}
       <WhoRedflaqHelps />
 
-      {/* 6. Protection Orders & Evidence Collection */}
+      {/* 6. Why RedFlaq Exists (Info inequality) */}
+      <WhyRedflaqExists />
+
+      {/* 7. Protection Orders & Evidence Collection */}
       <ProtectionOrdersSection />
 
-      {/* 7. Photo Grid */}
+      {/* 8. Photo Grid */}
       <PhotoGrid />
 
       {/* 8. The South African Reality */}

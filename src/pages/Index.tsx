@@ -132,8 +132,8 @@ const Index = () => {
       {/* 15. Community CTA */}
       <CommunitySectionSA />
 
-      {/* 16. Why RedFlaq Exists (Ambassadors) */}
-      <WhyRedflaqExists />
+      {/* 16. Why RedFlaq Section (Team & Principles) */}
+      <WhyRedflaqSection />
 
       {/* 17. Mid-Page Signup Strip */}
       <MidPageSignupStrip />

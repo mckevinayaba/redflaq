@@ -22,9 +22,6 @@ function formatFileSize(bytes: number) {
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
 }
 
-const labelStyle = "font-mono text-[11px] tracking-wider uppercase block mb-2";
-const helperStyle = "font-body text-xs mb-2 block";
-
 export default function JournalNew() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
@@ -145,152 +142,159 @@ export default function JournalNew() {
     setSaving(false);
   };
 
-  const inputClass = "w-full px-4 py-3 rounded-xl bg-white text-[#1E1B4B] font-body text-sm border border-purple-200/40 shadow-sm focus:outline-none focus:border-primary focus:ring-0 focus:border-l-[3px] focus:border-l-primary transition-all";
-  const textareaClass = `${inputClass} resize-y`;
+  const labelCls = "font-mono text-[11px] tracking-wider uppercase block mb-2" as const;
+  const helperCls = "font-body text-xs block mb-2" as const;
+  const inputCls = "w-full px-4 py-3 bg-white text-foreground font-body text-sm border border-border shadow-sm focus:outline-none focus:ring-0 transition-all" as const;
 
   return (
     <DashboardLayout>
-      <div className="min-h-screen -m-4 sm:-m-6 lg:-m-10 p-4 sm:p-6 lg:p-10" style={{ background: 'linear-gradient(135deg, #1E1B4B 0%, #312E81 50%, #1E1B4B 100%)' }}>
-        <div className="max-w-2xl mx-auto">
-          {/* Header */}
-          <div className="mb-8">
-            <p className="font-mono text-[11px] tracking-widest text-purple-300/70 uppercase mb-1">New Entry</p>
-            <h1 className="font-heading text-2xl sm:text-3xl text-white mb-2">{firstName}'s Safety Journal</h1>
-            <p className="font-body text-sm text-purple-200/80">
-              What you write here is private. Only you can see it when logged in.
-            </p>
+      <div className="max-w-2xl mx-auto">
+        {/* Header */}
+        <div className="mb-6">
+          <p className="font-mono text-[11px] tracking-widest text-muted-foreground uppercase mb-1">New Entry</p>
+          <h1 className="font-heading text-2xl sm:text-3xl text-foreground mb-2">{firstName}'s Safety Journal</h1>
+          <p className="font-body text-sm text-muted-foreground">
+            What you write here is private. Only you can see it when logged in.
+          </p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Date & Time */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className={labelCls} style={{ color: '#5B21B6' }}>Date</label>
+              <span className={helperCls} style={{ color: '#64748B' }}>When did this happen?</span>
+              <input type="date" value={entryDate} onChange={e => setEntryDate(e.target.value)}
+                className={inputCls} style={{ borderRadius: 10 }} />
+            </div>
+            <div>
+              <label className={labelCls} style={{ color: '#5B21B6' }}>Time</label>
+              <span className={helperCls} style={{ color: '#64748B' }}>Approximate time</span>
+              <input type="time" value={entryTime} onChange={e => setEntryTime(e.target.value)}
+                className={inputCls} style={{ borderRadius: 10 }} />
+            </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Date & Time */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className={labelStyle} style={{ color: '#C4B5FD' }}>Date</label>
-                <span className={helperStyle} style={{ color: '#9CA3AF' }}>When did this happen?</span>
-                <input type="date" value={entryDate} onChange={e => setEntryDate(e.target.value)} className={inputClass} />
-              </div>
-              <div>
-                <label className={labelStyle} style={{ color: '#C4B5FD' }}>Time</label>
-                <span className={helperStyle} style={{ color: '#9CA3AF' }}>Approximate time</span>
-                <input type="time" value={entryTime} onChange={e => setEntryTime(e.target.value)} className={inputClass} />
-              </div>
+          {/* Who Is This About */}
+          <div>
+            <label className={labelCls} style={{ color: '#5B21B6' }}>Who Is This About? (Optional)</label>
+            <span className={helperCls} style={{ color: '#64748B' }}>Name or description of the person involved — e.g. their first name, 'my landlord', 'my ex-partner'. This is for your reference only.</span>
+            <input type="text" value={subjectPerson} onChange={e => setSubjectPerson(e.target.value)}
+              placeholder="e.g. Thabo, my ex, my landlord John"
+              className={inputCls} style={{ borderRadius: 10 }} />
+          </div>
+
+          {/* What Happened */}
+          <div>
+            <label className={labelCls} style={{ color: '#5B21B6' }}>What Happened? *</label>
+            <span className={helperCls} style={{ color: '#64748B' }}>Describe the incident in detail. Include what was said or done, how it made you feel, and anything that worried you.</span>
+            <textarea value={description} onChange={e => setDescription(e.target.value.slice(0, 5000))}
+              rows={8} placeholder="Write what happened..."
+              className={`${inputCls} resize-y`} style={{ borderRadius: 10 }} />
+            <p className="font-mono text-[10px] text-muted-foreground mt-1 text-right">{description.length} / 5000 characters</p>
+          </div>
+
+          {/* Location */}
+          <div>
+            <label className={labelCls} style={{ color: '#5B21B6' }}>Location (Optional)</label>
+            <span className={helperCls} style={{ color: '#64748B' }}>Where did this happen? (Home, workplace, street name, etc.)</span>
+            <input type="text" value={location} onChange={e => setLocation(e.target.value)} placeholder="e.g. Home, Sandton City"
+              className={inputCls} style={{ borderRadius: 10 }} />
+          </div>
+
+          {/* Witnesses */}
+          <div>
+            <label className={labelCls} style={{ color: '#5B21B6' }}>Witnesses (Optional)</label>
+            <span className={helperCls} style={{ color: '#64748B' }}>Names or descriptions of people who saw or heard what happened.</span>
+            <textarea value={witnesses} onChange={e => setWitnesses(e.target.value)} rows={3} placeholder="e.g. My neighbour Thandi was in the next room"
+              className={`${inputCls} resize-y`} style={{ borderRadius: 10 }} />
+          </div>
+
+          {/* Injuries or Damage */}
+          <div>
+            <label className={labelCls} style={{ color: '#5B21B6' }}>Injuries or Damage (Optional)</label>
+            <span className={helperCls} style={{ color: '#64748B' }}>Describe any physical harm, threats, or damage to property.</span>
+            <textarea value={injuries} onChange={e => setInjuries(e.target.value)} rows={3} placeholder="e.g. Bruise on left arm, broken phone screen"
+              className={`${inputCls} resize-y`} style={{ borderRadius: 10 }} />
+          </div>
+
+          {/* Evidence Upload */}
+          <div>
+            <label className={labelCls} style={{ color: '#5B21B6' }}>Evidence (Optional)</label>
+            <span className={helperCls} style={{ color: '#64748B' }}>Upload photos, videos, audio or documents that relate to this incident.</span>
+            <div
+              onDragOver={e => { e.preventDefault(); e.currentTarget.classList.add("border-primary"); }}
+              onDragLeave={e => e.currentTarget.classList.remove("border-primary")}
+              onDrop={e => { e.preventDefault(); e.currentTarget.classList.remove("border-primary"); handleFileAdd(e.dataTransfer.files); }}
+              className="border-2 border-dashed border-border p-8 text-center hover:border-primary/50 transition-colors cursor-pointer bg-white"
+              style={{ borderRadius: 14 }}
+              onClick={() => document.getElementById("file-input")?.click()}
+            >
+              <Upload className="h-8 w-8 text-muted-foreground mx-auto mb-3" />
+              <p className="font-body text-sm text-foreground mb-1">Drag and drop files or click to browse</p>
+              <p className="font-body text-xs text-muted-foreground">JPG, PNG, MP4, MOV, MP3, M4A, PDF · Max 50MB per file · Up to 10 files</p>
             </div>
+            <input id="file-input" type="file" multiple accept="image/jpeg,image/png,image/gif,image/webp,video/mp4,video/quicktime,audio/mpeg,audio/mp4,audio/x-m4a,application/pdf"
+              onChange={e => handleFileAdd(e.target.files)} className="hidden" />
 
-            {/* Who Is This About */}
-            <div>
-              <label className={labelStyle} style={{ color: '#C4B5FD' }}>Who Is This About? (Optional)</label>
-              <span className={helperStyle} style={{ color: '#9CA3AF' }}>Name or description of the person involved — e.g. their first name, 'my landlord', 'my ex-partner'. This is for your reference only and helps you organise entries.</span>
-              <input type="text" value={subjectPerson} onChange={e => setSubjectPerson(e.target.value)} placeholder="e.g. Thabo, my ex, my landlord John" className={inputClass} />
-            </div>
-
-            {/* What Happened */}
-            <div>
-              <label className={labelStyle} style={{ color: '#C4B5FD' }}>What Happened? *</label>
-              <span className={helperStyle} style={{ color: '#9CA3AF' }}>Describe the incident in detail. Include what was said or done, how it made you feel, and anything that worried you.</span>
-              <textarea value={description} onChange={e => setDescription(e.target.value.slice(0, 5000))}
-                rows={8} placeholder="Write what happened..." className={textareaClass} />
-              <p className="font-mono text-[10px] text-purple-300/50 mt-1 text-right">{description.length} / 5000 characters</p>
-            </div>
-
-            {/* Location */}
-            <div>
-              <label className={labelStyle} style={{ color: '#C4B5FD' }}>Location (Optional)</label>
-              <span className={helperStyle} style={{ color: '#9CA3AF' }}>Where did this happen? (Home, workplace, street name, etc.)</span>
-              <input type="text" value={location} onChange={e => setLocation(e.target.value)} placeholder="e.g. Home, Sandton City" className={inputClass} />
-            </div>
-
-            {/* Witnesses */}
-            <div>
-              <label className={labelStyle} style={{ color: '#C4B5FD' }}>Witnesses (Optional)</label>
-              <span className={helperStyle} style={{ color: '#9CA3AF' }}>Names or descriptions of people who saw or heard what happened.</span>
-              <textarea value={witnesses} onChange={e => setWitnesses(e.target.value)} rows={3} placeholder="e.g. My neighbour Thandi was in the next room" className={textareaClass} />
-            </div>
-
-            {/* Injuries or Damage */}
-            <div>
-              <label className={labelStyle} style={{ color: '#C4B5FD' }}>Injuries or Damage (Optional)</label>
-              <span className={helperStyle} style={{ color: '#9CA3AF' }}>Describe any physical harm, threats, or damage to property.</span>
-              <textarea value={injuries} onChange={e => setInjuries(e.target.value)} rows={3} placeholder="e.g. Bruise on left arm, broken phone screen" className={textareaClass} />
-            </div>
-
-            {/* Evidence Upload */}
-            <div>
-              <label className={labelStyle} style={{ color: '#C4B5FD' }}>Evidence (Optional)</label>
-              <span className={helperStyle} style={{ color: '#9CA3AF' }}>Upload photos, videos, audio or documents that relate to this incident.</span>
-              <div
-                onDragOver={e => { e.preventDefault(); e.currentTarget.style.borderColor = '#7C3AED'; }}
-                onDragLeave={e => { e.currentTarget.style.borderColor = 'rgba(196,181,253,0.3)'; }}
-                onDrop={e => { e.preventDefault(); e.currentTarget.style.borderColor = 'rgba(196,181,253,0.3)'; handleFileAdd(e.dataTransfer.files); }}
-                className="border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-colors hover:border-primary/50"
-                style={{ borderColor: 'rgba(196,181,253,0.3)', background: 'rgba(255,255,255,0.05)' }}
-                onClick={() => document.getElementById("file-input")?.click()}
-              >
-                <Upload className="h-8 w-8 text-purple-300/60 mx-auto mb-3" />
-                <p className="font-body text-sm text-purple-200/80 mb-1">Drag and drop files or click to browse</p>
-                <p className="font-body text-xs text-purple-300/40">JPG, PNG, MP4, MOV, MP3, M4A, PDF · Max 50MB per file · Up to 10 files</p>
-              </div>
-              <input id="file-input" type="file" multiple accept="image/jpeg,image/png,image/gif,image/webp,video/mp4,video/quicktime,audio/mpeg,audio/mp4,audio/x-m4a,application/pdf"
-                onChange={e => handleFileAdd(e.target.files)} className="hidden" />
-
-              {files.length > 0 && (
-                <div className="mt-3 space-y-2">
-                  {files.map((f, i) => (
-                    <div key={i} className="flex items-center justify-between px-3 py-2 rounded-xl" style={{ background: 'rgba(255,255,255,0.08)' }}>
-                      <div className="flex items-center gap-2 min-w-0">
-                        <span className="text-sm">{MIME_MAP[f.type] === "photo" ? "📷" : MIME_MAP[f.type] === "video" ? "🎥" : MIME_MAP[f.type] === "audio" ? "🎤" : "📄"}</span>
-                        <span className="font-body text-sm text-purple-100 truncate">{f.name}</span>
-                        <span className="font-mono text-[10px] text-purple-300/50 flex-shrink-0">({formatFileSize(f.size)})</span>
-                      </div>
-                      <button type="button" onClick={() => removeFile(i)} className="text-red-400 hover:bg-red-400/10 p-1 rounded">
-                        <Trash2 className="h-4 w-4" />
-                      </button>
+            {files.length > 0 && (
+              <div className="mt-3 space-y-2">
+                {files.map((f, i) => (
+                  <div key={i} className="flex items-center justify-between px-3 py-2 bg-muted/50 rounded-xl">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="text-sm">{MIME_MAP[f.type] === "photo" ? "📷" : MIME_MAP[f.type] === "video" ? "🎥" : MIME_MAP[f.type] === "audio" ? "🎤" : "📄"}</span>
+                      <span className="font-body text-sm text-foreground truncate">{f.name}</span>
+                      <span className="font-mono text-[10px] text-muted-foreground flex-shrink-0">({formatFileSize(f.size)})</span>
                     </div>
-                  ))}
-                </div>
-              )}
-
-              {uploading && (
-                <div className="mt-3">
-                  <div className="h-2 bg-white/10 rounded-full overflow-hidden">
-                    <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${uploadProgress}%` }} />
+                    <button type="button" onClick={() => removeFile(i)} className="text-destructive hover:bg-destructive/10 p-1 rounded">
+                      <Trash2 className="h-4 w-4" />
+                    </button>
                   </div>
-                  <p className="font-mono text-[10px] text-purple-300/50 mt-1">Uploading files... {uploadProgress}%</p>
-                </div>
-              )}
-            </div>
+                ))}
+              </div>
+            )}
 
-            {/* Privacy & Safety Notice */}
-            <div className="rounded-2xl p-5" style={{ background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.2)' }}>
-              <div className="flex items-start gap-3">
-                <Lock className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                <div>
-                  <h3 className="font-heading text-sm text-white mb-2">Privacy & Safety</h3>
-                  <ul className="font-body text-xs text-purple-200/70 space-y-1.5">
-                    <li>• Entries are stored securely in the cloud.</li>
-                    <li>• Only you can access your journal when logged in.</li>
-                    <li>• If someone unsafe has access to your phone, use the Quick Exit button to close this page fast.</li>
-                  </ul>
-                  <button type="button" onClick={handleQuickExit}
-                    className="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-destructive text-destructive-foreground font-body font-bold text-xs rounded-lg hover:opacity-90 transition-colors">
-                    <QuickExitIcon className="h-3.5 w-3.5" /> Quick Exit
-                  </button>
+            {uploading && (
+              <div className="mt-3">
+                <div className="h-2 bg-muted rounded-full overflow-hidden">
+                  <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${uploadProgress}%` }} />
                 </div>
+                <p className="font-mono text-[10px] text-muted-foreground mt-1">Uploading files... {uploadProgress}%</p>
+              </div>
+            )}
+          </div>
+
+          {/* Privacy & Safety Notice */}
+          <div className="bg-primary/5 border border-primary/20 p-5" style={{ borderRadius: 14 }}>
+            <div className="flex items-start gap-3">
+              <Lock className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+              <div>
+                <h3 className="font-heading text-sm text-foreground mb-2">Privacy & Safety</h3>
+                <ul className="font-body text-xs text-muted-foreground space-y-1.5">
+                  <li>• Entries are stored securely in the cloud.</li>
+                  <li>• Only you can access your journal when logged in.</li>
+                  <li>• If someone unsafe has access to your phone, use the Quick Exit button to close this page fast.</li>
+                </ul>
+                <button type="button" onClick={handleQuickExit}
+                  className="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-destructive text-destructive-foreground font-body font-bold text-xs rounded-lg hover:opacity-90 transition-colors">
+                  <QuickExitIcon className="h-3.5 w-3.5" /> Quick Exit
+                </button>
               </div>
             </div>
+          </div>
 
-            {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-3 pt-2">
-              <button type="submit" disabled={saving}
-                className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3 bg-primary text-primary-foreground font-body font-bold text-sm rounded-lg hover:opacity-90 transition-colors disabled:opacity-50">
-                <Lock className="h-4 w-4" /> {saving ? "Saving..." : "Save Entry"}
-              </button>
-              <button type="button" onClick={() => navigate("/dashboard/journal")}
-                className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3 border border-purple-400/30 text-purple-200 font-body font-medium text-sm rounded-lg hover:bg-white/5 transition-colors">
-                <X className="h-4 w-4" /> Cancel
-              </button>
-            </div>
-          </form>
-        </div>
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-3 pt-2">
+            <button type="submit" disabled={saving}
+              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3 bg-primary text-primary-foreground font-body font-bold text-sm rounded-lg hover:opacity-90 transition-colors disabled:opacity-50">
+              <Lock className="h-4 w-4" /> {saving ? "Saving..." : "Save Entry"}
+            </button>
+            <button type="button" onClick={() => navigate("/dashboard/journal")}
+              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3 border border-border text-foreground font-body font-medium text-sm rounded-lg hover:bg-muted transition-colors">
+              <X className="h-4 w-4" /> Cancel
+            </button>
+          </div>
+        </form>
       </div>
     </DashboardLayout>
   );

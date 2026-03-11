@@ -138,7 +138,7 @@ const FooterPlinq = () => {
               </span>
             </div>
             <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#A855F7' }}>
-              Standing with South African women against GBV
+              Making safety verification accessible to every South African. Standing with survivors. Serving communities.
             </span>
           </div>
         </div>

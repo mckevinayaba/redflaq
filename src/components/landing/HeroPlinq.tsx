@@ -46,7 +46,7 @@ const HeroPlinq = () => {
             lineHeight: 1.5,
           }}>
             <span style={{ fontSize: 14, flexShrink: 0 }}>♡</span>
-            <span>Built for South African women facing GBVF.<br />Designed for anyone protecting their loved ones.</span>
+            <span>Built in South Africa for people living with GBV and violence —<br />and everyone protecting their loved ones.</span>
           </div>
 
           {/* Headline */}
@@ -286,7 +286,7 @@ const HeroPlinq = () => {
               marginTop: 10,
               fontWeight: 600,
             }}>
-              — McKevin Ayaba, Founder
+              — RedFlaq Founding Team
             </div>
           </div>
         </div>

@@ -2,6 +2,7 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Shield, Lock, Eye } from "lucide-react";
 import nthabiPhoto from "@/assets/nthabi-montsho.jpeg";
 import ayolaPhoto from "@/assets/ayola-masizana.jpeg";
+import founderPhoto from "@/assets/mckevin-ayaba.png";
 
 const WhyRedflaqSection = () => {
   const { ref, isVisible } = useScrollReveal();
@@ -25,28 +26,22 @@ const WhyRedflaqSection = () => {
           <p>South Africa has one of the highest GBV rates globally. A woman is killed by her intimate partner every few hours. Many tragedies had warning signs in public records — but people couldn't access them easily.</p>
         </div>
 
-        {/* Ambassador blocks */}
+        {/* Team blocks */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8" style={{ marginBottom: 48 }}>
           {/* Nthabi */}
           <div style={{ textAlign: 'center' }}>
             <div style={{ position: 'relative', width: 160, height: 160, margin: '0 auto 20px', borderRadius: '45% 55% 50% 50% / 50% 45% 55% 50%', overflow: 'hidden', boxShadow: '0 8px 32px rgba(124,58,237,0.3)' }}>
-              <img src={nthabiPhoto} alt="Nthabi Montsho, GBV Advocate & Brand Ambassador" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={nthabiPhoto} alt="Nthabiseng Montsho, Co-Founder & CEO of RedFlaq" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
             <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: '#FFFFFF', marginBottom: 4 }}>
               Nthabi Montsho
             </div>
             <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.06em', color: '#A78BFA', marginBottom: 8, lineHeight: 1.5 }}>
-              Survivor, GBV Advocate & TV Host · Brand Ambassador, RedFlaq
+              Survivor, GBV Advocate & TV Host · Co‑Founder & CEO, RedFlaq
             </div>
             <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#C4B5FD', marginBottom: 16, fontStyle: 'italic', lineHeight: 1.5 }}>
-              Author of <em>"Women Arise with Power"</em>, a book about her life story as a survivor of GBV
+              Author of <em>"Women Arise with Power"</em>, her life story as a GBV survivor.
             </div>
-            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7, marginBottom: 12, textAlign: 'left' }}>
-              Nthabi Montsho is a force behind South Africa's fight against GBV. She is the founder of Women Arise with Power, a non‑profit helping survivors rebuild their lives, and the author of <em>Women Arise with Power</em>, a powerful account of her own journey as a GBV survivor. As the host of Women Arise with Power on Soweto TV and a Mail & Guardian Women of Power (2022) and She Awards (2024) winner, she uses her platform to push for safety, justice, and dignity for women.
-            </p>
-            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7, marginBottom: 16, textAlign: 'left' }}>
-              Nthabi stands with RedFlaq because survivors should not be the only ones carrying the burden of safety — our tools, data, and systems must do their part too.
-            </p>
             <blockquote style={{ fontFamily: "'DM Serif Display', serif", fontSize: 14, fontStyle: 'italic', color: '#C4B5FD', lineHeight: 1.6, borderLeft: '3px solid #7C3AED', paddingLeft: 16, textAlign: 'left' }}>
               "I survived what many women do not. If one public‑record warning can stop another woman from living my story, then tools like RedFlaq are not a luxury — they are a necessity."
             </blockquote>
@@ -55,7 +50,7 @@ const WhyRedflaqSection = () => {
           {/* Ayola */}
           <div style={{ textAlign: 'center' }}>
             <div style={{ position: 'relative', width: 160, height: 160, margin: '0 auto 20px', borderRadius: '50% 45% 55% 50% / 45% 55% 50% 50%', overflow: 'hidden', boxShadow: '0 8px 32px rgba(124,58,237,0.3)' }}>
-              <img src={ayolaPhoto} alt="Ayola Masizana, Witness of GBV & Brand Ambassador" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <img src={ayolaPhoto} alt="Ayola Masizana, Brand Ambassador of RedFlaq" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
             <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: '#FFFFFF', marginBottom: 4 }}>
               Ayola Masizana
@@ -66,22 +61,43 @@ const WhyRedflaqSection = () => {
             <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7, marginBottom: 12, textAlign: 'left' }}>
               Growing up, Ayola Masizana watched his father abuse his mother. Those memories shaped his view of safety, trust, and what children see but cannot stop. Today he is studying for a BA in Public Management and Governance at the University of Johannesburg, determined to help build systems that protect families before violence erupts.
             </p>
-            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7, marginBottom: 16, textAlign: 'left' }}>
-              Ayola stands with RedFlaq as the voice of those who witnessed GBV as children and never want the next generation to feel that helpless again.
-            </p>
             <blockquote style={{ fontFamily: "'DM Serif Display', serif", fontSize: 14, fontStyle: 'italic', color: '#C4B5FD', lineHeight: 1.6, borderLeft: '3px solid #7C3AED', paddingLeft: 16, textAlign: 'left' }}>
               "As a child, I saw things no child should ever see. I stand with RedFlaq because boys and girls deserve parents who are safe, and systems that listen to the warning signs early."
             </blockquote>
           </div>
         </div>
 
-        {/* Founder quote */}
-        <div style={{ maxWidth: 700, margin: '0 auto 48px', borderLeft: '4px solid #7C3AED', paddingLeft: 24 }}>
-          <p style={{ fontFamily: "'DM Serif Display', serif", fontSize: 20, fontStyle: 'italic', color: 'rgba(255,255,255,0.9)', lineHeight: 1.6 }}>
-            "Traditional background check services exist, but they are slow, bureaucratic, and designed for businesses, not individuals. RedFlaq was created so women and communities can access key public‑record warnings quickly and affordably."
-          </p>
-          <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.5)', marginTop: 12 }}>
-            — McKevin Ayaba, Founder of RedFlaq
+        {/* McKevin block */}
+        <div style={{
+          background: 'rgba(124, 58, 237, 0.06)',
+          border: '1px solid rgba(124, 58, 237, 0.2)',
+          borderRadius: 20,
+          padding: '40px 36px',
+          marginBottom: 48,
+        }}>
+          <div className="flex flex-col md:flex-row items-start gap-8">
+            <div style={{ flexShrink: 0 }}>
+              <div style={{ width: 120, height: 120, borderRadius: '45% 55% 50% 50% / 50% 45% 55% 50%', overflow: 'hidden', boxShadow: '0 8px 32px rgba(124,58,237,0.3)' }}>
+                <img src={founderPhoto} alt="McKevin Ayaba, Co-Founder & CPO of RedFlaq" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
+            </div>
+            <div>
+              <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: '#FFFFFF', marginBottom: 4 }}>
+                McKevin Ayaba
+              </div>
+              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.06em', color: '#A78BFA', marginBottom: 4, lineHeight: 1.5 }}>
+                Technology Entrepreneur · Co‑Founder & CPO, RedFlaq
+              </div>
+              <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#C4B5FD', marginBottom: 16, fontStyle: 'italic', lineHeight: 1.5 }}>
+                Founder of ASEB Society, operating across 44+ African countries.
+              </div>
+              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7, marginBottom: 16 }}>
+                McKevin Ayaba is a technology entrepreneur and ecosystem builder who has spent more than a decade building infrastructure for African startups. As Chief Product Officer of RedFlaq, he leads product architecture, technology development and strategic partnerships.
+              </p>
+              <blockquote style={{ fontFamily: "'DM Serif Display', serif", fontSize: 14, fontStyle: 'italic', color: '#C4B5FD', lineHeight: 1.6, borderLeft: '3px solid #7C3AED', paddingLeft: 16 }}>
+                "Traditional background check services exist, but they are slow, bureaucratic and designed for businesses, not individuals. RedFlaq was created so women and communities can access key public‑record warnings quickly and affordably."
+              </blockquote>
+            </div>
           </div>
         </div>
 

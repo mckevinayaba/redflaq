@@ -23,11 +23,22 @@ const HowItWorksPlinq = () => {
           fontSize: 'clamp(36px, 4vw, 52px)',
           maxWidth: 500,
           color: '#1A1523',
-          marginBottom: 56,
+          marginBottom: 20,
           letterSpacing: '-0.02em',
         }}>
           Fast. Simple. <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>Public‑record based.</em>
         </h2>
+
+        <p style={{
+          fontFamily: "'Syne', sans-serif",
+          fontSize: 15,
+          color: '#6B7280',
+          lineHeight: 1.7,
+          maxWidth: 640,
+          marginBottom: 56,
+        }}>
+          Trusting relationships begin with information. Here's how RedFlaq turns public‑record warning lists into a simple high/medium/low/clear safety signal.
+        </p>
 
         {/* Timeline layout */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-0 relative">

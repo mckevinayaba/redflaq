@@ -217,7 +217,7 @@ const SearchOptionsSection = () => {
                 { Icon: ShieldCheck, text: "Confidential use only" },
               ].map(({ Icon, text }) => (
                 <span key={text} className="flex items-center gap-1.5" style={{
-                  fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.35)',
+                  fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#888888',
                 }}>
                   <Icon style={{ width: 13, height: 13 }} /> {text}
                 </span>

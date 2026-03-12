@@ -12,7 +12,7 @@ const Footer = () => {
           {/* Column 1: Brand */}
           <div>
             <div className="flex items-center mb-2">
-              <img src={redflaqLogo} alt="RedFlaq" style={{ height: 36, width: 'auto', display: 'block', filter: 'brightness(0) invert(1)' }} />
+              <img src={redflaqLogo} alt="RedFlaq" style={{ height: 36, width: 'auto', display: 'block' }} />
             </div>
             <p className="text-sm mb-4">
               A Setup A Startup Initiative

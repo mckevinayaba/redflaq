@@ -96,7 +96,7 @@ const PricingPlinq = () => {
                   onMouseEnter={e => {
                     if (!plan.highlight) {
                       e.currentTarget.style.transform = 'translateY(-4px)';
-                      e.currentTarget.style.boxShadow = '0 12px 40px rgba(124,58,237,0.2)';
+                      e.currentTarget.style.boxShadow = '0 12px 40px rgba(107,78,255,0.1)';
                     }
                   }}
                   onMouseLeave={e => {

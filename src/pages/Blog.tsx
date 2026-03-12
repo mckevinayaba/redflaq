@@ -48,28 +48,21 @@ const Blog = () => {
     <div style={{ background: "#F5F0EB", minHeight: "100vh", overflowX: "hidden" }}>
       <NavbarPlinq />
 
-      {/* Hero — dark */}
+      {/* Hero */}
       <section style={{
-        background: 'linear-gradient(135deg, #0F0A1A 0%, #1A1035 50%, #0F0A1A 100%)',
+        background: '#F5F0EB',
         paddingTop: 120, paddingBottom: 64,
-        position: 'relative', overflow: 'hidden',
       }}>
-        <div style={{
-          position: 'absolute', top: '30%', left: '50%', transform: 'translateX(-50%)',
-          width: '60%', height: '50%',
-          background: 'radial-gradient(ellipse, rgba(124,58,237,0.12) 0%, transparent 70%)',
-          pointerEvents: 'none',
-        }} />
-        <div className="max-w-[900px] mx-auto px-5 sm:px-6 relative z-10">
-          <p className="font-mono text-[11px] tracking-[0.15em] mb-4 flex items-center gap-3" style={{ color: '#A855F7' }}>
-            <span style={{ width: 24, height: 1, background: '#A855F7', display: 'inline-block' }} />
+        <div className="max-w-[900px] mx-auto px-5 sm:px-6">
+          <p className="font-mono text-[11px] tracking-[0.15em] mb-4 flex items-center gap-3" style={{ color: '#6B4EFF' }}>
+            <span style={{ width: 24, height: 1, background: '#6B4EFF', display: 'inline-block' }} />
             Blog
           </p>
-          <h1 className="font-heading text-[28px] sm:text-[40px] lg:text-[48px] leading-[1.05] mb-4" style={{ color: '#FFFFFF', letterSpacing: '-0.02em' }}>
+          <h1 className="font-heading text-[28px] sm:text-[40px] lg:text-[48px] leading-[1.05] mb-4" style={{ color: '#1F1F1F', letterSpacing: '-0.02em' }}>
             New risks, real stories,<br />
-            <span style={{ color: '#A855F7' }}>better decisions.</span>
+            <span style={{ color: '#6B4EFF' }}>better decisions.</span>
           </h1>
-          <p className="font-body text-[15px] sm:text-base leading-relaxed max-w-[560px]" style={{ color: 'rgba(255,255,255,0.6)' }}>
+          <p className="font-body text-[15px] sm:text-base leading-relaxed max-w-[560px]" style={{ color: '#555555' }}>
             Fresh information on scams, dating and tenant behaviours, GBV trends, and RedFlaq updates — helping South Africans make safer decisions.
           </p>
         </div>

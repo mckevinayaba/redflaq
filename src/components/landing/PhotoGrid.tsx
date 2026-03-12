@@ -4,7 +4,7 @@ import motherImg from "@/assets/sa-mother-child.jpg";
 import professionalImg from "@/assets/sa-professional-woman.jpg";
 
 const PhotoGrid = () => {
-  const { ref, isVisible } = useScrollReveal();
+  const { ref, isVisible } = useScrollReveal(0.05);
 
   return (
     <section
@@ -12,7 +12,7 @@ const PhotoGrid = () => {
       className={`reveal-section ${isVisible ? 'visible' : ''} py-12 md:py-20 px-6`} style={{ background: '#F5F0EB' }}
     >
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <div className="grid grid-cols-1 md:grid-cols-[38%_32%_28%] gap-5 md:gap-6 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-[38%_32%_28%] gap-8 md:gap-6 items-start">
           {/* Column 1 — Text */}
           <div className="flex flex-col justify-center pr-4" style={{ paddingTop: 24 }}>
             <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 24 }}>

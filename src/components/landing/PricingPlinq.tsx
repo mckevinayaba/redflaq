@@ -67,7 +67,7 @@ const PricingPlinq = () => {
             Each safety check uses South African public‑record warning lists to highlight possible red flags. It does not provide a full SAPS criminal record.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
+          <div className={`grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch reveal-stagger ${isVisible ? 'visible' : ''}`}>
             {plans.map(plan => {
               const bg = plan.highlight
                 ? '#E9E3FF'

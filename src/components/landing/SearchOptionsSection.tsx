@@ -17,12 +17,12 @@ const SearchOptionsSection = () => {
   const searchReasons = ["Potential romantic partner", "Employee verification", "Childcare provider", "Tenant screening", "Business partner", "Other legitimate purpose"];
 
   const inputStyle: React.CSSProperties = {
-    background: 'rgba(255,255,255,0.06)',
-    border: '1.5px solid rgba(124,58,237,0.25)',
+    background: '#FFFFFF',
+    border: '1.5px solid #E6E0DA',
     padding: '14px 16px',
     fontFamily: "'Syne', sans-serif",
     fontSize: 15,
-    color: 'white',
+    color: '#1F1F1F',
     borderRadius: 12,
     width: '100%',
     outline: 'none',

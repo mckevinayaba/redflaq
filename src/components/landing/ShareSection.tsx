@@ -13,7 +13,7 @@ const ShareSection = () => {
   return (
     <section className="py-12 md:py-20 px-5" style={{ background: '#F5F0EB' }}>
       <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
-        <Heart className="h-8 w-8 mx-auto mb-4" style={{ color: '#7C3AED' }} />
+        <Heart className="h-8 w-8 mx-auto mb-4" style={{ color: '#6B4EFF' }} />
         <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, color: '#1A1523', marginBottom: 12 }}>Share RedFlaq</h3>
         <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#6B7280', lineHeight: 1.7, marginBottom: 28 }}>
           Share RedFlaq to raise awareness and help another woman check for serious public‑record warning signs before trusting someone with her life, home or business.

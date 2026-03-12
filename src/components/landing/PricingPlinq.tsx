@@ -187,11 +187,11 @@ const PricingPlinq = () => {
             {["No subscription", "No recurring charges", "Pay once, use when needed"].map(text => (
               <span key={text} style={{
                 display: 'inline-flex', alignItems: 'center', gap: 6,
-                fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#6B7280',
-                background: 'rgba(124,58,237,0.04)', border: '1px solid rgba(124,58,237,0.1)',
+                fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#555555',
+                background: '#FFFFFF', border: '1px solid #E6E0DA',
                 padding: '8px 16px', borderRadius: 50,
               }}>
-                <Check style={{ width: 13, height: 13, color: '#7C3AED' }} /> {text}
+                <Check style={{ width: 13, height: 13, color: '#6B4EFF' }} /> {text}
               </span>
             ))}
           </div>

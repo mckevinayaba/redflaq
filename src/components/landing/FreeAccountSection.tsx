@@ -23,14 +23,14 @@ const FreeAccountSection = () => {
   const navigate = useNavigate();
 
   return (
-    <section style={{ background: '#F5F3FF' }} className="py-12 md:py-20 px-6">
+    <section style={{ background: '#E9E3FF' }} className="py-12 md:py-20 px-6">
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 16, textAlign: 'center' }}>Free Account</div>
+        <div className="section-tag" style={{ color: '#6B4EFF', marginBottom: 16, textAlign: 'center' }}>Free Account</div>
 
         <h2 style={{
           fontFamily: "'DM Serif Display', serif",
           fontSize: 'clamp(28px, 3.5vw, 44px)',
-          color: '#1A1523',
+          color: '#1F1F1F',
           textAlign: 'center',
           marginBottom: 12,
           letterSpacing: '-0.02em',
@@ -40,7 +40,7 @@ const FreeAccountSection = () => {
         <p style={{
           fontFamily: "'Syne', sans-serif",
           fontSize: 15,
-          color: '#6B7280',
+          color: '#555555',
           textAlign: 'center',
           maxWidth: 520,
           marginLeft: 'auto',
@@ -58,35 +58,35 @@ const FreeAccountSection = () => {
               <div
                 key={f.title}
                 style={{
-                  background: 'linear-gradient(145deg, #0F0A1A, #1A1035)',
+                  background: '#FFFFFF',
                   borderRadius: 20,
                   padding: '48px 32px',
-                  border: '1px solid rgba(124,58,237,0.2)',
-                  boxShadow: '0 4px 24px rgba(0,0,0,0.1)',
+                  border: '1px solid #E6E0DA',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
                   transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                 }}
                 onMouseEnter={e => {
                   e.currentTarget.style.transform = 'translateY(-4px)';
-                  e.currentTarget.style.boxShadow = '0 12px 40px rgba(124,58,237,0.2)';
+                  e.currentTarget.style.boxShadow = '0 12px 40px rgba(107,78,255,0.1)';
                 }}
                 onMouseLeave={e => {
                   e.currentTarget.style.transform = 'none';
-                  e.currentTarget.style.boxShadow = '0 4px 24px rgba(0,0,0,0.1)';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
                 }}
               >
                 <div style={{
                   width: 48, height: 48, borderRadius: '50%',
-                  background: '#EDE9FE',
+                  background: '#E9E3FF',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   marginBottom: 20,
                 }}>
-                  <Icon size={24} color="#7C3AED" aria-label={f.title} />
+                  <Icon size={24} color="#6B4EFF" aria-label={f.title} />
                 </div>
                 <h3 style={{
                   fontFamily: "'Syne', sans-serif",
                   fontWeight: 800,
                   fontSize: 20,
-                  color: 'white',
+                  color: '#1F1F1F',
                   marginBottom: 12,
                 }}>
                   {f.title}
@@ -95,7 +95,7 @@ const FreeAccountSection = () => {
                   fontFamily: "'Syne', sans-serif",
                   fontSize: 13,
                   lineHeight: 1.7,
-                  color: 'rgba(255,255,255,0.7)',
+                  color: '#555555',
                 }}>
                   {f.description}
                 </p>
@@ -108,7 +108,7 @@ const FreeAccountSection = () => {
           <button
             onClick={() => navigate('/signup')}
             style={{
-              background: '#7C3AED',
+              background: '#6B4EFF',
               color: '#FFFFFF',
               padding: '16px 40px',
               fontFamily: "'Syne', sans-serif",
@@ -117,11 +117,11 @@ const FreeAccountSection = () => {
               border: 'none',
               cursor: 'pointer',
               borderRadius: 50,
-              boxShadow: '0 4px 20px rgba(124,58,237,0.3)',
+              boxShadow: '0 4px 20px rgba(107,78,255,0.25)',
               transition: 'all 0.25s ease',
             }}
-            onMouseEnter={e => { e.currentTarget.style.background = '#6D28D9'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = '#7C3AED'; e.currentTarget.style.transform = 'translateY(0)'; }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#5539E8'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#6B4EFF'; e.currentTarget.style.transform = 'translateY(0)'; }}
           >
             Sign Up Free
           </button>
@@ -132,11 +132,11 @@ const FreeAccountSection = () => {
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
           maxWidth: 640, margin: '0 auto',
         }}>
-          <Lock size={14} color="#9CA3AF" style={{ flexShrink: 0 }} />
+          <Lock size={14} color="#888888" style={{ flexShrink: 0 }} />
           <p style={{
             fontFamily: "'Syne', sans-serif",
             fontSize: 12,
-            color: '#9CA3AF',
+            color: '#888888',
             lineHeight: 1.6,
             textAlign: 'center',
           }}>

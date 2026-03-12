@@ -22,16 +22,16 @@ const FAQPlinq = () => {
 
   return (
     <section id="faq" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''} py-12 md:py-20 px-6`} style={{
-      background: 'linear-gradient(180deg, #0F0A1A 0%, #110D1F 100%)',
+      background: '#F5F0EB',
     }}>
       <div style={{ maxWidth: 700, margin: '0 auto' }}>
-        <div className="section-tag justify-center" style={{ color: '#A855F7', marginBottom: 16 }}>FAQ</div>
+        <div className="section-tag justify-center" style={{ color: '#6B4EFF', marginBottom: 16 }}>FAQ</div>
 
         <h2 style={{
           fontFamily: "'DM Serif Display', serif",
-          fontSize: 'clamp(32px, 4vw, 44px)', color: 'white', textAlign: 'center', marginBottom: 48, letterSpacing: '-0.02em',
+          fontSize: 'clamp(32px, 4vw, 44px)', color: '#1F1F1F', textAlign: 'center', marginBottom: 48, letterSpacing: '-0.02em',
         }}>
-          You have questions. We have <em style={{ color: '#A855F7', fontStyle: 'italic' }}>answers.</em>
+          You have questions. We have <em style={{ color: '#6B4EFF', fontStyle: 'italic' }}>answers.</em>
         </h2>
 
         <Accordion type="single" collapsible className="space-y-3">
@@ -40,23 +40,24 @@ const FAQPlinq = () => {
               key={index}
               value={`item-${index}`}
               style={{
-                background: 'rgba(124, 58, 237, 0.06)',
-                border: '1px solid rgba(124, 58, 237, 0.15)',
+                background: '#FFFFFF',
+                border: '1px solid #E6E0DA',
                 borderRadius: 12,
                 overflow: 'hidden',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
                 transition: 'border-color 0.2s ease',
               }}
-              className="data-[state=open]:!border-[rgba(124,58,237,0.4)] px-6"
+              className="data-[state=open]:!border-[#6B4EFF40] px-6"
             >
               <AccordionTrigger
                 className="text-left text-[15px] font-semibold hover:no-underline py-5"
-                style={{ color: 'white', fontFamily: "'Syne', sans-serif" }}
+                style={{ color: '#1F1F1F', fontFamily: "'Syne', sans-serif" }}
               >
                 {faq.question}
               </AccordionTrigger>
               <AccordionContent
                 className="leading-relaxed pb-5"
-                style={{ color: 'rgba(255,255,255,0.6)', fontFamily: "'Syne', sans-serif", fontSize: 14 }}
+                style={{ color: '#555555', fontFamily: "'Syne', sans-serif", fontSize: 14 }}
               >
                 {faq.answer}
               </AccordionContent>

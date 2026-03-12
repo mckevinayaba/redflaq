@@ -11,9 +11,9 @@ const AdvocacySection = () => {
         <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, lineHeight: 1.7, color: '#6B7280', marginBottom: 28 }}>
           RedFlaq was built because safety should never be a privilege. Every check you run helps build a South Africa where women have access to the information they deserve.
         </p>
-        <button onClick={() => guardedAction()} style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 15, background: '#7C3AED', color: '#fff', border: 'none', borderRadius: 50, padding: '16px 36px', cursor: 'pointer', transition: 'all 0.25s ease', boxShadow: '0 4px 20px rgba(124,58,237,0.3)' }}
-          onMouseEnter={e => { e.currentTarget.style.background = '#6D28D9'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-          onMouseLeave={e => { e.currentTarget.style.background = '#7C3AED'; e.currentTarget.style.transform = 'translateY(0)'; }}
+        <button onClick={() => guardedAction()} style={{ fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 15, background: '#6B4EFF', color: '#fff', border: 'none', borderRadius: 50, padding: '16px 36px', cursor: 'pointer', transition: 'all 0.25s ease', boxShadow: '0 4px 20px rgba(107,78,255,0.25)' }}
+          onMouseEnter={e => { e.currentTarget.style.background = '#5539E8'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = '#6B4EFF'; e.currentTarget.style.transform = 'translateY(0)'; }}
         >
           Verify Someone Now — R99
         </button>

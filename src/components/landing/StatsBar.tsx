@@ -8,7 +8,7 @@ const StatsBar = () => {
   ];
 
   return (
-    <section className="bg-purple-600 py-6">
+    <section className="py-6" style={{ background: '#6B4EFF' }}>
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-3 gap-6">
           {stats.map((stat, index) => (

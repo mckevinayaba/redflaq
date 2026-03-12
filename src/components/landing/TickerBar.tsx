@@ -28,7 +28,7 @@ const TickerBar = () => {
   return (
     <div style={{
       width: '100%',
-      background: 'linear-gradient(90deg, #7C3AED, #6D28D9, #7C3AED)',
+      background: '#6B4EFF',
       padding: '12px 0',
       overflow: 'hidden',
       whiteSpace: 'nowrap',

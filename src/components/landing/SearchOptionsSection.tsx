@@ -17,12 +17,12 @@ const SearchOptionsSection = () => {
   const searchReasons = ["Potential romantic partner", "Employee verification", "Childcare provider", "Tenant screening", "Business partner", "Other legitimate purpose"];
 
   const inputStyle: React.CSSProperties = {
-    background: 'rgba(255,255,255,0.06)',
-    border: '1.5px solid rgba(124,58,237,0.25)',
+    background: '#FFFFFF',
+    border: '1.5px solid #E6E0DA',
     padding: '14px 16px',
     fontFamily: "'Syne', sans-serif",
     fontSize: 15,
-    color: 'white',
+    color: '#1F1F1F',
     borderRadius: 12,
     width: '100%',
     outline: 'none',
@@ -34,7 +34,7 @@ const SearchOptionsSection = () => {
     fontSize: 11,
     letterSpacing: '0.1em',
     textTransform: 'uppercase',
-    color: 'rgba(255,255,255,0.5)',
+    color: '#888888',
     display: 'block',
     marginBottom: 8,
   };
@@ -52,7 +52,7 @@ const SearchOptionsSection = () => {
   return (
     <section id="search" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''} py-12 md:py-20 px-5`} style={{ background: '#F5F0EB' }}>
       <div style={{ maxWidth: 800, margin: '0 auto' }}>
-        <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 16 }}>
+        <div className="section-tag" style={{ color: '#6B4EFF', marginBottom: 16 }}>
           Start Verifying
         </div>
 
@@ -73,21 +73,21 @@ const SearchOptionsSection = () => {
 
         {/* Dark form card */}
         <div style={{
-          background: 'linear-gradient(145deg, #0F0A1A, #1A1035)',
-          border: '1px solid rgba(124, 58, 237, 0.25)',
+          background: '#FFFFFF',
+          border: '1px solid #E6E0DA',
           borderRadius: 24,
           padding: '48px 32px',
-          boxShadow: '0 8px 48px rgba(124, 58, 237, 0.1), 0 0 0 1px rgba(124,58,237,0.08)',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
         }}>
           <h3 style={{
             fontFamily: "'DM Serif Display', serif",
             fontSize: 28,
-            color: 'white',
+            color: '#1F1F1F',
             marginBottom: 8,
           }}>
             Person Search
           </h3>
-          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.5)', marginBottom: 36 }}>
+          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#888888', marginBottom: 36 }}>
             Results shown instantly and sent to your email. We're continuously improving accuracy, but no system can be perfect.
           </p>
 
@@ -98,16 +98,16 @@ const SearchOptionsSection = () => {
                 ref={nameRef}
                 style={inputStyle}
                 placeholder="e.g. John David Mokoena"
-                onFocus={e => e.currentTarget.style.borderColor = '#7C3AED'}
-                onBlur={e => e.currentTarget.style.borderColor = 'rgba(124,58,237,0.25)'}
+                onFocus={e => e.currentTarget.style.borderColor = '#6B4EFF'}
+                onBlur={e => e.currentTarget.style.borderColor = '#E6E0DA'}
               />
             </div>
             <div>
               <label style={labelStyle}>Province (Optional)</label>
               <select
                 style={{ ...inputStyle, appearance: 'none' }}
-                onFocus={e => e.currentTarget.style.borderColor = '#7C3AED'}
-                onBlur={e => e.currentTarget.style.borderColor = 'rgba(124,58,237,0.25)'}
+                onFocus={e => e.currentTarget.style.borderColor = '#6B4EFF'}
+                onBlur={e => e.currentTarget.style.borderColor = '#E6E0DA'}
               >
                 <option value="">Select province</option>
                 {provinces.map(p => <option key={p} value={p}>{p}</option>)}
@@ -117,8 +117,8 @@ const SearchOptionsSection = () => {
               <label style={labelStyle}>Age Range (Optional)</label>
               <select
                 style={{ ...inputStyle, appearance: 'none' }}
-                onFocus={e => e.currentTarget.style.borderColor = '#7C3AED'}
-                onBlur={e => e.currentTarget.style.borderColor = 'rgba(124,58,237,0.25)'}
+                onFocus={e => e.currentTarget.style.borderColor = '#6B4EFF'}
+                onBlur={e => e.currentTarget.style.borderColor = '#E6E0DA'}
               >
                 <option value="">Select age range</option>
                 <option value="18-25">18–25</option>
@@ -132,13 +132,13 @@ const SearchOptionsSection = () => {
               <label style={labelStyle}>Reason for Search *</label>
               <select
                 style={{ ...inputStyle, appearance: 'none' }}
-                onFocus={e => e.currentTarget.style.borderColor = '#7C3AED'}
-                onBlur={e => e.currentTarget.style.borderColor = 'rgba(124,58,237,0.25)'}
+                onFocus={e => e.currentTarget.style.borderColor = '#6B4EFF'}
+                onBlur={e => e.currentTarget.style.borderColor = '#E6E0DA'}
               >
                 <option value="">Select reason</option>
                 {searchReasons.map(r => <option key={r} value={r}>{r}</option>)}
               </select>
-              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: 'rgba(255,255,255,0.3)', marginTop: 4, display: 'block' }}>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#888888', marginTop: 4, display: 'block' }}>
                 We ask this to comply with POPIA and protect everyone's rights
               </span>
             </div>
@@ -162,15 +162,15 @@ const SearchOptionsSection = () => {
                   setShowConsentHint(false);
                 }}
                 className="mt-1"
-                style={{ accentColor: '#7C3AED' }}
+                style={{ accentColor: '#6B4EFF' }}
               />
               <label htmlFor="consent" style={{
-                fontFamily: "'Syne', sans-serif", fontSize: 13, color: 'rgba(255,255,255,0.7)',
+                fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#555555',
                 lineHeight: 1.5, cursor: 'pointer',
               }}>
                 I confirm I have a legitimate reason to search this person and I agree to the{" "}
-                <a href="/terms" style={{ color: '#A855F7', textDecoration: 'underline' }}>Terms of Service</a> and{" "}
-                <a href="/privacy" style={{ color: '#A855F7', textDecoration: 'underline' }}>Privacy Policy</a>
+                <a href="/terms" style={{ color: '#6B4EFF', textDecoration: 'underline' }}>Terms of Service</a> and{" "}
+                <a href="/privacy" style={{ color: '#6B4EFF', textDecoration: 'underline' }}>Privacy Policy</a>
               </label>
             </div>
 
@@ -187,8 +187,8 @@ const SearchOptionsSection = () => {
                 disabled={!consentChecked}
                 style={{
                   width: '100%',
-                  background: consentChecked ? 'linear-gradient(135deg, #7C3AED, #A855F7)' : 'rgba(255,255,255,0.1)',
-                  color: 'white',
+                  background: consentChecked ? '#6B4EFF' : '#E6E0DA',
+                  color: consentChecked ? 'white' : '#888888',
                   padding: 20,
                   fontFamily: "'Syne', sans-serif",
                   fontSize: 16,
@@ -201,7 +201,7 @@ const SearchOptionsSection = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: 10,
-                  boxShadow: consentChecked ? '0 4px 24px rgba(124,58,237,0.35)' : 'none',
+                  boxShadow: consentChecked ? '0 4px 24px rgba(107,78,255,0.25)' : 'none',
                 }}
               >
                 <Lock style={{ width: 16, height: 16 }} />
@@ -217,7 +217,7 @@ const SearchOptionsSection = () => {
                 { Icon: ShieldCheck, text: "Confidential use only" },
               ].map(({ Icon, text }) => (
                 <span key={text} className="flex items-center gap-1.5" style={{
-                  fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: 'rgba(255,255,255,0.35)',
+                  fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: '#888888',
                 }}>
                   <Icon style={{ width: 13, height: 13 }} /> {text}
                 </span>

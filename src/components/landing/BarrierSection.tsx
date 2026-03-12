@@ -38,26 +38,26 @@ const BarrierSection = () => {
       ref={ref}
       className={`scroll-reveal ${isVisible ? 'visible' : ''} py-12 md:py-20 px-6`}
       style={{
-        background: 'linear-gradient(180deg, #110D1F 0%, #0F0A1A 100%)',
+        background: '#F5F0EB',
         overflow: 'hidden',
         position: 'relative',
       }}
     >
       <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1 }}>
-        <div className="section-tag" style={{ color: '#A855F7', marginBottom: 24 }}>
+        <div className="section-tag" style={{ color: '#6B4EFF', marginBottom: 24 }}>
           Why No One Checked Before
         </div>
 
         <h2 style={{
           fontFamily: "'DM Serif Display', serif",
           fontSize: 'clamp(36px, 4vw, 56px)',
-          color: 'white',
+          color: '#1F1F1F',
           lineHeight: 1.08,
           maxWidth: 700,
           margin: '0 0 56px',
           letterSpacing: '-0.02em',
         }}>
-          Background checks existed. But they weren't built for <em style={{ color: '#A855F7', fontStyle: 'italic' }}>you.</em>
+          Background checks existed. But they weren't built for <em style={{ color: '#6B4EFF', fontStyle: 'italic' }}>you.</em>
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -65,27 +65,27 @@ const BarrierSection = () => {
             <div
               key={card.num}
               style={{
-                background: 'rgba(124, 58, 237, 0.06)',
-                border: '1px solid rgba(124, 58, 237, 0.2)',
+                background: '#FFFFFF',
+                border: '1px solid #E6E0DA',
                 borderRadius: 20,
                 padding: '40px 32px',
-                backdropFilter: 'blur(12px)',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
                 transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                 cursor: 'default',
               }}
               onMouseEnter={e => {
                 e.currentTarget.style.transform = 'translateY(-4px)';
-                e.currentTarget.style.boxShadow = '0 12px 40px rgba(124,58,237,0.15)';
+                e.currentTarget.style.boxShadow = '0 12px 40px rgba(107,78,255,0.1)';
               }}
               onMouseLeave={e => {
                 e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = 'none';
+                e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
               }}
             >
               <div style={{
                 fontFamily: "'JetBrains Mono', monospace",
                 fontSize: 11,
-                color: 'rgba(255,255,255,0.3)',
+                color: '#888888',
                 letterSpacing: '0.1em',
                 marginBottom: 20,
               }}>
@@ -98,7 +98,7 @@ const BarrierSection = () => {
                 fontFamily: "'Syne', sans-serif",
                 fontSize: 20,
                 fontWeight: 700,
-                color: 'white',
+                color: '#1F1F1F',
                 marginBottom: 16,
               }}>
                 {card.title}
@@ -110,19 +110,19 @@ const BarrierSection = () => {
                   fontFamily: "'JetBrains Mono', monospace",
                   fontSize: 12,
                   color: '#EF4444',
-                  background: 'rgba(239,68,68,0.1)',
+                  background: 'rgba(239,68,68,0.08)',
                   padding: '4px 10px',
                   borderRadius: 6,
                   textDecoration: 'line-through',
                 }}>
                   {card.oldWay}
                 </span>
-                <ArrowRight style={{ width: 14, height: 14, color: 'rgba(255,255,255,0.3)' }} />
+                <ArrowRight style={{ width: 14, height: 14, color: '#888888' }} />
                 <span style={{
                   fontFamily: "'JetBrains Mono', monospace",
                   fontSize: 12,
-                  color: '#A855F7',
-                  background: 'rgba(168,85,247,0.15)',
+                  color: '#6B4EFF',
+                  background: '#E9E3FF',
                   padding: '4px 10px',
                   borderRadius: 6,
                   fontWeight: 700,
@@ -134,7 +134,7 @@ const BarrierSection = () => {
               <p style={{
                 fontFamily: "'Syne', sans-serif",
                 fontSize: 14,
-                color: 'rgba(255,255,255,0.6)',
+                color: '#555555',
                 lineHeight: 1.65,
               }}>
                 {card.desc}
@@ -146,7 +146,7 @@ const BarrierSection = () => {
         {/* CTA Banner */}
         <div style={{
           marginTop: 64,
-          background: 'linear-gradient(135deg, #7C3AED, #A855F7)',
+          background: '#6B4EFF',
           borderRadius: 20,
           padding: '48px 40px',
           textAlign: 'center',
@@ -163,7 +163,7 @@ const BarrierSection = () => {
             onClick={() => guardedAction()}
             style={{
               background: 'white',
-              color: '#7C3AED',
+              color: '#6B4EFF',
               padding: '16px 40px',
               fontFamily: "'Syne', sans-serif",
               fontWeight: 700,

@@ -52,13 +52,13 @@ const PricingPlinq = () => {
     <>
       <section id="pricing" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''} py-12 md:py-20 px-6`} style={{ background: '#F5F0EB' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-          <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 16 }}>Pricing</div>
+          <div className="section-tag" style={{ color: '#6B4EFF', marginBottom: 16 }}>Pricing</div>
 
           <h2 style={{
             fontFamily: "'DM Serif Display', serif",
             fontSize: 'clamp(36px, 4vw, 52px)', color: '#1A1523', lineHeight: 1.08, maxWidth: 500, marginBottom: 16, letterSpacing: '-0.02em',
           }}>
-            Choose your <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>safety plan</em>
+            Choose your <em style={{ color: '#6B4EFF', fontStyle: 'italic' }}>safety plan</em>
           </h2>
           <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#6B7280', maxWidth: 520, lineHeight: 1.7, marginBottom: 16 }}>
             Traditional checks are expensive, slow and built for companies, not for women or communities trying to stay safe. RedFlaq makes it R99 and under a minute.
@@ -69,12 +69,11 @@ const PricingPlinq = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
             {plans.map(plan => {
-              const isDark = !plan.highlight;
               const bg = plan.highlight
-                ? 'linear-gradient(145deg, #7C3AED, #A855F7)'
-                : 'linear-gradient(145deg, #0F0A1A, #1A1035)';
-              const textColor = 'white';
-              const mutedColor = plan.highlight ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.5)';
+                ? '#E9E3FF'
+                : '#FFFFFF';
+              const textColor = '#1F1F1F';
+              const mutedColor = '#888888';
 
               return (
                 <div
@@ -85,11 +84,11 @@ const PricingPlinq = () => {
                     position: 'relative',
                     borderRadius: 20,
                     border: plan.highlight
-                      ? '1px solid rgba(168,85,247,0.5)'
-                      : '1px solid rgba(124,58,237,0.2)',
+                      ? '1.5px solid #6B4EFF40'
+                      : '1px solid #E6E0DA',
                     boxShadow: plan.highlight
-                      ? '0 8px 48px rgba(124,58,237,0.3), 0 0 0 1px rgba(168,85,247,0.2)'
-                      : '0 4px 24px rgba(0,0,0,0.1)',
+                      ? '0 8px 48px rgba(107,78,255,0.1)'
+                      : '0 2px 8px rgba(0,0,0,0.05)',
                     transform: plan.highlight ? 'scale(1.03)' : 'none',
                     zIndex: plan.highlight ? 2 : 1,
                     transition: 'transform 0.3s ease, box-shadow 0.3s ease',
@@ -97,13 +96,13 @@ const PricingPlinq = () => {
                   onMouseEnter={e => {
                     if (!plan.highlight) {
                       e.currentTarget.style.transform = 'translateY(-4px)';
-                      e.currentTarget.style.boxShadow = '0 12px 40px rgba(124,58,237,0.2)';
+                      e.currentTarget.style.boxShadow = '0 12px 40px rgba(107,78,255,0.1)';
                     }
                   }}
                   onMouseLeave={e => {
                     if (!plan.highlight) {
                       e.currentTarget.style.transform = 'none';
-                      e.currentTarget.style.boxShadow = '0 4px 24px rgba(0,0,0,0.1)';
+                      e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
                     }
                   }}
                 >
@@ -130,7 +129,7 @@ const PricingPlinq = () => {
 
                   {plan.savings && (
                     <span style={{
-                      display: 'inline-block', background: 'rgba(22,163,106,0.15)', color: '#4ADE80',
+                      display: 'inline-block', background: 'rgba(22,163,106,0.08)', color: '#16A34A',
                       fontFamily: "'JetBrains Mono', monospace", fontSize: 10, padding: '4px 12px', borderRadius: 6, marginBottom: 24,
                     }}>
                       {plan.savings}
@@ -141,11 +140,11 @@ const PricingPlinq = () => {
                     {plan.features.map(f => (
                       <div key={f} style={{
                         fontFamily: "'Syne', sans-serif", fontSize: 13,
-                        color: 'rgba(255,255,255,0.8)',
-                        borderBottom: '1px solid rgba(255,255,255,0.08)',
+                        color: '#555555',
+                        borderBottom: '1px solid #E6E0DA',
                         padding: '12px 0', display: 'flex', alignItems: 'center', gap: 10,
                       }}>
-                        <Check style={{ width: 14, height: 14, color: plan.highlight ? 'white' : '#A855F7', flexShrink: 0 }} /> {f}
+                        <Check style={{ width: 14, height: 14, color: '#6B4EFF', flexShrink: 0 }} /> {f}
                       </div>
                     ))}
                   </div>
@@ -161,23 +160,18 @@ const PricingPlinq = () => {
                     style={{
                       width: '100%', marginTop: 28, padding: 16,
                       fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 14,
-                      border: plan.highlight ? 'none' : '2px solid rgba(168,85,247,0.5)',
-                      background: plan.highlight ? 'white' : 'transparent',
-                      color: plan.highlight ? '#7C3AED' : 'white',
+                      border: 'none',
+                      background: '#6B4EFF',
+                      color: '#FFFFFF',
                       cursor: 'pointer', transition: 'all 0.25s ease',
                       borderRadius: 50,
                     }}
                     onMouseEnter={e => {
-                      if (plan.highlight) {
-                        e.currentTarget.style.background = 'rgba(255,255,255,0.9)';
-                        e.currentTarget.style.transform = 'translateY(-1px)';
-                      } else {
-                        e.currentTarget.style.background = 'rgba(168,85,247,0.15)';
-                        e.currentTarget.style.transform = 'translateY(-1px)';
-                      }
+                      e.currentTarget.style.background = '#5539E8';
+                      e.currentTarget.style.transform = 'translateY(-1px)';
                     }}
                     onMouseLeave={e => {
-                      e.currentTarget.style.background = plan.highlight ? 'white' : 'transparent';
+                      e.currentTarget.style.background = '#6B4EFF';
                       e.currentTarget.style.transform = 'translateY(0)';
                     }}
                   >
@@ -193,11 +187,11 @@ const PricingPlinq = () => {
             {["No subscription", "No recurring charges", "Pay once, use when needed"].map(text => (
               <span key={text} style={{
                 display: 'inline-flex', alignItems: 'center', gap: 6,
-                fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#6B7280',
-                background: 'rgba(124,58,237,0.04)', border: '1px solid rgba(124,58,237,0.1)',
+                fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#555555',
+                background: '#FFFFFF', border: '1px solid #E6E0DA',
                 padding: '8px 16px', borderRadius: 50,
               }}>
-                <Check style={{ width: 13, height: 13, color: '#7C3AED' }} /> {text}
+                <Check style={{ width: 13, height: 13, color: '#6B4EFF' }} /> {text}
               </span>
             ))}
           </div>

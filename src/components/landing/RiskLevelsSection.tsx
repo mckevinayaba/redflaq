@@ -22,13 +22,13 @@ const RiskLevelsSection = () => {
   return (
     <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''} py-12 md:py-20 px-6`} style={{ background: '#F5F0EB' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 16 }}>Your Report</div>
+        <div className="section-tag" style={{ color: '#6B4EFF', marginBottom: 16 }}>Your Report</div>
 
         <h2 style={{
           fontFamily: "'DM Serif Display', serif",
           fontSize: 'clamp(36px, 4vw, 52px)', color: '#1A1523', marginBottom: 56, letterSpacing: '-0.02em',
         }}>
-          What your report <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>reveals</em>
+          What your report <em style={{ color: '#6B4EFF', fontStyle: 'italic' }}>reveals</em>
         </h2>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6" style={{ marginBottom: 48 }}>
@@ -79,25 +79,25 @@ const RiskLevelsSection = () => {
 
         {/* What you get — premium card */}
         <div style={{
-          background: 'rgba(124, 58, 237, 0.04)', border: '1px solid rgba(124, 58, 237, 0.15)',
-          borderRadius: 16, padding: '40px 36px', maxWidth: 700, margin: '0 auto',
+          background: '#FFFFFF', border: '1px solid #E6E0DA',
+          borderRadius: 16, padding: '40px 36px', maxWidth: 700, margin: '0 auto', boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
         }}>
           <div className="flex items-center gap-3 mb-6">
-            <Shield className="h-6 w-6" style={{ color: '#7C3AED' }} />
+            <Shield className="h-6 w-6" style={{ color: '#6B4EFF' }} />
             <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 24, color: '#1A1523' }}>What you get</h3>
           </div>
           <div className="space-y-0">
             {checklistItems.map((item) => (
               <div key={item} style={{
                 display: 'flex', alignItems: 'center', gap: 12,
-                padding: '12px 0', borderBottom: '1px solid rgba(124,58,237,0.1)',
+                padding: '12px 0', borderBottom: '1px solid #E6E0DA',
                 fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#4B4453',
               }}>
                 <div style={{
-                  width: 20, height: 20, borderRadius: '50%', background: 'rgba(124,58,237,0.1)',
+                  width: 20, height: 20, borderRadius: '50%', background: '#E9E3FF',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                 }}>
-                  <Check className="h-3 w-3" style={{ color: '#7C3AED' }} />
+                  <Check className="h-3 w-3" style={{ color: '#6B4EFF' }} />
                 </div>
                 {item}
               </div>

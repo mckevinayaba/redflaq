@@ -13,19 +13,19 @@ const ShareSection = () => {
   return (
     <section className="py-12 md:py-20 px-5" style={{ background: '#F5F0EB' }}>
       <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
-        <Heart className="h-8 w-8 mx-auto mb-4" style={{ color: '#7C3AED' }} />
+        <Heart className="h-8 w-8 mx-auto mb-4" style={{ color: '#6B4EFF' }} />
         <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, color: '#1A1523', marginBottom: 12 }}>Share RedFlaq</h3>
         <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#6B7280', lineHeight: 1.7, marginBottom: 28 }}>
           Share RedFlaq to raise awareness and help another woman check for serious public‑record warning signs before trusting someone with her life, home or business.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <button onClick={handleCopy} className="inline-flex items-center justify-center gap-2" style={{ border: '2px solid #7C3AED', background: 'transparent', color: '#7C3AED', padding: '12px 24px', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, borderRadius: 50, transition: 'all 0.2s' }}>
+          <button onClick={handleCopy} className="inline-flex items-center justify-center gap-2" style={{ border: '2px solid #6B4EFF', background: 'transparent', color: '#6B4EFF', padding: '12px 24px', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, borderRadius: 50, transition: 'all 0.2s' }}>
             {copied ? <><Check className="h-4 w-4" /> Copied!</> : <><Copy className="h-4 w-4" /> Copy Link</>}
           </button>
           <button onClick={handleWhatsApp} className="inline-flex items-center justify-center gap-2" style={{ background: '#25D366', color: '#fff', border: 'none', padding: '12px 24px', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, borderRadius: 50, transition: 'all 0.2s' }}>
             <MessageCircle className="h-4 w-4" /> WhatsApp
           </button>
-          <button onClick={handleEmail} className="inline-flex items-center justify-center gap-2" style={{ border: '2px solid rgba(124,58,237,0.2)', background: 'transparent', color: '#6B7280', padding: '12px 24px', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, borderRadius: 50, transition: 'all 0.2s' }}>
+          <button onClick={handleEmail} className="inline-flex items-center justify-center gap-2" style={{ border: '2px solid #E6E0DA', background: 'transparent', color: '#555555', padding: '12px 24px', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, borderRadius: 50, transition: 'all 0.2s' }}>
             <Mail className="h-4 w-4" /> Email
           </button>
         </div>

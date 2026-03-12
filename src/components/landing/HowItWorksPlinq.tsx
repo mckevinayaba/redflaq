@@ -14,7 +14,7 @@ const HowItWorksPlinq = () => {
   return (
     <section id="how-it-works" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''} py-12 md:py-20 px-6`} style={{ background: '#F5F0EB' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 16 }}>
+        <div className="section-tag" style={{ color: '#6B4EFF', marginBottom: 16 }}>
           The Process
         </div>
 
@@ -26,7 +26,7 @@ const HowItWorksPlinq = () => {
           marginBottom: 20,
           letterSpacing: '-0.02em',
         }}>
-          Fast. Simple. <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>Public‑record based.</em>
+          Fast. Simple. <em style={{ color: '#6B4EFF', fontStyle: 'italic' }}>Public‑record based.</em>
         </h2>
 
         <p style={{
@@ -44,7 +44,7 @@ const HowItWorksPlinq = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-0 relative">
           {/* Horizontal connector line (desktop) */}
           <div className="hidden md:block absolute top-[52px] left-[12.5%] right-[12.5%] h-[2px]"
-            style={{ background: 'linear-gradient(90deg, #EDE9FE, #7C3AED, #EDE9FE)' }}
+            style={{ background: 'linear-gradient(90deg, #E9E3FF, #6B4EFF, #E9E3FF)' }}
           />
 
           {steps.map((step, i) => (
@@ -61,8 +61,8 @@ const HowItWorksPlinq = () => {
                 width: 64,
                 height: 64,
                 borderRadius: '50%',
-                background: 'rgba(124, 58, 237, 0.08)',
-                border: '2px solid #7C3AED',
+                background: '#E9E3FF',
+                border: '2px solid #6B4EFF',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -73,7 +73,7 @@ const HowItWorksPlinq = () => {
                 <span style={{
                   fontFamily: "'DM Serif Display', serif",
                   fontSize: 24,
-                  color: '#7C3AED',
+                  color: '#6B4EFF',
                   fontWeight: 700,
                 }}>
                   {step.num}
@@ -105,7 +105,7 @@ const HowItWorksPlinq = () => {
                 <div className="md:hidden" style={{
                   width: 2,
                   height: 32,
-                  background: '#EDE9FE',
+                  background: '#E9E3FF',
                   margin: '16px auto',
                 }} />
               )}
@@ -116,8 +116,8 @@ const HowItWorksPlinq = () => {
         {/* Disclaimer card */}
         <div style={{
           marginTop: 56,
-          background: 'rgba(124, 58, 237, 0.04)',
-          border: '1px solid rgba(124, 58, 237, 0.15)',
+          background: '#FFFFFF',
+          border: '1px solid #E6E0DA',
           borderRadius: 12,
           padding: '20px 28px',
           display: 'flex',
@@ -126,7 +126,7 @@ const HowItWorksPlinq = () => {
           maxWidth: 640,
           margin: '56px auto 0',
         }}>
-          <ShieldAlert style={{ width: 20, height: 20, color: '#7C3AED', flexShrink: 0, opacity: 0.7 }} />
+          <ShieldAlert style={{ width: 20, height: 20, color: '#6B4EFF', flexShrink: 0, opacity: 0.7 }} />
           <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#6B7280', lineHeight: 1.5 }}>
             We never access private SAPS fingerprint or internal criminal record databases. RedFlaq only uses information that is already public.
           </p>

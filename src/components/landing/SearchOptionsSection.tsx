@@ -201,7 +201,7 @@ const SearchOptionsSection = () => {
                   alignItems: 'center',
                   justifyContent: 'center',
                   gap: 10,
-                  boxShadow: consentChecked ? '0 4px 24px rgba(124,58,237,0.35)' : 'none',
+                  boxShadow: consentChecked ? '0 4px 24px rgba(107,78,255,0.25)' : 'none',
                 }}
               >
                 <Lock style={{ width: 16, height: 16 }} />

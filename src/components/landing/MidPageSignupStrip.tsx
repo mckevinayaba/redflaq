@@ -5,7 +5,7 @@ const MidPageSignupStrip = () => {
 
   return (
     <section style={{
-      background: '#7C3AED',
+      background: '#6B4EFF',
       padding: '40px 24px',
       textAlign: 'center',
     }}>

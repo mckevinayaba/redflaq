@@ -54,7 +54,7 @@ const Footer = () => {
         </div>
         
         {/* Copyright */}
-        <div className="mt-6 text-center text-xs">
+        <div className="mt-6 text-center text-xs" style={{ color: '#888888' }}>
           <p>🏢 Setup A Startup (Pty) Ltd</p>
           <p className="mt-1">© {new Date().getFullYear()} Setup A Startup. All rights reserved.</p>
         </div>

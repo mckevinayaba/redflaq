@@ -94,10 +94,10 @@ const RiskLevelsSection = () => {
                 fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#4B4453',
               }}>
                 <div style={{
-                  width: 20, height: 20, borderRadius: '50%', background: 'rgba(124,58,237,0.1)',
+                  width: 20, height: 20, borderRadius: '50%', background: '#E9E3FF',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                 }}>
-                  <Check className="h-3 w-3" style={{ color: '#7C3AED' }} />
+                  <Check className="h-3 w-3" style={{ color: '#6B4EFF' }} />
                 </div>
                 {item}
               </div>

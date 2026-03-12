@@ -25,7 +25,7 @@ const ShareSection = () => {
           <button onClick={handleWhatsApp} className="inline-flex items-center justify-center gap-2" style={{ background: '#25D366', color: '#fff', border: 'none', padding: '12px 24px', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, borderRadius: 50, transition: 'all 0.2s' }}>
             <MessageCircle className="h-4 w-4" /> WhatsApp
           </button>
-          <button onClick={handleEmail} className="inline-flex items-center justify-center gap-2" style={{ border: '2px solid rgba(124,58,237,0.2)', background: 'transparent', color: '#6B7280', padding: '12px 24px', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, borderRadius: 50, transition: 'all 0.2s' }}>
+          <button onClick={handleEmail} className="inline-flex items-center justify-center gap-2" style={{ border: '2px solid #E6E0DA', background: 'transparent', color: '#555555', padding: '12px 24px', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, borderRadius: 50, transition: 'all 0.2s' }}>
             <Mail className="h-4 w-4" /> Email
           </button>
         </div>

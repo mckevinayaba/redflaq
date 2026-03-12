@@ -22,7 +22,7 @@ const MidPageSignupStrip = () => {
         onClick={() => navigate('/signup')}
         style={{
           background: '#FFFFFF',
-          color: '#7C3AED',
+          color: '#6B4EFF',
           padding: '14px 36px',
           fontFamily: "'Syne', sans-serif",
           fontWeight: 700,

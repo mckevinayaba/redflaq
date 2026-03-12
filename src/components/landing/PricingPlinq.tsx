@@ -58,7 +58,7 @@ const PricingPlinq = () => {
             fontFamily: "'DM Serif Display', serif",
             fontSize: 'clamp(36px, 4vw, 52px)', color: '#1A1523', lineHeight: 1.08, maxWidth: 500, marginBottom: 16, letterSpacing: '-0.02em',
           }}>
-            Choose your <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>safety plan</em>
+            Choose your <em style={{ color: '#6B4EFF', fontStyle: 'italic' }}>safety plan</em>
           </h2>
           <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#6B7280', maxWidth: 520, lineHeight: 1.7, marginBottom: 16 }}>
             Traditional checks are expensive, slow and built for companies, not for women or communities trying to stay safe. RedFlaq makes it R99 and under a minute.

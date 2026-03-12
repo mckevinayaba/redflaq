@@ -2,7 +2,7 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Shield, Lock, Eye } from "lucide-react";
 import nthabiPhoto from "@/assets/nthabi-montsho.jpeg";
 import ayolaPhoto from "@/assets/ayola-masizana.jpeg";
-
+import mckevinPhoto from "@/assets/mckevin-ayaba.png";
 
 const WhyRedflaqSection = () => {
   const { ref, isVisible } = useScrollReveal();
@@ -78,21 +78,22 @@ const WhyRedflaqSection = () => {
           padding: '40px 36px',
           marginBottom: 48,
         }}>
-          <div>
-            <div>
-              <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: '#FFFFFF', marginBottom: 4 }}>
-                McKevin Ayaba
-              </div>
-              <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.06em', color: '#A78BFA', marginBottom: 4, lineHeight: 1.5 }}>
-                Technology Entrepreneur · Co‑Founder & CPO, RedFlaq
-              </div>
-              <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#C4B5FD', marginBottom: 16, fontStyle: 'italic', lineHeight: 1.5 }}>
-                Founder of ASEB Society.
-              </div>
-              <blockquote style={{ fontFamily: "'DM Serif Display', serif", fontSize: 14, fontStyle: 'italic', color: '#C4B5FD', lineHeight: 1.6, borderLeft: '3px solid #7C3AED', paddingLeft: 16 }}>
-                "Traditional background check services exist, but they are slow, bureaucratic and designed for businesses, not individuals. RedFlaq was created so women and communities can access key public‑record warnings quickly and affordably."
-              </blockquote>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ position: 'relative', width: 160, height: 160, margin: '0 auto 20px', borderRadius: '55% 45% 50% 50% / 50% 50% 50% 50%', overflow: 'hidden', boxShadow: '0 8px 32px rgba(124,58,237,0.3)' }}>
+              <img src={mckevinPhoto} alt="McKevin Ayaba, Co-Founder & CPO of RedFlaq" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             </div>
+            <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 800, color: '#FFFFFF', marginBottom: 4 }}>
+              McKevin Ayaba
+            </div>
+            <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: '0.06em', color: '#A78BFA', marginBottom: 4, lineHeight: 1.5 }}>
+              Technology Entrepreneur · Co‑Founder & CPO, RedFlaq
+            </div>
+            <div style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#C4B5FD', marginBottom: 16, fontStyle: 'italic', lineHeight: 1.5 }}>
+              Founder of ASEB Society.
+            </div>
+            <blockquote style={{ fontFamily: "'DM Serif Display', serif", fontSize: 14, fontStyle: 'italic', color: '#C4B5FD', lineHeight: 1.6, borderLeft: '3px solid #7C3AED', paddingLeft: 16, textAlign: 'left' }}>
+              "Traditional background check services exist, but they are slow, bureaucratic and designed for businesses, not individuals. RedFlaq was created so women and communities can access key public‑record warnings quickly and affordably."
+            </blockquote>
           </div>
         </div>
 

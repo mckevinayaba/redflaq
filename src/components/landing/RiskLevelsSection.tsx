@@ -5,10 +5,10 @@ const RiskLevelsSection = () => {
   const { ref, isVisible } = useScrollReveal();
 
   const riskLevels = [
-    { level: "HIGH RISK", headline: "Stop. Look closer.", description: "Serious public‑record warnings found — violent or sexual offences with an active warning status.", borderColor: "#DC2626" },
-    { level: "MODERATE RISK", headline: "Proceed with caution.", description: "Older or less severe public‑record warnings — status may no longer be active.", borderColor: "#F59E0B" },
-    { level: "LOW RISK", headline: "Some concerns noted.", description: "Lower‑level issues or incomplete public information found.", borderColor: "#A78BFA" },
-    { level: "CLEAR", headline: "No warnings found.", description: "No matching public‑record warnings found for this name in the sources we check.", borderColor: "#10B981" },
+    { level: "HIGH RISK", headline: "Stop. Look closer.", description: "Serious public‑record warnings found — violent or sexual offences with an active warning status.", color: "#DC2626" },
+    { level: "MODERATE RISK", headline: "Proceed with caution.", description: "Older or less severe public‑record warnings — status may no longer be active.", color: "#F59E0B" },
+    { level: "LOW RISK", headline: "Some concerns noted.", description: "Lower‑level issues or incomplete public information found.", color: "#A78BFA" },
+    { level: "CLEAR", headline: "No warnings found.", description: "No matching public‑record warnings found for this name in the sources we check.", color: "#10B981" },
   ];
 
   const checklistItems = [
@@ -20,7 +20,7 @@ const RiskLevelsSection = () => {
   ];
 
   return (
-    <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''} py-12 md:py-20 px-6`} style={{ background: '#FFFFFF' }}>
+    <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''} py-12 md:py-20 px-6`} style={{ background: '#F5F0EB' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 16 }}>Your Report</div>
 
@@ -31,30 +31,40 @@ const RiskLevelsSection = () => {
           What your report <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>reveals</em>
         </h2>
 
-        <div className="flex flex-col md:flex-row gap-4" style={{ marginBottom: 48 }}>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6" style={{ marginBottom: 48 }}>
           {riskLevels.map((risk) => (
             <div
               key={risk.level}
               style={{
-                flex: 1,
-                background: '#0F0D1A',
-                borderLeft: `5px solid ${risk.borderColor}`,
-                borderRadius: 12,
-                padding: '28px 24px',
+                textAlign: 'center',
+                padding: '28px 16px',
               }}
             >
+              {/* Round colored circle */}
               <div style={{
-                fontFamily: "'JetBrains Mono', monospace", fontSize: 13, fontWeight: 700,
-                letterSpacing: '0.15em', color: risk.borderColor, marginBottom: 14,
-              }}>
-                {risk.level}
-              </div>
-              <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 22, color: 'white', fontWeight: 700, lineHeight: 1.3, marginBottom: 10 }}>
+                width: 100, height: 100, borderRadius: '50%',
+                background: risk.color,
+                margin: '0 auto 20px',
+                boxShadow: `0 8px 24px ${risk.color}40`,
+              }} />
+              <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 20, color: '#1A1523', fontWeight: 700, lineHeight: 1.3, marginBottom: 10 }}>
                 {risk.headline}
               </h3>
-              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: 'rgba(255,255,255,0.55)', lineHeight: 1.6 }}>
+              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#6B7280', lineHeight: 1.6, marginBottom: 16 }}>
                 {risk.description}
               </p>
+              {/* Badge pill */}
+              <span style={{
+                display: 'inline-block',
+                fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700,
+                letterSpacing: '0.15em', color: risk.color,
+                background: `${risk.color}15`,
+                padding: '6px 14px',
+                borderRadius: 50,
+                border: `1.5px solid ${risk.color}30`,
+              }}>
+                {risk.level}
+              </span>
             </div>
           ))}
         </div>

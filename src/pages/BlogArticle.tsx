@@ -62,7 +62,7 @@ const BlogArticle = () => {
 
   if (loading) {
     return (
-      <div style={{ background: "#FFFFFF", minHeight: "100vh" }}>
+      <div style={{ background: "#F5F0EB", minHeight: "100vh" }}>
         <NavbarPlinq />
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "200px 24px" }}>
           <div style={{ width: 32, height: 32, border: "3px solid #7C3AED", borderTopColor: "transparent", borderRadius: "50%", animation: "spin 1s linear infinite" }} />
@@ -73,7 +73,7 @@ const BlogArticle = () => {
 
   if (!article) {
     return (
-      <div style={{ background: "#FFFFFF", minHeight: "100vh" }}>
+      <div style={{ background: "#F5F0EB", minHeight: "100vh" }}>
         <NavbarPlinq />
         <div className="max-w-[600px] mx-auto px-5 text-center" style={{ paddingTop: 140 }}>
           <h1 className="font-heading text-2xl text-foreground mb-4">Article not found</h1>
@@ -87,7 +87,7 @@ const BlogArticle = () => {
   const relatedTool = article.related_tool_slug ? toolMap[article.related_tool_slug] : null;
 
   return (
-    <div style={{ background: "#FFFFFF", minHeight: "100vh" }}>
+    <div style={{ background: "#F5F0EB", minHeight: "100vh" }}>
       <NavbarPlinq />
 
       {/* Article header — dark */}

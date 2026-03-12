@@ -45,7 +45,7 @@ const Academy = () => {
   const filtered = activeCategory === "all" ? articles : articles.filter((a) => a.category === activeCategory);
 
   return (
-    <div style={{ background: "#FFFFFF", minHeight: "100vh" }}>
+    <div style={{ background: "#F5F0EB", minHeight: "100vh" }}>
       <NavbarPlinq />
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "100px 24px 60px" }}>
         <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: "0.1em", color: "#9CA3AF", textTransform: "uppercase", marginBottom: 8 }}>

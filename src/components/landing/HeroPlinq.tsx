@@ -12,7 +12,7 @@ const HeroPlinq = () => {
   };
 
   return (
-    <section className="relative overflow-hidden" style={{ background: '#FFFFFF', minHeight: '100vh' }}>
+    <section className="relative overflow-hidden" style={{ background: '#F5F0EB', minHeight: '100vh' }}>
       <div
         style={{
           position: 'absolute',

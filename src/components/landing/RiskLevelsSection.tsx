@@ -83,7 +83,7 @@ const RiskLevelsSection = () => {
           borderRadius: 16, padding: '40px 36px', maxWidth: 700, margin: '0 auto', boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
         }}>
           <div className="flex items-center gap-3 mb-6">
-            <Shield className="h-6 w-6" style={{ color: '#7C3AED' }} />
+            <Shield className="h-6 w-6" style={{ color: '#6B4EFF' }} />
             <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 24, color: '#1A1523' }}>What you get</h3>
           </div>
           <div className="space-y-0">

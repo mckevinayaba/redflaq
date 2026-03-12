@@ -118,7 +118,7 @@ const PhotoGrid = () => {
             </div>
             <div
               className={`organic-frame-1 organic-scroll-in ${isVisible ? 'visible' : ''}`}
-              style={{ height: 220, position: 'relative' }}
+              style={{ height: 'clamp(180px, 25vw, 220px)', position: 'relative' }}
             >
               <img
                 src={professionalImg}

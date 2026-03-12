@@ -44,7 +44,7 @@ const FounderSection = () => {
 
           <div style={{ position: 'relative' }}>
             <div className={`organic-frame-3 organic-scroll-in ${isVisible ? 'visible' : ''} mx-auto md:mx-0`}
-              style={{ width: '100%', maxWidth: 400, height: 480, position: 'relative', zIndex: 1 }}
+              style={{ width: '100%', maxWidth: 400, height: 'clamp(300px, 55vw, 480px)', position: 'relative', zIndex: 1 }}
             >
               <img src={founderPhoto} alt="McKevin Ayaba, Founder of RedFlaq" />
             </div>

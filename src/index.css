@@ -551,6 +551,7 @@ nav, header {
   .reveal-stagger.visible > .reveal-child:nth-child(4) { transition-delay: 300ms; opacity: 1; transform: translateY(0); }
   .reveal-stagger.visible > .reveal-child:nth-child(5) { transition-delay: 400ms; opacity: 1; transform: translateY(0); }
   .reveal-stagger.visible > .reveal-child:nth-child(6) { transition-delay: 500ms; opacity: 1; transform: translateY(0); }
+  .reveal-stagger.visible > .reveal-child:nth-child(n+7) { transition-delay: 600ms; opacity: 1; transform: translateY(0); }
 
   /* Subtle pricing glow pulse */
   @keyframes glow-pulse {

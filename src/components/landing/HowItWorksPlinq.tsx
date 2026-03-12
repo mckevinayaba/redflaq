@@ -105,7 +105,7 @@ const HowItWorksPlinq = () => {
                 <div className="md:hidden" style={{
                   width: 2,
                   height: 32,
-                  background: '#EDE9FE',
+                  background: '#E9E3FF',
                   margin: '16px auto',
                 }} />
               )}

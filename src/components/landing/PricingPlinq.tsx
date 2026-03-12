@@ -129,7 +129,7 @@ const PricingPlinq = () => {
 
                   {plan.savings && (
                     <span style={{
-                      display: 'inline-block', background: 'rgba(22,163,106,0.15)', color: '#4ADE80',
+                      display: 'inline-block', background: 'rgba(22,163,106,0.08)', color: '#16A34A',
                       fontFamily: "'JetBrains Mono', monospace", fontSize: 10, padding: '4px 12px', borderRadius: 6, marginBottom: 24,
                     }}>
                       {plan.savings}

@@ -98,8 +98,8 @@ const SearchOptionsSection = () => {
                 ref={nameRef}
                 style={inputStyle}
                 placeholder="e.g. John David Mokoena"
-                onFocus={e => e.currentTarget.style.borderColor = '#7C3AED'}
-                onBlur={e => e.currentTarget.style.borderColor = 'rgba(124,58,237,0.25)'}
+                onFocus={e => e.currentTarget.style.borderColor = '#6B4EFF'}
+                onBlur={e => e.currentTarget.style.borderColor = '#E6E0DA'}
               />
             </div>
             <div>

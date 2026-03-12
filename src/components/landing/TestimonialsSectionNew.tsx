@@ -54,7 +54,7 @@ const TestimonialsSectionNew = () => {
         </p>
 
         <div
-          className="grid grid-cols-1 md:grid-cols-3 gap-5"
+          className={`grid grid-cols-1 md:grid-cols-3 gap-5 reveal-stagger ${isVisible ? 'visible' : ''}`}
           style={{ marginBottom: 48 }}
         >
           {testimonials.map((t, i) => {

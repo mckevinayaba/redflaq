@@ -2,54 +2,44 @@
 
 ## Problem
 
-The Tawk.to chat widget is:
-1. Auto-opening its chat window without user interaction
-2. Showing a proactive "We Are Here" popup message
-3. Displaying a "1 new message" notification badge above the navbar
+The testimonials section ("Real Stories. Real Safety") appears cut off because the CSS `.reveal-stagger` animation only defines opacity/transform transitions for children 1 through 6. The testimonials grid has 14 cards, so cards 7-14 remain permanently at `opacity: 0` and are invisible.
 
-All of these are controlled by Tawk.to's API settings.
+Additionally, the user wants comprehensive mobile responsiveness across all devices.
 
-## Fix
+## Fix 1: Testimonials Grid Cut-Off
 
-Add `Tawk_API` configuration in `index.html` to suppress all auto-popups:
+**Root cause**: In `src/index.css` lines 543-553, `.reveal-stagger > .reveal-child` starts at `opacity: 0`, but only children 1-6 get the `.visible` state. Children 7+ never become visible.
 
-1. **Set `Tawk_API.onLoad`** callback to:
-   - Minimize the widget on load (`Tawk_API.minimize()`)
-   - Hide the popup message (`Tawk_API.hideWidget()` is too aggressive — instead use `minimize`)
-2. **Set `Tawk_API.customStyle`** to hide the notification badge
-3. **Disable proactive chat triggers** by setting `Tawk_API.onBeforeLoad` to prevent auto-popup behaviors:
-   - `Tawk_API.visitor` settings won't help — the proactive messages ("We Are Here", auto-open) are configured in the Tawk.to dashboard under **Triggers**
-   
-### What we can control via code
+**Solution**: Add rules for children 7-14 in the CSS, OR better — use a general rule that makes ALL `.reveal-child` elements visible when the parent has `.visible`, with staggered delays capped at child 6 and all subsequent children appearing at the same final delay.
 
-In `index.html`, before the Tawk script loads, add:
+In `src/index.css`:
+- Add a catch-all rule: `.reveal-stagger.visible > .reveal-child:nth-child(n+7)` with `transition-delay: 600ms; opacity: 1; transform: translateY(0);`
 
-```javascript
-Tawk_API.onLoad = function() {
-  Tawk_API.minimize();
-};
-Tawk_API.onChatMessageVisitor = function() {};
-Tawk_API.onChatMessageSystem = function() {};
-```
+## Fix 2: Mobile Responsiveness Audit
 
-And add CSS to hide the unread badge:
+Files to update for mobile-safe layouts:
 
-```css
-/* Hide Tawk notification badge */
-.tawk-min-container .tawk-badge {
-  display: none !important;
-}
-```
+1. **TestimonialsSectionNew.tsx** — The 3-column grid already uses `grid-cols-1 md:grid-cols-3`, which is correct. But the footer area (attribution row with name/location/badge) wraps poorly on small screens. Change the badge/location row to `flex-wrap: wrap` to prevent overflow.
 
-### What requires Tawk.to dashboard changes
+2. **PhotoGrid.tsx** — The `md:grid-cols-[38%_32%_28%]` grid with fixed heights (520px, 260px, 220px) can overflow on mobile. Add responsive heights for mobile (auto height instead of fixed).
 
-The proactive "We Are Here" message and auto-open behavior are **Triggers** configured in the Tawk.to dashboard (Settings → Triggers). These cannot be fully suppressed from code alone. The `Tawk_API.minimize()` on load will close it if it auto-opens, but the trigger may still fire briefly.
+3. **CommunitySectionSA.tsx** — The organic frame has a fixed `height: 550` which can be too tall on small screens. Make it responsive.
 
-**Recommendation**: Go to your Tawk.to dashboard → Settings → Triggers → disable or delete the proactive greeting trigger. This is the only way to fully stop "We Are Here" and the auto-open.
+4. **FounderSection.tsx** — The `md:grid-cols-[60%_40%]` layout with fixed photo height (480px) needs a mobile-friendly height.
 
-### Implementation steps
+5. **WhyRedflaqSection.tsx** — Verify the 3-card founder grid stacks properly on mobile.
 
-1. Update `index.html`: Add `Tawk_API.onLoad` with `minimize()` call before the embed script
-2. Add CSS to hide the notification badge counter
-3. These changes will make the widget stay minimized and badge-free until a user explicitly clicks it
+6. **General CSS** — Ensure the grain texture overlay `z-index: 9998` doesn't interfere with touch events (it has `pointer-events: none` so it's fine).
+
+## Changes Summary
+
+| File | Change |
+|------|--------|
+| `src/index.css` | Add `.reveal-stagger.visible > .reveal-child:nth-child(n+7)` rule to make all children beyond 6 visible |
+| `src/components/landing/TestimonialsSectionNew.tsx` | Add `flexWrap: 'wrap'` to the location/badge row for mobile; ensure padding is mobile-safe |
+| `src/components/landing/PhotoGrid.tsx` | Make fixed heights responsive on mobile (use `minHeight` or auto) |
+| `src/components/landing/CommunitySectionSA.tsx` | Reduce organic frame height on mobile |
+| `src/components/landing/FounderSection.tsx` | Reduce photo frame height on mobile |
+
+The primary fix (cards cut off) is a one-line CSS addition. The mobile fixes are targeted adjustments to prevent overflow and ensure proper stacking on all phone sizes.
 

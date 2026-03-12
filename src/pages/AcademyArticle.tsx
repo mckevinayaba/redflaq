@@ -59,7 +59,7 @@ const AcademyArticle = () => {
 
   if (loading) {
     return (
-      <div style={{ background: "#FFFFFF", minHeight: "100vh" }}>
+      <div style={{ background: "#F5F0EB", minHeight: "100vh" }}>
         <NavbarPlinq />
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "200px 24px" }}>
           <div style={{ width: 32, height: 32, border: "3px solid #7C3AED", borderTopColor: "transparent", borderRadius: "50%", animation: "spin 1s linear infinite" }} />

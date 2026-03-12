@@ -60,24 +60,21 @@ const BarrierSection = () => {
           Background checks existed. But they weren't built for <em style={{ color: '#6B4EFF', fontStyle: 'italic' }}>you.</em>
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className={`grid grid-cols-1 md:grid-cols-3 gap-5 reveal-stagger ${isVisible ? 'visible' : ''}`}>
           {cards.map(card => (
             <div
               key={card.num}
+              className="card-lift reveal-child"
               style={{
                 background: '#FFFFFF',
                 border: '1px solid #E6E0DA',
                 borderRadius: 18,
                 padding: '0 32px 40px',
                 boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
-                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                 cursor: 'default',
                 overflow: 'hidden',
                 position: 'relative',
               }}
-              onMouseEnter={e => {
-                e.currentTarget.style.transform = 'translateY(-4px)';
-                e.currentTarget.style.boxShadow = '0 12px 40px rgba(107,78,255,0.1)';
               }}
               onMouseLeave={e => {
                 e.currentTarget.style.transform = 'translateY(0)';

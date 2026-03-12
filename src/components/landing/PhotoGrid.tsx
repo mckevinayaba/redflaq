@@ -75,7 +75,7 @@ const PhotoGrid = () => {
           <div style={{ position: 'relative' }}>
             <div
               className={`organic-frame-2 organic-scroll-in ${isVisible ? 'visible' : ''}`}
-              style={{ height: 520, position: 'relative' }}
+              style={{ height: 'clamp(300px, 50vw, 520px)', position: 'relative' }}
             >
               <img
                 src={coffeeImg}

@@ -44,11 +44,11 @@ const Footer = () => {
         </div>
         
         {/* GBV Message */}
-        <div className="border-t border-[#7C3AED] mt-8 pt-8 text-center">
-          <p className="text-sm mb-2">
+        <div className="mt-8 pt-8 text-center" style={{ borderTop: '1px solid #E2DCD6' }}>
+          <p className="text-sm mb-2" style={{ color: '#555555' }}>
             💜 Standing with South African women against Gender-Based Violence
           </p>
-          <p className="text-xs">
+          <p className="text-xs" style={{ color: '#888888' }}>
             #StopGBV #ProtectSAWomen
           </p>
         </div>

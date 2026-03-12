@@ -119,7 +119,7 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Syne', sans-serif;
-    background-color: #F7F4F0 !important;
+    background-color: #FFFFFF !important;
     color: #0D0B0E;
     overflow-x: hidden;
     width: 100%;

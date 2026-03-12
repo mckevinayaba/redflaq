@@ -160,9 +160,9 @@ const PricingPlinq = () => {
                     style={{
                       width: '100%', marginTop: 28, padding: 16,
                       fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 14,
-                      border: plan.highlight ? 'none' : '2px solid rgba(168,85,247,0.5)',
-                      background: plan.highlight ? 'white' : 'transparent',
-                      color: plan.highlight ? '#7C3AED' : 'white',
+                      border: 'none',
+                      background: '#6B4EFF',
+                      color: '#FFFFFF',
                       cursor: 'pointer', transition: 'all 0.25s ease',
                       borderRadius: 50,
                     }}

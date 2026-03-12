@@ -5,7 +5,7 @@ import redflaqLogo from "@/assets/redflaq-logo-official.png";
 const Footer = () => {
   return (
     <>
-    <footer className="bg-[#5B21B6] text-[#DDD6FE] py-12">
+    <footer style={{ background: '#F5F0EB', borderTop: '1px solid #E2DCD6' }} className="py-12">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-3 gap-8">
           

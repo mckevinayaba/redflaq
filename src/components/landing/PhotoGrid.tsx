@@ -4,7 +4,7 @@ import motherImg from "@/assets/sa-mother-child.jpg";
 import professionalImg from "@/assets/sa-professional-woman.jpg";
 
 const PhotoGrid = () => {
-  const { ref, isVisible } = useScrollReveal();
+  const { ref, isVisible } = useScrollReveal(0.05);
 
   return (
     <section

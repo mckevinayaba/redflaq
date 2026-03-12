@@ -8,7 +8,7 @@ import StatsBar from "@/components/landing/StatsBar";
 import FreeAccountSection from "@/components/landing/FreeAccountSection";
 import WhoRedflaqHelps from "@/components/landing/WhoRedflaqHelps";
 import ProtectionOrdersSection from "@/components/landing/ProtectionOrdersSection";
-import WhyRedflaqExists from "@/components/landing/WhyRedflaqExists";
+
 import MidPageSignupStrip from "@/components/landing/MidPageSignupStrip";
 import PhotoGrid from "@/components/landing/PhotoGrid";
 import RealitySection from "@/components/landing/RealitySection";

@@ -101,6 +101,8 @@ const App = () => (
           <Route path="/dashboard/journal/new" element={<JournalNew />} />
           <Route path="/dashboard/journal/export" element={<JournalExport />} />
           <Route path="/dashboard/journal/:id" element={<JournalDetail />} />
+          <Route path="/dashboard/journal/:id/edit" element={<JournalEdit />} />
+          <Route path="/dashboard/affidavit" element={<AffidavitBuilder />} />
           {/* Safety Tips (formerly Tools) */}
           <Route path="/safety-tips" element={<SafetyTips />} />
           <Route path="/conversation-guide" element={<ConversationGuide />} />

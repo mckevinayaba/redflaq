@@ -6,12 +6,14 @@ import {
   Settings,
   Heart,
   BookOpen,
+  Scale,
 } from "lucide-react";
 
 const menuItems = [
   { title: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
   { title: "New Safety Check", path: "/dashboard/new-check", icon: Shield },
   { title: "My Safety Journal", path: "/dashboard/journal", icon: BookOpen },
+  { title: "Affidavit Builder", path: "/dashboard/affidavit", icon: Scale },
   { title: "My Reports", path: "/dashboard/reports", icon: FileText },
   { title: "Account", path: "/dashboard/account", icon: Settings },
 ];

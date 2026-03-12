@@ -132,8 +132,8 @@ const SearchOptionsSection = () => {
               <label style={labelStyle}>Reason for Search *</label>
               <select
                 style={{ ...inputStyle, appearance: 'none' }}
-                onFocus={e => e.currentTarget.style.borderColor = '#7C3AED'}
-                onBlur={e => e.currentTarget.style.borderColor = 'rgba(124,58,237,0.25)'}
+                onFocus={e => e.currentTarget.style.borderColor = '#6B4EFF'}
+                onBlur={e => e.currentTarget.style.borderColor = '#E6E0DA'}
               >
                 <option value="">Select reason</option>
                 {searchReasons.map(r => <option key={r} value={r}>{r}</option>)}

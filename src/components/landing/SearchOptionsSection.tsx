@@ -73,11 +73,11 @@ const SearchOptionsSection = () => {
 
         {/* Dark form card */}
         <div style={{
-          background: 'linear-gradient(145deg, #0F0A1A, #1A1035)',
-          border: '1px solid rgba(124, 58, 237, 0.25)',
+          background: '#FFFFFF',
+          border: '1px solid #E6E0DA',
           borderRadius: 24,
           padding: '48px 32px',
-          boxShadow: '0 8px 48px rgba(124, 58, 237, 0.1), 0 0 0 1px rgba(124,58,237,0.08)',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
         }}>
           <h3 style={{
             fontFamily: "'DM Serif Display', serif",

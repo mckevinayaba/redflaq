@@ -83,6 +83,9 @@ const Index = () => {
       {/* 1. Hero */}
       <HeroPlinq />
 
+      {/* Live Demo */}
+      <HomepageDemo />
+
       {/* 2. Ticker Bar */}
       <TickerBar />
 

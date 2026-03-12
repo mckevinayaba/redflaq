@@ -116,8 +116,8 @@ const HowItWorksPlinq = () => {
         {/* Disclaimer card */}
         <div style={{
           marginTop: 56,
-          background: 'rgba(124, 58, 237, 0.04)',
-          border: '1px solid rgba(124, 58, 237, 0.15)',
+          background: '#FFFFFF',
+          border: '1px solid #E6E0DA',
           borderRadius: 12,
           padding: '20px 28px',
           display: 'flex',

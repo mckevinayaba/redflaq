@@ -86,6 +86,60 @@ export type Database = {
         }
         Relationships: []
       }
+      affidavit_drafts: {
+        Row: {
+          about_person: string | null
+          created_at: string | null
+          draft_pdf_url: string | null
+          full_name: string
+          id: string
+          id_number: string | null
+          purpose: string
+          related_entry_ids: string[] | null
+          relationship_to_person: string | null
+          relief_sought: string[] | null
+          residential_address: string
+          statement_text: string
+          telephone_number: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          about_person?: string | null
+          created_at?: string | null
+          draft_pdf_url?: string | null
+          full_name: string
+          id?: string
+          id_number?: string | null
+          purpose: string
+          related_entry_ids?: string[] | null
+          relationship_to_person?: string | null
+          relief_sought?: string[] | null
+          residential_address: string
+          statement_text: string
+          telephone_number?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          about_person?: string | null
+          created_at?: string | null
+          draft_pdf_url?: string | null
+          full_name?: string
+          id?: string
+          id_number?: string | null
+          purpose?: string
+          related_entry_ids?: string[] | null
+          relationship_to_person?: string | null
+          relief_sought?: string[] | null
+          residential_address?: string
+          statement_text?: string
+          telephone_number?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       disputes: {
         Row: {
           created_at: string | null
@@ -341,42 +395,87 @@ export type Database = {
       }
       journal_entries: {
         Row: {
+          about_person: string | null
+          abuse_types: string[] | null
+          addendum_notes: string | null
+          children_present: boolean | null
           created_at: string | null
+          emotional_state: string | null
           entry_date: string
           entry_time: string
+          hash_generated_at: string | null
           id: string
           incident_description: string
           injuries_damage: string | null
+          last_edited_at: string | null
           location: string | null
+          medical_attention: boolean | null
+          medical_details: string | null
+          police_case_number: string | null
+          police_reported: boolean | null
+          statement_hash: string | null
+          statement_locked: boolean | null
           subject_person: string | null
           updated_at: string | null
           user_id: string
+          weapon_description: string | null
+          weapon_involved: boolean | null
           witnesses: string | null
         }
         Insert: {
+          about_person?: string | null
+          abuse_types?: string[] | null
+          addendum_notes?: string | null
+          children_present?: boolean | null
           created_at?: string | null
+          emotional_state?: string | null
           entry_date: string
           entry_time: string
+          hash_generated_at?: string | null
           id?: string
           incident_description: string
           injuries_damage?: string | null
+          last_edited_at?: string | null
           location?: string | null
+          medical_attention?: boolean | null
+          medical_details?: string | null
+          police_case_number?: string | null
+          police_reported?: boolean | null
+          statement_hash?: string | null
+          statement_locked?: boolean | null
           subject_person?: string | null
           updated_at?: string | null
           user_id: string
+          weapon_description?: string | null
+          weapon_involved?: boolean | null
           witnesses?: string | null
         }
         Update: {
+          about_person?: string | null
+          abuse_types?: string[] | null
+          addendum_notes?: string | null
+          children_present?: boolean | null
           created_at?: string | null
+          emotional_state?: string | null
           entry_date?: string
           entry_time?: string
+          hash_generated_at?: string | null
           id?: string
           incident_description?: string
           injuries_damage?: string | null
+          last_edited_at?: string | null
           location?: string | null
+          medical_attention?: boolean | null
+          medical_details?: string | null
+          police_case_number?: string | null
+          police_reported?: boolean | null
+          statement_hash?: string | null
+          statement_locked?: boolean | null
           subject_person?: string | null
           updated_at?: string | null
           user_id?: string
+          weapon_description?: string | null
+          weapon_involved?: boolean | null
           witnesses?: string | null
         }
         Relationships: []
@@ -384,28 +483,37 @@ export type Database = {
       journal_evidence: {
         Row: {
           entry_id: string
+          file_hash: string | null
+          file_hash_generated_at: string | null
           file_name: string
           file_size: number
           file_type: string
           file_url: string
+          hash_algorithm: string | null
           id: string
           uploaded_at: string | null
         }
         Insert: {
           entry_id: string
+          file_hash?: string | null
+          file_hash_generated_at?: string | null
           file_name: string
           file_size: number
           file_type: string
           file_url: string
+          hash_algorithm?: string | null
           id?: string
           uploaded_at?: string | null
         }
         Update: {
           entry_id?: string
+          file_hash?: string | null
+          file_hash_generated_at?: string | null
           file_name?: string
           file_size?: number
           file_type?: string
           file_url?: string
+          hash_algorithm?: string | null
           id?: string
           uploaded_at?: string | null
         }
@@ -1083,6 +1191,10 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      lock_journal_entry_statement: {
+        Args: { computed_hash: string; entry_id: string }
+        Returns: undefined
       }
     }
     Enums: {

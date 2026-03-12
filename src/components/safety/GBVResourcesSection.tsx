@@ -117,9 +117,9 @@ const provincialResources: Record<string, ProvResource[]> = {
 };
 
 const nationalBadgeConfig: Record<string, { label: string; bg: string; text: string }> = {
-  crisis: { label: "Emergency", bg: "rgba(239,68,68,0.15)", text: "#FCA5A5" },
-  counselling: { label: "Counselling", bg: "rgba(107,78,255,0.15)", text: "#C4B5FD" },
-  support: { label: "Support", bg: "rgba(45,212,191,0.15)", text: "#5EEAD4" },
+  crisis: { label: "Emergency", bg: "rgba(229,57,53,0.1)", text: "#E53935" },
+  counselling: { label: "Counselling", bg: "rgba(107,78,255,0.1)", text: "#6B4EFF" },
+  support: { label: "Support", bg: "rgba(20,184,166,0.1)", text: "#14B8A6" },
 };
 
 const categoryLeftBorder: Record<string, string> = {
@@ -220,17 +220,18 @@ const GBVResourcesSection = () => {
   return (
     <section
       id="get-help"
-      className="scroll-mt-24 py-20 -mx-4 px-4 sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8"
-      style={{ background: "linear-gradient(180deg, #F5F3FF 0%, #FFFFFF 100%)" }}
+      className="scroll-mt-24 py-16 -mx-5 sm:-mx-6 px-5 sm:px-6 mb-12 sm:mb-16"
+      style={{ background: "#F5F0EB", borderRadius: 24 }}
     >
       <div className="max-w-5xl mx-auto">
-        <p className="text-xs font-semibold uppercase tracking-[0.15em] mb-3" style={{ color: "#6B4EFF" }}>
+        <p className="font-mono text-[11px] tracking-[0.15em] mb-3 flex items-center gap-3" style={{ color: "#6B4EFF" }}>
+          <span style={{ width: 24, height: 1, background: '#6B4EFF', display: 'inline-block' }} />
           Support Services
         </p>
-        <h2 className="font-heading text-3xl sm:text-4xl font-bold mb-2" style={{ color: "#2B2B2B" }}>
+        <h2 className="font-heading text-3xl sm:text-4xl font-bold mb-2" style={{ color: "#1F1F1F" }}>
           Find Help Near You
         </h2>
-        <p className="text-base mb-10 max-w-xl" style={{ color: "#6B7280", lineHeight: 1.6 }}>
+        <p className="text-base mb-10 max-w-xl" style={{ color: "#555555", lineHeight: 1.6 }}>
           Select your province. National helplines are always available.
         </p>
 
@@ -263,8 +264,12 @@ const GBVResourcesSection = () => {
         </div>
 
         {/* National resources */}
-        <div className="rounded-2xl p-8 sm:p-10 mb-12" style={{ background: "#0F0624" }}>
-          <h3 className="font-heading text-lg font-bold text-white mb-6 flex items-center gap-2">
+        <div className="rounded-2xl p-8 sm:p-10 mb-12" style={{
+          background: '#FFFFFF',
+          border: '1px solid #E6E0DA',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+        }}>
+          <h3 className="font-heading text-lg font-bold mb-6 flex items-center gap-2" style={{ color: "#1F1F1F" }}>
             🆘 National Helplines — Available Everywhere, Always
           </h3>
           <div className="grid sm:grid-cols-2 gap-4">
@@ -274,11 +279,11 @@ const GBVResourcesSection = () => {
                 <div
                   key={r.name}
                   className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3 rounded-xl px-5 py-4"
-                  style={{ background: "rgba(255,255,255,0.05)" }}
+                  style={{ background: "#F5F0EB", border: '1px solid #E6E0DA' }}
                 >
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2 mb-1">
-                      <p className="text-sm font-semibold text-white">{r.name}</p>
+                      <p className="text-sm font-semibold" style={{ color: "#1F1F1F" }}>{r.name}</p>
                       <span
                         className="shrink-0 text-[10px] font-semibold px-2 py-0.5 rounded-full whitespace-nowrap"
                         style={{ background: badge.bg, color: badge.text }}
@@ -286,13 +291,13 @@ const GBVResourcesSection = () => {
                         {badge.label}
                       </span>
                     </div>
-                    <p className="text-xs" style={{ color: "#9CA3AF" }}>{r.hours}</p>
+                    <p className="text-xs" style={{ color: "#6B7280" }}>{r.hours}</p>
                   </div>
                   <a
                     href={`tel:${r.phone.replace(/\s/g, "")}`}
                     aria-label={`Call ${r.name}`}
                     className="inline-flex items-center gap-1.5 font-heading text-base font-bold whitespace-nowrap min-h-[44px] transition-opacity hover:opacity-80 shrink-0"
-                    style={{ color: "#C4B5FD" }}
+                    style={{ color: "#6B4EFF" }}
                   >
                     <Phone className="w-4 h-4 shrink-0" />
                     {r.phone}
@@ -306,7 +311,7 @@ const GBVResourcesSection = () => {
         {/* Provincial resources */}
         {selectedProvince && (
           <div className="animate-fade-in" style={{ animation: "fadeIn 0.3s ease-out" }}>
-            <h3 className="font-heading text-2xl font-bold mb-6 flex items-center gap-2" style={{ color: "#2B2B2B" }}>
+            <h3 className="font-heading text-2xl font-bold mb-6 flex items-center gap-2" style={{ color: "#1F1F1F" }}>
               📍 Resources in {selectedProvince}
             </h3>
             {provincialList.length === 0 ? (
@@ -339,7 +344,7 @@ const GBVResourcesSection = () => {
             borderLeft: "4px solid #6B4EFF",
           }}
         >
-          <h3 className="font-heading text-lg font-bold mb-3" style={{ color: "#2B2B2B" }}>
+          <h3 className="font-heading text-lg font-bold mb-3" style={{ color: "#1F1F1F" }}>
             ⚖️ Protection Orders
           </h3>
           <p className="text-sm leading-relaxed mb-4" style={{ color: "#6B7280" }}>

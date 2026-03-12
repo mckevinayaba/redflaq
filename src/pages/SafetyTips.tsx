@@ -50,41 +50,34 @@ const tips = [
 
 const SafetyTips = () => {
   return (
-    <div className="min-h-screen" style={{ background: 'hsl(var(--background))' }}>
+    <div className="min-h-screen" style={{ background: '#F5F0EB' }}>
       <NavbarPlinq />
 
       {/* Hero */}
       <section style={{
-        background: 'linear-gradient(135deg, #0F0624 0%, #1B0D3A 50%, #0F0624 100%)',
+        background: '#F5F0EB',
         paddingTop: 120,
         paddingBottom: 80,
         position: 'relative',
         overflow: 'hidden',
       }}>
-        <div style={{
-          position: 'absolute', top: '20%', left: '50%', transform: 'translateX(-50%)',
-          width: '80%', height: '60%',
-          background: 'radial-gradient(ellipse, rgba(107,78,255,0.15) 0%, transparent 70%)',
-          pointerEvents: 'none',
-        }} />
-
         <div className="max-w-[900px] mx-auto px-5 sm:px-6 relative z-10">
-          <p className="font-mono text-[11px] tracking-[0.15em] mb-4 flex items-center gap-3" style={{ color: 'hsl(var(--primary))' }}>
-            <span style={{ width: 24, height: 1, background: 'hsl(var(--primary))', display: 'inline-block' }} />
+          <p className="font-mono text-[11px] tracking-[0.15em] mb-4 flex items-center gap-3" style={{ color: '#6B4EFF' }}>
+            <span style={{ width: 24, height: 1, background: '#6B4EFF', display: 'inline-block' }} />
             Safety First
           </p>
-          <h1 className="font-heading text-[28px] sm:text-[40px] lg:text-[52px] leading-[1.05] mb-5" style={{ color: '#FFFFFF', letterSpacing: '-0.02em' }}>
+          <h1 className="font-heading text-[28px] sm:text-[40px] lg:text-[52px] leading-[1.05] mb-5" style={{ color: '#1F1F1F', letterSpacing: '-0.02em' }}>
             Information is the first step.<br />
-            <span style={{ color: 'hsl(var(--primary))' }}>Safety</span> is the destination.
+            <span style={{ color: '#6B4EFF' }}>Safety</span> is the destination.
           </h1>
-          <p className="font-body text-[15px] sm:text-lg leading-relaxed max-w-[600px] mb-8" style={{ color: '#C8C3D6' }}>
+          <p className="font-body text-[15px] sm:text-lg leading-relaxed max-w-[600px] mb-8" style={{ color: '#555555' }}>
             RedFlaq gives you the signal. This page helps you know what to do with it — before, during, and after.
           </p>
           <Link
             to="/signup"
             className="inline-flex items-center justify-center font-body font-bold text-[14px] transition-all duration-200"
             style={{
-              background: 'linear-gradient(135deg, #6B4EFF, #8B6CFF)',
+              background: '#6B4EFF',
               color: '#FFFFFF',
               padding: '14px 32px', borderRadius: 50,
               boxShadow: '0 4px 20px rgba(107,78,255,0.3)',
@@ -102,51 +95,46 @@ const SafetyTips = () => {
         <GBVResourcesSection />
         <ProvincialResourcesSection />
 
-        {/* Before You Check — Dark */}
+        {/* Before You Check */}
         <section className="mb-12 sm:mb-16 -mx-5 sm:-mx-6 px-5 sm:px-6 py-12 sm:py-16" style={{
-          background: 'linear-gradient(135deg, #0F0624 0%, #1B0D3A 100%)',
+          background: '#FFFFFF',
           borderRadius: 24,
+          border: '1px solid #E6E0DA',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
           position: 'relative',
           overflow: 'hidden',
         }}>
-          <div style={{
-            position: 'absolute', top: -40, right: -40, width: 200, height: 200,
-            background: 'radial-gradient(circle, rgba(107,78,255,0.15), transparent 70%)',
-            filter: 'blur(40px)', pointerEvents: 'none',
-          }} />
-
           <div className="relative z-10">
-            <p className="font-mono text-[11px] tracking-[0.15em] mb-3 flex items-center gap-3" style={{ color: 'hsl(var(--primary))' }}>
-              <span style={{ width: 24, height: 1, background: 'hsl(var(--primary))', display: 'inline-block' }} />
+            <p className="font-mono text-[11px] tracking-[0.15em] mb-3 flex items-center gap-3" style={{ color: '#6B4EFF' }}>
+              <span style={{ width: 24, height: 1, background: '#6B4EFF', display: 'inline-block' }} />
               Before You Check
             </p>
-            <h2 className="font-heading text-[24px] sm:text-[32px] mb-2 leading-tight" style={{ color: '#FFFFFF' }}>
+            <h2 className="font-heading text-[24px] sm:text-[32px] mb-2 leading-tight" style={{ color: '#1F1F1F' }}>
               Signs worth paying attention to
             </h2>
-            <p className="font-body text-sm sm:text-base leading-relaxed max-w-[600px] mb-8" style={{ color: '#C8C3D6' }}>
+            <p className="font-body text-sm sm:text-base leading-relaxed max-w-[600px] mb-8" style={{ color: '#555555' }}>
               Your instincts often know before the data does. Here are patterns worth noticing early.
             </p>
 
             <div className="grid sm:grid-cols-2 gap-3 sm:gap-4 mb-8">
               {redFlags.map((flag) => (
                 <div key={flag} className="flex items-start gap-3 p-4 sm:p-5" style={{
-                  background: 'rgba(107,78,255,0.06)',
-                  border: '1px solid rgba(107,78,255,0.15)',
+                  background: '#F5F0EB',
+                  border: '1px solid #E6E0DA',
                   borderRadius: 14,
-                  backdropFilter: 'blur(8px)',
                 }}>
                   <span className="text-lg flex-shrink-0 mt-0.5" style={{ color: '#E53935' }}>🚩</span>
-                  <p className="font-body text-[13px] sm:text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.85)' }}>{flag}</p>
+                  <p className="font-body text-[13px] sm:text-sm leading-relaxed" style={{ color: '#555555' }}>{flag}</p>
                 </div>
               ))}
             </div>
 
             <div className="p-5 sm:p-6" style={{
-              background: 'linear-gradient(135deg, rgba(107,78,255,0.15), rgba(107,78,255,0.08))',
-              border: '1px solid rgba(107,78,255,0.25)',
+              background: '#F1ECFF',
+              border: '1px solid rgba(107,78,255,0.2)',
               borderRadius: 16,
             }}>
-              <p className="font-body text-[13px] sm:text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.85)' }}>
+              <p className="font-body text-[13px] sm:text-sm leading-relaxed" style={{ color: '#1F1F1F' }}>
                 Running a RedFlaq check is not a sign of distrust. It is a sign that you take your safety seriously. That is not something to apologise for.
               </p>
             </div>
@@ -155,14 +143,14 @@ const SafetyTips = () => {
 
         {/* After a Flag */}
         <section className="mb-12 sm:mb-16">
-          <p className="font-mono text-[11px] tracking-[0.15em] mb-3 flex items-center gap-3" style={{ color: 'hsl(var(--primary))' }}>
-            <span style={{ width: 24, height: 1, background: 'hsl(var(--primary))', display: 'inline-block' }} />
+          <p className="font-mono text-[11px] tracking-[0.15em] mb-3 flex items-center gap-3" style={{ color: '#6B4EFF' }}>
+            <span style={{ width: 24, height: 1, background: '#6B4EFF', display: 'inline-block' }} />
             After a Flag
           </p>
-          <h2 className="font-heading text-[24px] sm:text-[32px] text-foreground mb-2 leading-tight">
+          <h2 className="font-heading text-[24px] sm:text-[32px] mb-2 leading-tight" style={{ color: '#1F1F1F' }}>
             He came up flagged. Don't panic — and don't ignore it.
           </h2>
-          <p className="font-body text-sm sm:text-base text-muted-foreground leading-relaxed max-w-[600px] mb-8">
+          <p className="font-body text-sm sm:text-base leading-relaxed max-w-[600px] mb-8" style={{ color: '#555555' }}>
             A flag means public-record warnings exist. What you do with it is your choice — here's how to approach it safely.
           </p>
 
@@ -188,28 +176,28 @@ const SafetyTips = () => {
               const Icon = step.icon;
               return (
                 <div key={step.num} className="flex flex-col p-5 sm:p-6" style={{
-                  background: 'hsl(var(--card))',
+                  background: '#FFFFFF',
                   border: '1px solid #E6E0DA',
-                  borderRadius: 18,
-                  boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
+                  borderRadius: 20,
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
                 }}>
                   <div className="flex items-center gap-3 mb-4">
                     <div style={{
                       width: 40, height: 40, borderRadius: '50%',
-                      background: 'hsl(var(--purple-100))',
+                      background: '#F1ECFF',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                     }}>
-                      <Icon className="w-5 h-5" style={{ color: 'hsl(var(--primary))' }} />
+                      <Icon className="w-5 h-5" style={{ color: '#6B4EFF' }} />
                     </div>
-                    <span className="font-mono text-[11px] tracking-[0.1em]" style={{ color: 'hsl(var(--primary))' }}>{step.num}</span>
+                    <span className="font-mono text-[11px] tracking-[0.1em]" style={{ color: '#6B4EFF' }}>{step.num}</span>
                   </div>
-                  <h3 className="font-heading text-lg text-foreground mb-2">{step.title}</h3>
-                  <p className="font-body text-[13px] text-muted-foreground leading-relaxed flex-1 mb-4">{step.body}</p>
+                  <h3 className="font-heading text-lg mb-2" style={{ color: '#1F1F1F' }}>{step.title}</h3>
+                  <p className="font-body text-[13px] leading-relaxed flex-1 mb-4" style={{ color: '#555555' }}>{step.body}</p>
                   {step.button && (
                     <Link
                       to={step.button.href}
                       className="inline-flex items-center justify-center px-5 py-2.5 font-body font-semibold text-[13px] transition-all duration-200"
-                      style={{ background: 'linear-gradient(135deg, #6B4EFF, #8B6CFF)', color: '#FFFFFF', borderRadius: 50 }}
+                      style={{ background: '#6B4EFF', color: '#FFFFFF', borderRadius: 50 }}
                     >
                       {step.button.text}
                     </Link>
@@ -222,26 +210,27 @@ const SafetyTips = () => {
 
         {/* Clear Result */}
         <section className="mb-12 sm:mb-16 p-6 sm:p-8" style={{
-          background: 'rgba(107,78,255,0.04)',
-          border: '1px solid rgba(107,78,255,0.12)',
+          background: '#FFFFFF',
+          border: '1px solid #E6E0DA',
           borderRadius: 20,
+          boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
         }}>
-          <p className="font-mono text-[11px] tracking-[0.15em] mb-3 flex items-center gap-3" style={{ color: 'hsl(var(--primary))' }}>
-            <span style={{ width: 24, height: 1, background: 'hsl(var(--primary))', display: 'inline-block' }} />
+          <p className="font-mono text-[11px] tracking-[0.15em] mb-3 flex items-center gap-3" style={{ color: '#6B4EFF' }}>
+            <span style={{ width: 24, height: 1, background: '#6B4EFF', display: 'inline-block' }} />
             When the Result Is Clear
           </p>
-          <h2 className="font-heading text-[22px] sm:text-[28px] text-foreground mb-3 leading-tight">
+          <h2 className="font-heading text-[22px] sm:text-[28px] mb-3 leading-tight" style={{ color: '#1F1F1F' }}>
             A clear result is good news — and the beginning of building trust.
           </h2>
-          <p className="font-body text-sm text-muted-foreground leading-relaxed max-w-[600px] mb-5">
+          <p className="font-body text-sm leading-relaxed max-w-[600px] mb-5" style={{ color: '#555555' }}>
             No public-record warnings found means exactly that. It does not mean this person has never done anything wrong. Use it as one piece of the picture — not the whole picture.
           </p>
           <div className="p-4 sm:p-5" style={{
-            background: 'rgba(107,78,255,0.06)',
-            border: '1px solid rgba(107,78,255,0.12)',
+            background: '#F1ECFF',
+            border: '1px solid rgba(107,78,255,0.2)',
             borderRadius: 14,
           }}>
-            <p className="font-body text-[13px] sm:text-sm text-foreground leading-relaxed">
+            <p className="font-body text-[13px] sm:text-sm leading-relaxed" style={{ color: '#1F1F1F' }}>
               Always trust your instincts. If something feels wrong, it is worth paying attention to — even when the result is clear.
             </p>
           </div>
@@ -249,33 +238,33 @@ const SafetyTips = () => {
 
         {/* Interactive Checklists */}
         <section className="mb-12 sm:mb-16">
-          <p className="font-mono text-[11px] tracking-[0.15em] mb-3 flex items-center gap-3" style={{ color: 'hsl(var(--primary))' }}>
-            <span style={{ width: 24, height: 1, background: 'hsl(var(--primary))', display: 'inline-block' }} />
+          <p className="font-mono text-[11px] tracking-[0.15em] mb-3 flex items-center gap-3" style={{ color: '#6B4EFF' }}>
+            <span style={{ width: 24, height: 1, background: '#6B4EFF', display: 'inline-block' }} />
             Interactive Checklists
           </p>
-          <h2 className="font-heading text-[24px] sm:text-[32px] text-foreground mb-6">Safety checklists for every situation</h2>
+          <h2 className="font-heading text-[24px] sm:text-[32px] mb-6" style={{ color: '#1F1F1F' }}>Safety checklists for every situation</h2>
           <div className="grid gap-4">
             {tips.map((tip) => {
               const Icon = tip.icon;
               return (
                 <Link key={tip.href} to={tip.href} className="block no-underline transition-all duration-200 hover:-translate-y-1" style={{
-                  background: 'hsl(var(--card))',
+                  background: '#FFFFFF',
                   border: '1px solid #E6E0DA',
                   padding: '24px 20px',
-                  borderRadius: 18,
-                  boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
+                  borderRadius: 20,
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
                 }}>
                   <div className="flex items-start gap-4 sm:gap-5">
                     <div className="w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center flex-shrink-0" style={{
-                      background: 'hsl(var(--purple-100))',
+                      background: '#F1ECFF',
                       borderRadius: '50%',
                     }}>
-                      <Icon className="w-5 h-5 sm:w-6 sm:h-6" style={{ color: 'hsl(var(--primary))' }} />
+                      <Icon className="w-5 h-5 sm:w-6 sm:h-6" style={{ color: '#6B4EFF' }} />
                     </div>
                     <div className="min-w-0">
-                      <span className="font-mono text-[10px] tracking-[0.1em] font-semibold" style={{ color: 'hsl(var(--primary))' }}>{tip.tag}</span>
-                      <h3 className="font-heading text-lg sm:text-xl text-foreground mt-1 mb-1.5">{tip.title}</h3>
-                      <p className="font-body text-[13px] sm:text-sm text-muted-foreground leading-relaxed">{tip.description}</p>
+                      <span className="font-mono text-[10px] tracking-[0.1em] font-semibold" style={{ color: '#6B4EFF' }}>{tip.tag}</span>
+                      <h3 className="font-heading text-lg sm:text-xl mt-1 mb-1.5" style={{ color: '#1F1F1F' }}>{tip.title}</h3>
+                      <p className="font-body text-[13px] sm:text-sm leading-relaxed" style={{ color: '#555555' }}>{tip.description}</p>
                     </div>
                   </div>
                 </Link>
@@ -286,28 +275,24 @@ const SafetyTips = () => {
 
         {/* Footer CTA */}
         <section className="mb-12 sm:mb-16 p-8 sm:p-12 text-center" style={{
-          background: 'linear-gradient(135deg, #0F0624 0%, #1B0D3A 100%)',
+          background: '#FFFFFF',
           borderRadius: 24,
+          border: '1px solid #E6E0DA',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
           position: 'relative',
           overflow: 'hidden',
         }}>
-          <div style={{
-            position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
-            width: '60%', height: '60%',
-            background: 'radial-gradient(circle, rgba(107,78,255,0.2), transparent 70%)',
-            filter: 'blur(40px)', pointerEvents: 'none',
-          }} />
           <div className="relative z-10">
-            <h2 className="font-heading text-[24px] sm:text-[32px] mb-2" style={{ color: '#FFFFFF' }}>Ready to check?</h2>
-            <p className="font-body text-sm mb-6" style={{ color: '#C8C3D6' }}>R99. Under 60 seconds. Completely confidential.</p>
+            <h2 className="font-heading text-[24px] sm:text-[32px] mb-2" style={{ color: '#1F1F1F' }}>Ready to check?</h2>
+            <p className="font-body text-sm mb-6" style={{ color: '#555555' }}>R99. Under 60 seconds. Completely confidential.</p>
             <Link
               to="/signup"
               className="inline-flex items-center justify-center font-body font-bold text-[14px] sm:text-base transition-all"
               style={{
-                background: 'linear-gradient(135deg, #6B4EFF, #8B6CFF)',
+                background: '#6B4EFF',
                 color: '#FFFFFF',
                 padding: '16px 36px', borderRadius: 50,
-                boxShadow: '0 4px 20px rgba(107,78,255,0.35)',
+                boxShadow: '0 4px 20px rgba(107,78,255,0.3)',
               }}
             >
               Verify Someone Now — R99
@@ -317,15 +302,16 @@ const SafetyTips = () => {
 
         {/* SEO text */}
         <div className="p-6 sm:p-8" style={{
-          background: 'rgba(107,78,255,0.03)',
+          background: '#FFFFFF',
           border: '1px solid #E6E0DA',
           borderRadius: 16,
+          boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
         }}>
-          <p className="font-body text-[13px] text-muted-foreground leading-relaxed">
+          <p className="font-body text-[13px] leading-relaxed" style={{ color: '#555555' }}>
             These free safety tips are part of RedFlaq's mission to make South Africa safer for women and communities.
             Whether you need a first date safety checklist, a tenant background check guide, or help identifying red flags,
             we've got you covered. If anything feels off, run a{" "}
-            <Link to="/signup" className="text-primary font-bold">RedFlaq public-record safety check</Link> before you decide.
+            <Link to="/signup" className="font-bold" style={{ color: '#6B4EFF' }}>RedFlaq public-record safety check</Link> before you decide.
           </p>
         </div>
       </div>

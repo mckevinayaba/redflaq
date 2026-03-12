@@ -73,7 +73,7 @@ const BlogArticle = () => {
 
   if (!article) {
     return (
-      <div style={{ background: "#F7F4F0", minHeight: "100vh" }}>
+      <div style={{ background: "#FFFFFF", minHeight: "100vh" }}>
         <NavbarPlinq />
         <div className="max-w-[600px] mx-auto px-5 text-center" style={{ paddingTop: 140 }}>
           <h1 className="font-heading text-2xl text-foreground mb-4">Article not found</h1>

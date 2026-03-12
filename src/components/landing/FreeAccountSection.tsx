@@ -1,19 +1,19 @@
 import { useNavigate } from "react-router-dom";
-import { FileText, Search, AlertCircle, Lock } from "lucide-react";
+import { BookOpen, ShieldCheck, HeartHandshake, Lock } from "lucide-react";
 
 const features = [
   {
-    icon: FileText,
+    icon: BookOpen,
     title: "My Safety Journal",
     description: "A private, time‑stamped journal where you can record incidents, worries and patterns. Add photos, videos or audio, and export your entries to share with a lawyer, social worker or trusted person. Only you can see your journal when logged in.",
   },
   {
-    icon: Search,
+    icon: ShieldCheck,
     title: "Saved Checks",
     description: "Keep a history of everyone you have checked on RedFlaq. Re‑download reports, show them to someone you trust, and track your own safety decisions over time.",
   },
   {
-    icon: AlertCircle,
+    icon: HeartHandshake,
     title: "All Safety Resources",
     description: "Instant access to GBV helplines, provincial resources, protection order information and practical safety tips for dating, parenting, tenants, domestic workers and more in South Africa.",
   },
@@ -59,7 +59,7 @@ const FreeAccountSection = () => {
                 key={f.title}
                 style={{
                   background: '#FFFFFF',
-                  borderRadius: 20,
+                  borderRadius: 18,
                   padding: '48px 32px',
                   border: '1px solid #E6E0DA',
                   boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
@@ -75,12 +75,12 @@ const FreeAccountSection = () => {
                 }}
               >
                 <div style={{
-                  width: 48, height: 48, borderRadius: '50%',
-                  background: '#E9E3FF',
+                  width: 52, height: 52, borderRadius: '50%',
+                  background: '#F1ECFF',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   marginBottom: 20,
                 }}>
-                  <Icon size={24} color="#6B4EFF" aria-label={f.title} />
+                  <Icon size={24} color="#6B4EFF" strokeWidth={2} aria-label={f.title} />
                 </div>
                 <h3 style={{
                   fontFamily: "'Syne', sans-serif",
@@ -132,7 +132,7 @@ const FreeAccountSection = () => {
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
           maxWidth: 640, margin: '0 auto',
         }}>
-          <Lock size={14} color="#888888" style={{ flexShrink: 0 }} />
+          <Lock size={14} color="#888888" strokeWidth={2} style={{ flexShrink: 0 }} />
           <p style={{
             fontFamily: "'Syne', sans-serif",
             fontSize: 12,

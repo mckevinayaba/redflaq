@@ -8,14 +8,21 @@ const StatsBar = () => {
   ];
 
   return (
-    <section className="py-6" style={{ background: '#6B4EFF' }}>
+    <section className="py-8" style={{ background: '#F5F0EB', borderTop: '1px solid #E6E0DA', borderBottom: '1px solid #E6E0DA' }}>
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-3 gap-6">
           {stats.map((stat, index) => (
-            <div key={index} className="flex flex-col items-center text-center text-white">
-              <stat.icon className="h-6 w-6 mb-2 opacity-90" />
-              <span className="text-2xl md:text-3xl font-bold">{stat.value}</span>
-              <span className="text-sm opacity-90">{stat.label}</span>
+            <div key={index} className="flex flex-col items-center text-center">
+              <div style={{
+                width: 48, height: 48, borderRadius: '50%',
+                background: '#F1ECFF',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                marginBottom: 8,
+              }}>
+                <stat.icon className="h-5 w-5" style={{ color: '#6B4EFF', strokeWidth: 2 }} />
+              </div>
+              <span className="text-2xl md:text-3xl font-bold" style={{ color: '#6B4EFF', fontFamily: "'DM Serif Display', serif" }}>{stat.value}</span>
+              <span className="text-sm" style={{ color: '#555555', fontFamily: "'Syne', sans-serif" }}>{stat.label}</span>
             </div>
           ))}
         </div>

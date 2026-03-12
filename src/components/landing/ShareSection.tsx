@@ -1,17 +1,19 @@
 import { useState } from "react";
 import { Copy, Check, MessageCircle, Mail, Heart } from "lucide-react";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const SHARE_URL = "https://www.redflaq.com/";
 const INVITE_TEXT = "I'm using RedFlaq to check public records before I trust someone with my life, home or business. It was built with South African women facing GBV in mind. You can try it here:";
 
 const ShareSection = () => {
   const [copied, setCopied] = useState(false);
+  const { ref, isVisible } = useScrollReveal();
   const handleCopy = async () => { await navigator.clipboard.writeText(SHARE_URL); setCopied(true); setTimeout(() => setCopied(false), 2000); };
   const handleWhatsApp = () => { window.open(`https://wa.me/?text=${encodeURIComponent(`${INVITE_TEXT} ${SHARE_URL}`)}`, "_blank"); };
   const handleEmail = () => { window.open(`mailto:?subject=${encodeURIComponent("Check out RedFlaq — public-record safety checks")}&body=${encodeURIComponent(`${INVITE_TEXT} ${SHARE_URL}`)}`, "_blank"); };
 
   return (
-    <section className="py-12 md:py-20 px-5" style={{ background: '#F5F0EB' }}>
+    <section ref={ref} className={`reveal-section ${isVisible ? 'visible' : ''} py-12 md:py-20 px-5`} style={{ background: '#F5F0EB' }}>
       <div style={{ maxWidth: 600, margin: '0 auto', textAlign: 'center' }}>
         <Heart className="h-8 w-8 mx-auto mb-4" style={{ color: '#6B4EFF' }} />
         <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, color: '#1A1523', marginBottom: 12 }}>Share RedFlaq</h3>

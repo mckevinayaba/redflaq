@@ -4,7 +4,7 @@ import { AlertTriangle, TrendingUp } from "lucide-react";
 
 const RealitySection = () => {
   const { ref, isVisible } = useScrollReveal();
-  const { count: statTwo, ref: statRef } = useCountUp(40000, 2000);
+  const { count: statTwo, ref: statRef } = useCountUp(40000, 900);
 
   return (
     <section

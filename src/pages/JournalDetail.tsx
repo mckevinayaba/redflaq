@@ -3,19 +3,9 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import { ArrowLeft, FileDown, Trash2, Download, Eye, Scale } from "lucide-react";
+import { ArrowLeft, FileDown, Trash2, Download, Eye, Scale, CheckCircle, Lock, Edit } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-
-interface JournalEntry {
-  id: string;
-  entry_date: string;
-  entry_time: string;
-  incident_description: string;
-  location: string | null;
-  witnesses: string | null;
-  injuries_damage: string | null;
-  created_at: string;
-}
+import { generateVerificationCertificate } from "@/utils/pdfCertificate";
 
 interface Evidence {
   id: string;
@@ -23,6 +13,8 @@ interface Evidence {
   file_url: string;
   file_name: string;
   file_size: number;
+  file_hash?: string | null;
+  uploaded_at?: string | null;
 }
 
 function formatFileSize(bytes: number) {
@@ -36,7 +28,7 @@ export default function JournalDetail() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [entry, setEntry] = useState<JournalEntry | null>(null);
+  const [entry, setEntry] = useState<any>(null);
   const [evidence, setEvidence] = useState<Evidence[]>([]);
   const [loading, setLoading] = useState(true);
   const [showDelete, setShowDelete] = useState(false);
@@ -53,10 +45,9 @@ export default function JournalDetail() {
     setEntry(data);
 
     const { data: evData } = await supabase.from("journal_evidence").select("*").eq("entry_id", id!);
-    const evidenceItems = evData || [];
+    const evidenceItems = (evData || []) as Evidence[];
     setEvidence(evidenceItems);
 
-    // Generate signed URLs for viewing
     const urls: Record<string, string> = {};
     for (const ev of evidenceItems) {
       const path = extractPath(ev.file_url);
@@ -99,6 +90,41 @@ export default function JournalDetail() {
     }
   };
 
+  const handleDownloadCertificate = () => {
+    if (!entry) return;
+    generateVerificationCertificate({
+      entry: {
+        id: entry.id,
+        entry_date: entry.entry_date,
+        entry_time: entry.entry_time,
+        incident_description: entry.incident_description,
+        about_person: entry.about_person,
+        abuse_types: entry.abuse_types,
+        weapon_involved: entry.weapon_involved,
+        weapon_description: entry.weapon_description,
+        medical_attention: entry.medical_attention,
+        medical_details: entry.medical_details,
+        police_reported: entry.police_reported,
+        police_case_number: entry.police_case_number,
+        children_present: entry.children_present,
+        location: entry.location,
+        witnesses: entry.witnesses,
+        injuries_damage: entry.injuries_damage,
+        emotional_state: entry.emotional_state,
+        statement_hash: entry.statement_hash,
+        hash_generated_at: entry.hash_generated_at,
+        created_at: entry.created_at,
+      },
+      evidence: evidence.map(ev => ({
+        file_name: ev.file_name,
+        file_type: ev.file_type,
+        file_size: ev.file_size,
+        file_hash: ev.file_hash,
+        uploaded_at: ev.uploaded_at,
+      })),
+    });
+  };
+
   if (authLoading || loading) {
     return (
       <DashboardLayout>
@@ -110,6 +136,8 @@ export default function JournalDetail() {
   }
 
   if (!entry) return null;
+
+  const isVerified = !!entry.statement_hash;
 
   return (
     <DashboardLayout>
@@ -135,6 +163,12 @@ export default function JournalDetail() {
               <p className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase mb-1">Created</p>
               <p className="font-body text-sm text-muted-foreground">{new Date(entry.created_at).toLocaleString("en-ZA")}</p>
             </div>
+            {entry.about_person && (
+              <div>
+                <p className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase mb-1">About</p>
+                <p className="font-body text-sm text-foreground">{entry.about_person}</p>
+              </div>
+            )}
             {entry.location && (
               <div>
                 <p className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase mb-1">Location</p>
@@ -153,9 +187,52 @@ export default function JournalDetail() {
         {/* Incident Description */}
         <div className="bg-card rounded-xl border border-border p-5 mb-6">
           <p className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase mb-1">Incident description</p>
-          <p className="font-body text-xs text-muted-foreground mb-3">This is exactly what you wrote at the time. If you need to correct something, you can add a new entry with the updated information.</p>
+          <p className="font-body text-xs text-muted-foreground mb-3">This is exactly what you wrote at the time.</p>
           <p className="font-body text-sm text-foreground leading-relaxed whitespace-pre-wrap">{entry.incident_description}</p>
         </div>
+
+        {/* Enhanced fields display */}
+        {(entry.abuse_types?.length > 0 || entry.weapon_involved || entry.medical_attention || entry.police_reported || entry.children_present || entry.emotional_state) && (
+          <div className="bg-card rounded-xl border border-border p-5 mb-6 space-y-3">
+            <p className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase mb-1">Additional Details</p>
+            {entry.abuse_types?.length > 0 && (
+              <div>
+                <span className="font-body text-xs text-muted-foreground">Type of abuse: </span>
+                <span className="font-body text-sm text-foreground">{entry.abuse_types.join(" • ")}</span>
+              </div>
+            )}
+            {entry.weapon_involved && (
+              <div>
+                <span className="font-body text-xs text-muted-foreground">Weapon involved: </span>
+                <span className="font-body text-sm text-foreground">Yes{entry.weapon_description ? ` — ${entry.weapon_description}` : ''}</span>
+              </div>
+            )}
+            {entry.medical_attention && (
+              <div>
+                <span className="font-body text-xs text-muted-foreground">Medical attention: </span>
+                <span className="font-body text-sm text-foreground">Yes{entry.medical_details ? ` — ${entry.medical_details}` : ''}</span>
+              </div>
+            )}
+            {entry.police_reported && (
+              <div>
+                <span className="font-body text-xs text-muted-foreground">Police report: </span>
+                <span className="font-body text-sm text-foreground">Yes{entry.police_case_number ? ` — ${entry.police_case_number}` : ''}</span>
+              </div>
+            )}
+            {entry.children_present && (
+              <div>
+                <span className="font-body text-xs text-muted-foreground">Children present: </span>
+                <span className="font-body text-sm text-foreground">Yes</span>
+              </div>
+            )}
+            {entry.emotional_state && (
+              <div>
+                <span className="font-body text-xs text-muted-foreground">Emotional state: </span>
+                <span className="font-body text-sm text-foreground">{entry.emotional_state}</span>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Injuries / Damage */}
         {entry.injuries_damage && (
@@ -165,17 +242,27 @@ export default function JournalDetail() {
           </div>
         )}
 
+        {/* Addendum */}
+        {entry.addendum_notes && (
+          <div className="bg-card rounded-xl border border-border p-5 mb-6">
+            <p className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase mb-1">Addendum</p>
+            {entry.last_edited_at && (
+              <p className="font-mono text-[10px] text-muted-foreground mb-2">Added: {new Date(entry.last_edited_at).toLocaleString('en-ZA')}</p>
+            )}
+            <p className="font-body text-sm text-foreground leading-relaxed whitespace-pre-wrap">{entry.addendum_notes}</p>
+          </div>
+        )}
+
         {/* Evidence */}
         {evidence.length > 0 && (
           <div className="bg-card rounded-xl border border-border p-5 mb-6">
             <p className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase mb-1">Evidence</p>
-            <p className="font-body text-xs text-muted-foreground mb-4">These files stay linked to this entry. You can download them for sharing with a lawyer, counsellor, or support service.</p>
+            <p className="font-body text-xs text-muted-foreground mb-4">These files stay linked to this entry.</p>
             <div className="space-y-3">
               {evidence.map(ev => {
                 const url = signedUrls[ev.id];
                 return (
                   <div key={ev.id} className="border border-border rounded-lg p-3">
-                    {/* Thumbnail for images */}
                     {ev.file_type === "photo" && url && (
                       <img src={url} alt={ev.file_name} className="w-full max-h-48 object-cover rounded-lg mb-3" />
                     )}
@@ -209,9 +296,39 @@ export default function JournalDetail() {
           </div>
         )}
 
+        {/* Verification Certificate Section */}
+        {isVerified && (
+          <div className="mb-6 p-5" style={{ borderRadius: 14, background: '#F5F3FF', borderLeft: '4px solid #7C3AED' }}>
+            <div className="flex items-start gap-3">
+              <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+              <div className="flex-1">
+                <p className="font-mono text-[10px] tracking-wider uppercase text-primary font-bold mb-2">Verified Entry</p>
+                <p className="font-body text-sm text-foreground mb-1">
+                  This entry was verified and cryptographically locked on{' '}
+                  {entry.hash_generated_at ? new Date(entry.hash_generated_at).toLocaleString('en-ZA', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' }) : 'N/A'}.
+                </p>
+                <p className="font-mono text-[10px] text-muted-foreground">
+                  Entry ID: {entry.id.slice(0, 8)}...{entry.id.slice(-4)}
+                </p>
+                <p className="font-mono text-[10px] text-muted-foreground mb-3">
+                  Hash: {entry.statement_hash?.slice(0, 16)}...{entry.statement_hash?.slice(-8)}
+                </p>
+                <button onClick={handleDownloadCertificate}
+                  className="inline-flex items-center gap-2 px-4 py-2 border-2 border-primary text-primary font-body font-bold text-sm rounded-lg hover:bg-primary/5 transition-colors">
+                  <Download className="h-4 w-4" /> Download Verification Certificate
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Actions */}
         <div className="flex flex-wrap gap-3 mb-6">
-          <Link to={`/dashboard/journal/export?entry=${entry.id}`} className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground font-body font-bold text-sm rounded-lg hover:opacity-90 transition-colors">
+          <Link to={`/dashboard/journal/${entry.id}/edit`}
+            className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground font-body font-bold text-sm rounded-lg hover:opacity-90 transition-colors">
+            <Edit className="h-4 w-4" /> Edit Entry
+          </Link>
+          <Link to={`/dashboard/journal/export?entry=${entry.id}`} className="inline-flex items-center gap-2 px-5 py-2.5 border border-border text-foreground font-body font-medium text-sm rounded-lg hover:bg-muted transition-colors">
             <FileDown className="h-4 w-4" /> Export to PDF
           </Link>
           <button onClick={() => setShowDelete(true)} className="inline-flex items-center gap-2 px-5 py-2.5 border border-destructive text-destructive font-body font-medium text-sm rounded-lg hover:bg-destructive/10 transition-colors">
@@ -226,13 +343,7 @@ export default function JournalDetail() {
             <div>
               <h3 className="font-heading text-sm text-foreground mb-2">Legal disclaimer</h3>
               <p className="font-body text-xs text-muted-foreground leading-relaxed">
-                My Safety Journal is a documentation tool to help you organise incidents and share information with people supporting you. It does not guarantee that any entry or file will be accepted as evidence in court.
-              </p>
-              <p className="font-body text-xs text-muted-foreground leading-relaxed mt-2">
-                Under South African law (including the Electronic Communications and Transactions Act), digital information can be used in legal processes if it is properly authenticated and presented by a legal professional. Always speak to a lawyer, Legal Aid South Africa (0800 110 110), or another qualified advisor before relying on journal entries in a case.
-              </p>
-              <p className="font-body text-xs text-muted-foreground leading-relaxed mt-2">
-                This tool does not replace: reporting to the police (10111), getting medical care, or speaking to a qualified attorney.
+                My Safety Journal is a documentation tool. It does not guarantee that any entry or file will be accepted as evidence in court. Under South African law (ECTA), digital records may be used if properly authenticated. Always consult Legal Aid SA (0800 110 110) or a qualified attorney.
               </p>
             </div>
           </div>

@@ -102,7 +102,7 @@ const PricingPlinq = () => {
                   onMouseLeave={e => {
                     if (!plan.highlight) {
                       e.currentTarget.style.transform = 'none';
-                      e.currentTarget.style.boxShadow = '0 4px 24px rgba(0,0,0,0.1)';
+                      e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
                     }
                   }}
                 >

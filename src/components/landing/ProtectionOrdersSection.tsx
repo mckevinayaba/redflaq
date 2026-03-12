@@ -36,7 +36,6 @@ const ProtectionOrdersSection = () => {
   return (
     <section ref={ref} className={`reveal-section ${isVisible ? 'visible' : ''}`} style={{ background: '#F5F3FF' }}>
       <div className="py-12 md:py-20 px-6" style={{ maxWidth: 1200, margin: '0 auto' }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] gap-12 lg:gap-16">
           {/* LEFT COLUMN */}
           <div>

@@ -140,11 +140,11 @@ const PricingPlinq = () => {
                     {plan.features.map(f => (
                       <div key={f} style={{
                         fontFamily: "'Syne', sans-serif", fontSize: 13,
-                        color: 'rgba(255,255,255,0.8)',
-                        borderBottom: '1px solid rgba(255,255,255,0.08)',
+                        color: '#555555',
+                        borderBottom: '1px solid #E6E0DA',
                         padding: '12px 0', display: 'flex', alignItems: 'center', gap: 10,
                       }}>
-                        <Check style={{ width: 14, height: 14, color: plan.highlight ? 'white' : '#A855F7', flexShrink: 0 }} /> {f}
+                        <Check style={{ width: 14, height: 14, color: '#6B4EFF', flexShrink: 0 }} /> {f}
                       </div>
                     ))}
                   </div>

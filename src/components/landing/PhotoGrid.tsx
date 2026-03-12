@@ -75,7 +75,7 @@ const PhotoGrid = () => {
           <div style={{ position: 'relative' }}>
             <div
               className={`organic-frame-2 organic-scroll-in ${isVisible ? 'visible' : ''}`}
-              style={{ height: 520, position: 'relative' }}
+              style={{ height: 'clamp(300px, 50vw, 520px)', position: 'relative' }}
             >
               <img
                 src={coffeeImg}
@@ -101,7 +101,7 @@ const PhotoGrid = () => {
           <div className="flex flex-col gap-5" style={{ paddingTop: 48 }}>
             <div
               className={`organic-frame-3 organic-scroll-in ${isVisible ? 'visible' : ''}`}
-              style={{ height: 260, position: 'relative' }}
+              style={{ height: 'clamp(200px, 30vw, 260px)', position: 'relative' }}
             >
               <img
                 src={motherImg}
@@ -118,7 +118,7 @@ const PhotoGrid = () => {
             </div>
             <div
               className={`organic-frame-1 organic-scroll-in ${isVisible ? 'visible' : ''}`}
-              style={{ height: 220, position: 'relative' }}
+              style={{ height: 'clamp(180px, 25vw, 220px)', position: 'relative' }}
             >
               <img
                 src={professionalImg}

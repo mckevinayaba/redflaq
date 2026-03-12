@@ -65,7 +65,7 @@ const CommunitySectionSA = () => {
           </div>
 
           <div style={{ position: 'relative' }}>
-            <div className={`organic-frame-2 organic-scroll-in ${isVisible ? 'visible' : ''}`} style={{ height: 550 }}>
+            <div className={`organic-frame-2 organic-scroll-in ${isVisible ? 'visible' : ''}`} style={{ height: 'clamp(300px, 60vw, 550px)' }}>
               <img
                 src={groupImg}
                 alt="Group of diverse South African women standing together confidently on a Johannesburg rooftop"

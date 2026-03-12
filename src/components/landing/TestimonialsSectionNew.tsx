@@ -105,7 +105,7 @@ const TestimonialsSectionNew = () => {
                     <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, fontWeight: 700, color: '#1F1F1F', margin: 0 }}>
                       {t.name}
                     </p>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                       <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#888888' }}>
                         {t.location}
                       </span>

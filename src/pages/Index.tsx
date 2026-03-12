@@ -94,8 +94,6 @@ const Index = () => {
       {/* 5. Who RedFlaq Helps */}
       <WhoRedflaqHelps />
 
-      {/* 6. Why RedFlaq Exists (Info inequality) */}
-      <WhyRedflaqExists />
 
       {/* 7. Protection Orders & Evidence Collection */}
       <ProtectionOrdersSection />

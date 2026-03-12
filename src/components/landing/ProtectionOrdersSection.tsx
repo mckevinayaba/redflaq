@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Shield, Scale, FileText, Clock, Check, ArrowRight } from "lucide-react";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const contentBlocks = [
   {

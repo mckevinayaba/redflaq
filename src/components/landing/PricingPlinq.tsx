@@ -50,7 +50,7 @@ const PricingPlinq = () => {
 
   return (
     <>
-      <section id="pricing" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''} py-12 md:py-20 px-6`} style={{ background: '#F5F0EB' }}>
+      <section id="pricing" ref={ref} className={`reveal-section ${isVisible ? 'visible' : ''} py-12 md:py-20 px-6`} style={{ background: '#F5F0EB' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           <div className="section-tag" style={{ color: '#6B4EFF', marginBottom: 16 }}>Pricing</div>
 
@@ -67,7 +67,7 @@ const PricingPlinq = () => {
             Each safety check uses South African public‑record warning lists to highlight possible red flags. It does not provide a full SAPS criminal record.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
+          <div className={`grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch reveal-stagger ${isVisible ? 'visible' : ''}`}>
             {plans.map(plan => {
               const bg = plan.highlight
                 ? '#E9E3FF'
@@ -78,6 +78,7 @@ const PricingPlinq = () => {
               return (
                 <div
                   key={plan.id}
+                  className={`reveal-child ${plan.highlight ? 'pricing-glow' : 'card-lift'}`}
                   style={{
                     background: bg,
                     padding: '48px 32px',
@@ -157,6 +158,7 @@ const PricingPlinq = () => {
 
                   <button
                     onClick={() => handleOpenPayment(plan.id)}
+                    className="btn-scale"
                     style={{
                       width: '100%', marginTop: 28, padding: 16,
                       fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 14,

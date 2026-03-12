@@ -9,7 +9,7 @@ const PhotoGrid = () => {
   return (
     <section
       ref={ref}
-      className={`scroll-reveal ${isVisible ? 'visible' : ''} py-12 md:py-20 px-6`} style={{ background: '#F5F0EB' }}
+      className={`reveal-section ${isVisible ? 'visible' : ''} py-12 md:py-20 px-6`} style={{ background: '#F5F0EB' }}
     >
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <div className="grid grid-cols-1 md:grid-cols-[38%_32%_28%] gap-5 md:gap-6 items-start">

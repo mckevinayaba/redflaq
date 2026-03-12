@@ -11,7 +11,7 @@ const FinalCTAPlinq = () => {
   const [shareOpen, setShareOpen] = useState(false);
 
   return (
-    <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{ position: 'relative', overflow: 'hidden', minHeight: 500 }}>
+    <section ref={ref} className={`reveal-section ${isVisible ? 'visible' : ''}`} style={{ position: 'relative', overflow: 'hidden', minHeight: 500 }}>
       <div style={{ position: 'absolute', inset: 0, zIndex: 0, backgroundImage: `url(${skylineImg})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
       <div style={{ position: 'absolute', inset: 0, zIndex: 1, background: 'linear-gradient(180deg, rgba(15,10,26,0.85), rgba(26,16,53,0.9))' }} />
       <div className="py-12 md:py-20 px-6" style={{ position: 'relative', zIndex: 2, maxWidth: 700, margin: '0 auto', textAlign: 'center' }}>

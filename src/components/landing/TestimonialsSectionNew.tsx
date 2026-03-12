@@ -31,7 +31,7 @@ const TestimonialsSectionNew = () => {
   };
 
   return (
-    <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''} py-12 md:py-20 px-5`} style={{
+    <section ref={ref} className={`reveal-section ${isVisible ? 'visible' : ''} py-12 md:py-20 px-5`} style={{
       background: '#F5F0EB',
     }}>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
@@ -54,13 +54,13 @@ const TestimonialsSectionNew = () => {
         </p>
 
         <div
-          className="grid grid-cols-1 md:grid-cols-3 gap-5"
+          className={`grid grid-cols-1 md:grid-cols-3 gap-5 reveal-stagger ${isVisible ? 'visible' : ''}`}
           style={{ marginBottom: 48 }}
         >
           {testimonials.map((t, i) => {
             const isFeatured = (t as any).featured;
             return (
-              <div key={i} style={{
+              <div key={i} className="card-lift reveal-child" style={{
                 background: isFeatured ? '#E9E3FF' : '#FFFFFF',
                 borderLeft: '3px solid #6B4EFF',
                 borderRadius: 16,
@@ -72,16 +72,7 @@ const TestimonialsSectionNew = () => {
                 flexDirection: 'column',
                 justifyContent: 'space-between',
                 boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
               }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.transform = 'translateY(-3px)';
-                  e.currentTarget.style.boxShadow = '0 8px 32px rgba(107,78,255,0.1)';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
-                }}
               >
                 <div>
                   <span style={{

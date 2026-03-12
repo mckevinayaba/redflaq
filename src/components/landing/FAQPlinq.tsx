@@ -21,7 +21,7 @@ const FAQPlinq = () => {
   ];
 
   return (
-    <section id="faq" ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''} py-12 md:py-20 px-6`} style={{
+    <section id="faq" ref={ref} className={`reveal-section ${isVisible ? 'visible' : ''} py-12 md:py-20 px-6`} style={{
       background: '#F5F0EB',
     }}>
       <div style={{ maxWidth: 700, margin: '0 auto' }}>

@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { BookOpen, ShieldCheck, HeartHandshake, Lock } from "lucide-react";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const features = [
   {
@@ -21,10 +22,11 @@ const features = [
 
 const FreeAccountSection = () => {
   const navigate = useNavigate();
+  const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section style={{ background: '#E9E3FF' }} className="py-12 md:py-20 px-6">
-      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+    <section ref={ref} className={`reveal-section ${isVisible ? 'visible' : ''}`} style={{ background: '#E9E3FF' }}>
+      <div className="py-12 md:py-20 px-6" style={{ maxWidth: 1200, margin: '0 auto' }}>
         <div className="section-tag" style={{ color: '#6B4EFF', marginBottom: 16, textAlign: 'center' }}>Free Account</div>
 
         <h2 style={{
@@ -51,30 +53,22 @@ const FreeAccountSection = () => {
           No credit card required. Built for South African women and communities.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5" style={{ marginBottom: 40 }}>
+        <div className={`grid grid-cols-1 md:grid-cols-3 gap-5 reveal-stagger ${isVisible ? 'visible' : ''}`} style={{ marginBottom: 40 }}>
           {features.map((f) => {
             const Icon = f.icon;
             return (
               <div
                 key={f.title}
+                className="card-lift reveal-child"
                 style={{
                   background: '#FFFFFF',
                   borderRadius: 18,
                   padding: '48px 32px',
                   border: '1px solid #E6E0DA',
                   boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.transform = 'translateY(-4px)';
-                  e.currentTarget.style.boxShadow = '0 12px 40px rgba(107,78,255,0.1)';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.transform = 'none';
-                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
                 }}
               >
-                <div style={{
+                <div className="icon-hover" style={{
                   width: 52, height: 52, borderRadius: '50%',
                   background: '#F1ECFF',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -107,6 +101,7 @@ const FreeAccountSection = () => {
         <div style={{ textAlign: 'center', marginBottom: 32 }}>
           <button
             onClick={() => navigate('/signup')}
+            className="btn-scale"
             style={{
               background: '#6B4EFF',
               color: '#FFFFFF',
@@ -120,8 +115,8 @@ const FreeAccountSection = () => {
               boxShadow: '0 4px 20px rgba(107,78,255,0.25)',
               transition: 'all 0.25s ease',
             }}
-            onMouseEnter={e => { e.currentTarget.style.background = '#5539E8'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = '#6B4EFF'; e.currentTarget.style.transform = 'translateY(0)'; }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#5539E8'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#6B4EFF'; }}
           >
             Sign Up Free
           </button>

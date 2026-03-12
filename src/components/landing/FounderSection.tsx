@@ -5,7 +5,7 @@ const FounderSection = () => {
   const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''}`} style={{
+    <section ref={ref} className={`reveal-section ${isVisible ? 'visible' : ''}`} style={{
       background: '#F5F0EB',
       padding: '120px 24px',
     }}>

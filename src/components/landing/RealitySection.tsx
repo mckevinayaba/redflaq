@@ -4,12 +4,12 @@ import { AlertTriangle, TrendingUp } from "lucide-react";
 
 const RealitySection = () => {
   const { ref, isVisible } = useScrollReveal();
-  const { count: statTwo, ref: statRef } = useCountUp(40000, 2000);
+  const { count: statTwo, ref: statRef } = useCountUp(40000, 900);
 
   return (
     <section
       ref={ref}
-      className={`scroll-reveal ${isVisible ? 'visible' : ''} py-12 md:py-20 px-6`}
+      className={`reveal-section ${isVisible ? 'visible' : ''} py-12 md:py-20 px-6`}
       style={{ background: '#F5F0EB' }}
     >
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>

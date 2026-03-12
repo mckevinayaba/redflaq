@@ -187,8 +187,8 @@ const SearchOptionsSection = () => {
                 disabled={!consentChecked}
                 style={{
                   width: '100%',
-                  background: consentChecked ? 'linear-gradient(135deg, #7C3AED, #A855F7)' : 'rgba(255,255,255,0.1)',
-                  color: 'white',
+                  background: consentChecked ? '#6B4EFF' : '#E6E0DA',
+                  color: consentChecked ? 'white' : '#888888',
                   padding: 20,
                   fontFamily: "'Syne', sans-serif",
                   fontSize: 16,

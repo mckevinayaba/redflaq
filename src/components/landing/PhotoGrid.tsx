@@ -101,7 +101,7 @@ const PhotoGrid = () => {
           <div className="flex flex-col gap-5" style={{ paddingTop: 48 }}>
             <div
               className={`organic-frame-3 organic-scroll-in ${isVisible ? 'visible' : ''}`}
-              style={{ height: 260, position: 'relative' }}
+              style={{ height: 'clamp(200px, 30vw, 260px)', position: 'relative' }}
             >
               <img
                 src={motherImg}

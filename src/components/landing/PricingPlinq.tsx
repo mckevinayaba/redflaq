@@ -158,6 +158,7 @@ const PricingPlinq = () => {
 
                   <button
                     onClick={() => handleOpenPayment(plan.id)}
+                    className="btn-scale"
                     style={{
                       width: '100%', marginTop: 28, padding: 16,
                       fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 14,

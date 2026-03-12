@@ -72,16 +72,7 @@ const TestimonialsSectionNew = () => {
                 flexDirection: 'column',
                 justifyContent: 'space-between',
                 boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
               }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.transform = 'translateY(-3px)';
-                  e.currentTarget.style.boxShadow = '0 8px 32px rgba(107,78,255,0.1)';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
-                }}
               >
                 <div>
                   <span style={{

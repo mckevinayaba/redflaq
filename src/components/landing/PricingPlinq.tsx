@@ -69,12 +69,11 @@ const PricingPlinq = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch">
             {plans.map(plan => {
-              const isDark = !plan.highlight;
               const bg = plan.highlight
-                ? 'linear-gradient(145deg, #7C3AED, #A855F7)'
-                : 'linear-gradient(145deg, #0F0A1A, #1A1035)';
-              const textColor = 'white';
-              const mutedColor = plan.highlight ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.5)';
+                ? '#E9E3FF'
+                : '#FFFFFF';
+              const textColor = '#1F1F1F';
+              const mutedColor = '#888888';
 
               return (
                 <div

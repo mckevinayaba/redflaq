@@ -6,7 +6,7 @@ interface EmptyStateProps {
 const EmptyState = ({ onDownload, onSearchAnother }: EmptyStateProps) => {
   return (
     <div style={{
-      background: '#F7F4F0', border: '1.5px solid #0D0B0E', padding: 48, textAlign: 'center',
+      background: '#FFFFFF', border: '1.5px solid #0D0B0E', padding: 48, textAlign: 'center',
     }}>
       <span style={{ fontSize: 48, display: 'block', marginBottom: 16 }}>✅</span>
 

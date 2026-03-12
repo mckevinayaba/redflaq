@@ -97,8 +97,8 @@ const NavbarPlinq = () => {
         opacity: 1,
         display: 'block',
         background: isScrolled
-          ? 'rgba(247, 244, 240, 0.92)'
-          : '#F7F4F0',
+          ? 'rgba(255, 255, 255, 0.92)'
+          : '#FFFFFF',
         backdropFilter: isScrolled ? 'blur(16px) saturate(180%)' : 'none',
         WebkitBackdropFilter: isScrolled ? 'blur(16px) saturate(180%)' : 'none',
         borderBottom: isScrolled ? '1px solid rgba(214, 211, 205, 0.6)' : '1px solid transparent',

@@ -7,7 +7,7 @@ export default function PaymentCancelled() {
   const [retryOpen, setRetryOpen] = useState(false);
 
   return (
-    <div style={{ background: '#F7F4F0', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
+    <div style={{ background: '#FFFFFF', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24 }}>
       <div style={{ maxWidth: 520, width: '100%', textAlign: 'center' }}>
         <div style={{ background: 'white', border: '1.5px solid #D6D3CD', padding: '48px 40px' }}>
           <XCircle size={56} style={{ color: '#DC2626', margin: '0 auto 24px' }} />

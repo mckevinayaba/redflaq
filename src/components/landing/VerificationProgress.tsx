@@ -40,7 +40,7 @@ const VerificationProgress = ({ currentStep = 1 }: VerificationProgressProps) =>
                 alignItems: 'center', justifyContent: 'center', position: 'relative', zIndex: 1,
                 ...(state === 'done' ? { background: '#15803D', border: '2px solid #15803D' } :
                    state === 'active' ? { background: '#7C3AED', border: '2px solid #7C3AED', boxShadow: '0 0 0 4px rgba(124,58,237,0.15)' } :
-                   { background: '#F7F4F0', border: '2px solid #9CA3AF' }),
+                   { background: '#FFFFFF', border: '2px solid #9CA3AF' }),
               }}>
                 {state === 'done' && <span style={{ color: 'white', fontWeight: 700, fontSize: 14 }}>✓</span>}
                 {state === 'active' && <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'white' }} />}

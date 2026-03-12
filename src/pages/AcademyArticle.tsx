@@ -84,7 +84,7 @@ const AcademyArticle = () => {
   const relatedTool = article.related_tool_slug ? toolMap[article.related_tool_slug] : null;
 
   return (
-    <div style={{ background: "#F7F4F0", minHeight: "100vh" }}>
+    <div style={{ background: "#FFFFFF", minHeight: "100vh" }}>
       <NavbarPlinq />
       <article style={{ maxWidth: 720, margin: "0 auto", padding: "100px 24px 60px" }}>
         <Link to="/academy" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: "0.1em", color: "#7C3AED", textDecoration: "none", textTransform: "uppercase", marginBottom: 16, display: "block" }}>

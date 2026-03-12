@@ -26,7 +26,7 @@ const sources = [
 
 export default function About() {
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: '#F7F4F0' }}>
+    <div className="min-h-screen flex flex-col" style={{ background: '#FFFFFF' }}>
       <NavbarPlinq />
 
       {/* Hero — dark immersive */}

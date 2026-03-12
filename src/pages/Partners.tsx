@@ -19,7 +19,7 @@ const orgTypes = [
 ];
 
 const Partners = () => (
-  <div style={{ background: "#F7F4F0", minHeight: "100vh" }}>
+  <div style={{ background: "#FFFFFF", minHeight: "100vh" }}>
     <NavbarPlinq />
 
     {/* Hero — dark */}

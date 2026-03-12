@@ -4,7 +4,7 @@ import communityGroupImg from "@/assets/sa-community-group.jpg";
 
 const CommunityImageStrip = () => {
   return (
-    <section style={{ background: '#F7F4F0', padding: '48px 24px' }}>
+    <section style={{ background: '#FFFFFF', padding: '48px 24px' }}>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
         <p style={{
           fontFamily: "'Syne', sans-serif",

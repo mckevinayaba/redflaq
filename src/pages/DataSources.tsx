@@ -96,7 +96,7 @@ const statusConfig: Record<string, { bg: string; text: string; icon: React.React
 
 export default function DataSources() {
   return (
-    <div style={{ background: '#F7F4F0', minHeight: '100vh' }}>
+    <div style={{ background: '#FFFFFF', minHeight: '100vh' }}>
       <NavbarPlinq />
 
       {/* Hero — dark */}

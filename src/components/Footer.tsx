@@ -17,7 +17,7 @@ const Footer = () => {
             <p className="text-sm mb-4" style={{ color: '#888888' }}>
               A Setup A Startup Initiative
             </p>
-            <p className="text-xs">
+            <p className="text-xs" style={{ color: '#888888' }}>
               Building technology that protects South African women
             </p>
           </div>

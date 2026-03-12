@@ -78,6 +78,7 @@ const PricingPlinq = () => {
               return (
                 <div
                   key={plan.id}
+                  className={`reveal-child ${plan.highlight ? 'pricing-glow' : 'card-lift'}`}
                   style={{
                     background: bg,
                     padding: '48px 32px',

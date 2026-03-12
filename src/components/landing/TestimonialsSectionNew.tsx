@@ -19,7 +19,7 @@ const testimonials = [
 ];
 
 const TestimonialsSectionNew = () => {
-  const { ref, isVisible } = useScrollReveal();
+  const { ref, isVisible } = useScrollReveal(0.01);
 
   const handleShare = (platform: 'whatsapp' | 'copy') => {
     const shareText = "Check out RedFlaq — search public records for safety red flags in under 60 seconds. https://redflaq.com";

@@ -165,12 +165,12 @@ const SearchOptionsSection = () => {
                 style={{ accentColor: '#6B4EFF' }}
               />
               <label htmlFor="consent" style={{
-                fontFamily: "'Syne', sans-serif", fontSize: 13, color: 'rgba(255,255,255,0.7)',
+                fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#555555',
                 lineHeight: 1.5, cursor: 'pointer',
               }}>
                 I confirm I have a legitimate reason to search this person and I agree to the{" "}
-                <a href="/terms" style={{ color: '#A855F7', textDecoration: 'underline' }}>Terms of Service</a> and{" "}
-                <a href="/privacy" style={{ color: '#A855F7', textDecoration: 'underline' }}>Privacy Policy</a>
+                <a href="/terms" style={{ color: '#6B4EFF', textDecoration: 'underline' }}>Terms of Service</a> and{" "}
+                <a href="/privacy" style={{ color: '#6B4EFF', textDecoration: 'underline' }}>Privacy Policy</a>
               </label>
             </div>
 

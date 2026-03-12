@@ -87,7 +87,7 @@ const BlogArticle = () => {
   const relatedTool = article.related_tool_slug ? toolMap[article.related_tool_slug] : null;
 
   return (
-    <div style={{ background: "#FFFFFF", minHeight: "100vh" }}>
+    <div style={{ background: "#F5F0EB", minHeight: "100vh" }}>
       <NavbarPlinq />
 
       {/* Article header — dark */}

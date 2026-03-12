@@ -1,55 +1,53 @@
 
 
-## Problem
+## Analysis
 
-The Tawk.to chat widget is:
-1. Auto-opening its chat window without user interaction
-2. Showing a proactive "We Are Here" popup message
-3. Displaying a "1 new message" notification badge above the navbar
+The user wants two fixes:
 
-All of these are controlled by Tawk.to's API settings.
+1. **Restore warm beige backgrounds** — The screenshots clearly show the warm beige/off-white (#F5F0EB) background that was previously changed to #FFFFFF. The user wants this restored across the entire site.
 
-## Fix
+2. **Restore McKevin Ayaba's photo** — His photo (`src/assets/mckevin-ayaba.png`) exists but isn't used in `WhyRedflaqSection.tsx`.
 
-Add `Tawk_API` configuration in `index.html` to suppress all auto-popups:
+3. **Restore round colored circles on "What your report reveals"** — Screenshot (image-91) shows large round colored circles (red, amber, orange, green) centered above each card with white background and colored badge pills at bottom. The current dark "intel report" cards need to revert to this centered circle layout.
 
-1. **Set `Tawk_API.onLoad`** callback to:
-   - Minimize the widget on load (`Tawk_API.minimize()`)
-   - Hide the popup message (`Tawk_API.hideWidget()` is too aggressive — instead use `minimize`)
-2. **Set `Tawk_API.customStyle`** to hide the notification badge
-3. **Disable proactive chat triggers** by setting `Tawk_API.onBeforeLoad` to prevent auto-popup behaviors:
-   - `Tawk_API.visitor` settings won't help — the proactive messages ("We Are Here", auto-open) are configured in the Tawk.to dashboard under **Triggers**
-   
-### What we can control via code
+## Plan
 
-In `index.html`, before the Tawk script loads, add:
+### Fix 1: Restore warm beige background globally
 
-```javascript
-Tawk_API.onLoad = function() {
-  Tawk_API.minimize();
-};
-Tawk_API.onChatMessageVisitor = function() {};
-Tawk_API.onChatMessageSystem = function() {};
-```
+Change `background: '#FFFFFF'` back to `background: '#F5F0EB'` in all light sections. Files to update:
 
-And add CSS to hide the unread badge:
+- `src/index.css` — CSS variables `--paper` and `--cream`, `html`/`body` background
+- `src/pages/Index.tsx` — main wrapper
+- `src/components/landing/HeroPlinq.tsx`
+- `src/components/landing/HowItWorksPlinq.tsx`
+- `src/components/landing/RiskLevelsSection.tsx` — section bg
+- `src/components/landing/PricingPlinq.tsx`
+- `src/components/landing/SearchOptionsSection.tsx`
+- `src/components/landing/NavbarPlinq.tsx` — scrolled state
+- `src/components/landing/PhotoGrid.tsx`
+- `src/components/landing/WhoRedflaqHelps.tsx`
+- `src/components/landing/ShareSection.tsx`
+- `src/components/landing/AdvocacySection.tsx`
+- `src/components/landing/CommunityImageStrip.tsx`
+- `src/components/landing/VerificationProgress.tsx`
+- `src/components/landing/EmptyState.tsx`
+- All other pages: About, Blog, Academy, SafetyTips, Partners, DataSources, Dispute, etc.
+- `src/components/tools/ToolLayout.tsx`
 
-```css
-/* Hide Tawk notification badge */
-.tawk-min-container .tawk-badge {
-  display: none !important;
-}
-```
+Dark sections (TestimonialsSectionNew, FAQPlinq, FooterPlinq, RealitySection, WhyRedflaqSection) already use dark backgrounds — leave untouched.
 
-### What requires Tawk.to dashboard changes
+### Fix 2: Restore McKevin's photo
 
-The proactive "We Are Here" message and auto-open behavior are **Triggers** configured in the Tawk.to dashboard (Settings → Triggers). These cannot be fully suppressed from code alone. The `Tawk_API.minimize()` on load will close it if it auto-opens, but the trigger may still fire briefly.
+In `WhyRedflaqSection.tsx`:
+- Import `mckevinPhoto from "@/assets/mckevin-ayaba.png"`
+- Add an organic-frame photo element (same style as Nthabi's) in McKevin's card section
 
-**Recommendation**: Go to your Tawk.to dashboard → Settings → Triggers → disable or delete the proactive greeting trigger. This is the only way to fully stop "We Are Here" and the auto-open.
+### Fix 3: Restore round colored circles on risk levels
 
-### Implementation steps
-
-1. Update `index.html`: Add `Tawk_API.onLoad` with `minimize()` call before the embed script
-2. Add CSS to hide the notification badge counter
-3. These changes will make the widget stay minimized and badge-free until a user explicitly clicks it
+Revert `RiskLevelsSection.tsx` to show:
+- Centered layout per card (not left-aligned dark cards)
+- Large round colored circle above each card (matching red/amber/orange/green from screenshot)
+- White card background on beige section background
+- Colored badge pills at bottom of each card ("HIGH RISK", "MODERATE RISK", etc.)
+- Remove the dark #0F0D1A background and left-border intel style
 

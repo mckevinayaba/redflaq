@@ -117,8 +117,8 @@ const SearchOptionsSection = () => {
               <label style={labelStyle}>Age Range (Optional)</label>
               <select
                 style={{ ...inputStyle, appearance: 'none' }}
-                onFocus={e => e.currentTarget.style.borderColor = '#7C3AED'}
-                onBlur={e => e.currentTarget.style.borderColor = 'rgba(124,58,237,0.25)'}
+                onFocus={e => e.currentTarget.style.borderColor = '#6B4EFF'}
+                onBlur={e => e.currentTarget.style.borderColor = '#E6E0DA'}
               >
                 <option value="">Select age range</option>
                 <option value="18-25">18–25</option>

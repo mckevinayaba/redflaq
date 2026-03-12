@@ -162,7 +162,7 @@ const SearchOptionsSection = () => {
                   setShowConsentHint(false);
                 }}
                 className="mt-1"
-                style={{ accentColor: '#7C3AED' }}
+                style={{ accentColor: '#6B4EFF' }}
               />
               <label htmlFor="consent" style={{
                 fontFamily: "'Syne', sans-serif", fontSize: 13, color: 'rgba(255,255,255,0.7)',

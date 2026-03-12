@@ -55,7 +55,7 @@ const SafetyCardGrid = () => {
 
   return (
     <div className="-mx-5 sm:-mx-6 px-5 sm:px-6 py-12 sm:py-16 mb-12 sm:mb-16" style={{
-      background: 'linear-gradient(135deg, #0F0A1A 0%, #1A1035 100%)',
+      background: 'linear-gradient(135deg, #0F0624 0%, #1B0D3A 100%)',
       borderRadius: 24,
       position: 'relative',
       overflow: 'hidden',
@@ -64,13 +64,13 @@ const SafetyCardGrid = () => {
       <div style={{
         position: 'absolute', top: '30%', left: '50%', transform: 'translateX(-50%)',
         width: '70%', height: '50%',
-        background: 'radial-gradient(ellipse, rgba(124,58,237,0.12) 0%, transparent 70%)',
+        background: 'radial-gradient(ellipse, rgba(107,78,255,0.12) 0%, transparent 70%)',
         pointerEvents: 'none',
       }} />
 
       <div className="relative z-10">
-        <p className="font-mono text-[11px] tracking-[0.15em] mb-3 flex items-center gap-3" style={{ color: '#A855F7' }}>
-          <span style={{ width: 24, height: 1, background: '#A855F7', display: 'inline-block' }} />
+        <p className="font-mono text-[11px] tracking-[0.15em] mb-3 flex items-center gap-3" style={{ color: 'hsl(var(--primary))' }}>
+          <span style={{ width: 24, height: 1, background: 'hsl(var(--primary))', display: 'inline-block' }} />
           Safety Resources
         </p>
         <h2 className="font-heading text-[24px] sm:text-[32px] mb-8 leading-tight" style={{ color: '#FFFFFF' }}>
@@ -94,7 +94,7 @@ const SafetyCardGrid = () => {
                     : 'rgba(255,255,255,0.04)',
                   border: card.urgent
                     ? '1px solid rgba(220,38,38,0.4)'
-                    : '1px solid rgba(124,58,237,0.15)',
+                    : '1px solid rgba(107,78,255,0.15)',
                   boxShadow: card.urgent
                     ? '0 4px 30px rgba(220,38,38,0.25), inset 0 1px 0 rgba(255,255,255,0.1)'
                     : '0 2px 12px rgba(0,0,0,0.1)',
@@ -102,22 +102,21 @@ const SafetyCardGrid = () => {
                 }}
                 onMouseEnter={e => {
                   if (!card.urgent) {
-                    e.currentTarget.style.borderColor = 'rgba(124,58,237,0.4)';
-                    e.currentTarget.style.boxShadow = '0 8px 32px rgba(124,58,237,0.2)';
+                    e.currentTarget.style.borderColor = 'rgba(107,78,255,0.4)';
+                    e.currentTarget.style.boxShadow = '0 8px 32px rgba(107,78,255,0.2)';
                   } else {
                     e.currentTarget.style.boxShadow = '0 8px 40px rgba(220,38,38,0.35), inset 0 1px 0 rgba(255,255,255,0.1)';
                   }
                 }}
                 onMouseLeave={e => {
                   if (!card.urgent) {
-                    e.currentTarget.style.borderColor = 'rgba(124,58,237,0.15)';
+                    e.currentTarget.style.borderColor = 'rgba(107,78,255,0.15)';
                     e.currentTarget.style.boxShadow = '0 2px 12px rgba(0,0,0,0.1)';
                   } else {
                     e.currentTarget.style.boxShadow = '0 4px 30px rgba(220,38,38,0.25), inset 0 1px 0 rgba(255,255,255,0.1)';
                   }
                 }}
               >
-                {/* Urgent card glow */}
                 {card.urgent && (
                   <div style={{
                     position: 'absolute', top: -20, right: -20, width: 120, height: 120,
@@ -126,40 +125,30 @@ const SafetyCardGrid = () => {
                   }} />
                 )}
 
-                {/* Icon circle */}
                 <div
                   className="flex items-center justify-center flex-shrink-0 mb-3 sm:mb-4 relative z-10"
                   style={{
-                    width: 44,
-                    height: 44,
-                    borderRadius: 14,
-                    background: card.urgent ? 'rgba(255,255,255,0.2)' : 'rgba(124,58,237,0.12)',
+                    width: 44, height: 44, borderRadius: '50%',
+                    background: card.urgent ? 'rgba(255,255,255,0.2)' : 'rgba(107,78,255,0.12)',
                   }}
                 >
-                  <Icon size={20} color={card.urgent ? '#FFFFFF' : '#A855F7'} strokeWidth={2} />
+                  <Icon size={20} color={card.urgent ? '#FFFFFF' : 'hsl(var(--primary))'} strokeWidth={2} />
                 </div>
 
-                <h3
-                  className="font-body text-[15px] sm:text-lg font-bold mb-1 sm:mb-1.5 relative z-10"
-                  style={{ color: '#FFFFFF' }}
-                >
+                <h3 className="font-body text-[15px] sm:text-lg font-bold mb-1 sm:mb-1.5 relative z-10" style={{ color: '#FFFFFF' }}>
                   {card.title}
                 </h3>
 
-                <p
-                  className="font-body text-[12px] sm:text-[13px] leading-relaxed flex-1 mb-3 sm:mb-4 relative z-10"
-                  style={{ color: card.urgent ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.5)' }}
-                >
+                <p className="font-body text-[12px] sm:text-[13px] leading-relaxed flex-1 mb-3 sm:mb-4 relative z-10"
+                  style={{ color: card.urgent ? 'rgba(255,255,255,0.85)' : '#C8C3D6' }}>
                   {card.description}
                 </p>
 
                 <span
                   className="inline-flex items-center justify-center self-start font-body font-semibold transition-all duration-200 relative z-10"
                   style={{
-                    fontSize: 11,
-                    padding: '6px 16px',
-                    borderRadius: 999,
-                    background: card.urgent ? 'rgba(255,255,255,0.25)' : '#7C3AED',
+                    fontSize: 11, padding: '6px 16px', borderRadius: 999,
+                    background: card.urgent ? 'rgba(255,255,255,0.25)' : 'linear-gradient(135deg, #6B4EFF, #8B6CFF)',
                     color: '#FFFFFF',
                   }}
                 >

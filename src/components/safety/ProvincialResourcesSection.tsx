@@ -83,7 +83,7 @@ const ProvincialResourcesSection = () => {
 
   return (
     <div className="-mx-5 sm:-mx-6 px-5 sm:px-6 py-12 sm:py-16 mb-12 sm:mb-16" style={{
-      background: 'linear-gradient(135deg, #0F0A1A 0%, #1A1035 100%)',
+      background: 'linear-gradient(135deg, #0F0624 0%, #1B0D3A 100%)',
       borderRadius: 24,
       position: 'relative',
       overflow: 'hidden',
@@ -92,20 +92,20 @@ const ProvincialResourcesSection = () => {
       <div style={{
         position: 'absolute', bottom: 0, left: '50%', transform: 'translateX(-50%)',
         width: '60%', height: '40%',
-        background: 'radial-gradient(ellipse, rgba(124,58,237,0.1) 0%, transparent 70%)',
+        background: 'radial-gradient(ellipse, rgba(107,78,255,0.1) 0%, transparent 70%)',
         pointerEvents: 'none',
       }} />
 
       <div className="relative z-10">
-        <p className="font-mono text-[11px] tracking-[0.15em] mb-3 flex items-center gap-3" style={{ color: '#A855F7' }}>
-          <span style={{ width: 24, height: 1, background: '#A855F7', display: 'inline-block' }} />
+        <p className="font-mono text-[11px] tracking-[0.15em] mb-3 flex items-center gap-3" style={{ color: 'hsl(var(--primary))' }}>
+          <span style={{ width: 24, height: 1, background: 'hsl(var(--primary))', display: 'inline-block' }} />
           Provincial Support
         </p>
         <h2 className="font-heading text-[24px] sm:text-[32px] mb-8 leading-tight" style={{ color: '#FFFFFF' }}>
           Emergency contacts by province
         </h2>
 
-        {/* Province tabs — horizontal scroll */}
+        {/* Province tabs */}
         <div className="flex gap-2 overflow-x-auto pb-4 mb-6 scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
           {provinces.map((p) => (
             <button
@@ -115,8 +115,8 @@ const ProvincialResourcesSection = () => {
               style={{
                 padding: '8px 18px',
                 borderRadius: 50,
-                border: active === p.name ? '1px solid #7C3AED' : '1px solid rgba(124,58,237,0.2)',
-                background: active === p.name ? '#7C3AED' : 'rgba(124,58,237,0.06)',
+                border: active === p.name ? '1px solid #6B4EFF' : '1px solid rgba(107,78,255,0.2)',
+                background: active === p.name ? '#6B4EFF' : 'rgba(107,78,255,0.06)',
                 color: active === p.name ? '#FFFFFF' : 'rgba(255,255,255,0.6)',
                 cursor: 'pointer',
               }}
@@ -133,23 +133,23 @@ const ProvincialResourcesSection = () => {
             ?.resources.map((r) => (
               <div key={r.name + r.phone} className="flex items-center justify-between p-4 sm:p-5" style={{
                 background: 'rgba(255,255,255,0.04)',
-                border: '1px solid rgba(124,58,237,0.12)',
+                border: '1px solid rgba(107,78,255,0.12)',
                 borderRadius: 14,
                 backdropFilter: 'blur(8px)',
               }}>
                 <div className="min-w-0 flex-1">
                   <h4 className="font-body text-[14px] sm:text-[15px] font-bold mb-0.5" style={{ color: '#FFFFFF' }}>{r.name}</h4>
-                  <p className="font-body text-[11px] sm:text-[12px]" style={{ color: 'rgba(255,255,255,0.45)' }}>{r.hours}</p>
+                  <p className="font-body text-[11px] sm:text-[12px]" style={{ color: '#C8C3D6' }}>{r.hours}</p>
                 </div>
                 <a
                   href={`tel:${r.phone.replace(/\s/g, '')}`}
                   className="font-mono text-[13px] sm:text-[14px] font-bold flex-shrink-0 ml-4 transition-colors"
                   style={{
-                    color: '#A855F7',
+                    color: 'hsl(var(--primary))',
                     padding: '8px 16px',
                     borderRadius: 50,
-                    background: 'rgba(124,58,237,0.1)',
-                    border: '1px solid rgba(124,58,237,0.2)',
+                    background: 'rgba(107,78,255,0.1)',
+                    border: '1px solid rgba(107,78,255,0.2)',
                     textDecoration: 'none',
                   }}
                 >

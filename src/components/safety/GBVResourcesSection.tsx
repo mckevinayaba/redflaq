@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Phone, MessageCircle } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 
 const provinces = [
   "Gauteng", "Western Cape", "KwaZulu-Natal", "Eastern Cape",
@@ -119,22 +118,22 @@ const provincialResources: Record<string, ProvResource[]> = {
 
 const nationalBadgeConfig: Record<string, { label: string; bg: string; text: string }> = {
   crisis: { label: "Emergency", bg: "rgba(239,68,68,0.15)", text: "#FCA5A5" },
-  counselling: { label: "Counselling", bg: "rgba(167,139,250,0.15)", text: "#C4B5FD" },
+  counselling: { label: "Counselling", bg: "rgba(107,78,255,0.15)", text: "#C4B5FD" },
   support: { label: "Support", bg: "rgba(45,212,191,0.15)", text: "#5EEAD4" },
 };
 
 const categoryLeftBorder: Record<string, string> = {
-  crisis: "#EF4444",
-  tcc: "#EF4444",
-  counselling: "#7C3AED",
+  crisis: "#E53935",
+  tcc: "#E53935",
+  counselling: "#6B4EFF",
   legal: "#14B8A6",
   support: "#6B7280",
 };
 
 const categoryBadgeConfig: Record<string, { label: string; bg: string; text: string }> = {
-  crisis: { label: "Crisis Line", bg: "rgba(239,68,68,0.1)", text: "#DC2626" },
-  tcc: { label: "TCC", bg: "rgba(239,68,68,0.1)", text: "#DC2626" },
-  counselling: { label: "Counselling", bg: "rgba(124,58,237,0.1)", text: "#7C3AED" },
+  crisis: { label: "Crisis Line", bg: "rgba(229,57,53,0.1)", text: "#E53935" },
+  tcc: { label: "TCC", bg: "rgba(229,57,53,0.1)", text: "#E53935" },
+  counselling: { label: "Counselling", bg: "rgba(107,78,255,0.1)", text: "#6B4EFF" },
   legal: { label: "Legal", bg: "rgba(20,184,166,0.1)", text: "#14B8A6" },
   support: { label: "Support", bg: "rgba(107,114,128,0.1)", text: "#6B7280" },
 };
@@ -151,14 +150,14 @@ function ResourceCard({ r }: { r: ProvResource }) {
         boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
       }}
       onMouseEnter={(e) => {
-        (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 24px rgba(124,58,237,0.15)";
+        (e.currentTarget as HTMLElement).style.boxShadow = "0 8px 24px rgba(107,78,255,0.15)";
       }}
       onMouseLeave={(e) => {
         (e.currentTarget as HTMLElement).style.boxShadow = "0 1px 3px rgba(0,0,0,0.08)";
       }}
     >
       <div className="flex flex-wrap items-start justify-between gap-2 mb-2">
-        <h4 className="font-heading text-[15px] font-bold leading-snug" style={{ color: "#1F1F2E" }}>
+        <h4 className="font-heading text-[15px] font-bold leading-snug" style={{ color: "#2B2B2B" }}>
           {r.name}
         </h4>
         <span
@@ -179,7 +178,7 @@ function ResourceCard({ r }: { r: ProvResource }) {
             href={`tel:${r.phone.replace(/\s/g, "")}`}
             aria-label={`Call ${r.name}`}
             className="inline-flex items-center gap-1.5 font-heading text-lg font-bold transition-colors min-h-[44px] hover:opacity-80"
-            style={{ color: "#7C3AED" }}
+            style={{ color: "#6B4EFF" }}
           >
             <Phone className="w-4 h-4 shrink-0" />
             {r.phone}
@@ -191,7 +190,7 @@ function ResourceCard({ r }: { r: ProvResource }) {
             rel="noopener noreferrer"
             aria-label={`Visit ${r.name}`}
             className="inline-flex items-center gap-1.5 font-heading text-lg font-bold transition-colors min-h-[44px] underline hover:opacity-80"
-            style={{ color: "#7C3AED" }}
+            style={{ color: "#6B4EFF" }}
           >
             {r.phone}
           </a>
@@ -225,24 +224,17 @@ const GBVResourcesSection = () => {
       style={{ background: "linear-gradient(180deg, #F5F3FF 0%, #FFFFFF 100%)" }}
     >
       <div className="max-w-5xl mx-auto">
-        {/* Section header */}
-        <p
-          className="text-xs font-semibold uppercase tracking-[0.15em] mb-3"
-          style={{ color: "#7C3AED" }}
-        >
+        <p className="text-xs font-semibold uppercase tracking-[0.15em] mb-3" style={{ color: "#6B4EFF" }}>
           Support Services
         </p>
-        <h2
-          className="font-heading text-3xl sm:text-4xl font-bold mb-2"
-          style={{ color: "#1F1F2E" }}
-        >
+        <h2 className="font-heading text-3xl sm:text-4xl font-bold mb-2" style={{ color: "#2B2B2B" }}>
           Find Help Near You
         </h2>
         <p className="text-base mb-10 max-w-xl" style={{ color: "#6B7280", lineHeight: 1.6 }}>
           Select your province. National helplines are always available.
         </p>
 
-        {/* Province chips — horizontal scroll on mobile */}
+        {/* Province chips */}
         <div className="mb-10 overflow-x-auto scrollbar-hide pb-2 -mx-1">
           <div className="flex gap-2.5 px-1 min-w-max">
             {provinces.map((p) => {
@@ -255,10 +247,10 @@ const GBVResourcesSection = () => {
                   className="rounded-full text-sm font-medium transition-all duration-200 min-h-[44px] whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-offset-2"
                   style={{
                     padding: "10px 20px",
-                    background: isActive ? "#7C3AED" : "#FFFFFF",
-                    color: isActive ? "#FFFFFF" : "#7C3AED",
-                    border: isActive ? "1.5px solid #7C3AED" : "1.5px solid #7C3AED",
-                    boxShadow: isActive ? "0 4px 12px rgba(124,58,237,0.3)" : "none",
+                    background: isActive ? "#6B4EFF" : "#FFFFFF",
+                    color: isActive ? "#FFFFFF" : "#6B4EFF",
+                    border: "1.5px solid #6B4EFF",
+                    boxShadow: isActive ? "0 4px 12px rgba(107,78,255,0.3)" : "none",
                     fontWeight: isActive ? 600 : 500,
                     cursor: "pointer",
                   }}
@@ -270,11 +262,8 @@ const GBVResourcesSection = () => {
           </div>
         </div>
 
-        {/* National resources — dark immersive band */}
-        <div
-          className="rounded-2xl p-8 sm:p-10 mb-12"
-          style={{ background: "#1A0533" }}
-        >
+        {/* National resources */}
+        <div className="rounded-2xl p-8 sm:p-10 mb-12" style={{ background: "#0F0624" }}>
           <h3 className="font-heading text-lg font-bold text-white mb-6 flex items-center gap-2">
             🆘 National Helplines — Available Everywhere, Always
           </h3>
@@ -316,21 +305,15 @@ const GBVResourcesSection = () => {
 
         {/* Provincial resources */}
         {selectedProvince && (
-          <div
-            className="animate-fade-in"
-            style={{ animation: "fadeIn 0.3s ease-out" }}
-          >
-            <h3
-              className="font-heading text-2xl font-bold mb-6 flex items-center gap-2"
-              style={{ color: "#1F1F2E" }}
-            >
+          <div className="animate-fade-in" style={{ animation: "fadeIn 0.3s ease-out" }}>
+            <h3 className="font-heading text-2xl font-bold mb-6 flex items-center gap-2" style={{ color: "#2B2B2B" }}>
               📍 Resources in {selectedProvince}
             </h3>
             {provincialList.length === 0 ? (
               <div className="bg-white rounded-xl p-8 text-center" style={{ boxShadow: "0 1px 3px rgba(0,0,0,0.08)" }}>
                 <p className="text-sm" style={{ color: "#6B7280" }}>
                   Limited local resources listed for this province. Please contact the{" "}
-                  <a href="tel:0800428428" className="font-bold" style={{ color: "#7C3AED" }}>
+                  <a href="tel:0800428428" className="font-bold" style={{ color: "#6B4EFF" }}>
                     GBV Command Centre (0800 428 428)
                   </a>{" "}
                   for 24/7 national support.
@@ -353,10 +336,10 @@ const GBVResourcesSection = () => {
           style={{
             background: "#FFFFFF",
             boxShadow: "0 1px 3px rgba(0,0,0,0.08)",
-            borderLeft: "4px solid #7C3AED",
+            borderLeft: "4px solid #6B4EFF",
           }}
         >
-          <h3 className="font-heading text-lg font-bold mb-3" style={{ color: "#1F1F2E" }}>
+          <h3 className="font-heading text-lg font-bold mb-3" style={{ color: "#2B2B2B" }}>
             ⚖️ Protection Orders
           </h3>
           <p className="text-sm leading-relaxed mb-4" style={{ color: "#6B7280" }}>

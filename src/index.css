@@ -6,8 +6,8 @@
   :root {
     /* RedFlaq Design System */
     --ink: 280 15% 5%;
-    --paper: 30 18% 95%;
-    --cream: 30 14% 90%;
+    --paper: 0 0% 100%;
+    --cream: 0 0% 96%;
     --purple: 271 67% 40%;
     --purple-mid: 262 83% 58%;
     --purple-light: 260 100% 92%;
@@ -101,7 +101,7 @@
   }
 
   html {
-    background-color: #F7F4F0;
+    background-color: #FFFFFF;
     color-scheme: light only;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
@@ -119,7 +119,7 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Syne', sans-serif;
-    background-color: #F7F4F0 !important;
+    background-color: #FFFFFF !important;
     color: #0D0B0E;
     overflow-x: hidden;
     width: 100%;

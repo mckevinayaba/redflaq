@@ -50,7 +50,7 @@ const tips = [
 
 const SafetyTips = () => {
   return (
-    <div className="min-h-screen" style={{ background: '#F7F4F0' }}>
+    <div className="min-h-screen" style={{ background: '#FFFFFF' }}>
       <NavbarPlinq />
 
       {/* Hero — dark immersive */}

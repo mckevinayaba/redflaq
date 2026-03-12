@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 
 export default function Dispute() {
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: '#F7F4F0' }}>
+    <div className="min-h-screen flex flex-col" style={{ background: '#FFFFFF' }}>
       <NavbarPlinq />
       <div style={{ height: 80 }} />
 

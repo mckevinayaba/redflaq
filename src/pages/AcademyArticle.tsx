@@ -59,7 +59,7 @@ const AcademyArticle = () => {
 
   if (loading) {
     return (
-      <div style={{ background: "#F7F4F0", minHeight: "100vh" }}>
+      <div style={{ background: "#FFFFFF", minHeight: "100vh" }}>
         <NavbarPlinq />
         <div style={{ display: "flex", alignItems: "center", justifyContent: "center", padding: "200px 24px" }}>
           <div style={{ width: 32, height: 32, border: "3px solid #7C3AED", borderTopColor: "transparent", borderRadius: "50%", animation: "spin 1s linear infinite" }} />
@@ -70,7 +70,7 @@ const AcademyArticle = () => {
 
   if (!article) {
     return (
-      <div style={{ background: "#F7F4F0", minHeight: "100vh" }}>
+      <div style={{ background: "#FFFFFF", minHeight: "100vh" }}>
         <NavbarPlinq />
         <div style={{ maxWidth: 600, margin: "0 auto", padding: "120px 24px", textAlign: "center" }}>
           <h1 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, color: "#2D2235" }}>Article not found</h1>
@@ -84,7 +84,7 @@ const AcademyArticle = () => {
   const relatedTool = article.related_tool_slug ? toolMap[article.related_tool_slug] : null;
 
   return (
-    <div style={{ background: "#F7F4F0", minHeight: "100vh" }}>
+    <div style={{ background: "#FFFFFF", minHeight: "100vh" }}>
       <NavbarPlinq />
       <article style={{ maxWidth: 720, margin: "0 auto", padding: "100px 24px 60px" }}>
         <Link to="/academy" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: "0.1em", color: "#7C3AED", textDecoration: "none", textTransform: "uppercase", marginBottom: 16, display: "block" }}>

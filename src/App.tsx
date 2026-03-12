@@ -61,7 +61,9 @@ import SecureReportView from "./pages/SecureReportView";
 import JournalList from "./pages/JournalList";
 import JournalNew from "./pages/JournalNew";
 import JournalDetail from "./pages/JournalDetail";
+import JournalEdit from "./pages/JournalEdit";
 import JournalExport from "./pages/JournalExport";
+import AffidavitBuilder from "./pages/AffidavitBuilder";
 const queryClient = new QueryClient();
 
 const App = () => (

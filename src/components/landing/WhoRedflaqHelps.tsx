@@ -66,13 +66,25 @@ const WhoRedflaqHelps = () => {
   const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section ref={ref} className={`reveal-section ${isVisible ? 'visible' : ''}`} style={{ background: '#F5F0EB' }}>
-      <div className="py-12 md:py-20 px-6" style={{ maxWidth: 1200, margin: '0 auto' }}>
+    <section ref={ref} className={`reveal-section ${isVisible ? 'visible' : ''}`} style={{
+      background: 'linear-gradient(135deg, #0F0624 0%, #1B0D3A 100%)',
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
+      {/* Glow */}
+      <div style={{
+        position: 'absolute', top: '30%', left: '50%', transform: 'translateX(-50%)',
+        width: '70%', height: '50%',
+        background: 'radial-gradient(ellipse, rgba(107,78,255,0.12) 0%, transparent 70%)',
+        pointerEvents: 'none',
+      }} />
+
+      <div className="py-12 md:py-20 px-6 relative z-10" style={{ maxWidth: 1200, margin: '0 auto' }}>
         <h2 style={{
           fontFamily: "'DM Serif Display', serif",
           fontSize: 'clamp(28px, 4vw, 40px)',
           fontWeight: 700,
-          color: '#1F1F1F',
+          color: '#FFFFFF',
           textAlign: 'center',
           marginBottom: 12,
           letterSpacing: '-0.02em',
@@ -82,7 +94,7 @@ const WhoRedflaqHelps = () => {
         <p style={{
           fontFamily: "'Syne', sans-serif",
           fontSize: 18,
-          color: '#555555',
+          color: '#C8C3D6',
           textAlign: 'center',
           marginBottom: 56,
           maxWidth: 700,
@@ -92,24 +104,33 @@ const WhoRedflaqHelps = () => {
           One safety tool for every trust decision you make.
         </p>
 
-        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 reveal-stagger ${isVisible ? 'visible' : ''}`} style={{ marginBottom: 40 }}>
+        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 reveal-stagger ${isVisible ? 'visible' : ''}`} style={{ marginBottom: 40 }}>
           {personas.map((p) => {
             const Icon = p.icon;
             return (
               <div
                 key={p.title}
-                className="card-lift reveal-child"
+                className="reveal-child transition-all duration-300 hover:-translate-y-1"
                 style={{
-                  background: '#FFFFFF',
+                  background: 'rgba(255,255,255,0.04)',
                   borderRadius: 20,
                   padding: '48px 32px',
-                  border: p.prominent ? '1.5px solid #6B4EFF40' : '1px solid #E6E0DA',
-                  boxShadow: p.prominent ? '0 4px 32px rgba(107,78,255,0.08)' : '0 2px 8px rgba(0,0,0,0.05)',
+                  border: p.prominent ? '1.5px solid rgba(107,78,255,0.35)' : '1px solid rgba(107,78,255,0.15)',
+                  boxShadow: p.prominent ? '0 4px 32px rgba(107,78,255,0.15)' : '0 2px 12px rgba(0,0,0,0.12)',
+                  backdropFilter: 'blur(8px)',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.borderColor = 'rgba(107,78,255,0.4)';
+                  e.currentTarget.style.boxShadow = '0 8px 32px rgba(107,78,255,0.2)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.borderColor = p.prominent ? 'rgba(107,78,255,0.35)' : 'rgba(107,78,255,0.15)';
+                  e.currentTarget.style.boxShadow = p.prominent ? '0 4px 32px rgba(107,78,255,0.15)' : '0 2px 12px rgba(0,0,0,0.12)';
                 }}
               >
-                <div className="icon-hover" style={{
+                <div style={{
                   width: 48, height: 48, borderRadius: '50%',
-                  background: '#E9E3FF',
+                  background: 'rgba(107,78,255,0.12)',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   marginBottom: 20,
                 }}>
@@ -119,7 +140,7 @@ const WhoRedflaqHelps = () => {
                   fontFamily: "'Syne', sans-serif",
                   fontWeight: 800,
                   fontSize: 20,
-                  color: '#1F1F1F',
+                  color: '#FFFFFF',
                   marginBottom: 20,
                 }}>
                   {p.title}
@@ -130,8 +151,8 @@ const WhoRedflaqHelps = () => {
                       fontFamily: "'Syne', sans-serif",
                       fontSize: 13,
                       lineHeight: 1.6,
-                      color: '#555555',
-                      borderBottom: '1px solid #E6E0DA',
+                      color: '#C8C3D6',
+                      borderBottom: '1px solid rgba(107,78,255,0.1)',
                       padding: '12px 0',
                       display: 'flex',
                       alignItems: 'flex-start',
@@ -147,11 +168,10 @@ const WhoRedflaqHelps = () => {
           })}
         </div>
 
-        {/* Bottom text */}
         <p style={{
           fontFamily: "'Syne', sans-serif",
           fontSize: 14,
-          color: '#888888',
+          color: '#8B87A0',
           textAlign: 'center',
           maxWidth: 700,
           margin: '0 auto 32px',
@@ -166,18 +186,18 @@ const WhoRedflaqHelps = () => {
             className="btn-scale"
             style={{
               background: 'transparent',
-              color: '#6B4EFF',
+              color: '#FFFFFF',
               padding: '14px 36px',
               fontFamily: "'Syne', sans-serif",
               fontWeight: 700,
               fontSize: 14,
-              border: '2px solid #6B4EFF',
+              border: '2px solid rgba(107,78,255,0.5)',
               cursor: 'pointer',
               borderRadius: 50,
               transition: 'all 0.25s ease',
             }}
-            onMouseEnter={e => { e.currentTarget.style.background = '#6B4EFF'; e.currentTarget.style.color = '#FFFFFF'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#6B4EFF'; }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#6B4EFF'; e.currentTarget.style.borderColor = '#6B4EFF'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(107,78,255,0.5)'; }}
           >
             See All Safety Scenarios
           </button>

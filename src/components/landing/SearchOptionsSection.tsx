@@ -106,8 +106,8 @@ const SearchOptionsSection = () => {
               <label style={labelStyle}>Province (Optional)</label>
               <select
                 style={{ ...inputStyle, appearance: 'none' }}
-                onFocus={e => e.currentTarget.style.borderColor = '#7C3AED'}
-                onBlur={e => e.currentTarget.style.borderColor = 'rgba(124,58,237,0.25)'}
+                onFocus={e => e.currentTarget.style.borderColor = '#6B4EFF'}
+                onBlur={e => e.currentTarget.style.borderColor = '#E6E0DA'}
               >
                 <option value="">Select province</option>
                 {provinces.map(p => <option key={p} value={p}>{p}</option>)}

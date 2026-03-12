@@ -11,7 +11,7 @@ const BarrierSection = () => {
       num: "01",
       Icon: DollarSign,
       title: "Too Expensive",
-      oldWay: "R500+",
+      oldWay: "Costly",
       redflaq: "R99",
       desc: "Traditional checks are expensive, slow and built for companies, not for women and communities.",
     },

@@ -27,6 +27,7 @@ import ShareSection from "@/components/landing/ShareSection";
 import AdvocacySection from "@/components/landing/AdvocacySection";
 import FooterPlinq from "@/components/landing/FooterPlinq";
 import { PWAInstallBanner } from "@/components/PWAInstallBanner";
+import HomepageDemo from "@/components/landing/HomepageDemo";
 
 const Index = () => {
   const [searchParams, setSearchParams] = useSearchParams();

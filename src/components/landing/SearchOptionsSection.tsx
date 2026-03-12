@@ -34,7 +34,7 @@ const SearchOptionsSection = () => {
     fontSize: 11,
     letterSpacing: '0.1em',
     textTransform: 'uppercase',
-    color: 'rgba(255,255,255,0.5)',
+    color: '#888888',
     display: 'block',
     marginBottom: 8,
   };

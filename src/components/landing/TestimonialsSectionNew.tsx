@@ -32,28 +32,27 @@ const TestimonialsSectionNew = () => {
 
   return (
     <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''} py-12 md:py-20 px-5`} style={{
-      background: 'linear-gradient(180deg, #0F0A1A 0%, #1A1035 100%)',
+      background: '#F5F0EB',
     }}>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-        <div className="section-tag" style={{ color: '#A855F7', marginBottom: 16, justifyContent: 'center' }}>
+        <div className="section-tag" style={{ color: '#6B4EFF', marginBottom: 16, justifyContent: 'center' }}>
           Real Stories · Real Safety
         </div>
 
         <h2 style={{
           fontFamily: "'DM Serif Display', serif",
-          fontSize: 'clamp(28px, 4vw, 42px)', color: 'white', textAlign: 'center', marginBottom: 8, letterSpacing: '-0.02em',
+          fontSize: 'clamp(28px, 4vw, 42px)', color: '#1F1F1F', textAlign: 'center', marginBottom: 8, letterSpacing: '-0.02em',
         }}>
-          They checked. It changed <em style={{ color: '#A855F7', fontStyle: 'italic' }}>everything.</em>
+          They checked. It changed <em style={{ color: '#6B4EFF', fontStyle: 'italic' }}>everything.</em>
         </h2>
 
         <p style={{
-          fontFamily: "'Syne', sans-serif", fontSize: 15, color: 'rgba(255,255,255,0.45)',
+          fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#888888',
           textAlign: 'center', marginBottom: 48,
         }}>
           These are the kinds of decisions RedFlaq was built for.
         </p>
 
-        {/* Horizontal scrollable on mobile, grid on desktop */}
         <div
           className="grid grid-cols-1 md:grid-cols-3 gap-5"
           style={{ marginBottom: 48 }}
@@ -62,41 +61,41 @@ const TestimonialsSectionNew = () => {
             const isFeatured = (t as any).featured;
             return (
               <div key={i} style={{
-                background: isFeatured ? 'rgba(124, 58, 237, 0.12)' : 'rgba(124, 58, 237, 0.06)',
-                borderLeft: '3px solid #7C3AED',
+                background: isFeatured ? '#E9E3FF' : '#FFFFFF',
+                borderLeft: '3px solid #6B4EFF',
                 borderRadius: 16,
-                border: `1px solid rgba(124,58,237,${isFeatured ? '0.3' : '0.15'})`,
+                border: `1px solid ${isFeatured ? '#6B4EFF30' : '#E6E0DA'}`,
                 borderLeftWidth: 3,
-                borderLeftColor: '#7C3AED',
+                borderLeftColor: '#6B4EFF',
                 padding: '28px 24px',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                backdropFilter: 'blur(8px)',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
                 transition: 'transform 0.3s ease, box-shadow 0.3s ease',
               }}
                 onMouseEnter={e => {
                   e.currentTarget.style.transform = 'translateY(-3px)';
-                  e.currentTarget.style.boxShadow = '0 8px 32px rgba(124,58,237,0.15)';
+                  e.currentTarget.style.boxShadow = '0 8px 32px rgba(107,78,255,0.1)';
                 }}
                 onMouseLeave={e => {
                   e.currentTarget.style.transform = 'translateY(0)';
-                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
                 }}
               >
                 <div>
                   <span style={{
                     fontFamily: "'DM Serif Display', serif",
-                    fontSize: 48, lineHeight: 0.8, color: 'rgba(168,85,247,0.2)', display: 'block',
+                    fontSize: 48, lineHeight: 0.8, color: '#6B4EFF20', display: 'block',
                   }}>"</span>
                   <p style={{
-                    fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.8)',
+                    fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#555555',
                     lineHeight: 1.75, marginTop: -4, fontStyle: 'italic',
                   }}>
                     {t.quote}
                   </p>
                   {(t as any).footnote && (
-                    <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: 'rgba(255,255,255,0.35)', fontStyle: 'italic', marginTop: 12 }}>
+                    <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#888888', fontStyle: 'italic', marginTop: 12 }}>
                       {(t as any).footnote}
                     </p>
                   )}
@@ -105,23 +104,23 @@ const TestimonialsSectionNew = () => {
                 <div style={{ marginTop: 20, display: 'flex', alignItems: 'center', gap: 12 }}>
                   <div style={{
                     width: 36, height: 36, borderRadius: '50%',
-                    background: 'rgba(124,58,237,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                    background: '#E9E3FF', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                   }}>
-                    <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: '#A855F7' }}>
+                    <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: '#6B4EFF' }}>
                       {t.name.charAt(0)}
                     </span>
                   </div>
                   <div>
-                    <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, fontWeight: 700, color: 'white', margin: 0 }}>
+                    <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, fontWeight: 700, color: '#1F1F1F', margin: 0 }}>
                       {t.name}
                     </p>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: 'rgba(255,255,255,0.4)' }}>
+                      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#888888' }}>
                         {t.location}
                       </span>
                       <span style={{
-                        fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#A855F7',
-                        background: 'rgba(168,85,247,0.12)', padding: '2px 8px', borderRadius: 50,
+                        fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#6B4EFF',
+                        background: '#E9E3FF', padding: '2px 8px', borderRadius: 50,
                       }}>
                         {t.use}
                       </span>
@@ -135,7 +134,7 @@ const TestimonialsSectionNew = () => {
 
         {/* Privacy note */}
         <p style={{
-          fontFamily: "'Syne', sans-serif", fontSize: 12, color: 'rgba(255,255,255,0.3)',
+          fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#888888',
           textAlign: 'center', lineHeight: 1.6,
         }}>
           Names and identifying details are representative of the kinds of people RedFlaq protects. Privacy is central to everything we do.
@@ -144,23 +143,23 @@ const TestimonialsSectionNew = () => {
         {/* GBV helpline */}
         <div style={{
           marginTop: 32,
-          background: 'rgba(124, 58, 237, 0.1)',
-          border: '1px solid rgba(124, 58, 237, 0.25)',
+          background: '#E9E3FF',
+          border: '1px solid #6B4EFF30',
           borderRadius: 12,
           padding: '16px 24px',
           textAlign: 'center',
         }}>
-          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: 'rgba(255,255,255,0.8)' }}>
+          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#555555' }}>
             If you or someone you know is experiencing abuse, contact the GBV Command Centre:{" "}
-            <a href="tel:0800428428" style={{ color: '#A855F7', fontWeight: 700, textDecoration: 'none' }}>0800 428 428</a>
+            <a href="tel:0800428428" style={{ color: '#6B4EFF', fontWeight: 700, textDecoration: 'none' }}>0800 428 428</a>
             {" "}(24/7, free)
           </p>
         </div>
 
         {/* Share buttons */}
         <div style={{ textAlign: 'center', marginTop: 32 }}>
-          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.6)', marginBottom: 14 }}>
-            Did RedFlaq help you? <strong style={{ color: 'white' }}>Share it with a woman who needs it.</strong>
+          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#555555', marginBottom: 14 }}>
+            Did RedFlaq help you? <strong style={{ color: '#1F1F1F' }}>Share it with a woman who needs it.</strong>
           </p>
           <div className="flex justify-center gap-3">
             <button
@@ -178,12 +177,12 @@ const TestimonialsSectionNew = () => {
             <button
               onClick={() => handleShare('copy')}
               style={{
-                background: 'transparent', color: '#A855F7', padding: '10px 24px',
-                border: '1.5px solid rgba(168,85,247,0.4)', borderRadius: 50,
+                background: 'transparent', color: '#6B4EFF', padding: '10px 24px',
+                border: '1.5px solid #6B4EFF40', borderRadius: 50,
                 fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, cursor: 'pointer',
                 display: 'flex', alignItems: 'center', gap: 8, transition: 'all 0.2s ease',
               }}
-              onMouseEnter={e => { e.currentTarget.style.background = 'rgba(168,85,247,0.1)'; }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#E9E3FF'; }}
               onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}
             >
               <Link2 style={{ width: 14, height: 14 }} /> Copy Link

@@ -44,7 +44,7 @@ const HowItWorksPlinq = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-0 relative">
           {/* Horizontal connector line (desktop) */}
           <div className="hidden md:block absolute top-[52px] left-[12.5%] right-[12.5%] h-[2px]"
-            style={{ background: 'linear-gradient(90deg, #EDE9FE, #7C3AED, #EDE9FE)' }}
+            style={{ background: 'linear-gradient(90deg, #E9E3FF, #6B4EFF, #E9E3FF)' }}
           />
 
           {steps.map((step, i) => (

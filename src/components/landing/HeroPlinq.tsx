@@ -20,7 +20,7 @@ const HeroPlinq = () => {
           left: '30%',
           width: '70%',
           height: '80%',
-          background: 'radial-gradient(ellipse at 60% 40%, rgba(124,58,237,0.08) 0%, rgba(220,38,38,0.03) 40%, transparent 70%)',
+          background: 'radial-gradient(ellipse at 60% 40%, rgba(107,78,255,0.06) 0%, rgba(233,227,255,0.04) 40%, transparent 70%)',
           pointerEvents: 'none',
           zIndex: 0,
         }}
@@ -31,8 +31,8 @@ const HeroPlinq = () => {
         <div className="pt-24 px-5 pb-10 lg:pt-40 lg:px-10 lg:pb-20" style={{ maxWidth: 640 }}>
           {/* Positioning pill */}
           <div style={{
-            background: 'rgba(124, 58, 237, 0.06)',
-            border: '1px solid rgba(124, 58, 237, 0.15)',
+            background: '#E9E3FF',
+            border: '1px solid #6B4EFF20',
             padding: '10px 20px',
             display: 'inline-flex',
             alignItems: 'center',
@@ -41,7 +41,7 @@ const HeroPlinq = () => {
             fontFamily: "'Syne', sans-serif",
             fontSize: 13,
             fontWeight: 600,
-            color: '#7C3AED',
+            color: '#6B4EFF',
             marginBottom: 20,
             lineHeight: 1.5,
           }}>
@@ -53,18 +53,18 @@ const HeroPlinq = () => {
           <h1 style={{
             fontFamily: "'DM Serif Display', serif",
             lineHeight: 1.02,
-            color: '#1A1523',
+            color: '#1F1F1F',
             marginBottom: 20,
             letterSpacing: '-0.02em',
           }} className="text-[38px] sm:text-[48px] lg:text-[60px] xl:text-[72px]">
             Before you give him a spare key,<br />
-            give yourself <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>clarity.</em>
+            give yourself <em style={{ color: '#6B4EFF', fontStyle: 'italic' }}>clarity.</em>
           </h1>
 
           <p style={{
             fontFamily: "'DM Serif Display', serif",
             lineHeight: 1.15,
-            color: '#1A1523',
+            color: '#1F1F1F',
             marginBottom: 20,
             letterSpacing: '-0.01em',
           }} className="text-[22px] sm:text-[26px] lg:text-[32px] xl:text-[36px]">
@@ -75,7 +75,7 @@ const HeroPlinq = () => {
             fontFamily: "'Syne', sans-serif",
             fontWeight: 400,
             lineHeight: 1.7,
-            color: '#4B4453',
+            color: '#555555',
             maxWidth: 500,
             marginBottom: 16,
             fontSize: 17,
@@ -86,7 +86,7 @@ const HeroPlinq = () => {
           <p style={{
             fontFamily: "'Syne', sans-serif",
             fontSize: 14,
-            color: '#78716C',
+            color: '#888888',
             marginBottom: 36,
             maxWidth: 500,
             lineHeight: 1.6,
@@ -97,14 +97,14 @@ const HeroPlinq = () => {
           {/* Value props */}
           <div className="flex flex-wrap gap-x-6 gap-y-3" style={{ marginBottom: 40 }}>
             {["Results in under 60 seconds", "Public records only", "100% confidential", "POPIA‑aware use"].map(item => (
-              <div key={item} className="flex items-center gap-2" style={{ fontSize: 14, color: '#4B4453', fontFamily: "'Syne', sans-serif" }}>
+              <div key={item} className="flex items-center gap-2" style={{ fontSize: 14, color: '#555555', fontFamily: "'Syne', sans-serif" }}>
                 <div style={{
                   width: 20, height: 20, borderRadius: '50%',
-                  background: 'rgba(124,58,237,0.1)',
+                  background: '#E9E3FF',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   flexShrink: 0,
                 }}>
-                  <Check className="h-3 w-3" style={{ color: '#7C3AED' }} />
+                  <Check className="h-3 w-3" style={{ color: '#6B4EFF' }} />
                 </div>
                 <span>{item}</span>
               </div>
@@ -116,7 +116,7 @@ const HeroPlinq = () => {
             <button
               onClick={handleVerify}
               style={{
-                background: '#7C3AED',
+                background: '#6B4EFF',
                 color: '#FFFFFF',
                 padding: '18px 40px',
                 fontFamily: "'Syne', sans-serif",
@@ -125,18 +125,18 @@ const HeroPlinq = () => {
                 border: 'none',
                 cursor: 'pointer',
                 borderRadius: 50,
-                boxShadow: '0 4px 20px rgba(124, 58, 237, 0.3)',
+                boxShadow: '0 4px 20px rgba(107, 78, 255, 0.25)',
                 transition: 'all 0.25s ease',
               }}
               onMouseEnter={e => {
-                e.currentTarget.style.background = '#6D28D9';
+                e.currentTarget.style.background = '#5539E8';
                 e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 6px 28px rgba(124, 58, 237, 0.4)';
+                e.currentTarget.style.boxShadow = '0 6px 28px rgba(107, 78, 255, 0.35)';
               }}
               onMouseLeave={e => {
-                e.currentTarget.style.background = '#7C3AED';
+                e.currentTarget.style.background = '#6B4EFF';
                 e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 4px 20px rgba(124, 58, 237, 0.3)';
+                e.currentTarget.style.boxShadow = '0 4px 20px rgba(107, 78, 255, 0.25)';
               }}
             >
               Verify Someone Now — R99
@@ -145,24 +145,24 @@ const HeroPlinq = () => {
               onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
               style={{
                 background: 'transparent',
-                color: '#7C3AED',
+                color: '#6B4EFF',
                 padding: '18px 40px',
                 fontFamily: "'Syne', sans-serif",
                 fontWeight: 700,
                 fontSize: 15,
-                border: '2px solid #7C3AED',
+                border: '2px solid #6B4EFF',
                 cursor: 'pointer',
                 borderRadius: 50,
                 transition: 'all 0.25s ease',
               }}
               onMouseEnter={e => {
-                e.currentTarget.style.background = '#7C3AED';
+                e.currentTarget.style.background = '#6B4EFF';
                 e.currentTarget.style.color = '#FFFFFF';
                 e.currentTarget.style.transform = 'translateY(-2px)';
               }}
               onMouseLeave={e => {
                 e.currentTarget.style.background = 'transparent';
-                e.currentTarget.style.color = '#7C3AED';
+                e.currentTarget.style.color = '#6B4EFF';
                 e.currentTarget.style.transform = 'translateY(0)';
               }}
             >
@@ -174,7 +174,7 @@ const HeroPlinq = () => {
           <p style={{
             fontFamily: "'Syne', sans-serif",
             fontSize: 14,
-            color: '#4B5563',
+            color: '#555555',
             marginTop: 12,
             lineHeight: '20px',
             textAlign: 'center',
@@ -184,14 +184,14 @@ const HeroPlinq = () => {
           </p>
 
           {/* Login link */}
-          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#78716C', marginTop: 28 }}>
+          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#888888', marginTop: 28 }}>
             Already have an account?{" "}
             <button
               onClick={() => {
                 sessionStorage.setItem("fromCTA", "true");
                 window.location.href = '/signup?mode=signin';
               }}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: '#7C3AED', textDecoration: 'underline', padding: 0 }}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: '#6B4EFF', textDecoration: 'underline', padding: 0 }}
             >
               Log in here
             </button>
@@ -199,8 +199,8 @@ const HeroPlinq = () => {
 
           {/* Disclaimer */}
           <div className="flex items-center gap-3" style={{ marginTop: 28 }}>
-            <div style={{ width: 32, height: 1, background: '#D6D3CD' }} />
-            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#9CA3AF', letterSpacing: '0.08em' }}>
+            <div style={{ width: 32, height: 1, background: '#E6E0DA' }} />
+            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#888888', letterSpacing: '0.08em' }}>
               FOR YOUR PROTECTION · NOT FOR HARASSMENT OR REVENGE
             </span>
           </div>
@@ -213,7 +213,7 @@ const HeroPlinq = () => {
               position: 'absolute',
               inset: -8,
               borderRadius: '40% 60% 55% 45% / 45% 55% 45% 55%',
-              background: 'linear-gradient(135deg, rgba(124,58,237,0.25), rgba(168,85,247,0.15), rgba(124,58,237,0.2))',
+              background: 'linear-gradient(135deg, rgba(107,78,255,0.15), rgba(233,227,255,0.2), rgba(107,78,255,0.1))',
               filter: 'blur(16px)',
               zIndex: 0,
             }} />
@@ -233,28 +233,25 @@ const HeroPlinq = () => {
 
           <div ref={statTwoRef} className="w-full" style={{ maxWidth: 420 }}>
             <div style={{
-              background: 'rgba(15, 10, 26, 0.92)',
-              backdropFilter: 'blur(16px)',
-              WebkitBackdropFilter: 'blur(16px)',
-              border: '1px solid rgba(124, 58, 237, 0.3)',
+              background: '#FFFFFF',
+              border: '1px solid #E6E0DA',
               padding: '28px 28px',
               borderRadius: 16,
-              boxShadow: '0 8px 32px rgba(0,0,0,0.2), inset 0 1px 0 rgba(124,58,237,0.1)',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
             }}>
               <div className="flex items-baseline gap-4 mb-2">
                 <span style={{
                   fontFamily: "'DM Serif Display', serif",
                   fontSize: 44,
-                  color: '#A855F7',
+                  color: '#6B4EFF',
                   lineHeight: 1,
-                  textShadow: '0 0 24px rgba(168,85,247,0.3)',
                 }}>
                   {statTwo > 0 ? statTwo.toLocaleString() : '40,000'}+
                 </span>
                 <span style={{
                   fontFamily: "'JetBrains Mono', monospace",
                   fontSize: 9,
-                  color: 'rgba(255,255,255,0.5)',
+                  color: '#888888',
                   letterSpacing: '0.08em',
                 }}>
                   SEXUAL OFFENCES / YEAR
@@ -263,7 +260,7 @@ const HeroPlinq = () => {
               <p style={{
                 fontFamily: "'Syne', sans-serif",
                 fontSize: 13,
-                color: 'rgba(255,255,255,0.7)',
+                color: '#555555',
                 lineHeight: 1.6,
               }}>
                 Many offenders had prior warnings in public records.
@@ -272,13 +269,11 @@ const HeroPlinq = () => {
           </div>
 
           <div style={{
-            background: 'linear-gradient(135deg, rgba(124,58,237,0.95), rgba(109,40,217,0.95))',
-            backdropFilter: 'blur(12px)',
+            background: '#6B4EFF',
             padding: '24px 28px',
             maxWidth: 420,
             borderRadius: 16,
-            border: '1px solid rgba(168,85,247,0.3)',
-            boxShadow: '0 8px 32px rgba(124,58,237,0.2)',
+            boxShadow: '0 8px 32px rgba(107,78,255,0.15)',
           }} className="w-full">
             <p style={{
               fontFamily: "'DM Serif Display', serif",
@@ -292,7 +287,7 @@ const HeroPlinq = () => {
             <div style={{
               fontFamily: "'Syne', sans-serif",
               fontSize: 12,
-              color: 'rgba(255,255,255,0.6)',
+              color: 'rgba(255,255,255,0.7)',
               marginTop: 10,
               fontWeight: 600,
             }}>

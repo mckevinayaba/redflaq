@@ -481,6 +481,104 @@ nav, header {
     to { height: 0; opacity: 0; }
   }
 
+  /* Staggered hero entrance */
+  .hero-stagger > * {
+    opacity: 0;
+    transform: translateY(24px);
+    animation: hero-enter 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .hero-stagger > *:nth-child(1) { animation-delay: 0ms; }
+  .hero-stagger > *:nth-child(2) { animation-delay: 100ms; }
+  .hero-stagger > *:nth-child(3) { animation-delay: 200ms; }
+  .hero-stagger > *:nth-child(4) { animation-delay: 300ms; }
+  .hero-stagger > *:nth-child(5) { animation-delay: 400ms; }
+  .hero-stagger > *:nth-child(6) { animation-delay: 500ms; }
+  .hero-stagger > *:nth-child(7) { animation-delay: 600ms; }
+  .hero-stagger > *:nth-child(8) { animation-delay: 700ms; }
+  .hero-stagger > *:nth-child(9) { animation-delay: 800ms; }
+  .hero-stagger > *:nth-child(10) { animation-delay: 900ms; }
+
+  @keyframes hero-enter {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Card hover lift */
+  .card-lift {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .card-lift:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 40px rgba(107, 78, 255, 0.1);
+  }
+
+  /* Icon micro-animation */
+  .icon-hover {
+    transition: transform 0.2s ease;
+  }
+  .card-lift:hover .icon-hover {
+    transform: scale(1.08);
+  }
+
+  /* Button scale on hover */
+  .btn-scale {
+    transition: transform 0.12s ease, background 0.25s ease, box-shadow 0.25s ease;
+  }
+  .btn-scale:hover {
+    transform: scale(1.02);
+  }
+
+  /* Section scroll-reveal with fade-up */
+  .reveal-section {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Staggered card reveal */
+  .reveal-stagger > .reveal-child {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal-stagger.visible > .reveal-child:nth-child(1) { transition-delay: 0ms; opacity: 1; transform: translateY(0); }
+  .reveal-stagger.visible > .reveal-child:nth-child(2) { transition-delay: 100ms; opacity: 1; transform: translateY(0); }
+  .reveal-stagger.visible > .reveal-child:nth-child(3) { transition-delay: 200ms; opacity: 1; transform: translateY(0); }
+  .reveal-stagger.visible > .reveal-child:nth-child(4) { transition-delay: 300ms; opacity: 1; transform: translateY(0); }
+  .reveal-stagger.visible > .reveal-child:nth-child(5) { transition-delay: 400ms; opacity: 1; transform: translateY(0); }
+  .reveal-stagger.visible > .reveal-child:nth-child(6) { transition-delay: 500ms; opacity: 1; transform: translateY(0); }
+
+  /* Subtle pricing glow pulse */
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 8px 48px rgba(107, 78, 255, 0.1); }
+    50% { box-shadow: 0 8px 48px rgba(107, 78, 255, 0.22); }
+  }
+  .pricing-glow {
+    animation: glow-pulse 3s ease-in-out infinite;
+  }
+
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .hero-stagger > *,
+    .reveal-section,
+    .reveal-stagger > .reveal-child,
+    .card-lift,
+    .icon-hover,
+    .btn-scale {
+      animation: none !important;
+      transition: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+    .pricing-glow {
+      animation: none !important;
+    }
+  }
+
   /* Cross-browser backdrop-filter with vendor prefixes */
   .backdrop-blur-sm {
     -webkit-backdrop-filter: blur(4px);

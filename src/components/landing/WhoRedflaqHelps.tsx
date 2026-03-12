@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { ShieldCheck, Users, Shield, Home, Briefcase, HandHeart } from "lucide-react";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const personas = [
   {
@@ -62,10 +63,11 @@ const personas = [
 
 const WhoRedflaqHelps = () => {
   const navigate = useNavigate();
+  const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section style={{ background: '#F5F0EB' }} className="py-12 md:py-20 px-6">
-      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+    <section ref={ref} className={`reveal-section ${isVisible ? 'visible' : ''}`} style={{ background: '#F5F0EB' }}>
+      <div className="py-12 md:py-20 px-6" style={{ maxWidth: 1200, margin: '0 auto' }}>
         <h2 style={{
           fontFamily: "'DM Serif Display', serif",
           fontSize: 'clamp(28px, 4vw, 40px)',
@@ -90,30 +92,22 @@ const WhoRedflaqHelps = () => {
           One safety tool for every trust decision you make.
         </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5" style={{ marginBottom: 40 }}>
+        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 reveal-stagger ${isVisible ? 'visible' : ''}`} style={{ marginBottom: 40 }}>
           {personas.map((p) => {
             const Icon = p.icon;
             return (
               <div
                 key={p.title}
+                className="card-lift reveal-child"
                 style={{
                   background: '#FFFFFF',
                   borderRadius: 20,
                   padding: '48px 32px',
                   border: p.prominent ? '1.5px solid #6B4EFF40' : '1px solid #E6E0DA',
                   boxShadow: p.prominent ? '0 4px 32px rgba(107,78,255,0.08)' : '0 2px 8px rgba(0,0,0,0.05)',
-                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.transform = 'translateY(-4px)';
-                  e.currentTarget.style.boxShadow = '0 12px 40px rgba(107,78,255,0.1)';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.transform = 'none';
-                  e.currentTarget.style.boxShadow = p.prominent ? '0 4px 32px rgba(107,78,255,0.08)' : '0 2px 8px rgba(0,0,0,0.05)';
                 }}
               >
-                <div style={{
+                <div className="icon-hover" style={{
                   width: 48, height: 48, borderRadius: '50%',
                   background: '#E9E3FF',
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -169,6 +163,7 @@ const WhoRedflaqHelps = () => {
         <div style={{ textAlign: 'center' }}>
           <button
             onClick={() => navigate('/safety-tips')}
+            className="btn-scale"
             style={{
               background: 'transparent',
               color: '#6B4EFF',

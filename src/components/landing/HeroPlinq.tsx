@@ -5,7 +5,7 @@ import heroImage from "@/assets/hero-sa-woman.jpg";
 
 const HeroPlinq = () => {
   const { guardedAction } = useAuthGuard();
-  const { count: statTwo, ref: statTwoRef } = useCountUp(40000, 2000);
+  const { count: statTwo, ref: statTwoRef } = useCountUp(40000, 900);
 
   const handleVerify = () => {
     guardedAction();
@@ -28,7 +28,7 @@ const HeroPlinq = () => {
 
       <div className="grid lg:grid-cols-[55%_45%] min-h-screen max-w-[1280px] mx-auto relative z-10">
         {/* LEFT COLUMN */}
-        <div className="pt-24 px-5 pb-10 lg:pt-40 lg:px-10 lg:pb-20" style={{ maxWidth: 640 }}>
+        <div className="hero-stagger pt-24 px-5 pb-10 lg:pt-40 lg:px-10 lg:pb-20" style={{ maxWidth: 640 }}>
           {/* Positioning pill */}
           <div style={{
             background: '#E9E3FF',
@@ -115,6 +115,7 @@ const HeroPlinq = () => {
           <div className="flex flex-col sm:flex-row gap-4">
             <button
               onClick={handleVerify}
+              className="btn-scale"
               style={{
                 background: '#6B4EFF',
                 color: '#FFFFFF',
@@ -130,12 +131,10 @@ const HeroPlinq = () => {
               }}
               onMouseEnter={e => {
                 e.currentTarget.style.background = '#5539E8';
-                e.currentTarget.style.transform = 'translateY(-2px)';
                 e.currentTarget.style.boxShadow = '0 6px 28px rgba(107, 78, 255, 0.35)';
               }}
               onMouseLeave={e => {
                 e.currentTarget.style.background = '#6B4EFF';
-                e.currentTarget.style.transform = 'translateY(0)';
                 e.currentTarget.style.boxShadow = '0 4px 20px rgba(107, 78, 255, 0.25)';
               }}
             >
@@ -143,6 +142,7 @@ const HeroPlinq = () => {
             </button>
             <button
               onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
+              className="btn-scale"
               style={{
                 background: 'transparent',
                 color: '#6B4EFF',
@@ -158,12 +158,10 @@ const HeroPlinq = () => {
               onMouseEnter={e => {
                 e.currentTarget.style.background = '#6B4EFF';
                 e.currentTarget.style.color = '#FFFFFF';
-                e.currentTarget.style.transform = 'translateY(-2px)';
               }}
               onMouseLeave={e => {
                 e.currentTarget.style.background = 'transparent';
                 e.currentTarget.style.color = '#6B4EFF';
-                e.currentTarget.style.transform = 'translateY(0)';
               }}
             >
               See How It Works
@@ -207,7 +205,7 @@ const HeroPlinq = () => {
         </div>
 
         {/* RIGHT COLUMN */}
-        <div className="flex flex-col justify-center items-center px-5 pb-20 gap-6 lg:px-10 lg:pt-28 lg:pb-20">
+        <div className="hero-stagger flex flex-col justify-center items-center px-5 pb-20 gap-6 lg:px-10 lg:pt-28 lg:pb-20">
           <div style={{ position: 'relative', maxWidth: 420, width: '100%' }}>
             <div style={{
               position: 'absolute',
@@ -232,7 +230,7 @@ const HeroPlinq = () => {
           </div>
 
           <div ref={statTwoRef} className="w-full" style={{ maxWidth: 420 }}>
-            <div style={{
+            <div className="card-lift" style={{
               background: '#FFFFFF',
               border: '1px solid #E6E0DA',
               padding: '28px 28px',
@@ -268,13 +266,13 @@ const HeroPlinq = () => {
             </div>
           </div>
 
-          <div style={{
+          <div className="card-lift w-full" style={{
             background: '#6B4EFF',
             padding: '24px 28px',
             maxWidth: 420,
             borderRadius: 16,
             boxShadow: '0 8px 32px rgba(107,78,255,0.15)',
-          }} className="w-full">
+          }}>
             <p style={{
               fontFamily: "'DM Serif Display', serif",
               fontSize: 17,

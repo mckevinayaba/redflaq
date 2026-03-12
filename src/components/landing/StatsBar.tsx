@@ -1,6 +1,9 @@
 import { Clock, FileCheck, Shield } from "lucide-react";
+import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const StatsBar = () => {
+  const { ref, isVisible } = useScrollReveal();
+
   const stats = [
     { icon: Clock, value: "<60 sec", label: "Average Search Time" },
     { icon: FileCheck, value: "100%", label: "Public Sources" },
@@ -8,12 +11,12 @@ const StatsBar = () => {
   ];
 
   return (
-    <section className="py-8" style={{ background: '#F5F0EB', borderTop: '1px solid #E6E0DA', borderBottom: '1px solid #E6E0DA' }}>
+    <section ref={ref} className={`reveal-section ${isVisible ? 'visible' : ''} py-8`} style={{ background: '#F5F0EB', borderTop: '1px solid #E6E0DA', borderBottom: '1px solid #E6E0DA' }}>
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-3 gap-6">
+        <div className={`grid grid-cols-3 gap-6 reveal-stagger ${isVisible ? 'visible' : ''}`}>
           {stats.map((stat, index) => (
-            <div key={index} className="flex flex-col items-center text-center">
-              <div style={{
+            <div key={index} className="flex flex-col items-center text-center reveal-child">
+              <div className="icon-hover" style={{
                 width: 48, height: 48, borderRadius: '50%',
                 background: '#F1ECFF',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',

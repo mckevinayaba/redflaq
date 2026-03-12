@@ -167,16 +167,11 @@ const PricingPlinq = () => {
                       borderRadius: 50,
                     }}
                     onMouseEnter={e => {
-                      if (plan.highlight) {
-                        e.currentTarget.style.background = 'rgba(255,255,255,0.9)';
-                        e.currentTarget.style.transform = 'translateY(-1px)';
-                      } else {
-                        e.currentTarget.style.background = 'rgba(168,85,247,0.15)';
-                        e.currentTarget.style.transform = 'translateY(-1px)';
-                      }
+                      e.currentTarget.style.background = '#5539E8';
+                      e.currentTarget.style.transform = 'translateY(-1px)';
                     }}
                     onMouseLeave={e => {
-                      e.currentTarget.style.background = plan.highlight ? 'white' : 'transparent';
+                      e.currentTarget.style.background = '#6B4EFF';
                       e.currentTarget.style.transform = 'translateY(0)';
                     }}
                   >

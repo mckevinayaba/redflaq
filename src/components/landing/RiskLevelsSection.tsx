@@ -1,14 +1,14 @@
-import { Shield, Check, AlertTriangle, AlertCircle, Info, CheckCircle2 } from "lucide-react";
+import { Shield, Check } from "lucide-react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 
 const RiskLevelsSection = () => {
   const { ref, isVisible } = useScrollReveal();
 
   const riskLevels = [
-    { level: "HIGH RISK", headline: "Stop. Look closer.", description: "Serious public‑record warnings found — violent or sexual offences with an active warning status.", dotColor: "#DC2626", Icon: AlertTriangle },
-    { level: "MODERATE RISK", headline: "Proceed with caution.", description: "Older or less severe public‑record warnings — status may no longer be active.", dotColor: "#F59E0B", Icon: AlertCircle },
-    { level: "LOW RISK", headline: "Some concerns noted.", description: "Lower‑level issues or incomplete public information found.", dotColor: "#EA580C", Icon: Info },
-    { level: "CLEAR", headline: "No warnings found.", description: "No matching public‑record warnings found for this name in the sources we check.", dotColor: "#16A34A", Icon: CheckCircle2 },
+    { level: "HIGH RISK", headline: "Stop. Look closer.", description: "Serious public‑record warnings found — violent or sexual offences with an active warning status.", borderColor: "#DC2626" },
+    { level: "MODERATE RISK", headline: "Proceed with caution.", description: "Older or less severe public‑record warnings — status may no longer be active.", borderColor: "#F59E0B" },
+    { level: "LOW RISK", headline: "Some concerns noted.", description: "Lower‑level issues or incomplete public information found.", borderColor: "#A78BFA" },
+    { level: "CLEAR", headline: "No warnings found.", description: "No matching public‑record warnings found for this name in the sources we check.", borderColor: "#10B981" },
   ];
 
   const checklistItems = [
@@ -31,42 +31,30 @@ const RiskLevelsSection = () => {
           What your report <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>reveals</em>
         </h2>
 
-        {/* Horizontal risk cards */}
-        <div className="flex flex-col md:flex-row gap-5" style={{ marginBottom: 48 }}>
+        <div className="flex flex-col md:flex-row gap-4" style={{ marginBottom: 48 }}>
           {riskLevels.map((risk) => (
             <div
               key={risk.level}
               style={{
                 flex: 1,
-                background: 'linear-gradient(145deg, #0F0A1A, #1A1035)',
-                borderLeft: `4px solid ${risk.dotColor}`,
-                borderRadius: 16,
-                padding: '32px 24px',
-                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                cursor: 'default',
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.transform = 'translateY(-4px)';
-                e.currentTarget.style.boxShadow = `0 12px 32px ${risk.dotColor}20`;
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = 'none';
+                background: '#0F0D1A',
+                borderLeft: `5px solid ${risk.borderColor}`,
+                borderRadius: 12,
+                padding: '28px 24px',
               }}
             >
-              <risk.Icon style={{ width: 24, height: 24, color: risk.dotColor, marginBottom: 16, opacity: 0.9 }} />
-              <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 18, color: 'white', lineHeight: 1.3, marginBottom: 10 }}>
-                {risk.headline}
-              </h3>
-              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, marginBottom: 16 }}>
-                {risk.description}
-              </p>
-              <span style={{
-                fontFamily: "'JetBrains Mono', monospace", fontSize: 9, fontWeight: 700, letterSpacing: '0.15em',
-                color: risk.dotColor, border: `1px solid ${risk.dotColor}40`, padding: '4px 10px', borderRadius: 6,
+              <div style={{
+                fontFamily: "'JetBrains Mono', monospace", fontSize: 13, fontWeight: 700,
+                letterSpacing: '0.15em', color: risk.borderColor, marginBottom: 14,
               }}>
                 {risk.level}
-              </span>
+              </div>
+              <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 22, color: 'white', fontWeight: 700, lineHeight: 1.3, marginBottom: 10 }}>
+                {risk.headline}
+              </h3>
+              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: 'rgba(255,255,255,0.55)', lineHeight: 1.6 }}>
+                {risk.description}
+              </p>
             </div>
           ))}
         </div>

@@ -35,9 +35,9 @@ const Footer = () => {
           
           {/* Column 3: Contact */}
           <div>
-            <h4 className="font-bold text-white mb-4">Contact Us</h4>
-            <ul className="space-y-2 text-sm">
-              <li>📧 <a href="mailto:support@redflaq.com" className="hover:text-white transition-colors">support@redflaq.com</a></li>
+            <h4 className="font-bold mb-4" style={{ color: '#1F1F1F' }}>Contact Us</h4>
+            <ul className="space-y-2 text-sm" style={{ color: '#888888' }}>
+              <li>📧 <a href="mailto:support@redflaq.com" className="transition-colors" style={{ color: '#888888' }}>support@redflaq.com</a></li>
               <li>🌍 Johannesburg, South Africa</li>
             </ul>
           </div>

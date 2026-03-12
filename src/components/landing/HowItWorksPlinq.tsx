@@ -73,7 +73,7 @@ const HowItWorksPlinq = () => {
                 <span style={{
                   fontFamily: "'DM Serif Display', serif",
                   fontSize: 24,
-                  color: '#7C3AED',
+                  color: '#6B4EFF',
                   fontWeight: 700,
                 }}>
                   {step.num}

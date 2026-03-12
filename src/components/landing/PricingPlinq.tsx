@@ -84,11 +84,11 @@ const PricingPlinq = () => {
                     position: 'relative',
                     borderRadius: 20,
                     border: plan.highlight
-                      ? '1px solid rgba(168,85,247,0.5)'
-                      : '1px solid rgba(124,58,237,0.2)',
+                      ? '1.5px solid #6B4EFF40'
+                      : '1px solid #E6E0DA',
                     boxShadow: plan.highlight
-                      ? '0 8px 48px rgba(124,58,237,0.3), 0 0 0 1px rgba(168,85,247,0.2)'
-                      : '0 4px 24px rgba(0,0,0,0.1)',
+                      ? '0 8px 48px rgba(107,78,255,0.1)'
+                      : '0 2px 8px rgba(0,0,0,0.05)',
                     transform: plan.highlight ? 'scale(1.03)' : 'none',
                     zIndex: plan.highlight ? 2 : 1,
                     transition: 'transform 0.3s ease, box-shadow 0.3s ease',

@@ -138,7 +138,7 @@ const SearchOptionsSection = () => {
                 <option value="">Select reason</option>
                 {searchReasons.map(r => <option key={r} value={r}>{r}</option>)}
               </select>
-              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: 'rgba(255,255,255,0.3)', marginTop: 4, display: 'block' }}>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#888888', marginTop: 4, display: 'block' }}>
                 We ask this to comply with POPIA and protect everyone's rights
               </span>
             </div>

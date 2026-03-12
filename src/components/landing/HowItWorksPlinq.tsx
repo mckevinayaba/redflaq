@@ -26,7 +26,7 @@ const HowItWorksPlinq = () => {
           marginBottom: 20,
           letterSpacing: '-0.02em',
         }}>
-          Fast. Simple. <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>Public‑record based.</em>
+          Fast. Simple. <em style={{ color: '#6B4EFF', fontStyle: 'italic' }}>Public‑record based.</em>
         </h2>
 
         <p style={{

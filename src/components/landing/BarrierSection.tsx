@@ -67,11 +67,13 @@ const BarrierSection = () => {
               style={{
                 background: '#FFFFFF',
                 border: '1px solid #E6E0DA',
-                borderRadius: 20,
-                padding: '40px 32px',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+                borderRadius: 18,
+                padding: '0 32px 40px',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.06)',
                 transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                 cursor: 'default',
+                overflow: 'hidden',
+                position: 'relative',
               }}
               onMouseEnter={e => {
                 e.currentTarget.style.transform = 'translateY(-4px)';
@@ -79,9 +81,18 @@ const BarrierSection = () => {
               }}
               onMouseLeave={e => {
                 e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
+                e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.06)';
               }}
             >
+              {/* Top accent bar */}
+              <div style={{
+                height: 4,
+                background: '#6B4EFF',
+                marginLeft: -32,
+                marginRight: -32,
+                marginBottom: 36,
+              }} />
+
               <div style={{
                 fontFamily: "'JetBrains Mono', monospace",
                 fontSize: 11,
@@ -92,7 +103,14 @@ const BarrierSection = () => {
                 {card.num}
               </div>
 
-              <card.Icon style={{ width: 28, height: 28, color: '#EF4444', marginBottom: 20, opacity: 0.8 }} />
+              <div style={{
+                width: 52, height: 52, borderRadius: '50%',
+                background: '#F1ECFF',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                marginBottom: 20,
+              }}>
+                <card.Icon style={{ width: 24, height: 24, color: '#6B4EFF', strokeWidth: 2 }} />
+              </div>
 
               <div style={{
                 fontFamily: "'Syne', sans-serif",

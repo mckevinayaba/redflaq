@@ -61,7 +61,7 @@ const HowItWorksPlinq = () => {
                 width: 64,
                 height: 64,
                 borderRadius: '50%',
-                background: '#E9E3FF',
+                background: '#F1ECFF',
                 border: '2px solid #6B4EFF',
                 display: 'flex',
                 alignItems: 'center',

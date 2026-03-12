@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Shield } from "lucide-react";
 import ShareInviteModal from "@/components/ShareInviteModal";
-import EmergencyBanner from "@/components/EmergencyBanner";
 import redflaqLogo from "@/assets/redflaq-logo-official.png";
 
 const FooterPlinq = () => {
@@ -90,14 +89,14 @@ const FooterPlinq = () => {
                       aria-label={s.icon}
                       style={{
                         width: 40, height: 40, borderRadius: '50%',
-                        background: '#E9E3FF',
+                        background: '#F1ECFF',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
                         transition: 'all 0.2s ease', textDecoration: 'none',
                         WebkitTapHighlightColor: 'transparent',
                         minWidth: 40, minHeight: 40,
                       }}
-                      onMouseEnter={e => { e.currentTarget.style.background = '#6B4EFF'; }}
-                      onMouseLeave={e => { e.currentTarget.style.background = '#E9E3FF'; }}
+                      onMouseEnter={e => { e.currentTarget.style.background = '#6B4EFF'; const svg = e.currentTarget.querySelector('svg'); if (svg) { svg.setAttribute('stroke', 'white'); svg.setAttribute('fill', 'white'); } }}
+                      onMouseLeave={e => { e.currentTarget.style.background = '#F1ECFF'; const svg = e.currentTarget.querySelector('svg'); if (svg) { svg.setAttribute('stroke', '#6B4EFF'); svg.setAttribute('fill', '#6B4EFF'); } }}
                     >
                       {s.icon === 'facebook' && (
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B4EFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
@@ -144,8 +143,9 @@ const FooterPlinq = () => {
         </div>
       </footer>
       {/* Emergency GBV banner */}
-      <div style={{ width: '100%', background: '#DC2626', padding: '12px 20px', textAlign: 'center' }}>
-        <a href="tel:0800428428" style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: 'white', textDecoration: 'none', fontWeight: 600 }}>
+      <div style={{ width: '100%', background: '#5B3EE4', padding: '12px 20px', textAlign: 'center' }}>
+        <a href="tel:0800428428" style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: 'white', textDecoration: 'none', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+          <Shield style={{ width: 14, height: 14, color: 'white', strokeWidth: 2, flexShrink: 0 }} />
           In danger right now? GBV Command Centre: <strong>0800 428 428</strong> — Free · 24/7 · Confidential
         </a>
       </div>

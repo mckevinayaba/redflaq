@@ -60,7 +60,7 @@ const TestimonialsSectionNew = () => {
           {testimonials.map((t, i) => {
             const isFeatured = (t as any).featured;
             return (
-              <div key={i} style={{
+              <div key={i} className="card-lift reveal-child" style={{
                 background: isFeatured ? '#E9E3FF' : '#FFFFFF',
                 borderLeft: '3px solid #6B4EFF',
                 borderRadius: 16,

@@ -25,11 +25,11 @@ const Footer = () => {
           {/* Column 2: Links */}
           <div>
             <h4 className="font-bold mb-4" style={{ color: '#1F1F1F' }}>Quick Links</h4>
-            <ul className="space-y-2 text-sm">
-              <li><Link to="/about" className="hover:text-white transition-colors">About</Link></li>
-              <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-              <li><Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
-              <li><Link to="/dispute" className="hover:text-white transition-colors">Dispute a Record</Link></li>
+            <ul className="space-y-2 text-sm" style={{ color: '#888888' }}>
+              <li><Link to="/about" className="transition-colors" style={{ color: '#888888' }}>About</Link></li>
+              <li><Link to="/privacy" className="transition-colors" style={{ color: '#888888' }}>Privacy Policy</Link></li>
+              <li><Link to="/terms" className="transition-colors" style={{ color: '#888888' }}>Terms of Service</Link></li>
+              <li><Link to="/dispute" className="transition-colors" style={{ color: '#888888' }}>Dispute a Record</Link></li>
             </ul>
           </div>
           

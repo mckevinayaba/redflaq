@@ -70,7 +70,7 @@ const AcademyArticle = () => {
 
   if (!article) {
     return (
-      <div style={{ background: "#F7F4F0", minHeight: "100vh" }}>
+      <div style={{ background: "#FFFFFF", minHeight: "100vh" }}>
         <NavbarPlinq />
         <div style={{ maxWidth: 600, margin: "0 auto", padding: "120px 24px", textAlign: "center" }}>
           <h1 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 28, color: "#2D2235" }}>Article not found</h1>

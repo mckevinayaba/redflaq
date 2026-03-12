@@ -82,12 +82,12 @@ const SearchOptionsSection = () => {
           <h3 style={{
             fontFamily: "'DM Serif Display', serif",
             fontSize: 28,
-            color: 'white',
+            color: '#1F1F1F',
             marginBottom: 8,
           }}>
             Person Search
           </h3>
-          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.5)', marginBottom: 36 }}>
+          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#888888', marginBottom: 36 }}>
             Results shown instantly and sent to your email. We're continuously improving accuracy, but no system can be perfect.
           </p>
 

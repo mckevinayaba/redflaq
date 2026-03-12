@@ -11,7 +11,26 @@ const RiskLevelsSection = () => {
     { level: "CLEAR", headline: "No warnings found.", description: "No matching public‑record warnings found for this name in the sources we check.", borderColor: "#10B981" },
   ];
 
-        {/* Horizontal risk cards */}
+  const checklistItems = [
+    "Possible matches on public wanted‑person notices",
+    "Other public‑record warnings linked to that name",
+    "Crime type, status, area and timing when available",
+    "A clear risk level and explanation",
+    "A downloadable PDF summary",
+  ];
+
+  return (
+    <section ref={ref} className={`scroll-reveal ${isVisible ? 'visible' : ''} py-12 md:py-20 px-6`} style={{ background: '#F7F4F0' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+        <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 16 }}>Your Report</div>
+
+        <h2 style={{
+          fontFamily: "'DM Serif Display', serif",
+          fontSize: 'clamp(36px, 4vw, 52px)', color: '#1A1523', marginBottom: 56, letterSpacing: '-0.02em',
+        }}>
+          What your report <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>reveals</em>
+        </h2>
+
         <div className="flex flex-col md:flex-row gap-4" style={{ marginBottom: 48 }}>
           {riskLevels.map((risk) => (
             <div

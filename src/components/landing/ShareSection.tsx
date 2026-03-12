@@ -19,7 +19,7 @@ const ShareSection = () => {
           Share RedFlaq to raise awareness and help another woman check for serious public‑record warning signs before trusting someone with her life, home or business.
         </p>
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
-          <button onClick={handleCopy} className="inline-flex items-center justify-center gap-2" style={{ border: '2px solid #7C3AED', background: 'transparent', color: '#7C3AED', padding: '12px 24px', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, borderRadius: 50, transition: 'all 0.2s' }}>
+          <button onClick={handleCopy} className="inline-flex items-center justify-center gap-2" style={{ border: '2px solid #6B4EFF', background: 'transparent', color: '#6B4EFF', padding: '12px 24px', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, borderRadius: 50, transition: 'all 0.2s' }}>
             {copied ? <><Check className="h-4 w-4" /> Copied!</> : <><Copy className="h-4 w-4" /> Copy Link</>}
           </button>
           <button onClick={handleWhatsApp} className="inline-flex items-center justify-center gap-2" style={{ background: '#25D366', color: '#fff', border: 'none', padding: '12px 24px', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, borderRadius: 50, transition: 'all 0.2s' }}>

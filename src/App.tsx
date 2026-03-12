@@ -61,7 +61,9 @@ import SecureReportView from "./pages/SecureReportView";
 import JournalList from "./pages/JournalList";
 import JournalNew from "./pages/JournalNew";
 import JournalDetail from "./pages/JournalDetail";
+import JournalEdit from "./pages/JournalEdit";
 import JournalExport from "./pages/JournalExport";
+import AffidavitBuilder from "./pages/AffidavitBuilder";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -99,6 +101,8 @@ const App = () => (
           <Route path="/dashboard/journal/new" element={<JournalNew />} />
           <Route path="/dashboard/journal/export" element={<JournalExport />} />
           <Route path="/dashboard/journal/:id" element={<JournalDetail />} />
+          <Route path="/dashboard/journal/:id/edit" element={<JournalEdit />} />
+          <Route path="/dashboard/affidavit" element={<AffidavitBuilder />} />
           {/* Safety Tips (formerly Tools) */}
           <Route path="/safety-tips" element={<SafetyTips />} />
           <Route path="/conversation-guide" element={<ConversationGuide />} />

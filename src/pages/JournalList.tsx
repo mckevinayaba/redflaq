@@ -3,8 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import { Plus, FileDown, Search, Trash2, Eye, Scale } from "lucide-react";
+import { Plus, FileDown, Search, Trash2, Eye, Scale, Calendar, CheckCircle, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { generateTimelinePDF } from "@/utils/pdfTimeline";
 import journalHeroImg from "@/assets/journal-hero-woman-writing.jpg";
 
 interface JournalEntry {
@@ -16,6 +17,20 @@ interface JournalEntry {
   witnesses: string | null;
   injuries_damage: string | null;
   created_at: string;
+  about_person?: string | null;
+  statement_hash?: string | null;
+  hash_generated_at?: string | null;
+  abuse_types?: string[] | null;
+  weapon_involved?: boolean | null;
+  weapon_description?: string | null;
+  medical_attention?: boolean | null;
+  medical_details?: string | null;
+  police_reported?: boolean | null;
+  police_case_number?: string | null;
+  children_present?: boolean | null;
+  emotional_state?: string | null;
+  addendum_notes?: string | null;
+  last_edited_at?: string | null;
 }
 
 interface EvidenceCount {
@@ -33,6 +48,10 @@ export default function JournalList() {
   const [filter, setFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [showTimeline, setShowTimeline] = useState(false);
+  const [timelineFilter, setTimelineFilter] = useState("all");
+  const [timelineDateFrom, setTimelineDateFrom] = useState("");
+  const [timelineDateTo, setTimelineDateTo] = useState("");
 
   const firstName = user?.user_metadata?.full_name?.split(" ")[0]
     || user?.email?.split("@")[0]
@@ -52,7 +71,7 @@ export default function JournalList() {
       .order("entry_time", { ascending: false });
 
     if (error) { toast({ title: "Error loading entries", description: error.message, variant: "destructive" }); return; }
-    setEntries(data || []);
+    setEntries((data as JournalEntry[]) || []);
 
     if (data && data.length > 0) {
       const ids = data.map(e => e.id);
@@ -96,7 +115,7 @@ export default function JournalList() {
     if (filter === "365") { const cutoff = new Date(); cutoff.setDate(now.getDate() - 365); if (entryDate < cutoff) return false; }
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
-      return (e.incident_description?.toLowerCase().includes(q) || e.location?.toLowerCase().includes(q));
+      return (e.incident_description?.toLowerCase().includes(q) || e.location?.toLowerCase().includes(q) || e.about_person?.toLowerCase().includes(q));
     }
     return true;
   });
@@ -110,6 +129,32 @@ export default function JournalList() {
     if (counts.audio) parts.push(`${counts.audio} audio`);
     if (counts.document) parts.push(`${counts.document} doc${counts.document > 1 ? "s" : ""}`);
     return parts.join(", ");
+  };
+
+  const uniquePersons = [...new Set(entries.map(e => e.about_person).filter(Boolean) as string[])].sort();
+
+  const handleGenerateTimeline = () => {
+    let filtered = [...entries];
+    if (timelineFilter !== "all") {
+      filtered = filtered.filter(e => e.about_person === timelineFilter);
+    }
+    if (timelineDateFrom) {
+      filtered = filtered.filter(e => e.entry_date >= timelineDateFrom);
+    }
+    if (timelineDateTo) {
+      filtered = filtered.filter(e => e.entry_date <= timelineDateTo);
+    }
+    if (filtered.length === 0) {
+      toast({ title: "No entries match", description: "Adjust your filters.", variant: "destructive" });
+      return;
+    }
+    generateTimelinePDF({
+      entries: filtered,
+      userName: firstName,
+      filterPerson: timelineFilter === "all" ? undefined : timelineFilter,
+    });
+    setShowTimeline(false);
+    toast({ title: "Timeline PDF downloaded ✓" });
   };
 
   if (authLoading || loading) {
@@ -127,26 +172,11 @@ export default function JournalList() {
       {/* Hero Banner */}
       <div
         className="relative w-full overflow-hidden -mt-4 sm:-mt-6 lg:-mt-10 -mx-4 sm:-mx-6 lg:-mx-10 mb-8"
-        style={{
-          width: 'calc(100% + 2rem)',
-          marginLeft: '-1rem',
-          marginRight: '-1rem',
-        }}
+        style={{ width: 'calc(100% + 2rem)', marginLeft: '-1rem', marginRight: '-1rem' }}
       >
         <div className="relative h-[160px] sm:h-[220px] w-full overflow-hidden">
-          <img
-            src={journalHeroImg}
-            alt="A woman writing privately in her journal by natural window light"
-            className="absolute inset-0 w-full h-full object-cover"
-          />
-          {/* Purple gradient overlay on left */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background: 'linear-gradient(to right, rgba(124,58,237,0.65) 0%, rgba(124,58,237,0.35) 40%, transparent 70%)',
-            }}
-          />
-          {/* Text over banner */}
+          <img src={journalHeroImg} alt="A woman writing privately in her journal by natural window light" className="absolute inset-0 w-full h-full object-cover" />
+          <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(124,58,237,0.65) 0%, rgba(124,58,237,0.35) 40%, transparent 70%)' }} />
           <div className="absolute inset-0 flex flex-col justify-center px-6 sm:px-10 lg:px-14">
             <h1 className="font-heading text-2xl sm:text-[32px] text-white font-bold leading-tight mb-1.5 drop-shadow-md">
               {firstName}'s Safety Journal
@@ -180,9 +210,14 @@ export default function JournalList() {
           <Plus className="h-4 w-4" /> New Entry
         </Link>
         {entries.length > 0 && (
-          <Link to="/dashboard/journal/export" className="inline-flex items-center gap-2 px-5 py-2.5 border border-border text-foreground font-body font-medium text-sm rounded-lg hover:bg-muted transition-colors">
-            <FileDown className="h-4 w-4" /> Export to PDF
-          </Link>
+          <>
+            <button onClick={() => setShowTimeline(true)} className="inline-flex items-center gap-2 px-5 py-2.5 border border-primary text-primary font-body font-medium text-sm rounded-lg hover:bg-primary/5 transition-colors">
+              <Calendar className="h-4 w-4" /> Export Timeline
+            </button>
+            <Link to="/dashboard/journal/export" className="inline-flex items-center gap-2 px-5 py-2.5 border border-border text-foreground font-body font-medium text-sm rounded-lg hover:bg-muted transition-colors">
+              <FileDown className="h-4 w-4" /> Export to PDF
+            </Link>
+          </>
         )}
       </div>
 
@@ -198,11 +233,9 @@ export default function JournalList() {
           </select>
           <div className="relative flex-1 max-w-sm">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <input
-              type="text" placeholder="Search entries..."
+            <input type="text" placeholder="Search entries..."
               value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-xl border border-border bg-card text-foreground font-body text-sm"
-            />
+              className="w-full pl-9 pr-4 py-2 rounded-xl border border-border bg-card text-foreground font-body text-sm" />
           </div>
         </div>
       )}
@@ -229,6 +262,7 @@ export default function JournalList() {
         <div className="space-y-4">
           {filteredEntries.map(entry => {
             const evSummary = getEvidenceSummary(entry.id);
+            const isVerified = !!entry.statement_hash;
             return (
               <div key={entry.id} className="bg-white p-5 hover:shadow-md transition-shadow" style={{ borderRadius: 14, boxShadow: '0 2px 12px rgba(124,58,237,0.08)' }}>
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
@@ -239,7 +273,15 @@ export default function JournalList() {
                         {new Date(entry.entry_date).toLocaleDateString("en-ZA", { year: "numeric", month: "long", day: "numeric" })}
                       </span>
                       <span className="font-body text-xs text-muted-foreground">at {entry.entry_time?.slice(0, 5)}</span>
+                      {isVerified && (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono bg-green-50 text-green-700">
+                          <CheckCircle className="h-3 w-3" /> Verified
+                        </span>
+                      )}
                     </div>
+                    {entry.about_person && (
+                      <p className="font-body text-xs text-primary mb-1">About: {entry.about_person}</p>
+                    )}
                     {entry.location && (
                       <p className="font-body text-xs text-muted-foreground mb-1">📍 {entry.location}</p>
                     )}
@@ -296,6 +338,59 @@ export default function JournalList() {
             <div className="flex gap-3 justify-end">
               <button onClick={() => setDeleteId(null)} className="px-4 py-2 font-body text-sm font-medium text-foreground border border-border rounded-lg hover:bg-muted transition-colors">Cancel</button>
               <button onClick={() => handleDelete(deleteId)} className="px-4 py-2 font-body text-sm font-bold text-destructive-foreground bg-destructive rounded-lg hover:opacity-90 transition-colors">Delete</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Timeline Export Modal */}
+      {showTimeline && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setShowTimeline(false)}>
+          <div className="bg-white p-6 max-w-lg w-full shadow-xl" style={{ borderRadius: 14 }} onClick={e => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-heading text-lg text-foreground">Export Incident Timeline</h3>
+              <button onClick={() => setShowTimeline(false)} className="p-1 text-muted-foreground hover:text-foreground">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <p className="font-body text-sm text-muted-foreground mb-6">
+              Export a chronological timeline of journal entries. This is useful for showing patterns of abuse to Legal Aid SA, lawyers, or social workers.
+            </p>
+
+            <div className="space-y-4">
+              <div>
+                <label className="font-mono text-[11px] tracking-wider uppercase block mb-2" style={{ color: '#5B21B6' }}>Filter by Person (Optional)</label>
+                <select value={timelineFilter} onChange={e => setTimelineFilter(e.target.value)}
+                  className="w-full px-4 py-3 bg-white text-foreground font-body text-sm border border-border rounded-xl">
+                  <option value="all">All entries</option>
+                  {uniquePersons.map(p => <option key={p} value={p}>{p}</option>)}
+                </select>
+                <span className="font-body text-xs text-muted-foreground mt-1 block">Choose a specific person or select 'All entries' for a complete timeline.</span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="font-mono text-[11px] tracking-wider uppercase block mb-2" style={{ color: '#5B21B6' }}>From (Optional)</label>
+                  <input type="date" value={timelineDateFrom} onChange={e => setTimelineDateFrom(e.target.value)}
+                    className="w-full px-3 py-2 border border-border rounded-xl font-body text-sm" />
+                </div>
+                <div>
+                  <label className="font-mono text-[11px] tracking-wider uppercase block mb-2" style={{ color: '#5B21B6' }}>To (Optional)</label>
+                  <input type="date" value={timelineDateTo} onChange={e => setTimelineDateTo(e.target.value)}
+                    className="w-full px-3 py-2 border border-border rounded-xl font-body text-sm" />
+                </div>
+              </div>
+
+              <p className="font-body text-xs text-muted-foreground">
+                This timeline will include entries matching your filters.
+              </p>
+            </div>
+
+            <div className="flex gap-3 justify-end mt-6">
+              <button onClick={() => setShowTimeline(false)} className="px-4 py-2 font-body text-sm font-medium text-foreground border border-border rounded-lg hover:bg-muted">Cancel</button>
+              <button onClick={handleGenerateTimeline} className="px-5 py-2 font-body text-sm font-bold text-primary-foreground bg-primary rounded-lg hover:opacity-90">
+                Generate Timeline PDF
+              </button>
             </div>
           </div>
         </div>

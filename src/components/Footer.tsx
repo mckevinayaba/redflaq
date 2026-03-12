@@ -14,7 +14,7 @@ const Footer = () => {
             <div className="flex items-center mb-2">
               <img src={redflaqLogo} alt="RedFlaq" style={{ height: 36, width: 'auto', display: 'block' }} />
             </div>
-            <p className="text-sm mb-4">
+            <p className="text-sm mb-4" style={{ color: '#888888' }}>
               A Setup A Startup Initiative
             </p>
             <p className="text-xs">

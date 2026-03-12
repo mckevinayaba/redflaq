@@ -90,7 +90,7 @@ const RiskLevelsSection = () => {
             {checklistItems.map((item) => (
               <div key={item} style={{
                 display: 'flex', alignItems: 'center', gap: 12,
-                padding: '12px 0', borderBottom: '1px solid rgba(124,58,237,0.1)',
+                padding: '12px 0', borderBottom: '1px solid #E6E0DA',
                 fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#4B4453',
               }}>
                 <div style={{

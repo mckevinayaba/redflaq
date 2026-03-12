@@ -75,11 +75,6 @@ const BarrierSection = () => {
                 overflow: 'hidden',
                 position: 'relative',
               }}
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.06)';
-              }}
             >
               {/* Top accent bar */}
               <div style={{

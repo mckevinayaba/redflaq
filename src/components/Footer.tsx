@@ -24,7 +24,7 @@ const Footer = () => {
           
           {/* Column 2: Links */}
           <div>
-            <h4 className="font-bold text-white mb-4">Quick Links</h4>
+            <h4 className="font-bold mb-4" style={{ color: '#1F1F1F' }}>Quick Links</h4>
             <ul className="space-y-2 text-sm">
               <li><Link to="/about" className="hover:text-white transition-colors">About</Link></li>
               <li><Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>

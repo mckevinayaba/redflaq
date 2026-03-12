@@ -72,7 +72,7 @@ const ConversationGuide = () => {
   };
 
   return (
-    <div style={{ background: '#FFFFFF', minHeight: '100vh' }}>
+    <div style={{ background: '#F5F0EB', minHeight: '100vh' }}>
       <NavbarPlinq />
 
       {/* Hero — dark */}

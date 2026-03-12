@@ -49,7 +49,7 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen" style={{ background: '#FFFFFF', overflowX: 'hidden' }}>
+    <div className="min-h-screen" style={{ background: '#F5F0EB', overflowX: 'hidden' }}>
       {showConfirmedBanner && (
         <div style={{
           position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999,

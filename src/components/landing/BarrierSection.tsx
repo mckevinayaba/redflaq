@@ -36,7 +36,7 @@ const BarrierSection = () => {
   return (
     <section
       ref={ref}
-      className={`scroll-reveal ${isVisible ? 'visible' : ''} py-12 md:py-20 px-6`}
+      className={`reveal-section ${isVisible ? 'visible' : ''} py-12 md:py-20 px-6`}
       style={{
         background: '#F5F0EB',
         overflow: 'hidden',

@@ -125,13 +125,15 @@ export default function HomepageDemo() {
               border: "1px solid #E6E0DA",
               borderRadius: 20,
               boxShadow: "0 4px 20px rgba(0,0,0,0.06)",
-              padding: "36px 32px",
-              minHeight: 420,
+              minHeight: 520,
               overflow: "hidden",
               position: "relative",
             }}>
               <div
                 style={{
+                  position: "absolute",
+                  inset: 0,
+                  padding: "36px 32px",
                   opacity: fade ? 1 : 0,
                   transform: fade ? "translateY(0)" : "translateY(8px)",
                   transition: "opacity 0.35s ease, transform 0.35s ease",

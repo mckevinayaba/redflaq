@@ -2,7 +2,7 @@
 // WhatsApp Configuration — Update the number here once ready
 // ═══════════════════════════════════════════════════════════
 
-export const WHATSAPP_NUMBER = "27000000000"; // placeholder — replace with real number
+export const WHATSAPP_NUMBER = "27663365296";
 
 export const WHATSAPP_CHAT_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
 

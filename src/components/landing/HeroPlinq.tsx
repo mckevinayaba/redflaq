@@ -81,7 +81,7 @@ const HeroPlinq = () => {
             marginBottom: 20,
             letterSpacing: '-0.01em',
           }} className="text-[22px] sm:text-[26px] lg:text-[32px] xl:text-[36px]">
-            Before you trust anyone with your home, children, or safety — check public records first.
+            Before you trust anyone with your home, children, or safety — RedFlaq their public records first.
           </p>
 
           <p style={{

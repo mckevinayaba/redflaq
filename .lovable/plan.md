@@ -1,32 +1,55 @@
 
 
-## Summary
+## Problem
 
-Most of the requested features already exist from previous builds. The changes needed are primarily **content updates** to match the new emotional messaging, plus minor text/label tweaks.
+The Tawk.to chat widget is:
+1. Auto-opening its chat window without user interaction
+2. Showing a proactive "We Are Here" popup message
+3. Displaying a "1 new message" notification badge above the navbar
 
-### What already exists (no structural changes needed):
-- WhatsApp number constant (`src/constants/whatsapp.ts`) — already set to `27663365296`
-- WhatsApp share button on results page (`ResultsPageUpdated.tsx`)
-- Post-check registration prompt for logged-out users (`PostCheckRegistrationPrompt.tsx`)
-- `/whatsapp` page with hero, how-it-works, registration nudge, and share sections
-- WhatsApp banner on homepage between MakeRedflaqHabit and Pricing
-- Footer link "RedFlaq on WhatsApp" → `/whatsapp`
-- Route registered in `App.tsx`
+All of these are controlled by Tawk.to's API settings.
 
-### Changes Required:
+## Fix
 
-**1. `src/constants/whatsapp.ts`** — Update the `shareAfterCheck` message to the new emotional story text ("She loved him...Forward this to every woman you love.")
+Add `Tawk_API` configuration in `index.html` to suppress all auto-popups:
 
-**2. `src/components/PostCheckRegistrationPrompt.tsx`** — Update body text to include Affidavit Builder and GBV helplines: "Create a free account to save your check history, access your private Safety Journal, build an Affidavit if you need one, and get GBV helplines across all 9 provinces. No credit card needed."
+1. **Set `Tawk_API.onLoad`** callback to:
+   - Minimize the widget on load (`Tawk_API.minimize()`)
+   - Hide the popup message (`Tawk_API.hideWidget()` is too aggressive — instead use `minimize`)
+2. **Set `Tawk_API.customStyle`** to hide the notification badge
+3. **Disable proactive chat triggers** by setting `Tawk_API.onBeforeLoad` to prevent auto-popup behaviors:
+   - `Tawk_API.visitor` settings won't help — the proactive messages ("We Are Here", auto-open) are configured in the Tawk.to dashboard under **Triggers**
+   
+### What we can control via code
 
-**3. `src/pages/WhatsApp.tsx`** — Multiple content updates:
-- Hero body text: Replace generic text with the emotional story ("She loved him...RedFlaq was built so that story ends differently for the next woman.")
-- Step 4 description: Add "access your Safety Journal, and build an Affidavit"
-- Benefits section: Change headline to "Your free account does more than save a check." and update to 4 benefits (Safety Journal, Affidavit Builder, Saved check history, GBV helplines)
-- Share section: Change headline to "Share RedFlaq with someone you love.", update body text, change button label to "Forward on WhatsApp", update share message to the new emotional story text
-- Update `chatbotStart` message in constants to match the new prefilled text
+In `index.html`, before the Tawk script loads, add:
 
-**4. `src/components/WhatsAppBanner.tsx`** — Update banner text to "RedFlaq is now on WhatsApp. Check anyone without leaving your chat." and link text to "See how it works →" (minor wording change from "Learn" to "See")
+```javascript
+Tawk_API.onLoad = function() {
+  Tawk_API.minimize();
+};
+Tawk_API.onChatMessageVisitor = function() {};
+Tawk_API.onChatMessageSystem = function() {};
+```
 
-**5. `src/constants/whatsapp.ts`** — Add a new `emotionalShare` message constant for the long emotional story, used by both the results share button and the /whatsapp share section. Update `groupShare` to use this same message.
+And add CSS to hide the unread badge:
+
+```css
+/* Hide Tawk notification badge */
+.tawk-min-container .tawk-badge {
+  display: none !important;
+}
+```
+
+### What requires Tawk.to dashboard changes
+
+The proactive "We Are Here" message and auto-open behavior are **Triggers** configured in the Tawk.to dashboard (Settings → Triggers). These cannot be fully suppressed from code alone. The `Tawk_API.minimize()` on load will close it if it auto-opens, but the trigger may still fire briefly.
+
+**Recommendation**: Go to your Tawk.to dashboard → Settings → Triggers → disable or delete the proactive greeting trigger. This is the only way to fully stop "We Are Here" and the auto-open.
+
+### Implementation steps
+
+1. Update `index.html`: Add `Tawk_API.onLoad` with `minimize()` call before the embed script
+2. Add CSS to hide the notification badge counter
+3. These changes will make the widget stay minimized and badge-free until a user explicitly clicks it
 

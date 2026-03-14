@@ -53,9 +53,9 @@ const PostCheckRegistrationPrompt = () => {
           margin: "0 auto 24px",
         }}
       >
-        Create a free account to save your check history, access your Safety
-        Journal, and get results sent directly to your WhatsApp. No credit card
-        needed.
+        Create a free account to save your check history, access your private
+        Safety Journal, build an Affidavit if you need one, and get GBV
+        helplines across all 9 provinces. No credit card needed.
       </p>
 
       <button

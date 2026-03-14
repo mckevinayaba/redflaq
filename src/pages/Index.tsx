@@ -127,6 +127,9 @@ const Index = () => {
       {/* Make RedFlaq a Habit */}
       <MakeRedflaqHabitSection />
 
+      {/* WhatsApp Banner */}
+      <WhatsAppBanner />
+
       {/* 13. Pricing */}
       <div id="pricing">
         <PricingPlinq />

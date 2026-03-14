@@ -332,6 +332,15 @@ export default function JournalDetail() {
           <Link to={`/dashboard/journal/export?entry=${entry.id}`} className="inline-flex items-center gap-2 px-5 py-2.5 border border-border text-foreground font-body font-medium text-sm rounded-lg hover:bg-muted transition-colors">
             <FileDown className="h-4 w-4" /> Export to PDF
           </Link>
+          <a
+            href={getWhatsAppShareUrl(WHATSAPP_MESSAGES.journalShare)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-4 py-2 border border-border text-muted-foreground font-body font-medium text-xs rounded-lg hover:bg-muted transition-colors"
+            style={{ textDecoration: 'none' }}
+          >
+            <MessageCircle className="h-3.5 w-3.5" style={{ color: '#25D366' }} /> Share with trusted person via WhatsApp
+          </a>
           <button onClick={() => setShowDelete(true)} className="inline-flex items-center gap-2 px-5 py-2.5 border border-destructive text-destructive font-body font-medium text-sm rounded-lg hover:bg-destructive/10 transition-colors">
             <Trash2 className="h-4 w-4" /> Delete Entry
           </button>

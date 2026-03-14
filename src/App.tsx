@@ -126,6 +126,9 @@ const App = () => (
           {/* Partners */}
           <Route path="/partners" element={<Partners />} />
           <Route path="/partners/apply" element={<PartnersApply />} />
+          {/* WhatsApp */}
+          <Route path="/whatsapp" element={<WhatsAppPage />} />
+          <Route path="/partners/apply" element={<PartnersApply />} />
           {/* Admin */}
           <Route path="/admin" element={<AdminDashboardNew />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />

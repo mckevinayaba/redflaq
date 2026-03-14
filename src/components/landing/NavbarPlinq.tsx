@@ -392,7 +392,7 @@ const NavbarPlinq = () => {
             <div style={{ paddingTop: 12, display: 'flex', flexDirection: 'column', gap: 10 }}>
               {/* WhatsApp chat — mobile */}
               <a
-                href="https://wa.me/27000000000"
+                href={WHATSAPP_CHAT_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{

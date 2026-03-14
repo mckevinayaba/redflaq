@@ -12,6 +12,9 @@ import PostReportGuidance from "@/components/PostReportGuidance";
 import GetHelpModal from "@/components/GetHelpModal";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import Footer from "@/components/Footer";
+import WhatsAppShareButton from "@/components/WhatsAppShareButton";
+import PostCheckRegistrationPrompt from "@/components/PostCheckRegistrationPrompt";
+import { useAuth } from "@/hooks/useAuth";
 import { ArrowLeft, Plus } from "lucide-react";
 
 interface WantedPerson {

@@ -123,6 +123,9 @@ const Index = () => {
       {/* 12. Risk Levels / Your Report */}
       <RiskLevelsSection />
 
+      {/* Make RedFlaq a Habit */}
+      <MakeRedflaqHabitSection />
+
       {/* 13. Pricing */}
       <div id="pricing">
         <PricingPlinq />

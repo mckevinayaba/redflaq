@@ -64,6 +64,7 @@ import JournalDetail from "./pages/JournalDetail";
 import JournalEdit from "./pages/JournalEdit";
 import JournalExport from "./pages/JournalExport";
 import AffidavitBuilder from "./pages/AffidavitBuilder";
+import WhatsAppPage from "./pages/WhatsApp";
 const queryClient = new QueryClient();
 
 const App = () => (

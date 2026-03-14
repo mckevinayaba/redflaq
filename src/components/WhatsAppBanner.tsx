@@ -70,7 +70,7 @@ const WhatsAppBanner = () => {
             whiteSpace: "nowrap",
           }}
         >
-          Learn how it works →
+          See how it works →
         </button>
       </div>
     </section>

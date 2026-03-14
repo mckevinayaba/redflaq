@@ -1,37 +1,38 @@
 import { useNavigate } from "react-router-dom";
-import { MessageCircle, Shield, BookOpen, FileText, ArrowRight } from "lucide-react";
+import { MessageCircle, Shield, BookOpen, FileText, ArrowRight, Phone, Scale } from "lucide-react";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
 import WhatsAppShareButton from "@/components/WhatsAppShareButton";
-import { getWhatsAppChatUrl, getWhatsAppShareUrl, WHATSAPP_MESSAGES } from "@/constants/whatsapp";
+import { getWhatsAppChatUrl, WHATSAPP_MESSAGES } from "@/constants/whatsapp";
 
 const steps = [
   {
     num: "01",
-    title: "Save the RedFlaq WhatsApp number",
-    desc: "Add our number to your contacts so you can reach us anytime.",
+    title: "Save the RedFlaq WhatsApp number to your contacts",
+    desc: "Add our number so you can reach us anytime, right from your WhatsApp.",
   },
   {
     num: "02",
-    title: "Type the full name",
-    desc: "Send us the full name of the person you want to check.",
+    title: "Send the full name of the person you want to check",
+    desc: "Just type the full name — we handle the rest.",
   },
   {
     num: "03",
-    title: "Receive your safety signal",
-    desc: "Get a public safety signal — CLEAR, LOW, MODERATE, or HIGH RISK.",
+    title: "Receive your public safety signal",
+    desc: "Get a result — CLEAR, LOW, MODERATE, or HIGH RISK — in under 60 seconds.",
   },
   {
     num: "04",
-    title: "Create your free account",
-    desc: "Save results and access your Safety Journal by creating a free RedFlaq account.",
+    title: "Create your free RedFlaq account",
+    desc: "Save results, access your Safety Journal, and build an Affidavit — all free.",
   },
 ];
 
 const benefits = [
-  { icon: FileText, label: "Save every check result to your history" },
-  { icon: BookOpen, label: "Access your private Safety Journal" },
-  { icon: MessageCircle, label: "Get future results sent directly to your WhatsApp" },
+  { icon: BookOpen, label: "Safety Journal — document incidents, threats, and patterns privately" },
+  { icon: Scale, label: "Affidavit Builder — generate a legally formatted SA affidavit draft, free" },
+  { icon: FileText, label: "Saved check history — revisit every person you've checked" },
+  { icon: Phone, label: "GBV helplines & resources across all 9 provinces" },
 ];
 
 const WhatsAppPage = () => {
@@ -78,29 +79,34 @@ const WhatsAppPage = () => {
               fontSize: "clamp(16px, 2.2vw, 20px)",
               color: "#4B4453",
               lineHeight: 1.6,
-              marginBottom: 12,
+              marginBottom: 28,
               maxWidth: 560,
-              margin: "0 auto 12px",
+              margin: "0 auto 28px",
             }}
           >
             Save our number. Text a name. Get a public safety signal in 60
             seconds — no app download needed.
           </p>
 
-          <p
+          <div
             style={{
               fontFamily: "'Syne', sans-serif",
               fontSize: 15,
               color: "#78716C",
-              lineHeight: 1.6,
+              lineHeight: 1.8,
               maxWidth: 520,
               margin: "0 auto 36px",
+              fontStyle: "italic",
             }}
           >
-            The easiest way to RedFlaq someone is now in your WhatsApp. No
-            website. No login required to start. Just save the number and text a
-            name.
-          </p>
+            <p style={{ margin: "0 0 8px" }}>She loved him. She trusted him.</p>
+            <p style={{ margin: "0 0 8px" }}>His name was on a public warning list.</p>
+            <p style={{ margin: "0 0 8px" }}>Nobody told her to check.</p>
+            <p style={{ margin: "0 0 16px" }}>We buried her last month.</p>
+            <p style={{ margin: 0, fontStyle: "normal", fontWeight: 600, color: "#4B4453" }}>
+              RedFlaq was built so that story ends differently for the next woman.
+            </p>
+          </div>
 
           <a
             href={getWhatsAppChatUrl(WHATSAPP_MESSAGES.chatbotStart)}
@@ -222,7 +228,7 @@ const WhatsAppPage = () => {
         </div>
       </section>
 
-      {/* Registration nudge */}
+      {/* Why create a free account */}
       <section style={{ padding: "60px 24px", textAlign: "center" }}>
         <div style={{ maxWidth: 560, margin: "0 auto" }}>
           <h2
@@ -233,7 +239,7 @@ const WhatsAppPage = () => {
               marginBottom: 32,
             }}
           >
-            Why create a free account?
+            Your free account does more than save a check.
           </h2>
 
           <div style={{ display: "grid", gap: 20, marginBottom: 36 }}>
@@ -308,7 +314,7 @@ const WhatsAppPage = () => {
         </div>
       </section>
 
-      {/* WhatsApp group sharing */}
+      {/* Share section */}
       <section
         style={{
           padding: "60px 24px",
@@ -327,7 +333,7 @@ const WhatsAppPage = () => {
               marginBottom: 12,
             }}
           >
-            Share RedFlaq with your WhatsApp group
+            Share RedFlaq with someone you love.
           </h2>
           <p
             style={{
@@ -338,13 +344,13 @@ const WhatsAppPage = () => {
               marginBottom: 28,
             }}
           >
-            Know a group of women, parents, or community members who should know
-            about RedFlaq? Share this link with them.
+            One forward can change everything. Send this to every woman, parent,
+            or community member who deserves to know.
           </p>
 
           <WhatsAppShareButton
-            message={WHATSAPP_MESSAGES.groupShare}
-            label="Share in WhatsApp"
+            message={WHATSAPP_MESSAGES.emotionalShare}
+            label="Forward on WhatsApp"
           />
         </div>
       </section>

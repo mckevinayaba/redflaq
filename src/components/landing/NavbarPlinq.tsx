@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
 import ShareInviteModal from "@/components/ShareInviteModal";
+import { WHATSAPP_CHAT_URL } from "@/constants/whatsapp";
 
 const NavbarPlinq = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -156,7 +157,7 @@ const NavbarPlinq = () => {
             <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
               {/* WhatsApp chat */}
               <a
-                href="https://wa.me/27000000000"
+                href={WHATSAPP_CHAT_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Chat with us on WhatsApp"
@@ -391,7 +392,7 @@ const NavbarPlinq = () => {
             <div style={{ paddingTop: 12, display: 'flex', flexDirection: 'column', gap: 10 }}>
               {/* WhatsApp chat — mobile */}
               <a
-                href="https://wa.me/27000000000"
+                href={WHATSAPP_CHAT_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{

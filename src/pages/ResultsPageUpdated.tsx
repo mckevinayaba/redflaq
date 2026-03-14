@@ -1089,6 +1089,18 @@ const ResultsPageUpdated = () => {
         {/* Post-report guidance */}
         <PostReportGuidance riskLevel={results.riskLevel} />
 
+        {/* WhatsApp share */}
+        <div className="mt-8 mb-4 flex justify-center">
+          <WhatsAppShareButton />
+        </div>
+
+        {/* Registration prompt for non-logged-in users */}
+        {!isAuthenticated && (
+          <div className="mt-6 mb-6">
+            <PostCheckRegistrationPrompt />
+          </div>
+        )}
+
         {/* ─── FOOTER ACTIONS ─── */}
         <div className="mt-10 pt-8 border-t border-border">
           <div className="flex gap-4 justify-center flex-wrap mb-6">

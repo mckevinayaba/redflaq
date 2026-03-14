@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
 import ShareInviteModal from "@/components/ShareInviteModal";
+import { WHATSAPP_CHAT_URL } from "@/constants/whatsapp";
 
 const NavbarPlinq = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

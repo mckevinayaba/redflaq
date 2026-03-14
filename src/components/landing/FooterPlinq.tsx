@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Shield } from "lucide-react";
 import ShareInviteModal from "@/components/ShareInviteModal";
+import { WHATSAPP_CHAT_URL } from "@/constants/whatsapp";
 import redflaqLogo from "@/assets/redflaq-logo-official.png";
 
 const FooterPlinq = () => {

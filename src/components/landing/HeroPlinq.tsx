@@ -29,6 +29,19 @@ const HeroPlinq = () => {
       <div className="grid lg:grid-cols-[55%_45%] min-h-screen max-w-[1280px] mx-auto relative z-10">
         {/* LEFT COLUMN */}
         <div className="hero-stagger pt-24 px-5 pb-10 lg:pt-40 lg:px-10 lg:pb-20" style={{ maxWidth: 640 }}>
+          {/* Tagline above pill */}
+          <p style={{
+            fontFamily: "'DM Serif Display', serif",
+            fontSize: 'clamp(20px, 3vw, 28px)',
+            fontWeight: 700,
+            color: '#6B4EFF',
+            marginBottom: 12,
+            letterSpacing: '-0.01em',
+            lineHeight: 1.2,
+          }}>
+            Before you trust, RedFlaq First.
+          </p>
+
           {/* Positioning pill */}
           <div style={{
             background: '#E9E3FF',

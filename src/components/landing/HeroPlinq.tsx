@@ -32,10 +32,11 @@ const HeroPlinq = () => {
           {/* Tagline above pill */}
           <p style={{
             fontFamily: "'DM Serif Display', serif",
-            fontSize: 'clamp(20px, 3vw, 28px)',
+            fontSize: 'clamp(16px, 2.2vw, 22px)',
             fontWeight: 700,
-            color: '#6B4EFF',
-            marginBottom: 12,
+            color: '#1F1F1F',
+            marginTop: 16,
+            marginBottom: 20,
             letterSpacing: '-0.01em',
             lineHeight: 1.2,
           }}>

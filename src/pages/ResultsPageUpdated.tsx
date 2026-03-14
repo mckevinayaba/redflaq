@@ -12,6 +12,9 @@ import PostReportGuidance from "@/components/PostReportGuidance";
 import GetHelpModal from "@/components/GetHelpModal";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import Footer from "@/components/Footer";
+import WhatsAppShareButton from "@/components/WhatsAppShareButton";
+import PostCheckRegistrationPrompt from "@/components/PostCheckRegistrationPrompt";
+import { useAuth } from "@/hooks/useAuth";
 import { ArrowLeft, Plus } from "lucide-react";
 
 interface WantedPerson {
@@ -213,6 +216,7 @@ const ResultsPageUpdated = () => {
   const [shareControlsOpen, setShareControlsOpen] = useState(false);
   const [pendingDownload, setPendingDownload] = useState(false);
   const [helpModalOpen, setHelpModalOpen] = useState(false);
+  const { isAuthenticated } = useAuth();
   const searchId = searchParams.get("search_id");
 
   useEffect(() => {
@@ -1084,6 +1088,18 @@ const ResultsPageUpdated = () => {
 
         {/* Post-report guidance */}
         <PostReportGuidance riskLevel={results.riskLevel} />
+
+        {/* WhatsApp share */}
+        <div className="mt-8 mb-4 flex justify-center">
+          <WhatsAppShareButton />
+        </div>
+
+        {/* Registration prompt for non-logged-in users */}
+        {!isAuthenticated && (
+          <div className="mt-6 mb-6">
+            <PostCheckRegistrationPrompt />
+          </div>
+        )}
 
         {/* ─── FOOTER ACTIONS ─── */}
         <div className="mt-10 pt-8 border-t border-border">

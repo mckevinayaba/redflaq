@@ -64,6 +64,7 @@ import JournalDetail from "./pages/JournalDetail";
 import JournalEdit from "./pages/JournalEdit";
 import JournalExport from "./pages/JournalExport";
 import AffidavitBuilder from "./pages/AffidavitBuilder";
+import WhatsAppPage from "./pages/WhatsApp";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -124,6 +125,9 @@ const App = () => (
           <Route path="/academy/:slug" element={<AcademyRedirect />} />
           {/* Partners */}
           <Route path="/partners" element={<Partners />} />
+          <Route path="/partners/apply" element={<PartnersApply />} />
+          {/* WhatsApp */}
+          <Route path="/whatsapp" element={<WhatsAppPage />} />
           <Route path="/partners/apply" element={<PartnersApply />} />
           {/* Admin */}
           <Route path="/admin" element={<AdminDashboardNew />} />

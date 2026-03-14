@@ -17,6 +17,7 @@ import SearchOptionsSection from "@/components/landing/SearchOptionsSection";
 import HowItWorksPlinq from "@/components/landing/HowItWorksPlinq";
 import RiskLevelsSection from "@/components/landing/RiskLevelsSection";
 import MakeRedflaqHabitSection from "@/components/landing/MakeRedflaqHabitSection";
+import WhatsAppBanner from "@/components/WhatsAppBanner";
 import PricingPlinq from "@/components/landing/PricingPlinq";
 import TestimonialsSectionNew from "@/components/landing/TestimonialsSectionNew";
 import CommunitySectionSA from "@/components/landing/CommunitySectionSA";
@@ -125,6 +126,9 @@ const Index = () => {
 
       {/* Make RedFlaq a Habit */}
       <MakeRedflaqHabitSection />
+
+      {/* WhatsApp Banner */}
+      <WhatsAppBanner />
 
       {/* 13. Pricing */}
       <div id="pricing">

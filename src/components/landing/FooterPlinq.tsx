@@ -12,6 +12,7 @@ const FooterPlinq = () => {
     { label: "Safety Tips", href: "/safety-tips" },
     { label: "Blog", href: "/blog" },
     { label: "Partners", href: "/partners" },
+    { label: "RedFlaq on WhatsApp", href: "/whatsapp" },
     { label: "FAQ", href: "#faq" },
   ];
 

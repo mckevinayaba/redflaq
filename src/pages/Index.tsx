@@ -16,6 +16,7 @@ import BarrierSection from "@/components/landing/BarrierSection";
 import SearchOptionsSection from "@/components/landing/SearchOptionsSection";
 import HowItWorksPlinq from "@/components/landing/HowItWorksPlinq";
 import RiskLevelsSection from "@/components/landing/RiskLevelsSection";
+import MakeRedflaqHabitSection from "@/components/landing/MakeRedflaqHabitSection";
 import PricingPlinq from "@/components/landing/PricingPlinq";
 import TestimonialsSectionNew from "@/components/landing/TestimonialsSectionNew";
 import CommunitySectionSA from "@/components/landing/CommunitySectionSA";

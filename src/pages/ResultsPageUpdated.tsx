@@ -216,6 +216,7 @@ const ResultsPageUpdated = () => {
   const [shareControlsOpen, setShareControlsOpen] = useState(false);
   const [pendingDownload, setPendingDownload] = useState(false);
   const [helpModalOpen, setHelpModalOpen] = useState(false);
+  const { isAuthenticated } = useAuth();
   const searchId = searchParams.get("search_id");
 
   useEffect(() => {

@@ -3,7 +3,8 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import { ArrowLeft, FileDown, Trash2, Download, Eye, Scale, CheckCircle, Lock, Edit } from "lucide-react";
+import { ArrowLeft, FileDown, Trash2, Download, Eye, Scale, CheckCircle, Lock, Edit, MessageCircle } from "lucide-react";
+import { getWhatsAppShareUrl, WHATSAPP_MESSAGES } from "@/constants/whatsapp";
 import { useToast } from "@/hooks/use-toast";
 import { generateVerificationCertificate } from "@/utils/pdfCertificate";
 

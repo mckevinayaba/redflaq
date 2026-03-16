@@ -76,10 +76,8 @@ export default function AdminDashboardNew() {
     const { data: activeData } = await supabase.from("searches").select("user_id").gte("searched_at", startOfMonth).not("user_id", "is", null);
     const uniqueActive = new Set((activeData || []).map(r => r.user_id)).size;
 
-    const revenue = (paymentsRes.data || []).reduce((sum, p) => sum + Number(p.amount), 0);
-    const allTimeManual = (allPaymentsRes.data || []).reduce((sum, p) => sum + Number(p.amount), 0);
-    const allTimePurchases = (allPurchasesRes.data || []).reduce((sum, p) => sum + Number(p.amount), 0);
-    const allTimeRevenue = allTimeManual + allTimePurchases;
+    const revenue = (revenueMonthRes.data || []).reduce((sum, p) => sum + Number(p.amount), 0);
+    const allTimeRevenue = (allPurchasesRes.data || []).reduce((sum, p) => sum + Number(p.amount), 0);
 
     // Build daily chart data
     const dailyMap: Record<string, number> = {};

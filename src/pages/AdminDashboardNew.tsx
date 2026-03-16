@@ -121,9 +121,23 @@ export default function AdminDashboardNew() {
   return (
     <AdminLayout>
       <div className="space-y-8">
-        <div>
-          <h1 className="font-heading text-2xl text-foreground">Dashboard</h1>
-          <p className="font-body text-sm text-muted-foreground mt-1">Overview of RedFlaq platform activity</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="font-heading text-2xl text-foreground">Dashboard</h1>
+            <p className="font-body text-sm text-muted-foreground mt-1">Overview of RedFlaq platform activity</p>
+          </div>
+          <button
+            onClick={() =>
+              generateDashboardReport({
+                ...kpis,
+                dailyChecks,
+                recentChecks: checks,
+              })
+            }
+            className="hidden sm:flex items-center gap-2 px-4 py-2 text-sm font-body border border-border rounded-lg hover:bg-muted transition-colors"
+          >
+            <Download className="h-4 w-4" /> Download Report
+          </button>
         </div>
 
         {loading ? (

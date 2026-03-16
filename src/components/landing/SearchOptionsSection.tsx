@@ -17,26 +17,16 @@ const SearchOptionsSection = () => {
   const searchReasons = ["Potential romantic partner", "Employee verification", "Childcare provider", "Tenant screening", "Business partner", "Other legitimate purpose"];
 
   const inputStyle: React.CSSProperties = {
-    background: '#FFFFFF',
-    border: '1.5px solid #E6E0DA',
-    padding: '14px 16px',
-    fontFamily: "'Syne', sans-serif",
-    fontSize: 15,
-    color: '#1F1F1F',
-    borderRadius: 12,
-    width: '100%',
-    outline: 'none',
+    background: '#FFFFFF', border: '1px solid #E6E0DA',
+    padding: '12px 16px', fontFamily: "'Syne', sans-serif", fontSize: 15,
+    color: '#1F1F1F', borderRadius: 6, width: '100%', outline: 'none',
     transition: 'border-color 0.2s ease',
   };
 
   const labelStyle: React.CSSProperties = {
-    fontFamily: "'JetBrains Mono', monospace",
-    fontSize: 11,
-    letterSpacing: '0.1em',
-    textTransform: 'uppercase',
-    color: '#888888',
-    display: 'block',
-    marginBottom: 8,
+    fontFamily: "'JetBrains Mono', monospace", fontSize: 11,
+    letterSpacing: '0.1em', textTransform: 'uppercase', color: '#888888',
+    display: 'block', marginBottom: 6,
   };
 
   const handleDisabledClick = () => {
@@ -50,62 +40,47 @@ const SearchOptionsSection = () => {
   };
 
   return (
-    <section id="search" ref={ref} className={`reveal-section ${isVisible ? 'visible' : ''} py-12 md:py-20 px-5`} style={{ background: '#F5F0EB' }}>
-      <div style={{ maxWidth: 800, margin: '0 auto' }}>
-        <div className="section-tag" style={{ color: '#6B4EFF', marginBottom: 16 }}>
-          Start Verifying
+    <section id="search" ref={ref} className={`reveal-section ${isVisible ? 'visible' : ''}`} style={{ background: '#FFFFFF', borderBottom: '1px solid #E6E0DA' }}>
+      <div className="py-16 md:py-24 px-6" style={{ maxWidth: 640, margin: '0 auto' }}>
+        <div style={{ textAlign: 'center', marginBottom: 40 }}>
+          <span style={{
+            fontFamily: "'JetBrains Mono', monospace", fontSize: 11,
+            letterSpacing: '0.2em', textTransform: 'uppercase', color: '#6B4EFF',
+          }}>Start Verifying</span>
+          <h2 style={{
+            fontFamily: "'DM Serif Display', serif",
+            fontSize: 'clamp(28px, 4vw, 40px)', color: '#1F1F1F',
+            marginTop: 12, letterSpacing: '-0.02em',
+          }}>
+            Check a person using their full name and province.
+          </h2>
+          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#555555', marginTop: 8, lineHeight: 1.7 }}>
+            We scan South African public-record warning lists for possible matches. Results shown instantly.
+          </p>
         </div>
 
-        <h2 style={{
-          fontFamily: "'DM Serif Display', serif",
-          fontSize: 'clamp(36px, 4vw, 52px)',
-          maxWidth: 600,
-          color: '#1A1523',
-          marginBottom: 16,
-          letterSpacing: '-0.02em',
-        }}>
-          Check a person using their full name and province.
-        </h2>
-
-        <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#6B7280', marginBottom: 48, maxWidth: 600, lineHeight: 1.7 }}>
-          We scan South African public‑record warning lists for possible matches. Results shown instantly.
-        </p>
-
-        {/* Dark form card */}
         <div style={{
-          background: '#FFFFFF',
-          border: '1px solid #E6E0DA',
-          borderRadius: 24,
-          padding: '48px 32px',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+          background: '#FAFAF8', border: '1px solid #E6E0DA',
+          borderRadius: 8, padding: '36px 28px',
         }}>
-          <h3 style={{
-            fontFamily: "'DM Serif Display', serif",
-            fontSize: 28,
-            color: '#1F1F1F',
-            marginBottom: 8,
-          }}>
+          <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 24, color: '#1F1F1F', marginBottom: 6 }}>
             Person Search
           </h3>
-          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#888888', marginBottom: 36 }}>
+          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#888888', marginBottom: 28 }}>
             Results shown instantly and sent to your email. We're continuously improving accuracy, but no system can be perfect.
           </p>
 
-          <div className="space-y-5">
+          <div className="space-y-4">
             <div>
               <label style={labelStyle}>Full Name *</label>
-              <input
-                ref={nameRef}
-                style={inputStyle}
-                placeholder="e.g. John David Mokoena"
+              <input ref={nameRef} style={inputStyle} placeholder="e.g. John David Mokoena"
                 onFocus={e => e.currentTarget.style.borderColor = '#6B4EFF'}
                 onBlur={e => e.currentTarget.style.borderColor = '#E6E0DA'}
               />
             </div>
             <div>
               <label style={labelStyle}>Province (Optional)</label>
-              <select
-                style={{ ...inputStyle, appearance: 'none' }}
+              <select style={{ ...inputStyle, appearance: 'none' }}
                 onFocus={e => e.currentTarget.style.borderColor = '#6B4EFF'}
                 onBlur={e => e.currentTarget.style.borderColor = '#E6E0DA'}
               >
@@ -115,8 +90,7 @@ const SearchOptionsSection = () => {
             </div>
             <div>
               <label style={labelStyle}>Age Range (Optional)</label>
-              <select
-                style={{ ...inputStyle, appearance: 'none' }}
+              <select style={{ ...inputStyle, appearance: 'none' }}
                 onFocus={e => e.currentTarget.style.borderColor = '#6B4EFF'}
                 onBlur={e => e.currentTarget.style.borderColor = '#E6E0DA'}
               >
@@ -130,8 +104,7 @@ const SearchOptionsSection = () => {
             </div>
             <div>
               <label style={labelStyle}>Reason for Search *</label>
-              <select
-                style={{ ...inputStyle, appearance: 'none' }}
+              <select style={{ ...inputStyle, appearance: 'none' }}
                 onFocus={e => e.currentTarget.style.borderColor = '#6B4EFF'}
                 onBlur={e => e.currentTarget.style.borderColor = '#E6E0DA'}
               >
@@ -144,29 +117,19 @@ const SearchOptionsSection = () => {
             </div>
 
             {/* Consent */}
-            <div
-              ref={consentRef}
-              className={`flex items-start gap-3 pt-4 rounded-lg transition-all ${shakeConsent ? 'animate-shake' : ''}`}
+            <div ref={consentRef} className={`flex items-start gap-3 pt-3 rounded transition-all ${shakeConsent ? 'animate-shake' : ''}`}
               style={{
-                border: showConsentHint ? '1.5px solid #DC2626' : '1.5px solid transparent',
-                padding: 12,
-                background: showConsentHint ? 'rgba(220,38,38,0.08)' : 'transparent',
-                borderRadius: 12,
+                border: showConsentHint ? '1px solid #DC2626' : '1px solid transparent',
+                padding: 10, background: showConsentHint ? 'rgba(220,38,38,0.06)' : 'transparent',
+                borderRadius: 6,
               }}
             >
-              <Checkbox
-                id="consent"
-                checked={consentChecked}
-                onCheckedChange={(checked) => {
-                  setConsentChecked(checked as boolean);
-                  setShowConsentHint(false);
-                }}
-                className="mt-1"
-                style={{ accentColor: '#6B4EFF' }}
+              <Checkbox id="consent" checked={consentChecked}
+                onCheckedChange={(checked) => { setConsentChecked(checked as boolean); setShowConsentHint(false); }}
+                className="mt-1" style={{ accentColor: '#6B4EFF' }}
               />
               <label htmlFor="consent" style={{
-                fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#555555',
-                lineHeight: 1.5, cursor: 'pointer',
+                fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#555555', lineHeight: 1.5, cursor: 'pointer',
               }}>
                 I confirm I have a legitimate reason to search this person and I agree to the{" "}
                 <a href="/terms" style={{ color: '#6B4EFF', textDecoration: 'underline' }}>Terms of Service</a> and{" "}
@@ -175,7 +138,7 @@ const SearchOptionsSection = () => {
             </div>
 
             {showConsentHint && (
-              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#EF4444', marginTop: -8 }}>
+              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#EF4444', marginTop: -4 }}>
                 ↑ Please confirm your reason and agree to the terms above to continue
               </p>
             )}
@@ -189,19 +152,11 @@ const SearchOptionsSection = () => {
                   width: '100%',
                   background: consentChecked ? '#6B4EFF' : '#E6E0DA',
                   color: consentChecked ? 'white' : '#888888',
-                  padding: 20,
-                  fontFamily: "'Syne', sans-serif",
-                  fontSize: 16,
-                  fontWeight: 700,
-                  border: 'none',
+                  padding: 16, fontFamily: "'Syne', sans-serif", fontSize: 15,
+                  fontWeight: 700, border: 'none',
                   cursor: consentChecked ? 'pointer' : 'not-allowed',
-                  borderRadius: 50,
-                  transition: 'all 0.25s ease',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: 10,
-                  boxShadow: consentChecked ? '0 4px 24px rgba(107,78,255,0.25)' : 'none',
+                  borderRadius: 4, transition: 'all 0.2s ease',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
                 }}
               >
                 <Lock style={{ width: 16, height: 16 }} />
@@ -209,7 +164,6 @@ const SearchOptionsSection = () => {
               </button>
             </div>
 
-            {/* Form meta — icon chips */}
             <div className="flex flex-wrap gap-4 pt-2">
               {[
                 { Icon: Mail, text: "Results shown instantly & emailed" },

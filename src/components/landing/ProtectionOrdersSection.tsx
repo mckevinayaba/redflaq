@@ -34,16 +34,18 @@ const ProtectionOrdersSection = () => {
   const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section ref={ref} className={`reveal-section ${isVisible ? 'visible' : ''}`} style={{ background: '#FAFAF8', borderTop: '1px solid #E6E0DA', borderBottom: '1px solid #E6E0DA' }}>
-      <div className="py-16 md:py-24 px-6" style={{ maxWidth: 1200, margin: '0 auto' }}>
+    <section ref={ref} className={`reveal-section ${isVisible ? 'visible' : ''}`} style={{ background: '#F5F3FF' }}>
+      <div className="py-12 md:py-20 px-6" style={{ maxWidth: 1200, margin: '0 auto' }}>
         <div className="grid grid-cols-1 lg:grid-cols-[60%_40%] gap-12 lg:gap-16">
           {/* LEFT COLUMN */}
           <div>
+            {/* Badge */}
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: 6,
-              background: '#F1ECFF', border: '1px solid rgba(107,78,255,0.2)',
-              color: '#6B4EFF', padding: '4px 12px', borderRadius: 4,
-              fontFamily: "'Syne', sans-serif", fontSize: 12, fontWeight: 600, marginBottom: 16,
+              background: 'white', border: '1px solid #7C3AED',
+              color: '#7C3AED', padding: '4px 12px', borderRadius: 16,
+              fontFamily: "'Syne', sans-serif", fontSize: 13, fontWeight: 500,
+              marginBottom: 16,
             }}>
               <Shield size={14} aria-hidden="true" />
               Legal Protection Available
@@ -51,35 +53,55 @@ const ProtectionOrdersSection = () => {
 
             <h2 style={{
               fontFamily: "'DM Serif Display', serif",
-              fontSize: 'clamp(24px, 3vw, 32px)', color: '#1F1F1F',
-              marginBottom: 12, letterSpacing: '-0.02em',
+              fontSize: 'clamp(24px, 3vw, 32px)',
+              fontWeight: 700,
+              color: '#111827',
+              marginBottom: 12,
+              letterSpacing: '-0.02em',
             }}>
               Need a Protection Order?
             </h2>
 
             <p style={{
-              fontFamily: "'Syne', sans-serif", fontSize: 16, color: '#555555',
-              lineHeight: 1.7, marginBottom: 32,
+              fontFamily: "'Syne', sans-serif",
+              fontSize: 18,
+              color: '#4B5563',
+              lineHeight: '28px',
+              marginBottom: 32,
             }}>
               Free legal protection available at any Magistrate's Court in South Africa. No lawyer required.
             </p>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            {/* Content blocks */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
               {contentBlocks.map((block) => {
                 const Icon = block.icon;
                 return (
-                  <div key={block.title} style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+                  <div key={block.title} style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
                     <div style={{
-                      width: 40, height: 40, borderRadius: 8, background: '#F1ECFF',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                      width: 40, height: 40, borderRadius: '50%',
+                      background: '#EDE9FE',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      flexShrink: 0,
                     }}>
-                      <Icon size={18} color="#6B4EFF" aria-hidden="true" />
+                      <Icon size={20} color="#7C3AED" aria-hidden="true" />
                     </div>
                     <div>
-                      <h3 style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 600, color: '#1F1F1F', marginBottom: 4 }}>
+                      <h3 style={{
+                        fontFamily: "'Syne', sans-serif",
+                        fontSize: 18,
+                        fontWeight: 600,
+                        color: '#111827',
+                        marginBottom: 6,
+                      }}>
                         {block.title}
                       </h3>
-                      <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#555555', lineHeight: 1.6 }}>
+                      <p style={{
+                        fontFamily: "'Syne', sans-serif",
+                        fontSize: 15,
+                        color: '#4B5563',
+                        lineHeight: '24px',
+                      }}>
                         {block.description}
                       </p>
                     </div>
@@ -88,12 +110,16 @@ const ProtectionOrdersSection = () => {
               })}
             </div>
 
-            <button onClick={() => navigate('/safety-tips')} style={{
-              background: 'none', border: 'none', cursor: 'pointer',
-              display: 'inline-flex', alignItems: 'center', gap: 6,
-              fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 600,
-              color: '#6B4EFF', marginTop: 28, padding: 0,
-            }}
+            {/* Link */}
+            <button
+              onClick={() => navigate('/safety-tips')}
+              style={{
+                background: 'none', border: 'none', cursor: 'pointer',
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+                fontFamily: "'Syne', sans-serif", fontSize: 16, fontWeight: 500,
+                color: '#7C3AED', marginTop: 32, padding: 0,
+                transition: 'gap 0.2s ease',
+              }}
               onMouseEnter={e => { e.currentTarget.style.textDecoration = 'underline'; }}
               onMouseLeave={e => { e.currentTarget.style.textDecoration = 'none'; }}
             >
@@ -105,51 +131,95 @@ const ProtectionOrdersSection = () => {
           {/* RIGHT COLUMN */}
           <div>
             <div style={{
-              background: '#FFFFFF', borderRadius: 8, padding: 28,
-              border: '1px solid #E6E0DA',
+              background: 'white',
+              borderRadius: 12,
+              padding: 32,
+              boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+              border: '1px solid rgba(124, 58, 237, 0.1)',
             }}>
+              {/* Free Tool badge */}
               <span style={{
-                display: 'inline-block', background: '#F1ECFF', color: '#6B4EFF',
-                padding: '4px 10px', borderRadius: 4,
-                fontFamily: "'Syne', sans-serif", fontSize: 11, fontWeight: 600, marginBottom: 14,
+                display: 'inline-block',
+                background: '#EDE9FE',
+                color: '#7C3AED',
+                padding: '4px 12px',
+                borderRadius: 12,
+                fontFamily: "'Syne', sans-serif",
+                fontSize: 12,
+                fontWeight: 600,
+                marginBottom: 16,
               }}>
                 Free Tool
               </span>
 
-              <h3 style={{ fontFamily: "'Syne', sans-serif", fontSize: 18, fontWeight: 600, color: '#1F1F1F', marginBottom: 10 }}>
+              <h3 style={{
+                fontFamily: "'Syne', sans-serif",
+                fontSize: 20,
+                fontWeight: 600,
+                color: '#111827',
+                marginBottom: 12,
+              }}>
                 Build Your Evidence with My Safety Journal
               </h3>
 
-              <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#555555', lineHeight: 1.6, marginBottom: 18 }}>
+              <p style={{
+                fontFamily: "'Syne', sans-serif",
+                fontSize: 15,
+                color: '#4B5563',
+                lineHeight: '24px',
+                marginBottom: 20,
+              }}>
                 Courts need proof. My Safety Journal helps you document abuse privately and organize evidence that lawyers can use.
               </p>
 
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 20 }}>
+              {/* Checklist */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 24 }}>
                 {checklist.map((item) => (
                   <div key={item} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <Check size={14} color="#6B4EFF" aria-hidden="true" style={{ flexShrink: 0 }} />
-                    <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#1F1F1F', lineHeight: 1.5 }}>
+                    <Check size={16} color="#7C3AED" aria-hidden="true" style={{ flexShrink: 0 }} />
+                    <span style={{
+                      fontFamily: "'Syne', sans-serif",
+                      fontSize: 15,
+                      color: '#111827',
+                      lineHeight: '28px',
+                    }}>
                       {item}
                     </span>
                   </div>
                 ))}
               </div>
 
-              <button onClick={() => navigate('/signup')} className="w-full" style={{
-                background: '#6B4EFF', color: 'white', padding: '14px 24px',
-                borderRadius: 4, fontFamily: "'Syne', sans-serif", fontSize: 15,
-                fontWeight: 600, border: 'none', cursor: 'pointer',
-                transition: 'background 0.2s ease',
-              }}
-                onMouseEnter={e => { e.currentTarget.style.background = '#5539E8'; }}
-                onMouseLeave={e => { e.currentTarget.style.background = '#6B4EFF'; }}
+              {/* CTA */}
+              <button
+                onClick={() => navigate('/signup')}
+                className="w-full sm:w-auto"
+                style={{
+                  background: '#7C3AED',
+                  color: 'white',
+                  padding: '14px 28px',
+                  borderRadius: 8,
+                  fontFamily: "'Syne', sans-serif",
+                  fontSize: 16,
+                  fontWeight: 600,
+                  border: 'none',
+                  cursor: 'pointer',
+                  width: '100%',
+                  transition: 'background 0.25s ease',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#5B21B6'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = '#7C3AED'; }}
               >
                 Start Documenting Free
               </button>
 
+              {/* Legal disclaimer */}
               <p style={{
-                fontFamily: "'Syne', sans-serif", fontSize: 12, color: '#888888',
-                lineHeight: 1.5, marginTop: 14, fontStyle: 'italic',
+                fontFamily: "'Syne', sans-serif",
+                fontSize: 13,
+                color: '#6B7280',
+                lineHeight: '20px',
+                marginTop: 16,
+                fontStyle: 'italic',
               }}>
                 My Safety Journal is a documentation tool. It does not guarantee court acceptance. Always consult Legal Aid SA (0800 110 110) for legal advice.
               </p>

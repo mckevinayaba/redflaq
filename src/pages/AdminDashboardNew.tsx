@@ -69,7 +69,6 @@ export default function AdminDashboardNew() {
       supabase.from("profiles").select("*", { count: "exact", head: true }).gte("created_at", sevenDaysAgo),
       supabase.from("searches").select("searched_at").gte("searched_at", thirtyDaysAgo).order("searched_at", { ascending: true }),
       supabase.from("manual_payments").select("*", { count: "exact", head: true }).eq("status", "pending"),
-      supabase.from("manual_payments").select("amount").eq("status", "verified"),
       supabase.from("purchases").select("amount").eq("status", "completed"),
     ]);
 

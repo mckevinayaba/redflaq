@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import AdminLayout from "@/components/admin/AdminLayout";
 import {
-  Users, Search, BarChart3, CreditCard, TrendingUp, AlertTriangle, Mail,
+  Users, Search, BarChart3, CreditCard, TrendingUp, AlertTriangle, Mail, Download,
 } from "lucide-react";
+import { generateDashboardReport } from "@/utils/pdfDashboardReport";
 import {
   LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
 } from "recharts";

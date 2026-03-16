@@ -74,7 +74,7 @@ export default function AdminDashboard() {
       supabase.from("profiles").select("*", { count: "exact", head: true }),
       supabase.from("searches").select("*", { count: "exact", head: true }),
       supabase.from("searches").select("*", { count: "exact", head: true }).gte("searched_at", startOfDay),
-      supabase.from("manual_payments").select("amount").eq("status", "verified").gte("created_at", startOfMonth),
+      supabase.from("purchases").select("amount").eq("status", "completed").gte("purchased_at", startOfMonth),
       supabase.from("profiles").select("user_id, full_name, created_at").order("created_at", { ascending: false }).limit(20),
       supabase.from("searches").select("*").order("searched_at", { ascending: false }).limit(50),
     ]);

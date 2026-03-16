@@ -60,7 +60,7 @@ export default function AdminDashboardNew() {
     const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
 
-    const [profilesRes, checksRes, checksTodayRes, paymentsRes, recentChecksRes, newSignupsRes, last30Checks, pendingRes, allPaymentsRes, allPurchasesRes] = await Promise.all([
+    const [profilesRes, checksRes, checksTodayRes, revenueMonthRes, recentChecksRes, newSignupsRes, last30Checks, pendingRes, allPurchasesRes] = await Promise.all([
       supabase.from("profiles").select("*", { count: "exact", head: true }),
       supabase.from("searches").select("*", { count: "exact", head: true }),
       supabase.from("searches").select("*", { count: "exact", head: true }).gte("searched_at", startOfDay),

@@ -60,16 +60,15 @@ export default function AdminDashboardNew() {
     const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString();
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
 
-    const [profilesRes, checksRes, checksTodayRes, paymentsRes, recentChecksRes, newSignupsRes, last30Checks, pendingRes, allPaymentsRes, allPurchasesRes] = await Promise.all([
+    const [profilesRes, checksRes, checksTodayRes, revenueMonthRes, recentChecksRes, newSignupsRes, last30Checks, pendingRes, allPurchasesRes] = await Promise.all([
       supabase.from("profiles").select("*", { count: "exact", head: true }),
       supabase.from("searches").select("*", { count: "exact", head: true }),
       supabase.from("searches").select("*", { count: "exact", head: true }).gte("searched_at", startOfDay),
-      supabase.from("manual_payments").select("amount").eq("status", "verified").gte("created_at", startOfMonth),
+      supabase.from("purchases").select("amount").eq("status", "completed").gte("purchased_at", startOfMonth),
       supabase.from("searches").select("*").order("searched_at", { ascending: false }).limit(10),
       supabase.from("profiles").select("*", { count: "exact", head: true }).gte("created_at", sevenDaysAgo),
       supabase.from("searches").select("searched_at").gte("searched_at", thirtyDaysAgo).order("searched_at", { ascending: true }),
       supabase.from("manual_payments").select("*", { count: "exact", head: true }).eq("status", "pending"),
-      supabase.from("manual_payments").select("amount").eq("status", "verified"),
       supabase.from("purchases").select("amount").eq("status", "completed"),
     ]);
 
@@ -77,10 +76,8 @@ export default function AdminDashboardNew() {
     const { data: activeData } = await supabase.from("searches").select("user_id").gte("searched_at", startOfMonth).not("user_id", "is", null);
     const uniqueActive = new Set((activeData || []).map(r => r.user_id)).size;
 
-    const revenue = (paymentsRes.data || []).reduce((sum, p) => sum + Number(p.amount), 0);
-    const allTimeManual = (allPaymentsRes.data || []).reduce((sum, p) => sum + Number(p.amount), 0);
-    const allTimePurchases = (allPurchasesRes.data || []).reduce((sum, p) => sum + Number(p.amount), 0);
-    const allTimeRevenue = allTimeManual + allTimePurchases;
+    const revenue = (revenueMonthRes.data || []).reduce((sum, p) => sum + Number(p.amount), 0);
+    const allTimeRevenue = (allPurchasesRes.data || []).reduce((sum, p) => sum + Number(p.amount), 0);
 
     // Build daily chart data
     const dailyMap: Record<string, number> = {};

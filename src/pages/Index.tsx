@@ -3,33 +3,20 @@ import { Link, useSearchParams } from "react-router-dom";
 import { Check, X } from "lucide-react";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import HeroPlinq from "@/components/landing/HeroPlinq";
-import TickerBar from "@/components/landing/TickerBar";
-import StatsBar from "@/components/landing/StatsBar";
-import FreeAccountSection from "@/components/landing/FreeAccountSection";
+import HomepageDemo from "@/components/landing/HomepageDemo";
 import WhoRedflaqHelps from "@/components/landing/WhoRedflaqHelps";
-import ProtectionOrdersSection from "@/components/landing/ProtectionOrdersSection";
-
-import MidPageSignupStrip from "@/components/landing/MidPageSignupStrip";
-import PhotoGrid from "@/components/landing/PhotoGrid";
-import RealitySection from "@/components/landing/RealitySection";
-import BarrierSection from "@/components/landing/BarrierSection";
-import SearchOptionsSection from "@/components/landing/SearchOptionsSection";
 import HowItWorksPlinq from "@/components/landing/HowItWorksPlinq";
 import RiskLevelsSection from "@/components/landing/RiskLevelsSection";
-import MakeRedflaqHabitSection from "@/components/landing/MakeRedflaqHabitSection";
-import WhatsAppBanner from "@/components/WhatsAppBanner";
+import FreeAccountSection from "@/components/landing/FreeAccountSection";
+import ProtectionOrdersSection from "@/components/landing/ProtectionOrdersSection";
+import SearchOptionsSection from "@/components/landing/SearchOptionsSection";
 import PricingPlinq from "@/components/landing/PricingPlinq";
 import TestimonialsSectionNew from "@/components/landing/TestimonialsSectionNew";
-import CommunitySectionSA from "@/components/landing/CommunitySectionSA";
 import WhyRedflaqSection from "@/components/landing/WhyRedflaqSection";
-import CommunityImageStrip from "@/components/landing/CommunityImageStrip";
 import FAQPlinq from "@/components/landing/FAQPlinq";
 import FinalCTAPlinq from "@/components/landing/FinalCTAPlinq";
-import ShareSection from "@/components/landing/ShareSection";
-import AdvocacySection from "@/components/landing/AdvocacySection";
 import FooterPlinq from "@/components/landing/FooterPlinq";
 import { PWAInstallBanner } from "@/components/PWAInstallBanner";
-import HomepageDemo from "@/components/landing/HomepageDemo";
 
 const Index = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -52,7 +39,7 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen" style={{ background: '#F5F0EB', overflowX: 'hidden' }}>
+    <div className="min-h-screen" style={{ background: '#FFFFFF', overflowX: 'hidden' }}>
       {showConfirmedBanner && (
         <div style={{
           position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999,
@@ -85,86 +72,49 @@ const Index = () => {
       {/* 1. Hero */}
       <HeroPlinq />
 
-      {/* Live Demo */}
+      {/* 2. Live Demo */}
       <HomepageDemo />
 
-      {/* 2. Ticker Bar */}
-      <TickerBar />
-
-      {/* 3. Stats Bar */}
-      <StatsBar />
-
-      {/* 4. Create Your Free Safety Account */}
-      <FreeAccountSection />
-
-      {/* 5. Who RedFlaq Helps */}
+      {/* 3. Who RedFlaq Helps */}
       <WhoRedflaqHelps />
 
-
-      {/* 7. Protection Orders & Evidence Collection */}
-      <ProtectionOrdersSection />
-
-      {/* 8. Photo Grid */}
-      <PhotoGrid />
-
-      {/* 8. The South African Reality */}
-      <RealitySection />
-
-      {/* 9. Why No One Checked Before */}
-      <BarrierSection />
-
-      {/* 10. Search Form */}
-      <SearchOptionsSection />
-
-      {/* 11. How It Works */}
+      {/* 4. How It Works */}
       <div id="how-it-works">
         <HowItWorksPlinq />
       </div>
 
-      {/* 12. Risk Levels / Your Report */}
+      {/* 5. Risk Levels */}
       <RiskLevelsSection />
 
-      {/* Make RedFlaq a Habit */}
-      <MakeRedflaqHabitSection />
+      {/* 6. Free Safety Account */}
+      <FreeAccountSection />
 
-      {/* WhatsApp Banner */}
-      <WhatsAppBanner />
+      {/* 7. Protection Orders */}
+      <ProtectionOrdersSection />
 
-      {/* 13. Pricing */}
+      {/* 8. Search Form */}
+      <SearchOptionsSection />
+
+      {/* 9. Pricing */}
       <div id="pricing">
         <PricingPlinq />
       </div>
 
-      {/* 14. Testimonials */}
+      {/* 10. Testimonials */}
       <div id="testimonials">
         <TestimonialsSectionNew />
       </div>
 
-      {/* Community images */}
-      <CommunityImageStrip />
-
-      {/* 15. Community CTA */}
-      <CommunitySectionSA />
-
-      {/* 16. Why RedFlaq Section (Team & Principles) */}
+      {/* 11. Why RedFlaq / Team */}
       <WhyRedflaqSection />
 
-      {/* 17. Mid-Page Signup Strip */}
-      <MidPageSignupStrip />
-
-      {/* 19. FAQ */}
+      {/* 12. FAQ */}
       <FAQPlinq />
 
-      {/* 20. Final CTA */}
+      {/* 13. Final CTA */}
       <FinalCTAPlinq />
 
-      {/* 21. Share Section */}
-      <ShareSection />
-
-      {/* 22. Advocacy */}
-      <AdvocacySection />
-
-      {/* 23. Footer */}
+      {/* 14. Footer */}
       <FooterPlinq />
       <PWAInstallBanner />
     </div>

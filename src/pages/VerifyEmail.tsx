@@ -31,14 +31,21 @@ export default function VerifyEmail() {
     });
   }, [navigate]);
 
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const timer = setTimeout(() => setCooldown(c => c - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [cooldown]);
+
   const handleResend = async () => {
-    if (!email) return;
+    if (!email || cooldown > 0) return;
     setResending(true);
     const { error } = await supabase.auth.resend({ type: "signup", email });
     if (error) {
       toast({ title: "Could not resend", description: error.message, variant: "destructive" });
     } else {
       toast({ title: "Email sent ✓", description: "Check your inbox for the verification link." });
+      setCooldown(60);
     }
     setResending(false);
   };

@@ -45,3 +45,5 @@ project_id = "gewwxdmxrwyosddczezg"
     verify_jwt = false
   [functions.whatsapp-followup]
     verify_jwt = false
+  [functions.process-email-queue]
+    verify_jwt = true

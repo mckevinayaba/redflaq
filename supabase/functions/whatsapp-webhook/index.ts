@@ -40,32 +40,39 @@ function getSupabase() {
 }
 
 // ── Meta WhatsApp Send API ──
-async function sendWhatsAppMessage(to: string, text: string) {
+async function sendWhatsAppMessage(to: string, text: string): Promise<{ ok: boolean; error?: string }> {
   const token = Deno.env.get("WHATSAPP_ACCESS_TOKEN")!;
   const phoneId = Deno.env.get("WHATSAPP_PHONE_NUMBER_ID")!;
 
-  const res = await fetch(
-    `https://graph.facebook.com/v21.0/${phoneId}/messages`,
-    {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        messaging_product: "whatsapp",
-        to,
-        type: "text",
-        text: { body: text },
-      }),
-    }
-  );
+  try {
+    const res = await fetch(
+      `https://graph.facebook.com/v21.0/${phoneId}/messages`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messaging_product: "whatsapp",
+          to,
+          type: "text",
+          text: { body: text },
+        }),
+      }
+    );
 
-  if (!res.ok) {
-    const err = await res.text();
-    console.error("Meta send error:", err);
+    if (!res.ok) {
+      const errBody = await res.text();
+      console.error("Meta send error:", res.status, errBody);
+      return { ok: false, error: `${res.status}: ${errBody}` };
+    }
+
+    return { ok: true };
+  } catch (err) {
+    console.error("Meta send fetch error:", err);
+    return { ok: false, error: String(err) };
   }
-  return res;
 }
 
 // ── Log message ──
@@ -73,11 +80,16 @@ async function logMessage(
   supabase: ReturnType<typeof getSupabase>,
   phone: string,
   text: string,
-  direction: "inbound" | "outbound"
+  direction: "inbound" | "outbound",
+  sendError?: string
 ) {
   await supabase
     .from("whatsapp_messages")
-    .insert({ phone_number: phone, message_text: text, direction });
+    .insert({
+      phone_number: phone,
+      message_text: sendError ? `[SEND FAILED: ${sendError}] ${text}` : text,
+      direction,
+    });
 }
 
 // ── Get or create conversation ──
@@ -252,6 +264,110 @@ Please try again in a moment or continue here:
 
 https://redflaq.com/whatsapp`;
 
+// ── Process state machine ──
+async function processStateMachine(
+  supabase: ReturnType<typeof getSupabase>,
+  convo: Record<string, unknown>,
+  msgText: string
+): Promise<{ reply: string; newState: string; updates: Record<string, unknown> }> {
+  const state = convo.current_state as string;
+  const inputLower = msgText.toLowerCase();
+  let reply = "";
+  let newState = state;
+  const updates: Record<string, unknown> = {};
+
+  switch (state) {
+    case "START": {
+      reply = await getRandomOpening(supabase);
+      newState = "MENU";
+      break;
+    }
+
+    case "MENU": {
+      if (inputLower === "1") {
+        reply = CONSENT_MSG;
+        newState = "CHECK_CONSENT";
+      } else if (inputLower === "2") {
+        reply = SIGNUP_MSG;
+        newState = "MENU";
+      } else if (inputLower === "3") {
+        reply = WHY_MSG + "\n\nWhat would you like to do?\n\n1. Run a safety check now\n2. Create your free RedFlaq account\n3. Why RedFlaq exists\n4. Get help now\n5. Share this tool";
+        newState = "MENU";
+      } else if (inputLower === "4") {
+        reply = HELP_MSG;
+        newState = "MENU";
+      } else if (inputLower === "5") {
+        reply = SHARE_MSG;
+        newState = "MENU";
+      } else if (GREETINGS.some((g) => inputLower.includes(g))) {
+        reply = await getRandomOpening(supabase);
+        newState = "MENU";
+      } else {
+        reply = "Please reply with a number from 1 to 5:\n\n1. Run a safety check now\n2. Create your free RedFlaq account\n3. Why RedFlaq exists\n4. Get help now\n5. Share this tool";
+        newState = "MENU";
+      }
+      break;
+    }
+
+    case "CHECK_CONSENT": {
+      if (inputLower === "yes" || inputLower === "y") {
+        reply = CHECK_NAME_MSG;
+        newState = "CHECK_NAME";
+        updates.consent_given = true;
+      } else {
+        reply = "No problem. You can return anytime.\n\nWhat would you like to do?\n\n1. Run a safety check now\n2. Create your free RedFlaq account\n3. Why RedFlaq exists\n4. Get help now\n5. Share this tool";
+        newState = "MENU";
+      }
+      break;
+    }
+
+    case "CHECK_NAME": {
+      if (msgText.length < 2) {
+        reply = "Please enter the full name of the person you want to check.";
+      } else {
+        updates.name_entered = msgText;
+        reply = CHECK_PROVINCE_MSG;
+        newState = "CHECK_PROVINCE";
+      }
+      break;
+    }
+
+    case "CHECK_PROVINCE": {
+      const matched = VALID_PROVINCES.find(
+        (p) => inputLower.replace(/-/g, " ").includes(p) || p.includes(inputLower.replace(/-/g, " "))
+      );
+      if (matched) {
+        const province = matched
+          .split(" ")
+          .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+          .join(" ");
+        updates.province_entered = province;
+        const link = buildCheckLink((convo.name_entered as string) || msgText, province);
+        updates.last_generated_link = link;
+        reply = buildCheckSentMsg(link);
+        newState = "CHECK_SENT";
+      } else {
+        reply = "I did not recognise that province. " + CHECK_PROVINCE_MSG;
+      }
+      break;
+    }
+
+    case "CHECK_SENT":
+    case "FOLLOWUP_SENT": {
+      reply = "Welcome back.\n\nWhat would you like to do?\n\n1. Run a safety check now\n2. Create your free RedFlaq account\n3. Why RedFlaq exists\n4. Get help now\n5. Share this tool";
+      newState = "MENU";
+      break;
+    }
+
+    default: {
+      reply = await getRandomOpening(supabase);
+      newState = "MENU";
+    }
+  }
+
+  return { reply, newState, updates };
+}
+
 // ── Main handler ──
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -275,8 +391,12 @@ Deno.serve(async (req) => {
 
   // POST = incoming messages
   if (req.method === "POST") {
+    // Clone request body early so error handler can read it
+    const bodyText = await req.text();
+    let from: string | undefined;
+
     try {
-      const body = await req.json();
+      const body = JSON.parse(bodyText);
 
       // Meta sends various webhook events; extract message
       const entry = body?.entry?.[0];
@@ -292,125 +412,36 @@ Deno.serve(async (req) => {
       }
 
       const message = value.messages[0];
-      const from = message.from; // sender phone number
+      from = message.from; // sender phone number
       const msgText = (message.text?.body || "").trim();
+
+      console.log(`Inbound from ${from}: "${msgText}"`);
 
       const supabase = getSupabase();
 
       // Log inbound
-      await logMessage(supabase, from, msgText, "inbound");
+      await logMessage(supabase, from!, msgText, "inbound");
 
       // Get or create conversation
-      const convo = await getOrCreateConversation(supabase, from);
+      const convo = await getOrCreateConversation(supabase, from!);
       if (!convo) throw new Error("Failed to get/create conversation");
 
-      const state = convo.current_state;
-      const inputLower = msgText.toLowerCase();
-
-      let reply = "";
-      let newState = state;
-      const updates: Record<string, unknown> = {};
-
-      // ── State machine ──
-      switch (state) {
-        case "START": {
-          reply = await getRandomOpening(supabase);
-          newState = "MENU";
-          break;
-        }
-
-        case "MENU": {
-          if (inputLower === "1") {
-            reply = CONSENT_MSG;
-            newState = "CHECK_CONSENT";
-          } else if (inputLower === "2") {
-            reply = SIGNUP_MSG;
-            newState = "MENU";
-          } else if (inputLower === "3") {
-            reply = WHY_MSG + "\n\nWhat would you like to do?\n\n1. Run a safety check now\n2. Create your free RedFlaq account\n3. Why RedFlaq exists\n4. Get help now\n5. Share this tool";
-            newState = "MENU";
-          } else if (inputLower === "4") {
-            reply = HELP_MSG;
-            newState = "MENU";
-          } else if (inputLower === "5") {
-            reply = SHARE_MSG;
-            newState = "MENU";
-          } else if (GREETINGS.some((g) => inputLower.includes(g))) {
-            reply = await getRandomOpening(supabase);
-            newState = "MENU";
-          } else {
-            reply = "Please reply with a number from 1 to 5:\n\n1. Run a safety check now\n2. Create your free RedFlaq account\n3. Why RedFlaq exists\n4. Get help now\n5. Share this tool";
-            newState = "MENU";
-          }
-          break;
-        }
-
-        case "CHECK_CONSENT": {
-          if (inputLower === "yes" || inputLower === "y") {
-            reply = CHECK_NAME_MSG;
-            newState = "CHECK_NAME";
-            updates.consent_given = true;
-          } else {
-            reply = "No problem. You can return anytime.\n\nWhat would you like to do?\n\n1. Run a safety check now\n2. Create your free RedFlaq account\n3. Why RedFlaq exists\n4. Get help now\n5. Share this tool";
-            newState = "MENU";
-          }
-          break;
-        }
-
-        case "CHECK_NAME": {
-          if (msgText.length < 2) {
-            reply = "Please enter the full name of the person you want to check.";
-          } else {
-            updates.name_entered = msgText;
-            reply = CHECK_PROVINCE_MSG;
-            newState = "CHECK_PROVINCE";
-          }
-          break;
-        }
-
-        case "CHECK_PROVINCE": {
-          const matched = VALID_PROVINCES.find(
-            (p) => inputLower.replace(/-/g, " ").includes(p) || p.includes(inputLower.replace(/-/g, " "))
-          );
-          if (matched) {
-            const province = matched
-              .split(" ")
-              .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-              .join(" ");
-            updates.province_entered = province;
-            const link = buildCheckLink(convo.name_entered || msgText, province);
-            updates.last_generated_link = link;
-            reply = buildCheckSentMsg(link);
-            newState = "CHECK_SENT";
-          } else {
-            reply = "I did not recognise that province. " + CHECK_PROVINCE_MSG;
-          }
-          break;
-        }
-
-        case "CHECK_SENT":
-        case "FOLLOWUP_SENT": {
-          // User came back after check sent or followup — show menu
-          reply = "Welcome back.\n\nWhat would you like to do?\n\n1. Run a safety check now\n2. Create your free RedFlaq account\n3. Why RedFlaq exists\n4. Get help now\n5. Share this tool";
-          newState = "MENU";
-          break;
-        }
-
-        default: {
-          reply = await getRandomOpening(supabase);
-          newState = "MENU";
-        }
-      }
+      // Process state machine
+      const { reply, newState, updates } = await processStateMachine(supabase, convo, msgText);
 
       // Update conversation state
       updates.current_state = newState;
-      await updateConvo(supabase, from, updates);
+      await updateConvo(supabase, from!, updates);
 
       // Send reply
-      await sendWhatsAppMessage(from, reply);
+      const sendResult = await sendWhatsAppMessage(from!, reply);
 
-      // Log outbound
-      await logMessage(supabase, from, reply, "outbound");
+      // Log outbound (with failure info if send failed)
+      await logMessage(supabase, from!, reply, "outbound", sendResult.ok ? undefined : sendResult.error);
+
+      if (!sendResult.ok) {
+        console.error(`Failed to send reply to ${from}: ${sendResult.error}`);
+      }
 
       return new Response(JSON.stringify({ status: "ok" }), {
         status: 200,
@@ -420,14 +451,17 @@ Deno.serve(async (req) => {
       console.error("WhatsApp webhook error:", error);
 
       // Try to send error message if we have the sender
-      try {
-        const body = await req.clone().json().catch(() => null);
-        const from = body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0]?.from;
-        if (from) {
-          await sendWhatsAppMessage(from, ERROR_MSG);
+      if (!from) {
+        try {
+          const body = JSON.parse(bodyText);
+          from = body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0]?.from;
+        } catch (_) {
+          // ignore parse error
         }
-      } catch (_) {
-        // ignore secondary error
+      }
+
+      if (from) {
+        await sendWhatsAppMessage(from, ERROR_MSG);
       }
 
       return new Response(JSON.stringify({ status: "error" }), {

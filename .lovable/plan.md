@@ -1,50 +1,35 @@
 
-Goal: deeply verify whether your WhatsApp keys/config are actually correct.
 
-What I verified in depth
-1) Backend webhook code path:
-- GET verification checks only:
-  - hub.mode === "subscribe"
-  - hub.verify_token === WHATSAPP_VERIFY_TOKEN
-- If either fails, response is 403 "Forbidden".
+## Diagnosis
 
-2) Live endpoint behavior:
-- Calling your webhook URL with the token string you shared returns 403 (not 200 challenge).
-- This proves the function is reachable, but token comparison is failing.
+I investigated thoroughly and found two distinct issues:
 
-3) Real verification attempts in backend request logs:
-- Meta is calling the correct callback path and receiving 403.
-- So the issue is not routing/path availability; it is verification mismatch.
+### Issue 1: Signup confirmation emails may not be delivering
 
-4) Runtime message-send key health:
-- I triggered a safe inbound simulation.
-- Outbound send to Meta failed with OAuthException code 190/subcode 463:
-  - "Error validating access token: Session has expired..."
-- This confirms WHATSAPP_ACCESS_TOKEN is expired.
+- **Jessica Scott** (jessicascott007@gmail.com) signed up at 15:50 UTC today. Her email is **not confirmed**.
+- The `auth-email-hook` edge function has virtually no logs — just a "shutdown" message. This means the hook is likely **not registered** with the email routing system, so it's never being called when signup emails should be sent.
+- The email queue infrastructure (`email_send_log` table etc.) does **not exist** — `setup_email_infra` was never run.
+- Your email domain `notify.redflaq.com` **is verified and active**, so sending capability exists — but the hook isn't wired up.
 
-5) Secret presence:
-- WHATSAPP_VERIFY_TOKEN, WHATSAPP_ACCESS_TOKEN, WHATSAPP_PHONE_NUMBER_ID all exist in project secrets.
-- Existence is correct; values are not all correct/current.
+### Issue 2: Rate limit on resend
 
-Diagnosis (final)
-- Key mismatch #1 (blocking webhook verification now):
-  - WHATSAPP_VERIFY_TOKEN secret value does NOT match what Meta is using in Verify Token.
-- Key mismatch #2 (will block messaging after verification):
-  - WHATSAPP_ACCESS_TOKEN is expired and must be replaced.
-- WHATSAPP_PHONE_NUMBER_ID cannot be fully validated until a fresh access token is in place.
+- Jessica hit the built-in auth email rate limit when clicking "Resend" multiple times. The error "email rate limit exceeded" (429) is from the default auth rate limiter — it prevents more than one confirmation email per ~60 seconds per user. This is expected behavior and not a bug.
 
-Non-breaking fix plan
-1) Reset verification token to a fresh known string (example: redflaq_wa_verify_2026_secure_v2).
-2) Set that exact same string in:
-   - Lovable Cloud secret: WHATSAPP_VERIFY_TOKEN
-   - Meta webhook “Verify token” field
-3) Replace WHATSAPP_ACCESS_TOKEN with a fresh long-lived/system-user token from Meta.
-4) Keep callback URL exactly:
-   - https://gewwxdmxrwyosddczezg.supabase.co/functions/v1/whatsapp-webhook
-5) Click “Verify and Save” again.
-6) End-to-end validation:
-   - Send “hi” to WhatsApp number
-   - Confirm inbound/outbound rows are written in whatsapp_messages
-   - Confirm no OAuth 190 token errors in function logs
+### Root Cause
 
-If you want, next step I’ll execute is a targeted remediation pass: rotate both tokens, then run a full verification + message delivery test sequence end-to-end.
+The `auth-email-hook` was deployed as code but was never **registered** with the email system. Without registration, signup emails either fall back to a default sender (which may not be configured/working) or silently fail.
+
+### Fix Plan
+
+1. **Set up email infrastructure** — run `setup_email_infra` to create the email queue tables, cron job, and dispatcher function.
+
+2. **Re-scaffold and register the auth-email-hook** — use the scaffolding tool (with overwrite) to properly register the hook with the email routing system. This is the critical step — deployment alone is not enough.
+
+3. **Redeploy the auth-email-hook** — deploy the updated function so the registration takes effect.
+
+4. **Manually confirm Jessica's email** — since she's stuck, we can confirm her email directly so she can use the platform now.
+
+5. **Add a cooldown timer to the Resend button** — show a countdown (e.g. 60s) after clicking Resend so users don't repeatedly trigger the rate limit and see the scary red error.
+
+No other code changes needed — the email templates already exist and are well-designed.
+

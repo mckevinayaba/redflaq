@@ -1180,6 +1180,90 @@ export type Database = {
         }
         Relationships: []
       }
+      whatsapp_conversations: {
+        Row: {
+          consent_given: boolean | null
+          created_at: string | null
+          current_state: string
+          id: string
+          last_generated_link: string | null
+          last_message_at: string | null
+          name_entered: string | null
+          phone_number: string
+          province_entered: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          consent_given?: boolean | null
+          created_at?: string | null
+          current_state?: string
+          id?: string
+          last_generated_link?: string | null
+          last_message_at?: string | null
+          name_entered?: string | null
+          phone_number: string
+          province_entered?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          consent_given?: boolean | null
+          created_at?: string | null
+          current_state?: string
+          id?: string
+          last_generated_link?: string | null
+          last_message_at?: string | null
+          name_entered?: string | null
+          phone_number?: string
+          province_entered?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      whatsapp_messages: {
+        Row: {
+          created_at: string | null
+          direction: string
+          id: string
+          message_text: string
+          phone_number: string
+        }
+        Insert: {
+          created_at?: string | null
+          direction: string
+          id?: string
+          message_text: string
+          phone_number: string
+        }
+        Update: {
+          created_at?: string | null
+          direction?: string
+          id?: string
+          message_text?: string
+          phone_number?: string
+        }
+        Relationships: []
+      }
+      whatsapp_openings: {
+        Row: {
+          active: boolean | null
+          created_at: string | null
+          id: string
+          opening_text: string
+        }
+        Insert: {
+          active?: boolean | null
+          created_at?: string | null
+          id?: string
+          opening_text: string
+        }
+        Update: {
+          active?: boolean | null
+          created_at?: string | null
+          id?: string
+          opening_text?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

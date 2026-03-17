@@ -9,7 +9,9 @@ import {
   Head,
   Heading,
   Html,
+  Img,
   Preview,
+  Section,
   Text,
 } from 'npm:@react-email/components@0.0.22'
 
@@ -24,20 +26,31 @@ export const MagicLinkEmail = ({
 }: MagicLinkEmailProps) => (
   <Html lang="en" dir="ltr">
     <Head />
-    <Preview>Your login link for {siteName}</Preview>
+    <Preview>Your RedFlaq login link</Preview>
     <Body style={main}>
-      <Container style={container}>
-        <Heading style={h1}>Your login link</Heading>
-        <Text style={text}>
-          Click the button below to log in to {siteName}. This link will expire
-          shortly.
-        </Text>
-        <Button style={button} href={confirmationUrl}>
-          Log In
-        </Button>
-        <Text style={footer}>
-          If you didn't request this link, you can safely ignore this email.
-        </Text>
+      <Container style={outerWrapper}>
+        <Container style={card}>
+          <Section style={header}>
+            <Img src="https://redflaq.lovable.app/redflaq-logo-email.png" alt="RedFlaq" height="44" style={{ margin: '0 auto 12px', display: 'block' }} />
+          </Section>
+          <Section style={body}>
+            <Heading style={h1}>Your login link</Heading>
+            <Text style={paragraph}>
+              Click the button below to log in to RedFlaq. This link will expire shortly.
+            </Text>
+            <Section style={buttonWrapper}>
+              <Button style={ctaButton} href={confirmationUrl}>
+                Log In →
+              </Button>
+            </Section>
+            <Text style={mutedCenter}>
+              If you didn't request this link, you can safely ignore this email.
+            </Text>
+          </Section>
+          <Section style={footer}>
+            <Text style={footerMuted}>RedFlaq · Johannesburg, South Africa</Text>
+          </Section>
+        </Container>
       </Container>
     </Body>
   </Html>
@@ -45,26 +58,15 @@ export const MagicLinkEmail = ({
 
 export default MagicLinkEmail
 
-const main = { backgroundColor: '#ffffff', fontFamily: 'Arial, sans-serif' }
-const container = { padding: '20px 25px' }
-const h1 = {
-  fontSize: '22px',
-  fontWeight: 'bold' as const,
-  color: '#000000',
-  margin: '0 0 20px',
-}
-const text = {
-  fontSize: '14px',
-  color: '#55575d',
-  lineHeight: '1.5',
-  margin: '0 0 25px',
-}
-const button = {
-  backgroundColor: '#000000',
-  color: '#ffffff',
-  fontSize: '14px',
-  borderRadius: '8px',
-  padding: '12px 20px',
-  textDecoration: 'none',
-}
-const footer = { fontSize: '12px', color: '#999999', margin: '30px 0 0' }
+const main = { backgroundColor: '#ffffff', fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif" }
+const outerWrapper = { padding: '40px 20px' }
+const card = { maxWidth: '560px', margin: '0 auto', backgroundColor: '#ffffff', borderRadius: '16px', overflow: 'hidden' as const, boxShadow: '0 2px 12px rgba(0,0,0,0.06)' }
+const header = { backgroundColor: '#1a0a2e', padding: '32px 40px 24px', textAlign: 'center' as const }
+const body = { padding: '40px 40px 32px' }
+const h1 = { margin: '0 0 16px', fontSize: '26px', fontWeight: '700' as const, color: '#1a0a2e', lineHeight: '1.3' }
+const paragraph = { margin: '0 0 24px', fontSize: '16px', color: '#444444', lineHeight: '1.6' }
+const buttonWrapper = { textAlign: 'center' as const, padding: '8px 0 32px' }
+const ctaButton = { display: 'inline-block' as const, backgroundColor: '#7C3AED', color: '#ffffff', fontSize: '16px', fontWeight: '600' as const, textDecoration: 'none', padding: '16px 40px', borderRadius: '50px' }
+const mutedCenter = { margin: '0', fontSize: '13px', color: '#999999', textAlign: 'center' as const }
+const footer = { backgroundColor: '#f3f0ff', padding: '24px 40px', borderTop: '1px solid #e8e4f4' }
+const footerMuted = { margin: '0', fontSize: '12px', color: '#999999', textAlign: 'center' as const }

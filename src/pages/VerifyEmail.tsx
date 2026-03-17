@@ -114,17 +114,17 @@ export default function VerifyEmail() {
 
           <button
             onClick={handleResend}
-            disabled={resending}
+            disabled={resending || cooldown > 0}
             style={{
               background: 'transparent', border: '1.5px solid rgba(124,58,237,0.3)',
               padding: '14px 24px',
               fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 600,
-              color: '#A855F7', cursor: resending ? 'not-allowed' : 'pointer',
-              width: '100%', marginTop: 12, opacity: resending ? 0.7 : 1, borderRadius: 50,
+              color: '#A855F7', cursor: (resending || cooldown > 0) ? 'not-allowed' : 'pointer',
+              width: '100%', marginTop: 12, opacity: (resending || cooldown > 0) ? 0.7 : 1, borderRadius: 50,
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
             }}
           >
-            {resending ? <><Loader2 size={16} className="animate-spin" /> Sending...</> : "Resend confirmation email"}
+            {resending ? <><Loader2 size={16} className="animate-spin" /> Sending...</> : cooldown > 0 ? `Resend available in ${cooldown}s` : "Resend confirmation email"}
           </button>
         </div>
 

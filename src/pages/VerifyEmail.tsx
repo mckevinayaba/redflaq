@@ -7,6 +7,7 @@ import redflaqLogo from "@/assets/redflaq-logo-official.png";
 
 export default function VerifyEmail() {
   const [resending, setResending] = useState(false);
+  const [cooldown, setCooldown] = useState(0);
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
   const { toast } = useToast();

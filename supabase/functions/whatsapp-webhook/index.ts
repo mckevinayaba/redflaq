@@ -388,15 +388,11 @@ Deno.serve(async (req) => {
           break;
         }
 
-        case "CHECK_SENT": {
-          // User came back after check sent — show menu
-          if (GREETINGS.some((g) => inputLower.includes(g)) || ["1","2","3","4","5"].includes(inputLower)) {
-            reply = await getRandomOpening(supabase);
-            newState = "MENU";
-          } else {
-            reply = "Thank you for using RedFlaq.\n\nWhat would you like to do next?\n\n1. Run a safety check now\n2. Create your free RedFlaq account\n3. Why RedFlaq exists\n4. Get help now\n5. Share this tool";
-            newState = "MENU";
-          }
+        case "CHECK_SENT":
+        case "FOLLOWUP_SENT": {
+          // User came back after check sent or followup — show menu
+          reply = "Welcome back.\n\nWhat would you like to do?\n\n1. Run a safety check now\n2. Create your free RedFlaq account\n3. Why RedFlaq exists\n4. Get help now\n5. Share this tool";
+          newState = "MENU";
           break;
         }
 

@@ -1,41 +1,50 @@
 
+Goal: deeply verify whether your WhatsApp keys/config are actually correct.
 
-## Diagnosis: Meta Webhook Verification Failing
+What I verified in depth
+1) Backend webhook code path:
+- GET verification checks only:
+  - hub.mode === "subscribe"
+  - hub.verify_token === WHATSAPP_VERIFY_TOKEN
+- If either fails, response is 403 "Forbidden".
 
-The screenshot shows Meta's error: **"The callback URL or verify token couldn't be validated."**
+2) Live endpoint behavior:
+- Calling your webhook URL with the token string you shared returns 403 (not 200 challenge).
+- This proves the function is reachable, but token comparison is failing.
 
-### Root Cause
+3) Real verification attempts in backend request logs:
+- Meta is calling the correct callback path and receiving 403.
+- So the issue is not routing/path availability; it is verification mismatch.
 
-The callback URL in your Meta dashboard is:
-```
-gewwxdmxrwyosddczezg.supabase.co/functions/v1/whatsapp-webhook
-```
+4) Runtime message-send key health:
+- I triggered a safe inbound simulation.
+- Outbound send to Meta failed with OAuthException code 190/subcode 463:
+  - "Error validating access token: Session has expired..."
+- This confirms WHATSAPP_ACCESS_TOKEN is expired.
 
-It is **missing the `https://` prefix**. Meta requires a full URL.
+5) Secret presence:
+- WHATSAPP_VERIFY_TOKEN, WHATSAPP_ACCESS_TOKEN, WHATSAPP_PHONE_NUMBER_ID all exist in project secrets.
+- Existence is correct; values are not all correct/current.
 
-### What Needs to Happen
+Diagnosis (final)
+- Key mismatch #1 (blocking webhook verification now):
+  - WHATSAPP_VERIFY_TOKEN secret value does NOT match what Meta is using in Verify Token.
+- Key mismatch #2 (will block messaging after verification):
+  - WHATSAPP_ACCESS_TOKEN is expired and must be replaced.
+- WHATSAPP_PHONE_NUMBER_ID cannot be fully validated until a fresh access token is in place.
 
-**Step 1 — Fix the Callback URL in Meta (manual, on your side)**
+Non-breaking fix plan
+1) Reset verification token to a fresh known string (example: redflaq_wa_verify_2026_secure_v2).
+2) Set that exact same string in:
+   - Lovable Cloud secret: WHATSAPP_VERIFY_TOKEN
+   - Meta webhook “Verify token” field
+3) Replace WHATSAPP_ACCESS_TOKEN with a fresh long-lived/system-user token from Meta.
+4) Keep callback URL exactly:
+   - https://gewwxdmxrwyosddczezg.supabase.co/functions/v1/whatsapp-webhook
+5) Click “Verify and Save” again.
+6) End-to-end validation:
+   - Send “hi” to WhatsApp number
+   - Confirm inbound/outbound rows are written in whatsapp_messages
+   - Confirm no OAuth 190 token errors in function logs
 
-In the Meta Developer Dashboard, update the Callback URL field to:
-
-```
-https://gewwxdmxrwyosddczezg.supabase.co/functions/v1/whatsapp-webhook
-```
-
-**Step 2 — Verify the token matches**
-
-The verify token in your screenshot is `redflaq_wa_verify_2026_secure`. The edge function reads from the `WHATSAPP_VERIFY_TOKEN` secret. I confirmed this secret exists. You need to ensure the value stored in that secret matches exactly what you entered in Meta — `redflaq_wa_verify_2026_secure`.
-
-**Step 3 — Confirm the edge function is deployed and responding**
-
-I tested calling the function and got a `403 Forbidden` response, which is actually correct — it means the function IS running and returning 403 because my test token didn't match. This confirms the function is deployed and working.
-
-### Summary
-
-No code changes are needed. This is a configuration issue on the Meta side:
-
-1. Add `https://` to the beginning of your Callback URL in Meta
-2. Confirm the verify token value matches exactly
-3. Click "Verify and save" again
-
+If you want, next step I’ll execute is a targeted remediation pass: rotate both tokens, then run a full verification + message delivery test sequence end-to-end.

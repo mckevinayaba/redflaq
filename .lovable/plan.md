@@ -1,12 +1,18 @@
 
 
-## Update WhatsApp Access Token
+## Plan: Update WHATSAPP_VERIFY_TOKEN Secret
 
-**What**: Replace the expired `WHATSAPP_ACCESS_TOKEN` with your new permanent System User token.
+The `WHATSAPP_VERIFY_TOKEN` secret already exists in the project. We need to update its value to `redflaq_verify_2025` so it matches what you'll enter in the Meta Developer Dashboard.
 
-**Steps**:
-1. Update the `WHATSAPP_ACCESS_TOKEN` secret with the value you provide
-2. Test the webhook by sending a simulated inbound message to confirm outbound delivery now works
+### Steps
 
-That's it — no code changes needed. The `whatsapp-webhook` edge function already uses `Deno.env.get("WHATSAPP_ACCESS_TOKEN")` so the new token will take effect immediately.
+1. **Update the secret** `WHATSAPP_VERIFY_TOKEN` to `redflaq_verify_2025`
+
+2. **You then configure Meta Developer Dashboard**:
+   - Go to your WhatsApp app → Configuration → Webhook
+   - **Callback URL**: `https://gewwxdmxrwyosddczezg.supabase.co/functions/v1/whatsapp-webhook`
+   - **Verify token**: `redflaq_verify_2025`
+   - Subscribe to the **`messages`** webhook field
+
+No code changes needed — just the secret update and Meta configuration.
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
@@ -7,6 +7,7 @@ import redflaqLogo from "@/assets/redflaq-logo-official.png";
 
 export default function VerifyEmail() {
   const [resending, setResending] = useState(false);
+  const [cooldown, setCooldown] = useState(0);
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -30,14 +31,21 @@ export default function VerifyEmail() {
     });
   }, [navigate]);
 
+  useEffect(() => {
+    if (cooldown <= 0) return;
+    const timer = setTimeout(() => setCooldown(c => c - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [cooldown]);
+
   const handleResend = async () => {
-    if (!email) return;
+    if (!email || cooldown > 0) return;
     setResending(true);
     const { error } = await supabase.auth.resend({ type: "signup", email });
     if (error) {
       toast({ title: "Could not resend", description: error.message, variant: "destructive" });
     } else {
       toast({ title: "Email sent ✓", description: "Check your inbox for the verification link." });
+      setCooldown(60);
     }
     setResending(false);
   };
@@ -106,17 +114,17 @@ export default function VerifyEmail() {
 
           <button
             onClick={handleResend}
-            disabled={resending}
+            disabled={resending || cooldown > 0}
             style={{
               background: 'transparent', border: '1.5px solid rgba(124,58,237,0.3)',
               padding: '14px 24px',
               fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 600,
-              color: '#A855F7', cursor: resending ? 'not-allowed' : 'pointer',
-              width: '100%', marginTop: 12, opacity: resending ? 0.7 : 1, borderRadius: 50,
+              color: '#A855F7', cursor: (resending || cooldown > 0) ? 'not-allowed' : 'pointer',
+              width: '100%', marginTop: 12, opacity: (resending || cooldown > 0) ? 0.7 : 1, borderRadius: 50,
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
             }}
           >
-            {resending ? <><Loader2 size={16} className="animate-spin" /> Sending...</> : "Resend confirmation email"}
+            {resending ? <><Loader2 size={16} className="animate-spin" /> Sending...</> : cooldown > 0 ? `Resend available in ${cooldown}s` : "Resend confirmation email"}
           </button>
         </div>
 

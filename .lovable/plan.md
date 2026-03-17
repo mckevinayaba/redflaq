@@ -1,35 +1,55 @@
 
 
-## Diagnosis
+## Problem
 
-I investigated thoroughly and found two distinct issues:
+The Tawk.to chat widget is:
+1. Auto-opening its chat window without user interaction
+2. Showing a proactive "We Are Here" popup message
+3. Displaying a "1 new message" notification badge above the navbar
 
-### Issue 1: Signup confirmation emails may not be delivering
+All of these are controlled by Tawk.to's API settings.
 
-- **Jessica Scott** (jessicascott007@gmail.com) signed up at 15:50 UTC today. Her email is **not confirmed**.
-- The `auth-email-hook` edge function has virtually no logs — just a "shutdown" message. This means the hook is likely **not registered** with the email routing system, so it's never being called when signup emails should be sent.
-- The email queue infrastructure (`email_send_log` table etc.) does **not exist** — `setup_email_infra` was never run.
-- Your email domain `notify.redflaq.com` **is verified and active**, so sending capability exists — but the hook isn't wired up.
+## Fix
 
-### Issue 2: Rate limit on resend
+Add `Tawk_API` configuration in `index.html` to suppress all auto-popups:
 
-- Jessica hit the built-in auth email rate limit when clicking "Resend" multiple times. The error "email rate limit exceeded" (429) is from the default auth rate limiter — it prevents more than one confirmation email per ~60 seconds per user. This is expected behavior and not a bug.
+1. **Set `Tawk_API.onLoad`** callback to:
+   - Minimize the widget on load (`Tawk_API.minimize()`)
+   - Hide the popup message (`Tawk_API.hideWidget()` is too aggressive — instead use `minimize`)
+2. **Set `Tawk_API.customStyle`** to hide the notification badge
+3. **Disable proactive chat triggers** by setting `Tawk_API.onBeforeLoad` to prevent auto-popup behaviors:
+   - `Tawk_API.visitor` settings won't help — the proactive messages ("We Are Here", auto-open) are configured in the Tawk.to dashboard under **Triggers**
+   
+### What we can control via code
 
-### Root Cause
+In `index.html`, before the Tawk script loads, add:
 
-The `auth-email-hook` was deployed as code but was never **registered** with the email system. Without registration, signup emails either fall back to a default sender (which may not be configured/working) or silently fail.
+```javascript
+Tawk_API.onLoad = function() {
+  Tawk_API.minimize();
+};
+Tawk_API.onChatMessageVisitor = function() {};
+Tawk_API.onChatMessageSystem = function() {};
+```
 
-### Fix Plan
+And add CSS to hide the unread badge:
 
-1. **Set up email infrastructure** — run `setup_email_infra` to create the email queue tables, cron job, and dispatcher function.
+```css
+/* Hide Tawk notification badge */
+.tawk-min-container .tawk-badge {
+  display: none !important;
+}
+```
 
-2. **Re-scaffold and register the auth-email-hook** — use the scaffolding tool (with overwrite) to properly register the hook with the email routing system. This is the critical step — deployment alone is not enough.
+### What requires Tawk.to dashboard changes
 
-3. **Redeploy the auth-email-hook** — deploy the updated function so the registration takes effect.
+The proactive "We Are Here" message and auto-open behavior are **Triggers** configured in the Tawk.to dashboard (Settings → Triggers). These cannot be fully suppressed from code alone. The `Tawk_API.minimize()` on load will close it if it auto-opens, but the trigger may still fire briefly.
 
-4. **Manually confirm Jessica's email** — since she's stuck, we can confirm her email directly so she can use the platform now.
+**Recommendation**: Go to your Tawk.to dashboard → Settings → Triggers → disable or delete the proactive greeting trigger. This is the only way to fully stop "We Are Here" and the auto-open.
 
-5. **Add a cooldown timer to the Resend button** — show a countdown (e.g. 60s) after clicking Resend so users don't repeatedly trigger the rate limit and see the scary red error.
+### Implementation steps
 
-No other code changes needed — the email templates already exist and are well-designed.
+1. Update `index.html`: Add `Tawk_API.onLoad` with `minimize()` call before the embed script
+2. Add CSS to hide the notification badge counter
+3. These changes will make the widget stay minimized and badge-free until a user explicitly clicks it
 

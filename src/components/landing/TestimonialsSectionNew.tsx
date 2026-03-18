@@ -47,8 +47,8 @@ const TestimonialsSectionNew = () => {
         </p>
 
         <div
-          className={`grid grid-cols-1 md:grid-cols-3 gap-5 reveal-stagger ${isVisible ? 'visible' : ''}`}
-          style={{ marginBottom: 48 }}
+          className={`grid grid-cols-1 md:grid-cols-2 gap-3 reveal-stagger ${isVisible ? 'visible' : ''}`}
+          style={{ marginBottom: 48, maxWidth: 860, margin: '0 auto 48px' }}
         >
           {testimonials.map((t, i) => {
             const isFeatured = (t as any).featured;
@@ -56,15 +56,15 @@ const TestimonialsSectionNew = () => {
               <div key={i} className="card-lift reveal-child" style={{
                 background: isFeatured ? '#E9E3FF' : '#FFFFFF',
                 borderLeft: '3px solid #6B4EFF',
-                borderRadius: 16,
+                borderRadius: 12,
                 border: `1px solid ${isFeatured ? '#6B4EFF30' : '#E6E0DA'}`,
                 borderLeftWidth: 3,
                 borderLeftColor: '#6B4EFF',
-                padding: '28px 24px',
+                padding: '20px 20px',
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+                boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
               }}
               >
                 <div>
@@ -73,8 +73,8 @@ const TestimonialsSectionNew = () => {
                     fontSize: 48, lineHeight: 0.8, color: '#6B4EFF20', display: 'block',
                   }}>"</span>
                   <p style={{
-                    fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#555555',
-                    lineHeight: 1.75, marginTop: -4, fontStyle: 'italic', whiteSpace: 'pre-line',
+                    fontFamily: "'Syne', sans-serif", fontSize: 13.5, color: '#555555',
+                    lineHeight: 1.55, marginTop: -4, fontStyle: 'italic', whiteSpace: 'pre-line',
                   }}>
                     {t.quote}
                   </p>

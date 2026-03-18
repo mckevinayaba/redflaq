@@ -116,11 +116,15 @@ export default function JournalNew() {
   const removeFile = (idx: number) => setFiles(prev => prev.filter((_, i) => i !== idx));
 
   const toggleAbuseType = (type: string) => {
+    const scrollY = window.scrollY;
     setAbuseTypes(prev => prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]);
+    requestAnimationFrame(() => window.scrollTo(0, scrollY));
   };
 
   const toggleEmotion = (emotion: string) => {
+    const scrollY = window.scrollY;
     setEmotionalState(prev => prev.includes(emotion) ? prev.filter(e => e !== emotion) : [...prev, emotion]);
+    requestAnimationFrame(() => window.scrollTo(0, scrollY));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

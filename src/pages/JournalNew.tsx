@@ -476,7 +476,7 @@ export default function JournalNew() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6" onFocus={(e) => { if (isMobile) e.target.setAttribute('data-no-scroll', '1'); }}>
           {isMobile ? (
             <>
               <SectionWrapper id="basic" title="Basic Details" defaultOpen>{basicFields}</SectionWrapper>

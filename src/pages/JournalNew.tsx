@@ -77,7 +77,12 @@ export default function JournalNew() {
     basic: true, whatHappened: true, additional: false, locationEvidence: false, emotional: false,
   });
 
-  const toggleSection = (key: string) => setOpenSections(prev => ({ ...prev, [key]: !prev[key] }));
+  const toggleSection = (key: string) => {
+    const scrollY = window.scrollY;
+    setOpenSections(prev => ({ ...prev, [key]: !prev[key] }));
+    // Prevent browser from auto-scrolling when accordion content changes
+    requestAnimationFrame(() => window.scrollTo(0, scrollY));
+  };
 
   useEffect(() => {
     if (!authLoading && !user) navigate("/signup");

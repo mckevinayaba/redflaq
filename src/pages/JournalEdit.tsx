@@ -160,7 +160,7 @@ export default function JournalEdit() {
 
   const ToggleSwitch = ({ checked, onChange, label }: { checked: boolean; onChange: (v: boolean) => void; label: string }) => (
     <div className="flex items-center gap-3">
-      <button type="button" onClick={() => onChange(!checked)}
+      <button type="button" onClick={() => { const scrollY = window.scrollY; onChange(!checked); requestAnimationFrame(() => window.scrollTo(0, scrollY)); }}
         className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${checked ? 'bg-primary' : 'bg-border'}`}
         style={{ minWidth: 44, minHeight: 44, padding: '9px 0' }}>
         <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform shadow ${checked ? 'translate-x-6' : 'translate-x-1'}`} />
@@ -244,7 +244,7 @@ export default function JournalEdit() {
             <div className="space-y-2">
               {ABUSE_TYPES.map(type => (
                 <label key={type} className="flex items-start gap-3 cursor-pointer" style={{ minHeight: 44 }}>
-                  <input type="checkbox" checked={abuseTypes.includes(type)} onChange={() => setAbuseTypes(prev => prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type])}
+                  <input type="checkbox" checked={abuseTypes.includes(type)} onChange={() => { const scrollY = window.scrollY; setAbuseTypes(prev => prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]); requestAnimationFrame(() => window.scrollTo(0, scrollY)); }}
                     className="mt-1 h-4 w-4 rounded border-primary text-primary accent-primary" />
                   <span className="font-body text-sm text-foreground">{type}</span>
                 </label>
@@ -328,7 +328,7 @@ export default function JournalEdit() {
             <label className={labelCls} style={{ color: '#5B21B6' }}>How Were You Feeling?</label>
             <div className="flex flex-wrap gap-2">
               {EMOTIONAL_OPTIONS.map(emotion => (
-                <button key={emotion} type="button" onClick={() => setEmotionalState(prev => prev.includes(emotion) ? prev.filter(e => e !== emotion) : [...prev, emotion])}
+                <button key={emotion} type="button" onClick={() => { const scrollY = window.scrollY; setEmotionalState(prev => prev.includes(emotion) ? prev.filter(e => e !== emotion) : [...prev, emotion]); requestAnimationFrame(() => window.scrollTo(0, scrollY)); }}
                   className={`px-4 py-2 rounded-full font-body text-sm border transition-colors ${
                     emotionalState.includes(emotion)
                       ? 'bg-primary text-primary-foreground border-primary'

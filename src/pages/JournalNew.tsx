@@ -77,7 +77,12 @@ export default function JournalNew() {
     basic: true, whatHappened: true, additional: false, locationEvidence: false, emotional: false,
   });
 
-  const toggleSection = (key: string) => setOpenSections(prev => ({ ...prev, [key]: !prev[key] }));
+  const toggleSection = (key: string) => {
+    const scrollY = window.scrollY;
+    setOpenSections(prev => ({ ...prev, [key]: !prev[key] }));
+    // Prevent browser from auto-scrolling when accordion content changes
+    requestAnimationFrame(() => window.scrollTo(0, scrollY));
+  };
 
   useEffect(() => {
     if (!authLoading && !user) navigate("/signup");
@@ -111,11 +116,15 @@ export default function JournalNew() {
   const removeFile = (idx: number) => setFiles(prev => prev.filter((_, i) => i !== idx));
 
   const toggleAbuseType = (type: string) => {
+    const scrollY = window.scrollY;
     setAbuseTypes(prev => prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]);
+    requestAnimationFrame(() => window.scrollTo(0, scrollY));
   };
 
   const toggleEmotion = (emotion: string) => {
+    const scrollY = window.scrollY;
     setEmotionalState(prev => prev.includes(emotion) ? prev.filter(e => e !== emotion) : [...prev, emotion]);
+    requestAnimationFrame(() => window.scrollTo(0, scrollY));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -247,7 +256,7 @@ export default function JournalNew() {
 
   const ToggleSwitch = ({ checked, onChange, label }: { checked: boolean; onChange: (v: boolean) => void; label: string }) => (
     <div className="flex items-center gap-3">
-      <button type="button" onClick={() => onChange(!checked)}
+      <button type="button" onClick={() => { const scrollY = window.scrollY; onChange(!checked); requestAnimationFrame(() => window.scrollTo(0, scrollY)); }}
         className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${checked ? 'bg-primary' : 'bg-border'}`}
         style={{ minWidth: 44, minHeight: 44, padding: '9px 0' }}>
         <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform shadow ${checked ? 'translate-x-6' : 'translate-x-1'}`} />
@@ -467,7 +476,7 @@ export default function JournalNew() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6" onFocus={(e) => { if (isMobile) e.target.setAttribute('data-no-scroll', '1'); }}>
           {isMobile ? (
             <>
               <SectionWrapper id="basic" title="Basic Details" defaultOpen>{basicFields}</SectionWrapper>
@@ -507,7 +516,7 @@ export default function JournalNew() {
           </div>
 
           {/* Action Buttons */}
-          <div className={`flex flex-col sm:flex-row gap-3 pt-2 ${isMobile ? 'sticky bottom-0 bg-background pb-4 pt-4 -mx-4 px-4 border-t border-border' : ''}`}>
+          <div className={`flex flex-col sm:flex-row gap-3 pt-2 ${isMobile ? 'sticky bottom-0 z-10 bg-background pb-4 pt-4 -mx-4 px-4 border-t border-border shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]' : ''}`} style={isMobile ? { overflowAnchor: 'none' } : undefined}>
             <button type="submit" disabled={saving}
               className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3 bg-primary text-primary-foreground font-body font-bold text-sm rounded-lg hover:opacity-90 transition-colors disabled:opacity-50">
               <Lock className="h-4 w-4" /> {saving ? "Saving & Verifying..." : "Save Entry"}

@@ -73,8 +73,8 @@ const TestimonialsSectionNew = () => {
                     fontSize: 48, lineHeight: 0.8, color: '#6B4EFF20', display: 'block',
                   }}>"</span>
                   <p style={{
-                    fontFamily: "'Syne', sans-serif", fontSize: 14, color: '#555555',
-                    lineHeight: 1.75, marginTop: -4, fontStyle: 'italic', whiteSpace: 'pre-line',
+                    fontFamily: "'Syne', sans-serif", fontSize: 13.5, color: '#555555',
+                    lineHeight: 1.55, marginTop: -4, fontStyle: 'italic', whiteSpace: 'pre-line',
                   }}>
                     {t.quote}
                   </p>

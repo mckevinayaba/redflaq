@@ -244,7 +244,7 @@ export default function JournalEdit() {
             <div className="space-y-2">
               {ABUSE_TYPES.map(type => (
                 <label key={type} className="flex items-start gap-3 cursor-pointer" style={{ minHeight: 44 }}>
-                  <input type="checkbox" checked={abuseTypes.includes(type)} onChange={() => setAbuseTypes(prev => prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type])}
+                  <input type="checkbox" checked={abuseTypes.includes(type)} onChange={() => { const scrollY = window.scrollY; setAbuseTypes(prev => prev.includes(type) ? prev.filter(t => t !== type) : [...prev, type]); requestAnimationFrame(() => window.scrollTo(0, scrollY)); }}
                     className="mt-1 h-4 w-4 rounded border-primary text-primary accent-primary" />
                   <span className="font-body text-sm text-foreground">{type}</span>
                 </label>

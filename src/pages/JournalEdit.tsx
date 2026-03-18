@@ -328,7 +328,7 @@ export default function JournalEdit() {
             <label className={labelCls} style={{ color: '#5B21B6' }}>How Were You Feeling?</label>
             <div className="flex flex-wrap gap-2">
               {EMOTIONAL_OPTIONS.map(emotion => (
-                <button key={emotion} type="button" onClick={() => setEmotionalState(prev => prev.includes(emotion) ? prev.filter(e => e !== emotion) : [...prev, emotion])}
+                <button key={emotion} type="button" onClick={() => { const scrollY = window.scrollY; setEmotionalState(prev => prev.includes(emotion) ? prev.filter(e => e !== emotion) : [...prev, emotion]); requestAnimationFrame(() => window.scrollTo(0, scrollY)); }}
                   className={`px-4 py-2 rounded-full font-body text-sm border transition-colors ${
                     emotionalState.includes(emotion)
                       ? 'bg-primary text-primary-foreground border-primary'

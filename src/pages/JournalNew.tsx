@@ -516,7 +516,7 @@ export default function JournalNew() {
           </div>
 
           {/* Action Buttons */}
-          <div className={`flex flex-col sm:flex-row gap-3 pt-2 ${isMobile ? 'sticky bottom-0 bg-background pb-4 pt-4 -mx-4 px-4 border-t border-border' : ''}`}>
+          <div className={`flex flex-col sm:flex-row gap-3 pt-2 ${isMobile ? 'sticky bottom-0 z-10 bg-background pb-4 pt-4 -mx-4 px-4 border-t border-border shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]' : ''}`} style={isMobile ? { overflowAnchor: 'none' } : undefined}>
             <button type="submit" disabled={saving}
               className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3 bg-primary text-primary-foreground font-body font-bold text-sm rounded-lg hover:opacity-90 transition-colors disabled:opacity-50">
               <Lock className="h-4 w-4" /> {saving ? "Saving & Verifying..." : "Save Entry"}

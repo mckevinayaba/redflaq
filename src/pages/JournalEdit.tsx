@@ -160,7 +160,7 @@ export default function JournalEdit() {
 
   const ToggleSwitch = ({ checked, onChange, label }: { checked: boolean; onChange: (v: boolean) => void; label: string }) => (
     <div className="flex items-center gap-3">
-      <button type="button" onClick={() => onChange(!checked)}
+      <button type="button" onClick={() => { const scrollY = window.scrollY; onChange(!checked); requestAnimationFrame(() => window.scrollTo(0, scrollY)); }}
         className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${checked ? 'bg-primary' : 'bg-border'}`}
         style={{ minWidth: 44, minHeight: 44, padding: '9px 0' }}>
         <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform shadow ${checked ? 'translate-x-6' : 'translate-x-1'}`} />

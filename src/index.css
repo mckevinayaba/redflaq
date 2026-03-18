@@ -637,3 +637,18 @@ nav, header {
     background: #6B4EFF !important;
   }
 }
+
+/* Prevent mobile browsers from auto-scrolling inputs into view */
+@media (max-width: 767px) {
+  input:focus,
+  textarea:focus,
+  select:focus {
+    scroll-margin-top: 0;
+    scroll-margin-bottom: 0;
+  }
+
+  /* Prevent scroll anchoring from jumping page position */
+  form {
+    overflow-anchor: none;
+  }
+}

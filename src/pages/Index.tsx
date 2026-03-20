@@ -2,34 +2,18 @@ import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Check, X } from "lucide-react";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
-import HeroPlinq from "@/components/landing/HeroPlinq";
-import TickerBar from "@/components/landing/TickerBar";
-import StatsBar from "@/components/landing/StatsBar";
-import FreeAccountSection from "@/components/landing/FreeAccountSection";
-import WhoRedflaqHelps from "@/components/landing/WhoRedflaqHelps";
-import ProtectionOrdersSection from "@/components/landing/ProtectionOrdersSection";
-
-import MidPageSignupStrip from "@/components/landing/MidPageSignupStrip";
-import PhotoGrid from "@/components/landing/PhotoGrid";
-import RealitySection from "@/components/landing/RealitySection";
-import BarrierSection from "@/components/landing/BarrierSection";
-import SearchOptionsSection from "@/components/landing/SearchOptionsSection";
-import HowItWorksPlinq from "@/components/landing/HowItWorksPlinq";
-import RiskLevelsSection from "@/components/landing/RiskLevelsSection";
-import MakeRedflaqHabitSection from "@/components/landing/MakeRedflaqHabitSection";
-import WhatsAppBanner from "@/components/WhatsAppBanner";
-import PricingPlinq from "@/components/landing/PricingPlinq";
-import TestimonialsSectionNew from "@/components/landing/TestimonialsSectionNew";
-import CommunitySectionSA from "@/components/landing/CommunitySectionSA";
-import WhyRedflaqSection from "@/components/landing/WhyRedflaqSection";
-import CommunityImageStrip from "@/components/landing/CommunityImageStrip";
-import FAQPlinq from "@/components/landing/FAQPlinq";
-import FinalCTAPlinq from "@/components/landing/FinalCTAPlinq";
-import ShareSection from "@/components/landing/ShareSection";
-import AdvocacySection from "@/components/landing/AdvocacySection";
+import HeroHormozi from "@/components/landing/HeroHormozi";
+import ProblemAgitation from "@/components/landing/ProblemAgitation";
+import SolutionHormozi from "@/components/landing/SolutionHormozi";
+import ValueStack from "@/components/landing/ValueStack";
+import HowItWorksHormozi from "@/components/landing/HowItWorksHormozi";
+import SocialProofHormozi from "@/components/landing/SocialProofHormozi";
+import IndustriesBrief from "@/components/landing/IndustriesBrief";
+import PaidChecksSection from "@/components/landing/PaidChecksSection";
+import FinalUrgency from "@/components/landing/FinalUrgency";
+import FAQHormozi from "@/components/landing/FAQHormozi";
 import FooterPlinq from "@/components/landing/FooterPlinq";
 import { PWAInstallBanner } from "@/components/PWAInstallBanner";
-import HomepageDemo from "@/components/landing/HomepageDemo";
 
 const Index = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -82,89 +66,42 @@ const Index = () => {
 
       <NavbarPlinq />
 
-      {/* 1. Hero */}
-      <HeroPlinq />
+      {/* Section 1: Hero — Brutal Truth Hook */}
+      <HeroHormozi />
 
-      {/* Live Demo */}
-      <HomepageDemo />
+      {/* Section 2: Problem Agitation */}
+      <ProblemAgitation />
 
-      {/* 2. Ticker Bar */}
-      <TickerBar />
+      {/* Section 3: The Solution */}
+      <SolutionHormozi />
 
-      {/* 3. Stats Bar */}
-      <StatsBar />
+      {/* Section 4: Value Stack — FREE Tier Explosion */}
+      <ValueStack />
 
-      {/* 4. Create Your Free Safety Account */}
-      <FreeAccountSection />
-
-      {/* 5. Who RedFlaq Helps */}
-      <WhoRedflaqHelps />
-
-
-      {/* 7. Protection Orders & Evidence Collection */}
-      <ProtectionOrdersSection />
-
-      {/* 8. Photo Grid */}
-      <PhotoGrid />
-
-      {/* 8. The South African Reality */}
-      <RealitySection />
-
-      {/* 9. Why No One Checked Before */}
-      <BarrierSection />
-
-      {/* 10. Search Form */}
-      <SearchOptionsSection />
-
-      {/* 11. How It Works */}
+      {/* Section 5: How It Works */}
       <div id="how-it-works">
-        <HowItWorksPlinq />
+        <HowItWorksHormozi />
       </div>
 
-      {/* 12. Risk Levels / Your Report */}
-      <RiskLevelsSection />
+      {/* Section 6: Social Proof #1 */}
+      <SocialProofHormozi variant={1} />
 
-      {/* Make RedFlaq a Habit */}
-      <MakeRedflaqHabitSection />
+      {/* Section 7: Who This Is For */}
+      <IndustriesBrief />
 
-      {/* WhatsApp Banner */}
-      <WhatsAppBanner />
+      {/* Section 8: Paid Checks */}
+      <PaidChecksSection />
 
-      {/* 13. Pricing */}
-      <div id="pricing">
-        <PricingPlinq />
-      </div>
+      {/* Section 9: Social Proof #2 */}
+      <SocialProofHormozi variant={2} />
 
-      {/* 14. Testimonials */}
-      <div id="testimonials">
-        <TestimonialsSectionNew />
-      </div>
+      {/* Section 10: Final Urgency + CTA */}
+      <FinalUrgency />
 
-      {/* Community images */}
-      <CommunityImageStrip />
+      {/* Section 11: FAQ */}
+      <FAQHormozi />
 
-      {/* 15. Community CTA */}
-      <CommunitySectionSA />
-
-      {/* 16. Why RedFlaq Section (Team & Principles) */}
-      <WhyRedflaqSection />
-
-      {/* 17. Mid-Page Signup Strip */}
-      <MidPageSignupStrip />
-
-      {/* 19. FAQ */}
-      <FAQPlinq />
-
-      {/* 20. Final CTA */}
-      <FinalCTAPlinq />
-
-      {/* 21. Share Section */}
-      <ShareSection />
-
-      {/* 22. Advocacy */}
-      <AdvocacySection />
-
-      {/* 23. Footer */}
+      {/* Footer */}
       <FooterPlinq />
       <PWAInstallBanner />
     </div>

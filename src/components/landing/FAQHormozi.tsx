@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 
-const font: React.CSSProperties = { fontFamily: "'Syne', sans-serif" };
+const serif: React.CSSProperties = { fontFamily: "'DM Serif Display', serif" };
+const sans: React.CSSProperties = { fontFamily: "'Syne', sans-serif" };
 const mono: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };
 
 const faqs = [
@@ -39,18 +40,17 @@ const FAQHormozi = () => {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <section id="faq" style={{ background: '#F5F0EB', padding: 'clamp(48px, 8vw, 80px) 20px' }}>
-      <div style={{ maxWidth: 720, margin: '0 auto' }}>
-        <p style={{ ...mono, fontSize: 11, letterSpacing: '0.15em', color: '#7C3AED', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 12 }}>
-          <span style={{ width: 24, height: 1, background: '#7C3AED', display: 'inline-block' }} />
+    <section id="faq" style={{ background: '#F5F0EB', padding: 'clamp(56px, 10vw, 100px) 20px' }}>
+      <div style={{ maxWidth: 760, margin: '0 auto' }}>
+        <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 20 }}>
           FAQ
-        </p>
+        </div>
 
         <h2 style={{
-          ...font, fontSize: 'clamp(24px, 4vw, 34px)', fontWeight: 800,
-          color: '#1F1F1F', lineHeight: 1.2, letterSpacing: '-0.02em', marginBottom: 32,
+          ...serif, fontSize: 'clamp(28px, 4vw, 40px)',
+          color: '#1F1F1F', lineHeight: 1.15, letterSpacing: '-0.02em', marginBottom: 36,
         }}>
-          Questions You Might Have
+          Questions you might <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>have.</em>
         </h2>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -59,7 +59,7 @@ const FAQHormozi = () => {
               key={i}
               style={{
                 background: 'white', border: '1px solid #E6E0DA',
-                borderRadius: 14, overflow: 'hidden',
+                borderRadius: 16, overflow: 'hidden',
                 transition: 'box-shadow 0.2s',
                 boxShadow: openIndex === i ? '0 4px 16px rgba(124,58,237,0.06)' : 'none',
               }}
@@ -68,11 +68,11 @@ const FAQHormozi = () => {
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
                 style={{
                   display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                  width: '100%', padding: '18px 22px', background: 'none', border: 'none',
+                  width: '100%', padding: '20px 24px', background: 'none', border: 'none',
                   cursor: 'pointer', textAlign: 'left' as const,
                 }}
               >
-                <span style={{ ...font, fontSize: 15, fontWeight: 600, color: '#1F1F1F', paddingRight: 16 }}>
+                <span style={{ ...sans, fontSize: 15, fontWeight: 600, color: '#1F1F1F', paddingRight: 16 }}>
                   {faq.q}
                 </span>
                 <ChevronDown
@@ -86,8 +86,8 @@ const FAQHormozi = () => {
                 />
               </button>
               {openIndex === i && (
-                <div style={{ padding: '0 22px 18px', borderTop: '1px solid #F0EBE5' }}>
-                  <p style={{ ...font, fontSize: 14, color: '#555555', lineHeight: 1.7, paddingTop: 14 }}>
+                <div style={{ padding: '0 24px 20px', borderTop: '1px solid #F0EBE5' }}>
+                  <p style={{ ...sans, fontSize: 14, color: '#555', lineHeight: 1.7, paddingTop: 14 }}>
                     {faq.a}
                   </p>
                 </div>

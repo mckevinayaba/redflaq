@@ -65,6 +65,11 @@ import JournalEdit from "./pages/JournalEdit";
 import JournalExport from "./pages/JournalExport";
 import AffidavitBuilder from "./pages/AffidavitBuilder";
 import WhatsAppPage from "./pages/WhatsApp";
+import Shop from "./pages/Shop";
+import HabitComingSoon from "./pages/HabitComingSoon";
+import BehavioralSignalComingSoon from "./pages/BehavioralSignalComingSoon";
+import ApiComingSoon from "./pages/ApiComingSoon";
+import RedflaqOrgComingSoon from "./pages/RedflaqOrgComingSoon";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -128,6 +133,13 @@ const App = () => (
           <Route path="/partners/apply" element={<PartnersApply />} />
           {/* WhatsApp */}
           <Route path="/whatsapp" element={<WhatsAppPage />} />
+          {/* Shop */}
+          <Route path="/shop" element={<Shop />} />
+          {/* Coming Soon */}
+          <Route path="/habit-coming-soon" element={<HabitComingSoon />} />
+          <Route path="/behavioral-signal-coming-soon" element={<BehavioralSignalComingSoon />} />
+          <Route path="/api-coming-soon" element={<ApiComingSoon />} />
+          <Route path="/redflaq-org-coming-soon" element={<RedflaqOrgComingSoon />} />
           <Route path="/partners/apply" element={<PartnersApply />} />
           {/* Admin */}
           <Route path="/admin" element={<AdminDashboardNew />} />

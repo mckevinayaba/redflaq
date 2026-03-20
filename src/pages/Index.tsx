@@ -3,13 +3,21 @@ import { Link, useSearchParams } from "react-router-dom";
 import { Check, X } from "lucide-react";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import HeroHormozi from "@/components/landing/HeroHormozi";
+import TickerBar from "@/components/landing/TickerBar";
+import HomepageDemo from "@/components/landing/HomepageDemo";
 import ProblemAgitation from "@/components/landing/ProblemAgitation";
+import BarrierSection from "@/components/landing/BarrierSection";
 import SolutionHormozi from "@/components/landing/SolutionHormozi";
+import HowItWorksPlinq from "@/components/landing/HowItWorksPlinq";
+import RiskLevelsSection from "@/components/landing/RiskLevelsSection";
+import StatsBar from "@/components/landing/StatsBar";
+import PhotoGrid from "@/components/landing/PhotoGrid";
 import ValueStack from "@/components/landing/ValueStack";
-import HowItWorksHormozi from "@/components/landing/HowItWorksHormozi";
-import SocialProofHormozi from "@/components/landing/SocialProofHormozi";
-import IndustriesBrief from "@/components/landing/IndustriesBrief";
 import PaidChecksSection from "@/components/landing/PaidChecksSection";
+import TestimonialsSectionNew from "@/components/landing/TestimonialsSectionNew";
+import IndustriesBrief from "@/components/landing/IndustriesBrief";
+import CommunityImageStrip from "@/components/landing/CommunityImageStrip";
+import FounderSection from "@/components/landing/FounderSection";
 import FinalUrgency from "@/components/landing/FinalUrgency";
 import FAQHormozi from "@/components/landing/FAQHormozi";
 import FooterPlinq from "@/components/landing/FooterPlinq";
@@ -66,39 +74,60 @@ const Index = () => {
 
       <NavbarPlinq />
 
-      {/* Section 1: Hero — Brutal Truth Hook */}
+      {/* 1. Hero — Editorial hook + hero image */}
       <HeroHormozi />
 
-      {/* Section 2: Problem Agitation */}
+      {/* 2. Trust ticker */}
+      <TickerBar />
+
+      {/* 3. Interactive demo */}
+      <HomepageDemo />
+
+      {/* 4. Problem — Verifiable stats + emotional truth */}
       <ProblemAgitation />
 
-      {/* Section 3: The Solution */}
+      {/* 5. Barriers — Why no one checked before */}
+      <BarrierSection />
+
+      {/* 6. Solution pillars */}
       <SolutionHormozi />
 
-      {/* Section 4: Value Stack — FREE Tier Explosion */}
+      {/* 7. How it works — 4-step timeline */}
+      <HowItWorksPlinq />
+
+      {/* 8. Risk levels — What your report reveals */}
+      <RiskLevelsSection />
+
+      {/* 9. Trust stats bar */}
+      <StatsBar />
+
+      {/* 10. Real SA women photos */}
+      <PhotoGrid />
+
+      {/* 11. Value stack — FREE tier explosion */}
       <ValueStack />
 
-      {/* Section 5: How It Works */}
-      <div id="how-it-works">
-        <HowItWorksHormozi />
-      </div>
-
-      {/* Section 6: Social Proof #1 */}
-      <SocialProofHormozi variant={1} />
-
-      {/* Section 7: Who This Is For */}
-      <IndustriesBrief />
-
-      {/* Section 8: Paid Checks */}
+      {/* 12. Paid checks pricing */}
       <PaidChecksSection />
 
-      {/* Section 9: Social Proof #2 */}
-      <SocialProofHormozi variant={2} />
+      {/* 13. Testimonials */}
+      <div id="testimonials">
+        <TestimonialsSectionNew />
+      </div>
 
-      {/* Section 10: Final Urgency + CTA */}
+      {/* 14. Who this is for */}
+      <IndustriesBrief />
+
+      {/* 15. Community photos */}
+      <CommunityImageStrip />
+
+      {/* 16. Founder credibility */}
+      <FounderSection />
+
+      {/* 17. Final urgency + CTA */}
       <FinalUrgency />
 
-      {/* Section 11: FAQ */}
+      {/* 18. FAQ */}
       <FAQHormozi />
 
       {/* Footer */}

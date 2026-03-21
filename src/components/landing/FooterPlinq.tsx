@@ -7,6 +7,22 @@ import redflaqLogo from "@/assets/redflaq-logo-official.png";
 
 const FooterPlinq = () => {
   const [shareOpen, setShareOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleLinkClick = useCallback((href: string, e: React.MouseEvent) => {
+    if (href.startsWith('#')) {
+      e.preventDefault();
+      if (location.pathname === '/') {
+        document.getElementById(href.slice(1))?.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        navigate('/' + href);
+      }
+    } else if (href.startsWith('/')) {
+      e.preventDefault();
+      navigate(href);
+    }
+  }, [location.pathname, navigate]);
 
   const fontBase: React.CSSProperties = { fontFamily: "'Syne', sans-serif" };
 

@@ -31,7 +31,7 @@ const FinalUrgency = () => {
           <p style={{ marginBottom: 8 }}>She thought she was being careful.</p>
           <p style={{ marginBottom: 8 }}>She met him in public. She shared her location.</p>
           <p style={{ marginBottom: 20 }}>She told her friends where she'd be.</p>
-          <p style={{ marginBottom: 4, color: '#888' }}>And in 3 months, 6 months, 9 months — when his true behavior reveals itself — she'll wish she had verified him on Day 1.</p>
+          <p style={{ marginBottom: 4, color: '#888' }}>And in 3 months, 6 months, 9 months — when his true behavior reveals itself — she'll wish she had RedFlaq'd him on Day 1.</p>
           <div style={{ marginTop: 24 }}>
             <p style={{ fontWeight: 600, color: '#1F1F1F' }}>Don't be her.</p>
             <p style={{ fontWeight: 600, color: '#1F1F1F' }}>Don't let your sister be her.</p>

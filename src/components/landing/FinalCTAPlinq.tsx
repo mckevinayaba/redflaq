@@ -16,7 +16,7 @@ const FinalCTAPlinq = () => {
       <div style={{ position: 'absolute', inset: 0, zIndex: 1, background: 'linear-gradient(180deg, rgba(15,10,26,0.85), rgba(26,16,53,0.9))' }} />
       <div className="py-12 md:py-20 px-6" style={{ position: 'relative', zIndex: 2, maxWidth: 700, margin: '0 auto', textAlign: 'center' }}>
         <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 'clamp(36px, 5vw, 64px)', lineHeight: 1.08, color: 'white', marginBottom: 20, letterSpacing: '-0.02em' }}>
-          Before you trust,<br /><em style={{ fontStyle: 'italic' }}>verify.</em>
+          Before You Trust,<br /><em style={{ fontStyle: 'italic' }}>RedFlaq First.</em>
         </h2>
         <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7, marginBottom: 40 }}>
           Clarity creates safety. Every search you make helps protect not just yourself but the next person who asks the same question.

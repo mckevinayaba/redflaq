@@ -34,7 +34,7 @@ const ValueStack = () => {
           <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>100% free.</em>
         </h2>
         <p style={{ ...sans, fontSize: 15, color: '#555', lineHeight: 1.7, marginBottom: 48, maxWidth: 640 }}>
-          Most safety platforms charge you to feel safe. RedFlaq gives you everything for free. You only pay when you need to verify someone's public record.
+          Most safety platforms charge you to feel safe. RedFlaq gives you everything for free. You only pay when you need to RedFlaq someone's public record.
         </p>
 
         {/* Free features grid */}

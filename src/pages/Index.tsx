@@ -75,6 +75,7 @@ const Index = () => {
       <NavbarPlinq />
       <HeroHormozi />
       <TickerBar />
+      <GovDataSection />
       <HomepageDemo />
       <ProblemAgitation />
       <BarrierSection />

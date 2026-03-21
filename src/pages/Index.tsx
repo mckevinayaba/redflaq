@@ -14,7 +14,6 @@ import StatsBar from "@/components/landing/StatsBar";
 import PhotoGrid from "@/components/landing/PhotoGrid";
 import ValueStack from "@/components/landing/ValueStack";
 import PaidChecksSection from "@/components/landing/PaidChecksSection";
-import GovDataSection from "@/components/landing/GovDataSection";
 
 import IndustriesBrief from "@/components/landing/IndustriesBrief";
 import FinalUrgency from "@/components/landing/FinalUrgency";
@@ -75,7 +74,6 @@ const Index = () => {
       <NavbarPlinq />
       <HeroHormozi />
       <TickerBar />
-      <GovDataSection />
       <HomepageDemo />
       <ProblemAgitation />
       <BarrierSection />

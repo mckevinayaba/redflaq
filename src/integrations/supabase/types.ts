@@ -140,6 +140,45 @@ export type Database = {
         }
         Relationships: []
       }
+      behavioral_assessments: {
+        Row: {
+          ai_analysis: string | null
+          assessment_type: string
+          categories_detected: string[] | null
+          created_at: string
+          free_text: string | null
+          id: string
+          responses: Json
+          risk_level: string
+          risk_score: number
+          user_id: string
+        }
+        Insert: {
+          ai_analysis?: string | null
+          assessment_type?: string
+          categories_detected?: string[] | null
+          created_at?: string
+          free_text?: string | null
+          id?: string
+          responses?: Json
+          risk_level?: string
+          risk_score?: number
+          user_id: string
+        }
+        Update: {
+          ai_analysis?: string | null
+          assessment_type?: string
+          categories_detected?: string[] | null
+          created_at?: string
+          free_text?: string | null
+          id?: string
+          responses?: Json
+          risk_level?: string
+          risk_score?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       disputes: {
         Row: {
           created_at: string | null
@@ -418,6 +457,63 @@ export type Database = {
           services?: string[] | null
           type?: string
           whatsapp?: string | null
+        }
+        Relationships: []
+      }
+      habit_checkins: {
+        Row: {
+          checkin_date: string
+          created_at: string
+          id: string
+          responses: Json
+          score: number
+          user_id: string
+        }
+        Insert: {
+          checkin_date?: string
+          created_at?: string
+          id?: string
+          responses?: Json
+          score?: number
+          user_id: string
+        }
+        Update: {
+          checkin_date?: string
+          created_at?: string
+          id?: string
+          responses?: Json
+          score?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      habit_streaks: {
+        Row: {
+          current_streak: number
+          id: string
+          last_checkin_date: string | null
+          longest_streak: number
+          total_checkins: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          current_streak?: number
+          id?: string
+          last_checkin_date?: string | null
+          longest_streak?: number
+          total_checkins?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          current_streak?: number
+          id?: string
+          last_checkin_date?: string | null
+          longest_streak?: number
+          total_checkins?: number
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }

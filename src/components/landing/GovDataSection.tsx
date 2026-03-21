@@ -40,7 +40,7 @@ const GovDataSection = () => {
   return (
     <>
       {/* Bridge line between hero and stats */}
-      <section style={{ background: "hsl(var(--background))", padding: "56px 24px 0" }}>
+      <section style={{ background: "hsl(var(--background))", padding: "56px 16px 0" }}>
         <p
           className="font-body text-center mx-auto"
           style={{

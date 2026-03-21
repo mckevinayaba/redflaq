@@ -26,9 +26,9 @@ const RiskLevelsSection = () => {
 
         <h2 style={{
           fontFamily: "'DM Serif Display', serif",
-          fontSize: 'clamp(36px, 4vw, 52px)', color: '#1A1523', marginBottom: 56, letterSpacing: '-0.02em',
+          fontSize: 'clamp(32px, 4vw, 52px)', color: '#1A1523', marginBottom: 56, letterSpacing: '-0.02em',
         }}>
-          What your report <em style={{ color: '#6B4EFF', fontStyle: 'italic' }}>reveals</em>
+          What your report <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>reveals</em>
         </h2>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6" style={{ marginBottom: 48 }}>

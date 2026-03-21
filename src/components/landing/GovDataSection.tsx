@@ -45,37 +45,47 @@ const GovDataSection = () => {
     >
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px" }}>
 
+        {/* Section title */}
+        <div className="text-center mb-10">
+          <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: "clamp(32px, 4.5vw, 52px)", letterSpacing: "-0.02em", color: "hsl(var(--foreground))", lineHeight: 1.1 }}>
+            The uncomfortable truth
+          </h2>
+          <p className="font-body text-muted-foreground mt-3 mx-auto" style={{ maxWidth: 520, fontSize: 15, lineHeight: 1.7 }}>
+            This is the South African reality women are living in right now.
+          </p>
+        </div>
+
         {/* Uncomfortable truth tiles */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-14">
           {[
             { value: "Every 4 hours", label: "In South Africa, about one woman is killed every 4 hours.", source: "Centre for Constitutional Rights, citing UNODC femicide data" },
-            { value: "5×", label: "South Africa's femicide rate is about five times the global average.", source: "Africa Check analysis of SA and UNODC data" },
-            { value: "3 000+", label: "Women murdered in South Africa in a typical year — roughly 9 every day.", source: "SAPS 2021/22 murder stats (3 198 women)" },
+            { value: "5×", label: "South Africa's femicide rate is about five times the global average.", source: "Africa Check analysis of South African and UNODC data" },
+            { value: "3 000+", label: "Women murdered in South Africa in a typical year — roughly 9 every day.", source: "SAPS national murder statistics (women)" },
           ].map((tile, i) => (
             <div
               key={i}
               className="text-center card-lift"
               style={{
-                background: "linear-gradient(135deg, #1A0A0A 0%, #2A0F1A 100%)",
+                background: "hsl(var(--card))",
                 borderRadius: 20,
                 padding: "44px 24px 36px",
-                border: "1px solid rgba(220,38,38,0.25)",
+                border: "1px solid hsl(var(--border))",
               }}
             >
               <div style={{
                 fontFamily: "'DM Serif Display', serif",
                 fontSize: "clamp(40px, 5vw, 60px)",
-                color: "#DC2626",
+                color: "hsl(var(--primary))",
                 lineHeight: 1,
                 marginBottom: 14,
                 letterSpacing: "-0.02em",
               }}>
                 {tile.value}
               </div>
-              <div className="font-body" style={{ fontSize: 14, color: "rgba(255,255,255,0.75)", lineHeight: 1.6, marginBottom: 14, maxWidth: 260, margin: "0 auto 14px" }}>
+              <div className="font-body" style={{ fontSize: 14, color: "hsl(var(--foreground))", lineHeight: 1.6, marginBottom: 14, maxWidth: 260, margin: "0 auto 14px" }}>
                 {tile.label}
               </div>
-              <div className="font-mono" style={{ fontSize: 9, letterSpacing: "0.06em", color: "rgba(255,255,255,0.3)" }}>
+              <div className="font-mono" style={{ fontSize: 9, letterSpacing: "0.06em", color: "hsl(var(--muted-foreground))", opacity: 0.7 }}>
                 {tile.source}
               </div>
             </div>

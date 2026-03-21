@@ -2,7 +2,8 @@ import { Link } from "react-router-dom";
 import { AlertTriangle, Mail, MessageCircle, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
-import Footer from "@/components/Footer";
+import FooterPlinq from "@/components/landing/FooterPlinq";
+import BackToHome from "@/components/landing/BackToHome";
 
 export default function Dispute() {
   return (

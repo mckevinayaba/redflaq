@@ -70,6 +70,7 @@ import HabitComingSoon from "./pages/HabitComingSoon";
 import BehavioralSignalComingSoon from "./pages/BehavioralSignalComingSoon";
 import ApiComingSoon from "./pages/ApiComingSoon";
 import RedflaqOrgComingSoon from "./pages/RedflaqOrgComingSoon";
+import CustomerStories from "./pages/CustomerStories";
 const queryClient = new QueryClient();
 
 const App = () => (

@@ -87,8 +87,6 @@ const Index = () => {
       {/* 3. Interactive demo */}
       <HomepageDemo />
 
-      {/* 4. Problem — Verifiable stats + emotional truth */}
-      <ProblemAgitation />
 
       {/* 5. Barriers — Why no one checked before */}
       <BarrierSection />

@@ -45,7 +45,7 @@ const BarrierSection = () => {
     >
       <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1 }}>
         <div className="section-tag" style={{ color: '#6B4EFF', marginBottom: 24 }}>
-          Why No One Checked Before
+          Why No One RedFlaq'd Before
         </div>
 
         <h2 style={{

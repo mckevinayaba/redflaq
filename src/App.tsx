@@ -144,7 +144,7 @@ const App = () => (
           <Route path="/behavioral-signal-coming-soon" element={<BehavioralSignalComingSoon />} />
           <Route path="/api-coming-soon" element={<ApiComingSoon />} />
           <Route path="/redflaq-org-coming-soon" element={<RedflaqOrgComingSoon />} />
-          <Route path="/partners/apply" element={<PartnersApply />} />
+          {/* Admin */}
           {/* Admin */}
           <Route path="/admin" element={<AdminDashboardNew />} />
           <Route path="/admin/dashboard" element={<AdminDashboard />} />

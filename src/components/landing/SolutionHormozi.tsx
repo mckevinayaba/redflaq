@@ -36,7 +36,7 @@ const SolutionHormozi = () => {
         <h2 style={{
           ...serif, fontSize: 'clamp(28px, 4.5vw, 48px)',
           color: '#1F1F1F', lineHeight: 1.15, letterSpacing: '-0.02em', marginBottom: 16,
-          maxWidth: 600,
+          whiteSpace: 'nowrap',
         }}>
           Before you trust,{' '}
           <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>RedFlaq first.</em>

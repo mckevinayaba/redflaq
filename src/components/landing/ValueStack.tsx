@@ -12,7 +12,7 @@ const freeFeatures = [
   { icon: <Sparkles size={20} color="#7C3AED" />, title: "Habit", desc: "Daily safety check-ins. Red flag education library. Safety streaks. Build the habit of checking first." },
   { icon: <Heart size={20} color="#7C3AED" />, title: "Behavioral Signal Detection", desc: "See patterns over time. Early warning system for manipulation, control, isolation, financial abuse." },
   { icon: <Shield size={20} color="#7C3AED" />, title: "Safety Resources", desc: "GBV hotlines. 66 Thuthuzela Care Centres. Legal Aid SA. Police GBV desks. All in one place." },
-  { icon: <Search size={20} color="#7C3AED" />, title: "Saved Checks", desc: "Full history of everyone you've verified. Track patterns. Reference when needed." },
+  { icon: <Search size={20} color="#7C3AED" />, title: "Saved RedFlaqs", desc: "Full history of everyone you've RedFlaq'd. Track patterns. Reference when needed." },
   { icon: <MessageSquare size={20} color="#7C3AED" />, title: "WhatsApp Support", desc: "Direct line to RedFlaq team. Questions answered. Guidance provided." },
 ];
 

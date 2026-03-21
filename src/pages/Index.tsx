@@ -3,6 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { Check, X } from "lucide-react";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import HeroHormozi from "@/components/landing/HeroHormozi";
+import GovDataSection from "@/components/landing/GovDataSection";
 import TickerBar from "@/components/landing/TickerBar";
 import HomepageDemo from "@/components/landing/HomepageDemo";
 import ProblemAgitation from "@/components/landing/ProblemAgitation";
@@ -16,9 +17,10 @@ import ValueStack from "@/components/landing/ValueStack";
 import PaidChecksSection from "@/components/landing/PaidChecksSection";
 import TestimonialsSectionNew from "@/components/landing/TestimonialsSectionNew";
 import IndustriesBrief from "@/components/landing/IndustriesBrief";
+import CommunityImageStrip from "@/components/landing/CommunityImageStrip";
+import FounderSection from "@/components/landing/FounderSection";
 import FinalUrgency from "@/components/landing/FinalUrgency";
 import FAQHormozi from "@/components/landing/FAQHormozi";
-import AdvocacySection from "@/components/landing/AdvocacySection";
 import FooterPlinq from "@/components/landing/FooterPlinq";
 import { PWAInstallBanner } from "@/components/PWAInstallBanner";
 
@@ -72,25 +74,67 @@ const Index = () => {
       )}
 
       <NavbarPlinq />
+
+      {/* 1. Hero — Editorial hook + hero image */}
       <HeroHormozi />
+
+      {/* 2. Government data — Classified as a national disaster */}
+      <GovDataSection />
+
+      {/* 3. Trust ticker */}
       <TickerBar />
+
+      {/* 3. Interactive demo */}
       <HomepageDemo />
+
+      {/* 4. Problem — Verifiable stats + emotional truth */}
       <ProblemAgitation />
+
+      {/* 5. Barriers — Why no one checked before */}
       <BarrierSection />
+
+      {/* 6. Solution pillars */}
       <SolutionHormozi />
+
+      {/* 7. How it works — 4-step timeline */}
       <HowItWorksPlinq />
+
+      {/* 8. Risk levels — What your report reveals */}
       <RiskLevelsSection />
+
+      {/* 9. Trust stats bar */}
       <StatsBar />
+
+      {/* 10. Real SA women photos */}
       <PhotoGrid />
+
+      {/* 11. Value stack — FREE tier explosion */}
       <ValueStack />
+
+      {/* 12. Paid checks pricing */}
       <PaidChecksSection />
+
+      {/* 13. Testimonials */}
       <div id="testimonials">
         <TestimonialsSectionNew />
       </div>
+
+      {/* 14. Who this is for */}
       <IndustriesBrief />
+
+      {/* 15. Community photos */}
+      <CommunityImageStrip />
+
+      {/* 16. Founder credibility */}
+      <FounderSection />
+
+      {/* 17. Final urgency + CTA */}
       <FinalUrgency />
+
+      {/* 18. FAQ */}
       <FAQHormozi />
-      <AdvocacySection />
+
+      {/* Footer */}
       <FooterPlinq />
       <PWAInstallBanner />
     </div>

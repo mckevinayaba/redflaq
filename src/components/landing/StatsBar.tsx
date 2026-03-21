@@ -11,7 +11,7 @@ const StatsBar = () => {
   ];
 
   return (
-    <section ref={ref} className={`reveal-section ${isVisible ? 'visible' : ''} py-8`} style={{ background: '#F5F0EB', borderTop: '1px solid #E6E0DA', borderBottom: '1px solid #E6E0DA' }}>
+    <section ref={ref} className={`reveal-section ${isVisible ? 'visible' : ''}`} style={{ background: '#F5F0EB', borderTop: '1px solid #E6E0DA', borderBottom: '1px solid #E6E0DA', padding: '40px 24px' }}>
       <div className="container mx-auto px-4">
         <div className={`grid grid-cols-3 gap-6 reveal-stagger ${isVisible ? 'visible' : ''}`}>
           {stats.map((stat, index) => (

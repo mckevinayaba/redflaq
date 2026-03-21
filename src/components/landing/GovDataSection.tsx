@@ -375,6 +375,7 @@ const GovDataSection = () => {
         </div>
       </div>
     </section>
+    </>
   );
 };
 

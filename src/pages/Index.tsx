@@ -78,7 +78,10 @@ const Index = () => {
       {/* 1. Hero — Editorial hook + hero image */}
       <HeroHormozi />
 
-      {/* 2. Trust ticker */}
+      {/* 2. Government data — Classified as a national disaster */}
+      <GovDataSection />
+
+      {/* 3. Trust ticker */}
       <TickerBar />
 
       {/* 3. Interactive demo */}

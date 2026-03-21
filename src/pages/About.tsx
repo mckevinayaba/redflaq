@@ -1,33 +1,36 @@
 import { Link } from "react-router-dom";
-import { Shield, Eye, Scale, Heart, CheckCircle, Database, FileText, Gavel, Mail, MessageCircle, Users, Target, BookOpen, TrendingUp } from "lucide-react";
+import { Shield, Eye, Scale, Heart, CheckCircle, Database, FileText, Gavel, Mail, MessageCircle, Users, Target, Linkedin } from "lucide-react";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
 import { WHATSAPP_CHAT_URL } from "@/constants/whatsapp";
+import nthabiPhoto from "@/assets/nthabi-montsho.jpeg";
+import ayolaPhoto from "@/assets/ayola-masizana.jpeg";
+import mckevinPhoto from "@/assets/mckevin-ayaba.png";
 
 const team = [
   {
-    name: "McKevin",
-    role: "Founder & CEO",
-    bio: "Built RedFlaq after seeing how easily preventable tragedies could be — if only people had access to the right information at the right time.",
-    quote: "Information saves lives. We just make it accessible.",
+    name: "Nthabi Montsho",
+    role: "Co‑Founder & CEO, RedFlaq\nGBV Survivor, Advocate & TV Host",
+    photo: nthabiPhoto,
+    bio: "Nthabi Montsho is a GBV survivor and advocate dedicated to helping women rebuild their lives after abuse. She is the founder of Women Arise with Power and the author of the book Women Arise with Power, which shares her journey of survival and healing. Through her work on Soweto TV and national platforms she continues to advocate for dignity, safety and justice for women across South Africa.",
+    quote: "I survived what many women do not. If one public‑record warning can stop another woman from living my story, then tools like RedFlaq are not a luxury. They are a necessity.",
+    linkedin: "https://www.linkedin.com/in/nthabiseng-montsho-kamakunene-a8a41841/",
   },
   {
-    name: "Nthabi",
-    role: "Head of Research & Data",
-    bio: "Leads the aggregation of public safety records from government sources, ensuring accuracy and compliance with POPIA.",
-    quote: "Every record we surface is a warning someone deserved to see.",
+    name: "Ayola Masizana",
+    role: "Witness of GBV · Student\nBrand Ambassador, RedFlaq",
+    photo: ayolaPhoto,
+    bio: "Growing up, Ayola Masizana witnessed his father abuse his mother. Those memories shaped his view of safety, trust and the impact violence has on families. Today he is studying Public Management and Governance at the University of Johannesburg and is committed to helping build systems that protect families before violence escalates.",
+    quote: "As a child I saw things no child should ever see. I stand with RedFlaq because boys and girls deserve parents who are safe and systems that recognise warning signs early.",
+    linkedin: "https://www.linkedin.com/in/ayola-masizana-30404b320/",
   },
   {
-    name: "Ayola",
-    role: "Community & Partnerships",
-    bio: "Connects RedFlaq with shelters, NGOs, and community organisations to extend our reach to those who need it most.",
-    quote: "Safety is a community effort. We're building the infrastructure for it.",
-  },
-  {
-    name: "Stacey",
-    role: "Product & Experience",
-    bio: "Designs every interaction with survivor safety in mind — from discreet search flows to secure evidence journals.",
-    quote: "If someone is in danger, every second of friction matters.",
+    name: "McKevin Ayaba",
+    role: "Technology Entrepreneur\nCo‑Founder & CPO, RedFlaq",
+    photo: mckevinPhoto,
+    bio: "McKevin Ayaba is a technology entrepreneur focused on building systems that solve real societal problems. Through RedFlaq he is working to make public record safety signals accessible to everyday people so women and communities can make safer decisions about who they trust.",
+    quote: "Traditional background check services exist, but they are slow, bureaucratic and designed for businesses, not individuals. RedFlaq was created so women and communities can access public‑record warnings quickly and affordably.",
+    linkedin: "https://www.linkedin.com/in/mckevin-ayaba-89853220/",
   },
 ];
 
@@ -69,7 +72,7 @@ export default function About() {
             <span className="inline-block w-6 h-px bg-primary" />
             Why RedFlaq Exists
           </p>
-          <h1 className="font-heading text-[28px] sm:text-[40px] lg:text-[52px] leading-[1.05] mb-5 text-white" style={{ letterSpacing: "-0.02em" }}>
+          <h1 style={{ fontFamily: "'DM Serif Display', serif", fontSize: "clamp(28px, 4vw, 52px)", lineHeight: 1.05, letterSpacing: "-0.02em", color: "#fff", marginBottom: 20 }}>
             Every 12 minutes, a woman<br />
             in South Africa is <span className="text-primary">assaulted</span>.
           </h1>
@@ -88,7 +91,7 @@ export default function About() {
               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                 <Target className="w-5 h-5 text-primary" />
               </div>
-              <h2 className="font-heading text-xl sm:text-2xl text-foreground">The Problem</h2>
+              <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: "clamp(20px, 2.5vw, 26px)", color: "hsl(var(--foreground))" }}>The Problem</h2>
             </div>
             <p className="font-body text-sm sm:text-base text-muted-foreground leading-relaxed">
               Criminal records, protection orders, and court judgments are <strong className="text-foreground">public information</strong> — but they're scattered across disconnected government databases. Checking someone's background means navigating bureaucracy most people don't know exists.
@@ -100,7 +103,7 @@ export default function About() {
               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                 <Shield className="w-5 h-5 text-primary" />
               </div>
-              <h2 className="font-heading text-xl sm:text-2xl text-foreground">The Solution</h2>
+              <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: "clamp(20px, 2.5vw, 26px)", color: "hsl(var(--foreground))" }}>The Solution</h2>
             </div>
             <p className="font-body text-sm sm:text-base text-muted-foreground leading-relaxed">
               RedFlaq aggregates publicly available legal records into one searchable platform. We don't create data — we surface what already exists. <strong className="text-foreground">60 seconds. One search. Multiple databases.</strong>
@@ -119,7 +122,7 @@ export default function About() {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {stats.map((s) => (
                 <div key={s.label} className="text-center">
-                  <div className="font-heading text-2xl sm:text-3xl text-white mb-1">{s.value}</div>
+                  <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: "clamp(24px, 3vw, 32px)", color: "#fff", marginBottom: 4 }}>{s.value}</div>
                   <div className="font-body text-xs text-white/50">{s.label}</div>
                 </div>
               ))}
@@ -133,21 +136,71 @@ export default function About() {
             <span className="inline-block w-6 h-px bg-primary" />
             The Team
           </p>
-          <h2 className="font-heading text-[24px] sm:text-[32px] text-foreground mb-6">The people behind RedFlaq</h2>
-          <div className="grid sm:grid-cols-2 gap-4">
+          <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: "clamp(24px, 3vw, 36px)", color: "hsl(var(--foreground))", marginBottom: 24, letterSpacing: "-0.02em" }}>
+            The people behind RedFlaq
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
             {team.map((t) => (
-              <div key={t.name} className="p-6 bg-card border border-border rounded-[18px] shadow-sm">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Users className="w-5 h-5 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-heading text-lg text-foreground">{t.name}</h3>
-                    <p className="font-body text-xs text-primary">{t.role}</p>
-                  </div>
+              <div
+                key={t.name}
+                className="card-lift"
+                style={{
+                  background: "hsl(var(--card))",
+                  border: "1px solid hsl(var(--border))",
+                  borderRadius: 18,
+                  padding: "36px 24px",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  textAlign: "center",
+                }}
+              >
+                {/* Photo */}
+                <div style={{
+                  width: 110, height: 110, borderRadius: "50%",
+                  border: "3px solid hsl(var(--primary) / 0.2)",
+                  overflow: "hidden",
+                  marginBottom: 18,
+                  boxShadow: "0 4px 16px rgba(107,78,255,0.12)",
+                }}>
+                  <img src={t.photo} alt={t.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 </div>
-                <p className="font-body text-[13px] text-muted-foreground leading-relaxed mb-3">{t.bio}</p>
-                <p className="font-body text-[12px] text-primary/80 italic">"{t.quote}"</p>
+
+                {/* Name */}
+                <div style={{ fontFamily: "'DM Serif Display', serif", fontSize: 20, color: "hsl(var(--foreground))", marginBottom: 4 }}>
+                  {t.name}
+                </div>
+
+                {/* Role */}
+                <div className="font-mono" style={{ fontSize: 10, letterSpacing: "0.06em", color: "hsl(var(--primary))", marginBottom: 16, lineHeight: 1.6, whiteSpace: "pre-line", minHeight: 32 }}>
+                  {t.role}
+                </div>
+
+                {/* Bio */}
+                <p className="font-body text-left" style={{ fontSize: 12, color: "hsl(var(--muted-foreground))", lineHeight: 1.7, marginBottom: 16 }}>
+                  {t.bio}
+                </p>
+
+                {/* Quote */}
+                <blockquote style={{
+                  fontFamily: "'DM Serif Display', serif", fontSize: 13, fontStyle: "italic",
+                  color: "hsl(var(--primary))", lineHeight: 1.6, borderLeft: "3px solid hsl(var(--primary))",
+                  paddingLeft: 14, textAlign: "left", marginTop: "auto", marginBottom: 16,
+                }}>
+                  "{t.quote}"
+                </blockquote>
+
+                {/* LinkedIn */}
+                <a
+                  href={t.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 font-body text-xs font-semibold transition-colors hover:opacity-80"
+                  style={{ color: "hsl(var(--primary))", textDecoration: "none" }}
+                >
+                  <Linkedin style={{ width: 14, height: 14 }} />
+                  LinkedIn Profile
+                </a>
               </div>
             ))}
           </div>
@@ -159,7 +212,7 @@ export default function About() {
             <span className="inline-block w-6 h-px bg-primary" />
             Data Sources
           </p>
-          <h2 className="font-heading text-[24px] sm:text-[32px] text-foreground mb-3">Where our data comes from</h2>
+          <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: "clamp(24px, 3vw, 32px)", color: "hsl(var(--foreground))", marginBottom: 12 }}>Where our data comes from</h2>
           <p className="font-body text-sm text-muted-foreground mb-6 max-w-[500px]">
             We search publicly available South African databases. We do not access private databases, medical records, or sealed court records.
           </p>
@@ -182,7 +235,7 @@ export default function About() {
             <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
               <Scale className="w-5 h-5 text-primary" />
             </div>
-            <h2 className="font-heading text-xl sm:text-2xl text-foreground">Our Commitment</h2>
+            <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: "clamp(20px, 2.5vw, 26px)", color: "hsl(var(--foreground))" }}>Our Commitment</h2>
           </div>
           <div className="space-y-2">
             {[
@@ -204,7 +257,7 @@ export default function About() {
         <section className="p-8 sm:p-12 text-center rounded-3xl relative overflow-hidden" style={{ background: "linear-gradient(135deg, #0F0A1A 0%, #1A1035 100%)" }}>
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] pointer-events-none" style={{ background: "radial-gradient(circle, rgba(124,58,237,0.2), transparent 70%)", filter: "blur(40px)" }} />
           <div className="relative z-10">
-            <h2 className="font-heading text-[24px] sm:text-[32px] mb-3 text-white">Get in Touch</h2>
+            <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: "clamp(24px, 3vw, 32px)", color: "#fff", marginBottom: 12 }}>Get in Touch</h2>
             <p className="font-body text-sm mb-6 text-white/60">Questions, partnerships, or media enquiries — we'd love to hear from you.</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <a href="mailto:hello@redflaq.com" className="inline-flex items-center gap-2 font-body font-bold text-sm px-6 py-3 rounded-full bg-primary text-primary-foreground shadow-lg">

@@ -498,18 +498,18 @@ const NavbarPlinq = () => {
                         key={item.label}
                         onClick={() => handleNavItem(item)}
                         style={{
-                          display: 'flex', alignItems: 'flex-start', gap: 10, padding: '10px 8px',
+                          display: 'flex', alignItems: 'flex-start', gap: 10, padding: '12px 8px',
                           width: '100%', background: 'none', border: 'none', cursor: 'pointer',
-                          textAlign: 'left', borderRadius: 8,
+                          textAlign: 'left', borderRadius: 8, minHeight: 44,
                         }}
                       >
                         <div style={{ marginTop: 2, flexShrink: 0 }}>{item.icon}</div>
                         <div>
-                          <div style={{ ...fontBase, fontSize: 13, fontWeight: 600, color: '#2D2235', display: 'flex', alignItems: 'center', gap: 6 }}>
+                          <div style={{ ...fontBase, fontSize: 14, fontWeight: 600, color: '#2D2235', display: 'flex', alignItems: 'center', gap: 6 }}>
                             {item.label}
                             {item.comingSoon && <span style={{ fontSize: 9, color: '#7C3AED', background: 'rgba(124,58,237,0.08)', padding: '1px 5px', borderRadius: 4, fontWeight: 700 }}>🔜</span>}
                           </div>
-                          <div style={{ ...fontBase, fontSize: 11, color: '#888888', marginTop: 1 }}>{item.desc}</div>
+                          <div style={{ ...fontBase, fontSize: 12, color: '#888888', marginTop: 2 }}>{item.desc}</div>
                         </div>
                       </button>
                     ))}

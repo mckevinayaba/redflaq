@@ -87,7 +87,7 @@ const FinalCTASection = () => {
               boxShadow: '0 20px 60px rgba(139,92,246,0.3)'
             }}
           >
-            💜 Check His Record Now - R50
+            💜 RedFlaq Him Now - R50
           </Button>
         </div>
 

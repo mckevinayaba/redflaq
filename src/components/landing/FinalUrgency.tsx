@@ -27,11 +27,11 @@ const FinalUrgency = () => {
           lineHeight: 1.8, textAlign: 'left', maxWidth: 600, margin: '0 auto',
           marginBottom: 36,
         }}>
-          <p style={{ marginBottom: 8 }}>She didn't check.</p>
+          <p style={{ marginBottom: 8 }}>She didn't RedFlaq.</p>
           <p style={{ marginBottom: 8 }}>She thought she was being careful.</p>
           <p style={{ marginBottom: 8 }}>She met him in public. She shared her location.</p>
           <p style={{ marginBottom: 20 }}>She told her friends where she'd be.</p>
-          <p style={{ marginBottom: 4, color: '#888' }}>And in 3 months, 6 months, 9 months — when his true behavior reveals itself — she'll wish she had verified him on Day 1.</p>
+          <p style={{ marginBottom: 4, color: '#888' }}>And in 3 months, 6 months, 9 months — when his true behavior reveals itself — she'll wish she had RedFlaq'd him on Day 1.</p>
           <div style={{ marginTop: 24 }}>
             <p style={{ fontWeight: 600, color: '#1F1F1F' }}>Don't be her.</p>
             <p style={{ fontWeight: 600, color: '#1F1F1F' }}>Don't let your sister be her.</p>
@@ -62,7 +62,7 @@ const FinalUrgency = () => {
             Create Your Free Safety Base Now
           </button>
           <p style={{ ...sans, fontSize: 12, color: '#888', maxWidth: 360, lineHeight: 1.5 }}>
-            No credit card required. 100% free forever. Pay only when you verify someone.
+            No credit card required. 100% free forever. Pay only when you RedFlaq someone.
           </p>
         </div>
       </div>

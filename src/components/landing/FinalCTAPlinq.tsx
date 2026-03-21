@@ -16,7 +16,7 @@ const FinalCTAPlinq = () => {
       <div style={{ position: 'absolute', inset: 0, zIndex: 1, background: 'linear-gradient(180deg, rgba(15,10,26,0.85), rgba(26,16,53,0.9))' }} />
       <div className="py-12 md:py-20 px-6" style={{ position: 'relative', zIndex: 2, maxWidth: 700, margin: '0 auto', textAlign: 'center' }}>
         <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 'clamp(36px, 5vw, 64px)', lineHeight: 1.08, color: 'white', marginBottom: 20, letterSpacing: '-0.02em' }}>
-          Before you trust,<br /><em style={{ fontStyle: 'italic' }}>verify.</em>
+          Before You Trust,<br /><em style={{ fontStyle: 'italic' }}>RedFlaq First.</em>
         </h2>
         <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, color: 'rgba(255,255,255,0.7)', lineHeight: 1.7, marginBottom: 40 }}>
           Clarity creates safety. Every search you make helps protect not just yourself but the next person who asks the same question.
@@ -26,7 +26,7 @@ const FinalCTAPlinq = () => {
             onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.3)'; }}
             onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 24px rgba(0,0,0,0.2)'; }}
           >
-            Start Your First Check
+            Start Your First RedFlaq
           </button>
           <button onClick={() => setShareOpen(true)} className="inline-flex items-center gap-2" style={{ background: 'transparent', border: '2px solid rgba(255,255,255,0.4)', color: 'white', padding: '18px 32px', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 16, cursor: 'pointer', borderRadius: 50, transition: 'all 0.25s ease' }}
             onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}

@@ -64,7 +64,7 @@ const HeroHormozi = () => {
                 Create Your Free Safety Base
               </button>
               <p style={{ ...sans, fontSize: 12, color: '#888', maxWidth: 380, lineHeight: 1.5 }}>
-                100% free account. No credit card. Pay only when you verify someone's public record (from R99).
+                100% free account. No credit card. Pay only when you RedFlaq someone's public record (from R99).
               </p>
               <button
                 onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}

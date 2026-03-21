@@ -129,8 +129,14 @@ const Index = () => {
       {/* 16. Why RedFlaq Exists — Team */}
       <WhyRedflaqSection />
 
-      {/* 17. Final urgency + CTA */}
+      {/* 17. Advocacy badge */}
+      <AdvocacySection />
+
+      {/* 18. Final urgency + CTA */}
       <FinalUrgency />
+
+      {/* 19. Cinematic skyline CTA */}
+      <FinalCTAPlinq />
 
       {/* 18. FAQ */}
       <FAQHormozi />

@@ -20,13 +20,13 @@ const HowItWorksPlinq = () => {
 
         <h2 style={{
           fontFamily: "'DM Serif Display', serif",
-          fontSize: 'clamp(36px, 4vw, 52px)',
+          fontSize: 'clamp(32px, 4vw, 52px)',
           whiteSpace: 'nowrap',
           color: '#1A1523',
           marginBottom: 20,
           letterSpacing: '-0.02em',
         }}>
-          Fast. Simple. <em style={{ color: '#6B4EFF', fontStyle: 'italic' }}>Public‑record based.</em>
+          Fast. Simple. <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>Public‑record based.</em>
         </h2>
 
         <p style={{

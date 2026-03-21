@@ -57,39 +57,92 @@ const GovDataSection = () => {
 
         {/* Uncomfortable truth tiles */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-14">
-          {[
-            { value: "Every 4 hours", label: "In South Africa, about one woman is killed every 4 hours.", source: "Centre for Constitutional Rights, citing UNODC femicide data" },
-            { value: "5×", label: "South Africa's femicide rate is about five times the global average.", source: "Africa Check analysis of South African and UNODC data" },
-            { value: "3 000+", label: "Women murdered in South Africa in a typical year — roughly 9 every day.", source: "SAPS national murder statistics (women)" },
-          ].map((tile, i) => (
-            <div
-              key={i}
-              className="text-center card-lift"
-              style={{
-                background: "hsl(var(--card))",
-                borderRadius: 20,
-                padding: "44px 24px 36px",
-                border: "1px solid hsl(var(--border))",
-              }}
-            >
-              <div style={{
-                fontFamily: "'DM Serif Display', serif",
-                fontSize: "clamp(40px, 5vw, 60px)",
-                color: "hsl(var(--primary))",
-                lineHeight: 1,
-                marginBottom: 14,
-                letterSpacing: "-0.02em",
-              }}>
-                {tile.value}
-              </div>
-              <div className="font-body" style={{ fontSize: 14, color: "hsl(var(--foreground))", lineHeight: 1.6, marginBottom: 14, maxWidth: 260, margin: "0 auto 14px" }}>
-                {tile.label}
-              </div>
-              <div className="font-mono" style={{ fontSize: 9, letterSpacing: "0.06em", color: "hsl(var(--muted-foreground))", opacity: 0.7 }}>
-                {tile.source}
-              </div>
+          {/* Card 1 – Time */}
+          <div
+            className="text-center card-lift flex flex-col"
+            style={{
+              background: "hsl(var(--card))",
+              borderRadius: 20,
+              padding: "44px 24px 36px",
+              border: "1px solid hsl(var(--border))",
+            }}
+          >
+            <div style={{
+              fontFamily: "'DM Serif Display', serif",
+              fontSize: "clamp(40px, 5vw, 60px)",
+              color: "hsl(var(--primary))",
+              lineHeight: 1,
+              marginBottom: 14,
+              letterSpacing: "-0.02em",
+            }}>
+              Every 4 hours
             </div>
-          ))}
+            <div className="font-body" style={{ fontSize: 15, color: "hsl(var(--foreground))", lineHeight: 1.6, maxWidth: 260, margin: "0 auto" }}>
+              Another woman is killed in South Africa.
+            </div>
+            <div className="mt-auto pt-5 font-mono" style={{ fontSize: 9, letterSpacing: "0.06em", color: "hsl(var(--muted-foreground))", opacity: 0.7 }}>
+              Centre for Constitutional Rights, citing UNODC femicide data
+            </div>
+          </div>
+
+          {/* Card 2 – Comparison */}
+          <div
+            className="text-center card-lift flex flex-col"
+            style={{
+              background: "hsl(var(--card))",
+              borderRadius: 20,
+              padding: "44px 24px 36px",
+              border: "1px solid hsl(var(--border))",
+            }}
+          >
+            <div style={{
+              fontFamily: "'DM Serif Display', serif",
+              fontSize: "clamp(40px, 5vw, 60px)",
+              color: "hsl(var(--primary))",
+              lineHeight: 1,
+              marginBottom: 14,
+              letterSpacing: "-0.02em",
+            }}>
+              5×
+            </div>
+            <div className="font-body" style={{ fontSize: 15, color: "hsl(var(--foreground))", lineHeight: 1.6, maxWidth: 260, margin: "0 auto" }}>
+              South Africa's femicide rate vs the global average.
+            </div>
+            <div className="mt-auto pt-5 font-mono" style={{ fontSize: 9, letterSpacing: "0.06em", color: "hsl(var(--muted-foreground))", opacity: 0.7 }}>
+              Africa Check analysis of South African and UNODC data
+            </div>
+          </div>
+
+          {/* Card 3 – Volume + brutal statement */}
+          <div
+            className="text-center card-lift flex flex-col"
+            style={{
+              background: "hsl(var(--card))",
+              borderRadius: 20,
+              padding: "44px 24px 36px",
+              border: "1px solid hsl(var(--border))",
+            }}
+          >
+            <div style={{
+              fontFamily: "'DM Serif Display', serif",
+              fontSize: "clamp(40px, 5vw, 60px)",
+              color: "hsl(var(--primary))",
+              lineHeight: 1,
+              marginBottom: 14,
+              letterSpacing: "-0.02em",
+            }}>
+              3 000+
+            </div>
+            <div className="font-body" style={{ fontSize: 15, color: "hsl(var(--foreground))", lineHeight: 1.6, maxWidth: 280, margin: "0 auto" }}>
+              Women murdered in South Africa in a typical year — roughly 9 every day.
+            </div>
+            <div className="font-body italic" style={{ fontSize: 12, color: "hsl(var(--muted-foreground))", lineHeight: 1.6, maxWidth: 280, margin: "14px auto 0" }}>
+              Because the danger does not reveal itself on the first date, or second or even third. It shows up at Month 3, Month 6, Month 9 — when you are already emotionally invested, financially entangled, and isolated from support.
+            </div>
+            <div className="mt-auto pt-5 font-mono" style={{ fontSize: 9, letterSpacing: "0.06em", color: "hsl(var(--muted-foreground))", opacity: 0.7 }}>
+              SAPS national murder statistics (women)
+            </div>
+          </div>
         </div>
 
         {/* Section header */}

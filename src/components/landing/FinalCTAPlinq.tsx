@@ -26,7 +26,7 @@ const FinalCTAPlinq = () => {
             onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 32px rgba(0,0,0,0.3)'; }}
             onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 24px rgba(0,0,0,0.2)'; }}
           >
-            Start Your First Check
+            Start Your First RedFlaq
           </button>
           <button onClick={() => setShareOpen(true)} className="inline-flex items-center gap-2" style={{ background: 'transparent', border: '2px solid rgba(255,255,255,0.4)', color: 'white', padding: '18px 32px', fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 16, cursor: 'pointer', borderRadius: 50, transition: 'all 0.25s ease' }}
             onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}

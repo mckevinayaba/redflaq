@@ -88,7 +88,7 @@ const PaidChecksSection = () => {
                 onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-1px)'}
                 onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
               >
-                Run Check
+                Run RedFlaq
               </button>
             </div>
           ))}

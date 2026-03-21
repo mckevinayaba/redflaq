@@ -15,7 +15,7 @@ const AdvocacySection = () => {
           onMouseEnter={e => { e.currentTarget.style.background = '#5539E8'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
           onMouseLeave={e => { e.currentTarget.style.background = '#6B4EFF'; e.currentTarget.style.transform = 'translateY(0)'; }}
         >
-          Verify Someone Now — R99
+          RedFlaq Someone Now — R99
         </button>
       </div>
     </section>

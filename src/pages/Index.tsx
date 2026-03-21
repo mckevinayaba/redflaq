@@ -20,6 +20,8 @@ import IndustriesBrief from "@/components/landing/IndustriesBrief";
 import CommunityImageStrip from "@/components/landing/CommunityImageStrip";
 import WhyRedflaqSection from "@/components/landing/WhyRedflaqSection";
 import FinalUrgency from "@/components/landing/FinalUrgency";
+import AdvocacySection from "@/components/landing/AdvocacySection";
+import FinalCTAPlinq from "@/components/landing/FinalCTAPlinq";
 import FAQHormozi from "@/components/landing/FAQHormozi";
 import FooterPlinq from "@/components/landing/FooterPlinq";
 import { PWAInstallBanner } from "@/components/PWAInstallBanner";

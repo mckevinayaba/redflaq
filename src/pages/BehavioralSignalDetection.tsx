@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
@@ -190,6 +190,12 @@ export default function BehavioralSignalDetection() {
 
   const content = (
     <div className="max-w-3xl mx-auto px-4 py-8 space-y-8">
+      <Link
+        to="/dashboard"
+        className="inline-flex items-center gap-1.5 font-mono text-[11px] tracking-wider text-primary hover:text-primary/80 transition-colors uppercase mb-4"
+      >
+        ← BACK TO DASHBOARD
+      </Link>
       <div>
         <h1 className="font-heading text-2xl sm:text-3xl text-foreground mb-1">Behavioral Signal Detection</h1>
         <p className="font-body text-sm text-muted-foreground">Identify warning signs that go beyond criminal records.</p>

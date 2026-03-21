@@ -28,7 +28,7 @@ const TickerBar = () => {
   return (
     <div style={{
       width: '100%',
-      background: '#6B4EFF',
+      background: '#7C3AED',
       padding: '12px 0',
       overflow: 'hidden',
       whiteSpace: 'nowrap',

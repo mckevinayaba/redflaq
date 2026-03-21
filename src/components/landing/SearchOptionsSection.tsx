@@ -52,7 +52,7 @@ const SearchOptionsSection = () => {
   return (
     <section id="search" ref={ref} className={`reveal-section ${isVisible ? 'visible' : ''} py-12 md:py-20 px-5`} style={{ background: '#F5F0EB' }}>
       <div style={{ maxWidth: 800, margin: '0 auto' }}>
-        <div className="section-tag" style={{ color: '#6B4EFF', marginBottom: 16 }}>
+        <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 16 }}>
           Start Verifying
         </div>
 
@@ -98,7 +98,7 @@ const SearchOptionsSection = () => {
                 ref={nameRef}
                 style={inputStyle}
                 placeholder="e.g. John David Mokoena"
-                onFocus={e => e.currentTarget.style.borderColor = '#6B4EFF'}
+                onFocus={e => e.currentTarget.style.borderColor = '#7C3AED'}
                 onBlur={e => e.currentTarget.style.borderColor = '#E6E0DA'}
               />
             </div>
@@ -106,7 +106,7 @@ const SearchOptionsSection = () => {
               <label style={labelStyle}>Province (Optional)</label>
               <select
                 style={{ ...inputStyle, appearance: 'none' }}
-                onFocus={e => e.currentTarget.style.borderColor = '#6B4EFF'}
+                onFocus={e => e.currentTarget.style.borderColor = '#7C3AED'}
                 onBlur={e => e.currentTarget.style.borderColor = '#E6E0DA'}
               >
                 <option value="">Select province</option>
@@ -117,7 +117,7 @@ const SearchOptionsSection = () => {
               <label style={labelStyle}>Age Range (Optional)</label>
               <select
                 style={{ ...inputStyle, appearance: 'none' }}
-                onFocus={e => e.currentTarget.style.borderColor = '#6B4EFF'}
+                onFocus={e => e.currentTarget.style.borderColor = '#7C3AED'}
                 onBlur={e => e.currentTarget.style.borderColor = '#E6E0DA'}
               >
                 <option value="">Select age range</option>
@@ -132,7 +132,7 @@ const SearchOptionsSection = () => {
               <label style={labelStyle}>Reason for Search *</label>
               <select
                 style={{ ...inputStyle, appearance: 'none' }}
-                onFocus={e => e.currentTarget.style.borderColor = '#6B4EFF'}
+                onFocus={e => e.currentTarget.style.borderColor = '#7C3AED'}
                 onBlur={e => e.currentTarget.style.borderColor = '#E6E0DA'}
               >
                 <option value="">Select reason</option>
@@ -162,15 +162,15 @@ const SearchOptionsSection = () => {
                   setShowConsentHint(false);
                 }}
                 className="mt-1"
-                style={{ accentColor: '#6B4EFF' }}
+                style={{ accentColor: '#7C3AED' }}
               />
               <label htmlFor="consent" style={{
                 fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#555555',
                 lineHeight: 1.5, cursor: 'pointer',
               }}>
                 I confirm I have a legitimate reason to search this person and I agree to the{" "}
-                <a href="/terms" style={{ color: '#6B4EFF', textDecoration: 'underline' }}>Terms of Service</a> and{" "}
-                <a href="/privacy" style={{ color: '#6B4EFF', textDecoration: 'underline' }}>Privacy Policy</a>
+                <a href="/terms" style={{ color: '#7C3AED', textDecoration: 'underline' }}>Terms of Service</a> and{" "}
+                <a href="/privacy" style={{ color: '#7C3AED', textDecoration: 'underline' }}>Privacy Policy</a>
               </label>
             </div>
 
@@ -187,7 +187,7 @@ const SearchOptionsSection = () => {
                 disabled={!consentChecked}
                 style={{
                   width: '100%',
-                  background: consentChecked ? '#6B4EFF' : '#E6E0DA',
+                  background: consentChecked ? '#7C3AED' : '#E6E0DA',
                   color: consentChecked ? 'white' : '#888888',
                   padding: 20,
                   fontFamily: "'Syne', sans-serif",

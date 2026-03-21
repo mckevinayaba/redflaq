@@ -24,6 +24,7 @@ import FAQHormozi from "@/components/landing/FAQHormozi";
 import FooterPlinq from "@/components/landing/FooterPlinq";
 import { PWAInstallBanner } from "@/components/PWAInstallBanner";
 
+// Landing page component
 const Index = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [showConfirmedBanner, setShowConfirmedBanner] = useState(false);

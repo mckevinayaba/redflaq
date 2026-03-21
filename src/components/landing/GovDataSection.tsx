@@ -51,7 +51,31 @@ const GovDataSection = () => {
             color: "hsl(var(--foreground))",
           }}
         >
-          You did everything they told you — met in public places, shared your location, checked his first impression and looks. They lied. Women still die. Before you trust, RedFlaq first.
+          You did everything they told you — met in public places, shared your location, checked his first impression and looks. They lied. Women still die.{" "}
+          <span
+            style={{
+              color: "hsl(var(--primary))",
+              fontWeight: 800,
+              fontStyle: "italic",
+              position: "relative",
+              display: "inline-block",
+            }}
+          >
+            Before you trust, RedFlaq first.
+            <span
+              aria-hidden="true"
+              style={{
+                position: "absolute",
+                left: 0,
+                right: 0,
+                top: "50%",
+                height: 2,
+                background: "#DC2626",
+                transform: "rotate(-1deg)",
+                pointerEvents: "none",
+              }}
+            />
+          </span>
         </p>
       </section>
 

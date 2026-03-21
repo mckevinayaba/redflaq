@@ -48,7 +48,7 @@ const FooterPlinq = () => {
         { label: "Safety Tips", href: "/safety-tips" },
         { label: "Blog", href: "/blog" },
         { label: "Get Help Near You", href: "/safety-tips#get-help" },
-        { label: "Protection Order Guide", href: "#protection-orders" },
+        { label: "Protection Order Guide", href: "/safety-tips#protection-orders" },
         { label: "FAQ", href: "#faq" },
         { label: "RedFlaq.org (Coming Soon)", href: "/redflaq-org-coming-soon" },
       ],

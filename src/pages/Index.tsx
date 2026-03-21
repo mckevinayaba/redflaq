@@ -126,7 +126,7 @@ const Index = () => {
       <CommunityImageStrip />
 
       {/* 16. Founder credibility */}
-      <FounderSection />
+      <WhyRedflaqSection />
 
       {/* 17. Final urgency + CTA */}
       <FinalUrgency />

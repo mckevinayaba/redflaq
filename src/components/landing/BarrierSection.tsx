@@ -156,7 +156,7 @@ const BarrierSection = () => {
         {/* CTA Banner */}
         <div style={{
           marginTop: 64,
-          background: '#6B4EFF',
+          background: '#7C3AED',
           borderRadius: 20,
           padding: '48px 40px',
           textAlign: 'center',

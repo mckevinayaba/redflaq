@@ -130,6 +130,7 @@ const FooterPlinq = () => {
                       <a
                         href={link.href}
                         style={linkStyle}
+                        onClick={(e) => handleLinkClick(link.href, e)}
                         onMouseEnter={e => e.currentTarget.style.color = '#7C3AED'}
                         onMouseLeave={e => e.currentTarget.style.color = '#888888'}
                       >

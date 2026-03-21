@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
+import BackToHome from "@/components/landing/BackToHome";
 import SafetyCardGrid from "@/components/safety/SafetyCardGrid";
 import GBVResourcesSection from "@/components/safety/GBVResourcesSection";
 import ProvincialResourcesSection from "@/components/safety/ProvincialResourcesSection";

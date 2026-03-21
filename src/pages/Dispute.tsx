@@ -10,6 +10,7 @@ export default function Dispute() {
     <div className="min-h-screen flex flex-col" style={{ background: '#F5F0EB' }}>
       <NavbarPlinq />
       <div style={{ height: 80 }} />
+      <BackToHome />
 
       <header className="bg-primary text-white py-10">
         <div className="max-w-4xl mx-auto px-6">

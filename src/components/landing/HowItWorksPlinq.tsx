@@ -21,7 +21,7 @@ const HowItWorksPlinq = () => {
         <h2 style={{
           fontFamily: "'DM Serif Display', serif",
           fontSize: 'clamp(36px, 4vw, 52px)',
-          maxWidth: 500,
+          whiteSpace: 'nowrap',
           color: '#1A1523',
           marginBottom: 20,
           letterSpacing: '-0.02em',

@@ -70,6 +70,7 @@ import HabitComingSoon from "./pages/HabitComingSoon";
 import BehavioralSignalComingSoon from "./pages/BehavioralSignalComingSoon";
 import ApiComingSoon from "./pages/ApiComingSoon";
 import RedflaqOrgComingSoon from "./pages/RedflaqOrgComingSoon";
+import CustomerStories from "./pages/CustomerStories";
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -140,6 +141,8 @@ const App = () => (
           <Route path="/behavioral-signal-coming-soon" element={<BehavioralSignalComingSoon />} />
           <Route path="/api-coming-soon" element={<ApiComingSoon />} />
           <Route path="/redflaq-org-coming-soon" element={<RedflaqOrgComingSoon />} />
+          {/* Resources */}
+          <Route path="/customer-stories" element={<CustomerStories />} />
           <Route path="/partners/apply" element={<PartnersApply />} />
           {/* Admin */}
           <Route path="/admin" element={<AdminDashboardNew />} />

@@ -68,6 +68,8 @@ import WhatsAppPage from "./pages/WhatsApp";
 import Shop from "./pages/Shop";
 import HabitComingSoon from "./pages/HabitComingSoon";
 import BehavioralSignalComingSoon from "./pages/BehavioralSignalComingSoon";
+import HabitDashboard from "./pages/HabitDashboard";
+import BehavioralSignalDetection from "./pages/BehavioralSignalDetection";
 import ApiComingSoon from "./pages/ApiComingSoon";
 import RedflaqOrgComingSoon from "./pages/RedflaqOrgComingSoon";
 const queryClient = new QueryClient();

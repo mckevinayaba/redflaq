@@ -386,12 +386,13 @@ const GovDataSection = () => {
 
         {/* Conviction rate callout */}
         <div className="text-center mt-8">
-          <div className="inline-flex items-center gap-3 px-6 py-3" style={{
+          <div className="inline-flex flex-wrap items-center justify-center gap-2 sm:gap-3 px-4 sm:px-6 py-3" style={{
             background: "rgba(220,38,38,0.06)",
             border: "1px solid rgba(220,38,38,0.15)",
             borderRadius: 12,
+            maxWidth: '100%',
           }}>
-            <Scale style={{ width: 16, height: 16, color: "#DC2626" }} />
+            <Scale style={{ width: 16, height: 16, color: "#DC2626", flexShrink: 0 }} />
             <span className="font-body" style={{ fontSize: 13, color: "hsl(var(--foreground))", fontWeight: 600 }}>
               During lockdown, the conviction rate for GBV cases dropped to approximately <span style={{ color: "#DC2626", fontWeight: 800 }}>3%</span>
             </span>

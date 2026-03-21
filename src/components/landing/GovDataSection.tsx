@@ -58,7 +58,8 @@ const GovDataSection = () => {
               fontWeight: 800,
               fontStyle: "italic",
               position: "relative",
-              display: "inline-block",
+              display: "inline",
+              whiteSpace: "nowrap",
             }}
           >
             Before you trust, RedFlaq first.

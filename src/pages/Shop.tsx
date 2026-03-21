@@ -1,6 +1,7 @@
 import { ShoppingBag, Mail } from "lucide-react";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
+import BackToHome from "@/components/landing/BackToHome";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { useState } from "react";

@@ -325,6 +325,14 @@
     }
   }
 
+  /* Consistent section spacing */
+  .section-spacing {
+    padding-top: clamp(64px, 10vw, 100px);
+    padding-bottom: clamp(64px, 10vw, 100px);
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
   /* Section tag */
   .section-tag {
     font-family: 'JetBrains Mono', monospace;
@@ -334,6 +342,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
+    color: #7C3AED;
   }
 
   .section-tag::before {

@@ -126,7 +126,7 @@ const HowItWorksPlinq = () => {
           maxWidth: 640,
           margin: '56px auto 0',
         }}>
-          <ShieldAlert style={{ width: 20, height: 20, color: '#6B4EFF', flexShrink: 0, opacity: 0.7 }} />
+          <ShieldAlert style={{ width: 20, height: 20, color: '#7C3AED', flexShrink: 0, opacity: 0.7 }} />
           <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#6B7280', lineHeight: 1.5 }}>
             We never access private SAPS fingerprint or internal criminal record databases. RedFlaq only uses information that is already public.
           </p>

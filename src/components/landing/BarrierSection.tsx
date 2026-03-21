@@ -173,7 +173,7 @@ const BarrierSection = () => {
             onClick={() => guardedAction()}
             style={{
               background: 'white',
-              color: '#6B4EFF',
+              color: '#7C3AED',
               padding: '16px 40px',
               fontFamily: "'Syne', sans-serif",
               fontWeight: 700,

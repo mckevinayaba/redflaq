@@ -33,8 +33,8 @@ const CommunitySectionSA = () => {
               color: '#555555', lineHeight: 1.8, marginBottom: 36,
             }}>
               Before the spare key. Before moving in together. Before introducing
-              him to your children. South African women are using RedFlaq to verify
-              public records and make informed decisions about who to trust.
+               him to your children. South African women are using RedFlaq to RedFlaq
+               public records and make informed decisions about who to trust.
             </p>
             <div className="flex flex-wrap gap-3">
               <button onClick={() => guardedAction()} style={{

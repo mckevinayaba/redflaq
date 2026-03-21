@@ -7,11 +7,15 @@ import {
   Heart,
   BookOpen,
   Scale,
+  Flame,
+  Brain,
 } from "lucide-react";
 
 const menuItems = [
   { title: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
   { title: "New Safety Check", path: "/dashboard/new-check", icon: Shield },
+  { title: "Habit", path: "/dashboard/habit", icon: Flame },
+  { title: "Signal Detection", path: "/dashboard/behavioral-signals", icon: Brain },
   { title: "My Safety Journal", path: "/dashboard/journal", icon: BookOpen },
   { title: "Affidavit Builder", path: "/dashboard/affidavit", icon: Scale },
   { title: "My Reports", path: "/dashboard/reports", icon: FileText },

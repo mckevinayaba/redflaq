@@ -125,7 +125,7 @@ const Index = () => {
       {/* 15. Community photos */}
       <CommunityImageStrip />
 
-      {/* 16. Founder credibility */}
+      {/* 16. Why RedFlaq Exists — Team */}
       <WhyRedflaqSection />
 
       {/* 17. Final urgency + CTA */}

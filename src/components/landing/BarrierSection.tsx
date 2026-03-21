@@ -50,14 +50,14 @@ const BarrierSection = () => {
 
         <h2 style={{
           fontFamily: "'DM Serif Display', serif",
-          fontSize: 'clamp(36px, 4vw, 56px)',
+          fontSize: 'clamp(32px, 4vw, 52px)',
           color: '#1F1F1F',
-          lineHeight: 1.08,
+          lineHeight: 1.12,
           maxWidth: 700,
           margin: '0 0 56px',
           letterSpacing: '-0.02em',
         }}>
-          Background checks existed. But they weren't built for <em style={{ color: '#6B4EFF', fontStyle: 'italic' }}>you.</em>
+          Background checks existed. But they weren't built for <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>you.</em>
         </h2>
 
         <div className={`grid grid-cols-1 md:grid-cols-3 gap-5 reveal-stagger ${isVisible ? 'visible' : ''}`}>

@@ -31,7 +31,7 @@ const TrustBarPlinq = () => {
               <div style={{ position: 'relative', zIndex: 1 }}>
                 <stat.Icon style={{
                   width: 22, height: 22,
-                  color: '#6B4EFF',
+                  color: '#7C3AED',
                   margin: '0 auto 12px',
                   opacity: 0.8,
                 }} />
@@ -39,7 +39,7 @@ const TrustBarPlinq = () => {
                   fontFamily: "'DM Serif Display', serif",
                   fontSize: 36,
                   fontWeight: 700,
-                  color: '#6B4EFF',
+                  color: '#7C3AED',
                   marginBottom: 6,
                   lineHeight: 1,
                 }}>

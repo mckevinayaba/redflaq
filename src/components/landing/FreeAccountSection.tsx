@@ -27,7 +27,7 @@ const FreeAccountSection = () => {
   return (
     <section ref={ref} className={`reveal-section ${isVisible ? 'visible' : ''}`} style={{ background: '#E9E3FF' }}>
       <div className="py-12 md:py-20 px-6" style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <div className="section-tag" style={{ color: '#6B4EFF', marginBottom: 16, textAlign: 'center' }}>Free Account</div>
+        <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 16, textAlign: 'center' }}>Free Account</div>
 
         <h2 style={{
           fontFamily: "'DM Serif Display', serif",
@@ -74,7 +74,7 @@ const FreeAccountSection = () => {
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   marginBottom: 20,
                 }}>
-                  <Icon size={24} color="#6B4EFF" strokeWidth={2} aria-label={f.title} />
+                  <Icon size={24} color="#7C3AED" strokeWidth={2} aria-label={f.title} />
                 </div>
                 <h3 style={{
                   fontFamily: "'Syne', sans-serif",
@@ -103,7 +103,7 @@ const FreeAccountSection = () => {
             onClick={() => navigate('/signup')}
             className="btn-scale"
             style={{
-              background: '#6B4EFF',
+              background: '#7C3AED',
               color: '#FFFFFF',
               padding: '16px 40px',
               fontFamily: "'Syne', sans-serif",
@@ -116,7 +116,7 @@ const FreeAccountSection = () => {
               transition: 'all 0.25s ease',
             }}
             onMouseEnter={e => { e.currentTarget.style.background = '#5539E8'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = '#6B4EFF'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#7C3AED'; }}
           >
             Sign Up Free
           </button>

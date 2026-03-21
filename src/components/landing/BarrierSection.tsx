@@ -79,7 +79,7 @@ const BarrierSection = () => {
               {/* Top accent bar */}
               <div style={{
                 height: 4,
-                background: '#6B4EFF',
+                background: '#7C3AED',
                 marginLeft: -32,
                 marginRight: -32,
                 marginBottom: 36,

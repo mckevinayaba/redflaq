@@ -5,7 +5,7 @@ const MidPageSignupStrip = () => {
 
   return (
     <section style={{
-      background: '#6B4EFF',
+      background: '#7C3AED',
       padding: '40px 24px',
       textAlign: 'center',
     }}>
@@ -22,7 +22,7 @@ const MidPageSignupStrip = () => {
         onClick={() => navigate('/signup')}
         style={{
           background: '#FFFFFF',
-          color: '#6B4EFF',
+          color: '#7C3AED',
           padding: '14px 36px',
           fontFamily: "'Syne', sans-serif",
           fontWeight: 700,

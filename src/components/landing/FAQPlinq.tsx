@@ -25,13 +25,13 @@ const FAQPlinq = () => {
       background: '#F5F0EB',
     }}>
       <div style={{ maxWidth: 700, margin: '0 auto' }}>
-        <div className="section-tag justify-center" style={{ color: '#6B4EFF', marginBottom: 16 }}>FAQ</div>
+        <div className="section-tag justify-center" style={{ color: '#7C3AED', marginBottom: 16 }}>FAQ</div>
 
         <h2 style={{
           fontFamily: "'DM Serif Display', serif",
           fontSize: 'clamp(32px, 4vw, 44px)', color: '#1F1F1F', textAlign: 'center', marginBottom: 48, letterSpacing: '-0.02em',
         }}>
-          You have questions. We have <em style={{ color: '#6B4EFF', fontStyle: 'italic' }}>answers.</em>
+          You have questions. We have <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>answers.</em>
         </h2>
 
         <Accordion type="single" collapsible className="space-y-3">
@@ -47,7 +47,7 @@ const FAQPlinq = () => {
                 boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
                 transition: 'border-color 0.2s ease',
               }}
-              className="data-[state=open]:!border-[#6B4EFF40] px-6"
+              className="data-[state=open]:!border-[#7C3AED40] px-6"
             >
               <AccordionTrigger
                 className="text-left text-[15px] font-semibold hover:no-underline py-5"

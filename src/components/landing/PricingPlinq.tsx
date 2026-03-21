@@ -52,13 +52,13 @@ const PricingPlinq = () => {
     <>
       <section id="pricing" ref={ref} className={`reveal-section ${isVisible ? 'visible' : ''} py-12 md:py-20 px-6`} style={{ background: '#F5F0EB' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-          <div className="section-tag" style={{ color: '#6B4EFF', marginBottom: 16 }}>Pricing</div>
+          <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 16 }}>Pricing</div>
 
           <h2 style={{
             fontFamily: "'DM Serif Display', serif",
             fontSize: 'clamp(36px, 4vw, 52px)', color: '#1A1523', lineHeight: 1.08, maxWidth: 500, marginBottom: 16, letterSpacing: '-0.02em',
           }}>
-            Choose your <em style={{ color: '#6B4EFF', fontStyle: 'italic' }}>safety plan</em>
+            Choose your <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>safety plan</em>
           </h2>
           <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 15, color: '#6B7280', maxWidth: 520, lineHeight: 1.7, marginBottom: 16 }}>
             Traditional checks are expensive, slow and built for companies, not for women or communities trying to stay safe. RedFlaq makes it R99 and under a minute.
@@ -85,7 +85,7 @@ const PricingPlinq = () => {
                     position: 'relative',
                     borderRadius: 20,
                     border: plan.highlight
-                      ? '1.5px solid #6B4EFF40'
+                      ? '1.5px solid #7C3AED40'
                       : '1px solid #E6E0DA',
                     boxShadow: plan.highlight
                       ? '0 8px 48px rgba(107,78,255,0.1)'
@@ -145,7 +145,7 @@ const PricingPlinq = () => {
                         borderBottom: '1px solid #E6E0DA',
                         padding: '12px 0', display: 'flex', alignItems: 'center', gap: 10,
                       }}>
-                        <Check style={{ width: 14, height: 14, color: '#6B4EFF', flexShrink: 0 }} /> {f}
+                        <Check style={{ width: 14, height: 14, color: '#7C3AED', flexShrink: 0 }} /> {f}
                       </div>
                     ))}
                   </div>
@@ -163,7 +163,7 @@ const PricingPlinq = () => {
                       width: '100%', marginTop: 28, padding: 16,
                       fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 14,
                       border: 'none',
-                      background: '#6B4EFF',
+                      background: '#7C3AED',
                       color: '#FFFFFF',
                       cursor: 'pointer', transition: 'all 0.25s ease',
                       borderRadius: 50,
@@ -173,7 +173,7 @@ const PricingPlinq = () => {
                       e.currentTarget.style.transform = 'translateY(-1px)';
                     }}
                     onMouseLeave={e => {
-                      e.currentTarget.style.background = '#6B4EFF';
+                      e.currentTarget.style.background = '#7C3AED';
                       e.currentTarget.style.transform = 'translateY(0)';
                     }}
                   >
@@ -193,7 +193,7 @@ const PricingPlinq = () => {
                 background: '#FFFFFF', border: '1px solid #E6E0DA',
                 padding: '8px 16px', borderRadius: 50,
               }}>
-                <Check style={{ width: 13, height: 13, color: '#6B4EFF' }} /> {text}
+                <Check style={{ width: 13, height: 13, color: '#7C3AED' }} /> {text}
               </span>
             ))}
           </div>

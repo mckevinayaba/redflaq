@@ -13,7 +13,7 @@ const RealitySection = () => {
       style={{ background: '#F5F0EB' }}
     >
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <div className="section-tag" style={{ color: '#6B4EFF', marginBottom: 40 }}>
+        <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 40 }}>
           The South African Reality
         </div>
 
@@ -27,7 +27,7 @@ const RealitySection = () => {
           letterSpacing: '-0.02em',
         }}>
           Violence rarely begins<br />
-          with <em style={{ color: '#6B4EFF', fontStyle: 'italic' }}>violence.</em>
+          with <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>violence.</em>
         </h2>
 
         {/* Bento grid stats */}
@@ -54,7 +54,7 @@ const RealitySection = () => {
                   marginBottom: 16,
                 }}
               >
-                1 in <span style={{ color: '#6B4EFF' }}>3</span>
+                1 in <span style={{ color: '#7C3AED' }}>3</span>
               </div>
               <p style={{
                 fontFamily: "'Syne', sans-serif",
@@ -89,14 +89,14 @@ const RealitySection = () => {
             overflow: 'hidden',
           }}>
             <div style={{ position: 'relative', zIndex: 1 }}>
-              <TrendingUp style={{ width: 24, height: 24, color: '#6B4EFF', marginBottom: 16, opacity: 0.8 }} />
+              <TrendingUp style={{ width: 24, height: 24, color: '#7C3AED', marginBottom: 16, opacity: 0.8 }} />
               <div style={{
                 fontFamily: "'DM Serif Display', serif",
                 fontSize: 64,
                 lineHeight: 1,
                 marginBottom: 16,
               }}>
-                <span style={{ color: '#6B4EFF' }}>
+                <span style={{ color: '#7C3AED' }}>
                   {statTwo >= 35000 ? statTwo.toLocaleString() : '40,000'}+
                 </span>
               </div>
@@ -127,7 +127,7 @@ const RealitySection = () => {
         <div style={{
           background: '#FFFFFF',
           border: '1px solid #E6E0DA',
-          borderLeft: '4px solid #6B4EFF',
+          borderLeft: '4px solid #7C3AED',
           borderRadius: 16,
           padding: '40px 48px',
           boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
@@ -137,7 +137,7 @@ const RealitySection = () => {
             fontFamily: "'DM Serif Display', serif",
             fontSize: 80,
             lineHeight: 0.5,
-            color: '#6B4EFF15',
+            color: '#7C3AED15',
             position: 'absolute',
             top: 28,
             left: 32,

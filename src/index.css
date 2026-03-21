@@ -354,13 +354,13 @@
 
   /* Button styles */
   .btn-primary {
-    background: #6B4EFF;
+    background: #7C3AED;
     color: #FFFFFF;
     padding: 16px 36px;
     font-family: 'Syne', sans-serif;
     font-weight: 700;
     font-size: 15px;
-    border: 2px solid #6B4EFF;
+    border: 2px solid #7C3AED;
     cursor: pointer;
     transition: all 0.2s;
   }
@@ -372,8 +372,8 @@
 
   .btn-secondary {
     background: transparent;
-    border: 2px solid #6B4EFF;
-    color: #6B4EFF;
+    border: 2px solid #7C3AED;
+    color: #7C3AED;
     padding: 16px 36px;
     font-family: 'Syne', sans-serif;
     font-weight: 700;
@@ -383,7 +383,7 @@
   }
 
   .btn-secondary:hover {
-    background: #6B4EFF;
+    background: #7C3AED;
     color: #FFFFFF;
   }
 
@@ -399,7 +399,7 @@
     left: 0;
     width: 100%;
     height: 2px;
-    background: #6B4EFF;
+    background: #7C3AED;
     transform: scaleX(0);
     transform-origin: right;
     transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
@@ -643,7 +643,7 @@ nav, header {
 /* Samsung Internet / Opera Mini safe gradients */
 @supports not (background: linear-gradient(135deg, red, blue)) {
   .animate-gradient {
-    background: #6B4EFF !important;
+    background: #7C3AED !important;
   }
 }
 

@@ -51,7 +51,7 @@ export default function HomepageDemo() {
               fontWeight: 700,
               textTransform: "uppercase",
               letterSpacing: 1.5,
-              color: "#6B4EFF",
+              color: "#7C3AED",
               marginBottom: 16,
             }}>
               See how RedFlaq works
@@ -90,12 +90,12 @@ export default function HomepageDemo() {
                   padding: "8px 18px",
                   width: "fit-content",
                 }}>
-                  <span style={{ color: "#6B4EFF", display: "flex" }}>{badge.icon}</span>
+                  <span style={{ color: "#7C3AED", display: "flex" }}>{badge.icon}</span>
                   <span style={{
                     fontFamily: "'Inter', sans-serif",
                     fontSize: 13,
                     fontWeight: 600,
-                    color: "#6B4EFF",
+                    color: "#7C3AED",
                   }}>{badge.label}</span>
                 </div>
               ))}
@@ -110,7 +110,7 @@ export default function HomepageDemo() {
                     width: currentState === s ? 28 : 8,
                     height: 8,
                     borderRadius: 4,
-                    background: currentState === s ? "#6B4EFF" : "#E6E0DA",
+                    background: currentState === s ? "#7C3AED" : "#E6E0DA",
                     transition: "all 0.4s ease",
                   }}
                 />
@@ -165,9 +165,9 @@ function SearchPanel() {
         <FormField label="Reason for Search" value="Dating safety" />
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4 }}>
           <div style={{
-            width: 18, height: 18, borderRadius: 4, border: "2px solid #6B4EFF",
+            width: 18, height: 18, borderRadius: 4, border: "2px solid #7C3AED",
             display: "flex", alignItems: "center", justifyContent: "center",
-            background: "#6B4EFF",
+            background: "#7C3AED",
           }}>
             <CheckCircle size={12} style={{ color: "#fff" }} />
           </div>
@@ -176,7 +176,7 @@ function SearchPanel() {
           </span>
         </div>
         <button style={{
-          background: "#6B4EFF", color: "#fff", border: "none", borderRadius: 50,
+          background: "#7C3AED", color: "#fff", border: "none", borderRadius: 50,
           padding: "14px 28px", fontFamily: "'Syne', sans-serif", fontSize: 15,
           fontWeight: 700, cursor: "pointer", marginTop: 8, width: "100%",
         }}>
@@ -283,7 +283,7 @@ function ActionsPanel() {
           Create a Free Safety Account to save checks, track patterns, and keep your safety decisions in one place.
         </p>
         <button style={{
-          background: "#6B4EFF", color: "#fff", border: "none", borderRadius: 50,
+          background: "#7C3AED", color: "#fff", border: "none", borderRadius: 50,
           padding: "12px 24px", fontFamily: "'Syne', sans-serif", fontSize: 14,
           fontWeight: 700, cursor: "pointer", width: "100%",
         }}>
@@ -302,7 +302,7 @@ function JournalPanel() {
           width: 36, height: 36, borderRadius: 10, background: "#F1ECFF",
           display: "flex", alignItems: "center", justifyContent: "center",
         }}>
-          <BookOpen size={18} style={{ color: "#6B4EFF" }} />
+          <BookOpen size={18} style={{ color: "#7C3AED" }} />
         </div>
         <PanelTitle noMargin>My Safety Journal</PanelTitle>
       </div>
@@ -334,13 +334,13 @@ function JournalPanel() {
           { icon: <PenLine size={14} />, text: "Built to help you organise what you are seeing" },
         ].map((b) => (
           <div key={b.text} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <span style={{ color: "#6B4EFF", display: "flex" }}>{b.icon}</span>
+            <span style={{ color: "#7C3AED", display: "flex" }}>{b.icon}</span>
             <span style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: "#555" }}>{b.text}</span>
           </div>
         ))}
       </div>
       <button style={{
-        background: "#6B4EFF", color: "#fff", border: "none", borderRadius: 50,
+        background: "#7C3AED", color: "#fff", border: "none", borderRadius: 50,
         padding: "12px 24px", fontFamily: "'Syne', sans-serif", fontSize: 14,
         fontWeight: 700, cursor: "pointer", width: "100%", marginBottom: 16,
       }}>
@@ -399,7 +399,7 @@ function ActionButton({ icon, label, variant }: { icon: React.ReactNode; label: 
   return (
     <button style={{
       display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
-      background: "#fff", color: "#6B4EFF", border: "1.5px solid #6B4EFF",
+      background: "#fff", color: "#7C3AED", border: "1.5px solid #7C3AED",
       borderRadius: 50, padding: "12px 20px", fontFamily: "'Syne', sans-serif",
       fontSize: 14, fontWeight: 700, cursor: "pointer", width: "100%",
     }}>
@@ -411,7 +411,7 @@ function ActionButton({ icon, label, variant }: { icon: React.ReactNode; label: 
 function ScanDot({ delay }: { delay: number }) {
   return (
     <div style={{
-      width: 10, height: 10, borderRadius: "50%", background: "#6B4EFF",
+      width: 10, height: 10, borderRadius: "50%", background: "#7C3AED",
       animation: `demoPulse 1.2s ease-in-out ${delay}ms infinite`,
     }}>
       <style>{`

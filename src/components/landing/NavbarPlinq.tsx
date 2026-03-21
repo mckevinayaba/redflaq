@@ -59,7 +59,7 @@ const navDropdowns: NavDropdown[] = [
       { label: "Safety Tips", desc: "Practical safety guides and tools", href: "/safety-tips", isRoute: true, icon: <Shield size={ICON_SIZE} color={ICON_COLOR} /> },
       { label: "Blog", desc: "Stories, insights, and safety education", href: "/blog", isRoute: true, icon: <BookOpen size={ICON_SIZE} color={ICON_COLOR} /> },
       { label: "Get Help Near You", desc: "Find GBV support in your area", href: "/safety-tips#get-help", isRoute: true, icon: <Phone size={ICON_SIZE} color={ICON_COLOR} /> },
-      { label: "Protection Order Guide", desc: "Legal steps to get protection", href: "#protection-orders", isAnchor: true, icon: <Scale size={ICON_SIZE} color={ICON_COLOR} /> },
+      { label: "Protection Order Guide", desc: "Legal steps to get protection", href: "/safety-tips#protection-orders", isRoute: true, icon: <Scale size={ICON_SIZE} color={ICON_COLOR} /> },
       { label: "FAQ", desc: "Common questions answered", href: "#faq", isAnchor: true, icon: <HelpCircle size={ICON_SIZE} color={ICON_COLOR} /> },
       { label: "RedFlaq.org", desc: "Safety hub for communities & partners", href: "/redflaq-org-coming-soon", isRoute: true, comingSoon: true, icon: <ExternalLink size={ICON_SIZE} color={ICON_COLOR} /> },
     ],

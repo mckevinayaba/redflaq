@@ -6,7 +6,7 @@ import HeroHormozi from "@/components/landing/HeroHormozi";
 import GovDataSection from "@/components/landing/GovDataSection";
 import TickerBar from "@/components/landing/TickerBar";
 import HomepageDemo from "@/components/landing/HomepageDemo";
-import ProblemAgitation from "@/components/landing/ProblemAgitation";
+
 import BarrierSection from "@/components/landing/BarrierSection";
 import SolutionHormozi from "@/components/landing/SolutionHormozi";
 import HowItWorksPlinq from "@/components/landing/HowItWorksPlinq";
@@ -87,8 +87,6 @@ const Index = () => {
       {/* 3. Interactive demo */}
       <HomepageDemo />
 
-      {/* 4. Problem — Verifiable stats + emotional truth */}
-      <ProblemAgitation />
 
       {/* 5. Barriers — Why no one checked before */}
       <BarrierSection />

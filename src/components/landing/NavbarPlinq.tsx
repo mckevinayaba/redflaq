@@ -35,7 +35,7 @@ const navDropdowns: NavDropdown[] = [
       { label: "RedFlaq Safety Check", desc: "Verify criminal records in 60 seconds", href: "#how-it-works", isAnchor: true, icon: <Search size={ICON_SIZE} color={ICON_COLOR} /> },
       { label: "My Safety Journal", desc: "Private, timestamped evidence documentation", href: "/dashboard/journal", isRoute: true, icon: <BookOpen size={ICON_SIZE} color={ICON_COLOR} /> },
       { label: "Affidavit Builder", desc: "Generate court-ready legal statements", href: "/dashboard/affidavit", isRoute: true, icon: <FileText size={ICON_SIZE} color={ICON_COLOR} /> },
-      { label: "Protection Order Guide", desc: "Step-by-step legal process to get protection", href: "#protection-orders", isAnchor: true, icon: <Scale size={ICON_SIZE} color={ICON_COLOR} /> },
+      { label: "Protection Order Guide", desc: "Step-by-step legal process to get protection", href: "/safety-tips#protection-orders", isRoute: true, icon: <Scale size={ICON_SIZE} color={ICON_COLOR} /> },
       { label: "Safety Resources", desc: "GBV hotlines, care centres, legal aid", href: "/safety-tips#get-help", isRoute: true, icon: <Shield size={ICON_SIZE} color={ICON_COLOR} /> },
       { label: "Habit", desc: "Daily safety practice — build the habit of checking first", href: "/habit-coming-soon", isRoute: true, comingSoon: true, icon: <Sparkles size={ICON_SIZE} color={ICON_COLOR} /> },
       { label: "Behavioral Signal", desc: "See patterns and early warning signs over time", href: "/behavioral-signal-coming-soon", isRoute: true, comingSoon: true, icon: <Heart size={ICON_SIZE} color={ICON_COLOR} /> },

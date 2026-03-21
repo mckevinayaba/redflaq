@@ -131,8 +131,8 @@ const BarrierSection = () => {
                 <span style={{
                   fontFamily: "'JetBrains Mono', monospace",
                   fontSize: 12,
-                  color: '#6B4EFF',
-                  background: '#E9E3FF',
+                  color: '#7C3AED',
+                  background: '#F1ECFF',
                   padding: '4px 10px',
                   borderRadius: 6,
                   fontWeight: 700,

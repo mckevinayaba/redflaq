@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
+import BackToHome from "@/components/landing/BackToHome";
 import { Users, Shield, BarChart3, Code, CheckCircle } from "lucide-react";
 import womenAriseBadge from "@/assets/women-arise-power.png";
 

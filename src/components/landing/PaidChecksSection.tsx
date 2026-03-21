@@ -40,7 +40,7 @@ const PaidChecksSection = () => {
           color: '#1F1F1F', lineHeight: 1.15, letterSpacing: '-0.02em', marginBottom: 10,
           textAlign: 'center',
         }}>
-          Pay only when you verify someone's{' '}
+          Pay only when you RedFlaq someone's{' '}
           <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>public record.</em>
         </h2>
         <p style={{ ...sans, fontSize: 15, color: '#555', textAlign: 'center', marginBottom: 48, maxWidth: 520, margin: '0 auto 48px' }}>

@@ -1,6 +1,7 @@
 import { ShoppingBag, Mail } from "lucide-react";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
+import BackToHome from "@/components/landing/BackToHome";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { useState } from "react";
@@ -94,10 +95,11 @@ export default function Shop() {
         className="relative overflow-hidden"
         style={{
           background: "linear-gradient(135deg, #0F0A1A 0%, #1A1035 50%, #0F0A1A 100%)",
-          paddingTop: 120,
+          paddingTop: 100,
           paddingBottom: 72,
         }}
       >
+        <BackToHome light />
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[70%] h-1/2 pointer-events-none" style={{ background: "radial-gradient(ellipse, rgba(124,58,237,0.12) 0%, transparent 70%)" }} />
         <div className="max-w-[900px] mx-auto px-5 sm:px-6 relative z-10 text-center">
           <p className="font-mono text-[11px] tracking-[0.15em] mb-4 text-primary">

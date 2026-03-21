@@ -2,13 +2,15 @@ import { Link } from "react-router-dom";
 import { AlertTriangle, Mail, MessageCircle, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
-import Footer from "@/components/Footer";
+import FooterPlinq from "@/components/landing/FooterPlinq";
+import BackToHome from "@/components/landing/BackToHome";
 
 export default function Dispute() {
   return (
     <div className="min-h-screen flex flex-col" style={{ background: '#F5F0EB' }}>
       <NavbarPlinq />
       <div style={{ height: 80 }} />
+      <BackToHome />
 
       <header className="bg-primary text-white py-10">
         <div className="max-w-4xl mx-auto px-6">
@@ -95,7 +97,7 @@ export default function Dispute() {
         </div>
       </main>
 
-      <Footer />
+      <FooterPlinq />
     </div>
   );
 }

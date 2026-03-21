@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
+import BackToHome from "@/components/landing/BackToHome";
 import { Users, Shield, BarChart3, Code, CheckCircle } from "lucide-react";
 import womenAriseBadge from "@/assets/women-arise-power.png";
 
@@ -25,9 +26,10 @@ const Partners = () => (
     {/* Hero — dark */}
     <section style={{
       background: 'linear-gradient(135deg, #0F0A1A 0%, #1A1035 50%, #0F0A1A 100%)',
-      paddingTop: 120, paddingBottom: 64,
+      paddingTop: 100, paddingBottom: 64,
       position: 'relative', overflow: 'hidden',
     }}>
+      <BackToHome light />
       <div style={{
         position: 'absolute', top: '30%', left: '50%', transform: 'translateX(-50%)',
         width: '60%', height: '50%',

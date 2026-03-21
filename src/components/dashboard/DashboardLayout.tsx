@@ -1,4 +1,5 @@
 import { ReactNode, useState } from "react";
+import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import DashboardSidebar from "./DashboardSidebar";
 import AppHeader from "./AppHeader";
@@ -51,14 +52,12 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
             {children}
 
             <div className="mt-8 sm:mt-12 pt-4 sm:pt-6 border-t border-border text-center">
-              <a
-                href="/"
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                to="/"
                 className="font-body text-sm text-muted-foreground hover:text-primary transition-colors"
               >
                 ← Back to redflaq.com homepage
-              </a>
+              </Link>
             </div>
           </div>
         </main>

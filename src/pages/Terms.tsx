@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
+import BackToHome from "@/components/landing/BackToHome";
 
 export default function Terms() {
   return (
@@ -10,9 +11,10 @@ export default function Terms() {
       {/* Hero */}
       <section style={{
         background: 'linear-gradient(135deg, #0F0A1A 0%, #1A1035 50%, #0F0A1A 100%)',
-        paddingTop: 120, paddingBottom: 60,
+        paddingTop: 100, paddingBottom: 60,
         position: 'relative', overflow: 'hidden',
       }}>
+        <BackToHome light />
         <div style={{
           position: 'absolute', top: '30%', left: '50%', transform: 'translateX(-50%)',
           width: '60%', height: '50%',

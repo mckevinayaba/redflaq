@@ -20,6 +20,8 @@ import IndustriesBrief from "@/components/landing/IndustriesBrief";
 import CommunityImageStrip from "@/components/landing/CommunityImageStrip";
 import WhyRedflaqSection from "@/components/landing/WhyRedflaqSection";
 import FinalUrgency from "@/components/landing/FinalUrgency";
+import AdvocacySection from "@/components/landing/AdvocacySection";
+import FinalCTAPlinq from "@/components/landing/FinalCTAPlinq";
 import FAQHormozi from "@/components/landing/FAQHormozi";
 import FooterPlinq from "@/components/landing/FooterPlinq";
 import { PWAInstallBanner } from "@/components/PWAInstallBanner";
@@ -127,8 +129,14 @@ const Index = () => {
       {/* 16. Why RedFlaq Exists — Team */}
       <WhyRedflaqSection />
 
-      {/* 17. Final urgency + CTA */}
+      {/* 17. Advocacy badge */}
+      <AdvocacySection />
+
+      {/* 18. Final urgency + CTA */}
       <FinalUrgency />
+
+      {/* 19. Cinematic skyline CTA */}
+      <FinalCTAPlinq />
 
       {/* 18. FAQ */}
       <FAQHormozi />

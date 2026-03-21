@@ -67,7 +67,7 @@ const PaidChecksSection = () => {
               )}
               <p style={{ ...sans, fontWeight: 700, fontSize: 16, color: '#1F1F1F', marginBottom: 8, marginTop: t.highlight ? 8 : 0 }}>{t.name}</p>
               <p style={{ ...serif, fontSize: 40, color: '#7C3AED', marginBottom: 4 }}>{t.price}</p>
-              <p style={{ ...mono, fontSize: 10, color: '#888', marginBottom: 24 }}>per check</p>
+              <p style={{ ...mono, fontSize: 10, color: '#888', marginBottom: 24 }}>per RedFlaq</p>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 28 }}>
                 {t.features.map((f) => (
                   <li key={f} style={{ ...sans, fontSize: 13, color: '#555', display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'center' }}>

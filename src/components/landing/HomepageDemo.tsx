@@ -180,7 +180,7 @@ function SearchPanel() {
           padding: "14px 28px", fontFamily: "'Syne', sans-serif", fontSize: 15,
           fontWeight: 700, cursor: "pointer", marginTop: 8, width: "100%",
         }}>
-          Verify Someone Now
+          RedFlaq Someone Now
         </button>
         <p style={{
           fontFamily: "'Inter', sans-serif", fontSize: 11, color: "#999",

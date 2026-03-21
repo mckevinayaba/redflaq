@@ -27,7 +27,7 @@ const FinalUrgency = () => {
           lineHeight: 1.8, textAlign: 'left', maxWidth: 600, margin: '0 auto',
           marginBottom: 36,
         }}>
-          <p style={{ marginBottom: 8 }}>She didn't check.</p>
+          <p style={{ marginBottom: 8 }}>She didn't RedFlaq.</p>
           <p style={{ marginBottom: 8 }}>She thought she was being careful.</p>
           <p style={{ marginBottom: 8 }}>She met him in public. She shared her location.</p>
           <p style={{ marginBottom: 20 }}>She told her friends where she'd be.</p>

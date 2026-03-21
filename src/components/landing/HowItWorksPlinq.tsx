@@ -2,8 +2,8 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { ShieldAlert } from "lucide-react";
 
 const steps = [
-  { num: "01", title: "You Provide Details", desc: "Enter their full name and province, and tell us why you're checking (dating, flat‑share, childcare, etc.)." },
-  { num: "02", title: "We Scan Public Records", desc: "RedFlaq checks South African public‑record warning lists for possible matches on that name." },
+  { num: "01", title: "You Provide Details", desc: "Enter their full name and province, and tell us why you're RedFlaq'ing (dating, flat‑share, childcare, etc.)." },
+  { num: "02", title: "We Scan Public Records", desc: "RedFlaq scans South African public‑record warning lists for possible matches on that name." },
   { num: "03", title: "You Get a Clear Safety Signal", desc: "See whether public records suggest high, moderate, low or no visible risk — with links to the original public record where possible." },
   { num: "04", title: "Download Your Report", desc: "Save a PDF to keep for yourself or share with someone you trust." },
 ];

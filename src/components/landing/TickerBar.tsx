@@ -3,7 +3,7 @@ const TickerBar = () => {
     "Public Records Only",
     "POPIA‑Aware",
     "100% Confidential",
-    "R99 Per Check",
+    "R99 Per RedFlaq",
     "Results in Under 60 Seconds",
     "Downloadable PDF Reports",
   ];

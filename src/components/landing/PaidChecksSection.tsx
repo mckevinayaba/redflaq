@@ -40,7 +40,7 @@ const PaidChecksSection = () => {
           color: '#1F1F1F', lineHeight: 1.15, letterSpacing: '-0.02em', marginBottom: 10,
           textAlign: 'center',
         }}>
-          Pay only when you verify someone's{' '}
+          Pay only when you RedFlaq someone's{' '}
           <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>public record.</em>
         </h2>
         <p style={{ ...sans, fontSize: 15, color: '#555', textAlign: 'center', marginBottom: 48, maxWidth: 520, margin: '0 auto 48px' }}>
@@ -67,7 +67,7 @@ const PaidChecksSection = () => {
               )}
               <p style={{ ...sans, fontWeight: 700, fontSize: 16, color: '#1F1F1F', marginBottom: 8, marginTop: t.highlight ? 8 : 0 }}>{t.name}</p>
               <p style={{ ...serif, fontSize: 40, color: '#7C3AED', marginBottom: 4 }}>{t.price}</p>
-              <p style={{ ...mono, fontSize: 10, color: '#888', marginBottom: 24 }}>per check</p>
+              <p style={{ ...mono, fontSize: 10, color: '#888', marginBottom: 24 }}>per RedFlaq</p>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 28 }}>
                 {t.features.map((f) => (
                   <li key={f} style={{ ...sans, fontSize: 13, color: '#555', display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'center' }}>
@@ -88,7 +88,7 @@ const PaidChecksSection = () => {
                 onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-1px)'}
                 onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
               >
-                Run Check
+                Run RedFlaq
               </button>
             </div>
           ))}

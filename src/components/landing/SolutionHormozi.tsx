@@ -8,8 +8,8 @@ const mono: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };
 const pillars = [
   {
     icon: <Search size={28} color="#7C3AED" />,
-    title: "Verify Before Trust",
-    desc: "Check their public record in 60 seconds. SAPS wanted lists, court judgments, sex offender registry (when available). Know who you're trusting.",
+    title: "RedFlaq Before Trust",
+    desc: "RedFlaq their public record in 60 seconds. SAPS wanted lists, court judgments, sex offender registry (when available). Know who you're trusting.",
   },
   {
     icon: <BookOpen size={28} color="#7C3AED" />,
@@ -19,7 +19,7 @@ const pillars = [
   {
     icon: <Sparkles size={28} color="#7C3AED" />,
     title: "Build Daily Safety Habits",
-    desc: "Habit (coming soon) teaches you red flags, tracks patterns, and makes \"check first\" your automatic behavior — not just crisis response.",
+    desc: "Habit (coming soon) teaches you red flags, tracks patterns, and makes \"RedFlaq first\" your automatic behavior — not just crisis response.",
   },
 ];
 

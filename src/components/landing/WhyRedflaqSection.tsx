@@ -10,7 +10,7 @@ const WhyRedflaqSection = () => {
   const cards = [
     { Icon: Shield, title: "Public Records Only", desc: "We never create data. We surface what already exists in public‑record warning lists." },
     { Icon: Lock, title: "POPIA‑Aware", desc: "Every search requires a legitimate purpose and consent. We minimise data and respect everyone's rights." },
-    { Icon: Eye, title: "Confidential Use", desc: "The person you check is not notified. Results are for your safety decisions, not public shaming." },
+    { Icon: Eye, title: "Confidential Use", desc: "The person you RedFlaq is not notified. Results are for your safety decisions, not public shaming." },
   ];
 
   const team = [

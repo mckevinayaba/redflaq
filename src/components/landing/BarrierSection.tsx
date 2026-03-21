@@ -36,7 +36,7 @@ const BarrierSection = () => {
   return (
     <section
       ref={ref}
-      className={`reveal-section ${isVisible ? 'visible' : ''} py-12 md:py-20 px-6`}
+      className={`reveal-section ${isVisible ? 'visible' : ''} section-spacing`}
       style={{
         background: '#F5F0EB',
         overflow: 'hidden',
@@ -44,20 +44,20 @@ const BarrierSection = () => {
       }}
     >
       <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1 }}>
-        <div className="section-tag" style={{ color: '#6B4EFF', marginBottom: 24 }}>
+        <div className="section-tag" style={{ marginBottom: 24 }}>
           Why No One RedFlaq'd Before
         </div>
 
         <h2 style={{
           fontFamily: "'DM Serif Display', serif",
-          fontSize: 'clamp(36px, 4vw, 56px)',
+          fontSize: 'clamp(32px, 4vw, 52px)',
           color: '#1F1F1F',
-          lineHeight: 1.08,
+          lineHeight: 1.12,
           maxWidth: 700,
           margin: '0 0 56px',
           letterSpacing: '-0.02em',
         }}>
-          Background checks existed. But they weren't built for <em style={{ color: '#6B4EFF', fontStyle: 'italic' }}>you.</em>
+          Background checks existed. But they weren't built for <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>you.</em>
         </h2>
 
         <div className={`grid grid-cols-1 md:grid-cols-3 gap-5 reveal-stagger ${isVisible ? 'visible' : ''}`}>
@@ -79,7 +79,7 @@ const BarrierSection = () => {
               {/* Top accent bar */}
               <div style={{
                 height: 4,
-                background: '#6B4EFF',
+                background: '#7C3AED',
                 marginLeft: -32,
                 marginRight: -32,
                 marginBottom: 36,
@@ -101,7 +101,7 @@ const BarrierSection = () => {
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 marginBottom: 20,
               }}>
-                <card.Icon style={{ width: 24, height: 24, color: '#6B4EFF', strokeWidth: 2 }} />
+                <card.Icon style={{ width: 24, height: 24, color: '#7C3AED', strokeWidth: 2 }} />
               </div>
 
               <div style={{
@@ -131,8 +131,8 @@ const BarrierSection = () => {
                 <span style={{
                   fontFamily: "'JetBrains Mono', monospace",
                   fontSize: 12,
-                  color: '#6B4EFF',
-                  background: '#E9E3FF',
+                  color: '#7C3AED',
+                  background: '#F1ECFF',
                   padding: '4px 10px',
                   borderRadius: 6,
                   fontWeight: 700,
@@ -143,9 +143,9 @@ const BarrierSection = () => {
 
               <p style={{
                 fontFamily: "'Syne', sans-serif",
-                fontSize: 14,
+                fontSize: 15,
                 color: '#555555',
-                lineHeight: 1.65,
+                lineHeight: 1.7,
               }}>
                 {card.desc}
               </p>
@@ -156,7 +156,7 @@ const BarrierSection = () => {
         {/* CTA Banner */}
         <div style={{
           marginTop: 64,
-          background: '#6B4EFF',
+          background: '#7C3AED',
           borderRadius: 20,
           padding: '48px 40px',
           textAlign: 'center',
@@ -173,7 +173,7 @@ const BarrierSection = () => {
             onClick={() => guardedAction()}
             style={{
               background: 'white',
-              color: '#6B4EFF',
+              color: '#7C3AED',
               padding: '16px 40px',
               fontFamily: "'Syne', sans-serif",
               fontWeight: 700,

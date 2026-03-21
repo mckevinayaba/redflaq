@@ -20,15 +20,15 @@ const RiskLevelsSection = () => {
   ];
 
   return (
-    <section ref={ref} className={`reveal-section ${isVisible ? 'visible' : ''} py-12 md:py-20 px-6`} style={{ background: '#F5F0EB' }}>
+    <section ref={ref} className={`reveal-section ${isVisible ? 'visible' : ''} section-spacing`} style={{ background: '#F5F0EB' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <div className="section-tag" style={{ color: '#6B4EFF', marginBottom: 16 }}>Your Report</div>
+        <div className="section-tag" style={{ marginBottom: 16 }}>Your Report</div>
 
         <h2 style={{
           fontFamily: "'DM Serif Display', serif",
-          fontSize: 'clamp(36px, 4vw, 52px)', color: '#1A1523', marginBottom: 56, letterSpacing: '-0.02em',
+          fontSize: 'clamp(32px, 4vw, 52px)', color: '#1A1523', marginBottom: 56, letterSpacing: '-0.02em',
         }}>
-          What your report <em style={{ color: '#6B4EFF', fontStyle: 'italic' }}>reveals</em>
+          What your report <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>reveals</em>
         </h2>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6" style={{ marginBottom: 48 }}>
@@ -57,7 +57,7 @@ const RiskLevelsSection = () => {
               <span style={{
                 display: 'inline-block',
                 fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700,
-                letterSpacing: '0.15em', color: risk.color,
+                letterSpacing: '0.12em', color: risk.color,
                 background: `${risk.color}15`,
                 padding: '6px 14px',
                 borderRadius: 50,
@@ -83,7 +83,7 @@ const RiskLevelsSection = () => {
           borderRadius: 16, padding: '40px 36px', maxWidth: 700, margin: '0 auto', boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
         }}>
           <div className="flex items-center gap-3 mb-6">
-            <Shield className="h-6 w-6" style={{ color: '#6B4EFF' }} />
+            <Shield className="h-6 w-6" style={{ color: '#7C3AED' }} />
             <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 24, color: '#1A1523' }}>What you get</h3>
           </div>
           <div className="space-y-0">
@@ -97,7 +97,7 @@ const RiskLevelsSection = () => {
                   width: 20, height: 20, borderRadius: '50%', background: '#F1ECFF',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                 }}>
-                  <Check className="h-3 w-3" style={{ color: '#6B4EFF' }} />
+                  <Check className="h-3 w-3" style={{ color: '#7C3AED' }} />
                 </div>
                 {item}
               </div>

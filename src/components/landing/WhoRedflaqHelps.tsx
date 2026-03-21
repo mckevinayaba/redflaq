@@ -81,7 +81,7 @@ const WhoRedflaqHelps = () => {
           marginBottom: 12,
           letterSpacing: '-0.02em',
         }}>
-          Trusting relationships begin with <em style={{ color: '#6B4EFF', fontStyle: 'italic' }}>information.</em>
+          Trusting relationships begin with <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>information.</em>
         </h2>
         <p style={{
           fontFamily: "'Syne', sans-serif",
@@ -125,7 +125,7 @@ const WhoRedflaqHelps = () => {
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   marginBottom: 20,
                 }}>
-                  <Icon size={24} color="#6B4EFF" aria-label={p.title} />
+                  <Icon size={24} color="#7C3AED" aria-label={p.title} />
                 </div>
                 <h3 style={{
                   fontFamily: "'Syne', sans-serif",
@@ -149,7 +149,7 @@ const WhoRedflaqHelps = () => {
                       alignItems: 'flex-start',
                       gap: 10,
                     }}>
-                      <span style={{ color: '#6B4EFF', flexShrink: 0, marginTop: 2 }}>•</span>
+                      <span style={{ color: '#7C3AED', flexShrink: 0, marginTop: 2 }}>•</span>
                       {b}
                     </li>
                   ))}
@@ -177,18 +177,18 @@ const WhoRedflaqHelps = () => {
             className="btn-scale"
             style={{
               background: 'transparent',
-              color: '#6B4EFF',
+              color: '#7C3AED',
               padding: '14px 36px',
               fontFamily: "'Syne', sans-serif",
               fontWeight: 700,
               fontSize: 14,
-              border: '2px solid #6B4EFF',
+              border: '2px solid #7C3AED',
               cursor: 'pointer',
               borderRadius: 50,
               transition: 'all 0.25s ease',
             }}
-            onMouseEnter={e => { e.currentTarget.style.background = '#6B4EFF'; e.currentTarget.style.color = '#FFFFFF'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#6B4EFF'; }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#7C3AED'; e.currentTarget.style.color = '#FFFFFF'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#7C3AED'; }}
           >
             See All Safety Scenarios
           </button>

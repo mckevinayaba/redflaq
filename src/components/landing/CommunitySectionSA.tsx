@@ -17,7 +17,7 @@ const CommunitySectionSA = () => {
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div>
-            <div className="section-tag" style={{ color: '#6B4EFF', marginBottom: 16 }}>
+            <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 16 }}>
               Built For South African Women
             </div>
             <h2 style={{
@@ -26,7 +26,7 @@ const CommunitySectionSA = () => {
               lineHeight: 1.08, marginBottom: 24, letterSpacing: '-0.02em',
             }}>
               You're not paranoid.<br />
-              You're <em style={{ fontStyle: 'italic', color: '#6B4EFF' }}>prepared.</em>
+              You're <em style={{ fontStyle: 'italic', color: '#7C3AED' }}>prepared.</em>
             </h2>
             <p style={{
               fontFamily: "'Syne', sans-serif", fontSize: 17,
@@ -38,13 +38,13 @@ const CommunitySectionSA = () => {
             </p>
             <div className="flex flex-wrap gap-3">
               <button onClick={() => guardedAction()} style={{
-                background: '#6B4EFF', color: 'white', padding: '16px 36px',
+                background: '#7C3AED', color: 'white', padding: '16px 36px',
                 fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 15,
                 border: 'none', cursor: 'pointer', borderRadius: 50,
                 boxShadow: '0 4px 20px rgba(107,78,255,0.25)', transition: 'all 0.25s ease',
               }}
                 onMouseEnter={e => { e.currentTarget.style.background = '#5539E8'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-                onMouseLeave={e => { e.currentTarget.style.background = '#6B4EFF'; e.currentTarget.style.transform = 'translateY(0)'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = '#7C3AED'; e.currentTarget.style.transform = 'translateY(0)'; }}
               >
                 Protect Yourself Now
               </button>
@@ -52,8 +52,8 @@ const CommunitySectionSA = () => {
                 onClick={() => setShareOpen(true)}
                 className="inline-flex items-center gap-2"
                 style={{
-                  background: 'transparent', border: '2px solid #6B4EFF',
-                  color: '#6B4EFF', padding: '16px 32px', fontFamily: "'Syne', sans-serif",
+                  background: 'transparent', border: '2px solid #7C3AED',
+                  color: '#7C3AED', padding: '16px 32px', fontFamily: "'Syne', sans-serif",
                   fontWeight: 700, fontSize: 15, cursor: 'pointer', borderRadius: 50, transition: 'all 0.25s ease',
                 }}
                 onMouseEnter={e => { e.currentTarget.style.background = '#E9E3FF'; e.currentTarget.style.transform = 'translateY(-2px)'; }}

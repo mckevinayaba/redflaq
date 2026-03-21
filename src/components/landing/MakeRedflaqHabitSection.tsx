@@ -32,7 +32,7 @@ const MakeRedflaqHabitSection = () => {
             Before the first date.<br />
             Before giving someone keys.<br />
             Before hiring someone for your home.<br />
-            <strong style={{ color: '#6B4EFF' }}>Before you trust, RedFlaq first.</strong>
+            <strong style={{ color: '#7C3AED' }}>Before you trust, RedFlaq first.</strong>
           </p>
         </div>
 
@@ -56,7 +56,7 @@ const MakeRedflaqHabitSection = () => {
               fontFamily: "'Syne', sans-serif",
               fontSize: 15,
               fontStyle: 'italic',
-              color: '#6B4EFF',
+              color: '#7C3AED',
               fontWeight: 600,
               boxShadow: '0 2px 8px rgba(107, 78, 255, 0.08)',
               maxWidth: 380,

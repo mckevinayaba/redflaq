@@ -28,7 +28,7 @@ const TestimonialsSectionNew = () => {
       background: '#F5F0EB',
     }}>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-        <div className="section-tag" style={{ color: '#6B4EFF', marginBottom: 16, justifyContent: 'center' }}>
+        <div className="section-tag" style={{ color: '#7C3AED', marginBottom: 16, justifyContent: 'center' }}>
           Real Stories · Real Safety
         </div>
 
@@ -36,7 +36,7 @@ const TestimonialsSectionNew = () => {
           fontFamily: "'DM Serif Display', serif",
           fontSize: 'clamp(28px, 4vw, 42px)', color: '#1F1F1F', textAlign: 'center', marginBottom: 8, letterSpacing: '-0.02em',
         }}>
-          They checked. It changed <em style={{ color: '#6B4EFF', fontStyle: 'italic' }}>everything.</em>
+          They checked. It changed <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>everything.</em>
         </h2>
 
         <p style={{
@@ -55,11 +55,11 @@ const TestimonialsSectionNew = () => {
             return (
               <div key={i} className="card-lift reveal-child" style={{
                 background: isFeatured ? '#E9E3FF' : '#FFFFFF',
-                borderLeft: '3px solid #6B4EFF',
+                borderLeft: '3px solid #7C3AED',
                 borderRadius: 12,
-                border: `1px solid ${isFeatured ? '#6B4EFF30' : '#E6E0DA'}`,
+                border: `1px solid ${isFeatured ? '#7C3AED30' : '#E6E0DA'}`,
                 borderLeftWidth: 3,
-                borderLeftColor: '#6B4EFF',
+                borderLeftColor: '#7C3AED',
                 padding: '20px 20px',
                 display: 'flex',
                 flexDirection: 'column',
@@ -70,7 +70,7 @@ const TestimonialsSectionNew = () => {
                 <div>
                   <span style={{
                     fontFamily: "'DM Serif Display', serif",
-                    fontSize: 48, lineHeight: 0.8, color: '#6B4EFF20', display: 'block',
+                    fontSize: 48, lineHeight: 0.8, color: '#7C3AED20', display: 'block',
                   }}>"</span>
                   <p style={{
                     fontFamily: "'Syne', sans-serif", fontSize: 13.5, color: '#555555',
@@ -90,7 +90,7 @@ const TestimonialsSectionNew = () => {
                     width: 36, height: 36, borderRadius: '50%',
                     background: '#E9E3FF', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                   }}>
-                    <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: '#6B4EFF' }}>
+                    <span style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: '#7C3AED' }}>
                       {t.name.charAt(0)}
                     </span>
                   </div>
@@ -103,7 +103,7 @@ const TestimonialsSectionNew = () => {
                         {t.location}
                       </span>
                       <span style={{
-                        fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#6B4EFF',
+                        fontFamily: "'JetBrains Mono', monospace", fontSize: 9, color: '#7C3AED',
                         background: '#E9E3FF', padding: '2px 8px', borderRadius: 50,
                       }}>
                         {t.use}
@@ -128,14 +128,14 @@ const TestimonialsSectionNew = () => {
         <div style={{
           marginTop: 32,
           background: '#E9E3FF',
-          border: '1px solid #6B4EFF30',
+          border: '1px solid #7C3AED30',
           borderRadius: 12,
           padding: '16px 24px',
           textAlign: 'center',
         }}>
           <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#555555' }}>
             If you or someone you know is experiencing abuse, contact the GBV Command Centre:{" "}
-            <a href="tel:0800428428" style={{ color: '#6B4EFF', fontWeight: 700, textDecoration: 'none' }}>0800 428 428</a>
+            <a href="tel:0800428428" style={{ color: '#7C3AED', fontWeight: 700, textDecoration: 'none' }}>0800 428 428</a>
             {" "}(24/7, free)
           </p>
         </div>
@@ -161,8 +161,8 @@ const TestimonialsSectionNew = () => {
             <button
               onClick={() => handleShare('copy')}
               style={{
-                background: 'transparent', color: '#6B4EFF', padding: '10px 24px',
-                border: '1.5px solid #6B4EFF40', borderRadius: 50,
+                background: 'transparent', color: '#7C3AED', padding: '10px 24px',
+                border: '1.5px solid #7C3AED40', borderRadius: 50,
                 fontFamily: "'Syne', sans-serif", fontWeight: 700, fontSize: 13, cursor: 'pointer',
                 display: 'flex', alignItems: 'center', gap: 8, transition: 'all 0.2s ease',
               }}

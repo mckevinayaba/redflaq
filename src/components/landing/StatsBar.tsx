@@ -11,7 +11,7 @@ const StatsBar = () => {
   ];
 
   return (
-    <section ref={ref} className={`reveal-section ${isVisible ? 'visible' : ''} py-8`} style={{ background: '#F5F0EB', borderTop: '1px solid #E6E0DA', borderBottom: '1px solid #E6E0DA' }}>
+    <section ref={ref} className={`reveal-section ${isVisible ? 'visible' : ''}`} style={{ background: '#F5F0EB', borderTop: '1px solid #E6E0DA', borderBottom: '1px solid #E6E0DA', padding: '40px 24px' }}>
       <div className="container mx-auto px-4">
         <div className={`grid grid-cols-3 gap-6 reveal-stagger ${isVisible ? 'visible' : ''}`}>
           {stats.map((stat, index) => (
@@ -22,9 +22,9 @@ const StatsBar = () => {
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 marginBottom: 8,
               }}>
-                <stat.icon className="h-5 w-5" style={{ color: '#6B4EFF', strokeWidth: 2 }} />
+                <stat.icon className="h-5 w-5" style={{ color: '#7C3AED', strokeWidth: 2 }} />
               </div>
-              <span className="text-2xl md:text-3xl font-bold" style={{ color: '#6B4EFF', fontFamily: "'DM Serif Display', serif" }}>{stat.value}</span>
+              <span className="text-2xl md:text-3xl font-bold" style={{ color: '#7C3AED', fontFamily: "'DM Serif Display', serif" }}>{stat.value}</span>
               <span className="text-sm" style={{ color: '#555555', fontFamily: "'Syne', sans-serif" }}>{stat.label}</span>
             </div>
           ))}

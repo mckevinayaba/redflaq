@@ -46,7 +46,7 @@ const HeroPlinq = () => {
           {/* Positioning pill */}
           <div style={{
             background: '#E9E3FF',
-            border: '1px solid #6B4EFF20',
+            border: '1px solid #7C3AED20',
             padding: '10px 20px',
             display: 'inline-flex',
             alignItems: 'center',
@@ -55,7 +55,7 @@ const HeroPlinq = () => {
             fontFamily: "'Syne', sans-serif",
             fontSize: 13,
             fontWeight: 600,
-            color: '#6B4EFF',
+            color: '#7C3AED',
             marginBottom: 20,
             lineHeight: 1.5,
           }}>
@@ -72,7 +72,7 @@ const HeroPlinq = () => {
             letterSpacing: '-0.02em',
           }} className="text-[38px] sm:text-[48px] lg:text-[60px] xl:text-[72px]">
             Before you give him a spare key,<br />
-            give yourself <em style={{ color: '#6B4EFF', fontStyle: 'italic' }}>clarity.</em>
+            give yourself <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>clarity.</em>
           </h1>
 
           <p style={{
@@ -118,7 +118,7 @@ const HeroPlinq = () => {
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   flexShrink: 0,
                 }}>
-                  <Check className="h-3 w-3" style={{ color: '#6B4EFF' }} />
+                  <Check className="h-3 w-3" style={{ color: '#7C3AED' }} />
                 </div>
                 <span>{item}</span>
               </div>
@@ -131,7 +131,7 @@ const HeroPlinq = () => {
               onClick={handleVerify}
               className="btn-scale"
               style={{
-                background: '#6B4EFF',
+                background: '#7C3AED',
                 color: '#FFFFFF',
                 padding: '18px 40px',
                 fontFamily: "'Syne', sans-serif",
@@ -148,7 +148,7 @@ const HeroPlinq = () => {
                 e.currentTarget.style.boxShadow = '0 6px 28px rgba(107, 78, 255, 0.35)';
               }}
               onMouseLeave={e => {
-                e.currentTarget.style.background = '#6B4EFF';
+                e.currentTarget.style.background = '#7C3AED';
                 e.currentTarget.style.boxShadow = '0 4px 20px rgba(107, 78, 255, 0.25)';
               }}
             >
@@ -159,23 +159,23 @@ const HeroPlinq = () => {
               className="btn-scale"
               style={{
                 background: 'transparent',
-                color: '#6B4EFF',
+                color: '#7C3AED',
                 padding: '18px 40px',
                 fontFamily: "'Syne', sans-serif",
                 fontWeight: 700,
                 fontSize: 15,
-                border: '2px solid #6B4EFF',
+                border: '2px solid #7C3AED',
                 cursor: 'pointer',
                 borderRadius: 50,
                 transition: 'all 0.25s ease',
               }}
               onMouseEnter={e => {
-                e.currentTarget.style.background = '#6B4EFF';
+                e.currentTarget.style.background = '#7C3AED';
                 e.currentTarget.style.color = '#FFFFFF';
               }}
               onMouseLeave={e => {
                 e.currentTarget.style.background = 'transparent';
-                e.currentTarget.style.color = '#6B4EFF';
+                e.currentTarget.style.color = '#7C3AED';
               }}
             >
               See How It Works
@@ -203,7 +203,7 @@ const HeroPlinq = () => {
                 sessionStorage.setItem("fromCTA", "true");
                 window.location.href = '/signup?mode=signin';
               }}
-              style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: '#6B4EFF', textDecoration: 'underline', padding: 0 }}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 700, color: '#7C3AED', textDecoration: 'underline', padding: 0 }}
             >
               Log in here
             </button>
@@ -255,7 +255,7 @@ const HeroPlinq = () => {
                 <span style={{
                   fontFamily: "'DM Serif Display', serif",
                   fontSize: 44,
-                  color: '#6B4EFF',
+                  color: '#7C3AED',
                   lineHeight: 1,
                 }}>
                   {statTwo > 0 ? statTwo.toLocaleString() : '40,000'}+
@@ -281,7 +281,7 @@ const HeroPlinq = () => {
           </div>
 
           <div className="card-lift w-full" style={{
-            background: '#6B4EFF',
+            background: '#7C3AED',
             padding: '24px 28px',
             maxWidth: 420,
             borderRadius: 16,

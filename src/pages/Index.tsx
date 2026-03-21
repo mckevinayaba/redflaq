@@ -18,7 +18,7 @@ import PaidChecksSection from "@/components/landing/PaidChecksSection";
 import TestimonialsSectionNew from "@/components/landing/TestimonialsSectionNew";
 import IndustriesBrief from "@/components/landing/IndustriesBrief";
 import CommunityImageStrip from "@/components/landing/CommunityImageStrip";
-import FounderSection from "@/components/landing/FounderSection";
+import WhyRedflaqSection from "@/components/landing/WhyRedflaqSection";
 import FinalUrgency from "@/components/landing/FinalUrgency";
 import FAQHormozi from "@/components/landing/FAQHormozi";
 import FooterPlinq from "@/components/landing/FooterPlinq";
@@ -126,7 +126,7 @@ const Index = () => {
       <CommunityImageStrip />
 
       {/* 16. Founder credibility */}
-      <FounderSection />
+      <WhyRedflaqSection />
 
       {/* 17. Final urgency + CTA */}
       <FinalUrgency />

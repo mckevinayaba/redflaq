@@ -78,7 +78,7 @@ const ValueStack = () => {
             Your Price: R0
           </p>
           <p style={{ ...sans, fontSize: 15, fontWeight: 600, color: '#555' }}>
-            You Pay ONLY When You Verify Someone's Public Record
+            You Pay ONLY When You RedFlaq Someone's Public Record
           </p>
         </div>
 

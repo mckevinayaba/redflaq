@@ -73,7 +73,7 @@ export default function HomepageDemo() {
               lineHeight: 1.7,
               marginBottom: 32,
             }}>
-              RedFlaq helps you check public record warning lists, get a clear safety signal, and save your decision to your free safety account.
+              RedFlaq helps you RedFlaq public record warning lists, get a clear safety signal, and save your decision to your free safety account.
             </p>
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
               {[

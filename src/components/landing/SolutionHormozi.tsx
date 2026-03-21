@@ -19,7 +19,7 @@ const pillars = [
   {
     icon: <Sparkles size={28} color="#7C3AED" />,
     title: "Build Daily Safety Habits",
-    desc: "Habit (coming soon) teaches you red flags, tracks patterns, and makes \"check first\" your automatic behavior — not just crisis response.",
+    desc: "Habit (coming soon) teaches you red flags, tracks patterns, and makes \"RedFlaq first\" your automatic behavior — not just crisis response.",
   },
 ];
 

@@ -62,7 +62,7 @@ const FinalUrgency = () => {
             Create Your Free Safety Base Now
           </button>
           <p style={{ ...sans, fontSize: 12, color: '#888', maxWidth: 360, lineHeight: 1.5 }}>
-            No credit card required. 100% free forever. Pay only when you verify someone.
+            No credit card required. 100% free forever. Pay only when you RedFlaq someone.
           </p>
         </div>
       </div>

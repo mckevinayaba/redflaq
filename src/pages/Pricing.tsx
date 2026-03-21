@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import PricingPlinq from "@/components/landing/PricingPlinq";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
+import BackToHome from "@/components/landing/BackToHome";
 
 export default function Pricing() {
   const [showBanner, setShowBanner] = useState(false);

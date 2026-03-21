@@ -18,6 +18,7 @@ import PaidChecksSection from "@/components/landing/PaidChecksSection";
 import TestimonialsSectionNew from "@/components/landing/TestimonialsSectionNew";
 import IndustriesBrief from "@/components/landing/IndustriesBrief";
 import CommunityImageStrip from "@/components/landing/CommunityImageStrip";
+import CommunitySectionSA from "@/components/landing/CommunitySectionSA";
 import WhyRedflaqSection from "@/components/landing/WhyRedflaqSection";
 import FinalUrgency from "@/components/landing/FinalUrgency";
 import AdvocacySection from "@/components/landing/AdvocacySection";

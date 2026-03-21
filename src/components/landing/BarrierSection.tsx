@@ -143,9 +143,9 @@ const BarrierSection = () => {
 
               <p style={{
                 fontFamily: "'Syne', sans-serif",
-                fontSize: 14,
+                fontSize: 15,
                 color: '#555555',
-                lineHeight: 1.65,
+                lineHeight: 1.7,
               }}>
                 {card.desc}
               </p>

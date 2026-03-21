@@ -60,10 +60,11 @@ export default function About() {
         className="relative overflow-hidden"
         style={{
           background: "linear-gradient(135deg, #0F0A1A 0%, #1A1035 50%, #0F0A1A 100%)",
-          paddingTop: 120,
+          paddingTop: 100,
           paddingBottom: 80,
         }}
       >
+        <BackToHome light />
         <div
           className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[70%] h-1/2 pointer-events-none"
           style={{ background: "radial-gradient(ellipse, rgba(124,58,237,0.12) 0%, transparent 70%)" }}

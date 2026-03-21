@@ -52,8 +52,9 @@ const Blog = () => {
       {/* Hero */}
       <section style={{
         background: '#F5F0EB',
-        paddingTop: 120, paddingBottom: 64,
+        paddingTop: 100, paddingBottom: 64,
       }}>
+        <BackToHome />
         <div className="max-w-[900px] mx-auto px-5 sm:px-6">
           <p className="font-mono text-[11px] tracking-[0.15em] mb-4 flex items-center gap-3" style={{ color: '#6B4EFF' }}>
             <span style={{ width: 24, height: 1, background: '#6B4EFF', display: 'inline-block' }} />

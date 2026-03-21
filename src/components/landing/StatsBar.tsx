@@ -24,7 +24,7 @@ const StatsBar = () => {
               }}>
                 <stat.icon className="h-5 w-5" style={{ color: '#7C3AED', strokeWidth: 2 }} />
               </div>
-              <span className="text-2xl md:text-3xl font-bold" style={{ color: '#6B4EFF', fontFamily: "'DM Serif Display', serif" }}>{stat.value}</span>
+              <span className="text-2xl md:text-3xl font-bold" style={{ color: '#7C3AED', fontFamily: "'DM Serif Display', serif" }}>{stat.value}</span>
               <span className="text-sm" style={{ color: '#555555', fontFamily: "'Syne', sans-serif" }}>{stat.label}</span>
             </div>
           ))}

@@ -97,7 +97,7 @@ const RiskLevelsSection = () => {
                   width: 20, height: 20, borderRadius: '50%', background: '#F1ECFF',
                   display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                 }}>
-                  <Check className="h-3 w-3" style={{ color: '#6B4EFF' }} />
+                  <Check className="h-3 w-3" style={{ color: '#7C3AED' }} />
                 </div>
                 {item}
               </div>

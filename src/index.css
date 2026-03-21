@@ -661,3 +661,8 @@ nav, header {
     overflow-anchor: none;
   }
 }
+
+/* Lazy-load spinner for route transitions */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

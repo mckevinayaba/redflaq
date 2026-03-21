@@ -446,9 +446,9 @@ const NavbarPlinq = () => {
                 <button
                   onClick={handleRunCheck}
                   style={{
-                    ...fontBase, fontWeight: 700, fontSize: 11, color: 'white',
-                    background: '#7C3AED', border: 'none', padding: '7px 14px',
-                    cursor: 'pointer', borderRadius: 50,
+                    ...fontBase, fontWeight: 700, fontSize: 12, color: 'white',
+                    background: '#7C3AED', border: 'none', padding: '10px 16px',
+                    cursor: 'pointer', borderRadius: 50, minHeight: 44,
                   }}
                 >
                   Run a Check
@@ -456,7 +456,7 @@ const NavbarPlinq = () => {
               )}
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                style={{ padding: 8, background: 'none', border: 'none', cursor: 'pointer' }}
+                style={{ padding: 10, background: 'none', border: 'none', cursor: 'pointer', minWidth: 44, minHeight: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
               >
                 {isMenuOpen ? <X size={22} color="#2D2235" /> : <Menu size={22} color="#2D2235" />}
               </button>

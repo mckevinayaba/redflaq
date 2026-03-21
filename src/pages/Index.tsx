@@ -84,9 +84,8 @@ const Index = () => {
       <PhotoGrid />
       <ValueStack />
       <PaidChecksSection />
-      <div id="testimonials">
-        <TestimonialsSectionNew />
-      </div>
+
+
       <IndustriesBrief />
       <FinalUrgency />
       <FAQHormozi />

@@ -88,7 +88,7 @@ const FooterPlinq = () => {
       <footer id="footer-contact" style={{ background: '#F5F0EB', padding: '56px 20px 28px', overflowX: 'hidden' as const, borderTop: '1px solid #E2DCD6' }}>
         <div style={{ maxWidth: 1200, margin: '0 auto' }}>
           {/* Top: Logo + 5 columns + Connect */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-8 md:gap-6 mb-12">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 md:grid-cols-6 md:gap-6 mb-12">
             {/* Brand column - takes first slot on mobile */}
             <div className="col-span-2 sm:col-span-3 md:col-span-1 mb-4 md:mb-0">
               <a href="/" className="flex items-center mb-3" style={{ textDecoration: 'none' }}>

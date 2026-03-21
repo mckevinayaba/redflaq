@@ -11,7 +11,7 @@ import ShareControlsModal from "@/components/ShareControlsModal";
 import PostReportGuidance from "@/components/PostReportGuidance";
 import GetHelpModal from "@/components/GetHelpModal";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
-import Footer from "@/components/Footer";
+import FooterPlinq from "@/components/landing/FooterPlinq";
 import WhatsAppShareButton from "@/components/WhatsAppShareButton";
 import PostCheckRegistrationPrompt from "@/components/PostCheckRegistrationPrompt";
 import { useAuth } from "@/hooks/useAuth";
@@ -1170,7 +1170,7 @@ const ResultsPageUpdated = () => {
         onClose={() => { setIsDisputeModalOpen(false); setDisputeRecord(null); }}
         record={disputeRecord}
       />
-      <Footer />
+      <FooterPlinq />
     </div>
   );
 };

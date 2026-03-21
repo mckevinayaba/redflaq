@@ -1170,7 +1170,7 @@ const ResultsPageUpdated = () => {
         onClose={() => { setIsDisputeModalOpen(false); setDisputeRecord(null); }}
         record={disputeRecord}
       />
-      <Footer />
+      <FooterPlinq />
     </div>
   );
 };

@@ -101,7 +101,7 @@ const BarrierSection = () => {
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 marginBottom: 20,
               }}>
-                <card.Icon style={{ width: 24, height: 24, color: '#6B4EFF', strokeWidth: 2 }} />
+                <card.Icon style={{ width: 24, height: 24, color: '#7C3AED', strokeWidth: 2 }} />
               </div>
 
               <div style={{

@@ -57,7 +57,7 @@ const RiskLevelsSection = () => {
               <span style={{
                 display: 'inline-block',
                 fontFamily: "'JetBrains Mono', monospace", fontSize: 10, fontWeight: 700,
-                letterSpacing: '0.15em', color: risk.color,
+                letterSpacing: '0.12em', color: risk.color,
                 background: `${risk.color}15`,
                 padding: '6px 14px',
                 borderRadius: 50,

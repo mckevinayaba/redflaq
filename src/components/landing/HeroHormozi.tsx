@@ -99,14 +99,13 @@ const HeroHormozi = () => {
             </div>
 
             {/* Floating stat card */}
-            <div style={{
-              position: 'absolute', bottom: 32, left: -20,
+            <div className="absolute bottom-4 left-0 sm:bottom-8 sm:-left-5" style={{
               background: 'white', border: '1px solid #E6E0DA',
-              borderRadius: 16, padding: '16px 22px',
+              borderRadius: 16, padding: '14px 18px',
               boxShadow: '0 8px 32px rgba(0,0,0,0.08)',
               maxWidth: 220,
             }}>
-              <p style={{ ...serif, fontSize: 32, color: '#DC2626', marginBottom: 2 }}>42,289</p>
+              <p style={{ ...serif, fontSize: 28, color: '#DC2626', marginBottom: 2 }}>42,289</p>
               <p style={{ ...sans, fontSize: 12, color: '#555', lineHeight: 1.4, marginBottom: 4 }}>
                 sexual offences reported in South Africa (2023/24)
               </p>

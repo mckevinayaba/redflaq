@@ -38,22 +38,39 @@ const GovDataSection = () => {
   const { ref, isVisible } = useScrollReveal();
 
   return (
-    <section
-      ref={ref}
-      className={`reveal-section ${isVisible ? "visible" : ""}`}
-      style={{ background: "hsl(var(--background))", padding: "80px 0 60px" }}
-    >
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px" }}>
+    <>
+      {/* Bridge line between hero and stats */}
+      <section style={{ background: "hsl(var(--background))", padding: "56px 24px 0" }}>
+        <p
+          className="font-body text-center mx-auto"
+          style={{
+            maxWidth: 620,
+            fontSize: "clamp(16px, 2vw, 19px)",
+            fontWeight: 600,
+            lineHeight: 1.7,
+            color: "hsl(var(--foreground))",
+          }}
+        >
+          You did everything they told you — met in public places, shared your location, checked his first impression and looks. They lied. Women still die. Before you trust, RedFlaq first.
+        </p>
+      </section>
 
-        {/* Section title */}
-        <div className="text-center mb-10">
-          <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: "clamp(32px, 4.5vw, 52px)", letterSpacing: "-0.02em", color: "hsl(var(--foreground))", lineHeight: 1.1 }}>
-            The uncomfortable truth
-          </h2>
-          <p className="font-body text-muted-foreground mt-3 mx-auto" style={{ maxWidth: 520, fontSize: 15, lineHeight: 1.7 }}>
-            This is the South African reality women are living in right now.
-          </p>
-        </div>
+      <section
+        ref={ref}
+        className={`reveal-section ${isVisible ? "visible" : ""}`}
+        style={{ background: "hsl(var(--background))", padding: "60px 0 60px" }}
+      >
+        <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px" }}>
+
+          {/* Section title */}
+          <div className="text-center mb-10">
+            <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: "clamp(32px, 4.5vw, 52px)", letterSpacing: "-0.02em", color: "hsl(var(--foreground))", lineHeight: 1.1 }}>
+              The uncomfortable truth
+            </h2>
+            <p className="font-body text-muted-foreground mt-3 mx-auto" style={{ maxWidth: 520, fontSize: 15, lineHeight: 1.7 }}>
+              This is the South African reality women are living in right now.
+            </p>
+          </div>
 
         {/* Uncomfortable truth tiles */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-14">

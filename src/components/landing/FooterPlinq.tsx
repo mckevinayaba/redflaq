@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Shield } from "lucide-react";
 import ShareInviteModal from "@/components/ShareInviteModal";
 import { WHATSAPP_CHAT_URL } from "@/constants/whatsapp";

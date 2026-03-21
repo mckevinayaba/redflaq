@@ -3,6 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { Check, X } from "lucide-react";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import HeroHormozi from "@/components/landing/HeroHormozi";
+import GovDataSection from "@/components/landing/GovDataSection";
 import TickerBar from "@/components/landing/TickerBar";
 import HomepageDemo from "@/components/landing/HomepageDemo";
 import ProblemAgitation from "@/components/landing/ProblemAgitation";
@@ -77,7 +78,10 @@ const Index = () => {
       {/* 1. Hero — Editorial hook + hero image */}
       <HeroHormozi />
 
-      {/* 2. Trust ticker */}
+      {/* 2. Government data — Classified as a national disaster */}
+      <GovDataSection />
+
+      {/* 3. Trust ticker */}
       <TickerBar />
 
       {/* 3. Interactive demo */}

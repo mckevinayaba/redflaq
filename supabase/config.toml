@@ -1,0 +1,49 @@
+project_id = "gewwxdmxrwyosddczezg"
+
+[functions]
+  [functions.admin-verify-payment]
+    verify_jwt = false
+  [functions.auth-email-hook]
+    verify_jwt = false
+  [functions.create-payfast-payment]
+    verify_jwt = false
+  [functions.create-stripe-checkout]
+    verify_jwt = false
+  [functions.extract-gazette]
+    verify_jwt = false
+  [functions.import-opensanctions]
+    verify_jwt = false
+  [functions.import-sapswanted]
+    verify_jwt = false
+  [functions.import-wanted-persons]
+    verify_jwt = false
+  [functions.index-saflii]
+    verify_jwt = false
+  [functions.multi-parameter-search]
+    verify_jwt = false
+  [functions.payfast-itn]
+    verify_jwt = false
+  [functions.scrape-saps-details]
+    verify_jwt = false
+  [functions.scrape-saps-wanted]
+    verify_jwt = false
+  [functions.send-email]
+    verify_jwt = false
+  [functions.stripe-webhook]
+    verify_jwt = false
+  [functions.submit-payment]
+    verify_jwt = false
+  [functions.verify-admin]
+    verify_jwt = false
+  [functions.create-yoco-checkout]
+    verify_jwt = false
+  [functions.yoco-webhook]
+    verify_jwt = false
+  [functions.register-yoco-webhook]
+    verify_jwt = false
+  [functions.whatsapp-webhook]
+    verify_jwt = false
+  [functions.whatsapp-followup]
+    verify_jwt = false
+  [functions.process-email-queue]
+    verify_jwt = true

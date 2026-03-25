@@ -1,3 +1,21 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════
+ * MY SAFETY JOURNAL — TIMELINE EXPORT
+ * ═══════════════════════════════════════════════════════════════════
+ *
+ * Generates a chronological PDF timeline of all journal entries for
+ * a specific person or all entries. Designed for use in protection
+ * order applications where courts need to see a pattern of abuse.
+ *
+ * Each entry shows: date, time, incident description, abuse types,
+ * weapons involved, medical attention, police reports, and the
+ * SHA-256 verification hash (if the entry was locked).
+ *
+ * POPIA COMPLIANCE:
+ * - Generated entirely client-side — no data leaves the browser
+ * - Only the authenticated user can generate their own timeline
+ * ═══════════════════════════════════════════════════════════════════
+ */
 import jsPDF from 'jspdf';
 
 interface TimelineEntry {

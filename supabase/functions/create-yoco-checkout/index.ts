@@ -1,3 +1,26 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════
+ * YOCO CHECKOUT SESSION CREATOR
+ * ═══════════════════════════════════════════════════════════════════
+ *
+ * Creates a Yoco Checkout session for purchasing safety check credits.
+ * Called from the PaymentModal component when a user selects a package.
+ *
+ * PACKAGES:
+ * - single: R99 → 1 credit
+ * - triple: R249 → 3 credits
+ * - five:   R399 → 5 credits
+ *
+ * FLOW:
+ * 1. Validates email and package type
+ * 2. Creates a Yoco Checkout session via their API
+ * 3. Inserts a pending manual_payments record
+ * 4. Returns the redirect URL for the hosted payment page
+ *
+ * SECURITY: verify_jwt = false (pre-auth purchase flow).
+ * YOCO_SECRET_KEY is stored as a backend secret.
+ * ═══════════════════════════════════════════════════════════════════
+ */
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 

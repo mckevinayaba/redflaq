@@ -1,3 +1,27 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════
+ * VERIFY — NEW SAFETY CHECK FORM
+ * ═══════════════════════════════════════════════════════════════════
+ *
+ * This is the core "Verify" feature — the criminal record check.
+ * Users enter a person's name and optional identifying info, then
+ * the system searches across SAPS wanted persons, SAFLII court
+ * judgments, and Government Gazette records.
+ *
+ * CREDIT SYSTEM:
+ * - Each check consumes 1 credit (purchased via Yoco)
+ * - Admin users bypass credit checks for testing
+ * - Credits are tracked across purchases and manual_payments tables
+ *
+ * POPIA COMPLIANCE:
+ * - Users must select a legitimate purpose for the search
+ * - Consent checkbox required before submission
+ * - SA ID numbers are validated but never stored in full
+ * - Discreet mode available to hide results from dashboard
+ *
+ * FLOW: Form → multi-parameter-search Edge Function → Results page
+ * ═══════════════════════════════════════════════════════════════════
+ */
 import { useState, useEffect } from "react";
 import { validateSAIDNumber } from "@/utils/idValidation";
 import { useNavigate, Link, useSearchParams } from "react-router-dom";

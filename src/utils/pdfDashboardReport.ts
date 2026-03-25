@@ -1,3 +1,15 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════
+ * ADMIN DASHBOARD REPORT GENERATOR
+ * ═══════════════════════════════════════════════════════════════════
+ *
+ * Generates a PDF summary report of platform analytics for the
+ * admin dashboard. Includes user counts, check volumes, revenue
+ * metrics, risk distribution, and provincial breakdown.
+ *
+ * ACCESS: Admin and Owner roles only (enforced via useUserRole hook)
+ * ═══════════════════════════════════════════════════════════════════
+ */
 import jsPDF from "jspdf";
 
 interface RiskSlice {

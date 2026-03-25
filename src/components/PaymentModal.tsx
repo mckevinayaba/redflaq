@@ -1,3 +1,25 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════
+ * YOCO PAYMENT MODAL — VERIFY SAFETY CHECK PURCHASE
+ * ═══════════════════════════════════════════════════════════════════
+ *
+ * This modal is the payment trigger for the "Verify" criminal record
+ * check feature. When a user wants to run a safety check, they must
+ * first purchase credits via Yoco (South Africa's leading card
+ * payment gateway).
+ *
+ * FLOW:
+ * 1. User selects a package (1, 3, or 5 checks)
+ * 2. Modal calls the create-yoco-checkout Edge Function
+ * 3. Edge Function creates a Yoco Checkout session
+ * 4. User is redirected to Yoco's hosted payment page
+ * 5. On success, yoco-webhook Edge Function processes the payment
+ * 6. Credits are added to the user's account
+ *
+ * POPIA: Email is collected for receipt delivery and credit linking.
+ * No card details touch our servers — Yoco handles PCI compliance.
+ * ═══════════════════════════════════════════════════════════════════
+ */
 import { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { supabase } from '@/integrations/supabase/client';

@@ -37,7 +37,7 @@ const team = [
 
 const stats = [
   { value: "10,000+", label: "Public records indexed" },
-  { value: "4", label: "Government data sources" },
+  { value: "4", label: "Verified record categories" },
   { value: "60s", label: "Average check time" },
   { value: "100%", label: "Free safety tools" },
 ];

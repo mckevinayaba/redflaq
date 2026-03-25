@@ -5,7 +5,7 @@
  *
  * Displays the results of a criminal record safety check. Shows:
  * - Risk score (0-100) with color-coded badge (GREEN/YELLOW/ORANGE/RED)
- * - Matched records from SAPS, SAFLII, and Gazette sources
+ * - Matched records from RedFlaq Verified Public Records Network
  * - Identity confidence scoring per match
  * - Human verification prompts for low-confidence matches
  * - Post-check guidance and GBV resource links

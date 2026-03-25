@@ -3,7 +3,13 @@ import { supabase } from "@/integrations/supabase/client";
 
 /**
  * Fetches and auto-updates the user's credit balance.
- * Uses realtime subscriptions + polling fallback after payment redirect.
+ *
+ * Credits are consumed when running safety checks (1 credit = 1 check).
+ * Sources: Yoco card payments, manual EFT payments verified by admin.
+ *
+ * Uses realtime subscriptions for instant UI updates + polling
+ * fallback (5s intervals for 60s) after payment redirect to handle
+ * webhook delivery delays from payment gateways.
  */
 export function useCredits(userEmail: string | undefined | null, userId: string | undefined | null) {
   const [credits, setCredits] = useState<number | null>(null);

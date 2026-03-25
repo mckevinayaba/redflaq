@@ -1,3 +1,25 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════
+ * RISK SCORING ENGINE
+ * ═══════════════════════════════════════════════════════════════════
+ *
+ * Calculates a 0-100 risk score from publicly available records
+ * matched against a search subject. The algorithm weighs:
+ *
+ * - Offense severity (Schedule 1-8 Criminal Procedure Act classifications)
+ * - Recency of records
+ * - Number of independent source matches (SAPS, SAFLII, Gazette)
+ * - Gender-based violence indicators
+ * - Protection order presence
+ *
+ * South Africa-specific: includes Afrikaans legal terms, SA court
+ * reference formats, and Government Gazette notice patterns.
+ *
+ * IMPORTANT: This score is advisory only. RedFlaq does not make
+ * guilt/innocence determinations. All data comes from public records.
+ * ═══════════════════════════════════════════════════════════════════
+ */
+
 export type RiskLevel = 'CLEAR' | 'LOW' | 'MODERATE' | 'HIGH' | 'CRITICAL';
 
 export interface RiskAssessment {

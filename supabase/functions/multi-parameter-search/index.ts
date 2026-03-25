@@ -1,3 +1,39 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════
+ * VERIFY — MULTI-PARAMETER SEARCH ENGINE (CORE FEATURE)
+ * ═══════════════════════════════════════════════════════════════════
+ *
+ * The heart of RedFlaq's safety check system. Searches across three
+ * South African public record databases:
+ *
+ * 1. SAPS Wanted Persons (wanted_persons table)
+ * 2. SAFLII Court Judgments (saflii_judgments table)
+ * 3. Government Gazette Records (gazette_records table)
+ *
+ * SEARCH STRATEGIES:
+ * - Exact name match
+ * - Fuzzy/partial name matching (surname + first name combinations)
+ * - SA ID number matching (full or last 4 digits)
+ * - Case number matching (police CAS format and court formats)
+ * - Province filtering
+ *
+ * RISK SCORING:
+ * - Calculates 0-100 risk score based on offense severity
+ * - Categorizes offenses (murder, sexual, assault, fraud, etc.)
+ * - Includes Afrikaans legal terms for bilingual matching
+ * - Maps to badge levels: GREEN/YELLOW/ORANGE/RED
+ *
+ * CREDIT SYSTEM:
+ * - Deducts 1 credit per search (from purchases or manual_payments)
+ * - Admin users bypass credit checks
+ * - Returns 402 if insufficient credits
+ *
+ * POPIA COMPLIANCE:
+ * - Search results stored in 'searches' table with user_id for audit
+ * - Discreet mode hides results from the user's dashboard
+ * - No full ID numbers stored in search results
+ * ═══════════════════════════════════════════════════════════════════
+ */
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.39.7';
 

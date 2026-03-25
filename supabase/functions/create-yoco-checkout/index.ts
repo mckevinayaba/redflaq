@@ -65,7 +65,7 @@ serve(async (req) => {
     }
 
     const paymentId = `RF-YOCO-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
-    const origin = req.headers.get("origin") || "https://redflaq.lovable.app";
+    const origin = req.headers.get("origin") || "https://redflaq.com";
 
     // Include package_type in success URL so the success page can show details optimistically
     const successUrl = `${origin}/payment-success?payment_id=${paymentId}&email=${encodeURIComponent(email)}&package_type=${package_type}`;

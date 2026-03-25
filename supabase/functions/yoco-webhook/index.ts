@@ -159,7 +159,7 @@ serve(async (req) => {
       });
     }
 
-    console.log("Yoco webhook received:", JSON.stringify(body));
+    console.log("Yoco webhook received:", body?.type);
 
     const eventType = body.type;
     const payload = body.payload || body;
@@ -243,7 +243,7 @@ serve(async (req) => {
       currency: "ZAR",
     });
 
-    console.log(`Payment ${paymentId} verified. ${credits} credits added for ${email}`);
+    console.log(`Payment ${paymentId} verified, ${credits} credits added`);
 
     // ── SEND EMAIL NOTIFICATIONS ──
 
@@ -260,7 +260,7 @@ serve(async (req) => {
           subject: `New Payment Received — R${amountZAR} — ${email}`,
           html: `
             <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
-              <img src="https://redflaq.lovable.app/redflaq-logo-email.png" alt="RedFlaq" height="40" style="margin-bottom: 24px;" />
+              <img src="https://redflaq.com/redflaq-logo-email.png" alt="RedFlaq" height="40" style="margin-bottom: 24px;" />
               <h2 style="color: #1a1a1a; margin: 0 0 20px;">💰 New Payment Received</h2>
               <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
                 <tr><td style="padding: 8px 0; color: #666;">Customer Email</td><td style="padding: 8px 0; font-weight: 700;">${email}</td></tr>
@@ -271,7 +271,7 @@ serve(async (req) => {
                 <tr><td style="padding: 8px 0; color: #666;">Payment Ref</td><td style="padding: 8px 0; font-weight: 700; font-family: monospace; font-size: 12px;">${paymentId}</td></tr>
               </table>
               <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
-              <p style="font-size: 13px; color: #999;">Log in to your <a href="https://redflaq.lovable.app/admin" style="color: #7C3AED;">admin dashboard</a> to manage payments.</p>
+              <p style="font-size: 13px; color: #999;">Log in to your <a href="https://redflaq.com/admin" style="color: #7C3AED;">admin dashboard</a> to manage payments.</p>
             </div>
           `,
         },
@@ -290,7 +290,7 @@ serve(async (req) => {
           html: `
             <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
               <div style="text-align: center; margin-bottom: 28px;">
-                <img src="https://redflaq.lovable.app/redflaq-logo-email.png" alt="RedFlaq" height="44" />
+                <img src="https://redflaq.com/redflaq-logo-email.png" alt="RedFlaq" height="44" />
               </div>
               <h2 style="font-size: 22px; color: #1a1a1a; text-align: center; margin: 0 0 8px;">Payment Confirmed! 🎉</h2>
               <p style="text-align: center; color: #666; font-size: 14px; margin-bottom: 24px;">Your safety checks are ready to use.</p>

@@ -922,7 +922,7 @@ serve(async (req) => {
               </div>
 
                <div style="text-align: center; margin-bottom: 32px;">
-                  <img src="https://redflaq.lovable.app/redflaq-logo-email.png" alt="RedFlaq" height="48" style="display: inline-block; margin-bottom: 12px; height: 48px; width: auto;" />
+                  <img src="https://redflaq.com/redflaq-logo-email.png" alt="RedFlaq" height="48" style="display: inline-block; margin-bottom: 12px; height: 48px; width: auto;" />
                   <p style="color: #666; font-size: 13px; margin-top: 4px;">Background Verification Service</p>
                 </div>
 
@@ -959,7 +959,7 @@ serve(async (req) => {
           : `
             <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px;">
                <div style="text-align: center; margin-bottom: 32px;">
-                  <img src="https://redflaq.lovable.app/redflaq-logo-email.png" alt="RedFlaq" height="48" style="display: inline-block; margin-bottom: 12px; height: 48px; width: auto;" />
+                  <img src="https://redflaq.com/redflaq-logo-email.png" alt="RedFlaq" height="48" style="display: inline-block; margin-bottom: 12px; height: 48px; width: auto;" />
                   <p style="color: #666; font-size: 13px; margin-top: 4px;">Background Verification Service</p>
                 </div>
 

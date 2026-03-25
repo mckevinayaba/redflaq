@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import AdminLayout from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -207,6 +208,7 @@ const AdminScraper = () => {
     : 0;
 
   return (
+    <AdminLayout>
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-4xl mx-auto space-y-6">
         <div className="flex justify-between items-center">
@@ -717,6 +719,7 @@ const AdminScraper = () => {
         </Card>
       </div>
     </div>
+    </AdminLayout>
   );
 };
 

@@ -15,7 +15,7 @@ serve(async (req) => {
   try {
     const { email, package_type } = await req.json();
     
-    console.log(`Processing manual payment submission for ${email}, package: ${package_type}`);
+    console.log(`Processing manual payment submission, package: ${package_type}`);
     
     // Validate email
     if (!email || !email.includes('@')) {

@@ -20,7 +20,7 @@ const tiers = [
   {
     name: "Premium",
     price: "R399",
-    features: ["SAPS + SAFLII + NRSO*", "60-second verification", "Results saved forever", "Comprehensive PDF report"],
+    features: ["Complete Verified Records Network", "60-second verification", "Results saved forever", "Comprehensive PDF report"],
     highlight: false,
   },
 ];

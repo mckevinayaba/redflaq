@@ -64,7 +64,7 @@ const PricingPlinq = () => {
             Traditional checks are expensive, slow and built for companies, not for women or communities trying to stay safe. RedFlaq makes it R99 and under a minute.
           </p>
           <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 13, color: '#9CA3AF', maxWidth: 520, lineHeight: 1.5, marginBottom: 56 }}>
-            Each safety check uses South African public‑record warning lists to highlight possible red flags. It does not provide a full SAPS criminal record.
+            Each safety check uses the RedFlaq Verified Public Records Network to highlight possible red flags. It does not provide a full fingerprint-based criminal record.
           </p>
 
           <div className={`grid grid-cols-1 md:grid-cols-3 gap-5 items-stretch reveal-stagger ${isVisible ? 'visible' : ''}`}>

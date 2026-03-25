@@ -12,7 +12,7 @@ const faqs = [
   },
   {
     q: "How long does a check take?",
-    a: "60 seconds. You enter name and ID number, we search SAPS wanted lists, SAFLII court records, and (when available) the National Register for Sex Offenders. Results appear immediately.",
+    a: "60 seconds. You enter name and ID number, we search the RedFlaq Verified Public Records Network — covering criminal records, court judgments, and official warning lists. Results appear immediately.",
   },
   {
     q: "Is my information private and safe?",

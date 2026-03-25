@@ -298,7 +298,7 @@ export default function DashboardNewCheck() {
                   </div>
                 </div>
                 <p className="font-body text-xs text-muted-foreground -mt-4">
-                  RedFlaq only uses information that is already public, such as official warning lists. It does not access private SAPS fingerprint or internal criminal record databases.
+                  RedFlaq only uses verified public records and official warning lists. It does not access private fingerprint or internal criminal record databases.
                 </p>
 
                 {/* Optional ID Number */}

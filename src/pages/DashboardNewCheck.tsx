@@ -439,7 +439,7 @@ export default function DashboardNewCheck() {
               <div className="space-y-2">
                 {[
                   { emoji: "🚔", label: "SAPS Wanted Persons" },
-                  { emoji: "⚖️", label: "SAFLII Court Judgments" },
+                  { emoji: "⚖️", label: "SA Court Records" },
                   { emoji: "📰", label: "Government Gazette" },
                   { emoji: "💰", label: "FIC Sanctions List" },
                 ].map(({ emoji, label }) => (

@@ -46,7 +46,7 @@ const sources = [
   { icon: FileText, label: "SAPS Most Wanted Lists" },
   { icon: Database, label: "FIC Financial Sanctions" },
   { icon: Gavel, label: "Government Gazettes (court orders)" },
-  { icon: Scale, label: "SAFLII Court Judgments" },
+  { icon: Scale, label: "SA Court Records" },
 ];
 
 export default function About() {

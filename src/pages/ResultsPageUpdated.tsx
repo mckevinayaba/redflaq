@@ -119,7 +119,7 @@ const redactId = (id?: string) => {
 };
 
 const getOfficialSourceUrl = (person: WantedPerson): string | null => {
-  // Only filter OpenSanctions entity page URLs (those 404). SAPS detail.php?bid= URLs work correctly.
+  // Only filter broken compliance-database entity page URLs (those 404). SAPS detail.php?bid= URLs work correctly.
   const isBrokenUrl = (url: string) => url.includes('opensanctions.org/entities/za-wanted-');
 
   // Check detail_page_url first
@@ -149,18 +149,18 @@ const getOfficialSourceUrl = (person: WantedPerson): string | null => {
 const getSourceLabel = (person: WantedPerson): string => {
   if (person.source_dataset === 'za_wanted') return 'SAPS Wanted Persons';
   if (person.source_dataset === 'za_fic_sanctions') return 'FIC Sanctions List';
-  if (person.source_dataset === 'saflii') return 'SAFLII Court Judgment';
+  if (person.source_dataset === 'saflii') return 'SA Court Records';
   if (person.source_dataset === 'gazette') return 'Government Gazette — Financial Court Order';
-  if (person.source_dataset === 'opensanctions_live') return 'OpenSanctions — Live API';
+  if (person.source_dataset === 'opensanctions_live') return 'Verified Compliance Database';
   return 'South African Public Records';
 };
 
 const getSourceTrustBadge = (person: WantedPerson): { icon: string; label: string; level: string; color: string } => {
   if (person.source_dataset === 'za_wanted') return { icon: '🚔', label: 'Official SAPS Database', level: 'HIGH', color: '#DC2626' };
   if (person.source_dataset === 'za_fic_sanctions') return { icon: '💰', label: 'FIC Sanctions — Government', level: 'HIGH', color: '#DC2626' };
-  if (person.source_dataset === 'saflii') return { icon: '⚖️', label: 'Court Record — SAFLII', level: 'MEDIUM', color: '#1E40AF' };
+  if (person.source_dataset === 'saflii') return { icon: '⚖️', label: 'SA Court Records', level: 'MEDIUM', color: '#1E40AF' };
   if (person.source_dataset === 'gazette') return { icon: '📰', label: 'Government Gazette', level: 'MEDIUM', color: '#D97706' };
-  if (person.source_dataset === 'opensanctions_live') return { icon: '🌐', label: 'OpenSanctions — Verified API', level: 'HIGH', color: '#7C3AED' };
+  if (person.source_dataset === 'opensanctions_live') return { icon: '🌐', label: 'Verified Compliance Database', level: 'HIGH', color: '#7C3AED' };
   return { icon: '📋', label: 'Public Record', level: 'STANDARD', color: '#6B7280' };
 };
 
@@ -848,10 +848,10 @@ const ResultsPageUpdated = () => {
                   <span
                     className="inline-block px-4 py-1.5 mb-4 font-mono text-[11px] tracking-[0.1em] uppercase font-semibold text-white"
                     style={{
-                      background: person.source_dataset === 'saflii' ? '#1E40AF' : isViolent ? 'hsl(var(--purple))' : person.legal_status === 'wanted' || !person.legal_status ? 'hsl(var(--gold))' : 'hsl(var(--muted-foreground))',
+                      background: person.source_dataset === 'saflii' ? '#1E40AF' : isViolent ? 'hsl(var(--purple))' : (person.legal_status === 'wanted' || !person.legal_status) ? 'hsl(var(--gold))' : 'hsl(var(--muted-foreground))',
                     }}
                   >
-                    {person.source_dataset === 'saflii' ? `⚖️ COURT JUDGMENT — ${person.charges}` : person.legal_status === 'wanted' || !person.legal_status ? `WANTED — ${person.charges}` : person.court_case_number ? 'COURT RECORD FOUND' : 'LEGAL NOTICE FOUND'}
+                    {person.source_dataset === 'saflii' ? `⚖️ COURT JUDGMENT — ${person.charges}` : (person.legal_status === 'wanted' || !person.legal_status) ? `WANTED — ${person.charges}` : person.court_case_number ? 'COURT RECORD FOUND' : 'LEGAL NOTICE FOUND'}
                   </span>
                   <h2 className="font-heading text-3xl text-foreground leading-tight mb-2">
                     {person.full_name}
@@ -917,7 +917,7 @@ const ResultsPageUpdated = () => {
                     ))}
                     {officialUrl && (
                       <a href={officialUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 font-mono text-xs text-blue-600 underline mt-2">
-                        🔗 {(person as any).match_type === 'opensanctions_api' ? 'View record details' : 'View on official source'} →
+                        🔗 View on official source →
                       </a>
                     )}
                   </div>
@@ -930,7 +930,7 @@ const ResultsPageUpdated = () => {
                   </h3>
                   <p className="font-body text-[15px] text-muted-foreground leading-relaxed">
                     {person.source_dataset === 'saflii'
-                      ? `A criminal court judgment was found on SAFLII involving a person with this name. The judgment is from ${(person as any).saflii_court_code ? `the ${person.court_name}` : 'a South African High Court'}${(person as any).saflii_year ? ` (${(person as any).saflii_year})` : ''}. This is a public court record — not a RedFlaq determination.`
+                      ? `A criminal court judgment was found in South African court records involving a person with this name. The judgment is from ${(person as any).saflii_court_code ? `the ${person.court_name}` : 'a South African High Court'}${(person as any).saflii_year ? ` (${(person as any).saflii_year})` : ''}. This is a public court record — not a RedFlaq determination.`
                       : person.source_dataset === 'za_fic_sanctions'
                         ? `This person appears on the FIC sanctions list. This indicates they are subject to financial restrictions or watchlist monitoring as of ${person.updated_at ? new Date(person.updated_at).toLocaleDateString('en-ZA') : 'recently'}.`
                         : `An active arrest warrant is listed on the SAPS wanted persons database as of ${person.updated_at ? new Date(person.updated_at).toLocaleDateString('en-ZA') : 'recently'}.`
@@ -940,7 +940,7 @@ const ResultsPageUpdated = () => {
                     <div className="bg-white border-l-[3px] border-blue-700 p-4 mt-4">
                       <p className="font-body text-sm font-bold text-blue-800 mb-2">Important Limitations:</p>
                       <ul className="font-body text-sm text-muted-foreground leading-relaxed list-disc pl-5 space-y-1">
-                        <li>Only High Court and above — most GBV cases start in Magistrate Courts (not on SAFLII)</li>
+                        <li>Only High Court and above — most GBV cases start in Magistrate Courts (not covered in this dataset)</li>
                         <li>Not every conviction produces a written judgment</li>
                         <li>Name-only matching means this may be a different person</li>
                         <li>Courts may anonymise parties in certain cases</li>
@@ -1074,7 +1074,7 @@ const ResultsPageUpdated = () => {
                 <div className="p-8 bg-destructive/5 border-t-2 border-destructive">
                   <h4 className="font-body text-sm font-bold text-destructive mb-3 flex items-center gap-2">⚖️ Important Legal Notice</h4>
                   <p className="font-body text-xs text-muted-foreground leading-relaxed">
-                    RedFlaq reports public records only, sourced from SAPS wanted persons lists, SAFLII court judgments, and FIC sanctions data via OpenSanctions. This is not a determination of guilt. Legal proceedings are ongoing until concluded by a court of law. Always verify current status with official sources before making any decisions.
+                    RedFlaq reports public records only, sourced from SAPS wanted persons lists, South African court records, Government Gazette notices, and FIC sanctions data. This is not a determination of guilt. Legal proceedings are ongoing until concluded by a court of law. Always verify current status with official sources before making any decisions.
                     <br /><br />
                     DO NOT use this information to harass, discriminate against, defame, or harm this person. Unlawful use of this information is prohibited and prosecutable under South African law, including under POPIA and the Harassment Act.
                     <br /><br />

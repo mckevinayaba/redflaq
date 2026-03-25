@@ -5,8 +5,8 @@
  *
  * This is the core "Verify" feature — the criminal record check.
  * Users enter a person's name and optional identifying info, then
- * the system searches across SAPS wanted persons, SAFLII court
- * judgments, and Government Gazette records.
+ * the system searches the RedFlaq Verified Public Records Network
+ * (criminal records, court judgments, and official warning lists).
  *
  * CREDIT SYSTEM:
  * - Each check consumes 1 credit (purchased via Yoco)
@@ -298,7 +298,7 @@ export default function DashboardNewCheck() {
                   </div>
                 </div>
                 <p className="font-body text-xs text-muted-foreground -mt-4">
-                  RedFlaq only uses information that is already public, such as official warning lists. It does not access private SAPS fingerprint or internal criminal record databases.
+                  RedFlaq only uses verified public records and official warning lists. It does not access private fingerprint or internal criminal record databases.
                 </p>
 
                 {/* Optional ID Number */}

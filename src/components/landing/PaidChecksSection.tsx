@@ -8,19 +8,19 @@ const tiers = [
   {
     name: "Basic",
     price: "R99",
-    features: ["SAPS Wanted Lists", "60-second verification", "Results saved forever", "Basic PDF report"],
+    features: ["Public Records Network", "60-second verification", "Results saved forever", "Basic PDF report"],
     highlight: false,
   },
   {
     name: "Standard",
     price: "R249",
-    features: ["SAPS + SAFLII Court Records", "60-second verification", "Results saved forever", "Enhanced PDF report"],
+    features: ["Full Verified Records Network", "60-second verification", "Results saved forever", "Enhanced PDF report"],
     highlight: true,
   },
   {
     name: "Premium",
     price: "R399",
-    features: ["SAPS + SAFLII + NRSO*", "60-second verification", "Results saved forever", "Comprehensive PDF report"],
+    features: ["Complete Verified Records Network", "60-second verification", "Results saved forever", "Comprehensive PDF report"],
     highlight: false,
   },
 ];

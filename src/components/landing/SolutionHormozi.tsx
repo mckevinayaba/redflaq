@@ -9,7 +9,7 @@ const pillars = [
   {
     icon: <Search size={28} color="#7C3AED" />,
     title: "RedFlaq Before Trust",
-    desc: "RedFlaq their public record in 60 seconds. SAPS wanted lists, court judgments, sex offender registry (when available). Know who you're trusting.",
+    desc: "RedFlaq their public record in 60 seconds via the RedFlaq Verified Public Records Network. Criminal records, court judgments, official warning lists. Know who you're trusting.",
   },
   {
     icon: <BookOpen size={28} color="#7C3AED" />,

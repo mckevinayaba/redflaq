@@ -11,7 +11,7 @@ const stats = [
   { value: "5×", label: "South Africa's femicide rate vs the global average", source: "WHO Global Study on Homicide" },
   { value: "92%", label: "of gender-based violence cases go unreported", source: "Africa Check / CSVR" },
   { value: "<8%", label: "conviction rate for reported GBV cases", source: "NPA Annual Report" },
-  { value: "170K+", label: "contact crimes against women reported annually", source: "SAPS Annual Statistics 2023/24" },
+  { value: "170K+", label: "contact crimes against women reported annually", source: "National Crime Statistics 2023/24" },
 ];
 
 const ProblemAgitation = () => {

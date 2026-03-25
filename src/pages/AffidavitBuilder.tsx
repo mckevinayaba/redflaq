@@ -1,3 +1,22 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════
+ * AFFIDAVIT BUILDER — COURT DOCUMENT GENERATOR
+ * ═══════════════════════════════════════════════════════════════════
+ *
+ * Generates a draft affidavit PDF in the format required by South
+ * African Magistrate's Courts, primarily for Domestic Violence Act
+ * (Act 116 of 1998) protection order applications.
+ *
+ * Users can link their journal entries as supporting evidence.
+ * The generated PDF is marked "DRAFT" and must be commissioned
+ * by a Commissioner of Oaths to become legally binding.
+ *
+ * POPIA COMPLIANCE:
+ * - Draft data stored per-user with strict RLS
+ * - PDF generated client-side (no server-side document storage)
+ * - User controls all personal information included
+ * ═══════════════════════════════════════════════════════════════════
+ */
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";

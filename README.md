@@ -1,3 +1,4 @@
+<!-- Last sync test: 2026-03-25 -->
 # 🔴 RedFlaq
 
 **South Africa's first public record safety check and evidence documentation platform.**

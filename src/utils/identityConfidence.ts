@@ -12,6 +12,8 @@
  * where an admin manually reviews the match before confirming.
  * ═══════════════════════════════════════════════════════════════════
  */
+
+export interface PersonRecord {
   id: string;
   full_name: string;
   date_wanted?: string;

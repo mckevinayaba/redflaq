@@ -944,7 +944,7 @@ const ResultsPageUpdated = () => {
                   {daysAgo !== null && daysAgo > 7 && (
                     <div className="bg-destructive/10 border-l-[3px] border-destructive p-3 mt-4">
                       <span className="font-body text-xs text-destructive font-semibold">
-                        ⚠️ This data is {daysAgo} days old and may be outdated. Verify current status with SAPS directly.
+                        ⚠️ This data is {daysAgo} days old and may be outdated. Verify current status through official channels.
                       </span>
                     </div>
                   )}

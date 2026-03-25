@@ -1,5 +1,22 @@
 /**
- * Validate a South African ID number (13 digits with Luhn check).
+ * ═══════════════════════════════════════════════════════════════════
+ * SOUTH AFRICAN ID NUMBER VALIDATION
+ * ═══════════════════════════════════════════════════════════════════
+ *
+ * Validates a 13-digit South African Identity Number per the
+ * Department of Home Affairs format: YYMMDD SSSS C A Z
+ *
+ * - YYMMDD: Date of birth
+ * - SSSS: Gender sequence (0000-4999 female, 5000-9999 male)
+ * - C: Citizenship (0 = SA citizen, 1 = permanent resident)
+ * - A: Usually 8 (was used for race pre-1994, now deprecated)
+ * - Z: Luhn check digit
+ *
+ * POPIA NOTE: ID numbers are classified as special personal
+ * information under POPIA Section 26. We validate format only —
+ * the full ID number is never stored; only partial (last 4) may
+ * be used for identity confidence matching.
+ * ═══════════════════════════════════════════════════════════════════
  */
 export function validateSAIDNumber(idNumber: string): {
   isValid: boolean;

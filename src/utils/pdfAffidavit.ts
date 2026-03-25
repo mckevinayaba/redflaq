@@ -1,3 +1,23 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════
+ * AFFIDAVIT DRAFT GENERATOR
+ * ═══════════════════════════════════════════════════════════════════
+ *
+ * Generates a court-ready PDF affidavit draft in the format required
+ * by South African Magistrate's Courts for Domestic Violence Act
+ * (DVA, Act 116 of 1998) protection order applications.
+ *
+ * The generated document includes:
+ * - Deponent personal details (required by court rules)
+ * - Statement of facts (from journal entries)
+ * - Relief sought (interim/final protection orders)
+ * - Signature block and Commissioner of Oaths section
+ *
+ * NOTE: This is a DRAFT. Users must have it commissioned by a
+ * Commissioner of Oaths (e.g., at a police station) to make it
+ * legally binding. RedFlaq clearly marks it as "DRAFT" throughout.
+ * ═══════════════════════════════════════════════════════════════════
+ */
 import jsPDF from 'jspdf';
 
 interface AffidavitData {

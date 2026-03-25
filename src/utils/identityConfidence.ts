@@ -1,3 +1,18 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════
+ * IDENTITY CONFIDENCE SCORING
+ * ═══════════════════════════════════════════════════════════════════
+ *
+ * When a safety check returns matches, this module calculates how
+ * confident we are that a matched record belongs to the searched
+ * person. Uses multiple signals: exact name match, partial ID,
+ * province, date of birth, and cross-source corroboration.
+ *
+ * A low confidence score triggers the "Human Verification" flow
+ * where an admin manually reviews the match before confirming.
+ * ═══════════════════════════════════════════════════════════════════
+ */
+
 export interface PersonRecord {
   id: string;
   full_name: string;

@@ -1,3 +1,11 @@
+/**
+ * Authentication hook — manages user session state via Lovable Cloud.
+ *
+ * POPIA COMPLIANCE:
+ * - Session data is stored in localStorage (user's device only)
+ * - Auto-refresh ensures tokens expire and rotate
+ * - No personally identifiable information is cached beyond the session
+ */
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { Session } from "@supabase/supabase-js";

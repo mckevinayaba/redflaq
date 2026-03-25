@@ -182,7 +182,7 @@ const GovDataSection = () => {
               Because the danger does not reveal itself on the first date, or second or even third. It shows up at Month 3, Month 6, Month 9 — when you are already emotionally invested, financially entangled, and isolated from support.
             </div>
             <div className="mt-auto pt-5 font-mono" style={{ fontSize: 9, letterSpacing: "0.06em", color: "hsl(var(--muted-foreground))", opacity: 0.7 }}>
-              SAPS national murder statistics (women)
+              National murder statistics (women)
             </div>
           </div>
         </div>

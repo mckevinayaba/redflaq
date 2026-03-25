@@ -382,10 +382,25 @@ Deno.serve(async (req) => {
     const challenge = url.searchParams.get("hub.challenge");
     const verifyToken = Deno.env.get("WHATSAPP_VERIFY_TOKEN");
 
-    if (mode === "subscribe" && token === verifyToken) {
-      console.log("Webhook verified");
-      return new Response(challenge, { status: 200 });
+    if (!verifyToken) {
+      console.error("WHATSAPP_VERIFY_TOKEN is not set — webhook verification will always fail");
+      return new Response("Forbidden", { status: 403 });
     }
+
+    if (!challenge) {
+      console.error("hub.challenge missing from Meta verification request");
+      return new Response("Bad Request", { status: 400 });
+    }
+
+    if (mode === "subscribe" && token === verifyToken) {
+      console.log("Webhook verified successfully");
+      return new Response(challenge, {
+        status: 200,
+        headers: { "Content-Type": "text/plain" },
+      });
+    }
+
+    console.error(`Webhook verification failed — mode=${mode}, token_match=${token === verifyToken}`);
     return new Response("Forbidden", { status: 403 });
   }
 

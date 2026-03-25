@@ -20,6 +20,7 @@
  */
 import jsPDF from 'jspdf';
 
+interface AffidavitData {
   fullName: string;
   idNumber?: string;
   address: string;

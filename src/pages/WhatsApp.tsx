@@ -18,8 +18,8 @@ const steps = [
   },
   {
     num: "03",
-    title: "Receive your public safety signal",
-    desc: "Get a result — CLEAR, LOW, MODERATE, or HIGH RISK — in under 60 seconds.",
+    title: "Get your pre-filled check link in seconds",
+    desc: "We send you a direct link to complete your safety check — pre-filled with the name and province you gave us.",
   },
   {
     num: "04",

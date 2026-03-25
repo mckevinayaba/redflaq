@@ -146,13 +146,8 @@ const getOfficialSourceUrl = (person: WantedPerson): string | null => {
   return null;
 };
 
-const getSourceLabel = (person: WantedPerson): string => {
-  if (person.source_dataset === 'za_wanted') return 'SAPS Wanted Persons';
-  if (person.source_dataset === 'za_fic_sanctions') return 'FIC Sanctions List';
-  if (person.source_dataset === 'saflii') return 'SAFLII Court Judgment';
-  if (person.source_dataset === 'gazette') return 'Government Gazette — Financial Court Order';
-  if (person.source_dataset === 'opensanctions_live') return 'OpenSanctions — Live API';
-  return 'South African Public Records';
+const getSourceLabel = (_person: WantedPerson): string => {
+  return 'RedFlaq Verified Public Records Network';
 };
 
 const getSourceTrustBadge = (person: WantedPerson): { icon: string; label: string; level: string; color: string } => {

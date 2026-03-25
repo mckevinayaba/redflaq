@@ -5,8 +5,8 @@
  *
  * This is the core "Verify" feature — the criminal record check.
  * Users enter a person's name and optional identifying info, then
- * the system searches across SAPS wanted persons, SAFLII court
- * judgments, and Government Gazette records.
+ * the system searches the RedFlaq Verified Public Records Network
+ * (criminal records, court judgments, and official warning lists).
  *
  * CREDIT SYSTEM:
  * - Each check consumes 1 credit (purchased via Yoco)

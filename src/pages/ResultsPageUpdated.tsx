@@ -892,10 +892,10 @@ const ResultsPageUpdated = () => {
                   </h3>
                   <p className="font-body text-[15px] text-muted-foreground leading-relaxed">
                     {person.source_dataset === 'saflii'
-                      ? `A criminal court judgment was found on SAFLII involving a person with this name. The judgment is from ${(person as any).saflii_court_code ? `the ${person.court_name}` : 'a South African High Court'}${(person as any).saflii_year ? ` (${(person as any).saflii_year})` : ''}. This is a public court record — not a RedFlaq determination.`
+                      ? `A criminal court judgment was found in the RedFlaq Verified Public Records Network involving a person with this name. The judgment is from ${(person as any).saflii_court_code ? `the ${person.court_name}` : 'a South African High Court'}${(person as any).saflii_year ? ` (${(person as any).saflii_year})` : ''}. This is a public court record — not a RedFlaq determination.`
                       : person.source_dataset === 'za_fic_sanctions'
-                        ? `This person appears on the FIC sanctions list. This indicates they are subject to financial restrictions or watchlist monitoring as of ${person.updated_at ? new Date(person.updated_at).toLocaleDateString('en-ZA') : 'recently'}.`
-                        : `An active arrest warrant is listed on the SAPS wanted persons database as of ${person.updated_at ? new Date(person.updated_at).toLocaleDateString('en-ZA') : 'recently'}.`
+                        ? `This person appears on a financial sanctions list in the RedFlaq Verified Public Records Network. This indicates they are subject to financial restrictions or watchlist monitoring as of ${person.updated_at ? new Date(person.updated_at).toLocaleDateString('en-ZA') : 'recently'}.`
+                        : `An active arrest warrant is listed in the RedFlaq Verified Public Records Network as of ${person.updated_at ? new Date(person.updated_at).toLocaleDateString('en-ZA') : 'recently'}.`
                     }
                   </p>
                   {person.source_dataset === 'saflii' && (

@@ -854,7 +854,7 @@ const ResultsPageUpdated = () => {
                         <div className="w-full sm:w-[200px] h-[200px] border border-border overflow-hidden">
                           <img src={person.photo_url} alt={person.full_name} className="w-full h-full object-cover grayscale-[40%]" />
                         </div>
-                        <span className="font-mono text-[10px] text-muted-foreground block mt-2">Source: {sourceLabel}</span>
+                        <span className="font-mono text-[10px] text-muted-foreground block mt-2">Source: RedFlaq Verified Public Records Network</span>
                         <span className="font-mono text-[10px] text-orange-600 block mt-1">Photos may be outdated. Do not rely on photo alone.</span>
                       </>
                     ) : (

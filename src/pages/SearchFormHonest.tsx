@@ -395,7 +395,7 @@ export default function SearchForm() {
               </div>
               <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <FileText className="h-4 w-4 text-primary" />
-                <span>Sources: SAPS, Courts (SAFLII), Government Gazette</span>
+                <span>Source: RedFlaq Verified Public Records Network</span>
               </div>
             </div>
           </form>

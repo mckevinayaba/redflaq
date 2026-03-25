@@ -43,10 +43,10 @@ const stats = [
 ];
 
 const sources = [
-  { icon: FileText, label: "SAPS Most Wanted Lists" },
-  { icon: Database, label: "FIC Financial Sanctions" },
-  { icon: Gavel, label: "Government Gazettes (court orders)" },
-  { icon: Scale, label: "SAFLII Court Judgments" },
+  { icon: FileText, label: "Criminal Records" },
+  { icon: Database, label: "Financial Sanctions" },
+  { icon: Gavel, label: "Court Orders" },
+  { icon: Scale, label: "Court Judgments" },
 ];
 
 export default function About() {

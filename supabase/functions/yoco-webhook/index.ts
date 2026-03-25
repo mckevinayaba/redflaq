@@ -5,15 +5,19 @@
  *
  * Receives webhook events from Yoco after a payment attempt.
  * On successful payment (payment.succeeded), this function:
- * 1. Updates the manual_payments record status to "verified"
- * 2. Awards search credits to the user's account
- * 3. Sends a confirmation email via the email queue
+ * 1. Verifies the X-Yoco-Signature HMAC-SHA256 header
+ * 2. Updates the manual_payments record status to "verified"
+ * 3. Awards search credits to the user's account
+ * 4. Sends a confirmation email via the email queue
  *
  * On failed payment (payment.failed), marks the record accordingly.
  *
  * SECURITY: verify_jwt = false (external callback from Yoco servers).
- * Authentication is implicit via the Yoco secret key used during
- * checkout session creation.
+ * Requests are authenticated by verifying the HMAC-SHA256 signature
+ * in the X-Yoco-Signature header against YOCO_WEBHOOK_SECRET.
+ *
+ * SETUP: Set YOCO_WEBHOOK_SECRET in Supabase project secrets.
+ * Obtain the value from the register-yoco-webhook function response.
  * ═══════════════════════════════════════════════════════════════════
  */
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
@@ -31,6 +35,68 @@ const PACKAGE_LABELS: Record<string, string> = {
   five: "Family & Friends (5 Checks)",
 };
 
+/**
+ * Verify the X-Yoco-Signature header using HMAC-SHA256.
+ *
+ * Yoco signs the raw request body with the webhook secret and sends:
+ *   X-Yoco-Signature: sha256=<hex_digest>
+ *
+ * We recompute the HMAC over the same raw body and compare using a
+ * constant-time byte comparison to prevent timing attacks.
+ */
+async function verifyYocoSignature(
+  rawBody: string,
+  signatureHeader: string | null,
+  secret: string,
+): Promise<boolean> {
+  if (!signatureHeader) {
+    console.error("Missing X-Yoco-Signature header");
+    return false;
+  }
+
+  // Header format: "sha256=<hex>"
+  const eqIndex = signatureHeader.indexOf("=");
+  if (eqIndex === -1) {
+    console.error("Malformed X-Yoco-Signature header (no '=' found):", signatureHeader);
+    return false;
+  }
+  const prefix = signatureHeader.slice(0, eqIndex);
+  const receivedHex = signatureHeader.slice(eqIndex + 1);
+
+  if (prefix !== "sha256" || !receivedHex) {
+    console.error("Unsupported signature algorithm or empty digest:", prefix);
+    return false;
+  }
+
+  const encoder = new TextEncoder();
+
+  const key = await crypto.subtle.importKey(
+    "raw",
+    encoder.encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"],
+  );
+
+  const signatureBytes = await crypto.subtle.sign(
+    "HMAC",
+    key,
+    encoder.encode(rawBody),
+  );
+
+  const computedHex = Array.from(new Uint8Array(signatureBytes))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+
+  // Constant-time comparison — prevents timing side-channel attacks
+  if (computedHex.length !== receivedHex.length) return false;
+  let mismatch = 0;
+  for (let i = 0; i < computedHex.length; i++) {
+    mismatch |= computedHex.charCodeAt(i) ^ receivedHex.charCodeAt(i);
+  }
+  return mismatch === 0;
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -43,7 +109,6 @@ serve(async (req) => {
   }
 
   try {
-    let body: any;
     const rawBody = await req.text();
 
     if (!rawBody || rawBody.trim() === "") {
@@ -52,6 +117,38 @@ serve(async (req) => {
       });
     }
 
+    // ── SIGNATURE VERIFICATION (must happen before any processing) ──
+    const webhookSecret = Deno.env.get("YOCO_WEBHOOK_SECRET");
+
+    if (!webhookSecret) {
+      // Secret not configured — refuse all requests rather than silently
+      // accepting unverified events. Set YOCO_WEBHOOK_SECRET in Supabase
+      // project secrets (run register-yoco-webhook to obtain the value).
+      console.error("YOCO_WEBHOOK_SECRET is not configured. Rejecting webhook.");
+      return new Response(
+        JSON.stringify({ error: "Webhook secret not configured on server" }),
+        { status: 500, headers: { "Content-Type": "application/json" } },
+      );
+    }
+
+    const signatureHeader = req.headers.get("x-yoco-signature");
+    const isValid = await verifyYocoSignature(rawBody, signatureHeader, webhookSecret);
+
+    if (!isValid) {
+      console.error(
+        "Yoco webhook signature verification FAILED.",
+        "Header received:", signatureHeader ?? "(none)",
+      );
+      return new Response(
+        JSON.stringify({ error: "Invalid signature" }),
+        { status: 401, headers: { "Content-Type": "application/json" } },
+      );
+    }
+
+    console.log("Yoco webhook signature verified successfully.");
+
+    // ── PARSE BODY (after signature is confirmed valid) ──
+    let body: any;
     try {
       body = JSON.parse(rawBody);
     } catch {

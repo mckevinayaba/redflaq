@@ -75,8 +75,26 @@ serve(async (req) => {
 
     const result = JSON.parse(registerBody);
 
+    // Yoco returns a `secret` field in the registration response.
+    // This is the HMAC signing secret for verifying incoming webhook requests.
+    // REQUIRED ACTION: copy the value below and set it as YOCO_WEBHOOK_SECRET
+    // in your Supabase project secrets (Settings → Edge Functions → Secrets).
+    if (result.secret) {
+      console.log("=== YOCO WEBHOOK SIGNING SECRET (store as YOCO_WEBHOOK_SECRET) ===");
+      console.log(result.secret);
+      console.log("=================================================================");
+    } else {
+      console.warn("Yoco registration response did not include a 'secret' field. Check the full response:", JSON.stringify(result));
+    }
+
     return new Response(
-      JSON.stringify({ success: true, message: "Webhook registered successfully", webhookUrl, yocoResponse: result }),
+      JSON.stringify({
+        success: true,
+        message: "Webhook registered successfully. Copy webhook_secret into YOCO_WEBHOOK_SECRET Supabase secret.",
+        webhookUrl,
+        webhook_secret: result.secret ?? null,
+        yocoResponse: result,
+      }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (err) {

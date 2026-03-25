@@ -49,7 +49,10 @@ export async function generateStatementHash(entry: {
 }
 
 /**
- * Generate SHA-256 hash of a file for evidence verification.
+ * Generate SHA-256 hash of an uploaded evidence file.
+ * Used to verify that photos, videos, audio recordings, and documents
+ * have not been modified after upload. The hash is stored in the
+ * journal_evidence table alongside the file metadata.
  */
 export async function generateFileHash(file: File): Promise<string> {
   const arrayBuffer = await file.arrayBuffer();

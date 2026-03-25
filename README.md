@@ -1,121 +1,116 @@
-<!-- Last sync test: 2026-03-25 -->
-# 🔴 RedFlaq
+# RedFlaq 🔴
 
 **South Africa's first public record safety check and evidence documentation platform.**
 
-Before you trust — RedFlaq first.
+RedFlaq closes the information inequality gap by giving ordinary people instant, affordable access to public criminal records — and free tools to document abuse for legal proceedings.
 
 ---
 
-## What Is RedFlaq?
+## Why RedFlaq Exists
 
-RedFlaq enables individuals — primarily women — to check whether someone has a criminal record, protection order, or public safety warning **before** trusting them with their life, home, or children.
+In South Africa, a traditional background check costs R2,000+ and takes 5–14 business days. Most people — especially women, tenants, and parents — cannot afford this. Meanwhile, gender-based violence affects 1 in 3 women, and survivors often lack the tools to build a legal case.
 
-It combines **instant public record checks** with a **court-ready evidence documentation system** (My Safety Journal), making it both a prevention tool and a legal preparedness platform.
-
-### The Problem RedFlaq Solves
-
-South Africa has the highest rate of gender-based violence globally. The Department of Social Development classifies GBV as a **national disaster**. Yet there is no accessible, affordable way for ordinary citizens to check someone's criminal history before making trust decisions — hiring a nanny, moving in with a partner, or accepting a tenant.
-
-RedFlaq closes that gap.
+RedFlaq solves both problems in one platform.
 
 ---
 
-## Key Features
+## Core Features
 
-### 🔍 Instant Safety Checks (R99/check)
-- Search across **4 public data sources** simultaneously
-- Cross-references SAPS wanted persons, SAFLII court judgments, Government Gazette records, and OpenSanctions
-- Multi-strategy name matching (exact, normalised, phonetic, fuzzy)
-- Risk score engine (0-100) with SA-specific legal term classification
-- Identity confidence scoring to reduce false positives
-- No fingerprints required — name-based, instant results
+### 💰 Verify — Instant Safety Check *(Paid: R99 per check)*
 
-### 📓 My Safety Journal (Free)
-- Structured incident documentation with guided prompts
-- **SHA-256 cryptographic hashing** — each verified entry is hashed and locked, creating a tamper-proof evidence chain
-- Evidence file uploads (photos, videos, audio, documents) with per-file hash verification
-- Timestamped, immutable statements that satisfy ECTA Section 15 for electronic evidence admissibility
-- Addendum system for post-verification updates (medical reports, police case numbers)
-- Exportable verification certificates for court use
+The only paid feature. A fingerprint-free criminal record check that searches across three South African public record databases in seconds:
 
-### 📄 Affidavit Builder (Free)
-- Generates court-ready PDF drafts in the format required by SA Magistrate's Courts
-- Pre-populated from journal entries for DVA (Act 116 of 1998) protection order applications
-- Includes deponent details, statement of facts, relief sought, and Commissioner of Oaths section
-- Clearly marked as DRAFT — must be commissioned at a police station
+- **SAPS Wanted Persons** — active warrants and wanted suspects
+- **SAFLII Court Judgments** — criminal case outcomes from SA courts
+- **Government Gazette** — insolvency, sequestration, and legal notices
 
-### 🛡️ Safety Tools (Free)
-- Red Flag Quiz — behavioural pattern assessment
-- First Date Safety Checklist
-- Domestic Worker Safety Guide
-- Tenant Safety Screening Guide
-- Conversation guides for difficult safety discussions
-- Provincial GBV resource directory
+Each check returns a **0–100 risk score** with color-coded badge (GREEN / YELLOW / ORANGE / RED), offense categorization, identity confidence scoring, and human verification for ambiguous matches.
 
-### 💬 WhatsApp Safety Bot
-- 7-state conversation machine for users without app access
-- Consent-first flow with POPIA compliance
-- Generates secure report links viewable on any device
-- Automated follow-up messaging
+**How it works:**
+1. User enters the person's name (+ optional ID number, province)
+2. Multi-parameter search engine queries all three databases
+3. Results displayed with risk assessment and source links
+4. Credits purchased via Yoco (South Africa's leading card payment gateway)
+
+### 📓 My Safety Journal *(Free)*
+
+A secure digital incident diary with cryptographic integrity verification:
+
+- **Structured incident recording** — who, what, when, where, abuse type classification
+- **Evidence uploads** — photos, videos, audio, documents (50MB limit per file)
+- **SHA-256 cryptographic hashing** — every statement and file receives a tamper-proof fingerprint
+- **Statement locking** — once verified, entries become immutable with timestamp proof
+- **Verification certificates** — court-ready PDF showing the SHA-256 hash chain
+- **Timeline export** — chronological PDF of all entries for protection order applications
+
+Admissible as electronic evidence under South Africa's **ECTA Section 15**. Private to the user — no admin access (strict Row-Level Security).
+
+### 📄 Affidavit Builder *(Free)*
+
+Generates draft affidavit PDFs in the format required by South African Magistrate's Courts for **Domestic Violence Act (Act 116 of 1998)** protection order applications. Users can link journal entries as supporting evidence.
+
+### 🛡️ Additional Free Features
+
+- **Behavioral Signal Detection** — AI-powered red flag assessment
+- **Safety Academy** — educational articles on dating safety, tenant safety, and more
+- **GBV Resource Directory** — national helplines, shelters, and legal aid by province
+- **Red Flag Quiz** — interactive relationship safety assessment
+- **Conversation Guide** — scripts for difficult safety conversations
+- **WhatsApp Bot** — safety checks via WhatsApp for users without app access
+- **Referral System** — share safety with friends and earn credits
+- **Discreet Mode** — hide check results from your own dashboard
 
 ---
 
-## Technical Architecture
-
-### Stack
+## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | React 18 + TypeScript + Vite |
-| UI | Tailwind CSS + shadcn/ui |
-| Backend | Lovable Cloud (Supabase) |
-| Functions | 26 Deno-based Edge Functions |
-| Database | PostgreSQL with Row-Level Security |
-| Auth | Email/password with verification |
-| Payments | Yoco (primary), Stripe, PayFast |
-| Messaging | Meta WhatsApp Cloud API |
-| Email | Resend + custom pgmq queue |
-| PWA | Service worker with install banner |
+| **Frontend** | React 18, TypeScript, Vite, Tailwind CSS |
+| **UI Components** | shadcn/ui (Radix primitives) |
+| **Backend** | Supabase (PostgreSQL, Auth, Edge Functions, Storage, Realtime) |
+| **Payments** | Yoco Checkout API (ZAR) |
+| **Hosting** | Lovable Cloud |
+| **PDF Generation** | jsPDF (client-side) |
+| **Cryptography** | Web Crypto API (SHA-256) |
 
-### Data Sources
+---
 
-| Source | Data Type |
-|--------|-----------|
-| SAPS (South African Police Service) | Wanted persons, case numbers |
-| SAFLII (Southern African Legal Information Institute) | Criminal court judgments |
-| Government Gazette | Protection orders, insolvencies, legal notices |
-| OpenSanctions | International sanctions, FIC watchlists |
+## Architecture Overview
 
-### Database
+### Database (27+ tables with Row-Level Security)
 
-- **27+ tables** with comprehensive Row-Level Security policies
-- Role-based access: `public`, `user`, `support`, `admin`, `owner`
-- `has_role()` security definer function prevents recursive RLS
-- Realtime subscriptions for credit balance updates
-- Custom pgmq email queue with dead-letter queue handling
+Key tables:
+- `wanted_persons` — SAPS wanted persons records (public read)
+- `saflii_judgments` — court judgment records (public read)
+- `gazette_records` — government gazette entries (public read)
+- `searches` — audit log of all safety checks (user-scoped)
+- `journal_entries` — incident documentation with SHA-256 hashes (user-only)
+- `journal_evidence` — uploaded evidence files with file hashes (user-only)
+- `affidavit_drafts` — legal document drafts (user-only)
+- `manual_payments` / `purchases` — payment and credit tracking
+- `user_roles` — RBAC: owner, admin, support, moderator, user
 
-### Security & Compliance
+### Edge Functions (26 Deno-based serverless functions)
 
-#### POPIA (Protection of Personal Information Act)
-- **Consent-first**: Users explicitly consent before any data processing
-- **Data minimisation**: Only publicly available records are searched
-- **Right to dispute**: Built-in dispute resolution flow (Regulation 8 compliance)
-- **ID validation without storage**: SA ID numbers are validated client-side using Luhn algorithm; full IDs are never stored
-- **Session-only auth data**: No PII cached beyond the authenticated session
+Core:
+- `multi-parameter-search` — the Verify search engine
+- `create-yoco-checkout` — payment session creation
+- `yoco-webhook` — payment confirmation and credit provisioning
+- `whatsapp-webhook` / `whatsapp-followup` — WhatsApp bot state machine
 
-#### Evidence Integrity
-- SHA-256 hashing of journal entry statement fields (description, date, time, user_id, created_at)
-- Per-file SHA-256 hashing for uploaded evidence
-- `lock_journal_entry_statement` database function makes verified entries immutable
-- Hash verification certificates exportable as PDF
-- Compliant with ECTA Section 15 (electronic evidence admissibility)
+Data ingestion:
+- `scrape-saps-wanted` / `scrape-saps-details` — SAPS data collection
+- `index-saflii` — court judgment indexing
+- `extract-gazette` — Government Gazette parsing
+- `import-opensanctions` — international sanctions data
 
-#### Infrastructure
-- Row-Level Security on all user-facing tables
-- Edge functions with JWT verification
-- No direct database access from client — all mutations through RLS-protected queries
-- Admin actions logged in `admin_events` audit table
+### Security
+
+- **POPIA compliant** — SA ID numbers validated but never stored in full; user data protected by RLS
+- **SHA-256 evidence integrity** — tamper-proof hashing for legal admissibility
+- **RBAC** — 5-tier role system (Owner > Admin > Support > Moderator > User)
+- **PCI compliant** — no card data touches our servers (Yoco handles payment security)
 
 ---
 
@@ -124,102 +119,63 @@ RedFlaq closes that gap.
 ```
 src/
 ├── components/
-│   ├── landing/        # 40+ conversion-optimised landing page sections
-│   ├── dashboard/      # User dashboard layout and navigation
-│   ├── admin/          # Admin panel layout (role-gated)
+│   ├── landing/        # Homepage sections
+│   ├── dashboard/      # User dashboard layout and components
+│   ├── admin/          # Admin panel layout and components
 │   ├── safety/         # GBV resources and safety tools
-│   ├── shop/           # Merchandise shop components
-│   ├── tools/          # Safety tool layouts
+│   ├── shop/           # Merchandise store components
+│   ├── tools/          # Interactive safety tools layout
 │   └── ui/             # shadcn/ui component library
-├── hooks/
-│   ├── useAuth.ts      # Authentication state management
-│   ├── useCredits.ts   # Credit balance with realtime updates
-│   ├── useUserRole.ts  # Role-based access control
-│   └── useAuthGuard.ts # Route protection
-├── pages/              # 60+ route pages
+├── hooks/              # Custom React hooks (auth, credits, roles)
+├── pages/              # Route-level page components
 ├── utils/
-│   ├── hashUtils.ts    # SHA-256 evidence hashing (critical path)
-│   ├── riskScoring.ts  # 0-100 risk assessment engine
-│   ├── identityConfidence.ts  # Match confidence scoring
-│   ├── idValidation.ts # SA ID number validation (Luhn)
-│   ├── pdfAffidavit.ts # Court-ready affidavit generation
-│   ├── pdfCertificate.ts # Verification certificate PDFs
-│   └── pdfTimeline.ts  # Incident timeline export
+│   ├── riskScoring.ts          # 0-100 risk score algorithm
+│   ├── identityConfidence.ts   # Match confidence scoring
+│   ├── hashUtils.ts            # SHA-256 hashing (statements + files)
+│   ├── idValidation.ts         # SA ID number validation
+│   ├── pdfAffidavit.ts         # Affidavit PDF generator
+│   ├── pdfCertificate.ts       # Verification certificate generator
+│   ├── pdfTimeline.ts          # Journal timeline export
+│   └── pdfDashboardReport.ts   # Admin analytics report
 └── integrations/
-    └── supabase/       # Auto-generated client and types
+    └── supabase/               # Auto-generated client and types
 
 supabase/
-├── functions/          # 26 Edge Functions
-│   ├── create-yoco-checkout/   # Primary SA payment gateway
-│   ├── whatsapp-webhook/       # WhatsApp bot conversation engine
-│   ├── multi-parameter-search/ # Cross-source safety check
-│   ├── import-opensanctions/   # Sanctions data import
-│   ├── extract-gazette/        # Government Gazette parser
-│   └── ...
-└── config.toml         # Project configuration
+├── functions/          # 26 Deno Edge Functions
+├── config.toml         # Function configuration
+└── migrations/         # Database schema migrations
 ```
 
 ---
 
-## Critical Code Paths
+## Business Model
 
-### 1. Safety Check Flow
-`SearchFormHonest.tsx` → `multi-parameter-search` (Edge Function) → `wanted_persons` + `saflii_judgments` + `gazette_records` → `riskScoring.ts` → `ResultsPageUpdated.tsx`
+**One paid feature. Everything else is free.**
 
-### 2. Evidence Documentation Flow
-`JournalNew.tsx` → `hashUtils.generateStatementHash()` → `lock_journal_entry_statement` (DB function) → `pdfCertificate.ts` → Court-ready PDF
+| Package | Price (ZAR) | Credits |
+|---------|-------------|---------|
+| Single Check | R99 | 1 |
+| Safety Pack | R249 | 3 |
+| Family & Friends | R399 | 5 |
 
-### 3. Payment Flow
-`PricingSection.tsx` → `create-yoco-checkout` → Yoco hosted payment → `yoco-webhook` → credit allocation → `useCredits.ts` (realtime update)
-
----
-
-## Payments
-
-| Gateway | Market | Integration |
-|---------|--------|-------------|
-| Yoco | South Africa (primary) | Server-side checkout + webhook |
-| PayFast | South Africa (alternative) | ITN callback |
-| Stripe | International | Checkout Sessions + webhook |
-
-Pricing: **R99 per safety check**. All other features (Journal, Affidavit Builder, Safety Tools) are **free**.
+The free tier delivers R12,000+ in annual value (Safety Journal, Affidavit Builder, legal resources, safety tools) — users only pay when they want to verify someone's criminal record.
 
 ---
 
-## Running Locally
+## Legal Framework
 
-```bash
-git clone <repository-url>
-cd redflaq
-npm install
-npm run dev
-```
-
-Requires environment variables:
-- `VITE_SUPABASE_URL`
-- `VITE_SUPABASE_PUBLISHABLE_KEY`
-
----
-
-## Deployment
-
-- **Frontend**: Deployed via Lovable (publish button)
-- **Backend**: Edge Functions deploy automatically on push
-- **Database**: Migrations managed through Lovable Cloud
-
----
-
-## Legal Disclaimer
-
-RedFlaq searches **publicly available records only**. It does not determine guilt or innocence. Results are advisory and should be considered alongside other due diligence. Users are responsible for how they use the information provided.
+- **POPIA** (Protection of Personal Information Act) — data minimization, consent, purpose limitation
+- **ECTA** (Electronic Communications and Transactions Act) — electronic evidence admissibility
+- **DVA** (Domestic Violence Act 116 of 1998) — affidavit format compliance
+- **Criminal Procedure Act** — offense severity classification (Schedule 1-8)
 
 ---
 
 ## Contact
 
 - **Product**: [redflaq.lovable.app](https://redflaq.lovable.app)
-- **Support**: Available through the in-app help system
+- **GitHub**: [github.com/mckevinayaba/redflaq](https://github.com/mckevinayaba/redflaq)
 
 ---
 
-*Built with conviction in South Africa. Because knowing should come before trusting.*
+*Built with [Lovable](https://lovable.dev) · Powered by Supabase · Payments by Yoco*

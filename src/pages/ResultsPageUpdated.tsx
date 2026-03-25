@@ -1,3 +1,20 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════
+ * VERIFY — SAFETY CHECK RESULTS PAGE
+ * ═══════════════════════════════════════════════════════════════════
+ *
+ * Displays the results of a criminal record safety check. Shows:
+ * - Risk score (0-100) with color-coded badge (GREEN/YELLOW/ORANGE/RED)
+ * - Matched records from SAPS, SAFLII, and Gazette sources
+ * - Identity confidence scoring per match
+ * - Human verification prompts for low-confidence matches
+ * - Post-check guidance and GBV resource links
+ *
+ * Results are fetched from the 'searches' table by search_id.
+ * The risk scoring algorithm is in src/utils/riskScoring.ts.
+ * Identity confidence logic is in src/utils/identityConfidence.ts.
+ * ═══════════════════════════════════════════════════════════════════
+ */
 import { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { toast } from "sonner";

@@ -1,3 +1,31 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════
+ * MY SAFETY JOURNAL — NEW ENTRY FORM
+ * ═══════════════════════════════════════════════════════════════════
+ *
+ * Core Evidence Documentation feature. Users document incidents of
+ * abuse, violence, or threatening behavior with structured fields
+ * designed for legal proceedings.
+ *
+ * KEY CAPABILITIES:
+ * - Structured incident recording (who, what, when, where)
+ * - Abuse type classification (physical, sexual, emotional, etc.)
+ * - Evidence file upload (photos, videos, audio, documents)
+ * - SHA-256 cryptographic hashing of both statements and files
+ * - Statement locking (immutable once verified)
+ *
+ * SHA-256 HASHING:
+ * - generateStatementHash() creates a fingerprint of the statement
+ * - generateFileHash() creates a fingerprint of each uploaded file
+ * - Hashes are stored alongside entries for tamper detection
+ * - Courts can verify entries have not been altered post-creation
+ *
+ * POPIA COMPLIANCE:
+ * - All data is user-owned and protected by RLS (user_id match)
+ * - Evidence files stored in private 'journal-evidence' bucket
+ * - No admin access to journal entries (strict user-only RLS)
+ * ═══════════════════════════════════════════════════════════════════
+ */
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";

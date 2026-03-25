@@ -1025,11 +1025,6 @@ const ResultsPageUpdated = () => {
                   <button onClick={() => { setDisputeRecord(person); setIsDisputeModalOpen(true); }} className="border-2 border-foreground bg-transparent text-foreground px-7 py-3.5 font-body text-sm font-bold cursor-pointer hover:bg-foreground hover:text-background transition-colors">
                     Challenge This Result
                   </button>
-                  {officialUrl && (
-                    <a href={officialUrl} target="_blank" rel="noopener noreferrer" className="border-2 border-foreground bg-transparent text-foreground px-7 py-3.5 font-body text-sm font-bold cursor-pointer no-underline inline-block hover:bg-foreground hover:text-background transition-colors">
-                      View Official Source
-                    </a>
-                  )}
                 </div>
 
                 {/* Legal Footer */}

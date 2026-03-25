@@ -1,6 +1,37 @@
 /**
+ * ═══════════════════════════════════════════════════════════════════
+ * CRYPTOGRAPHIC EVIDENCE INTEGRITY — SHA-256 HASHING
+ * ═══════════════════════════════════════════════════════════════════
+ *
+ * This module provides tamper-proof integrity verification for
+ * the My Safety Journal feature. Once a user "verifies" their
+ * journal entry, a SHA-256 hash is computed from the immutable
+ * statement fields and stored alongside the entry.
+ *
+ * PURPOSE:
+ * - Creates a cryptographic fingerprint of the original statement
+ * - Any modification to the locked fields would produce a different hash
+ * - Courts and legal professionals can verify the entry has not been altered
+ * - Builds trust in the evidentiary chain for protection order applications
+ *
+ * POPIA COMPLIANCE:
+ * - Hash is a one-way function — the original text cannot be derived from it
+ * - Only the user who created the entry can access the underlying data
+ * - Hash verification does not expose personal information
+ *
+ * LEGAL CONTEXT (South Africa):
+ * - Electronic Communications and Transactions Act (ECTA) Section 15
+ *   recognises data messages as admissible evidence
+ * - SHA-256 hash provides integrity assurance per ECTA requirements
+ * ═══════════════════════════════════════════════════════════════════
+ */
+
+/**
  * Generate SHA-256 hash of journal entry core statement fields.
- * These fields are immutable once verified.
+ * These fields become immutable once the entry is verified/locked.
+ *
+ * Hash input format: "description|date|time|user_id|created_at"
+ * This ensures uniqueness even if two entries share identical descriptions.
  */
 export async function generateStatementHash(entry: {
   incident_description: string;

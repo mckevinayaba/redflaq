@@ -438,10 +438,7 @@ export default function DashboardNewCheck() {
               <p className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase mb-3">Sources we check</p>
               <div className="space-y-2">
                 {[
-                  { emoji: "🚔", label: "SAPS Wanted Persons" },
-                  { emoji: "⚖️", label: "SAFLII Court Judgments" },
-                  { emoji: "📰", label: "Government Gazette" },
-                  { emoji: "💰", label: "FIC Sanctions List" },
+                  { emoji: "🛡️", label: "RedFlaq Verified Public Records Network" },
                 ].map(({ emoji, label }) => (
                   <div key={label} className="flex items-center gap-2">
                     <span className="text-sm">{emoji}</span>

@@ -3,7 +3,7 @@ import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { HelpCircle, Mail, Phone, FileText, Shield } from "lucide-react";
 
 const faqs = [
-  { q: "What does RedFlaq search?", a: "We scan South African public-record warning lists including SAPS Wanted Persons and FIC Sanctions lists." },
+  { q: "What does RedFlaq search?", a: "We scan the RedFlaq Verified Public Records Network, which includes South African public-record warning lists and sanctions databases." },
   { q: "Is the person I search notified?", a: "No. All searches are 100% confidential. The person you check will never know." },
   { q: "What does a 'Clear' result mean?", a: "It means no matches were found in the public sources we check. It is not a guarantee of someone's character." },
   { q: "Can I dispute a result?", a: "Yes. Every report includes a 'Dispute this record' option if you believe the information is incorrect." },

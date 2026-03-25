@@ -14,7 +14,7 @@ const tiers = [
   {
     name: "Standard",
     price: "R249",
-    features: ["SAPS + SAFLII Court Records", "60-second verification", "Results saved forever", "Enhanced PDF report"],
+    features: ["Full Verified Records Network", "60-second verification", "Results saved forever", "Enhanced PDF report"],
     highlight: true,
   },
   {

@@ -5,7 +5,7 @@
  *
  * Displays the results of a criminal record safety check. Shows:
  * - Risk score (0-100) with color-coded badge (GREEN/YELLOW/ORANGE/RED)
- * - Matched records from SAPS, SAFLII, and Gazette sources
+ * - Matched records from RedFlaq Verified Public Records Network
  * - Identity confidence scoring per match
  * - Human verification prompts for low-confidence matches
  * - Post-check guidance and GBV resource links
@@ -118,50 +118,17 @@ const redactId = (id?: string) => {
   return "████████" + id.slice(-4);
 };
 
-const getOfficialSourceUrl = (person: WantedPerson): string | null => {
-  // Only filter OpenSanctions entity page URLs (those 404). SAPS detail.php?bid= URLs work correctly.
-  const isBrokenUrl = (url: string) => url.includes('opensanctions.org/entities/za-wanted-');
-
-  // Check detail_page_url first
-  if (person.detail_page_url && !isBrokenUrl(person.detail_page_url) &&
-      person.detail_page_url !== 'https://www.saps.gov.za/crimestop/wanted/list.php') {
-    return person.detail_page_url;
-  }
-
-  // Check source_url
-  if (person.source_url && !isBrokenUrl(person.source_url) &&
-      person.source_url !== 'https://www.saps.gov.za/crimestop/wanted/list.php') {
-    return person.source_url;
-  }
-
-  // Check source_urls array for any valid URL
-  if (person.source_urls && person.source_urls.length > 0) {
-    for (const url of person.source_urls) {
-      if (!isBrokenUrl(url) && url !== 'https://www.saps.gov.za/crimestop/wanted/list.php') return url;
-    }
-  }
-
-  // Fallback for za_wanted: link to the SAPS wanted list page
-  if (person.source_dataset === 'za_wanted') return 'https://www.saps.gov.za/crimestop/wanted/list.php';
+// External source URLs removed — all results branded under RedFlaq Verified Public Records Network
+const getOfficialSourceUrl = (_person: WantedPerson): string | null => {
   return null;
 };
 
-const getSourceLabel = (person: WantedPerson): string => {
-  if (person.source_dataset === 'za_wanted') return 'SAPS Wanted Persons';
-  if (person.source_dataset === 'za_fic_sanctions') return 'FIC Sanctions List';
-  if (person.source_dataset === 'saflii') return 'SAFLII Court Judgment';
-  if (person.source_dataset === 'gazette') return 'Government Gazette — Financial Court Order';
-  if (person.source_dataset === 'opensanctions_live') return 'OpenSanctions — Live API';
-  return 'South African Public Records';
+const getSourceLabel = (_person: WantedPerson): string => {
+  return 'RedFlaq Verified Public Records Network';
 };
 
-const getSourceTrustBadge = (person: WantedPerson): { icon: string; label: string; level: string; color: string } => {
-  if (person.source_dataset === 'za_wanted') return { icon: '🚔', label: 'Official SAPS Database', level: 'HIGH', color: '#DC2626' };
-  if (person.source_dataset === 'za_fic_sanctions') return { icon: '💰', label: 'FIC Sanctions — Government', level: 'HIGH', color: '#DC2626' };
-  if (person.source_dataset === 'saflii') return { icon: '⚖️', label: 'Court Record — SAFLII', level: 'MEDIUM', color: '#1E40AF' };
-  if (person.source_dataset === 'gazette') return { icon: '📰', label: 'Government Gazette', level: 'MEDIUM', color: '#D97706' };
-  if (person.source_dataset === 'opensanctions_live') return { icon: '🌐', label: 'OpenSanctions — Verified API', level: 'HIGH', color: '#7C3AED' };
-  return { icon: '📋', label: 'Public Record', level: 'STANDARD', color: '#6B7280' };
+const getSourceTrustBadge = (_person: WantedPerson): { icon: string; label: string; level: string; color: string } => {
+  return { icon: '🛡️', label: 'RedFlaq Verified Public Records Network', level: 'VERIFIED', color: '#7C3AED' };
 };
 
 const getRiskBadge = (riskLevel: string) => {
@@ -887,7 +854,7 @@ const ResultsPageUpdated = () => {
                         <div className="w-full sm:w-[200px] h-[200px] border border-border overflow-hidden">
                           <img src={person.photo_url} alt={person.full_name} className="w-full h-full object-cover grayscale-[40%]" />
                         </div>
-                        <span className="font-mono text-[10px] text-muted-foreground block mt-2">Source: {sourceLabel}</span>
+                        <span className="font-mono text-[10px] text-muted-foreground block mt-2">Source: RedFlaq Verified Public Records Network</span>
                         <span className="font-mono text-[10px] text-orange-600 block mt-1">Photos may be outdated. Do not rely on photo alone.</span>
                       </>
                     ) : (
@@ -915,11 +882,6 @@ const ResultsPageUpdated = () => {
                         <span className={`font-body text-[15px] ${d.highlight ? 'text-destructive font-bold' : 'text-foreground font-medium'}`}>{d.value}</span>
                       </div>
                     ))}
-                    {officialUrl && (
-                      <a href={officialUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 font-mono text-xs text-blue-600 underline mt-2">
-                        🔗 {(person as any).match_type === 'opensanctions_api' ? 'View record details' : 'View on official source'} →
-                      </a>
-                    )}
                   </div>
                 </div>
 
@@ -930,17 +892,17 @@ const ResultsPageUpdated = () => {
                   </h3>
                   <p className="font-body text-[15px] text-muted-foreground leading-relaxed">
                     {person.source_dataset === 'saflii'
-                      ? `A criminal court judgment was found on SAFLII involving a person with this name. The judgment is from ${(person as any).saflii_court_code ? `the ${person.court_name}` : 'a South African High Court'}${(person as any).saflii_year ? ` (${(person as any).saflii_year})` : ''}. This is a public court record — not a RedFlaq determination.`
+                      ? `A criminal court judgment was found in the RedFlaq Verified Public Records Network involving a person with this name. The judgment is from ${(person as any).saflii_court_code ? `the ${person.court_name}` : 'a South African High Court'}${(person as any).saflii_year ? ` (${(person as any).saflii_year})` : ''}. This is a public court record — not a RedFlaq determination.`
                       : person.source_dataset === 'za_fic_sanctions'
-                        ? `This person appears on the FIC sanctions list. This indicates they are subject to financial restrictions or watchlist monitoring as of ${person.updated_at ? new Date(person.updated_at).toLocaleDateString('en-ZA') : 'recently'}.`
-                        : `An active arrest warrant is listed on the SAPS wanted persons database as of ${person.updated_at ? new Date(person.updated_at).toLocaleDateString('en-ZA') : 'recently'}.`
+                        ? `This person appears on a financial sanctions list in the RedFlaq Verified Public Records Network. This indicates they are subject to financial restrictions or watchlist monitoring as of ${person.updated_at ? new Date(person.updated_at).toLocaleDateString('en-ZA') : 'recently'}.`
+                        : `An active arrest warrant is listed in the RedFlaq Verified Public Records Network as of ${person.updated_at ? new Date(person.updated_at).toLocaleDateString('en-ZA') : 'recently'}.`
                     }
                   </p>
                   {person.source_dataset === 'saflii' && (
                     <div className="bg-white border-l-[3px] border-blue-700 p-4 mt-4">
                       <p className="font-body text-sm font-bold text-blue-800 mb-2">Important Limitations:</p>
                       <ul className="font-body text-sm text-muted-foreground leading-relaxed list-disc pl-5 space-y-1">
-                        <li>Only High Court and above — most GBV cases start in Magistrate Courts (not on SAFLII)</li>
+                        <li>Only High Court and above — most GBV cases start in Magistrate Courts (not indexed)</li>
                         <li>Not every conviction produces a written judgment</li>
                         <li>Name-only matching means this may be a different person</li>
                         <li>Courts may anonymise parties in certain cases</li>
@@ -982,7 +944,7 @@ const ResultsPageUpdated = () => {
                   {daysAgo !== null && daysAgo > 7 && (
                     <div className="bg-destructive/10 border-l-[3px] border-destructive p-3 mt-4">
                       <span className="font-body text-xs text-destructive font-semibold">
-                        ⚠️ This data is {daysAgo} days old and may be outdated. Verify current status with SAPS directly.
+                        ⚠️ This data is {daysAgo} days old and may be outdated. Verify current status through official channels.
                       </span>
                     </div>
                   )}
@@ -1063,18 +1025,13 @@ const ResultsPageUpdated = () => {
                   <button onClick={() => { setDisputeRecord(person); setIsDisputeModalOpen(true); }} className="border-2 border-foreground bg-transparent text-foreground px-7 py-3.5 font-body text-sm font-bold cursor-pointer hover:bg-foreground hover:text-background transition-colors">
                     Challenge This Result
                   </button>
-                  {officialUrl && (
-                    <a href={officialUrl} target="_blank" rel="noopener noreferrer" className="border-2 border-foreground bg-transparent text-foreground px-7 py-3.5 font-body text-sm font-bold cursor-pointer no-underline inline-block hover:bg-foreground hover:text-background transition-colors">
-                      View Official Source
-                    </a>
-                  )}
                 </div>
 
                 {/* Legal Footer */}
                 <div className="p-8 bg-destructive/5 border-t-2 border-destructive">
                   <h4 className="font-body text-sm font-bold text-destructive mb-3 flex items-center gap-2">⚖️ Important Legal Notice</h4>
                   <p className="font-body text-xs text-muted-foreground leading-relaxed">
-                    RedFlaq reports public records only, sourced from SAPS wanted persons lists, SAFLII court judgments, and FIC sanctions data via OpenSanctions. This is not a determination of guilt. Legal proceedings are ongoing until concluded by a court of law. Always verify current status with official sources before making any decisions.
+                    RedFlaq reports public records only, sourced from the RedFlaq Verified Public Records Network. This is not a determination of guilt. Legal proceedings are ongoing until concluded by a court of law.
                     <br /><br />
                     DO NOT use this information to harass, discriminate against, defame, or harm this person. Unlawful use of this information is prohibited and prosecutable under South African law, including under POPIA and the Harassment Act.
                     <br /><br />

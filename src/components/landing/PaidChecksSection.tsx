@@ -8,7 +8,7 @@ const tiers = [
   {
     name: "Basic",
     price: "R99",
-    features: ["SAPS Wanted Lists", "60-second verification", "Results saved forever", "Basic PDF report"],
+    features: ["Public Records Network", "60-second verification", "Results saved forever", "Basic PDF report"],
     highlight: false,
   },
   {

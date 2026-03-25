@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { MessageCircle, Shield, BookOpen, FileText, ArrowRight, Phone, Scale } from "lucide-react";
+import { MessageCircle, BookOpen, FileText, Phone, Scale } from "lucide-react";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
 import WhatsAppShareButton from "@/components/WhatsAppShareButton";

@@ -1031,7 +1031,7 @@ const ResultsPageUpdated = () => {
                 <div className="p-8 bg-destructive/5 border-t-2 border-destructive">
                   <h4 className="font-body text-sm font-bold text-destructive mb-3 flex items-center gap-2">⚖️ Important Legal Notice</h4>
                   <p className="font-body text-xs text-muted-foreground leading-relaxed">
-                    RedFlaq reports public records only, sourced from SAPS wanted persons lists, SAFLII court judgments, and FIC sanctions data via OpenSanctions. This is not a determination of guilt. Legal proceedings are ongoing until concluded by a court of law. Always verify current status with official sources before making any decisions.
+                    RedFlaq reports public records only, sourced from the RedFlaq Verified Public Records Network. This is not a determination of guilt. Legal proceedings are ongoing until concluded by a court of law.
                     <br /><br />
                     DO NOT use this information to harass, discriminate against, defame, or harm this person. Unlawful use of this information is prohibited and prosecutable under South African law, including under POPIA and the Harassment Act.
                     <br /><br />

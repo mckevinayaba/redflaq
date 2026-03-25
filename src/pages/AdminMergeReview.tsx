@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
+import AdminLayout from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -47,9 +47,7 @@ interface VerificationRequest {
 }
 
 const AdminMergeReview = () => {
-  const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
-  const [isAuthed, setIsAuthed] = useState(false);
   const [records, setRecords] = useState<WantedPerson[]>([]);
   const [loading, setLoading] = useState(true);
   const [merging, setMerging] = useState<string | null>(null);
@@ -61,23 +59,9 @@ const AdminMergeReview = () => {
   const [adminNotes, setAdminNotes] = useState("");
 
   useEffect(() => {
-    if (authLoading) return;
-    if (!user) { navigate("/admin/login"); return; }
-    checkAdminAccess();
-  }, [user, authLoading]);
-
-  const checkAdminAccess = async () => {
-    const { data: roleData } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", user!.id)
-      .in("role", ["admin", "owner"])
-      .maybeSingle();
-    if (!roleData) { navigate("/"); return; }
-    setIsAuthed(true);
     loadPendingRecords();
     loadVerificationRequests();
-  };
+  }, []);
 
   const loadPendingRecords = async () => {
     setLoading(true);
@@ -229,9 +213,8 @@ const AdminMergeReview = () => {
     }
   };
 
-  if (!isAuthed) return null;
-
   return (
+    <AdminLayout>
     <div className="min-h-screen bg-background p-6">
       <div className="max-w-5xl mx-auto">
         <div className="flex items-center gap-4 mb-8">
@@ -463,6 +446,7 @@ const AdminMergeReview = () => {
         </Tabs>
       </div>
     </div>
+    </AdminLayout>
   );
 };
 

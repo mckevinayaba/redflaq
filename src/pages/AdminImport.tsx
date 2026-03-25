@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
+import AdminLayout from "@/components/admin/AdminLayout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -43,7 +43,6 @@ interface WantedPerson {
 }
 
 const AdminImport = () => {
-  const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [csvFile, setCsvFile] = useState<File | null>(null);
@@ -64,21 +63,8 @@ const AdminImport = () => {
   });
 
   useEffect(() => {
-    if (authLoading) return;
-    if (!user) { navigate("/admin/login"); return; }
-    checkAdminAccess();
-  }, [user, authLoading]);
-
-  const checkAdminAccess = async () => {
-    const { data: roleData } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", user!.id)
-      .in("role", ["admin", "owner"])
-      .maybeSingle();
-    if (!roleData) { navigate("/"); return; }
     fetchDbStats();
-  };
+  }, []);
 
   const fetchDbStats = async () => {
     const { count: total } = await supabase
@@ -443,6 +429,7 @@ const AdminImport = () => {
   };
 
   return (
+    <AdminLayout>
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-6xl mx-auto space-y-6">
         <div className="flex justify-between items-center">
@@ -833,6 +820,7 @@ const AdminImport = () => {
         </Tabs>
       </div>
     </div>
+    </AdminLayout>
   );
 };
 

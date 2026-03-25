@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
+import AdminLayout from "@/components/admin/AdminLayout";
 import {
   Shield, Users, Search, CreditCard, BarChart3,
   ArrowLeft, FileText, GitMerge, CheckCircle2, AlertTriangle
@@ -39,30 +39,14 @@ const riskPill: Record<string, { label: string; color: string; bg: string }> = {
 };
 
 export default function AdminDashboard() {
-  const { user, loading: authLoading } = useAuth();
-  const navigate = useNavigate();
   const [kpis, setKpis] = useState<KPIs>({ totalUsers: 0, newSignups7d: 0, totalChecks: 0, checksToday: 0, revenueMonth: 0 });
   const [users, setUsers] = useState<UserRow[]>([]);
   const [checks, setChecks] = useState<CheckRow[]>([]);
   const [loading, setLoading] = useState(true);
-  const [hasAccess, setHasAccess] = useState(false);
 
   useEffect(() => {
-    if (!authLoading && !user) { navigate("/signup"); return; }
-    if (user) checkAdminAccess();
-  }, [user, authLoading]);
-
-  const checkAdminAccess = async () => {
-    const { data: roleData } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", user!.id)
-      .in("role", ["admin", "owner"])
-      .maybeSingle();
-    if (!roleData) { navigate("/"); return; }
-    setHasAccess(true);
     fetchAll();
-  };
+  }, []);
 
   const fetchAll = async () => {
     const now = new Date();
@@ -96,7 +80,7 @@ export default function AdminDashboard() {
     setLoading(false);
   };
 
-  if (!hasAccess || loading) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin" />
@@ -113,6 +97,7 @@ export default function AdminDashboard() {
   ];
 
   return (
+    <AdminLayout>
     <div className="min-h-screen bg-background">
       {/* Header */}
       <div className="border-b border-border bg-card px-6 py-4">
@@ -219,5 +204,6 @@ export default function AdminDashboard() {
         </div>
       </div>
     </div>
+    </AdminLayout>
   );
 }

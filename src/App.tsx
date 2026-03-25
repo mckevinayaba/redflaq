@@ -20,7 +20,6 @@ const SearchForm = lazy(() => import("./pages/SearchFormHonest"));
 const Results = lazy(() => import("./pages/ResultsPageUpdated"));
 const AdminScraper = lazy(() => import("./pages/AdminScraper"));
 const AdminImport = lazy(() => import("./pages/AdminImport"));
-const AdminLogin = lazy(() => import("./pages/AdminLogin"));
 const AdminVerifyPayments = lazy(() => import("./pages/AdminVerifyPayments"));
 const AdminMergeReview = lazy(() => import("./pages/AdminMergeReview"));
 const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
@@ -171,7 +170,6 @@ const App = () => (
             <Route path="/sources" element={<DataSources />} />
             <Route path="/admin/scraper" element={<AdminScraper />} />
             <Route path="/admin/import" element={<AdminImport />} />
-            <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/verify-payments" element={<AdminVerifyPayments />} />
             <Route path="/admin/merge-review" element={<AdminMergeReview />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

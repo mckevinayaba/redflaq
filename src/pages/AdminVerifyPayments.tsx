@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/hooks/useAuth';
+import AdminLayout from '@/components/admin/AdminLayout';
 import { CheckCircle2, XCircle, Copy, RefreshCw } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -21,28 +20,10 @@ interface Payment {
 }
 
 export default function AdminVerifyPayments() {
-  const { user, loading: authLoading } = useAuth();
-  const navigate = useNavigate();
   const [payments, setPayments] = useState<Payment[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'pending' | 'verified' | 'all'>('pending');
   const { toast } = useToast();
-
-  useEffect(() => {
-    if (authLoading) return;
-    if (!user) { navigate('/admin/login'); return; }
-    checkAdminAccess();
-  }, [user, authLoading]);
-
-  const checkAdminAccess = async () => {
-    const { data: roleData } = await supabase
-      .from('user_roles')
-      .select('role')
-      .eq('user_id', user!.id)
-      .in('role', ['admin', 'owner'])
-      .maybeSingle();
-    if (!roleData) { navigate('/'); return; }
-  };
 
   const fetchPayments = async () => {
     setLoading(true);
@@ -148,6 +129,7 @@ export default function AdminVerifyPayments() {
   };
 
   return (
+    <AdminLayout>
     <div className="min-h-screen bg-background p-8">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-8">
@@ -279,5 +261,6 @@ export default function AdminVerifyPayments() {
         )}
       </div>
     </div>
+    </AdminLayout>
   );
 }

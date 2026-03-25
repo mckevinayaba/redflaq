@@ -150,13 +150,8 @@ const getSourceLabel = (_person: WantedPerson): string => {
   return 'RedFlaq Verified Public Records Network';
 };
 
-const getSourceTrustBadge = (person: WantedPerson): { icon: string; label: string; level: string; color: string } => {
-  if (person.source_dataset === 'za_wanted') return { icon: '🚔', label: 'Official SAPS Database', level: 'HIGH', color: '#DC2626' };
-  if (person.source_dataset === 'za_fic_sanctions') return { icon: '💰', label: 'FIC Sanctions — Government', level: 'HIGH', color: '#DC2626' };
-  if (person.source_dataset === 'saflii') return { icon: '⚖️', label: 'Court Record — SAFLII', level: 'MEDIUM', color: '#1E40AF' };
-  if (person.source_dataset === 'gazette') return { icon: '📰', label: 'Government Gazette', level: 'MEDIUM', color: '#D97706' };
-  if (person.source_dataset === 'opensanctions_live') return { icon: '🌐', label: 'OpenSanctions — Verified API', level: 'HIGH', color: '#7C3AED' };
-  return { icon: '📋', label: 'Public Record', level: 'STANDARD', color: '#6B7280' };
+const getSourceTrustBadge = (_person: WantedPerson): { icon: string; label: string; level: string; color: string } => {
+  return { icon: '🛡️', label: 'RedFlaq Verified Public Records Network', level: 'VERIFIED', color: '#7C3AED' };
 };
 
 const getRiskBadge = (riskLevel: string) => {

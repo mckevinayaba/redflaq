@@ -10,7 +10,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "video:studio": "remotion studio src/remotion/Root.tsx",
-    "video:render": "remotion render src/remotion/Root.tsx RedFlagVideo out/video.mp4"
+    "video:render": "remotion render src/remotion/Root.tsx RedFlagVideo out/video.mp4",
+    "video:render:promo": "remotion render src/remotion/Root.tsx RedFlaqPromo out/redflaq-promo.mp4"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

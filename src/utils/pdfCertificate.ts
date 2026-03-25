@@ -1,3 +1,27 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════
+ * EVIDENCE VERIFICATION CERTIFICATE GENERATOR
+ * ═══════════════════════════════════════════════════════════════════
+ *
+ * Generates a PDF "Verification Certificate" for a locked journal
+ * entry in the My Safety Journal. This certificate proves:
+ *
+ * - The SHA-256 hash of the original statement (tamper-proof)
+ * - The exact timestamp the entry was locked
+ * - All attached evidence files with their own SHA-256 hashes
+ * - A chain-of-custody summary suitable for court submission
+ *
+ * LEGAL CONTEXT (South Africa):
+ * - Admissible under ECTA Section 15 (electronic evidence)
+ * - SHA-256 hash provides integrity assurance per ECTA requirements
+ * - Certificate format mirrors sworn affidavit structure
+ *
+ * POPIA COMPLIANCE:
+ * - Certificate is generated client-side only (no server storage)
+ * - Contains only data the user themselves entered
+ * - User controls when and with whom they share the PDF
+ * ═══════════════════════════════════════════════════════════════════
+ */
 import jsPDF from 'jspdf';
 
 interface CertificateData {

@@ -882,11 +882,6 @@ const ResultsPageUpdated = () => {
                         <span className={`font-body text-[15px] ${d.highlight ? 'text-destructive font-bold' : 'text-foreground font-medium'}`}>{d.value}</span>
                       </div>
                     ))}
-                    {officialUrl && (
-                      <a href={officialUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 font-mono text-xs text-blue-600 underline mt-2">
-                        🔗 {(person as any).match_type === 'opensanctions_api' ? 'View record details' : 'View on official source'} →
-                      </a>
-                    )}
                   </div>
                 </div>
 

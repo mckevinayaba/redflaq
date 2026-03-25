@@ -51,6 +51,20 @@ serve(async (req) => {
       });
     }
 
+    // Rate limit: 60 payment actions per 10 minutes per admin
+    // Prevents accidental rapid-fire double-processing and runaway scripts
+    const { data: allowed, error: rlErr } = await supabase.rpc('check_rate_limit', {
+      p_key:            `payment_action:admin:${user.id}`,
+      p_max_requests:   60,
+      p_window_minutes: 10,
+    });
+    if (!rlErr && !allowed) {
+      return new Response(JSON.stringify({ success: false, error: 'Too many requests' }), {
+        status: 429,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json', 'Retry-After': '60' },
+      });
+    }
+
     const { payment_id, action } = await req.json();
 
     if (!payment_id || !action) {

@@ -276,140 +276,81 @@ serve(async (req) => {
       isStaff = !!roleData;
     }
 
+    // ===== RATE LIMITING =====
+    // Applied before credit deduction to protect against cost-drain attacks.
+    // check_rate_limit() uses an atomic INSERT...ON CONFLICT bucket counter.
+    if (!isStaff) {
+      let rateLimitKey: string | null = null;
+      let rateLimitMax = 20;
+      let rateLimitWindow = 10;
+
+      if (user_id) {
+        rateLimitKey = `search:user:${user_id}`;
+        rateLimitMax = 20;    // 20 searches per 10 minutes
+        rateLimitWindow = 10;
+      } else if (payment_id) {
+        rateLimitKey = `search:payment:${payment_id}`;
+        rateLimitMax = 10;    // 10 searches per 5 minutes
+        rateLimitWindow = 5;
+      }
+
+      if (rateLimitKey) {
+        const { data: allowed, error: rlErr } = await supabase.rpc('check_rate_limit', {
+          p_key: rateLimitKey,
+          p_max_requests: rateLimitMax,
+          p_window_minutes: rateLimitWindow,
+        });
+
+        if (rlErr) {
+          console.error('Rate limit check failed:', rlErr);
+          // Fail open — do not block a legitimate search due to a rate-limit
+          // infrastructure error. Log and continue.
+        } else if (!allowed) {
+          return new Response(
+            JSON.stringify({ success: false, error: 'Too many requests. Please wait a moment before searching again.' }),
+            { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json', 'Retry-After': '60' } }
+          );
+        }
+      }
+    }
+
     // ===== CREDIT VALIDATION (MANDATORY for non-staff) =====
-    let creditDeducted = false;
-
-    if (isStaff) {
-      // Staff bypass — virtual credit, no deduction
-      console.log('Staff bypass: skipping credit check for user', user_id);
-      creditDeducted = true;
-    } else if (payment_id) {
-      // Legacy flow: deduct from specific payment
-      const { data: payment, error: fetchErr } = await supabase
-        .from('manual_payments')
-        .select('credits_used, search_credits, status')
-        .eq('payment_id', payment_id)
-        .single();
-
-      if (fetchErr || !payment) {
+    // Uses deduct_search_credit() — a SECURITY DEFINER PostgreSQL function
+    // that does the read and write atomically. No read-then-write race condition.
+    if (!isStaff) {
+      if (!payment_id && !user_id) {
         return new Response(
-          JSON.stringify({ success: false, error: 'Invalid payment ID' }),
-          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          JSON.stringify({ success: false, error: 'Authentication required to perform searches' }),
+          { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
 
-      if (payment.status !== 'verified') {
-        return new Response(
-          JSON.stringify({ success: false, error: 'Payment not yet verified' }),
-          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
-      }
+      const { data: deductRows, error: deductErr } = await supabase.rpc('deduct_search_credit', {
+        p_payment_id: payment_id || null,
+        p_user_id:    user_id    ? user_id : null,
+      });
 
-      if (payment.credits_used >= payment.search_credits) {
+      if (deductErr) {
+        console.error('Credit deduction error:', deductErr);
         return new Response(
-          JSON.stringify({ success: false, error: 'No credits remaining' }),
-          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
-      }
-
-      const { error: updateErr } = await supabase
-        .from('manual_payments')
-        .update({ credits_used: payment.credits_used + 1 })
-        .eq('payment_id', payment_id);
-
-      if (updateErr) {
-        console.error('Credit deduction error:', updateErr);
-        return new Response(
-          JSON.stringify({ success: false, error: 'Failed to deduct credit' }),
+          JSON.stringify({ success: false, error: 'Failed to process credit' }),
           { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
-      creditDeducted = true;
-    } else if (user_id) {
-      // Dashboard flow: find user's email and check for any available credits
-      if (!userEmail) {
-        const { data: userData2 } = await supabase.auth.admin.getUserById(user_id);
-        userEmail = userData2?.user?.email || null;
-      }
-      if (!userEmail) {
+
+      const deductResult = deductRows?.[0];
+      if (!deductResult?.success) {
+        const msg = deductResult?.error || 'Credit deduction failed';
+        const status = msg.includes('No credits available') ? 402 : 400;
         return new Response(
-          JSON.stringify({ success: false, error: 'User not found' }),
-          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-        );
-      }
-
-      // Check purchases table first
-      const { data: purchases } = await supabase
-        .from('purchases')
-        .select('id, credits_remaining')
-        .eq('email', userEmail)
-        .eq('status', 'completed')
-        .gt('credits_remaining', 0)
-        .order('purchased_at', { ascending: true })
-        .limit(1);
-
-      if (purchases && purchases.length > 0) {
-        const { error: updateErr } = await supabase
-          .from('purchases')
-          .update({ credits_remaining: purchases[0].credits_remaining - 1 })
-          .eq('id', purchases[0].id);
-
-        if (updateErr) {
-          console.error('Purchase credit deduction error:', updateErr);
-          return new Response(
-            JSON.stringify({ success: false, error: 'Failed to deduct credit' }),
-            { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-          );
-        }
-        creditDeducted = true;
-      }
-
-      // Check manual_payments if no purchase credits
-      if (!creditDeducted) {
-        const { data: manualPayments } = await supabase
-          .from('manual_payments')
-          .select('id, credits_used, search_credits, payment_id')
-          .eq('email', userEmail)
-          .eq('status', 'verified')
-          .order('created_at', { ascending: true });
-
-        const availablePayment = manualPayments?.find(
-          p => (p.search_credits || 0) - (p.credits_used || 0) > 0
-        );
-
-        if (availablePayment) {
-          const { error: updateErr } = await supabase
-            .from('manual_payments')
-            .update({ credits_used: (availablePayment.credits_used || 0) + 1 })
-            .eq('id', availablePayment.id);
-
-          if (updateErr) {
-            console.error('Manual payment credit deduction error:', updateErr);
-            return new Response(
-              JSON.stringify({ success: false, error: 'Failed to deduct credit' }),
-              { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-            );
-          }
-          creditDeducted = true;
-        }
-      }
-
-      if (!creditDeducted) {
-        return new Response(
-          JSON.stringify({ 
-            success: false, 
-            error: 'No credits available. Please purchase a check first.',
-            redirect: '/pricing'
+          JSON.stringify({
+            success: false,
+            error: msg,
+            ...(status === 402 ? { redirect: '/pricing' } : {}),
           }),
-          { status: 402, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          { status, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
         );
       }
-    } else {
-      // No payment_id and no user_id — reject
-      return new Response(
-        JSON.stringify({ success: false, error: 'Authentication required to perform searches' }),
-        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-      );
     }
 
     let matches: any[] = [];

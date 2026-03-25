@@ -1,3 +1,21 @@
+/**
+ * ═══════════════════════════════════════════════════════════════════
+ * YOCO WEBHOOK — PAYMENT CONFIRMATION HANDLER
+ * ═══════════════════════════════════════════════════════════════════
+ *
+ * Receives webhook events from Yoco after a payment attempt.
+ * On successful payment (payment.succeeded), this function:
+ * 1. Updates the manual_payments record status to "verified"
+ * 2. Awards search credits to the user's account
+ * 3. Sends a confirmation email via the email queue
+ *
+ * On failed payment (payment.failed), marks the record accordingly.
+ *
+ * SECURITY: verify_jwt = false (external callback from Yoco servers).
+ * Authentication is implicit via the Yoco secret key used during
+ * checkout session creation.
+ * ═══════════════════════════════════════════════════════════════════
+ */
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2.57.2";
 

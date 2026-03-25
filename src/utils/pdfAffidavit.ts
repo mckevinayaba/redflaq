@@ -18,8 +18,8 @@
  * legally binding. RedFlaq clearly marks it as "DRAFT" throughout.
  * ═══════════════════════════════════════════════════════════════════
  */
+import jsPDF from 'jspdf';
 
-interface AffidavitData {
   fullName: string;
   idNumber?: string;
   address: string;

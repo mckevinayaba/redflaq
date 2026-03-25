@@ -165,7 +165,7 @@ const getRiskExplainer = (riskLevel: string, persons: WantedPerson[]) => {
         triggers: [
           'Active warrant or legal notice found in public records',
           persons.length > 1 ? 'Multiple possible matches — verify identity carefully' : null,
-          hasSanctions ? 'Listed on FIC sanctions/watchlist' : null,
+          hasSanctions ? 'Listed on verified sanctions/watchlist' : null,
         ].filter(Boolean),
         action: 'Proceed with caution. Verify the identity carefully using date of birth and location. Consider meeting in a public place and informing someone of your plans.',
       };

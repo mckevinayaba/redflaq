@@ -1492,8 +1492,12 @@ export type Database = {
         Returns: boolean
       }
       lock_journal_entry_statement: {
-        Args: { computed_hash: string; entry_id: string }
-        Returns: undefined
+        Args: { entry_id: string }
+        Returns: string
+      }
+      verify_journal_entry_hash: {
+        Args: { entry_id: string }
+        Returns: boolean | null
       }
       move_to_dlq: {
         Args: {

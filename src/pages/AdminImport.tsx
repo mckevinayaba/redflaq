@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -42,6 +43,7 @@ interface WantedPerson {
 }
 
 const AdminImport = () => {
+  const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [csvFile, setCsvFile] = useState<File | null>(null);
@@ -61,14 +63,22 @@ const AdminImport = () => {
     id_number: "",
   });
 
-  // Check admin authentication
-  useState(() => {
-    const isAdmin = localStorage.getItem("admin_authenticated");
-    if (!isAdmin) {
-      navigate("/admin/login");
-    }
+  useEffect(() => {
+    if (authLoading) return;
+    if (!user) { navigate("/admin/login"); return; }
+    checkAdminAccess();
+  }, [user, authLoading]);
+
+  const checkAdminAccess = async () => {
+    const { data: roleData } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", user!.id)
+      .in("role", ["admin", "owner"])
+      .maybeSingle();
+    if (!roleData) { navigate("/"); return; }
     fetchDbStats();
-  });
+  };
 
   const fetchDbStats = async () => {
     const { count: total } = await supabase

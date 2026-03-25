@@ -12,16 +12,46 @@ serve(async (req) => {
   }
 
   try {
-    const { payment_id, action, admin_password } = await req.json();
-
-    // Verify admin
-    const adminPassword = Deno.env.get('ADMIN_PASSWORD');
-    if (!adminPassword || admin_password !== adminPassword) {
-      return new Response(JSON.stringify({ success: false, error: 'Unauthorized' }), {
+    // Authenticate via JWT — no password comparison.
+    // The Supabase client on the frontend automatically sends the session JWT
+    // in the Authorization header when supabase.functions.invoke() is called
+    // by a logged-in user.
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader?.startsWith('Bearer ')) {
+      return new Response(JSON.stringify({ success: false, error: 'Missing authentication' }), {
         status: 401,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
+    const token = authHeader.replace('Bearer ', '');
+
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabase = createClient(supabaseUrl, supabaseKey);
+
+    const { data: { user }, error: userError } = await supabase.auth.getUser(token);
+    if (userError || !user) {
+      return new Response(JSON.stringify({ success: false, error: 'Invalid or expired session' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    const { data: roleData } = await supabase
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', user.id)
+      .in('role', ['admin', 'owner'])
+      .maybeSingle();
+
+    if (!roleData) {
+      return new Response(JSON.stringify({ success: false, error: 'Insufficient privileges' }), {
+        status: 403,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    const { payment_id, action } = await req.json();
 
     if (!payment_id || !action) {
       return new Response(JSON.stringify({ success: false, error: 'payment_id and action required' }), {
@@ -29,10 +59,6 @@ serve(async (req) => {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
-
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const supabase = createClient(supabaseUrl, supabaseKey);
 
     // Log admin event
     await supabase.from('admin_events').insert({
@@ -66,7 +92,6 @@ serve(async (req) => {
         try {
           await supabase.functions.invoke('send-email', {
             body: {
-              admin_password: adminPassword,
               to: payment.email,
               subject: '✅ RedFlaq Payment Confirmed — Your Search Link is Ready',
               html: `

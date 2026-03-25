@@ -53,13 +53,13 @@ export default function AdminDashboard() {
   }, [user, authLoading]);
 
   const checkAdminAccess = async () => {
-    // Check via has_role function
-    const { data } = await supabase.rpc("has_role", { _user_id: user!.id, _role: "admin" });
-    if (!data) {
-      // Fallback: check localStorage for legacy admin auth
-      const legacy = localStorage.getItem("admin_authenticated");
-      if (legacy !== "true") { navigate("/"); return; }
-    }
+    const { data: roleData } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", user!.id)
+      .in("role", ["admin", "owner"])
+      .maybeSingle();
+    if (!roleData) { navigate("/"); return; }
     setHasAccess(true);
     fetchAll();
   };

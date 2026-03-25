@@ -11,6 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 const AdminLogin = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isChecking, setIsChecking] = useState(false);
 
@@ -19,27 +20,47 @@ const AdminLogin = () => {
     setIsChecking(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke('verify-admin', {
-        body: { password }
+      // Sign in with Supabase — issues a short-lived JWT managed by the client.
+      // The password is never stored anywhere after this call returns.
+      const { data: session, error: signInError } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password,
       });
 
-      if (error || !data?.success) {
+      if (signInError || !session.user) {
         toast({
           title: "Login failed",
-          description: data?.error || "Invalid password",
+          description: "Invalid email or password.",
           variant: "destructive",
         });
         setIsChecking(false);
         return;
       }
 
-      localStorage.setItem("admin_authenticated", "true");
-      localStorage.setItem("adminPassword", password);
+      // Verify the user has admin or owner role before granting access
+      const { data: roleData } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", session.user.id)
+        .in("role", ["admin", "owner"])
+        .maybeSingle();
+
+      if (!roleData) {
+        await supabase.auth.signOut();
+        toast({
+          title: "Access denied",
+          description: "This account does not have admin access.",
+          variant: "destructive",
+        });
+        setIsChecking(false);
+        return;
+      }
+
       toast({
         title: "Login successful",
         description: "Welcome to the admin panel",
       });
-      navigate("/admin/import");
+      navigate("/admin/dashboard");
     } catch (error) {
       toast({
         title: "Login failed",
@@ -60,11 +81,23 @@ const AdminLogin = () => {
           </div>
           <CardTitle className="text-2xl text-center">Admin Access</CardTitle>
           <CardDescription className="text-center">
-            Enter your admin password to access the management tools
+            Sign in with your admin account
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="admin@example.com"
+                disabled={isChecking}
+                autoFocus
+              />
+            </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
               <Input
@@ -72,13 +105,12 @@ const AdminLogin = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter admin password"
+                placeholder="Enter your password"
                 disabled={isChecking}
-                autoFocus
               />
             </div>
-            <Button type="submit" className="w-full" disabled={isChecking || !password}>
-              {isChecking ? "Checking..." : "Login"}
+            <Button type="submit" className="w-full" disabled={isChecking || !email || !password}>
+              {isChecking ? "Signing in..." : "Sign In"}
             </Button>
             <div className="text-center">
               <Button

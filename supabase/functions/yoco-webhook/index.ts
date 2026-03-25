@@ -247,7 +247,6 @@ serve(async (req) => {
 
     // ── SEND EMAIL NOTIFICATIONS ──
 
-    const adminPassword = Deno.env.get("ADMIN_PASSWORD");
     const packageLabel = PACKAGE_LABELS[packageType] || packageType;
     const now = new Date();
     const sastTime = now.toLocaleString("en-ZA", { timeZone: "Africa/Johannesburg" });
@@ -256,7 +255,7 @@ serve(async (req) => {
     try {
       await supabase.functions.invoke("send-email", {
         body: {
-          admin_password: adminPassword,
+
           to: "support@redflaq.com",
           subject: `New Payment Received — R${amountZAR} — ${email}`,
           html: `
@@ -285,7 +284,7 @@ serve(async (req) => {
     try {
       await supabase.functions.invoke("send-email", {
         body: {
-          admin_password: adminPassword,
+
           to: email,
           subject: "Your RedFlaq checks are ready ✅",
           html: `

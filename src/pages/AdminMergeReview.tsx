@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -46,6 +47,7 @@ interface VerificationRequest {
 }
 
 const AdminMergeReview = () => {
+  const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [isAuthed, setIsAuthed] = useState(false);
   const [records, setRecords] = useState<WantedPerson[]>([]);
@@ -59,15 +61,23 @@ const AdminMergeReview = () => {
   const [adminNotes, setAdminNotes] = useState("");
 
   useEffect(() => {
-    const authed = localStorage.getItem("admin_authenticated");
-    if (authed !== "true") {
-      navigate("/admin/login");
-      return;
-    }
+    if (authLoading) return;
+    if (!user) { navigate("/admin/login"); return; }
+    checkAdminAccess();
+  }, [user, authLoading]);
+
+  const checkAdminAccess = async () => {
+    const { data: roleData } = await supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", user!.id)
+      .in("role", ["admin", "owner"])
+      .maybeSingle();
+    if (!roleData) { navigate("/"); return; }
     setIsAuthed(true);
     loadPendingRecords();
     loadVerificationRequests();
-  }, [navigate]);
+  };
 
   const loadPendingRecords = async () => {
     setLoading(true);

@@ -263,32 +263,17 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // ===== STAFF/ADMIN BYPASS: Check by role AND by email =====
-    const ADMIN_EMAIL = 'mckevin.ayaba@gmail.com';
+    // ===== STAFF/ADMIN BYPASS: role-based only =====
     let isStaff = false;
-    let userEmail: string | null = null;
 
     if (user_id) {
-      // Get user email for admin check
-      const { data: userData } = await supabase.auth.admin.getUserById(user_id);
-      userEmail = userData?.user?.email || null;
-
-      // Admin email bypass
-      if (userEmail === ADMIN_EMAIL) {
-        isStaff = true;
-        console.log('Admin email bypass for', ADMIN_EMAIL);
-      }
-
-      // Also check role-based bypass
-      if (!isStaff) {
-        const { data: roleData } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', user_id)
-          .in('role', ['admin', 'owner'])
-          .maybeSingle();
-        isStaff = !!roleData;
-      }
+      const { data: roleData } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user_id)
+        .in('role', ['admin', 'owner'])
+        .maybeSingle();
+      isStaff = !!roleData;
     }
 
     // ===== CREDIT VALIDATION (MANDATORY for non-staff) =====
@@ -954,7 +939,6 @@ serve(async (req) => {
       }
 
       if (recipientEmail) {
-        const adminPassword = Deno.env.get('ADMIN_PASSWORD');
         const resultsUrl = secureToken
           ? `https://redflaq.com/reports/view/${secureToken}`
           : `https://redflaq.com/results?search_id=${searchId}`;
@@ -1063,7 +1047,6 @@ serve(async (req) => {
 
         await supabase.functions.invoke('send-email', {
           body: {
-            admin_password: adminPassword,
             to: recipientEmail,
             subject: emailSubject,
             html: emailHtml,

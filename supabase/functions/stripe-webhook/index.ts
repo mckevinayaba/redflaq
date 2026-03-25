@@ -128,12 +128,14 @@ serve(async (req) => {
         try {
           const emailRes = await fetch(`${supabaseUrl}/functions/v1/send-email`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+            },
             body: JSON.stringify({
               to: email,
               subject: "Payment Confirmed — Your RedFlaq Safety Check Credits",
               html: emailHtml,
-              admin_password: Deno.env.get("ADMIN_PASSWORD"),
             }),
           });
           const emailData = await emailRes.json();

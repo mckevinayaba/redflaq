@@ -15,7 +15,7 @@
  * - Statement locking (immutable once verified)
  *
  * SHA-256 HASHING:
- * - generateStatementHash() creates a fingerprint of the statement
+ * - Statement fingerprint is computed server-side via lock_journal_entry_statement()
  * - generateFileHash() creates a fingerprint of each uploaded file
  * - Hashes are stored alongside entries for tamper detection
  * - Courts can verify entries have not been altered post-creation
@@ -34,7 +34,7 @@ import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { Save, X, Upload, Trash2, Lock, LogOut as QuickExitIcon, ChevronDown, ChevronUp, Stethoscope, Users } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { generateStatementHash, generateFileHash } from "@/utils/hashUtils";
+import { generateFileHash } from "@/utils/hashUtils";
 
 const MIME_MAP: Record<string, string> = {
   "image/jpeg": "photo", "image/png": "photo", "image/gif": "photo", "image/webp": "photo",
@@ -225,19 +225,11 @@ export default function JournalNew() {
       setUploading(false);
     }
 
-    // Generate statement hash and lock
+    // Lock entry: hash is computed server-side from DB field values.
+    // The client never touches the hash value — see migration 20260325000001.
     try {
-      const hashHex = await generateStatementHash({
-        incident_description: description.trim(),
-        entry_date: entryDate,
-        entry_time: entryTime + ":00",
-        user_id: user!.id,
-        created_at: (entry as any).created_at,
-      });
-
       await supabase.rpc('lock_journal_entry_statement', {
         entry_id: (entry as any).id,
-        computed_hash: hashHex,
       });
 
       // Hash evidence files

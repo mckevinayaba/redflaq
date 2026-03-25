@@ -56,14 +56,13 @@ const REASONS = [
   "Other legitimate purpose",
 ];
 
-const ADMIN_EMAIL = "mckevin.ayaba@gmail.com";
-
 export default function DashboardNewCheck() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { credits: creditsRemaining, loading: creditsLoading, webhookDelayed } = useCredits(user?.email, user?.id);
   const [buyModalOpen, setBuyModalOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const [firstName, setFirstName] = useState("");
   const [surname, setSurname] = useState("");
@@ -78,7 +77,17 @@ export default function DashboardNewCheck() {
   const [useIdNumber, setUseIdNumber] = useState(false);
   const [idNumber, setIdNumber] = useState("");
 
-  const isAdmin = user?.email === ADMIN_EMAIL;
+  useEffect(() => {
+    if (!user) return;
+    supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", user.id)
+      .in("role", ["admin", "owner"])
+      .maybeSingle()
+      .then(({ data }) => setIsAdmin(!!data));
+  }, [user?.id]);
+
   const hasCredits = isAdmin || (creditsRemaining !== null && creditsRemaining > 0);
 
   const sanitize = (s: string) => s.replace(/[<>"'`]/g, "").slice(0, 100);

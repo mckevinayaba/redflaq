@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -11,7 +12,6 @@ interface EmailRequest {
   to: string;
   subject: string;
   html: string;
-  admin_password?: string;
 }
 
 serve(async (req) => {
@@ -19,25 +19,55 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  try {
-    const { to, subject, html, admin_password }: EmailRequest = await req.json();
+  // Accept either:
+  //   (a) the Supabase service-role key — used by server-to-server calls
+  //       from admin-verify-payment and other trusted edge functions, or
+  //   (b) a short-lived user JWT from an admin/owner-role account.
+  //
+  // The old admin_password body param is removed. Secrets must not be
+  // passed in request bodies where they will be logged or cached.
+  const authHeader = req.headers.get('Authorization') || '';
+  const token = authHeader.replace('Bearer ', '');
+  const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+  const serviceRoleKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
-    // Verify admin for internal calls
-    const adminPassword = Deno.env.get('ADMIN_PASSWORD');
-    if (!adminPassword || admin_password !== adminPassword) {
-      return new Response(JSON.stringify({ success: false, error: 'Unauthorized' }), {
-        status: 401,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+  let isAuthorized = false;
+
+  if (token === serviceRoleKey) {
+    // Server-to-server call from a trusted edge function using service role
+    isAuthorized = true;
+  } else if (token) {
+    // Direct call from an authenticated admin browser session
+    const supabase = createClient(supabaseUrl, serviceRoleKey);
+    const { data: { user } } = await supabase.auth.getUser(token);
+    if (user) {
+      const { data: roleData } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user.id)
+        .in('role', ['admin', 'owner'])
+        .maybeSingle();
+      isAuthorized = !!roleData;
     }
+  }
+
+  if (!isAuthorized) {
+    return new Response(JSON.stringify({ success: false, error: 'Unauthorized' }), {
+      status: 401,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
+  try {
+    const { to, subject, html }: EmailRequest = await req.json();
 
     if (!RESEND_API_KEY) {
       console.warn('RESEND_API_KEY not configured, logging email instead');
       console.log(`EMAIL TO: ${to} | SUBJECT: ${subject}`);
-      return new Response(JSON.stringify({ 
-        success: true, 
+      return new Response(JSON.stringify({
+        success: true,
         message: 'Email logged (no email service configured)',
-        logged: true 
+        logged: true
       }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });

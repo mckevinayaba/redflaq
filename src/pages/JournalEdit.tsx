@@ -5,7 +5,6 @@ import { supabase } from "@/integrations/supabase/client";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { ArrowLeft, Lock, Save, Stethoscope, Users, Upload, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { generateStatementHash } from "@/utils/hashUtils";
 
 const ABUSE_TYPES = [
   "Physical violence (hitting, kicking, choking, pushing)",
@@ -134,16 +133,9 @@ export default function JournalEdit() {
     if (!entry) return;
     setSaving(true);
     try {
-      const hashHex = await generateStatementHash({
-        incident_description: entry.incident_description,
-        entry_date: entry.entry_date,
-        entry_time: entry.entry_time,
-        user_id: entry.user_id,
-        created_at: entry.created_at,
-      });
+      // Hash computed server-side — see migration 20260325000001
       await supabase.rpc('lock_journal_entry_statement', {
         entry_id: entry.id,
-        computed_hash: hashHex,
       });
       toast({ title: "Entry verified ✓", description: "Statement is now cryptographically locked." });
       navigate(`/dashboard/journal/${id}`);

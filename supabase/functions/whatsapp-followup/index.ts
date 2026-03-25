@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { sendWhatsAppMessage } from "../_shared/whatsapp-send.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -12,13 +13,23 @@ Deno.serve(async (req) => {
   }
 
   try {
+    // Auth guard: only allow service-role or matching anon key from cron
+    const authHeader = req.headers.get("authorization") || "";
+    const anonKey = Deno.env.get("SUPABASE_ANON_KEY") || "";
+    const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "";
+
+    const token = authHeader.replace("Bearer ", "");
+    if (token !== anonKey && token !== serviceKey) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
-
-    const token = Deno.env.get("WHATSAPP_ACCESS_TOKEN")!;
-    const phoneId = Deno.env.get("WHATSAPP_PHONE_NUMBER_ID")!;
 
     // Find conversations in CHECK_SENT state where last_message_at > 2 hours ago
     const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString();
@@ -50,24 +61,9 @@ Complete your check here:
 
 ${convo.last_generated_link}`;
 
-      const res = await fetch(
-        `https://graph.facebook.com/v21.0/${phoneId}/messages`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            messaging_product: "whatsapp",
-            to: convo.phone_number,
-            type: "text",
-            text: { body: reminder },
-          }),
-        }
-      );
+      const result = await sendWhatsAppMessage(convo.phone_number, reminder);
 
-      if (res.ok) {
+      if (result.ok) {
         // Log outbound
         await supabase
           .from("whatsapp_messages")
@@ -77,12 +73,13 @@ ${convo.last_generated_link}`;
             direction: "outbound",
           });
 
-        // Move to MENU so we don't send again
+        // Move to FOLLOWUP_SENT and update last_message_at
         await supabase
           .from("whatsapp_conversations")
           .update({
             current_state: "FOLLOWUP_SENT",
             updated_at: new Date().toISOString(),
+            last_message_at: new Date().toISOString(),
           })
           .eq("id", convo.id);
 

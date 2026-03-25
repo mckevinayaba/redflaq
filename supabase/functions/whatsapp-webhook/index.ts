@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { sendWhatsAppMessage, sanitizeName } from "../_shared/whatsapp-send.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -31,48 +32,33 @@ const GREETINGS = [
   "menu",
 ];
 
+// ── Rate limiting (in-memory, per-phone, resets on cold start) ──
+const rateLimitMap = new Map<string, { count: number; windowStart: number }>();
+const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
+const RATE_LIMIT_MAX = 20; // max messages per minute per phone
+
+function isRateLimited(phone: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(phone);
+
+  if (!entry || now - entry.windowStart > RATE_LIMIT_WINDOW_MS) {
+    rateLimitMap.set(phone, { count: 1, windowStart: now });
+    return false;
+  }
+
+  entry.count++;
+  if (entry.count > RATE_LIMIT_MAX) {
+    return true;
+  }
+  return false;
+}
+
 // ── Supabase client (service role for edge function) ──
 function getSupabase() {
   return createClient(
     Deno.env.get("SUPABASE_URL")!,
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
   );
-}
-
-// ── Meta WhatsApp Send API ──
-async function sendWhatsAppMessage(to: string, text: string): Promise<{ ok: boolean; error?: string }> {
-  const token = Deno.env.get("WHATSAPP_ACCESS_TOKEN")!;
-  const phoneId = Deno.env.get("WHATSAPP_PHONE_NUMBER_ID")!;
-
-  try {
-    const res = await fetch(
-      `https://graph.facebook.com/v21.0/${phoneId}/messages`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          messaging_product: "whatsapp",
-          to,
-          type: "text",
-          text: { body: text },
-        }),
-      }
-    );
-
-    if (!res.ok) {
-      const errBody = await res.text();
-      console.error("Meta send error:", res.status, errBody);
-      return { ok: false, error: `${res.status}: ${errBody}` };
-    }
-
-    return { ok: true };
-  } catch (err) {
-    console.error("Meta send fetch error:", err);
-    return { ok: false, error: String(err) };
-  }
 }
 
 // ── Log message ──
@@ -264,6 +250,23 @@ Please try again in a moment or continue here:
 
 https://redflaq.com/whatsapp`;
 
+// ── Province matching with minimum input length ──
+function matchProvince(input: string): string | undefined {
+  const normalized = input.toLowerCase().replace(/-/g, " ").trim();
+
+  // Require at least 3 characters to prevent overly loose matching
+  if (normalized.length < 3) return undefined;
+
+  // Try exact match first
+  const exact = VALID_PROVINCES.find((p) => p === normalized);
+  if (exact) return exact;
+
+  // Then try prefix/contains match
+  return VALID_PROVINCES.find(
+    (p) => p.startsWith(normalized) || normalized.startsWith(p)
+  );
+}
+
 // ── Process state machine ──
 async function processStateMachine(
   supabase: ReturnType<typeof getSupabase>,
@@ -322,10 +325,11 @@ async function processStateMachine(
     }
 
     case "CHECK_NAME": {
-      if (msgText.length < 2) {
+      const sanitized = sanitizeName(msgText);
+      if (sanitized.length < 2) {
         reply = "Please enter the full name of the person you want to check.";
       } else {
-        updates.name_entered = msgText;
+        updates.name_entered = sanitized;
         reply = CHECK_PROVINCE_MSG;
         newState = "CHECK_PROVINCE";
       }
@@ -333,9 +337,7 @@ async function processStateMachine(
     }
 
     case "CHECK_PROVINCE": {
-      const matched = VALID_PROVINCES.find(
-        (p) => inputLower.replace(/-/g, " ").includes(p) || p.includes(inputLower.replace(/-/g, " "))
-      );
+      const matched = matchProvince(inputLower);
       if (matched) {
         const province = matched
           .split(" ")
@@ -391,19 +393,17 @@ Deno.serve(async (req) => {
 
   // POST = incoming messages
   if (req.method === "POST") {
-    // Clone request body early so error handler can read it
     const bodyText = await req.text();
     let from: string | undefined;
 
     try {
       const body = JSON.parse(bodyText);
 
-      // Meta sends various webhook events; extract message
       const entry = body?.entry?.[0];
       const changes = entry?.changes?.[0];
       const value = changes?.value;
 
-      // Check for status updates (delivery receipts) — acknowledge but skip
+      // Status updates — acknowledge but skip
       if (!value?.messages || value.messages.length === 0) {
         return new Response(JSON.stringify({ status: "ok" }), {
           status: 200,
@@ -412,10 +412,19 @@ Deno.serve(async (req) => {
       }
 
       const message = value.messages[0];
-      from = message.from; // sender phone number
+      from = message.from;
       const msgText = (message.text?.body || "").trim();
 
       console.log(`Inbound from ${from}: "${msgText}"`);
+
+      // Rate limiting
+      if (isRateLimited(from!)) {
+        console.warn(`Rate limited: ${from}`);
+        return new Response(JSON.stringify({ status: "rate_limited" }), {
+          status: 200,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
 
       const supabase = getSupabase();
 
@@ -436,7 +445,7 @@ Deno.serve(async (req) => {
       // Send reply
       const sendResult = await sendWhatsAppMessage(from!, reply);
 
-      // Log outbound (with failure info if send failed)
+      // Log outbound
       await logMessage(supabase, from!, reply, "outbound", sendResult.ok ? undefined : sendResult.error);
 
       if (!sendResult.ok) {
@@ -450,13 +459,12 @@ Deno.serve(async (req) => {
     } catch (error) {
       console.error("WhatsApp webhook error:", error);
 
-      // Try to send error message if we have the sender
       if (!from) {
         try {
           const body = JSON.parse(bodyText);
           from = body?.entry?.[0]?.changes?.[0]?.value?.messages?.[0]?.from;
         } catch (_) {
-          // ignore parse error
+          // ignore
         }
       }
 
@@ -465,7 +473,7 @@ Deno.serve(async (req) => {
       }
 
       return new Response(JSON.stringify({ status: "error" }), {
-        status: 200, // Return 200 to Meta so they don't retry
+        status: 200,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { MessageCircle, Shield, BookOpen, FileText, ArrowRight, Phone, Scale } from "lucide-react";
+import { MessageCircle, BookOpen, FileText, Phone, Scale } from "lucide-react";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
 import WhatsAppShareButton from "@/components/WhatsAppShareButton";
@@ -18,8 +18,8 @@ const steps = [
   },
   {
     num: "03",
-    title: "Receive your public safety signal",
-    desc: "Get a result — CLEAR, LOW, MODERATE, or HIGH RISK — in under 60 seconds.",
+    title: "Get your pre-filled check link in seconds",
+    desc: "We send you a direct link to complete your safety check — pre-filled with the name and province you gave us.",
   },
   {
     num: "04",

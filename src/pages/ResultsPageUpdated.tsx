@@ -902,7 +902,7 @@ const ResultsPageUpdated = () => {
                     <div className="bg-white border-l-[3px] border-blue-700 p-4 mt-4">
                       <p className="font-body text-sm font-bold text-blue-800 mb-2">Important Limitations:</p>
                       <ul className="font-body text-sm text-muted-foreground leading-relaxed list-disc pl-5 space-y-1">
-                        <li>Only High Court and above — most GBV cases start in Magistrate Courts (not on SAFLII)</li>
+                        <li>Only High Court and above — most GBV cases start in Magistrate Courts (not indexed)</li>
                         <li>Not every conviction produces a written judgment</li>
                         <li>Name-only matching means this may be a different person</li>
                         <li>Courts may anonymise parties in certain cases</li>

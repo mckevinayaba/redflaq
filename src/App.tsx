@@ -56,6 +56,8 @@ const DomesticWorkerSafety = lazy(() => import("./pages/tools/DomesticWorkerSafe
 const RedFlagQuiz = lazy(() => import("./pages/tools/RedFlagQuiz"));
 const Blog = lazy(() => import("./pages/Blog"));
 const BlogArticle = lazy(() => import("./pages/BlogArticle"));
+const Signals = lazy(() => import("./pages/Signals"));
+const SignalArticle = lazy(() => import("./pages/SignalArticle"));
 const Partners = lazy(() => import("./pages/Partners"));
 const PartnersApply = lazy(() => import("./pages/PartnersApply"));
 const DemoResult = lazy(() => import("./pages/DemoResult"));
@@ -140,6 +142,9 @@ const App = () => (
             <Route path="/tools/tenant-safety" element={<Navigate to="/safety-tips/tenant-safety" replace />} />
             <Route path="/tools/domestic-worker-safety" element={<Navigate to="/safety-tips/domestic-worker-safety" replace />} />
             <Route path="/tools/red-flag-quiz" element={<Navigate to="/safety-tips/red-flag-quiz" replace />} />
+            {/* Signals */}
+            <Route path="/signals" element={<Signals />} />
+            <Route path="/signals/:slug" element={<SignalArticle />} />
             {/* Blog */}
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogArticle />} />

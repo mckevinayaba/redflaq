@@ -182,7 +182,7 @@ export default function JournalList() {
               {firstName}'s Safety Journal
             </h1>
             <p className="font-body text-sm sm:text-base text-white/90 font-light drop-shadow-sm">
-              Private. Secure. Only yours.
+              Track what changed. Record what felt off. Preserve clarity.
             </p>
           </div>
         </div>
@@ -191,23 +191,24 @@ export default function JournalList() {
       <div className="mb-6">
         <p className="font-mono text-[11px] tracking-widest text-muted-foreground uppercase mb-1">My Safety Journal</p>
         <p className="font-body text-sm text-muted-foreground max-w-2xl mb-3">
-          Private documentation for anyone experiencing abuse.
+          You don't have to be certain something is wrong to start recording. You just have to feel that something changed.
         </p>
         <p className="font-body text-sm text-muted-foreground max-w-2xl mb-4">
-          Whether you're a woman, man, queer person, child or elder — abuse thrives in silence. My Safety Journal helps you quietly record what is happening while it is still fresh, so you are not left with only your memory later.
+          My Safety Journal creates a private, encrypted record of incidents, patterns, and moments that felt off — while they're still fresh and before memory gets manipulated.
+          Court-admissible when you need it. Invisible until then.
         </p>
         <ul className="font-body text-sm text-muted-foreground max-w-2xl space-y-1.5 list-disc list-inside">
-          <li>Record incidents with dates, times and details in your own words.</li>
-          <li>Upload photos, videos or voice recordings of injuries, damage or threats.</li>
-          <li>Save screenshots of messages, emails and social‑media posts.</li>
-          <li>Export everything to share with lawyers, police or trusted contacts when you're ready.</li>
+          <li>What happened today that didn't feel right?</li>
+          <li>What did he say that you want to remember exactly?</li>
+          <li>When did the behavior start to change?</li>
+          <li>What pattern are you noticing?</li>
         </ul>
       </div>
 
       {/* Actions */}
       <div className="flex flex-wrap gap-3 mb-6">
         <Link to="/dashboard/journal/new" className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground font-body font-bold text-sm rounded-lg hover:opacity-90 transition-colors">
-          <Plus className="h-4 w-4" /> New Entry
+          <Plus className="h-4 w-4" /> Record Something
         </Link>
         {entries.length > 0 && (
           <>

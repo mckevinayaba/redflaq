@@ -3,31 +3,21 @@ import { Link, useSearchParams } from "react-router-dom";
 import { Check, X } from "lucide-react";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import HeroHormozi from "@/components/landing/HeroHormozi";
+import TodaysSignal from "@/components/landing/TodaysSignal";
+import ThreePillarSystem from "@/components/landing/ThreePillarSystem";
 import GovDataSection from "@/components/landing/GovDataSection";
 import TickerBar from "@/components/landing/TickerBar";
-import HomepageDemo from "@/components/landing/HomepageDemo";
-
-import BarrierSection from "@/components/landing/BarrierSection";
-import SolutionHormozi from "@/components/landing/SolutionHormozi";
 import HowItWorksPlinq from "@/components/landing/HowItWorksPlinq";
-import RiskLevelsSection from "@/components/landing/RiskLevelsSection";
-import StatsBar from "@/components/landing/StatsBar";
-import PhotoGrid from "@/components/landing/PhotoGrid";
-import ValueStack from "@/components/landing/ValueStack";
-import PaidChecksSection from "@/components/landing/PaidChecksSection";
+import SafetyBaseSection from "@/components/landing/SafetyBaseSection";
+import PricingPlinq from "@/components/landing/PricingPlinq";
 import TestimonialsSectionNew from "@/components/landing/TestimonialsSectionNew";
-import IndustriesBrief from "@/components/landing/IndustriesBrief";
-import CommunityImageStrip from "@/components/landing/CommunityImageStrip";
-import CommunitySectionSA from "@/components/landing/CommunitySectionSA";
 import WhyRedflaqSection from "@/components/landing/WhyRedflaqSection";
-import FinalUrgency from "@/components/landing/FinalUrgency";
 import AdvocacySection from "@/components/landing/AdvocacySection";
 import FinalCTAPlinq from "@/components/landing/FinalCTAPlinq";
 import FAQHormozi from "@/components/landing/FAQHormozi";
 import FooterPlinq from "@/components/landing/FooterPlinq";
 import { PWAInstallBanner } from "@/components/PWAInstallBanner";
 
-// Landing page component
 const Index = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [showConfirmedBanner, setShowConfirmedBanner] = useState(false);
@@ -79,70 +69,47 @@ const Index = () => {
 
       <NavbarPlinq />
 
-      {/* 1. Hero — Editorial hook + hero image */}
+      {/* 1. Hero — Brutal direct headline + CTAs */}
       <HeroHormozi />
 
-      {/* 2. Government data — Classified as a national disaster */}
+      {/* 2. Today's Signal — featured editorial, drives daily return */}
+      <TodaysSignal />
+
+      {/* 3. Three-pillar behavioral system */}
+      <ThreePillarSystem />
+
+      {/* 4. Government data — GBVF national disaster stats */}
       <GovDataSection />
 
-      {/* 3. Trust ticker */}
+      {/* 5. Trust ticker */}
       <TickerBar />
 
-      {/* 3. Interactive demo */}
-      <HomepageDemo />
-
-
-      {/* 5. Barriers — Why no one checked before */}
-      <BarrierSection />
-
-      {/* 6. Solution pillars */}
-      <SolutionHormozi />
-
-      {/* 7. How it works — 4-step timeline */}
+      {/* 6. How it works — 3-step process */}
       <HowItWorksPlinq />
 
-      {/* 8. Risk levels — What your report reveals */}
-      <RiskLevelsSection />
+      {/* 7. Safety Base — free tools + paid checks */}
+      <SafetyBaseSection />
 
-      {/* 9. Trust stats bar */}
-      <StatsBar />
+      {/* 8. Pricing — pay per check */}
+      <div id="pricing">
+        <PricingPlinq />
+      </div>
 
-      {/* 10. Real SA women photos */}
-      <PhotoGrid />
-
-      {/* 11. Value stack — FREE tier explosion */}
-      <ValueStack />
-
-      {/* 12. Paid checks pricing */}
-      <PaidChecksSection />
-
-      {/* 13. Testimonials */}
+      {/* 9. Testimonials — editorial format */}
       <div id="testimonials">
         <TestimonialsSectionNew />
       </div>
 
-      {/* 14. Who this is for */}
-      <IndustriesBrief />
-
-      {/* 15. Community photos */}
-      <CommunityImageStrip />
-
-      {/* 16. Built for SA Women */}
-      <CommunitySectionSA />
-
-      {/* 17. Why RedFlaq Exists — Team */}
+      {/* 10. Why RedFlaq — mission */}
       <WhyRedflaqSection />
 
-      {/* 17. Advocacy badge */}
+      {/* 11. Advocacy */}
       <AdvocacySection />
 
-      {/* 18. Final urgency + CTA */}
-      <FinalUrgency />
-
-      {/* 19. Cinematic skyline CTA */}
+      {/* 12. Final CTA */}
       <FinalCTAPlinq />
 
-      {/* 18. FAQ */}
+      {/* 13. FAQ */}
       <FAQHormozi />
 
       {/* Footer */}

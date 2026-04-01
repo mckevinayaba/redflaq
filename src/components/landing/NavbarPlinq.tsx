@@ -30,38 +30,14 @@ const ICON_COLOR = '#9B8FA3';
 
 const navDropdowns: NavDropdown[] = [
   {
-    label: "Products",
+    label: "Safety Tools",
     items: [
-      { label: "RedFlaq Safety Check", desc: "Verify criminal records in 60 seconds", href: "#how-it-works", isAnchor: true, icon: <Search size={ICON_SIZE} color={ICON_COLOR} /> },
-      { label: "My Safety Journal", desc: "Private, timestamped evidence documentation", href: "/dashboard/journal", isRoute: true, icon: <BookOpen size={ICON_SIZE} color={ICON_COLOR} /> },
+      { label: "Safety Journal", desc: "Private, timestamped evidence documentation", href: "/dashboard/journal", isRoute: true, icon: <BookOpen size={ICON_SIZE} color={ICON_COLOR} /> },
       { label: "Affidavit Builder", desc: "Generate court-ready legal statements", href: "/dashboard/affidavit", isRoute: true, icon: <FileText size={ICON_SIZE} color={ICON_COLOR} /> },
       { label: "Protection Order Guide", desc: "Step-by-step legal process to get protection", href: "/safety-tips#protection-orders", isRoute: true, icon: <Scale size={ICON_SIZE} color={ICON_COLOR} /> },
+      { label: "Red Flag Quiz", desc: "Identify behavioral patterns in your relationship", href: "/safety-tips/red-flag-quiz", isRoute: true, icon: <Heart size={ICON_SIZE} color={ICON_COLOR} /> },
+      { label: "First Date Safety", desc: "Checklist before a first meeting", href: "/safety-tips/first-date-safety", isRoute: true, icon: <Users size={ICON_SIZE} color={ICON_COLOR} /> },
       { label: "Safety Resources", desc: "GBV hotlines, care centres, legal aid", href: "/safety-tips#get-help", isRoute: true, icon: <Shield size={ICON_SIZE} color={ICON_COLOR} /> },
-      { label: "Habit", desc: "Daily safety practice — build the habit of checking first", href: "/habit-coming-soon", isRoute: true, comingSoon: true, icon: <Sparkles size={ICON_SIZE} color={ICON_COLOR} /> },
-      { label: "Behavioral Signal", desc: "See patterns and early warning signs over time", href: "/behavioral-signal-coming-soon", isRoute: true, comingSoon: true, icon: <Heart size={ICON_SIZE} color={ICON_COLOR} /> },
-      { label: "RedFlaq API", desc: "Integrate safety checks into your platform", href: "/api-coming-soon", isRoute: true, comingSoon: true, icon: <ExternalLink size={ICON_SIZE} color={ICON_COLOR} /> },
-    ],
-  },
-  {
-    label: "Industries",
-    items: [
-      { label: "Women Navigating GBVF Risks", desc: "Before the first date. When something feels wrong.", href: "#who-redflaq-helps", isAnchor: true, icon: <Heart size={ICON_SIZE} color={ICON_COLOR} /> },
-      { label: "Parents Protecting Children", desc: "Before the babysitter. Before the tutor.", href: "#who-redflaq-helps", isAnchor: true, icon: <Users size={ICON_SIZE} color={ICON_COLOR} /> },
-      { label: "Protective Family Members", desc: "Sister's new boyfriend. Daughter's roommate.", href: "#who-redflaq-helps", isAnchor: true, icon: <Shield size={ICON_SIZE} color={ICON_COLOR} /> },
-      { label: "Tenants & Landlords", desc: "Who's moving in? Who owns this property?", href: "#who-redflaq-helps", isAnchor: true, icon: <Home size={ICON_SIZE} color={ICON_COLOR} /> },
-      { label: "Employers & Households", desc: "Domestic workers. Contractors. Caregivers.", href: "#who-redflaq-helps", isAnchor: true, icon: <Briefcase size={ICON_SIZE} color={ICON_COLOR} /> },
-      { label: "Support for All", desc: "Friends. Family. Community. Anyone making trust decisions.", href: "#who-redflaq-helps", isAnchor: true, icon: <Users size={ICON_SIZE} color={ICON_COLOR} /> },
-    ],
-  },
-  {
-    label: "Resources",
-    items: [
-      { label: "Safety Tips", desc: "Practical safety guides and tools", href: "/safety-tips", isRoute: true, icon: <Shield size={ICON_SIZE} color={ICON_COLOR} /> },
-      { label: "Blog", desc: "Stories, insights, and safety education", href: "/blog", isRoute: true, icon: <BookOpen size={ICON_SIZE} color={ICON_COLOR} /> },
-      { label: "Get Help Near You", desc: "Find GBV support in your area", href: "/safety-tips#get-help", isRoute: true, icon: <Phone size={ICON_SIZE} color={ICON_COLOR} /> },
-      { label: "Protection Order Guide", desc: "Legal steps to get protection", href: "/safety-tips#protection-orders", isRoute: true, icon: <Scale size={ICON_SIZE} color={ICON_COLOR} /> },
-      { label: "FAQ", desc: "Common questions answered", href: "#faq", isAnchor: true, icon: <HelpCircle size={ICON_SIZE} color={ICON_COLOR} /> },
-      { label: "RedFlaq.org", desc: "Safety hub for communities & partners", href: "/redflaq-org-coming-soon", isRoute: true, comingSoon: true, icon: <ExternalLink size={ICON_SIZE} color={ICON_COLOR} /> },
     ],
   },
   {
@@ -69,7 +45,6 @@ const navDropdowns: NavDropdown[] = [
     items: [
       { label: "About RedFlaq", desc: "Our story and mission", href: "/about", isRoute: true, icon: <Heart size={ICON_SIZE} color={ICON_COLOR} /> },
       { label: "Why We Exist", desc: "The problem we're solving", href: "/about#why-we-exist", isRoute: true, icon: <Shield size={ICON_SIZE} color={ICON_COLOR} /> },
-      { label: "Our Team", desc: "Meet the people behind RedFlaq", href: "/about#team", isRoute: true, icon: <Users size={ICON_SIZE} color={ICON_COLOR} /> },
       { label: "Partners", desc: "Organizations we work with", href: "/partners", isRoute: true, icon: <Briefcase size={ICON_SIZE} color={ICON_COLOR} /> },
       { label: "Contact", desc: "Get in touch with us", href: "#footer-contact", isAnchor: true, icon: <MessageSquare size={ICON_SIZE} color={ICON_COLOR} /> },
     ],
@@ -194,9 +169,24 @@ const NavbarPlinq = () => {
             />
           </a>
 
-          {/* Desktop: Left nav dropdowns */}
+          {/* Desktop: Left nav items */}
           {!isMobile && (
             <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginLeft: 32 }}>
+              {/* Signals — direct link */}
+              <a
+                href="/signals"
+                onClick={(e) => { e.preventDefault(); navigate('/signals'); }}
+                style={{
+                  ...fontBase, fontSize: 13, fontWeight: 500, color: '#4B4453',
+                  padding: '8px 12px', borderRadius: 8, textDecoration: 'none',
+                  transition: 'color 0.2s, background 0.2s',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.color = '#7C3AED'; e.currentTarget.style.background = 'rgba(124,58,237,0.04)'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = '#4B4453'; e.currentTarget.style.background = 'none'; }}
+              >
+                Signals
+              </a>
+
               {navDropdowns.map((dd) => (
                 <div
                   key={dd.label}
@@ -274,44 +264,12 @@ const NavbarPlinq = () => {
                 </div>
               ))}
 
-              {/* Shop link (no dropdown) */}
-              <a
-                href="/shop"
-                onClick={(e) => { e.preventDefault(); navigate('/shop'); }}
-                style={{
-                  ...fontBase, fontSize: 13, fontWeight: 500, color: '#4B4453',
-                  padding: '8px 12px', borderRadius: 8, textDecoration: 'none',
-                  transition: 'color 0.2s, background 0.2s',
-                }}
-                onMouseEnter={e => { e.currentTarget.style.color = '#7C3AED'; e.currentTarget.style.background = 'rgba(124,58,237,0.04)'; }}
-                onMouseLeave={e => { e.currentTarget.style.color = '#4B4453'; e.currentTarget.style.background = 'none'; }}
-              >
-                Shop
-              </a>
             </div>
           )}
 
           {/* Desktop: Right side */}
           {!isMobile && (
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              {/* WhatsApp */}
-              <a
-                href={WHATSAPP_CHAT_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Chat with us on WhatsApp"
-                style={{
-                  ...fontBase, fontSize: 12, fontWeight: 500, color: '#25D366',
-                  textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 5,
-                  padding: '6px 10px', borderRadius: 8, transition: 'background 0.15s',
-                }}
-                onMouseEnter={e => e.currentTarget.style.background = 'rgba(37,211,102,0.08)'}
-                onMouseLeave={e => e.currentTarget.style.background = 'none'}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                WhatsApp
-              </a>
-
               {isAuthenticated ? (
                 <>
                   {/* Avatar dropdown */}
@@ -411,14 +369,14 @@ const NavbarPlinq = () => {
                     onClick={handleRunCheck}
                     style={{
                       ...fontBase, fontWeight: 700, fontSize: 13, color: 'white',
-                      background: '#7C3AED', border: 'none', padding: '9px 20px',
+                      background: '#B52020', border: 'none', padding: '9px 20px',
                       cursor: 'pointer', borderRadius: 50,
-                      boxShadow: '0 2px 12px rgba(124, 58, 237, 0.25)',
+                      boxShadow: '0 2px 12px rgba(181, 32, 32, 0.25)',
                       transition: 'background 0.2s, transform 0.2s',
                       display: 'flex', flexDirection: 'column' as const, alignItems: 'center', lineHeight: 1.2,
                     }}
-                    onMouseEnter={e => { e.currentTarget.style.background = '#6D28D9'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
-                    onMouseLeave={e => { e.currentTarget.style.background = '#7C3AED'; e.currentTarget.style.transform = 'translateY(0)'; }}
+                    onMouseEnter={e => { e.currentTarget.style.background = '#991B1B'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.background = '#B52020'; e.currentTarget.style.transform = 'translateY(0)'; }}
                   >
                     <span>Run a Check</span>
                     <span style={{ fontSize: 10, fontWeight: 500, opacity: 0.8 }}>From R99</span>
@@ -447,7 +405,7 @@ const NavbarPlinq = () => {
                   onClick={handleRunCheck}
                   style={{
                     ...fontBase, fontWeight: 700, fontSize: 12, color: 'white',
-                    background: '#7C3AED', border: 'none', padding: '10px 16px',
+                    background: '#B52020', border: 'none', padding: '10px 16px',
                     cursor: 'pointer', borderRadius: 50, minHeight: 44,
                   }}
                 >
@@ -518,9 +476,9 @@ const NavbarPlinq = () => {
               </div>
             ))}
 
-            {/* Shop link */}
+            {/* Signals — direct link in mobile nav */}
             <button
-              onClick={() => { navigate('/shop'); setIsMenuOpen(false); }}
+              onClick={() => { navigate('/signals'); setIsMenuOpen(false); }}
               style={{
                 display: 'block', width: '100%', textAlign: 'left', padding: '14px 0',
                 ...fontBase, fontWeight: 600, fontSize: 15, color: '#2D2235',
@@ -528,28 +486,11 @@ const NavbarPlinq = () => {
                 borderBottom: '1px solid rgba(214,211,205,0.3)',
               }}
             >
-              Shop
+              Signals
             </button>
 
             {/* Action buttons */}
             <div style={{ paddingTop: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {/* WhatsApp */}
-              <a
-                href={WHATSAPP_CHAT_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  width: '100%', background: '#25D366', color: 'white',
-                  padding: '13px 20px', ...fontBase, fontWeight: 700, fontSize: 14,
-                  border: 'none', cursor: 'pointer', borderRadius: 50,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
-                  textDecoration: 'none',
-                }}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-                Chat on WhatsApp
-              </a>
-
               {/* Get Help */}
               <button
                 onClick={handleGetHelp}
@@ -570,7 +511,7 @@ const NavbarPlinq = () => {
                     Dashboard
                   </button>
                   <button onClick={handleRunCheck}
-                    style={{ width: '100%', background: '#7C3AED', color: 'white', padding: '13px 20px', ...fontBase, fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer', borderRadius: 50, boxShadow: '0 2px 12px rgba(124,58,237,0.25)' }}>
+                    style={{ width: '100%', background: '#B52020', color: 'white', padding: '13px 20px', ...fontBase, fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer', borderRadius: 50, boxShadow: '0 2px 12px rgba(181,32,32,0.25)' }}>
                     Run a Check
                   </button>
                   <button onClick={() => { handleLogout(); setIsMenuOpen(false); }}

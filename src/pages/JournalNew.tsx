@@ -322,10 +322,12 @@ export default function JournalNew() {
   const whatHappenedFields = (
     <>
       <div>
-        <label className={labelCls} style={{ color: '#5B21B6' }}>What Happened? *</label>
-        <span className={helperCls} style={{ color: '#64748B' }}>Describe the incident in detail. Include what was said or done, how it made you feel, and anything that worried you.</span>
+        <label className={labelCls} style={{ color: '#5B21B6' }}>What Are You Recording? *</label>
+        <span className={helperCls} style={{ color: '#64748B' }}>
+          What happened today that didn't feel right? What did he say that you want to remember exactly? What pattern are you noticing?
+        </span>
         <textarea value={description} onChange={e => setDescription(e.target.value.slice(0, 5000))}
-          rows={8} placeholder="Write what happened..."
+          rows={8} placeholder="What happened today that didn't feel right? What did he say that you want to remember exactly? When did the behavior start to change?"
           className={`${inputCls} resize-y`} style={{ borderRadius: 10 }} />
         <p className="font-mono text-[10px] text-muted-foreground mt-1 text-right">{description.length} / 5000 characters</p>
       </div>
@@ -497,10 +499,11 @@ export default function JournalNew() {
     <DashboardLayout>
       <div className="max-w-2xl mx-auto">
         <div className="mb-6">
-          <p className="font-mono text-[11px] tracking-widest text-muted-foreground uppercase mb-1">New Entry</p>
-          <h1 className="font-heading text-2xl sm:text-3xl text-foreground mb-2">{firstName}'s Safety Journal</h1>
+          <p className="font-mono text-[11px] tracking-widest text-muted-foreground uppercase mb-1">My Safety Journal</p>
+          <h1 className="font-heading text-2xl sm:text-3xl text-foreground mb-2">Track What Changed.</h1>
           <p className="font-body text-sm text-muted-foreground">
-            What you write here is private. Only you can see it when logged in.
+            Record what felt off. Preserve clarity before memory gets manipulated.
+            Only you can see this — encrypted, timestamped, court-admissible when you need it.
           </p>
         </div>
 
@@ -530,10 +533,10 @@ export default function JournalNew() {
               <div>
                 <h3 className="font-heading text-sm text-foreground mb-2">Privacy & Safety</h3>
                 <ul className="font-body text-xs text-muted-foreground space-y-1.5">
-                  <li>• Entries are stored securely in the cloud.</li>
-                  <li>• Only you can access your journal when logged in.</li>
-                  <li>• Your statement will be cryptographically verified to prevent tampering.</li>
-                  <li>• If someone unsafe has access to your phone, use the Quick Exit button to close this page fast.</li>
+                  <li>• Encrypted — only you can access your journal when logged in.</li>
+                  <li>• SHA-256 timestamped — tamper-evident, court-admissible when you need it.</li>
+                  <li>• No admin access — not even RedFlaq can read your entries.</li>
+                  <li>• If someone unsafe has access to your phone, use Quick Exit to close this page immediately.</li>
                 </ul>
                 <button type="button" onClick={handleQuickExit}
                   className="mt-3 inline-flex items-center gap-2 px-4 py-2 bg-destructive text-destructive-foreground font-body font-bold text-xs rounded-lg hover:opacity-90 transition-colors">

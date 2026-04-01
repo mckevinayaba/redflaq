@@ -25,29 +25,46 @@ const HeroHormozi = () => {
               </span>
             </div>
 
+            {/* Headline — brutal, direct, multi-line */}
             <h1 style={{
-              ...serif, fontSize: 'clamp(32px, 5.5vw, 56px)',
-              color: '#1F1F1F', lineHeight: 1.12, letterSpacing: '-0.02em', marginBottom: 24,
+              ...serif, fontSize: 'clamp(26px, 4.5vw, 48px)',
+              color: '#1F1F1F', lineHeight: 1.15, letterSpacing: '-0.02em', marginBottom: 28,
             }}>
-              Before you give him a spare key, give yourself{' '}
-              <em style={{ color: '#7C3AED', fontStyle: 'italic' }}>clarity.</em>
+              You Checked the Restaurant Reviews.<br />
+              You Shared Your Location.<br />
+              You Told a Friend Where You'd Be.
+              <br /><br />
+              You Think That Makes You{' '}
+              <em style={{ fontStyle: 'italic' }}>Safe.</em>
+              <br />
+              <span style={{ color: '#B52020' }}>It Doesn't.</span>
             </h1>
 
-            <p style={{
-              ...sans, fontSize: 'clamp(15px, 2vw, 18px)', color: '#555555',
-              lineHeight: 1.75, marginBottom: 12, maxWidth: 520,
-            }}>
-              November 2025: The South African government declared Gender-Based Violence a national disaster.
-            </p>
-            <p style={{
-              ...sans, fontSize: 'clamp(14px, 1.6vw, 16px)', color: '#888',
-              lineHeight: 1.7, marginBottom: 28, maxWidth: 520,
-            }}>
-              Not because women don't know it's dangerous. But because knowing hasn't changed behavior. RedFlaq exists for one moment: <strong style={{ color: '#1F1F1F' }}>before that trust is given.</strong>
-            </p>
+            {/* Subheadline */}
+            <div style={{ marginBottom: 32, maxWidth: 520 }}>
+              <p style={{
+                ...sans, fontSize: 'clamp(15px, 1.8vw, 17px)', color: '#1F1F1F',
+                lineHeight: 1.7, marginBottom: 12, fontWeight: 600,
+              }}>
+                73% of South African women killed by intimate partners knew their killer had a history of violence.
+              </p>
+              <p style={{
+                ...sans, fontSize: 'clamp(14px, 1.5vw, 15px)', color: '#555555',
+                lineHeight: 1.75, marginBottom: 16,
+              }}>
+                Public record. Checkable. Before trust was given.
+              </p>
+              <p style={{
+                ...sans, fontSize: 'clamp(14px, 1.5vw, 16px)', color: '#1F1F1F',
+                lineHeight: 1.6, fontWeight: 700,
+              }}>
+                Before you trust, RedFlaq first.
+              </p>
+            </div>
 
             {/* CTAs */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'flex-start' }}>
+              {/* Primary — Purple */}
               <button
                 onClick={() => navigate('/signup')}
                 style={{
@@ -61,25 +78,42 @@ const HeroHormozi = () => {
                 onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 6px 28px rgba(124,58,237,0.4)'; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(124,58,237,0.3)'; }}
               >
-                Create Your Free Safety Base
+                Create Free Safety Base
               </button>
-              <p style={{ ...sans, fontSize: 12, color: '#888', maxWidth: 380, lineHeight: 1.5 }}>
-                100% free account. No credit card. Pay only when you RedFlaq someone's public record (from R99).
-              </p>
+
+              {/* Secondary — Red */}
               <button
-                onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => navigate('/search-form')}
                 style={{
-                  ...sans, fontWeight: 600, fontSize: 14, color: '#7C3AED',
-                  background: 'transparent', border: '1.5px solid #7C3AED',
-                  padding: '12px 28px', borderRadius: 50, cursor: 'pointer',
-                  transition: 'background 0.2s',
+                  ...sans, fontWeight: 700, fontSize: 15, color: 'white',
+                  background: '#B52020', border: 'none', padding: '14px 32px',
+                  borderRadius: 50, cursor: 'pointer',
+                  boxShadow: '0 4px 16px rgba(181,32,32,0.25)',
+                  transition: 'transform 0.2s, box-shadow 0.2s',
+                  width: '100%', maxWidth: 380, textAlign: 'center',
                 }}
-                onMouseEnter={e => e.currentTarget.style.background = 'rgba(124,58,237,0.04)'}
-                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(181,32,32,0.35)'; }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(181,32,32,0.25)'; }}
               >
-                See How It Works
+                Run a Check — R99
+              </button>
+
+              {/* Tertiary — link */}
+              <button
+                onClick={() => navigate('/signals')}
+                style={{
+                  ...sans, fontWeight: 600, fontSize: 13, color: '#7C3AED',
+                  background: 'transparent', border: 'none', padding: '8px 0',
+                  cursor: 'pointer', textDecoration: 'underline', textUnderlineOffset: 3,
+                }}
+              >
+                Read Today's Signal →
               </button>
             </div>
+
+            <p style={{ ...sans, fontSize: 12, color: '#888', marginTop: 12, maxWidth: 380, lineHeight: 1.5 }}>
+              100% free account. No credit card. Pay only when you RedFlaq someone's public record.
+            </p>
           </div>
 
           {/* Right — Hero Image */}
@@ -97,7 +131,6 @@ const HeroHormozi = () => {
                 loading="eager"
               />
             </div>
-
           </div>
         </div>
       </div>

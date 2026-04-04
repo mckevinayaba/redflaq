@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import SignalModal from "./SignalModal";
 import { type SignalData, CATEGORY_LABELS, formatSignalDate } from "./types";
+import { getArticleBySlug } from "./signalArticles";
 
 // ── Fallback hardcoded content ───────────────────────────────────
 const FALLBACK: SignalData = {
@@ -20,10 +21,14 @@ const SignalsTodayFeatured = () => {
   const [signal, setSignal] = useState<SignalData>(FALLBACK);
   const [isMobile, setIsMobile] = useState(false);
   const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(247);
-  const [commentCount] = useState(34);
   const [modalOpen, setModalOpen] = useState(false);
   const [cardHovered, setCardHovered] = useState(false);
+
+  // Seed card display counts from article map — derived from current signal slug
+  const resolvedArticle = getArticleBySlug(signal.slug);
+  const likeCountSeed = resolvedArticle?.seededLikeCount ?? 247;
+  const commentCount = resolvedArticle?.seededCommentCount ?? 34;
+  const [likeCount, setLikeCount] = useState(likeCountSeed);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -299,10 +304,6 @@ const SignalsTodayFeatured = () => {
         <SignalModal
           signal={signal}
           onClose={() => setModalOpen(false)}
-          liked={liked}
-          likeCount={likeCount}
-          onLike={() => handleLike()}
-          commentCount={commentCount}
         />
       )}
     </>

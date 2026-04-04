@@ -1,30 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/hooks/useAuth";
-import { type SignalData, CATEGORY_LABELS, formatSignalDate } from "./types";
+import { type SignalData, CATEGORY_LABELS } from "./types";
+import { getArticleBySlug, type SignalArticleContent } from "./signalArticles";
 
-// ── Full article content for the featured fallback signal ────────
-// Completing the spec's cut-off paragraph 2 and continuing.
-const FEATURED_BODY_PARAGRAPHS = [
-  "Every time he lost his temper, you walked away wondering what you did wrong. You replayed the conversation. You adjusted your tone. You softened your language for next time. That is not confusion. That is conditioning.",
-  "Rage is not something that slips out when someone cannot help themselves. In most cases — particularly in intimate partner violence — rage is deployed. It is used because it works. It ends arguments. It resets power. It teaches you what happens when you question him.",
-  "Notice what happens after. Does he apologise? Does he minimise? Does he blame you for provoking him? Each of those responses tells you something different. The apology without change is a reset button. The minimisation is a correction. The blame is a transfer. What they all have in common: he is not confused about what happened. He knows exactly what he did.",
-  "You have been asking the wrong question. You keep asking whether he can control it. Whether he is working on it. Whether it is just stress. The right question is: what does he receive when he does it? If the answer is compliance, silence, space, or forgiveness — then his anger is working exactly as intended.",
-  "That is not a man losing control. That is a man whose control strategy is working perfectly.",
-];
-
-const FEATURED_PULL_QUOTE =
-  "Rage is not something that slips out. It is deployed. The question is not whether he can control it. The question is what he receives every time he uses it on you.";
-
-const FEATURED_ACTION = {
-  headline: "Name what you have been calling 'his temper'.",
-  description:
-    "Write down the last three times it happened. What did you change after each one? That change is the evidence that his strategy is working.",
-  cta: "Run a Background Check",
-  href: "/search-form",
-};
-
-// ── Hardcoded seed comments ──────────────────────────────────────
+// ── Seed comments (featured article) ────────────────────────────
 interface Comment {
   id: string;
   initial: string;
@@ -51,40 +30,39 @@ const SEED_COMMENTS: Comment[] = [
 ];
 
 // ── Props ────────────────────────────────────────────────────────
-interface SignalModalProps {
+export interface SignalModalProps {
   signal: SignalData;
   onClose: () => void;
-  liked: boolean;
-  likeCount: number;
-  onLike: () => void;
-  commentCount?: number;
 }
 
 // ── Component ────────────────────────────────────────────────────
-const SignalModal = ({
-  signal,
-  onClose,
-  liked,
-  likeCount,
-  onLike,
-  commentCount = 34,
-}: SignalModalProps) => {
+const SignalModal = ({ signal, onClose }: SignalModalProps) => {
   const navigate = useNavigate();
-  const { isAuthenticated, user } = useAuth();
-  const [newComment, setNewComment] = useState("");
-  const [comments, setComments] = useState<Comment[]>(SEED_COMMENTS);
-  const [closeHovered, setCloseHovered] = useState(false);
+
+  // Resolve article content from structured map; fall back to signal data
+  const article: SignalArticleContent | undefined = getArticleBySlug(signal.slug);
+
+  // Engagement display state (seeded from article map; local only in 10A)
+  const initialLikes = article?.seededLikeCount ?? 247;
+  const initialComments = article?.seededCommentCount ?? 34;
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(initialLikes);
+  const [comments] = useState<Comment[]>(SEED_COMMENTS);
+
+  // UI refs
   const commentsRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const isFeaturedFallback =
-    signal.id === "fallback" ||
-    signal.slug === "he-was-not-losing-control-he-was-using-it";
+  const categoryLabel = CATEGORY_LABELS[signal.category] || signal.category;
 
-  // Lock body scroll, handle Escape
+  // Body scroll lock + ESC
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+
+    // Scroll modal to top on open
+    containerRef.current?.scrollTo({ top: 0 });
+
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
     };
@@ -95,53 +73,33 @@ const SignalModal = ({
     };
   }, [onClose]);
 
-  const handleShare = async () => {
-    const url = `${window.location.origin}/signals/${signal.slug}`;
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: signal.title, url });
-      } catch {
-        /* user cancelled */
-      }
-    } else {
-      await navigator.clipboard.writeText(url);
-    }
+  const handleLike = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setLiked((prev) => {
+      setLikeCount((c) => (prev ? c - 1 : c + 1));
+      return !prev;
+    });
   };
 
   const handleScrollToComments = (e: React.MouseEvent) => {
     e.stopPropagation();
     commentsRef.current?.scrollIntoView({ behavior: "smooth" });
-    setTimeout(() => inputRef.current?.focus(), 400);
   };
 
-  const handlePostComment = () => {
-    const text = newComment.trim();
-    if (!text) return;
-    const initial =
-      user?.user_metadata?.full_name?.charAt(0)?.toUpperCase() ||
-      user?.email?.charAt(0)?.toUpperCase() ||
-      "Y";
-    const displayName =
-      user?.user_metadata?.full_name || user?.email?.split("@")[0] || "You";
-    setComments((prev) => [
-      ...prev,
-      {
-        id: `local-${Date.now()}`,
-        initial,
-        name: displayName,
-        time: "just now",
-        text,
-      },
-    ]);
-    setNewComment("");
+  const handleShare = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const url = `${window.location.origin}/signals/${signal.slug}`;
+    if (navigator.share) {
+      try { await navigator.share({ title: signal.title, url }); } catch { /* cancelled */ }
+    } else {
+      await navigator.clipboard.writeText(url);
+    }
   };
-
-  const categoryLabel =
-    CATEGORY_LABELS[signal.category] || signal.category;
 
   return (
     <div
       onClick={onClose}
+      ref={containerRef}
       style={{
         position: "fixed",
         inset: 0,
@@ -156,7 +114,7 @@ const SignalModal = ({
         overflowY: "auto",
       }}
     >
-      {/* Modal box — stop propagation so clicks inside don't close */}
+      {/* ── Modal box ── */}
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
@@ -172,25 +130,19 @@ const SignalModal = ({
         {/* ── HEADER ── */}
         <div
           style={{
-            background:
-              "linear-gradient(160deg, #13091F 0%, #1E1030 55%, #7C3AED 100%)",
+            background: "linear-gradient(160deg, #13091F 0%, #1E1030 55%, #7C3AED 100%)",
             padding: "2.5rem 2rem 2rem",
             position: "relative",
           }}
         >
-          {/* Close button */}
           <button
             onClick={onClose}
-            onMouseEnter={() => setCloseHovered(true)}
-            onMouseLeave={() => setCloseHovered(false)}
-            aria-label="Close"
+            aria-label="Close article"
             style={{
               position: "absolute",
               top: "1rem",
               right: "1rem",
-              background: closeHovered
-                ? "rgba(255,255,255,0.2)"
-                : "rgba(255,255,255,0.1)",
+              background: "rgba(255,255,255,0.1)",
               border: "none",
               color: "#FFFFFF",
               width: 32,
@@ -201,33 +153,37 @@ const SignalModal = ({
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              transition: "background 0.15s",
               lineHeight: 1,
+              transition: "background 0.15s",
             }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.background = "rgba(255,255,255,0.2)")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.background = "rgba(255,255,255,0.1)")
+            }
           >
             ×
           </button>
 
-          {/* Category tag */}
           <div
             style={{
               display: "inline-block",
               background: "var(--rf-purple)",
               color: "#FFFFFF",
-              fontSize: "0.68rem",
+              fontSize: "0.62rem",
               fontFamily: "var(--rf-sans)",
               fontWeight: 700,
-              letterSpacing: "0.08em",
+              letterSpacing: "0.1em",
               textTransform: "uppercase",
               borderRadius: "2rem",
-              padding: "0.28rem 0.7rem",
-              marginBottom: "0.85rem",
+              padding: "0.25rem 0.6rem",
+              marginBottom: "0.7rem",
             }}
           >
             {categoryLabel}
           </div>
 
-          {/* Title */}
           <h2
             style={{
               fontFamily: "var(--rf-serif)",
@@ -236,7 +192,7 @@ const SignalModal = ({
               color: "#FFFFFF",
               lineHeight: 1.25,
               letterSpacing: "-0.02em",
-              paddingRight: "2rem",
+              paddingRight: "2.5rem",
             }}
           >
             {signal.title}
@@ -245,25 +201,29 @@ const SignalModal = ({
 
         {/* ── BODY ── */}
         <div style={{ padding: "2rem" }}>
-          {isFeaturedFallback ? (
-            // Full structured article for the featured fallback
+          {article ? (
+            // Structured article from content map
             <>
-              <p style={pStyle}>{FEATURED_BODY_PARAGRAPHS[0]}</p>
-              <p style={pStyle}>{FEATURED_BODY_PARAGRAPHS[1]}</p>
-
-              {/* Pull-quote */}
-              <blockquote style={pullQuoteStyle}>
-                {FEATURED_PULL_QUOTE}
-              </blockquote>
-
-              <p style={pStyle}>{FEATURED_BODY_PARAGRAPHS[2]}</p>
-              <p style={pStyle}>{FEATURED_BODY_PARAGRAPHS[3]}</p>
-              <p style={pStyle}>{FEATURED_BODY_PARAGRAPHS[4]}</p>
-
-              <ActionBox {...FEATURED_ACTION} />
+              {article.bodySections.map((section, i) =>
+                section.type === "pullQuote" ? (
+                  <blockquote key={i} style={pullQuoteStyle}>
+                    {section.text}
+                  </blockquote>
+                ) : (
+                  <p key={i} style={pStyle}>
+                    {section.text}
+                  </p>
+                )
+              )}
+              <ActionBox
+                headline={article.action.headline}
+                description={article.action.description}
+                cta={article.action.cta}
+                href={article.action.href}
+              />
             </>
           ) : signal.body ? (
-            // HTML body from Supabase (academy_articles.content)
+            // HTML body from Supabase (admin-authored, safe to render)
             <>
               <div
                 style={{
@@ -282,7 +242,7 @@ const SignalModal = ({
               />
             </>
           ) : (
-            // Excerpt fallback for signals without body yet
+            // Excerpt fallback
             <>
               <p style={pStyle}>{signal.excerpt}</p>
               <ActionBox
@@ -307,10 +267,9 @@ const SignalModal = ({
             gap: "0.75rem",
           }}
         >
-          {/* Left: like / comment / share */}
           <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
             <EngagementBtn
-              onClick={(e) => { e.stopPropagation(); onLike(); }}
+              onClick={handleLike}
               active={liked}
               icon={liked ? "♥" : "♡"}
               count={likeCount}
@@ -319,17 +278,16 @@ const SignalModal = ({
             <EngagementBtn
               onClick={handleScrollToComments}
               icon="💬"
-              count={commentCount}
+              count={initialComments}
               label="Comments"
             />
             <EngagementBtn
-              onClick={(e) => { e.stopPropagation(); handleShare(); }}
+              onClick={handleShare}
               icon="🔗"
               label="Share"
             />
           </div>
 
-          {/* Right: product CTA */}
           <button
             onClick={() => { onClose(); navigate("/search-form"); }}
             style={{
@@ -373,14 +331,22 @@ const SignalModal = ({
               marginBottom: "1.25rem",
             }}
           >
-            Comments ({comments.length + (commentCount - SEED_COMMENTS.length)})
+            Comments ({initialComments})
           </h4>
 
-          {/* Comment list */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem", marginBottom: "1.5rem" }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "1.25rem",
+              marginBottom: "1.5rem",
+            }}
+          >
             {comments.map((c) => (
-              <div key={c.id} style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start" }}>
-                {/* Avatar */}
+              <div
+                key={c.id}
+                style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start" }}
+              >
                 <div
                   style={{
                     width: 36,
@@ -399,17 +365,44 @@ const SignalModal = ({
                 >
                   {c.initial}
                 </div>
-
                 <div style={{ flex: 1 }}>
-                  <div style={{ display: "flex", alignItems: "baseline", gap: "0.5rem", marginBottom: "0.25rem" }}>
-                    <span style={{ fontFamily: "var(--rf-sans)", fontSize: "0.8rem", fontWeight: 600, color: "var(--rf-ink)" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "baseline",
+                      gap: "0.5rem",
+                      marginBottom: "0.25rem",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontFamily: "var(--rf-sans)",
+                        fontSize: "0.8rem",
+                        fontWeight: 600,
+                        color: "var(--rf-ink)",
+                      }}
+                    >
                       {c.name}
                     </span>
-                    <span style={{ fontFamily: "var(--rf-sans)", fontSize: "0.7rem", color: "var(--rf-ink-soft)" }}>
+                    <span
+                      style={{
+                        fontFamily: "var(--rf-sans)",
+                        fontSize: "0.7rem",
+                        color: "var(--rf-ink-soft)",
+                      }}
+                    >
                       {c.time}
                     </span>
                   </div>
-                  <p style={{ fontFamily: "var(--rf-sans)", fontSize: "0.82rem", color: "var(--rf-ink-mid)", lineHeight: 1.6, margin: 0 }}>
+                  <p
+                    style={{
+                      fontFamily: "var(--rf-sans)",
+                      fontSize: "0.82rem",
+                      color: "var(--rf-ink-mid)",
+                      lineHeight: 1.6,
+                      margin: 0,
+                    }}
+                  >
                     {c.text}
                   </p>
                 </div>
@@ -417,89 +410,66 @@ const SignalModal = ({
             ))}
           </div>
 
-          {/* Comment input */}
-          {isAuthenticated ? (
-            <div style={{ display: "flex", gap: "0.6rem", alignItems: "center" }}>
-              <input
-                ref={inputRef}
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-                onKeyDown={(e) => { if (e.key === "Enter") handlePostComment(); }}
-                placeholder="Add your voice..."
-                style={{
-                  flex: 1,
-                  fontFamily: "var(--rf-sans)",
-                  fontSize: "0.82rem",
-                  color: "var(--rf-ink)",
-                  background: "#FFFFFF",
-                  border: "1.5px solid var(--rf-paper-dark)",
-                  borderRadius: "2rem",
-                  padding: "0.6rem 1rem",
-                  outline: "none",
-                  transition: "border-color 0.18s",
-                }}
-                onFocus={(e) =>
-                  (e.currentTarget.style.borderColor = "var(--rf-purple)")
-                }
-                onBlur={(e) =>
-                  (e.currentTarget.style.borderColor = "var(--rf-paper-dark)")
-                }
-              />
-              <button
-                onClick={handlePostComment}
-                disabled={!newComment.trim()}
-                style={{
-                  fontFamily: "var(--rf-sans)",
-                  fontSize: "0.78rem",
-                  fontWeight: 600,
-                  color: "#FFFFFF",
-                  background: newComment.trim() ? "var(--rf-purple)" : "var(--rf-ink-soft)",
-                  border: "none",
-                  borderRadius: "2rem",
-                  padding: "0.6rem 1rem",
-                  cursor: newComment.trim() ? "pointer" : "default",
-                  transition: "background 0.18s",
-                  whiteSpace: "nowrap",
-                }}
-                onMouseEnter={(e) => {
-                  if (newComment.trim())
-                    e.currentTarget.style.background = "var(--rf-purple-dark)";
-                }}
-                onMouseLeave={(e) => {
-                  if (newComment.trim())
-                    e.currentTarget.style.background = "var(--rf-purple)";
-                }}
-              >
-                Post
-              </button>
-            </div>
-          ) : (
-            <p style={{ fontFamily: "var(--rf-sans)", fontSize: "0.82rem", color: "var(--rf-ink-soft)" }}>
-              <button
-                onClick={() => { onClose(); navigate("/signup?mode=signin"); }}
-                style={{
-                  background: "none",
-                  border: "none",
-                  fontFamily: "var(--rf-sans)",
-                  fontSize: "0.82rem",
-                  fontWeight: 600,
-                  color: "var(--rf-purple)",
-                  cursor: "pointer",
-                  padding: 0,
-                  textDecoration: "underline",
-                }}
-              >
-                Sign in to comment
-              </button>
-            </p>
-          )}
+          {/* Comment input — auth wiring deferred to Phase 10B */}
+          <div
+            style={{
+              display: "flex",
+              gap: "0.6rem",
+              alignItems: "center",
+            }}
+          >
+            <input
+              placeholder="Add your voice..."
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                flex: 1,
+                fontFamily: "var(--rf-sans)",
+                fontSize: "0.82rem",
+                color: "var(--rf-ink)",
+                background: "#FFFFFF",
+                border: "1.5px solid var(--rf-paper-dark)",
+                borderRadius: "2rem",
+                padding: "0.6rem 1rem",
+                outline: "none",
+                transition: "border-color 0.18s",
+              }}
+              onFocus={(e) =>
+                (e.currentTarget.style.borderColor = "var(--rf-purple)")
+              }
+              onBlur={(e) =>
+                (e.currentTarget.style.borderColor = "var(--rf-paper-dark)")
+              }
+            />
+            <button
+              style={{
+                fontFamily: "var(--rf-sans)",
+                fontSize: "0.78rem",
+                fontWeight: 600,
+                color: "#FFFFFF",
+                background: "var(--rf-purple)",
+                border: "none",
+                borderRadius: "2rem",
+                padding: "0.6rem 1rem",
+                cursor: "pointer",
+                whiteSpace: "nowrap",
+              }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.background = "var(--rf-purple-dark)")
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.background = "var(--rf-purple)")
+              }
+            >
+              Post
+            </button>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-// ── Paragraph style ──────────────────────────────────────────────
+// ── Sub-components ───────────────────────────────────────────────
 const pStyle: React.CSSProperties = {
   fontFamily: "var(--rf-sans)",
   fontSize: "0.92rem",
@@ -508,7 +478,6 @@ const pStyle: React.CSSProperties = {
   marginBottom: "1rem",
 };
 
-// ── Pull-quote style ─────────────────────────────────────────────
 const pullQuoteStyle: React.CSSProperties = {
   fontFamily: "var(--rf-serif)",
   fontStyle: "italic",
@@ -521,7 +490,6 @@ const pullQuoteStyle: React.CSSProperties = {
   margin: "1.5rem 0",
 };
 
-// ── Behavioral Action Box ────────────────────────────────────────
 interface ActionBoxProps {
   headline: string;
   description: string;
@@ -597,13 +565,12 @@ const ActionBox = ({ headline, description, cta, href }: ActionBoxProps) => {
           (e.currentTarget.style.background = "var(--rf-purple)")
         }
       >
-        {cta} →
+        {cta}
       </button>
     </div>
   );
 };
 
-// ── Engagement button ────────────────────────────────────────────
 interface EngagementBtnProps {
   onClick: (e: React.MouseEvent) => void;
   icon: string;
@@ -612,7 +579,13 @@ interface EngagementBtnProps {
   active?: boolean;
 }
 
-const EngagementBtn = ({ onClick, icon, count, label, active }: EngagementBtnProps) => (
+const EngagementBtn = ({
+  onClick,
+  icon,
+  count,
+  label,
+  active,
+}: EngagementBtnProps) => (
   <button
     onClick={onClick}
     aria-label={label}
@@ -642,4 +615,3 @@ const EngagementBtn = ({ onClick, icon, count, label, active }: EngagementBtnPro
 );
 
 export default SignalModal;
-export type { SignalModalProps };

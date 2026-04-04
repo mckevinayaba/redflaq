@@ -18,14 +18,14 @@ const SignalEngagement = ({ signalId, signalSlug, signalTitle }: SignalEngagemen
 
   useEffect(() => {
     const fetchCounts = async () => {
-      const { count } = await supabase
+      const { count } = await (supabase as any)
         .from("signal_likes")
         .select("*", { count: "exact", head: true })
         .eq("signal_id", signalId);
       setLikeCount(count || 0);
 
       if (user) {
-        const { data: likeData } = await supabase
+        const { data: likeData } = await (supabase as any)
           .from("signal_likes")
           .select("id")
           .eq("signal_id", signalId)
@@ -33,7 +33,7 @@ const SignalEngagement = ({ signalId, signalSlug, signalTitle }: SignalEngagemen
           .maybeSingle();
         setLiked(!!likeData);
 
-        const { data: saveData } = await supabase
+        const { data: saveData } = await (supabase as any)
           .from("signal_saves")
           .select("id")
           .eq("signal_id", signalId)

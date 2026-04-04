@@ -1,17 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-
-// ── Types ────────────────────────────────────────────────────────
-interface SignalData {
-  id: string;
-  slug: string;
-  title: string;
-  excerpt: string;
-  category: string;
-  created_at: string;
-  body?: string | null;
-}
+import SignalModal from "./SignalModal";
+import { type SignalData, CATEGORY_LABELS, formatSignalDate } from "./types";
 
 // ── Fallback hardcoded content ───────────────────────────────────
 const FALLBACK: SignalData = {
@@ -25,211 +15,8 @@ const FALLBACK: SignalData = {
   body: null,
 };
 
-const CATEGORY_LABELS: Record<string, string> = {
-  "behavioral-patterns": "Behavioral Patterns",
-  "dating-relationships": "Dating & Relationships",
-  "safety-habits": "Safety Habits",
-  "gbvf-evidence": "GBVF & Evidence",
-  "trust-denial": "Trust & Denial",
-  "self-accountability": "Self-Accountability",
-  "dating-safety": "Dating Safety",
-  "gbv-resources": "GBV Resources",
-};
-
-const formatDate = (iso: string) =>
-  new Date(iso).toLocaleDateString("en-ZA", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
-
-// ── Article Modal ────────────────────────────────────────────────
-const ArticleModal = ({
-  signal,
-  onClose,
-}: {
-  signal: SignalData;
-  onClose: () => void;
-}) => {
-  // Close on Escape key
-  useEffect(() => {
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", handler);
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", handler);
-      document.body.style.overflow = "";
-    };
-  }, [onClose]);
-
-  const navigate = useNavigate();
-
-  return (
-    <div
-      onClick={onClose}
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 9000,
-        background: "rgba(19,9,31,0.82)",
-        backdropFilter: "blur(8px)",
-        WebkitBackdropFilter: "blur(8px)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "1.5rem",
-      }}
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        style={{
-          background: "#FFFFFF",
-          borderRadius: "1.5rem",
-          maxWidth: 660,
-          width: "100%",
-          maxHeight: "88vh",
-          overflowY: "auto",
-          padding: "2.5rem",
-          position: "relative",
-        }}
-      >
-        {/* Close button */}
-        <button
-          onClick={onClose}
-          aria-label="Close article"
-          style={{
-            position: "absolute",
-            top: "1.25rem",
-            right: "1.25rem",
-            background: "var(--rf-paper-dark)",
-            border: "none",
-            borderRadius: "50%",
-            width: 32,
-            height: 32,
-            cursor: "pointer",
-            fontFamily: "var(--rf-sans)",
-            fontSize: "1rem",
-            color: "var(--rf-ink-mid)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            lineHeight: 1,
-          }}
-        >
-          ×
-        </button>
-
-        {/* Category pill */}
-        <div
-          style={{
-            display: "inline-block",
-            background: "var(--rf-purple-light)",
-            color: "var(--rf-purple)",
-            fontSize: "0.68rem",
-            fontFamily: "var(--rf-sans)",
-            fontWeight: 700,
-            letterSpacing: "0.08em",
-            textTransform: "uppercase",
-            borderRadius: "2rem",
-            padding: "0.28rem 0.7rem",
-            marginBottom: "1rem",
-          }}
-        >
-          {CATEGORY_LABELS[signal.category] || signal.category}
-        </div>
-
-        {/* Title */}
-        <h2
-          style={{
-            fontFamily: "var(--rf-serif)",
-            fontSize: "1.75rem",
-            fontWeight: 900,
-            color: "var(--rf-ink)",
-            lineHeight: 1.25,
-            marginBottom: "0.5rem",
-            letterSpacing: "-0.02em",
-          }}
-        >
-          {signal.title}
-        </h2>
-
-        {/* Meta */}
-        <p
-          style={{
-            fontFamily: "var(--rf-sans)",
-            fontSize: "0.72rem",
-            color: "var(--rf-ink-soft)",
-            marginBottom: "1.5rem",
-          }}
-        >
-          RedFlaq Signals · {formatDate(signal.created_at)} · 5 min read
-        </p>
-
-        {/* Body or excerpt */}
-        {signal.body ? (
-          <div
-            style={{
-              fontFamily: "var(--rf-sans)",
-              fontSize: "0.95rem",
-              color: "var(--rf-ink-mid)",
-              lineHeight: 1.8,
-            }}
-            dangerouslySetInnerHTML={{ __html: signal.body }}
-          />
-        ) : (
-          <p
-            style={{
-              fontFamily: "var(--rf-sans)",
-              fontSize: "0.95rem",
-              color: "var(--rf-ink-mid)",
-              lineHeight: 1.8,
-              marginBottom: "1.5rem",
-            }}
-          >
-            {signal.excerpt}
-          </p>
-        )}
-
-        {/* Read full article link */}
-        {signal.slug && signal.id !== "fallback" && (
-          <button
-            onClick={() => {
-              onClose();
-              navigate(`/signals/${signal.slug}`);
-            }}
-            style={{
-              marginTop: "1.5rem",
-              fontFamily: "var(--rf-sans)",
-              fontSize: "0.85rem",
-              fontWeight: 600,
-              color: "#FFFFFF",
-              background: "var(--rf-purple)",
-              border: "none",
-              borderRadius: "2rem",
-              padding: "0.7rem 1.4rem",
-              cursor: "pointer",
-              transition: "background 0.18s",
-            }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.background = "var(--rf-purple-dark)")
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.background = "var(--rf-purple)")
-            }
-          >
-            Read full article →
-          </button>
-        )}
-      </div>
-    </div>
-  );
-};
-
 // ── Main component ───────────────────────────────────────────────
 const SignalsTodayFeatured = () => {
-  const navigate = useNavigate();
   const [signal, setSignal] = useState<SignalData>(FALLBACK);
   const [isMobile, setIsMobile] = useState(false);
   const [liked, setLiked] = useState(false);
@@ -247,7 +34,6 @@ const SignalsTodayFeatured = () => {
 
   useEffect(() => {
     const fetchFeatured = async () => {
-      // Try academy_articles for a recent signal-category article
       const { data, error } = await supabase
         .from("academy_articles")
         .select("id, title, slug, excerpt, category, created_at, content")
@@ -275,29 +61,17 @@ const SignalsTodayFeatured = () => {
           body: data.content ?? null,
         });
       }
-      // On any error or empty result, FALLBACK stays as-is
     };
     fetchFeatured();
   }, []);
 
-  const handleLike = useCallback(
-    (e: React.MouseEvent) => {
-      e.stopPropagation();
-      setLiked((prev) => {
-        setLikeCount((c) => (prev ? c - 1 : c + 1));
-        return !prev;
-      });
-    },
-    []
-  );
-
-  const handleOpenModal = useCallback(
-    (e: React.MouseEvent) => {
-      e.stopPropagation();
-      setModalOpen(true);
-    },
-    []
-  );
+  const handleLike = useCallback((e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setLiked((prev) => {
+      setLikeCount((c) => (prev ? c - 1 : c + 1));
+      return !prev;
+    });
+  }, []);
 
   const categoryLabel =
     CATEGORY_LABELS[signal.category] || signal.category;
@@ -306,10 +80,7 @@ const SignalsTodayFeatured = () => {
     <>
       <section
         id="signals-today"
-        style={{
-          background: "var(--rf-paper)",
-          padding: "1.5rem 2rem 3rem",
-        }}
+        style={{ background: "var(--rf-paper)", padding: "1.5rem 2rem 3rem" }}
       >
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           {/* Section label */}
@@ -354,12 +125,10 @@ const SignalsTodayFeatured = () => {
               transition: "transform 0.25s ease, box-shadow 0.25s ease",
             }}
           >
-            {/* ── LEFT: visual panel ── */}
-            {isMobile && (
-              <LeftPanel title={signal.title} isMobile={isMobile} />
-            )}
+            {/* Mobile: gradient panel on top */}
+            {isMobile && <LeftPanel title={signal.title} isMobile />}
 
-            {/* ── RIGHT: body panel ── */}
+            {/* Body panel */}
             <div
               style={{
                 padding: "2.25rem",
@@ -368,8 +137,8 @@ const SignalsTodayFeatured = () => {
                 justifyContent: "space-between",
               }}
             >
-              {/* Category tag */}
               <div>
+                {/* Category tag */}
                 <div
                   style={{
                     display: "inline-block",
@@ -388,7 +157,6 @@ const SignalsTodayFeatured = () => {
                   {categoryLabel}
                 </div>
 
-                {/* H3 title */}
                 <h3
                   style={{
                     fontFamily: "var(--rf-serif)",
@@ -403,14 +171,12 @@ const SignalsTodayFeatured = () => {
                   {signal.title}
                 </h3>
 
-                {/* Excerpt */}
                 <p
                   style={{
                     fontFamily: "var(--rf-sans)",
                     fontSize: "0.9rem",
                     color: "var(--rf-ink-mid)",
                     lineHeight: 1.7,
-                    flexGrow: 1,
                     marginBottom: "1.25rem",
                   }}
                 >
@@ -429,7 +195,6 @@ const SignalsTodayFeatured = () => {
                     justifyContent: "space-between",
                   }}
                 >
-                  {/* Meta */}
                   <span
                     style={{
                       fontFamily: "var(--rf-sans)",
@@ -437,16 +202,13 @@ const SignalsTodayFeatured = () => {
                       color: "var(--rf-ink-soft)",
                     }}
                   >
-                    RedFlaq Signals · {formatDate(signal.created_at)} · 5 min read
+                    RedFlaq Signals · {formatSignalDate(signal.created_at)} · 5 min read
                   </span>
 
-                  {/* Action buttons */}
-                  <div
-                    style={{ display: "flex", alignItems: "center", gap: "0.85rem" }}
-                  >
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.85rem" }}>
                     {/* Like */}
                     <button
-                      onClick={handleLike}
+                      onClick={(e) => handleLike(e)}
                       aria-label={liked ? "Unlike" : "Like"}
                       style={{
                         display: "flex",
@@ -470,7 +232,7 @@ const SignalsTodayFeatured = () => {
 
                     {/* Comment */}
                     <button
-                      onClick={handleOpenModal}
+                      onClick={(e) => { e.stopPropagation(); setModalOpen(true); }}
                       aria-label="View comments"
                       style={{
                         display: "flex",
@@ -482,8 +244,8 @@ const SignalsTodayFeatured = () => {
                         fontFamily: "var(--rf-sans)",
                         fontSize: "0.78rem",
                         color: "var(--rf-ink-soft)",
-                        transition: "color 0.15s",
                         padding: "4px",
+                        transition: "color 0.15s",
                       }}
                       onMouseEnter={(e) =>
                         (e.currentTarget.style.color = "var(--rf-purple)")
@@ -498,9 +260,9 @@ const SignalsTodayFeatured = () => {
                   </div>
                 </div>
 
-                {/* Read full signal button */}
+                {/* Read button */}
                 <button
-                  onClick={handleOpenModal}
+                  onClick={(e) => { e.stopPropagation(); setModalOpen(true); }}
                   style={{
                     marginTop: "0.85rem",
                     fontFamily: "var(--rf-sans)",
@@ -526,30 +288,29 @@ const SignalsTodayFeatured = () => {
               </div>
             </div>
 
-            {/* Desktop left panel */}
-            {!isMobile && (
-              <LeftPanel title={signal.title} isMobile={isMobile} />
-            )}
+            {/* Desktop: gradient panel on the right */}
+            {!isMobile && <LeftPanel title={signal.title} isMobile={false} />}
           </div>
         </div>
       </section>
 
-      {/* Article modal */}
+      {/* Full modal */}
       {modalOpen && (
-        <ArticleModal signal={signal} onClose={() => setModalOpen(false)} />
+        <SignalModal
+          signal={signal}
+          onClose={() => setModalOpen(false)}
+          liked={liked}
+          likeCount={likeCount}
+          onLike={() => handleLike()}
+          commentCount={commentCount}
+        />
       )}
     </>
   );
 };
 
-// ── Left visual panel (extracted to avoid duplication) ───────────
-const LeftPanel = ({
-  title,
-  isMobile,
-}: {
-  title: string;
-  isMobile: boolean;
-}) => (
+// ── Left / visual panel ──────────────────────────────────────────
+const LeftPanel = ({ title, isMobile }: { title: string; isMobile: boolean }) => (
   <div
     style={{
       background:
@@ -559,7 +320,7 @@ const LeftPanel = ({
       overflow: "hidden",
     }}
   >
-    {/* Decorative blurred orb */}
+    {/* Decorative orb */}
     <div
       aria-hidden="true"
       style={{
@@ -575,7 +336,6 @@ const LeftPanel = ({
       }}
     />
 
-    {/* Content — pinned to bottom */}
     <div
       style={{
         position: "absolute",
@@ -585,7 +345,6 @@ const LeftPanel = ({
         padding: "2rem",
       }}
     >
-      {/* Badge */}
       <div
         style={{
           display: "inline-block",
@@ -604,7 +363,6 @@ const LeftPanel = ({
         Today's Signal
       </div>
 
-      {/* Title */}
       <h2
         style={{
           fontFamily: "var(--rf-serif)",

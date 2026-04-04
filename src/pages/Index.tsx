@@ -14,6 +14,7 @@ import TestimonialsSectionNew from "@/components/landing/TestimonialsSectionNew"
 import WhyRedflaqSection from "@/components/landing/WhyRedflaqSection";
 import AdvocacySection from "@/components/landing/AdvocacySection";
 import FinalCTAPlinq from "@/components/landing/FinalCTAPlinq";
+import RedFlaqReality from "@/components/landing/RedFlaqReality";
 import FAQHormozi from "@/components/landing/FAQHormozi";
 import FooterPlinq from "@/components/landing/FooterPlinq";
 import { PWAInstallBanner } from "@/components/PWAInstallBanner";
@@ -80,6 +81,9 @@ const Index = () => {
 
       {/* 4. Government data — GBVF national disaster stats */}
       <GovDataSection />
+
+      {/* 4b. RedFlaq Reality — indictment stats block */}
+      <RedFlaqReality />
 
       {/* 5. Trust ticker */}
       <TickerBar />

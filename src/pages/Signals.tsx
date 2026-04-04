@@ -1,6 +1,7 @@
 import { useState } from "react";
 import SignalsNav from "@/components/signals/SignalsNav";
 import SignalsTicker from "@/components/signals/SignalsTicker";
+import RedFlaqReality from "@/components/landing/RedFlaqReality";
 import SignalsHero from "@/components/signals/SignalsHero";
 import SignalsFullQuote from "@/components/signals/SignalsFullQuote";
 import SignalsCategories, {
@@ -18,6 +19,7 @@ const Signals = () => {
     <div style={{ background: "var(--rf-paper)", minHeight: "100vh", overflowX: "hidden" }}>
       <SignalsNav />
       <SignalsTicker />
+      <RedFlaqReality />
       <SignalsHero />
       <SignalsFullQuote />
       <SignalsCategories

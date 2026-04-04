@@ -18,14 +18,14 @@ const SignalEngagement = ({ signalId, signalSlug, signalTitle }: SignalEngagemen
 
   useEffect(() => {
     const fetchCounts = async () => {
-      const { count } = await supabase
+      const { count } = await (supabase as any)
         .from("signal_likes")
         .select("*", { count: "exact", head: true })
         .eq("signal_id", signalId);
       setLikeCount(count || 0);
 
       if (user) {
-        const { data: likeData } = await supabase
+        const { data: likeData } = await (supabase as any)
           .from("signal_likes")
           .select("id")
           .eq("signal_id", signalId)
@@ -33,7 +33,7 @@ const SignalEngagement = ({ signalId, signalSlug, signalTitle }: SignalEngagemen
           .maybeSingle();
         setLiked(!!likeData);
 
-        const { data: saveData } = await supabase
+        const { data: saveData } = await (supabase as any)
           .from("signal_saves")
           .select("id")
           .eq("signal_id", signalId)
@@ -48,11 +48,11 @@ const SignalEngagement = ({ signalId, signalSlug, signalTitle }: SignalEngagemen
   const handleLike = async () => {
     if (!user) return;
     if (liked) {
-      await supabase.from("signal_likes").delete().eq("signal_id", signalId).eq("user_id", user.id);
+      await (supabase as any).from("signal_likes").delete().eq("signal_id", signalId).eq("user_id", user.id);
       setLiked(false);
       setLikeCount(c => Math.max(0, c - 1));
     } else {
-      await supabase.from("signal_likes").insert({ signal_id: signalId, user_id: user.id });
+      await (supabase as any).from("signal_likes").insert({ signal_id: signalId, user_id: user.id });
       setLiked(true);
       setLikeCount(c => c + 1);
     }
@@ -61,10 +61,10 @@ const SignalEngagement = ({ signalId, signalSlug, signalTitle }: SignalEngagemen
   const handleSave = async () => {
     if (!user) return;
     if (saved) {
-      await supabase.from("signal_saves").delete().eq("signal_id", signalId).eq("user_id", user.id);
+      await (supabase as any).from("signal_saves").delete().eq("signal_id", signalId).eq("user_id", user.id);
       setSaved(false);
     } else {
-      await supabase.from("signal_saves").insert({ signal_id: signalId, user_id: user.id });
+      await (supabase as any).from("signal_saves").insert({ signal_id: signalId, user_id: user.id });
       setSaved(true);
     }
   };

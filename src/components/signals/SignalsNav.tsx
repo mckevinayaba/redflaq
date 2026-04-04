@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
+import redflaqLogo from "@/assets/redflaq-logo-official.png";
 
 const NAV_LINKS = [
   { label: "Run a Check", href: "/search-form" },
@@ -87,20 +88,14 @@ const SignalsNav = () => {
         {/* ── Logo ── */}
         <a
           href="https://redflaq.com"
-          style={{ textDecoration: "none", flexShrink: 0 }}
+          style={{ textDecoration: "none", flexShrink: 0, display: "flex", alignItems: "center" }}
         >
-          <span
-            style={{
-              fontFamily: "var(--rf-sans)",
-              fontWeight: 800,
-              fontSize: "1.2rem",
-              lineHeight: 1,
-              letterSpacing: "-0.02em",
-            }}
-          >
-            <span style={{ color: "var(--rf-danger)" }}>R</span>
-            <span style={{ color: "var(--rf-purple)" }}>edFlaq</span>
-          </span>
+          <img
+            src={redflaqLogo}
+            alt="RedFlaq"
+            loading="eager"
+            style={{ height: 44, width: "auto", display: "block" }}
+          />
         </a>
 
         {/* ── Desktop center nav ── */}

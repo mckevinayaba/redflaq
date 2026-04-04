@@ -682,3 +682,17 @@ nav, header {
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+/* ── Signal modal animations (Phase 10C) ───────────────────────── */
+@keyframes rf-modal-slide-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+@keyframes rf-modal-fade-scale {
+  from { opacity: 0; transform: scale(0.97) translateY(8px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+@keyframes rf-toast-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(12px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}

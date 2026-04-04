@@ -91,28 +91,68 @@ const SignalModal = ({ signal, onClose }: SignalModalProps) => {
   const [visibleCount, setVisibleCount] = useState(COMMENTS_PAGE_SIZE);
 
   // ── Refs ──────────────────────────────────────────────────────
-  // overlayRef — desktop scroll-to-top target
-  // innerRef   — mobile scroll container + general scroll-to-top
+  // overlayRef      — desktop scroll-to-top target
+  // innerRef        — dialog container (focus trap boundary) + mobile scroller
+  // closeBtnRef     — receives focus on open
+  // previousFocusRef — element to restore focus to on close
   const overlayRef = useRef<HTMLDivElement>(null);
   const innerRef = useRef<HTMLDivElement>(null);
+  const closeBtnRef = useRef<HTMLButtonElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
   const commentsRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // ── Body scroll lock + ESC + scroll-to-top ────────────────────
+  // ── Body scroll lock · focus management · keyboard handling ───
   useEffect(() => {
+    // Capture trigger element before we move focus
+    previousFocusRef.current = document.activeElement as HTMLElement | null;
+
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+
     // Scroll both containers to top on open
     overlayRef.current?.scrollTo({ top: 0 });
     innerRef.current?.scrollTo({ top: 0 });
 
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    // Move focus into dialog after the entry animation starts
+    const rafId = requestAnimationFrame(() => {
+      closeBtnRef.current?.focus();
+    });
+
+    const onKey = (e: KeyboardEvent) => {
+      // Escape — close
+      if (e.key === "Escape") { onClose(); return; }
+
+      // Tab / Shift+Tab — trap focus within dialog
+      if (e.key === "Tab" && innerRef.current) {
+        const focusable = Array.from(
+          innerRef.current.querySelectorAll<HTMLElement>(
+            'button:not([disabled]), [href], input:not([disabled]), ' +
+            'select, textarea, [tabindex]:not([tabindex="-1"])'
+          )
+        ).filter((el) => el.offsetParent !== null); // skip hidden elements
+
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last  = focusable[focusable.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+        } else {
+          if (document.activeElement === last)  { e.preventDefault(); first.focus(); }
+        }
+      }
+    };
+
     document.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = prev;
       document.removeEventListener("keydown", onKey);
+      cancelAnimationFrame(rafId);
       if (likePromptTimer.current) clearTimeout(likePromptTimer.current);
       if (shareToastTimer.current) clearTimeout(shareToastTimer.current);
+      // Restore focus to whichever element opened the modal
+      previousFocusRef.current?.focus();
     };
   }, [onClose]);
 
@@ -336,6 +376,10 @@ const SignalModal = ({ signal, onClose }: SignalModalProps) => {
         <div
           ref={innerRef}
           onClick={(e) => e.stopPropagation()}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="signal-modal-title"
+          tabIndex={-1}
           style={innerStyle}
         >
           {/* ── HEADER ── */}
@@ -361,6 +405,7 @@ const SignalModal = ({ signal, onClose }: SignalModalProps) => {
             )}
 
             <button
+              ref={closeBtnRef}
               onClick={onClose}
               aria-label="Close article"
               style={{
@@ -403,7 +448,7 @@ const SignalModal = ({ signal, onClose }: SignalModalProps) => {
               {categoryLabel}
             </div>
 
-            <h2 style={{
+            <h2 id="signal-modal-title" style={{
               fontFamily: "var(--rf-serif)",
               fontSize: isMobile ? "1.55rem" : "1.9rem",
               fontWeight: 900,

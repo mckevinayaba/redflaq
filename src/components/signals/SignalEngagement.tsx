@@ -5,12 +5,11 @@ import { useAuth } from "@/hooks/useAuth";
 const sans: React.CSSProperties = { fontFamily: "'Syne', sans-serif" };
 
 interface SignalEngagementProps {
-  signalId: string;
   signalSlug: string;
   signalTitle: string;
 }
 
-const SignalEngagement = ({ signalId, signalSlug, signalTitle }: SignalEngagementProps) => {
+const SignalEngagement = ({ signalSlug, signalTitle }: SignalEngagementProps) => {
   const { user } = useAuth();
   const [liked, setLiked] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -21,14 +20,14 @@ const SignalEngagement = ({ signalId, signalSlug, signalTitle }: SignalEngagemen
       const { count } = await supabase
         .from("signal_likes")
         .select("*", { count: "exact", head: true })
-        .eq("signal_id", signalId);
+        .eq("signal_id", signalSlug);
       setLikeCount(count || 0);
 
       if (user) {
         const { data: likeData } = await supabase
           .from("signal_likes")
           .select("id")
-          .eq("signal_id", signalId)
+          .eq("signal_id", signalSlug)
           .eq("user_id", user.id)
           .maybeSingle();
         setLiked(!!likeData);
@@ -36,23 +35,23 @@ const SignalEngagement = ({ signalId, signalSlug, signalTitle }: SignalEngagemen
         const { data: saveData } = await supabase
           .from("signal_saves")
           .select("id")
-          .eq("signal_id", signalId)
+          .eq("signal_id", signalSlug)
           .eq("user_id", user.id)
           .maybeSingle();
         setSaved(!!saveData);
       }
     };
     fetchCounts();
-  }, [signalId, user]);
+  }, [signalSlug, user]);
 
   const handleLike = async () => {
     if (!user) return;
     if (liked) {
-      await supabase.from("signal_likes").delete().eq("signal_id", signalId).eq("user_id", user.id);
+      await supabase.from("signal_likes").delete().eq("signal_id", signalSlug).eq("user_id", user.id);
       setLiked(false);
       setLikeCount(c => Math.max(0, c - 1));
     } else {
-      await supabase.from("signal_likes").insert({ signal_id: signalId, user_id: user.id });
+      await supabase.from("signal_likes").insert({ signal_id: signalSlug, user_id: user.id });
       setLiked(true);
       setLikeCount(c => c + 1);
     }
@@ -61,10 +60,10 @@ const SignalEngagement = ({ signalId, signalSlug, signalTitle }: SignalEngagemen
   const handleSave = async () => {
     if (!user) return;
     if (saved) {
-      await supabase.from("signal_saves").delete().eq("signal_id", signalId).eq("user_id", user.id);
+      await supabase.from("signal_saves").delete().eq("signal_id", signalSlug).eq("user_id", user.id);
       setSaved(false);
     } else {
-      await supabase.from("signal_saves").insert({ signal_id: signalId, user_id: user.id });
+      await supabase.from("signal_saves").insert({ signal_id: signalSlug, user_id: user.id });
       setSaved(true);
     }
   };

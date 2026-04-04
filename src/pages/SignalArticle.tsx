@@ -157,7 +157,6 @@ const SignalArticle = () => {
           {/* Engagement row */}
           <div style={{ padding: '16px 0', borderTop: '1px solid #E8E2DC', borderBottom: '1px solid #E8E2DC', marginBottom: 40 }}>
             <SignalEngagement
-              signalId={article.id}
               signalSlug={article.slug}
               signalTitle={article.title}
             />
@@ -182,7 +181,6 @@ const SignalArticle = () => {
         <div style={{ padding: '24px 0', borderTop: '1px solid #E8E2DC', marginTop: 40 }}>
           <p style={{ ...sans, fontSize: 13, color: '#888', marginBottom: 12 }}>Was this signal useful?</p>
           <SignalEngagement
-            signalId={article.id}
             signalSlug={article.slug}
             signalTitle={article.title}
           />

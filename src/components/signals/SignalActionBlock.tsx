@@ -86,7 +86,7 @@ const SignalActionBlock = ({ category }: SignalActionBlockProps) => {
             key={action.label}
             onClick={() => handleAction(action)}
             style={{
-              ...sans, fontWeight: 700, fontSize: 14, color: 'white',
+          ...sans, fontWeight: 700, fontSize: 14,
               background: action.style === 'red' ? '#B52020'
                 : action.style === 'purple' ? '#7C3AED'
                 : 'transparent',

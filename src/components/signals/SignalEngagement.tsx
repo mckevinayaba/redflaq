@@ -61,10 +61,10 @@ const SignalEngagement = ({ signalId, signalSlug, signalTitle }: SignalEngagemen
   const handleSave = async () => {
     if (!user) return;
     if (saved) {
-      await supabase.from("signal_saves").delete().eq("signal_id", signalId).eq("user_id", user.id);
+      await (supabase as any).from("signal_saves").delete().eq("signal_id", signalId).eq("user_id", user.id);
       setSaved(false);
     } else {
-      await supabase.from("signal_saves").insert({ signal_id: signalId, user_id: user.id });
+      await (supabase as any).from("signal_saves").insert({ signal_id: signalId, user_id: user.id });
       setSaved(true);
     }
   };

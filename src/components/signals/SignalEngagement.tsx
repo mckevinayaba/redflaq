@@ -48,11 +48,11 @@ const SignalEngagement = ({ signalId, signalSlug, signalTitle }: SignalEngagemen
   const handleLike = async () => {
     if (!user) return;
     if (liked) {
-      await supabase.from("signal_likes").delete().eq("signal_id", signalId).eq("user_id", user.id);
+      await (supabase as any).from("signal_likes").delete().eq("signal_id", signalId).eq("user_id", user.id);
       setLiked(false);
       setLikeCount(c => Math.max(0, c - 1));
     } else {
-      await supabase.from("signal_likes").insert({ signal_id: signalId, user_id: user.id });
+      await (supabase as any).from("signal_likes").insert({ signal_id: signalId, user_id: user.id });
       setLiked(true);
       setLikeCount(c => c + 1);
     }

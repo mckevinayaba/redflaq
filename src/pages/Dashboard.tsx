@@ -4,10 +4,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useCredits } from "@/hooks/useCredits";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import { Shield, BarChart3, CheckCircle2, ArrowRight, Heart, Users, BookOpen, Flag } from "lucide-react";
 import ShareInviteModal from "@/components/ShareInviteModal";
 import BuyChecksModal from "@/components/BuyChecksModal";
 import MyPayments from "@/components/dashboard/MyPayments";
+
+const inter: React.CSSProperties = { fontFamily: "'Inter', sans-serif" };
+const mono: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };
 
 interface SearchRecord {
   id: string;
@@ -19,10 +21,17 @@ interface SearchRecord {
 }
 
 const riskConfig: Record<string, { label: string; color: string; bg: string }> = {
-  RED: { label: "High Risk", color: "hsl(var(--risk-danger))", bg: "hsl(var(--risk-danger) / 0.1)" },
-  ORANGE: { label: "Moderate", color: "hsl(var(--risk-warning))", bg: "hsl(var(--risk-warning) / 0.1)" },
-  YELLOW: { label: "Low Risk", color: "hsl(var(--risk-caution))", bg: "hsl(var(--risk-caution) / 0.1)" },
-  GREEN: { label: "Clear", color: "hsl(var(--risk-safe))", bg: "hsl(var(--risk-safe) / 0.1)" },
+  RED: { label: "High Risk", color: "#C0392B", bg: "rgba(192,57,43,0.12)" },
+  ORANGE: { label: "Moderate", color: "#E67E22", bg: "rgba(230,126,34,0.12)" },
+  YELLOW: { label: "Low Risk", color: "#F1C40F", bg: "rgba(241,196,15,0.12)" },
+  GREEN: { label: "Clear", color: "#27AE60", bg: "rgba(39,174,96,0.12)" },
+};
+
+const card: React.CSSProperties = {
+  background: '#111118',
+  border: '1px solid rgba(108,53,222,0.25)',
+  borderRadius: 8,
+  padding: '24px',
 };
 
 export default function Dashboard() {
@@ -63,8 +72,8 @@ export default function Dashboard() {
   if (authLoading || loading) {
     return (
       <DashboardLayout>
-        <div className="flex items-center justify-center py-20">
-          <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin" />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '80px 0' }}>
+          <div style={{ width: 28, height: 28, border: '3px solid rgba(108,53,222,0.2)', borderTopColor: '#6C35DE', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
         </div>
       </DashboardLayout>
     );
@@ -86,88 +95,150 @@ export default function Dashboard() {
 
   return (
     <DashboardLayout>
-      <div className="mb-6 sm:mb-8">
-        <p className="font-mono text-[11px] tracking-widest text-muted-foreground uppercase mb-1">Dashboard</p>
-        <h1 className="font-heading text-2xl sm:text-3xl text-foreground">Welcome to your Safety Dashboard</h1>
-        <p className="font-body text-sm text-muted-foreground mt-1">From here you can document incidents, run safety checks and find help if you or someone you love is at risk.</p>
+      {/* Header */}
+      <div style={{ marginBottom: 32 }}>
+        <p style={{ ...mono, fontSize: 10, color: '#8b8b91', letterSpacing: '0.15em', textTransform: 'uppercase' as const, marginBottom: 8 }}>
+          Safety Base Dashboard
+        </p>
+        <h1 style={{ ...inter, fontSize: 'clamp(22px, 3vw, 30px)', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.025em', marginBottom: 8 }}>
+          Welcome back{firstName ? `, ${firstName}` : ''}.
+        </h1>
+        <p style={{ ...inter, fontSize: 14, color: '#8b8b91', lineHeight: 1.6, marginBottom: 16 }}>
+          Document incidents, run safety checks, and find help — privately and securely.
+        </p>
+        {/* Brand line */}
+        <div style={{ borderLeft: '3px solid #6C35DE', paddingLeft: 12 }}>
+          <p style={{ ...inter, fontSize: 13, fontWeight: 700, color: '#6C35DE' }}>
+            Before You Trust, RedFlaq First.
+          </p>
+        </div>
+      </div>
+
+      {/* "Not Ready to Leave Yet?" box */}
+      <div style={{
+        ...card,
+        borderLeft: '4px solid #6C35DE',
+        marginBottom: 28,
+      }}>
+        <h3 style={{ ...inter, fontSize: 16, fontWeight: 700, color: '#ffffff', marginBottom: 8 }}>
+          Not Ready to Leave Yet?
+        </h3>
+        <p style={{ ...inter, fontSize: 14, color: '#d1d1d6', lineHeight: 1.7 }}>
+          That's okay. You don't need to leave to start protecting yourself.
+          Document patterns. Build evidence. Prepare on your timeline.
+          Your Safety Base is private, encrypted, and only you can access it.
+        </p>
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 sm:mb-8">
-        <Link to="/dashboard/new-check" className="bg-card rounded-xl border border-border p-5 hover:shadow-md transition-shadow flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
-            <Shield className="h-5 w-5 text-primary" />
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4" style={{ marginBottom: 28 }}>
+        <Link to="/dashboard/new-check" style={{
+          ...card, display: 'flex', alignItems: 'center', gap: 14,
+          textDecoration: 'none', transition: 'border-color 0.2s, transform 0.2s',
+        }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = '#6C35DE'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(108,53,222,0.25)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}
+        >
+          <div style={{ width: 44, height: 44, borderRadius: 8, background: 'rgba(108,53,222,0.12)', border: '1px solid rgba(108,53,222,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6C35DE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
           </div>
           <div>
-            <p className="font-heading text-sm text-foreground">Run Safety Check</p>
-            <p className="font-body text-xs text-muted-foreground">Check someone in under 60 seconds</p>
+            <p style={{ ...inter, fontSize: 14, fontWeight: 700, color: '#ffffff', marginBottom: 2 }}>Run Safety Check</p>
+            <p style={{ ...inter, fontSize: 12, color: '#8b8b91' }}>Check someone in under 60 seconds</p>
           </div>
         </Link>
-        <Link to="/dashboard/journal/new" className="bg-card rounded-xl border border-border p-5 hover:shadow-md transition-shadow flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
-            <BookOpen className="h-5 w-5 text-primary" />
+        <Link to="/dashboard/journal/new" style={{
+          ...card, display: 'flex', alignItems: 'center', gap: 14,
+          textDecoration: 'none', transition: 'border-color 0.2s, transform 0.2s',
+        }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = '#6C35DE'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(108,53,222,0.25)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}
+        >
+          <div style={{ width: 44, height: 44, borderRadius: 8, background: 'rgba(108,53,222,0.12)', border: '1px solid rgba(108,53,222,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6C35DE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" /></svg>
           </div>
           <div>
-            <p className="font-heading text-sm text-foreground">Document an Incident</p>
-            <p className="font-body text-xs text-muted-foreground">Record what happened privately</p>
+            <p style={{ ...inter, fontSize: 14, fontWeight: 700, color: '#ffffff', marginBottom: 2 }}>Document an Incident</p>
+            <p style={{ ...inter, fontSize: 12, color: '#8b8b91' }}>Record what happened privately</p>
           </div>
         </Link>
-        <Link to="/safety-tips#get-help" className="bg-card rounded-xl border border-border p-5 hover:shadow-md transition-shadow flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'hsl(var(--risk-danger) / 0.1)' }}>
-            <Flag className="h-5 w-5" style={{ color: 'hsl(var(--risk-danger))' }} />
+        <Link to="/safety-tips#get-help" style={{
+          ...card, display: 'flex', alignItems: 'center', gap: 14,
+          textDecoration: 'none', transition: 'border-color 0.2s, transform 0.2s',
+          borderColor: 'rgba(192,57,43,0.25)',
+        }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = '#C0392B'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(192,57,43,0.25)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}
+        >
+          <div style={{ width: 44, height: 44, borderRadius: 8, background: 'rgba(192,57,43,0.1)', border: '1px solid rgba(192,57,43,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C0392B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
           </div>
           <div>
-            <p className="font-heading text-sm text-foreground">Get Help Now</p>
-            <p className="font-body text-xs text-muted-foreground">Helplines and emergency resources</p>
+            <p style={{ ...inter, fontSize: 14, fontWeight: 700, color: '#ffffff', marginBottom: 2 }}>Get Help Now</p>
+            <p style={{ ...inter, fontSize: 12, color: '#8b8b91' }}>Helplines and emergency resources</p>
           </div>
         </Link>
       </div>
 
-      {/* Top cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-5 mb-6 sm:mb-8">
-        <div className="bg-card rounded-xl border border-border p-6 shadow-sm hover:shadow-md transition-shadow">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
-              <Shield className="h-5 w-5 text-primary" />
+      {/* Stats cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" style={{ marginBottom: 28 }}>
+        {/* Credits */}
+        <div style={{ ...card, borderLeft: '3px solid #6C35DE' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+            <div style={{ width: 40, height: 40, borderRadius: 8, background: 'rgba(108,53,222,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6C35DE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
             </div>
-            <span className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Your safety checks</span>
+            <span style={{ ...mono, fontSize: 10, color: '#8b8b91', letterSpacing: '0.1em', textTransform: 'uppercase' as const }}>Your safety checks</span>
           </div>
-          <p className="font-heading text-4xl text-foreground">{creditsRemaining ?? 0}</p>
-          <p className="font-body text-sm text-muted-foreground mt-1">checks remaining</p>
+          <p style={{ ...inter, fontSize: 40, fontWeight: 900, color: '#ffffff', letterSpacing: '-0.03em', lineHeight: 1, marginBottom: 4 }}>
+            {creditsRemaining ?? 0}
+          </p>
+          <p style={{ ...inter, fontSize: 13, color: '#8b8b91' }}>checks remaining</p>
           {(creditsRemaining ?? 0) === 0 && (
-            <button onClick={() => setBuyModalOpen(true)} className="inline-flex items-center gap-1.5 mt-2 px-3 py-1.5 bg-primary text-primary-foreground font-body text-xs font-semibold rounded-lg hover:opacity-90 transition-colors">
+            <button
+              onClick={() => setBuyModalOpen(true)}
+              style={{ ...inter, fontSize: 12, fontWeight: 700, color: '#ffffff', background: '#6C35DE', border: 'none', padding: '8px 16px', borderRadius: 4, cursor: 'pointer', marginTop: 10 }}
+            >
               Buy More Checks
             </button>
           )}
         </div>
 
-        <div className="bg-card rounded-xl border border-border p-6 shadow-sm hover:shadow-md transition-shadow">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
-              <BarChart3 className="h-5 w-5 text-primary" />
+        {/* Checks this month */}
+        <div style={{ ...card, borderLeft: '3px solid #6C35DE' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+            <div style={{ width: 40, height: 40, borderRadius: 8, background: 'rgba(108,53,222,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6C35DE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" /><line x1="6" y1="20" x2="6" y2="14" /></svg>
             </div>
-            <span className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Checks this month</span>
+            <span style={{ ...mono, fontSize: 10, color: '#8b8b91', letterSpacing: '0.1em', textTransform: 'uppercase' as const }}>Checks this month</span>
           </div>
-          <p className="font-heading text-4xl text-foreground">{thisMonth.length}</p>
-          <div className="mt-2 h-1.5 w-full bg-muted rounded-full overflow-hidden">
-            <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${Math.min(thisMonth.length * 20, 100)}%` }} />
+          <p style={{ ...inter, fontSize: 40, fontWeight: 900, color: '#ffffff', letterSpacing: '-0.03em', lineHeight: 1, marginBottom: 12 }}>
+            {thisMonth.length}
+          </p>
+          <div style={{ height: 4, width: '100%', background: 'rgba(255,255,255,0.08)', borderRadius: 4, overflow: 'hidden' }}>
+            <div style={{ height: '100%', background: '#6C35DE', borderRadius: 4, width: `${Math.min(thisMonth.length * 20, 100)}%`, transition: 'width 0.6s' }} />
           </div>
         </div>
 
-        <div className="bg-card rounded-xl border border-border p-6 shadow-sm hover:shadow-md transition-shadow">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
-              <CheckCircle2 className="h-5 w-5 text-primary" />
+        {/* Latest result */}
+        <div style={{ ...card, borderLeft: '3px solid #6C35DE' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+            <div style={{ width: 40, height: 40, borderRadius: 8, background: 'rgba(108,53,222,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6C35DE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12" /></svg>
             </div>
-            <span className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Latest result</span>
+            <span style={{ ...mono, fontSize: 10, color: '#8b8b91', letterSpacing: '0.1em', textTransform: 'uppercase' as const }}>Latest result</span>
           </div>
           {latestSearch ? (
             <>
-              <span className="inline-block px-3 py-1 rounded-full font-mono text-xs font-semibold mb-2" style={{ color: latestRisk?.color, background: latestRisk?.bg }}>{latestRisk?.label}</span>
-              <p className="font-body text-sm text-muted-foreground">Last: {latestSearch.search_name || "Unknown"} ({new Date(latestSearch.searched_at).toLocaleDateString("en-ZA")})</p>
+              <span style={{ display: 'inline-block', padding: '4px 12px', borderRadius: 4, ...mono, fontSize: 11, fontWeight: 700, color: latestRisk?.color, background: latestRisk?.bg, marginBottom: 8 }}>
+                {latestRisk?.label}
+              </span>
+              <p style={{ ...inter, fontSize: 13, color: '#8b8b91' }}>
+                {latestSearch.search_name || "Unknown"} · {new Date(latestSearch.searched_at).toLocaleDateString("en-ZA")}
+              </p>
             </>
           ) : (
-            <p className="font-body text-sm text-muted-foreground">No checks yet</p>
+            <p style={{ ...inter, fontSize: 13, color: '#8b8b91' }}>No checks yet</p>
           )}
         </div>
       </div>
@@ -176,29 +247,43 @@ export default function Dashboard() {
       {user?.email && <MyPayments email={user.email} />}
 
       {/* Recent Journal Entries */}
-      <div className="bg-card rounded-xl border border-border shadow-sm mb-6 sm:mb-8">
-        <div className="px-4 sm:px-6 py-4 border-b border-border flex items-center justify-between">
-          <h2 className="font-heading text-base sm:text-lg text-foreground">Recent Journal Entries</h2>
+      <div style={{ ...card, marginBottom: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, paddingBottom: 16, borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+          <h2 style={{ ...inter, fontSize: 16, fontWeight: 700, color: '#ffffff' }}>Recent Journal Entries</h2>
           {recentJournal.length > 0 && (
-            <Link to="/dashboard/journal" className="font-body text-sm text-primary hover:underline flex items-center gap-1">View all <ArrowRight className="h-3 w-3" /></Link>
+            <Link to="/dashboard/journal" style={{ ...inter, fontSize: 13, color: '#6C35DE', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}>
+              View all →
+            </Link>
           )}
         </div>
         {recentJournal.length === 0 ? (
-          <div className="px-6 py-8 text-center">
-            <BookOpen className="h-8 w-8 text-muted-foreground mx-auto mb-3" />
-            <p className="font-body text-sm text-muted-foreground mb-3">No journal entries yet. Document your first incident.</p>
-            <Link to="/dashboard/journal/new" className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground font-body font-semibold text-sm rounded-lg hover:opacity-90 transition-colors">
-              <BookOpen className="h-4 w-4" /> Create First Entry
+          <div style={{ padding: '32px 0', textAlign: 'center' }}>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#8b8b91" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ margin: '0 auto 12px' }}>
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+            </svg>
+            <p style={{ ...inter, fontSize: 14, color: '#8b8b91', marginBottom: 16 }}>No journal entries yet. Document your first incident.</p>
+            <Link to="/dashboard/journal/new" style={{ ...inter, fontSize: 13, fontWeight: 700, color: '#ffffff', background: '#6C35DE', padding: '10px 20px', borderRadius: 4, textDecoration: 'none' }}>
+              Create First Entry
             </Link>
           </div>
         ) : (
-          <div className="divide-y divide-border">
-            {recentJournal.map(j => (
-              <Link key={j.id} to={`/dashboard/journal/${j.id}`} className="block px-4 sm:px-6 py-4 hover:bg-muted transition-colors">
-                <p className="font-body text-xs text-muted-foreground mb-1">
-                  📅 {new Date(j.entry_date).toLocaleDateString("en-ZA", { year: "numeric", month: "short", day: "numeric" })}
+          <div>
+            {recentJournal.map((j, i) => (
+              <Link
+                key={j.id}
+                to={`/dashboard/journal/${j.id}`}
+                style={{
+                  display: 'block', padding: '14px 0',
+                  borderBottom: i < recentJournal.length - 1 ? '1px solid rgba(255,255,255,0.06)' : 'none',
+                  textDecoration: 'none', transition: 'background 0.15s',
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = 'rgba(108,53,222,0.05)'}
+                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+              >
+                <p style={{ ...mono, fontSize: 10, color: '#6C35DE', marginBottom: 4 }}>
+                  {new Date(j.entry_date).toLocaleDateString("en-ZA", { year: "numeric", month: "short", day: "numeric" })}
                 </p>
-                <p className="font-body text-sm text-foreground line-clamp-1">
+                <p style={{ ...inter, fontSize: 14, color: '#d1d1d6', lineHeight: 1.5 }}>
                   {j.incident_description.slice(0, 100)}{j.incident_description.length > 100 ? "..." : ""}
                 </p>
               </Link>
@@ -207,61 +292,81 @@ export default function Dashboard() {
         )}
       </div>
 
-
-      <div className="bg-card rounded-xl border border-border shadow-sm mb-6 sm:mb-8">
-        <div className="px-4 sm:px-6 py-4 border-b border-border flex items-center justify-between">
-          <h2 className="font-heading text-base sm:text-lg text-foreground">Recent checks</h2>
+      {/* Recent Checks */}
+      <div style={{ ...card, marginBottom: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16, paddingBottom: 16, borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+          <h2 style={{ ...inter, fontSize: 16, fontWeight: 700, color: '#ffffff' }}>Recent Checks</h2>
           {searches.length > 0 && (
-            <Link to="/dashboard/reports" className="font-body text-sm text-primary hover:underline flex items-center gap-1">View all <ArrowRight className="h-3 w-3" /></Link>
+            <Link to="/dashboard/reports" style={{ ...inter, fontSize: 13, color: '#6C35DE', textDecoration: 'none' }}>
+              View all →
+            </Link>
           )}
         </div>
         {searches.length === 0 ? (
-          <div className="px-6 py-12 text-center">
-            <Shield className="h-10 w-10 text-muted-foreground mx-auto mb-3" />
-            <p className="font-heading text-lg text-foreground mb-2">No safety checks yet</p>
-            <p className="font-body text-sm text-muted-foreground mb-4 max-w-md mx-auto">When you run your first safety check, you'll see all your results here.</p>
-            <Link to="/dashboard/new-check" className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-body font-semibold text-sm rounded-lg hover:opacity-90 transition-colors">
-              <Shield className="h-4 w-4" /> Run your first safety check
+          <div style={{ padding: '32px 0', textAlign: 'center' }}>
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#8b8b91" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ margin: '0 auto 12px' }}>
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            </svg>
+            <p style={{ ...inter, fontSize: 16, fontWeight: 700, color: '#ffffff', marginBottom: 8 }}>No safety checks yet</p>
+            <p style={{ ...inter, fontSize: 14, color: '#8b8b91', marginBottom: 20, maxWidth: 420, margin: '0 auto 20px' }}>
+              When you run your first safety check, you'll see all your results here.
+            </p>
+            <Link to="/dashboard/new-check" style={{ ...inter, fontSize: 14, fontWeight: 700, color: '#ffffff', background: '#6C35DE', padding: '12px 24px', borderRadius: 4, textDecoration: 'none' }}>
+              Run your first safety check
             </Link>
           </div>
         ) : (
           <>
-            <div className="sm:hidden divide-y divide-border">
+            {/* Mobile view */}
+            <div className="sm:hidden">
               {searches.slice(0, 10).map((s) => {
                 const risk = riskConfig[s.risk_level] || riskConfig.GREEN;
                 return (
-                  <div key={s.id} className="px-4 py-4 space-y-2">
-                    <div className="flex items-start justify-between">
-                      <div><p className="font-body text-sm text-foreground font-medium">{s.search_name || "—"}</p><p className="font-body text-xs text-muted-foreground">{new Date(s.searched_at).toLocaleDateString("en-ZA")}</p></div>
-                      <span className="inline-block px-2.5 py-0.5 rounded-full font-mono text-[10px] font-semibold" style={{ color: risk.color, background: risk.bg }}>{risk.label}</span>
+                  <div key={s.id} style={{ padding: '14px 0', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 8 }}>
+                      <div>
+                        <p style={{ ...inter, fontSize: 14, fontWeight: 600, color: '#ffffff' }}>{s.search_name || "—"}</p>
+                        <p style={{ ...mono, fontSize: 11, color: '#8b8b91' }}>{new Date(s.searched_at).toLocaleDateString("en-ZA")}</p>
+                      </div>
+                      <span style={{ ...mono, fontSize: 10, fontWeight: 700, color: risk.color, background: risk.bg, padding: '3px 10px', borderRadius: 4 }}>{risk.label}</span>
                     </div>
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono text-xs text-muted-foreground">{s.matches_found} match{s.matches_found !== 1 ? "es" : ""}</span>
-                      <Link to={`/results?search_id=${s.search_id}`} className="font-body text-sm text-primary hover:underline">View report</Link>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span style={{ ...mono, fontSize: 11, color: '#8b8b91' }}>{s.matches_found} match{s.matches_found !== 1 ? "es" : ""}</span>
+                      <Link to={`/results?search_id=${s.search_id}`} style={{ ...inter, fontSize: 13, color: '#6C35DE', textDecoration: 'none' }}>View →</Link>
                     </div>
                   </div>
                 );
               })}
             </div>
-            <div className="hidden sm:block overflow-x-auto">
-              <table className="w-full">
-                <thead><tr className="border-b border-border">
-                  <th className="text-left px-6 py-3 font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Person</th>
-                  <th className="text-left px-6 py-3 font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Date</th>
-                  <th className="text-left px-6 py-3 font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Result</th>
-                  <th className="text-left px-6 py-3 font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Matches</th>
-                  <th className="text-right px-6 py-3"></th>
-                </tr></thead>
+            {/* Desktop table */}
+            <div className="hidden sm:block" style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+                    {['Person', 'Date', 'Result', 'Matches', ''].map(h => (
+                      <th key={h} style={{ textAlign: 'left', padding: '0 16px 12px', ...mono, fontSize: 10, color: '#8b8b91', letterSpacing: '0.1em', textTransform: 'uppercase' as const }}>
+                        {h}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
                 <tbody>
                   {searches.slice(0, 10).map((s) => {
                     const risk = riskConfig[s.risk_level] || riskConfig.GREEN;
                     return (
-                      <tr key={s.id} className="border-b border-border last:border-0 hover:bg-muted transition-colors">
-                        <td className="px-6 py-4 font-body text-sm text-foreground font-medium">{s.search_name || "—"}</td>
-                        <td className="px-6 py-4 font-body text-sm text-muted-foreground">{new Date(s.searched_at).toLocaleDateString("en-ZA")}</td>
-                        <td className="px-6 py-4"><span className="inline-block px-3 py-1 rounded-full font-mono text-[10px] font-semibold" style={{ color: risk.color, background: risk.bg }}>{risk.label}</span></td>
-                        <td className="px-6 py-4 font-mono text-sm text-muted-foreground">{s.matches_found}</td>
-                        <td className="px-6 py-4 text-right"><Link to={`/results?search_id=${s.search_id}`} className="font-body text-sm text-primary hover:underline">View report</Link></td>
+                      <tr key={s.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}
+                        onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'rgba(108,53,222,0.04)'}
+                        onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}
+                      >
+                        <td style={{ padding: '14px 16px', ...inter, fontSize: 14, color: '#ffffff', fontWeight: 600 }}>{s.search_name || "—"}</td>
+                        <td style={{ padding: '14px 16px', ...mono, fontSize: 12, color: '#8b8b91' }}>{new Date(s.searched_at).toLocaleDateString("en-ZA")}</td>
+                        <td style={{ padding: '14px 16px' }}>
+                          <span style={{ ...mono, fontSize: 10, fontWeight: 700, color: risk.color, background: risk.bg, padding: '3px 10px', borderRadius: 4 }}>{risk.label}</span>
+                        </td>
+                        <td style={{ padding: '14px 16px', ...mono, fontSize: 13, color: '#8b8b91' }}>{s.matches_found}</td>
+                        <td style={{ padding: '14px 16px', textAlign: 'right' as const }}>
+                          <Link to={`/results?search_id=${s.search_id}`} style={{ ...inter, fontSize: 13, color: '#6C35DE', textDecoration: 'none' }}>View →</Link>
+                        </td>
                       </tr>
                     );
                   })}
@@ -272,42 +377,53 @@ export default function Dashboard() {
         )}
       </div>
 
-      {/* Referral stats */}
-      <div className="bg-card rounded-xl border border-border p-6 shadow-sm mb-6 sm:mb-8">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: 'hsl(var(--primary) / 0.1)' }}>
-            <Users className="h-5 w-5 text-primary" />
+      {/* Referral */}
+      <div style={{ ...card, marginBottom: 20 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+          <div style={{ width: 40, height: 40, borderRadius: 8, background: 'rgba(108,53,222,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6C35DE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
           </div>
           <div>
-            <span className="font-mono text-[10px] tracking-wider text-muted-foreground uppercase">Referral Programme</span>
-            <p className="font-heading text-lg text-foreground mt-1">You invited {referralCount} friend{referralCount !== 1 ? "s" : ""} · Earned {freeChecksEarned} free check{freeChecksEarned !== 1 ? "s" : ""}</p>
+            <p style={{ ...mono, fontSize: 10, color: '#8b8b91', letterSpacing: '0.1em', textTransform: 'uppercase' as const }}>Referral Programme</p>
+            <p style={{ ...inter, fontSize: 16, fontWeight: 700, color: '#ffffff', marginTop: 2 }}>
+              You invited {referralCount} friend{referralCount !== 1 ? "s" : ""} · Earned {freeChecksEarned} free check{freeChecksEarned !== 1 ? "s" : ""}
+            </p>
           </div>
         </div>
-        <p className="font-body text-sm text-muted-foreground mb-3">For every 3 friends who sign up from your link, you earn 1 free safety check.</p>
-        <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden mb-2">
-          <div className="h-full bg-primary rounded-full transition-all" style={{ width: `${((referralCount % 3) / 3) * 100}%` }} />
+        <p style={{ ...inter, fontSize: 13, color: '#8b8b91', marginBottom: 12 }}>
+          For every 3 friends who sign up from your link, you earn 1 free safety check.
+        </p>
+        <div style={{ height: 4, width: '100%', background: 'rgba(255,255,255,0.08)', borderRadius: 4, overflow: 'hidden', marginBottom: 8 }}>
+          <div style={{ height: '100%', background: '#6C35DE', borderRadius: 4, width: `${((referralCount % 3) / 3) * 100}%`, transition: 'width 0.6s' }} />
         </div>
-        <p className="font-mono text-[10px] text-muted-foreground">{3 - (referralCount % 3)} more referral{3 - (referralCount % 3) !== 1 ? "s" : ""} until your next free check</p>
+        <p style={{ ...mono, fontSize: 10, color: '#8b8b91' }}>
+          {3 - (referralCount % 3)} more referral{3 - (referralCount % 3) !== 1 ? "s" : ""} until your next free check
+        </p>
       </div>
 
-      {/* Quick actions */}
-      <div className="flex flex-wrap gap-4">
+      {/* Action buttons */}
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 16 }}>
         {(creditsRemaining ?? 0) > 0 ? (
-          <Link to="/dashboard/new-check" className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-body font-bold text-sm rounded-lg hover:opacity-90 transition-colors shadow-sm">
-            <Shield className="h-4 w-4" /> Run a new safety check
+          <Link to="/dashboard/new-check" style={{ ...inter, fontSize: 14, fontWeight: 700, color: '#ffffff', background: '#6C35DE', padding: '12px 24px', borderRadius: 4, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
+            Run a new safety check
           </Link>
         ) : (
-          <button onClick={() => setBuyModalOpen(true)} className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-body font-bold text-sm rounded-lg hover:opacity-90 transition-colors shadow-sm">
-            <Shield className="h-4 w-4" /> Buy More Checks
+          <button onClick={() => setBuyModalOpen(true)} style={{ ...inter, fontSize: 14, fontWeight: 700, color: '#ffffff', background: '#6C35DE', padding: '12px 24px', borderRadius: 4, border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" /></svg>
+            Buy More Checks
           </button>
         )}
-        <button onClick={() => setShareOpen(true)} className="inline-flex items-center gap-2 px-6 py-3 border border-border text-foreground font-body font-medium text-sm rounded-lg hover:bg-muted transition-colors">
-          <Heart className="h-4 w-4" /> Invite a friend to RedFlaq
+        <button onClick={() => setShareOpen(true)} style={{ ...inter, fontSize: 14, fontWeight: 600, color: '#d1d1d6', background: 'transparent', border: '1px solid rgba(255,255,255,0.12)', padding: '12px 24px', borderRadius: 4, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
+          Invite a friend to RedFlaq
         </button>
       </div>
 
-      <div className="mt-4 text-center">
-        <a href="mailto:support@redflaq.com" className="font-body text-xs text-muted-foreground hover:text-primary transition-colors">Payment issue? Contact support@redflaq.com</a>
+      <div style={{ textAlign: 'center' }}>
+        <a href="mailto:support@redflaq.com" style={{ ...inter, fontSize: 12, color: '#8b8b91', textDecoration: 'none' }}>
+          Payment issue? Contact support@redflaq.com
+        </a>
       </div>
 
       <ShareInviteModal open={shareOpen} onOpenChange={setShareOpen} />

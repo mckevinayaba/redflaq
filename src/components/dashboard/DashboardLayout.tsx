@@ -8,10 +8,10 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="flex flex-col min-h-screen bg-background">
+    <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', background: '#08080f' }}>
       <AppHeader />
 
-      <div className="flex flex-1">
+      <div style={{ display: 'flex', flex: 1 }}>
         {/* Desktop sidebar */}
         <div className="hidden lg:block">
           <DashboardSidebar />
@@ -20,7 +20,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         {/* Mobile overlay */}
         {mobileOpen && (
           <div className="fixed inset-0 z-50 lg:hidden" onClick={() => setMobileOpen(false)}>
-            <div className="absolute inset-0 bg-black/40 animate-fade-in" />
+            <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.7)' }} />
           </div>
         )}
         <div
@@ -31,30 +31,48 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           <div className="relative h-full">
             <button
               onClick={() => setMobileOpen(false)}
-              className="absolute top-3 right-3 z-10 p-1.5 rounded-lg bg-background/80 hover:bg-muted transition-colors"
+              style={{
+                position: 'absolute', top: 12, right: 12, zIndex: 10,
+                padding: '6px', borderRadius: 6,
+                background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.08)',
+                cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}
               aria-label="Close sidebar"
             >
-              <X className="h-5 w-5 text-foreground" />
+              <X style={{ width: 18, height: 18, color: '#ffffff' }} />
             </button>
             <DashboardSidebar />
           </div>
         </div>
 
         {/* Main content */}
-        <main className="flex-1 min-w-0">
-          <div className="lg:hidden flex items-center px-4 py-3 border-b border-border bg-card">
-            <button onClick={() => setMobileOpen(true)} className="p-2 hover:bg-muted rounded-lg">
-              <Menu className="h-5 w-5 text-foreground" />
+        <main style={{ flex: 1, minWidth: 0 }}>
+          {/* Mobile hamburger bar */}
+          <div
+            className="lg:hidden flex items-center px-4 py-3"
+            style={{ borderBottom: '1px solid rgba(255,255,255,0.06)', background: '#111118' }}
+          >
+            <button
+              onClick={() => setMobileOpen(true)}
+              style={{
+                padding: '6px', borderRadius: 6,
+                background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)',
+                cursor: 'pointer',
+              }}
+            >
+              <Menu style={{ width: 18, height: 18, color: '#d1d1d6' }} />
             </button>
           </div>
 
           <div className="p-4 sm:p-6 lg:p-10 max-w-7xl">
             {children}
 
-            <div className="mt-8 sm:mt-12 pt-4 sm:pt-6 border-t border-border text-center">
+            <div style={{ marginTop: 40, paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.06)', textAlign: 'center' }}>
               <Link
                 to="/"
-                className="font-body text-sm text-muted-foreground hover:text-primary transition-colors"
+                style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: '#8b8b91', textDecoration: 'none', transition: 'color 0.2s' }}
+                onMouseEnter={e => e.currentTarget.style.color = '#6C35DE'}
+                onMouseLeave={e => e.currentTarget.style.color = '#8b8b91'}
               >
                 ← Back to redflaq.com homepage
               </Link>

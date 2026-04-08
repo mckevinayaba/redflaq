@@ -3,10 +3,29 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
-import { Plus, FileDown, Search, Trash2, Eye, Scale, Calendar, CheckCircle, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { generateTimelinePDF } from "@/utils/pdfTimeline";
-import journalHeroImg from "@/assets/journal-hero-woman-writing.jpg";
+
+const inter: React.CSSProperties = { fontFamily: "'Inter', sans-serif" };
+const mono: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };
+
+const card: React.CSSProperties = {
+  background: '#111118',
+  border: '1px solid rgba(108,53,222,0.25)',
+  borderRadius: 8,
+};
+
+const inputStyle: React.CSSProperties = {
+  ...inter as React.CSSProperties,
+  fontSize: 14,
+  color: '#d1d1d6',
+  background: '#0d0d1a',
+  border: '1px solid rgba(255,255,255,0.1)',
+  borderRadius: 6,
+  padding: '10px 14px',
+  outline: 'none',
+  width: '100%',
+};
 
 interface JournalEntry {
   id: string;
@@ -53,9 +72,7 @@ export default function JournalList() {
   const [timelineDateFrom, setTimelineDateFrom] = useState("");
   const [timelineDateTo, setTimelineDateTo] = useState("");
 
-  const firstName = user?.user_metadata?.full_name?.split(" ")[0]
-    || user?.email?.split("@")[0]
-    || "Your";
+  const firstName = user?.user_metadata?.full_name?.split(" ")[0] || user?.email?.split("@")[0] || "Your";
 
   useEffect(() => {
     if (!authLoading && !user) { navigate("/signup"); return; }
@@ -75,11 +92,7 @@ export default function JournalList() {
 
     if (data && data.length > 0) {
       const ids = data.map(e => e.id);
-      const { data: evData } = await supabase
-        .from("journal_evidence")
-        .select("entry_id, file_type")
-        .in("entry_id", ids);
-
+      const { data: evData } = await supabase.from("journal_evidence").select("entry_id, file_type").in("entry_id", ids);
       const counts: Record<string, Record<string, number>> = {};
       (evData || []).forEach((ev: EvidenceCount) => {
         if (!counts[ev.entry_id]) counts[ev.entry_id] = {};
@@ -100,7 +113,6 @@ export default function JournalList() {
       }).filter(Boolean);
       if (paths.length > 0) await supabase.storage.from("journal-evidence").remove(paths);
     }
-
     const { error } = await supabase.from("journal_entries").delete().eq("id", id);
     if (error) toast({ title: "Error deleting entry", description: error.message, variant: "destructive" });
     else { toast({ title: "Entry deleted" }); setEntries(prev => prev.filter(e => e.id !== id)); }
@@ -108,8 +120,7 @@ export default function JournalList() {
   };
 
   const filteredEntries = entries.filter(e => {
-    const now = new Date();
-    const entryDate = new Date(e.entry_date);
+    const now = new Date(); const entryDate = new Date(e.entry_date);
     if (filter === "30") { const cutoff = new Date(); cutoff.setDate(now.getDate() - 30); if (entryDate < cutoff) return false; }
     if (filter === "180") { const cutoff = new Date(); cutoff.setDate(now.getDate() - 180); if (entryDate < cutoff) return false; }
     if (filter === "365") { const cutoff = new Date(); cutoff.setDate(now.getDate() - 365); if (entryDate < cutoff) return false; }
@@ -135,33 +146,20 @@ export default function JournalList() {
 
   const handleGenerateTimeline = () => {
     let filtered = [...entries];
-    if (timelineFilter !== "all") {
-      filtered = filtered.filter(e => e.about_person === timelineFilter);
-    }
-    if (timelineDateFrom) {
-      filtered = filtered.filter(e => e.entry_date >= timelineDateFrom);
-    }
-    if (timelineDateTo) {
-      filtered = filtered.filter(e => e.entry_date <= timelineDateTo);
-    }
-    if (filtered.length === 0) {
-      toast({ title: "No entries match", description: "Adjust your filters.", variant: "destructive" });
-      return;
-    }
-    generateTimelinePDF({
-      entries: filtered,
-      userName: firstName,
-      filterPerson: timelineFilter === "all" ? undefined : timelineFilter,
-    });
+    if (timelineFilter !== "all") filtered = filtered.filter(e => e.about_person === timelineFilter);
+    if (timelineDateFrom) filtered = filtered.filter(e => e.entry_date >= timelineDateFrom);
+    if (timelineDateTo) filtered = filtered.filter(e => e.entry_date <= timelineDateTo);
+    if (filtered.length === 0) { toast({ title: "No entries match", description: "Adjust your filters.", variant: "destructive" }); return; }
+    generateTimelinePDF({ entries: filtered, userName: firstName, filterPerson: timelineFilter === "all" ? undefined : timelineFilter });
     setShowTimeline(false);
-    toast({ title: "Timeline PDF downloaded ✓" });
+    toast({ title: "Timeline PDF downloaded" });
   };
 
   if (authLoading || loading) {
     return (
       <DashboardLayout>
-        <div className="flex items-center justify-center py-20">
-          <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin" />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '80px 0' }}>
+          <div style={{ width: 28, height: 28, border: '3px solid rgba(108,53,222,0.2)', borderTopColor: '#6C35DE', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
         </div>
       </DashboardLayout>
     );
@@ -169,54 +167,49 @@ export default function JournalList() {
 
   return (
     <DashboardLayout>
-      {/* Hero Banner */}
-      <div
-        className="relative w-full overflow-hidden -mt-4 sm:-mt-6 lg:-mt-10 -mx-4 sm:-mx-6 lg:-mx-10 mb-8"
-        style={{ width: 'calc(100% + 2rem)', marginLeft: '-1rem', marginRight: '-1rem' }}
-      >
-        <div className="relative h-[160px] sm:h-[220px] w-full overflow-hidden">
-          <img src={journalHeroImg} alt="A woman writing privately in her journal by natural window light" className="absolute inset-0 w-full h-full object-cover" />
-          <div className="absolute inset-0" style={{ background: 'linear-gradient(to right, rgba(124,58,237,0.65) 0%, rgba(124,58,237,0.35) 40%, transparent 70%)' }} />
-          <div className="absolute inset-0 flex flex-col justify-center px-6 sm:px-10 lg:px-14">
-            <h1 className="font-heading text-2xl sm:text-[32px] text-white font-bold leading-tight mb-1.5 drop-shadow-md">
-              {firstName}'s Safety Journal
-            </h1>
-            <p className="font-body text-sm sm:text-base text-white/90 font-light drop-shadow-sm">
-              Track what changed. Record what felt off. Preserve clarity.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="mb-6">
-        <p className="font-mono text-[11px] tracking-widest text-muted-foreground uppercase mb-1">My Safety Journal</p>
-        <p className="font-body text-sm text-muted-foreground max-w-2xl mb-3">
-          You don't have to be certain something is wrong to start recording. You just have to feel that something changed.
+      {/* Header */}
+      <div style={{ marginBottom: 28 }}>
+        <p style={{ ...mono, fontSize: 10, color: '#6C35DE', letterSpacing: '0.15em', textTransform: 'uppercase' as const, marginBottom: 8 }}>
+          Your Safety Journal
         </p>
-        <p className="font-body text-sm text-muted-foreground max-w-2xl mb-4">
-          My Safety Journal creates a private, encrypted record of incidents, patterns, and moments that felt off — while they're still fresh and before memory gets manipulated.
+        <h1 style={{ ...inter, fontSize: 'clamp(22px, 3vw, 30px)', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.025em', marginBottom: 8 }}>
+          {firstName}'s Safety Journal
+        </h1>
+        <p style={{ ...inter, fontSize: 14, color: '#8b8b91', lineHeight: 1.7, maxWidth: 600, marginBottom: 8 }}>
+          Track what changed. Record what felt off. Preserve clarity before memory gets manipulated.
+        </p>
+        <p style={{ ...inter, fontSize: 14, color: '#8b8b91', lineHeight: 1.7, maxWidth: 600 }}>
           Court-admissible when you need it. Invisible until then.
         </p>
-        <ul className="font-body text-sm text-muted-foreground max-w-2xl space-y-1.5 list-disc list-inside">
-          <li>What happened today that didn't feel right?</li>
-          <li>What did he say that you want to remember exactly?</li>
-          <li>When did the behavior start to change?</li>
-          <li>What pattern are you noticing?</li>
-        </ul>
       </div>
 
       {/* Actions */}
-      <div className="flex flex-wrap gap-3 mb-6">
-        <Link to="/dashboard/journal/new" className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary text-primary-foreground font-body font-bold text-sm rounded-lg hover:opacity-90 transition-colors">
-          <Plus className="h-4 w-4" /> Record Something
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 24 }}>
+        <Link to="/dashboard/journal/new" style={{
+          ...inter, fontSize: 14, fontWeight: 700, color: '#ffffff',
+          background: '#6C35DE', padding: '10px 20px', borderRadius: 4,
+          textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8,
+        }}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
+          Record Something
         </Link>
         {entries.length > 0 && (
           <>
-            <button onClick={() => setShowTimeline(true)} className="inline-flex items-center gap-2 px-5 py-2.5 border border-primary text-primary font-body font-medium text-sm rounded-lg hover:bg-primary/5 transition-colors">
-              <Calendar className="h-4 w-4" /> Export Timeline
+            <button onClick={() => setShowTimeline(true)} style={{
+              ...inter, fontSize: 14, fontWeight: 600, color: '#6C35DE',
+              background: 'transparent', border: '1px solid rgba(108,53,222,0.35)',
+              padding: '10px 18px', borderRadius: 4, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8,
+            }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
+              Export Timeline
             </button>
-            <Link to="/dashboard/journal/export" className="inline-flex items-center gap-2 px-5 py-2.5 border border-border text-foreground font-body font-medium text-sm rounded-lg hover:bg-muted transition-colors">
-              <FileDown className="h-4 w-4" /> Export to PDF
+            <Link to="/dashboard/journal/export" style={{
+              ...inter, fontSize: 14, fontWeight: 600, color: '#d1d1d6',
+              background: 'transparent', border: '1px solid rgba(255,255,255,0.12)',
+              padding: '10px 18px', borderRadius: 4, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8,
+            }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" y1="15" x2="12" y2="3" /></svg>
+              Export to PDF
             </Link>
           </>
         )}
@@ -224,84 +217,126 @@ export default function JournalList() {
 
       {/* Filter & Search */}
       {entries.length > 0 && (
-        <div className="flex flex-col sm:flex-row gap-3 mb-6">
-          <select value={filter} onChange={e => setFilter(e.target.value)}
-            className="px-3 py-2 rounded-xl border border-border bg-card text-foreground font-body text-sm">
+        <div className="flex flex-col sm:flex-row gap-3" style={{ marginBottom: 24 }}>
+          <select
+            value={filter}
+            onChange={e => setFilter(e.target.value)}
+            style={{ ...inputStyle, width: 'auto', minWidth: 160 }}
+            onFocus={e => e.target.style.borderColor = '#6C35DE'}
+            onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
+          >
             <option value="all">All Entries</option>
             <option value="30">Last 30 Days</option>
             <option value="180">Last 6 Months</option>
             <option value="365">Last Year</option>
           </select>
-          <div className="relative flex-1 max-w-sm">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <input type="text" placeholder="Search entries..."
-              value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-xl border border-border bg-card text-foreground font-body text-sm" />
+          <div style={{ position: 'relative', flex: 1, maxWidth: 360 }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8b8b91" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+              style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)' }}>
+              <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+            <input
+              type="text"
+              placeholder="Search entries..."
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              style={{ ...inputStyle, paddingLeft: 38 }}
+              onFocus={e => e.target.style.borderColor = '#6C35DE'}
+              onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.1)'}
+            />
           </div>
         </div>
       )}
 
-      {/* Entry List */}
+      {/* Entry list */}
       {filteredEntries.length === 0 ? (
-        <div className="bg-white p-12 text-center" style={{ borderRadius: 14, boxShadow: '0 2px 12px rgba(124,58,237,0.08)' }}>
-          <div className="text-4xl mb-4">📝</div>
-          <h2 className="font-heading text-lg text-foreground mb-2">
-            {entries.length === 0 ? "You have not documented any incidents yet" : "No entries match your search"}
+        <div style={{
+          ...card,
+          padding: '48px 24px',
+          textAlign: 'center',
+          border: '2px dashed rgba(108,53,222,0.3)',
+          background: '#0d0d1a',
+        }}>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#8b8b91" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ margin: '0 auto 16px' }}>
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" />
+          </svg>
+          <h2 style={{ ...inter, fontSize: 18, fontWeight: 700, color: '#ffffff', marginBottom: 8 }}>
+            {entries.length === 0 ? "No journal entries yet" : "No entries match your search"}
           </h2>
-          <p className="font-body text-sm text-muted-foreground mb-6 max-w-md mx-auto">
+          <p style={{ ...inter, fontSize: 14, color: '#8b8b91', maxWidth: 420, margin: '0 auto 24px', lineHeight: 1.6 }}>
             {entries.length === 0
-              ? "When something worries you, writing it down here can help you see patterns and remember details later."
+              ? "Start documenting patterns, incidents, or moments that felt off — privately and securely."
               : "Try adjusting your filters or search terms."}
           </p>
           {entries.length === 0 && (
-            <Link to="/dashboard/journal/new" className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground font-body font-bold text-sm rounded-lg hover:opacity-90 transition-colors">
-              <Plus className="h-4 w-4" /> Create First Entry
+            <Link to="/dashboard/journal/new" style={{
+              ...inter, fontSize: 14, fontWeight: 700, color: '#ffffff',
+              background: '#6C35DE', padding: '12px 24px', borderRadius: 4, textDecoration: 'none',
+            }}>
+              Create Your First Entry
             </Link>
           )}
         </div>
       ) : (
-        <div className="space-y-4">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {filteredEntries.map(entry => {
             const evSummary = getEvidenceSummary(entry.id);
             const isVerified = !!entry.statement_hash;
             return (
-              <div key={entry.id} className="bg-white p-5 hover:shadow-md transition-shadow" style={{ borderRadius: 14, boxShadow: '0 2px 12px rgba(124,58,237,0.08)' }}>
-                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="font-mono text-xs text-primary">📅</span>
-                      <span className="font-body text-sm font-semibold text-foreground">
+              <div key={entry.id} style={{ ...card, padding: '20px 24px', transition: 'border-color 0.2s' }}
+                onMouseEnter={e => (e.currentTarget as HTMLElement).style.borderColor = '#6C35DE'}
+                onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = 'rgba(108,53,222,0.25)'}
+              >
+                <div className="flex flex-col sm:flex-row sm:items-start" style={{ justifyContent: 'space-between', gap: 12 }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8, flexWrap: 'wrap' }}>
+                      <span style={{ ...mono, fontSize: 11, color: '#6C35DE', fontWeight: 700 }}>
                         {new Date(entry.entry_date).toLocaleDateString("en-ZA", { year: "numeric", month: "long", day: "numeric" })}
                       </span>
-                      <span className="font-body text-xs text-muted-foreground">at {entry.entry_time?.slice(0, 5)}</span>
+                      <span style={{ ...mono, fontSize: 11, color: '#8b8b91' }}>at {entry.entry_time?.slice(0, 5)}</span>
                       {isVerified && (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono bg-green-50 text-green-700">
-                          <CheckCircle className="h-3 w-3" /> Verified
+                        <span style={{ ...mono, fontSize: 9, fontWeight: 700, color: '#27AE60', background: 'rgba(39,174,96,0.1)', border: '1px solid rgba(39,174,96,0.25)', padding: '2px 8px', borderRadius: 4 }}>
+                          Verified
                         </span>
                       )}
                     </div>
                     {entry.about_person && (
-                      <p className="font-body text-xs text-primary mb-1">About: {entry.about_person}</p>
+                      <p style={{ ...inter, fontSize: 12, color: '#6C35DE', marginBottom: 4 }}>About: {entry.about_person}</p>
                     )}
                     {entry.location && (
-                      <p className="font-body text-xs text-muted-foreground mb-1">📍 {entry.location}</p>
+                      <p style={{ ...mono, fontSize: 11, color: '#8b8b91', marginBottom: 6 }}>{entry.location}</p>
                     )}
-                    <p className="font-body text-sm text-foreground line-clamp-2">
+                    <p style={{ ...inter, fontSize: 14, color: '#d1d1d6', lineHeight: 1.6 }}>
                       {entry.incident_description.slice(0, 150)}{entry.incident_description.length > 150 ? "..." : ""}
                     </p>
                     {evSummary && (
-                      <p className="font-mono text-[10px] text-muted-foreground mt-2">📎 {evSummary}</p>
+                      <p style={{ ...mono, fontSize: 10, color: '#8b8b91', marginTop: 8 }}>Attachments: {evSummary}</p>
                     )}
                   </div>
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    <Link to={`/dashboard/journal/${entry.id}`} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-body font-medium text-primary hover:bg-primary/10 rounded-lg transition-colors">
-                      <Eye className="h-3.5 w-3.5" /> View
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+                    <Link to={`/dashboard/journal/${entry.id}`} style={{
+                      ...inter, fontSize: 13, fontWeight: 600, color: '#6C35DE',
+                      textDecoration: 'none', padding: '6px 12px', borderRadius: 4,
+                      background: 'rgba(108,53,222,0.1)', border: '1px solid rgba(108,53,222,0.2)',
+                      display: 'flex', alignItems: 'center', gap: 4,
+                    }}>
+                      View
                     </Link>
-                    <Link to={`/dashboard/journal/export?entry=${entry.id}`} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-body font-medium text-muted-foreground hover:bg-muted rounded-lg transition-colors">
-                      <FileDown className="h-3.5 w-3.5" /> PDF
+                    <Link to={`/dashboard/journal/export?entry=${entry.id}`} style={{
+                      ...inter, fontSize: 13, fontWeight: 600, color: '#8b8b91',
+                      textDecoration: 'none', padding: '6px 12px', borderRadius: 4,
+                      background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)',
+                      display: 'flex', alignItems: 'center', gap: 4,
+                    }}>
+                      PDF
                     </Link>
-                    <button onClick={() => setDeleteId(entry.id)} className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-body font-medium text-destructive hover:bg-destructive/10 rounded-lg transition-colors">
-                      <Trash2 className="h-3.5 w-3.5" /> Delete
+                    <button onClick={() => setDeleteId(entry.id)} style={{
+                      ...inter, fontSize: 13, fontWeight: 600, color: '#C0392B',
+                      background: 'rgba(192,57,43,0.08)', border: '1px solid rgba(192,57,43,0.2)',
+                      padding: '6px 12px', borderRadius: 4, cursor: 'pointer',
+                    }}>
+                      Delete
                     </button>
                   </div>
                 </div>
@@ -311,85 +346,85 @@ export default function JournalList() {
         </div>
       )}
 
-      {/* Legal Disclaimer */}
-      <div className="mt-8 bg-white p-5" style={{ borderRadius: 14, boxShadow: '0 2px 12px rgba(124,58,237,0.08)', borderLeft: '4px solid #7C3AED' }}>
-        <div className="flex items-start gap-3">
-          <Scale className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+      {/* Legal disclaimer */}
+      <div style={{ ...card, padding: '20px 24px', marginTop: 32, borderLeft: '3px solid rgba(108,53,222,0.5)' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6C35DE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginTop: 2, flexShrink: 0 }}>
+            <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
           <div>
-            <h3 className="font-heading text-sm text-foreground mb-2">Legal disclaimer</h3>
-            <p className="font-body text-xs text-muted-foreground leading-relaxed">
+            <h3 style={{ ...inter, fontSize: 14, fontWeight: 700, color: '#ffffff', marginBottom: 8 }}>Legal disclaimer</h3>
+            <p style={{ ...inter, fontSize: 12, color: '#8b8b91', lineHeight: 1.7 }}>
               My Safety Journal is a documentation tool to help you organise incidents and share information with people supporting you. It does not guarantee that any entry or file will be accepted as evidence in court.
             </p>
-            <p className="font-body text-xs text-muted-foreground leading-relaxed mt-2">
-              Under South African law (including the Electronic Communications and Transactions Act), digital information can be used in legal processes if it is properly authenticated and presented by a legal professional. Always speak to a lawyer, Legal Aid South Africa (0800 110 110), or another qualified advisor before relying on journal entries in a case.
-            </p>
-            <p className="font-body text-xs text-muted-foreground leading-relaxed mt-2">
-              This tool does not replace: reporting to the police (10111), getting medical care, or speaking to a qualified attorney.
+            <p style={{ ...inter, fontSize: 12, color: '#8b8b91', lineHeight: 1.7, marginTop: 8 }}>
+              Under South African law (including the Electronic Communications and Transactions Act), digital information can be used in legal processes if properly authenticated. Always speak to a lawyer, Legal Aid South Africa (0800 110 110), or another qualified advisor before relying on journal entries in a case.
             </p>
           </div>
         </div>
       </div>
 
-      {/* Delete confirmation modal */}
+      {/* Delete modal */}
       {deleteId && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setDeleteId(null)}>
-          <div className="bg-white p-6 max-w-sm w-full shadow-xl" style={{ borderRadius: 14 }} onClick={e => e.stopPropagation()}>
-            <h3 className="font-heading text-lg text-foreground mb-2">Delete this entry?</h3>
-            <p className="font-body text-sm text-muted-foreground mb-6">Are you sure you want to delete this entry? This action cannot be undone.</p>
-            <div className="flex gap-3 justify-end">
-              <button onClick={() => setDeleteId(null)} className="px-4 py-2 font-body text-sm font-medium text-foreground border border-border rounded-lg hover:bg-muted transition-colors">Cancel</button>
-              <button onClick={() => handleDelete(deleteId)} className="px-4 py-2 font-body text-sm font-bold text-destructive-foreground bg-destructive rounded-lg hover:opacity-90 transition-colors">Delete</button>
+        <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.7)', padding: 16 }}
+          onClick={() => setDeleteId(null)}>
+          <div style={{ ...card, padding: 28, maxWidth: 400, width: '100%', boxShadow: '0 24px 64px rgba(0,0,0,0.6)' }}
+            onClick={e => e.stopPropagation()}>
+            <h3 style={{ ...inter, fontSize: 18, fontWeight: 700, color: '#ffffff', marginBottom: 8 }}>Delete this entry?</h3>
+            <p style={{ ...inter, fontSize: 14, color: '#8b8b91', marginBottom: 24 }}>Are you sure you want to delete this entry? This action cannot be undone.</p>
+            <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
+              <button onClick={() => setDeleteId(null)} style={{ ...inter, fontSize: 14, fontWeight: 600, color: '#d1d1d6', background: 'transparent', border: '1px solid rgba(255,255,255,0.12)', padding: '10px 18px', borderRadius: 4, cursor: 'pointer' }}>
+                Cancel
+              </button>
+              <button onClick={() => handleDelete(deleteId)} style={{ ...inter, fontSize: 14, fontWeight: 700, color: '#ffffff', background: '#C0392B', border: 'none', padding: '10px 18px', borderRadius: 4, cursor: 'pointer' }}>
+                Delete
+              </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* Timeline Export Modal */}
+      {/* Timeline Export modal */}
       {showTimeline && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setShowTimeline(false)}>
-          <div className="bg-white p-6 max-w-lg w-full shadow-xl" style={{ borderRadius: 14 }} onClick={e => e.stopPropagation()}>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="font-heading text-lg text-foreground">Export Incident Timeline</h3>
-              <button onClick={() => setShowTimeline(false)} className="p-1 text-muted-foreground hover:text-foreground">
-                <X className="h-5 w-5" />
+        <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.7)', padding: 16 }}
+          onClick={() => setShowTimeline(false)}>
+          <div style={{ ...card, padding: 28, maxWidth: 520, width: '100%', boxShadow: '0 24px 64px rgba(0,0,0,0.6)' }}
+            onClick={e => e.stopPropagation()}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+              <h3 style={{ ...inter, fontSize: 18, fontWeight: 700, color: '#ffffff' }}>Export Incident Timeline</h3>
+              <button onClick={() => setShowTimeline(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#8b8b91', padding: 4 }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
               </button>
             </div>
-            <p className="font-body text-sm text-muted-foreground mb-6">
-              Export a chronological timeline of journal entries. This is useful for showing patterns of abuse to Legal Aid SA, lawyers, or social workers.
+            <p style={{ ...inter, fontSize: 14, color: '#8b8b91', marginBottom: 24, lineHeight: 1.6 }}>
+              Export a chronological timeline for Legal Aid SA, lawyers, or social workers.
             </p>
-
-            <div className="space-y-4">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               <div>
-                <label className="font-mono text-[11px] tracking-wider uppercase block mb-2" style={{ color: '#5B21B6' }}>Filter by Person (Optional)</label>
-                <select value={timelineFilter} onChange={e => setTimelineFilter(e.target.value)}
-                  className="w-full px-4 py-3 bg-white text-foreground font-body text-sm border border-border rounded-xl">
+                <label style={{ ...mono, fontSize: 10, color: '#6C35DE', letterSpacing: '0.1em', textTransform: 'uppercase' as const, display: 'block', marginBottom: 8 }}>
+                  Filter by Person (Optional)
+                </label>
+                <select value={timelineFilter} onChange={e => setTimelineFilter(e.target.value)} style={inputStyle}>
                   <option value="all">All entries</option>
                   {uniquePersons.map(p => <option key={p} value={p}>{p}</option>)}
                 </select>
-                <span className="font-body text-xs text-muted-foreground mt-1 block">Choose a specific person or select 'All entries' for a complete timeline.</span>
               </div>
-
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="font-mono text-[11px] tracking-wider uppercase block mb-2" style={{ color: '#5B21B6' }}>From (Optional)</label>
-                  <input type="date" value={timelineDateFrom} onChange={e => setTimelineDateFrom(e.target.value)}
-                    className="w-full px-3 py-2 border border-border rounded-xl font-body text-sm" />
+                  <label style={{ ...mono, fontSize: 10, color: '#6C35DE', letterSpacing: '0.1em', textTransform: 'uppercase' as const, display: 'block', marginBottom: 8 }}>From</label>
+                  <input type="date" value={timelineDateFrom} onChange={e => setTimelineDateFrom(e.target.value)} style={inputStyle} />
                 </div>
                 <div>
-                  <label className="font-mono text-[11px] tracking-wider uppercase block mb-2" style={{ color: '#5B21B6' }}>To (Optional)</label>
-                  <input type="date" value={timelineDateTo} onChange={e => setTimelineDateTo(e.target.value)}
-                    className="w-full px-3 py-2 border border-border rounded-xl font-body text-sm" />
+                  <label style={{ ...mono, fontSize: 10, color: '#6C35DE', letterSpacing: '0.1em', textTransform: 'uppercase' as const, display: 'block', marginBottom: 8 }}>To</label>
+                  <input type="date" value={timelineDateTo} onChange={e => setTimelineDateTo(e.target.value)} style={inputStyle} />
                 </div>
               </div>
-
-              <p className="font-body text-xs text-muted-foreground">
-                This timeline will include entries matching your filters.
-              </p>
             </div>
-
-            <div className="flex gap-3 justify-end mt-6">
-              <button onClick={() => setShowTimeline(false)} className="px-4 py-2 font-body text-sm font-medium text-foreground border border-border rounded-lg hover:bg-muted">Cancel</button>
-              <button onClick={handleGenerateTimeline} className="px-5 py-2 font-body text-sm font-bold text-primary-foreground bg-primary rounded-lg hover:opacity-90">
+            <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 24 }}>
+              <button onClick={() => setShowTimeline(false)} style={{ ...inter, fontSize: 14, fontWeight: 600, color: '#d1d1d6', background: 'transparent', border: '1px solid rgba(255,255,255,0.12)', padding: '10px 18px', borderRadius: 4, cursor: 'pointer' }}>
+                Cancel
+              </button>
+              <button onClick={handleGenerateTimeline} style={{ ...inter, fontSize: 14, fontWeight: 700, color: '#ffffff', background: '#6C35DE', border: 'none', padding: '10px 20px', borderRadius: 4, cursor: 'pointer' }}>
                 Generate Timeline PDF
               </button>
             </div>

@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 
-const serif: React.CSSProperties = { fontFamily: "'DM Serif Display', serif" };
-const sans: React.CSSProperties = { fontFamily: "'Syne', sans-serif" };
+const inter: React.CSSProperties = { fontFamily: "'Inter', sans-serif" };
 const mono: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -15,16 +14,6 @@ const CATEGORY_LABELS: Record<string, string> = {
   "tenant-safety": "Tenant & Landlord",
   "domestic-worker-safety": "Domestic Worker",
   "popia-privacy": "POPIA & Privacy",
-};
-
-const CATEGORY_COLORS: Record<string, string> = {
-  "behavioral-patterns": "#B52020",
-  "dating-relationships": "#7C3AED",
-  "safety-habits": "#18752E",
-  "gbvf-evidence": "#B47714",
-  "trust-denial": "#5539E8",
-  "dating-safety": "#7C3AED",
-  "gbv-resources": "#B52020",
 };
 
 interface SignalCardProps {
@@ -44,68 +33,143 @@ const formatDate = (iso: string) => {
 const SignalCard = ({ title, slug, excerpt, category, created_at, featured = false }: SignalCardProps) => {
   const navigate = useNavigate();
   const label = CATEGORY_LABELS[category] || category;
-  const color = CATEGORY_COLORS[category] || "#7C3AED";
+
+  if (featured) {
+    return (
+      <div
+        onClick={() => navigate(`/signals/${slug}`)}
+        style={{
+          background: '#111118',
+          border: '1px solid rgba(108,53,222,0.25)',
+          borderLeft: '4px solid #6C35DE',
+          borderRadius: 8,
+          padding: 'clamp(28px, 4vw, 52px)',
+          cursor: 'pointer',
+          transition: 'border-color 0.2s, transform 0.2s',
+        }}
+        onMouseEnter={e => {
+          (e.currentTarget as HTMLDivElement).style.borderColor = '#6C35DE';
+          (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-2px)';
+        }}
+        onMouseLeave={e => {
+          (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(108,53,222,0.25)';
+          (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)';
+        }}
+      >
+        {/* Category badge */}
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+          background: 'rgba(108,53,222,0.15)', border: '1px solid rgba(108,53,222,0.3)',
+          padding: '4px 12px', borderRadius: 4, marginBottom: 20,
+        }}>
+          <span style={{ display: 'inline-block', width: 6, height: 6, background: '#6C35DE', borderRadius: '50%' }} />
+          <span style={{ ...mono, fontSize: 9, fontWeight: 700, color: '#6C35DE', letterSpacing: '0.1em', textTransform: 'uppercase' as const }}>
+            {label}
+          </span>
+        </div>
+
+        {/* Title */}
+        <h3 style={{
+          ...inter,
+          fontSize: 'clamp(22px, 3vw, 36px)',
+          fontWeight: 800,
+          color: '#ffffff',
+          lineHeight: 1.15,
+          letterSpacing: '-0.025em',
+          marginBottom: 16,
+          maxWidth: 700,
+        }}>
+          {title}
+        </h3>
+
+        {/* Excerpt */}
+        {excerpt && (
+          <p style={{
+            ...inter,
+            fontSize: 'clamp(14px, 1.5vw, 16px)',
+            color: '#d1d1d6',
+            lineHeight: 1.8,
+            marginBottom: 28,
+            maxWidth: 640,
+          }}>
+            {excerpt}
+          </p>
+        )}
+
+        {/* Meta + CTA */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+          <span style={{ ...mono, fontSize: 10, color: '#8b8b91', letterSpacing: '0.06em' }}>
+            {formatDate(created_at)} · RedFlaq Signals · 5 min read
+          </span>
+          <span style={{
+            ...inter, fontSize: 14, fontWeight: 700, color: '#fff',
+            background: '#6C35DE', padding: '10px 22px', borderRadius: 4,
+          }}>
+            Read Signal →
+          </span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
       onClick={() => navigate(`/signals/${slug}`)}
       style={{
-        background: featured ? '#1F1523' : '#FFFFFF',
-        border: featured ? 'none' : '1px solid #E8E2DC',
-        borderRadius: 14,
-        padding: featured ? '36px 32px' : '28px 24px',
+        background: '#111118',
+        border: '1px solid rgba(108,53,222,0.2)',
+        borderRadius: 8,
+        padding: '24px',
         cursor: 'pointer',
-        transition: 'transform 0.2s, box-shadow 0.2s',
+        transition: 'border-color 0.2s, transform 0.2s',
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
       }}
       onMouseEnter={e => {
-        (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-3px)';
-        (e.currentTarget as HTMLDivElement).style.boxShadow = featured
-          ? '0 16px 48px rgba(0,0,0,0.2)'
-          : '0 8px 24px rgba(0,0,0,0.08)';
+        (e.currentTarget as HTMLDivElement).style.borderColor = '#6C35DE';
+        (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-2px)';
       }}
       onMouseLeave={e => {
+        (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(108,53,222,0.2)';
         (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)';
-        (e.currentTarget as HTMLDivElement).style.boxShadow = 'none';
       }}
     >
-      {/* Category tag */}
+      {/* Category badge */}
       <div style={{
         display: 'inline-block',
-        background: `${color}18`,
-        border: `1px solid ${color}30`,
+        background: 'rgba(108,53,222,0.12)',
+        border: '1px solid rgba(108,53,222,0.25)',
         padding: '3px 10px',
-        borderRadius: 50,
-        marginBottom: 16,
+        borderRadius: 4,
+        marginBottom: 14,
         alignSelf: 'flex-start',
       }}>
-        <span style={{ ...mono, fontSize: 9, fontWeight: 700, color: featured ? '#C4B5FD' : color, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+        <span style={{ ...mono, fontSize: 9, fontWeight: 700, color: '#6C35DE', letterSpacing: '0.08em', textTransform: 'uppercase' as const }}>
           {label}
         </span>
       </div>
 
       <h3 style={{
-        ...serif,
-        fontSize: featured ? 'clamp(20px, 2.5vw, 28px)' : 'clamp(17px, 2vw, 20px)',
-        color: featured ? '#FAFAF9' : '#1F1F1F',
-        lineHeight: 1.25,
+        ...inter,
+        fontSize: 'clamp(15px, 1.8vw, 18px)',
+        fontWeight: 700,
+        color: '#ffffff',
+        lineHeight: 1.3,
         letterSpacing: '-0.01em',
-        marginBottom: 12,
-        flex: featured ? 0 : 1,
+        marginBottom: 10,
+        flex: 1,
       }}>
         {title}
       </h3>
 
       {excerpt && (
         <p style={{
-          ...sans,
-          fontSize: featured ? 15 : 14,
-          color: featured ? 'rgba(255,255,255,0.6)' : '#555555',
-          lineHeight: 1.75,
-          marginBottom: 20,
-          flex: 1,
+          ...inter,
+          fontSize: 13,
+          color: '#8b8b91',
+          lineHeight: 1.7,
+          marginBottom: 16,
           display: '-webkit-box',
           WebkitLineClamp: 3,
           WebkitBoxOrient: 'vertical' as const,
@@ -116,10 +180,10 @@ const SignalCard = ({ title, slug, excerpt, category, created_at, featured = fal
       )}
 
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto' }}>
-        <span style={{ ...mono, fontSize: 10, color: featured ? 'rgba(255,255,255,0.35)' : '#999', letterSpacing: '0.05em' }}>
+        <span style={{ ...mono, fontSize: 10, color: '#8b8b91', letterSpacing: '0.05em' }}>
           {formatDate(created_at)}
         </span>
-        <span style={{ ...sans, fontSize: 12, fontWeight: 700, color: featured ? '#C4B5FD' : '#7C3AED' }}>
+        <span style={{ ...inter, fontSize: 12, fontWeight: 700, color: '#6C35DE' }}>
           Read →
         </span>
       </div>

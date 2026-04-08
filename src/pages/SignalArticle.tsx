@@ -7,8 +7,8 @@ import SignalActionBlock from "@/components/signals/SignalActionBlock";
 import SignalCard from "@/components/signals/SignalCard";
 import { supabase } from "@/integrations/supabase/client";
 
-const serif: React.CSSProperties = { fontFamily: "'DM Serif Display', serif" };
-const sans: React.CSSProperties = { fontFamily: "'Syne', sans-serif" };
+const inter: React.CSSProperties = { fontFamily: "'Inter', sans-serif" };
+const playfair: React.CSSProperties = { fontFamily: "'Playfair Display', serif" };
 const mono: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -78,19 +78,30 @@ const SignalArticle = () => {
 
   if (loading) {
     return (
-      <div style={{ background: '#F5F0EB', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ width: 28, height: 28, border: '3px solid #E6E0DA', borderTopColor: '#7C3AED', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+      <div style={{ background: '#08080f', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{
+          width: 28, height: 28,
+          border: '3px solid rgba(108,53,222,0.2)',
+          borderTopColor: '#6C35DE',
+          borderRadius: '50%',
+          animation: 'spin 0.8s linear infinite',
+        }} />
       </div>
     );
   }
 
   if (!article) {
     return (
-      <div style={{ background: '#F5F0EB', minHeight: '100vh' }}>
+      <div style={{ background: '#08080f', minHeight: '100vh' }}>
         <NavbarPlinq />
         <div style={{ maxWidth: 700, margin: '0 auto', padding: '120px 24px', textAlign: 'center' }}>
-          <h1 style={{ ...serif, fontSize: 32, color: '#1F1F1F', marginBottom: 16 }}>Signal not found.</h1>
-          <button onClick={() => navigate('/signals')} style={{ ...sans, fontSize: 14, color: '#7C3AED', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}>
+          <h1 style={{ ...inter, fontSize: 32, fontWeight: 800, color: '#ffffff', marginBottom: 16 }}>
+            Signal not found.
+          </h1>
+          <button
+            onClick={() => navigate('/signals')}
+            style={{ ...inter, fontSize: 14, color: '#6C35DE', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}
+          >
             View all Signals →
           </button>
         </div>
@@ -103,17 +114,21 @@ const SignalArticle = () => {
   const readTime = estimateReadTime(article.content);
 
   return (
-    <div style={{ background: '#F5F0EB', minHeight: '100vh', overflowX: 'hidden' }}>
+    <div style={{ background: '#08080f', minHeight: '100vh', overflowX: 'hidden' }}>
       <NavbarPlinq />
 
       {/* Article header */}
-      <header style={{ background: '#F5F0EB', paddingTop: 100, paddingBottom: 0 }}>
+      <header style={{ background: '#08080f', paddingTop: 72 }}>
         <div style={{ maxWidth: 780, margin: '0 auto', padding: '40px 24px 0' }}>
           {/* Breadcrumb */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 24 }}>
             <button
               onClick={() => navigate('/signals')}
-              style={{ ...sans, fontSize: 13, color: '#7C3AED', background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center', gap: 4 }}
+              style={{
+                ...inter, fontSize: 13, color: '#6C35DE',
+                background: 'none', border: 'none', cursor: 'pointer', padding: 0,
+                display: 'flex', alignItems: 'center', gap: 4,
+              }}
             >
               ← Signals
             </button>
@@ -123,22 +138,27 @@ const SignalArticle = () => {
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap', marginBottom: 20 }}>
             <div style={{
               display: 'inline-block',
-              background: 'rgba(124,58,237,0.08)', border: '1px solid rgba(124,58,237,0.2)',
-              padding: '4px 12px', borderRadius: 50,
+              background: 'rgba(108,53,222,0.15)', border: '1px solid rgba(108,53,222,0.3)',
+              padding: '4px 12px', borderRadius: 4,
             }}>
-              <span style={{ ...mono, fontSize: 9, fontWeight: 700, color: '#7C3AED', letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+              <span style={{ ...mono, fontSize: 9, fontWeight: 700, color: '#6C35DE', letterSpacing: '0.08em', textTransform: 'uppercase' as const }}>
                 {categoryLabel}
               </span>
             </div>
-            <span style={{ ...mono, fontSize: 10, color: '#999', letterSpacing: '0.06em' }}>
+            <span style={{ ...mono, fontSize: 10, color: '#8b8b91', letterSpacing: '0.06em' }}>
               {formatDate(article.created_at)} · {readTime} min read
             </span>
           </div>
 
           {/* Title */}
           <h1 style={{
-            ...serif, fontSize: 'clamp(26px, 5vw, 46px)', color: '#1F1F1F',
-            lineHeight: 1.1, letterSpacing: '-0.025em', marginBottom: 20,
+            ...inter,
+            fontSize: 'clamp(26px, 5vw, 46px)',
+            fontWeight: 900,
+            color: '#ffffff',
+            lineHeight: 1.1,
+            letterSpacing: '-0.03em',
+            marginBottom: 20,
           }}>
             {article.title}
           </h1>
@@ -146,16 +166,21 @@ const SignalArticle = () => {
           {/* Excerpt / standfirst */}
           {article.excerpt && (
             <p style={{
-              ...sans, fontSize: 'clamp(15px, 1.8vw, 18px)', color: '#555555',
+              ...inter, fontSize: 'clamp(15px, 1.8vw, 18px)', color: '#d1d1d6',
               lineHeight: 1.75, marginBottom: 28, fontWeight: 500,
-              borderLeft: '3px solid #7C3AED', paddingLeft: 16,
+              borderLeft: '3px solid #6C35DE', paddingLeft: 16,
             }}>
               {article.excerpt}
             </p>
           )}
 
           {/* Engagement row */}
-          <div style={{ padding: '16px 0', borderTop: '1px solid #E8E2DC', borderBottom: '1px solid #E8E2DC', marginBottom: 40 }}>
+          <div style={{
+            padding: '16px 0',
+            borderTop: '1px solid rgba(255,255,255,0.06)',
+            borderBottom: '1px solid rgba(255,255,255,0.06)',
+            marginBottom: 40,
+          }}>
             <SignalEngagement
               signalId={article.id}
               signalSlug={article.slug}
@@ -169,7 +194,9 @@ const SignalArticle = () => {
       <article style={{ maxWidth: 780, margin: '0 auto', padding: '0 24px' }}>
         <div
           style={{
-            ...sans, fontSize: 'clamp(15px, 1.6vw, 17px)', color: '#1F1F1F',
+            ...inter,
+            fontSize: 'clamp(15px, 1.6vw, 17px)',
+            color: '#d1d1d6',
             lineHeight: 1.85,
           }}
           dangerouslySetInnerHTML={{ __html: article.content }}
@@ -179,8 +206,14 @@ const SignalArticle = () => {
         <SignalActionBlock category={article.category} />
 
         {/* Bottom engagement */}
-        <div style={{ padding: '24px 0', borderTop: '1px solid #E8E2DC', marginTop: 40 }}>
-          <p style={{ ...sans, fontSize: 13, color: '#888', marginBottom: 12 }}>Was this signal useful?</p>
+        <div style={{
+          padding: '24px 0',
+          borderTop: '1px solid rgba(255,255,255,0.06)',
+          marginTop: 40,
+        }}>
+          <p style={{ ...inter, fontSize: 13, color: '#8b8b91', marginBottom: 12 }}>
+            Was this signal useful?
+          </p>
           <SignalEngagement
             signalId={article.id}
             signalSlug={article.slug}
@@ -189,8 +222,8 @@ const SignalArticle = () => {
         </div>
 
         {/* Brand line */}
-        <div style={{ textAlign: 'center', padding: '32px 0', marginTop: 12 }}>
-          <p style={{ ...serif, fontSize: 20, color: '#7C3AED', fontStyle: 'italic' }}>
+        <div style={{ textAlign: 'center', padding: '40px 0 32px' }}>
+          <p style={{ ...playfair, fontSize: 22, color: '#6C35DE', fontStyle: 'italic', fontWeight: 700 }}>
             "Before you trust, RedFlaq first."
           </p>
         </div>
@@ -198,11 +231,18 @@ const SignalArticle = () => {
 
       {/* Related signals */}
       {related.length > 0 && (
-        <section style={{ maxWidth: 1100, margin: '40px auto 0', padding: '40px 24px 64px', borderTop: '1px solid #E8E2DC' }}>
-          <h2 style={{ ...serif, fontSize: 'clamp(20px, 3vw, 28px)', color: '#1F1F1F', letterSpacing: '-0.02em', marginBottom: 24 }}>
+        <section style={{
+          maxWidth: 1100, margin: '0 auto',
+          padding: '40px 24px 64px',
+          borderTop: '1px solid rgba(255,255,255,0.06)',
+        }}>
+          <h2 style={{
+            ...inter, fontSize: 'clamp(18px, 2.5vw, 26px)', fontWeight: 800,
+            color: '#ffffff', letterSpacing: '-0.025em', marginBottom: 24,
+          }}>
             More Signals
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {related.map(r => (
               <SignalCard
                 key={r.id}

@@ -78,6 +78,21 @@
 
     --font-heading: 'DM Serif Display', serif;
     --font-body: 'Syne', sans-serif;
+
+    /* Dark Premium Design System — Phase 1 */
+    --dark: #08080f;
+    --dark-card: #111118;
+    --dark-section: #0d0d1a;
+    --dark-elevated: #13131f;
+    --dark-border: rgba(108, 53, 222, 0.25);
+    --dark-border-hover: #6C35DE;
+    --dark-purple: #6C35DE;
+    --dark-danger: #C0392B;
+    --dark-text-primary: #ffffff;
+    --dark-text-secondary: #d1d1d6;
+    --dark-text-muted: #8b8b91;
+    --font-display: 'Playfair Display', serif;
+    --font-inter: 'Inter', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
 
     --sidebar-background: 0 0% 100%;
@@ -251,7 +266,11 @@
   }
 
   .animate-ticker {
-    animation: ticker-scroll 30s linear infinite;
+    animation: ticker-scroll 35s linear infinite;
+  }
+
+  .animate-ticker:hover {
+    animation-play-state: paused;
   }
 
   /* Pulse dot */

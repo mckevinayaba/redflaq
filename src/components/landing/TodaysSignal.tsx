@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
-const serif: React.CSSProperties = { fontFamily: "'DM Serif Display', serif" };
-const sans: React.CSSProperties = { fontFamily: "'Syne', sans-serif" };
+const inter: React.CSSProperties = { fontFamily: "'Inter', sans-serif" };
+const playfair: React.CSSProperties = { fontFamily: "'Playfair Display', serif" };
 const mono: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };
 
 interface SignalArticle {
@@ -42,48 +42,46 @@ const TodaysSignal = () => {
       if (data && data.length > 0) {
         setFeatured(data[0]);
         if (data.length > 1) setPrevious(data[1]);
-        // Random-ish like count for social proof
         setLikes(Math.floor(Math.random() * 300) + 80);
       }
     };
     fetchSignals();
   }, []);
 
-  // Fallback content when no signals are seeded yet
-  const fallbackFeatured = {
-    title: "You Checked the Vibe, the Venue, the Uber. But Not the Person.",
-    slug: "you-checked-everything-except-the-person",
+  const fallback = {
+    title: "That Wasn't Rage. That Was Strategy.",
+    slug: "he-is-not-going-through-something-this-is-him",
     excerpt:
-      "Meeting in public didn't save her. Sharing her location didn't save her. A good first impression didn't save her. Because those behaviors protect you from strangers. Not from the person who seemed perfect for 3 months.",
+      "Each explosion left you asking what you did to trigger him. That response is the point. Anger is not loss of control. It's a control mechanism. The question isn't whether he can stop. It's what he gains when he doesn't.",
     category: "behavioral-patterns",
   };
 
-  const signal = featured || fallbackFeatured;
+  const signal = featured || fallback;
   const categoryLabel = CATEGORY_LABELS[signal.category] || signal.category;
 
+  const handleCardClick = () => navigate(`/signals/${signal.slug}`);
+
   return (
-    <section style={{ background: '#F5F0EB', padding: '64px 24px 48px' }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto' }}>
+    <section style={{ background: '#08080f', padding: '0 24px 80px' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+
         {/* Section header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 32 }}>
+        <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 28 }}>
           <div>
-            <p style={{ ...mono, fontSize: 10, color: '#7C3AED', letterSpacing: '0.12em', fontWeight: 600, marginBottom: 6, textTransform: 'uppercase' }}>
-              TODAY'S SIGNAL
+            <p style={{ ...mono, fontSize: 10, fontWeight: 600, color: '#6C35DE', letterSpacing: '0.15em', textTransform: 'uppercase' as const, marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+              <span style={{ display: 'inline-block', width: 8, height: 8, background: '#6C35DE', borderRadius: '50%' }} />
+              TODAY'S REDFLAQ SIGNAL
             </p>
-            <h2 style={{ ...serif, fontSize: 'clamp(24px, 3vw, 36px)', color: '#1F1F1F', lineHeight: 1.1, letterSpacing: '-0.02em' }}>
-              Daily Truth. No Comfort. Just Clarity.
-            </h2>
           </div>
           <button
             onClick={() => navigate('/signals')}
             style={{
-              ...sans, fontSize: 13, fontWeight: 600, color: '#7C3AED',
-              background: 'transparent', border: '1.5px solid #7C3AED',
-              padding: '10px 20px', borderRadius: 50, cursor: 'pointer',
-              transition: 'background 0.2s', whiteSpace: 'nowrap',
+              ...inter, fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.5)',
+              background: 'transparent', border: 'none', cursor: 'pointer', padding: '4px 0',
+              transition: 'color 0.2s',
             }}
-            onMouseEnter={e => e.currentTarget.style.background = 'rgba(124,58,237,0.05)'}
-            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+            onMouseEnter={e => e.currentTarget.style.color = '#fff'}
+            onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.5)'}
           >
             All Signals →
           </button>
@@ -91,74 +89,98 @@ const TodaysSignal = () => {
 
         {/* Featured Signal card */}
         <div
+          onClick={handleCardClick}
           style={{
-            background: '#1F1523',
-            borderRadius: 16,
+            background: '#111118',
+            border: '1px solid rgba(108,53,222,0.25)',
+            borderRadius: 8,
             padding: 'clamp(28px, 5vw, 52px)',
             cursor: 'pointer',
-            transition: 'transform 0.2s, box-shadow 0.2s',
-            boxShadow: '0 8px 40px rgba(0,0,0,0.15)',
+            transition: 'border-color 0.2s, transform 0.2s',
           }}
-          onClick={() => navigate(`/signals/${signal.slug}`)}
-          onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-3px)'; (e.currentTarget as HTMLDivElement).style.boxShadow = '0 16px 48px rgba(0,0,0,0.2)'; }}
-          onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)'; (e.currentTarget as HTMLDivElement).style.boxShadow = '0 8px 40px rgba(0,0,0,0.15)'; }}
+          onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.borderColor = '#6C35DE'; (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-2px)'; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.borderColor = 'rgba(108,53,222,0.25)'; (e.currentTarget as HTMLDivElement).style.transform = 'translateY(0)'; }}
         >
-          {/* Category tag */}
+          {/* Category badge */}
           <div style={{
             display: 'inline-block',
-            background: 'rgba(124,58,237,0.2)', border: '1px solid rgba(124,58,237,0.3)',
-            padding: '4px 12px', borderRadius: 50, marginBottom: 20,
+            background: 'rgba(108,53,222,0.15)',
+            border: '1px solid rgba(108,53,222,0.3)',
+            padding: '4px 12px', borderRadius: 4, marginBottom: 20,
           }}>
-            <span style={{ ...mono, fontSize: 10, fontWeight: 600, color: '#C4B5FD', letterSpacing: '0.08em' }}>
-              {categoryLabel.toUpperCase()}
+            <span style={{ ...mono, fontSize: 9, fontWeight: 700, color: '#6C35DE', letterSpacing: '0.1em', textTransform: 'uppercase' as const }}>
+              {categoryLabel}
             </span>
           </div>
 
+          {/* Headline with red emphasis word */}
           <h3 style={{
-            ...serif, fontSize: 'clamp(22px, 3.5vw, 38px)', color: '#FAFAF9',
-            lineHeight: 1.2, letterSpacing: '-0.02em', marginBottom: 20, maxWidth: 800,
+            ...inter,
+            fontSize: 'clamp(22px, 3.5vw, 40px)',
+            fontWeight: 800,
+            color: '#ffffff',
+            lineHeight: 1.15,
+            letterSpacing: '-0.025em',
+            marginBottom: 20,
+            maxWidth: 800,
           }}>
-            {signal.title}
+            {signal.title.includes("Strategy") ? (
+              <>
+                That Wasn't Rage. That Was{' '}
+                <span style={{ color: '#C0392B' }}>Strategy.</span>
+              </>
+            ) : signal.title}
           </h3>
 
+          {/* Excerpt with red emphasis */}
           <p style={{
-            ...sans, fontSize: 'clamp(14px, 1.6vw, 16px)', color: 'rgba(255,255,255,0.65)',
-            lineHeight: 1.8, maxWidth: 680, marginBottom: 32,
+            ...inter,
+            fontSize: 'clamp(14px, 1.6vw, 17px)',
+            color: '#d1d1d6',
+            lineHeight: 1.85,
+            maxWidth: 700,
+            marginBottom: 32,
           }}>
-            {signal.excerpt}
+            {signal.excerpt && signal.excerpt.includes("control mechanism") ? (
+              <>
+                Each explosion left you asking what you did to trigger him. That response is the point.
+                Anger is not loss of control. It's a{' '}
+                <span style={{ color: '#C0392B', fontWeight: 600 }}>control mechanism.</span>
+                {' '}The question isn't whether he can stop. It's what he gains when he doesn't.
+              </>
+            ) : signal.excerpt}
           </p>
 
-          {/* Engagement row */}
+          {/* Meta + engagement */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+              <span style={{ ...mono, fontSize: 10, color: '#8b8b91', letterSpacing: '0.06em' }}>
+                RedFlaq Signals · Today · 5 min read
+              </span>
               <button
                 onClick={e => { e.stopPropagation(); setLikes(l => l + 1); }}
                 style={{
-                  ...sans, fontSize: 13, color: 'rgba(255,255,255,0.6)',
-                  background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(255,255,255,0.1)',
-                  padding: '7px 14px', borderRadius: 50, cursor: 'pointer',
-                  display: 'flex', alignItems: 'center', gap: 6, transition: 'background 0.2s',
+                  ...inter, fontSize: 12, color: '#8b8b91',
+                  background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)',
+                  padding: '5px 12px', borderRadius: 4, cursor: 'pointer',
+                  display: 'flex', alignItems: 'center', gap: 5, transition: 'color 0.2s',
                 }}
-                onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.12)')}
-                onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.07)')}
+                onMouseEnter={e => e.currentTarget.style.color = '#6C35DE'}
+                onMouseLeave={e => e.currentTarget.style.color = '#8b8b91'}
               >
                 ♥ {likes}
               </button>
-              <span style={{ ...sans, fontSize: 13, color: 'rgba(255,255,255,0.4)' }}>
-                5 min read
-              </span>
             </div>
-
             <button
-              onClick={e => { e.stopPropagation(); navigate(`/signals/${signal.slug}`); }}
+              onClick={e => { e.stopPropagation(); handleCardClick(); }}
               style={{
-                ...sans, fontWeight: 700, fontSize: 14, color: 'white',
-                background: '#7C3AED', border: 'none',
-                padding: '12px 24px', borderRadius: 50, cursor: 'pointer',
+                ...inter, fontWeight: 700, fontSize: 14, color: 'white',
+                background: '#6C35DE', border: 'none',
+                padding: '11px 24px', borderRadius: 4, cursor: 'pointer',
                 transition: 'background 0.2s',
               }}
-              onMouseEnter={e => (e.currentTarget.style.background = '#6D28D9')}
-              onMouseLeave={e => (e.currentTarget.style.background = '#7C3AED')}
+              onMouseEnter={e => e.currentTarget.style.background = '#7B42EE'}
+              onMouseLeave={e => e.currentTarget.style.background = '#6C35DE'}
             >
               Read Signal →
             </button>
@@ -167,13 +189,25 @@ const TodaysSignal = () => {
 
         {/* Previous signal teaser */}
         {previous && (
-          <div style={{ marginTop: 16, padding: '16px 20px', background: 'rgba(124,58,237,0.04)', border: '1px solid rgba(124,58,237,0.1)', borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', cursor: 'pointer' }}
-            onClick={() => navigate(`/signals/${previous.slug}`)}>
-            <span style={{ ...sans, fontSize: 13, color: '#888' }}>
+          <div
+            onClick={() => navigate(`/signals/${previous.slug}`)}
+            style={{
+              marginTop: 12, padding: '14px 20px',
+              background: 'rgba(108,53,222,0.06)',
+              border: '1px solid rgba(108,53,222,0.15)',
+              borderRadius: 6,
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
+              flexWrap: 'wrap', cursor: 'pointer',
+              transition: 'background 0.2s',
+            }}
+            onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.background = 'rgba(108,53,222,0.10)'}
+            onMouseLeave={e => (e.currentTarget as HTMLDivElement).style.background = 'rgba(108,53,222,0.06)'}
+          >
+            <span style={{ ...inter, fontSize: 13, color: '#8b8b91' }}>
               Yesterday's Signal:{' '}
-              <span style={{ color: '#4B4453', fontWeight: 600 }}>"{previous.title}"</span>
+              <span style={{ color: '#d1d1d6', fontWeight: 600 }}>"{previous.title}"</span>
             </span>
-            <span style={{ ...sans, fontSize: 12, color: '#7C3AED', fontWeight: 600, whiteSpace: 'nowrap' }}>Read →</span>
+            <span style={{ ...inter, fontSize: 12, color: '#6C35DE', fontWeight: 600, whiteSpace: 'nowrap' }}>Read →</span>
           </div>
         )}
       </div>

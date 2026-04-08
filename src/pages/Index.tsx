@@ -3,14 +3,14 @@ import { Link, useSearchParams } from "react-router-dom";
 import { Check, X } from "lucide-react";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import HeroHormozi from "@/components/landing/HeroHormozi";
+import IsolationStatement from "@/components/landing/IsolationStatement";
 import TodaysSignal from "@/components/landing/TodaysSignal";
-import ThreePillarSystem from "@/components/landing/ThreePillarSystem";
-import GovDataSection from "@/components/landing/GovDataSection";
+import DarkStatsSection from "@/components/landing/DarkStatsSection";
 import TickerBar from "@/components/landing/TickerBar";
-import HowItWorksPlinq from "@/components/landing/HowItWorksPlinq";
-import SafetyBaseSection from "@/components/landing/SafetyBaseSection";
-import PricingPlinq from "@/components/landing/PricingPlinq";
+import MethodSection from "@/components/landing/MethodSection";
+import ProductGrid from "@/components/landing/ProductGrid";
 import TestimonialsSectionNew from "@/components/landing/TestimonialsSectionNew";
+import TrappedUserSection from "@/components/landing/TrappedUserSection";
 import WhyRedflaqSection from "@/components/landing/WhyRedflaqSection";
 import AdvocacySection from "@/components/landing/AdvocacySection";
 import FinalCTAPlinq from "@/components/landing/FinalCTAPlinq";
@@ -40,21 +40,21 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen" style={{ background: '#F5F0EB', overflowX: 'hidden' }}>
+    <div className="min-h-screen" style={{ background: '#08080f', overflowX: 'hidden' }}>
       {showConfirmedBanner && (
         <div style={{
           position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9999,
           background: '#059669', padding: '12px 20px',
           display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12,
-          boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
+          boxShadow: '0 2px 12px rgba(0,0,0,0.3)',
         }}>
           <Check size={18} style={{ color: '#fff', flexShrink: 0 }} />
-          <span style={{ color: '#fff', fontFamily: "'Syne', sans-serif", fontSize: 14, fontWeight: 600 }}>
-            Your email is confirmed! Sign in to start your first check.
+          <span style={{ color: '#fff', fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 600 }}>
+            Your email is confirmed. Sign in to start your first check.
           </span>
           <Link to="/signup?mode=signin" style={{
-            background: '#fff', color: '#059669', padding: '6px 16px', borderRadius: 50,
-            fontSize: 13, fontWeight: 700, textDecoration: 'none', fontFamily: "'Syne', sans-serif",
+            background: '#fff', color: '#059669', padding: '6px 16px', borderRadius: 4,
+            fontSize: 13, fontWeight: 700, textDecoration: 'none', fontFamily: "'Inter', sans-serif",
             marginLeft: 8, flexShrink: 0,
           }}>
             Sign In
@@ -70,17 +70,17 @@ const Index = () => {
 
       <NavbarPlinq />
 
-      {/* 1. Hero — Brutal direct headline + CTAs */}
+      {/* 1. Hero — Fear / Recognition */}
       <HeroHormozi />
 
-      {/* 2. Today's Signal — featured editorial, drives daily return */}
+      {/* 2. Isolation statement — gut-punch */}
+      <IsolationStatement />
+
+      {/* 3. Today's Signal — editorial engagement */}
       <TodaysSignal />
 
-      {/* 3. Three-pillar behavioral system */}
-      <ThreePillarSystem />
-
-      {/* 4. Government data — GBVF national disaster stats */}
-      <GovDataSection />
+      {/* 4. Stats — Anger / system failed */}
+      <DarkStatsSection />
 
       {/* 4b. RedFlaq Reality — indictment stats block */}
       <RedFlaqReality />
@@ -88,33 +88,21 @@ const Index = () => {
       {/* 5. Trust ticker */}
       <TickerBar />
 
-      {/* 6. How it works — 3-step process */}
-      <HowItWorksPlinq />
-
-      {/* 7. Safety Base — free tools + paid checks */}
-      <SafetyBaseSection />
-
-      {/* 8. Pricing — pay per check */}
-      <div id="pricing">
-        <PricingPlinq />
+      {/* 6. Method — Hope / action */}
+      <div id="how-it-works">
+        <MethodSection />
       </div>
 
-      {/* 9. Testimonials — editorial format */}
+      {/* 7. Product grid */}
+      <ProductGrid />
+
+      {/* 8. Testimonials — Hope / survival */}
       <div id="testimonials">
         <TestimonialsSectionNew />
       </div>
 
-      {/* 10. Why RedFlaq — mission */}
-      <WhyRedflaqSection />
-
-      {/* 11. Advocacy */}
-      <AdvocacySection />
-
-      {/* 12. Final CTA */}
-      <FinalCTAPlinq />
-
-      {/* 13. FAQ */}
-      <FAQHormozi />
+      {/* 9. Trapped user — Love / protect */}
+      <TrappedUserSection />
 
       {/* Footer */}
       <FooterPlinq />

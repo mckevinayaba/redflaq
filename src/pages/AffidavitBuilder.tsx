@@ -183,9 +183,10 @@ export default function AffidavitBuilder() {
     setSaving(false);
   };
 
-  const labelCls = "font-mono text-[11px] tracking-wider uppercase block mb-2";
-  const helperCls = "font-body text-xs block mb-2";
-  const inputCls = "w-full px-4 py-3 bg-white text-foreground font-body text-sm border border-border shadow-sm focus:outline-none focus:ring-0 transition-all";
+  const labelCls = "font-mono text-[10px] tracking-wider uppercase block mb-2" + " " + "text-purple-400";
+  const helperCls = "font-body text-xs block mb-2 text-gray-400";
+  const inputCls = "w-full px-4 py-3 font-body text-sm focus:outline-none focus:ring-0 transition-all"
+    + " bg-[#0d0d1a] text-[#d1d1d6] border border-white/10 focus:border-[#6C35DE]";
 
   if (authLoading) return null;
 
@@ -194,28 +195,28 @@ export default function AffidavitBuilder() {
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="mb-6">
-          <p className="font-mono text-[11px] tracking-widest text-muted-foreground uppercase mb-1">Legal Tools</p>
-          <h1 className="font-heading text-2xl sm:text-3xl text-foreground mb-2">Affidavit Builder</h1>
-          <p className="font-body text-sm text-muted-foreground max-w-xl">
+          <p className="font-mono text-[10px] tracking-widest uppercase mb-2" style={{ color: '#8b8b91', letterSpacing: '0.15em' }}>Legal Evidence</p>
+          <h1 className="font-heading text-2xl sm:text-3xl mb-2" style={{ fontFamily: "'Inter', sans-serif", fontWeight: 900, color: '#ffffff', letterSpacing: '-0.025em' }}>Affidavit Builder</h1>
+          <p className="font-body text-sm max-w-xl" style={{ color: '#8b8b91', lineHeight: 1.7 }}>
             Build a correctly formatted South African affidavit draft — in your own words. Print and take to any police station, magistrate's court, or commissioner of oaths to sign and commission.
           </p>
         </div>
 
         {/* Info Banner */}
-        <div className="bg-blue-50 border-l-4 border-blue-400 p-4 mb-8" style={{ borderRadius: '0 12px 12px 0' }}>
+        <div className="p-4 mb-8" style={{ background: 'rgba(192,57,43,0.08)', borderLeft: '4px solid #C0392B', borderRadius: '0 8px 8px 0', border: '1px solid rgba(192,57,43,0.2)', borderLeftWidth: 4, borderLeftColor: '#C0392B' }}>
           <div className="flex items-start gap-3">
-            <Info className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
-            <p className="font-body text-sm text-blue-800">
+            <Info className="h-5 w-5 mt-0.5 flex-shrink-0" style={{ color: '#C0392B' }} />
+            <p className="font-body text-sm" style={{ color: '#d1d1d6', lineHeight: 1.7 }}>
               An affidavit only becomes legally binding when physically signed in the presence of a Commissioner of Oaths. This tool prepares your draft so you arrive ready with a properly structured document. You MUST bring your South African ID document when getting it commissioned.
             </p>
           </div>
         </div>
 
-        <div className="space-y-8">
+        <div className="space-y-6">
           {/* Step 1: Your Details */}
-          <section>
-            <h2 className="font-heading text-lg text-foreground mb-1">Your Details</h2>
-            <p className="font-body text-xs text-muted-foreground mb-4">This information will appear at the top of your affidavit.</p>
+          <section className="p-6 rounded-lg" style={{ background: '#111118', border: '1px solid rgba(108,53,222,0.25)' }}>
+            <h2 className="font-heading text-lg mb-1" style={{ color: '#ffffff', fontFamily: "'Inter', sans-serif", fontWeight: 700 }}>Your Details</h2>
+            <p className="font-body text-xs mb-4" style={{ color: '#8b8b91' }}>This information will appear at the top of your affidavit.</p>
             <div className="space-y-4">
               <div>
                 <label className={labelCls} style={{ color: '#5B21B6' }}>Full Legal Name *</label>
@@ -245,9 +246,9 @@ export default function AffidavitBuilder() {
           </section>
 
           {/* Step 2: Purpose */}
-          <section>
-            <h2 className="font-heading text-lg text-foreground mb-1">What This Affidavit Is For</h2>
-            <p className="font-body text-xs text-muted-foreground mb-4">Help the commissioner and court understand the purpose.</p>
+          <section className="p-6 rounded-lg" style={{ background: '#111118', border: '1px solid rgba(108,53,222,0.25)' }}>
+            <h2 className="font-heading text-lg mb-1" style={{ color: '#ffffff', fontFamily: "'Inter', sans-serif", fontWeight: 700 }}>What This Affidavit Is For</h2>
+            <p className="font-body text-xs mb-4" style={{ color: '#8b8b91' }}>Help the commissioner and court understand the purpose.</p>
             <div className="space-y-4">
               <div>
                 <label className={labelCls} style={{ color: '#5B21B6' }}>Purpose *</label>
@@ -274,35 +275,37 @@ export default function AffidavitBuilder() {
           </section>
 
           {/* Step 3: Import from Journal */}
-          <section>
-            <h2 className="font-heading text-lg text-foreground mb-1">Import From My Safety Journal (Optional)</h2>
-            <p className="font-body text-xs text-muted-foreground mb-4">Pull entries from your journal to populate this affidavit automatically.</p>
+          <section className="p-6 rounded-lg" style={{ background: '#111118', border: '1px solid rgba(108,53,222,0.25)' }}>
+            <h2 className="font-heading text-lg mb-1" style={{ color: '#ffffff', fontFamily: "'Inter', sans-serif", fontWeight: 700 }}>Import From My Safety Journal (Optional)</h2>
+            <p className="font-body text-xs mb-4" style={{ color: '#8b8b91' }}>Pull entries from your journal to populate this affidavit automatically.</p>
             {loadingEntries ? (
-              <p className="font-body text-sm text-muted-foreground">Loading journal entries...</p>
+              <p className="font-body text-sm" style={{ color: '#8b8b91' }}>Loading journal entries...</p>
             ) : journalEntries.length === 0 ? (
-              <div className="bg-muted/50 rounded-xl p-6 text-center">
-                <p className="font-body text-sm text-muted-foreground">No journal entries yet. You can write your statement from scratch below.</p>
+              <div className="rounded-lg p-6 text-center" style={{ background: '#0d0d1a', border: '1px dashed rgba(108,53,222,0.3)' }}>
+                <p className="font-body text-sm" style={{ color: '#8b8b91' }}>No journal entries yet. You can write your statement from scratch below.</p>
               </div>
             ) : (
               <>
-                <div className="space-y-2 max-h-64 overflow-y-auto border border-border rounded-xl p-3">
+                <div className="space-y-2 max-h-64 overflow-y-auto rounded-lg p-3" style={{ border: '1px solid rgba(255,255,255,0.08)', background: '#0d0d1a' }}>
                   {journalEntries.slice(0, 20).map(entry => (
-                    <label key={entry.id} className="flex items-start gap-3 p-3 rounded-lg hover:bg-muted/50 cursor-pointer transition-colors">
+                    <label key={entry.id} className="flex items-start gap-3 p-3 rounded-lg cursor-pointer transition-colors" style={{ '--hover-bg': 'rgba(108,53,222,0.06)' } as React.CSSProperties}
+                      onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'rgba(108,53,222,0.06)'}
+                      onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}>
                       <input type="checkbox" checked={selectedEntries.includes(entry.id)}
                         onChange={() => toggleEntry(entry.id)}
                         className="mt-1 h-4 w-4 rounded border-primary text-primary accent-primary" />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <span className="font-body text-sm font-semibold text-foreground">
+                          <span className="font-body text-sm font-semibold" style={{ color: '#d1d1d6' }}>
                             {new Date(entry.entry_date).toLocaleDateString('en-ZA', { day: 'numeric', month: 'short', year: 'numeric' })}
                           </span>
                           {entry.statement_hash && (
-                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[9px] font-mono bg-green-50 text-green-700">
+                            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] font-mono" style={{ background: 'rgba(39,174,96,0.12)', color: '#27AE60', border: '1px solid rgba(39,174,96,0.25)' }}>
                               <CheckCircle className="h-2.5 w-2.5" /> Verified
                             </span>
                           )}
                         </div>
-                        <p className="font-body text-xs text-muted-foreground line-clamp-1 mt-0.5">
+                        <p className="font-body text-xs line-clamp-1 mt-0.5" style={{ color: '#8b8b91' }}>
                           {entry.incident_description?.slice(0, 80)}...
                         </p>
                       </div>
@@ -311,9 +314,9 @@ export default function AffidavitBuilder() {
                 </div>
                 {selectedEntries.length > 0 && (
                   <div className="flex items-center justify-between mt-3">
-                    <span className="font-body text-sm text-muted-foreground">{selectedEntries.length} entries selected</span>
+                    <span className="font-body text-sm" style={{ color: '#8b8b91' }}>{selectedEntries.length} entries selected</span>
                     <button type="button" onClick={importSelectedEntries}
-                      className="inline-flex items-center gap-2 px-4 py-2 border-2 border-primary text-primary font-body font-bold text-sm rounded-lg hover:bg-primary/5">
+                      className="inline-flex items-center gap-2 px-4 py-2 font-body font-bold text-sm rounded" style={{ border: '1.5px solid #6C35DE', color: '#6C35DE', background: 'rgba(108,53,222,0.08)' }}>
                       Import Selected Journal Entries
                     </button>
                   </div>
@@ -323,13 +326,13 @@ export default function AffidavitBuilder() {
           </section>
 
           {/* Step 4: Statement */}
-          <section>
-            <h2 className="font-heading text-lg text-foreground mb-1">Your Statement</h2>
-            <p className="font-body text-xs text-muted-foreground mb-4">This is the core of your affidavit. Write in first person and be specific.</p>
+          <section className="p-6 rounded-lg" style={{ background: '#111118', border: '1px solid rgba(108,53,222,0.25)' }}>
+            <h2 className="font-heading text-lg mb-1" style={{ color: '#ffffff', fontFamily: "'Inter', sans-serif", fontWeight: 700 }}>Your Statement</h2>
+            <p className="font-body text-xs mb-4" style={{ color: '#8b8b91' }}>This is the core of your affidavit. Write in first person and be specific.</p>
 
-            <div className="bg-primary/5 border-l-4 border-primary p-4 mb-4" style={{ borderRadius: '0 12px 12px 0' }}>
-              <p className="font-heading text-sm text-foreground mb-2">WRITING GUIDANCE FOR AFFIDAVITS</p>
-              <ul className="font-body text-xs text-muted-foreground space-y-1">
+            <div className="p-4 mb-4" style={{ background: 'rgba(108,53,222,0.06)', borderLeft: '3px solid #6C35DE', borderRadius: '0 8px 8px 0' }}>
+              <p className="font-heading text-sm mb-2" style={{ color: '#ffffff', fontFamily: "'Inter', sans-serif", fontWeight: 700 }}>WRITING GUIDANCE FOR AFFIDAVITS</p>
+              <ul className="font-body text-xs space-y-1" style={{ color: '#8b8b91' }}>
                 <li>✓ Write in first person: 'I saw...', 'I experienced...'</li>
                 <li>✓ Be specific: Include dates, times, locations, exact words</li>
                 <li>✓ Be factual: Describe what you personally saw, heard, felt</li>
@@ -339,36 +342,36 @@ export default function AffidavitBuilder() {
               </ul>
             </div>
 
-            <label className="font-body text-sm text-foreground block mb-2">
+            <label className="font-body text-sm block mb-2" style={{ color: '#d1d1d6' }}>
               I, {fullName || '[your full name]'}, hereby make oath/affirm and state as follows:
             </label>
             <textarea value={statementText} onChange={e => setStatementText(e.target.value)}
               rows={16}
               placeholder={"1. On [date] at approximately [time], at [location], the following incident occurred: [describe what happened]\n\n2. [Continue with numbered paragraphs]\n\n3. [Include all relevant details]"}
               className={`${inputCls} resize-y`} style={{ borderRadius: 10, minHeight: 300 }} />
-            <p className="font-mono text-[10px] text-muted-foreground mt-1 text-right">
+            <p className="font-mono text-[10px] mt-1 text-right" style={{ color: '#8b8b91' }}>
               {statementText.split(/\s+/).filter(Boolean).length} words · {statementText.length} characters
             </p>
           </section>
 
           {/* Step 5: Relief Sought */}
-          <section>
-            <h2 className="font-heading text-lg text-foreground mb-1">What Are You Asking For?</h2>
-            <p className="font-body text-xs text-muted-foreground mb-4">What do you want the court, police, or authorities to do?</p>
+          <section className="p-6 rounded-lg" style={{ background: '#111118', border: '1px solid rgba(108,53,222,0.25)' }}>
+            <h2 className="font-heading text-lg mb-1" style={{ color: '#ffffff', fontFamily: "'Inter', sans-serif", fontWeight: 700 }}>What Are You Asking For?</h2>
+            <p className="font-body text-xs mb-4" style={{ color: '#8b8b91' }}>What do you want the court, police, or authorities to do?</p>
             <div className="space-y-2">
               {RELIEF_OPTIONS.map(opt => (
                 <label key={opt} className="flex items-start gap-3 cursor-pointer" style={{ minHeight: 44 }}>
                   <input type="checkbox" checked={reliefSought.includes(opt)}
                     onChange={() => setReliefSought(prev => prev.includes(opt) ? prev.filter(r => r !== opt) : [...prev, opt])}
-                    className="mt-1 h-4 w-4 rounded border-primary text-primary accent-primary" />
-                  <span className="font-body text-sm text-foreground">{opt}</span>
+                    className="mt-1 h-4 w-4 rounded accent-violet-500" style={{ accentColor: '#6C35DE' }} />
+                  <span className="font-body text-sm" style={{ color: '#d1d1d6' }}>{opt}</span>
                 </label>
               ))}
               <label className="flex items-start gap-3 cursor-pointer" style={{ minHeight: 44 }}>
                 <input type="checkbox" checked={includeOther}
                   onChange={() => setIncludeOther(!includeOther)}
-                  className="mt-1 h-4 w-4 rounded border-primary text-primary accent-primary" />
-                <span className="font-body text-sm text-foreground">Other (specify below)</span>
+                  className="mt-1 h-4 w-4 rounded" style={{ accentColor: '#6C35DE' }} />
+                <span className="font-body text-sm" style={{ color: '#d1d1d6' }}>Other (specify below)</span>
               </label>
               {includeOther && (
                 <textarea value={otherRelief} onChange={e => setOtherRelief(e.target.value)} rows={2}
@@ -379,13 +382,15 @@ export default function AffidavitBuilder() {
           </section>
 
           {/* Actions */}
-          <div className="flex flex-col sm:flex-row gap-3 pt-4 pb-8">
+          <div className="flex flex-col sm:flex-row gap-3 pt-2 pb-8">
             <button type="button" onClick={handleGenerate}
-              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3 bg-primary text-primary-foreground font-body font-bold text-sm rounded-lg hover:opacity-90 transition-colors">
+              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3 font-body font-bold text-sm rounded transition-opacity hover:opacity-90"
+              style={{ background: '#6C35DE', color: '#ffffff', border: 'none', cursor: 'pointer' }}>
               <FileText className="h-4 w-4" /> Generate Affidavit PDF
             </button>
             <button type="button" onClick={handleSaveDraft} disabled={saving}
-              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3 border border-border text-foreground font-body font-medium text-sm rounded-lg hover:bg-muted transition-colors disabled:opacity-50">
+              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto px-6 py-3 font-body font-medium text-sm rounded transition-colors disabled:opacity-50"
+              style={{ background: 'transparent', color: '#d1d1d6', border: '1px solid rgba(255,255,255,0.12)', cursor: 'pointer' }}>
               <Save className="h-4 w-4" /> {saving ? "Saving..." : "Save Draft"}
             </button>
           </div>

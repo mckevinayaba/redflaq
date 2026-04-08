@@ -1,135 +1,145 @@
 import { useNavigate } from "react-router-dom";
 import heroImg from "@/assets/hero-sa-woman.jpg";
 
-const serif: React.CSSProperties = { fontFamily: "'DM Serif Display', serif" };
-const sans: React.CSSProperties = { fontFamily: "'Syne', sans-serif" };
-const mono: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };
+const inter: React.CSSProperties = { fontFamily: "'Inter', sans-serif" };
+const playfair: React.CSSProperties = { fontFamily: "'Playfair Display', serif" };
 
 const HeroHormozi = () => {
   const navigate = useNavigate();
 
   return (
-    <section style={{ background: '#F5F0EB', paddingTop: 100, paddingBottom: 0 }}>
-      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 24px' }}>
-        <div className="grid grid-cols-1 md:grid-cols-[55%_45%] gap-8 md:gap-12 items-center">
+    <section style={{ background: '#08080f', paddingTop: 68, minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
+      <div style={{ maxWidth: 1200, margin: '0 auto', padding: '60px 24px 80px', width: '100%' }}>
+        <div className="grid grid-cols-1 md:grid-cols-[1.1fr_0.9fr] items-center" style={{ gap: 'clamp(3rem, 6vw, 6rem)' }}>
+
           {/* Left — Copy */}
-          <div style={{ paddingBottom: 60 }}>
-            {/* Badge */}
+          <div>
+            {/* Platform badge */}
             <div style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
-              background: 'rgba(124,58,237,0.06)', border: '1px solid rgba(124,58,237,0.12)',
-              padding: '6px 16px', borderRadius: 50, marginBottom: 28,
+              background: 'rgba(108,53,222,0.12)', border: '1px solid rgba(108,53,222,0.25)',
+              padding: '6px 16px', borderRadius: 4, marginBottom: 36,
             }}>
-              <span style={{ ...mono, fontSize: 10, fontWeight: 500, color: '#7C3AED', letterSpacing: '0.08em' }}>
-                SOUTH AFRICA'S SAFETY PLATFORM
+              <span style={{ ...inter, fontSize: 11, fontWeight: 600, color: '#6C35DE', letterSpacing: '0.1em', textTransform: 'uppercase' as const }}>
+                South Africa's Safety Platform
               </span>
             </div>
 
-            {/* Headline — brutal, direct, multi-line */}
+            {/* Headline */}
             <h1 style={{
-              ...serif, fontSize: 'clamp(26px, 4.5vw, 48px)',
-              color: '#1F1F1F', lineHeight: 1.15, letterSpacing: '-0.02em', marginBottom: 28,
+              fontSize: 'clamp(32px, 5vw, 64px)',
+              fontWeight: 900,
+              lineHeight: 1.05,
+              letterSpacing: '-0.03em',
+              color: '#ffffff',
+              marginBottom: 28,
             }}>
-              You Checked the Restaurant Reviews.<br />
-              You Shared Your Location.<br />
-              You Told a Friend Where You'd Be.
-              <br /><br />
-              You Think That Makes You{' '}
-              <em style={{ fontStyle: 'italic' }}>Safe.</em>
+              <span style={{ ...inter }}>South Africa Does Not Have</span>
               <br />
-              <span style={{ color: '#B52020' }}>It Doesn't.</span>
+              <span style={{ ...playfair, fontStyle: 'italic', color: '#6C35DE' }}>
+                an Awareness Problem.
+              </span>
+              <br />
+              <span style={{ ...inter }}>
+                It Has a{' '}
+                <span style={{ color: '#C0392B' }}>Denial</span>
+                {' '}Problem.
+              </span>
             </h1>
 
-            {/* Subheadline */}
-            <div style={{ marginBottom: 32, maxWidth: 520 }}>
-              <p style={{
-                ...sans, fontSize: 'clamp(15px, 1.8vw, 17px)', color: '#1F1F1F',
-                lineHeight: 1.7, marginBottom: 12, fontWeight: 600,
-              }}>
-                73% of South African women killed by intimate partners knew their killer had a history of violence.
-              </p>
-              <p style={{
-                ...sans, fontSize: 'clamp(14px, 1.5vw, 15px)', color: '#555555',
-                lineHeight: 1.75, marginBottom: 16,
-              }}>
-                Public record. Checkable. Before trust was given.
-              </p>
-              <p style={{
-                ...sans, fontSize: 'clamp(14px, 1.5vw, 16px)', color: '#1F1F1F',
-                lineHeight: 1.6, fontWeight: 700,
-              }}>
-                Before you trust, RedFlaq first.
-              </p>
-            </div>
+            {/* Subtitle */}
+            <p style={{
+              ...inter,
+              fontSize: 'clamp(15px, 1.8vw, 18px)',
+              fontWeight: 400,
+              color: '#d1d1d6',
+              lineHeight: 1.75,
+              marginBottom: 20,
+              maxWidth: 540,
+            }}>
+              RedFlaq helps you see the pattern, document the danger, verify the facts,
+              and act before it becomes evidence.
+            </p>
+
+            {/* Brand signature */}
+            <p style={{
+              ...inter,
+              fontSize: 'clamp(14px, 1.5vw, 17px)',
+              fontWeight: 700,
+              color: '#6C35DE',
+              borderLeft: '3px solid #6C35DE',
+              paddingLeft: 14,
+              lineHeight: 1.5,
+              marginBottom: 40,
+            }}>
+              Before You Trust, RedFlaq First.
+            </p>
 
             {/* CTAs */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'flex-start' }}>
-              {/* Primary — Purple */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'flex-start', marginBottom: 24 }}>
               <button
                 onClick={() => navigate('/signup')}
                 style={{
-                  ...sans, fontWeight: 700, fontSize: 16, color: 'white',
-                  background: '#7C3AED', border: 'none', padding: '16px 36px',
-                  borderRadius: 50, cursor: 'pointer',
-                  boxShadow: '0 4px 20px rgba(124,58,237,0.3)',
-                  transition: 'transform 0.2s, box-shadow 0.2s',
-                  width: '100%', maxWidth: 380, textAlign: 'center',
+                  ...inter, fontWeight: 700, fontSize: 16, color: 'white',
+                  background: '#6C35DE', border: 'none', padding: '16px 36px',
+                  borderRadius: 4, cursor: 'pointer',
+                  transition: 'background 0.2s',
+                  width: '100%', maxWidth: 380,
                 }}
-                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 6px 28px rgba(124,58,237,0.4)'; }}
-                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(124,58,237,0.3)'; }}
+                onMouseEnter={e => e.currentTarget.style.background = '#7B42EE'}
+                onMouseLeave={e => e.currentTarget.style.background = '#6C35DE'}
               >
                 Create Free Safety Base
               </button>
-
-              {/* Secondary — Red */}
-              <button
-                onClick={() => navigate('/search-form')}
-                style={{
-                  ...sans, fontWeight: 700, fontSize: 15, color: 'white',
-                  background: '#B52020', border: 'none', padding: '14px 32px',
-                  borderRadius: 50, cursor: 'pointer',
-                  boxShadow: '0 4px 16px rgba(181,32,32,0.25)',
-                  transition: 'transform 0.2s, box-shadow 0.2s',
-                  width: '100%', maxWidth: 380, textAlign: 'center',
-                }}
-                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 6px 20px rgba(181,32,32,0.35)'; }}
-                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 16px rgba(181,32,32,0.25)'; }}
-              >
-                Run a Check — R99
-              </button>
-
-              {/* Tertiary — link */}
               <button
                 onClick={() => navigate('/signals')}
                 style={{
-                  ...sans, fontWeight: 600, fontSize: 13, color: '#7C3AED',
-                  background: 'transparent', border: 'none', padding: '8px 0',
-                  cursor: 'pointer', textDecoration: 'underline', textUnderlineOffset: 3,
+                  ...inter, fontWeight: 600, fontSize: 15, color: 'rgba(255,255,255,0.75)',
+                  background: 'transparent',
+                  border: '1px solid rgba(255,255,255,0.2)',
+                  padding: '14px 32px',
+                  borderRadius: 4, cursor: 'pointer',
+                  transition: 'border-color 0.2s, color 0.2s',
+                  width: '100%', maxWidth: 380,
                 }}
+                onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.5)'; e.currentTarget.style.color = '#fff'; }}
+                onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)'; e.currentTarget.style.color = 'rgba(255,255,255,0.75)'; }}
               >
-                Read Today's Signal →
+                Read Today's Signal
               </button>
             </div>
 
-            <p style={{ ...sans, fontSize: 12, color: '#888', marginTop: 12, maxWidth: 380, lineHeight: 1.5 }}>
-              100% free account. No credit card. Pay only when you RedFlaq someone's public record.
+            <p style={{ ...inter, fontSize: 13, color: '#8b8b91', maxWidth: 380, lineHeight: 1.6 }}>
+              Free account. No credit card. Pay only when you run a check.
             </p>
           </div>
 
-          {/* Right — Hero Image */}
-          <div style={{ position: 'relative' }}>
+          {/* Right — existing hero image */}
+          <div style={{ position: 'relative', display: 'flex', justifyContent: 'flex-end' }}>
             <div style={{
-              borderRadius: '40% 60% 55% 45% / 55% 45% 60% 40%',
+              position: 'relative',
+              width: '100%',
+              maxWidth: 520,
+              height: 'clamp(400px, 55vw, 600px)',
+              borderRadius: 8,
               overflow: 'hidden',
-              aspectRatio: '4/5',
-              boxShadow: '0 20px 60px rgba(124,58,237,0.15)',
             }}>
               <img
                 src={heroImg}
-                alt="South African woman looking confidently into the distance"
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                alt="South African woman looking with clarity and resolve"
+                style={{
+                  width: '100%', height: '100%',
+                  objectFit: 'cover', objectPosition: 'center top',
+                  display: 'block',
+                }}
                 loading="eager"
               />
+              {/* Subtle dark overlay — left-to-right so text doesn't compete */}
+              <div style={{
+                position: 'absolute', inset: 0,
+                background: 'linear-gradient(to right, rgba(8,8,15,0.3) 0%, transparent 50%)',
+                pointerEvents: 'none',
+              }} />
             </div>
           </div>
         </div>

@@ -103,6 +103,22 @@
     --sidebar-accent-foreground: 246 100% 45%;
     --sidebar-border: 30 10% 85%;
     --sidebar-ring: var(--purple-mid);
+
+    /* Signals Design System Tokens */
+    --rf-purple: #7C3AED;
+    --rf-purple-dark: #5539E8;
+    --rf-purple-light: #EDE9FE;
+    --rf-paper: #F5F0EB;
+    --rf-paper-dark: #E8E2DB;
+    --rf-ink: #1F1F1F;
+    --rf-ink-mid: #555555;
+    --rf-ink-soft: #888888;
+    --rf-danger: #B52020;
+    --rf-dark: #13091F;
+    --rf-dark2: #1E1030;
+    --rf-white: #FFFFFF;
+    --rf-serif: 'Playfair Display', Georgia, serif;
+    --rf-sans: 'Inter', system-ui, sans-serif;
   }
 }
 
@@ -684,4 +700,18 @@ nav, header {
 /* Lazy-load spinner for route transitions */
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+/* ── Signal modal animations (Phase 10C) ───────────────────────── */
+@keyframes rf-modal-slide-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+@keyframes rf-modal-fade-scale {
+  from { opacity: 0; transform: scale(0.97) translateY(8px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+@keyframes rf-toast-in {
+  from { opacity: 0; transform: translateX(-50%) translateY(12px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }

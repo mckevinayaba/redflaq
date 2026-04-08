@@ -74,30 +74,7 @@ const SignalsTicker = () => {
 };
 
 const Signals = () => {
-  const navigate = useNavigate();
-  const [articles, setArticles] = useState<Article[]>([]);
-  const [loading, setLoading] = useState(true);
   const [activeCategory, setActiveCategory] = useState("all");
-
-  useEffect(() => {
-    const fetchSignals = async () => {
-      const { data } = await supabase
-        .from("academy_articles")
-        .select("id, title, slug, excerpt, category, created_at")
-        .eq("published", true)
-        .order("created_at", { ascending: false });
-      setArticles(data || []);
-      setLoading(false);
-    };
-    fetchSignals();
-  }, []);
-
-  const filtered = activeCategory === "all"
-    ? articles
-    : articles.filter(a => a.category === activeCategory);
-
-  const featured = filtered[0] || null;
-  const rest = filtered.slice(1);
 
   return (
     <div style={{ background: '#08080f', minHeight: '100vh', overflowX: 'hidden' }}>

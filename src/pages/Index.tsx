@@ -11,6 +11,11 @@ import MethodSection from "@/components/landing/MethodSection";
 import ProductGrid from "@/components/landing/ProductGrid";
 import TestimonialsSectionNew from "@/components/landing/TestimonialsSectionNew";
 import TrappedUserSection from "@/components/landing/TrappedUserSection";
+import WhyRedflaqSection from "@/components/landing/WhyRedflaqSection";
+import AdvocacySection from "@/components/landing/AdvocacySection";
+import FinalCTAPlinq from "@/components/landing/FinalCTAPlinq";
+import RedFlaqReality from "@/components/landing/RedFlaqReality";
+import FAQHormozi from "@/components/landing/FAQHormozi";
 import FooterPlinq from "@/components/landing/FooterPlinq";
 import { PWAInstallBanner } from "@/components/PWAInstallBanner";
 
@@ -76,6 +81,9 @@ const Index = () => {
 
       {/* 4. Stats — Anger / system failed */}
       <DarkStatsSection />
+
+      {/* 4b. RedFlaq Reality — indictment stats block */}
+      <RedFlaqReality />
 
       {/* 5. Trust ticker */}
       <TickerBar />

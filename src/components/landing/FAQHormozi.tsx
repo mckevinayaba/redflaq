@@ -28,7 +28,7 @@ const faqs = [
   },
   {
     q: "What's included in the FREE account?",
-    a: "Everything except public record verification. Safety Journal, Protection Order Guide, Affidavit Builder, Habit (coming soon), Behavioral Signal (coming soon), all Safety Resources, saved check history, WhatsApp support. Free forever.",
+    a: "Everything except public record verification. Safety Journal, Protection Order Guide, Affidavit Builder, Habit (coming soon), Behavioral Signal (coming soon), all Safety Resources, saved check history. Free forever.",
   },
   {
     q: "When do I have to pay?",

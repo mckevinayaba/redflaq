@@ -82,6 +82,23 @@ async function importDataset(
   const col: Record<string, number> = {};
   headers.forEach((h, i) => { col[h] = i; });
 
+  // Fetch existing records for this dataset to preserve meaningful charges
+  const { data: existingRecords } = await supabase
+    .from('wanted_persons')
+    .select('name_normalized, charges')
+    .eq('source_dataset', dataset.name);
+  
+  const existingChargesMap = new Map<string, string>();
+  if (existingRecords) {
+    for (const r of existingRecords) {
+      if (r.name_normalized && r.charges && r.charges.length > 0 
+          && !r.charges.startsWith('Listed in ') 
+          && r.charges !== 'Wanted by SAPS — specific charges not available') {
+        existingChargesMap.set(r.name_normalized, r.charges);
+      }
+    }
+  }
+
   // Delete existing for this dataset (idempotent)
   await supabase.from('wanted_persons').delete().eq('source_dataset', dataset.name);
 

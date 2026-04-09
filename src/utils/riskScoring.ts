@@ -177,13 +177,49 @@ export function calculateRiskScore(records: any[]): RiskAssessment {
   // Cap at 100
   score = Math.min(Math.round(score), 100);
 
-  // CRITICAL: If we have records but score is still 0, force minimum so we never show GREEN
-  if (records.length > 0 && score === 0) {
-    score = 10;
-    if (!factors.includes('Unclassified public record found')) {
-      factors.push('Unclassified public record found');
+  // ═══ WANTED-STATUS BASELINE SCORING ═══
+  if (records.length > 0) {
+    let statusBaseline = 0;
+
+    records.forEach(record => {
+      const legalStatus = (record.legal_status || '').toLowerCase();
+      const sourceDataset = (record.source_dataset || '').toLowerCase();
+      const foundInSaps = record.found_in_saps === true;
+
+      if (legalStatus === 'wanted' || sourceDataset === 'za_wanted') {
+        statusBaseline = Math.max(statusBaseline, 50);
+        if (!factors.includes('Listed on SAPS Wanted Persons database')) {
+          factors.push('Listed on SAPS Wanted Persons database');
+        }
+      }
+      if (sourceDataset === 'za_fic_sanctions' || legalStatus === 'sanctioned') {
+        statusBaseline = Math.max(statusBaseline, 50);
+        if (!factors.includes('Listed on FIC Sanctions list')) {
+          factors.push('Listed on FIC Sanctions list');
+        }
+      }
+      if (foundInSaps && statusBaseline < 40) {
+        statusBaseline = Math.max(statusBaseline, 40);
+        if (!factors.includes('Found in SAPS records')) {
+          factors.push('Found in SAPS records');
+        }
+      }
+    });
+
+    if (score < statusBaseline) {
+      score = statusBaseline;
+    }
+
+    // Any record in wanted_persons → minimum ORANGE (35)
+    if (score < 35) {
+      score = 35;
+      if (!factors.includes('Public record found in criminal database')) {
+        factors.push('Public record found in criminal database');
+      }
     }
   }
+
+  score = Math.min(score, 100);
 
   // ── Map score to risk level and existing badge ──
   let level: RiskLevel;

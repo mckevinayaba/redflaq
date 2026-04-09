@@ -1,72 +1,61 @@
 
 
-# Build Safety Habits Card + Saved Signals Bookmarking
+# RedFlaq Brain Integration — South African Realities, RedFlaq's Own Voice
 
-## Summary
-Two changes: (1) Add a Safety Habits card to the dashboard so users discover the existing `/dashboard/habit` page, and (2) build a Saved Signals feature with database tables, bookmark UI on signal cards, and a "Saved Signals" section on the dashboard.
+## Core Clarification
 
-## Database Migration
+Yes — we are still using Dr. Rhea's 4-step behavioral framework (See the Pattern → Name the Flaw → Cost of the Choice → Next Better Decision) as the internal operating logic. But externally:
 
-Create three tables: `signal_likes`, `signal_saves`, and update types:
+- **No mention of Dr. Rhea anywhere**
+- **Not called "The RedFlaq Method"** — the section heading becomes **"Before You Trust"** (our motto IS the system name)
+- The 4 steps are presented as what RedFlaq simply *does*, not a branded methodology
 
-```sql
--- Signal likes
-CREATE TABLE public.signal_likes (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  signal_id text NOT NULL,
-  user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-  created_at timestamptz DEFAULT now(),
-  UNIQUE(signal_id, user_id)
-);
-ALTER TABLE public.signal_likes ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Users manage own likes" ON public.signal_likes
-  FOR ALL TO authenticated USING (auth.uid() = user_id)
-  WITH CHECK (auth.uid() = user_id);
+The section header becomes:
 
--- Signal saves (bookmarks)
-CREATE TABLE public.signal_saves (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  signal_id text NOT NULL,
-  user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-  created_at timestamptz DEFAULT now(),
-  UNIQUE(signal_id, user_id)
-);
-ALTER TABLE public.signal_saves ENABLE ROW LEVEL SECURITY;
-CREATE POLICY "Users manage own saves" ON public.signal_saves
-  FOR ALL TO authenticated USING (auth.uid() = user_id)
-  WITH CHECK (auth.uid() = user_id);
+```
+Before You Trust
 ```
 
-## Dashboard Changes (`src/pages/Dashboard.tsx`)
+With the subline: "RedFlaq First."
 
-Add two new cards to the Quick Actions grid (changing from 3-col to 4-col or adding a second row):
+This makes the motto the system. The system IS the motto. No extra branding needed.
 
-1. **Safety Habits** card — links to `/dashboard/habit`, shows a smiley/heart icon with "Build your daily safety ritual" subtitle
-2. **Saved Signals** card — links to `/dashboard/saved-signals`, shows bookmark icon with count of saved signals
+## The 4 Steps (Rhea's brain, SA language)
 
-## New Page: Saved Signals (`src/pages/DashboardSavedSignals.tsx`)
+**01 — See the Pattern**
+"Every 4 hours a woman is killed in South Africa. Most of them saw the signs. Seeing is not the problem. Doing nothing with what you see — that is the problem."
 
-- Fetches from `signal_saves` joined with `academy_articles` for the logged-in user
-- Displays saved articles using `SignalCard` in a grid
-- Empty state: "No saved signals yet. Browse Signals to save articles for later."
-- Wrapped in `DashboardLayout`
+**02 — Name It**
+"In Khayelitsha they call it 'ukuhlukumeza.' In Soweto it's 'he's just like that.' In Sandton it's 'he has a temper.' Different words. Same pattern. Name it so it stops hiding behind culture, class, or love."
 
-## Route Addition (`src/App.tsx`)
+**03 — Prove It**
+"Feelings don't hold up in court. Timestamps do. Journal entries do. Public criminal records do. R99. 60 seconds. Before trust is given."
 
-Add `/dashboard/saved-signals` route pointing to the new page.
+**04 — Act Before It Becomes Evidence**
+"You don't need certainty. You need documentation. The woman who acts on a pattern — not a crisis — is the woman who survives."
 
-## Sidebar Update (`src/components/dashboard/DashboardSidebar.tsx`)
+## Everything Else from the Approved Plan Stays
 
-Add "Saved Signals" menu item with bookmark icon, positioned after "Signal Detection".
+All other changes (IsolationStatement, ProductGrid, TrappedUserSection, ProtectionSection, Dashboard daily prompts, pattern alerts, HabitDashboard SA-voice prompts/verdicts, About page rewrite, TodaysSignal sublines) remain exactly as approved — just confirming:
 
-## SignalEngagement Already Works
+- No "RedFlaq Method" label anywhere
+- Section is called **"Before You Trust"** with "RedFlaq First." as the subline
+- The operating system section on the About page is titled **"How RedFlaq Works"** (not "The Operating System" or "The Method")
+- Rhea's 4-step logic is the invisible engine — never named, never credited
 
-The existing `SignalEngagement.tsx` already has like/save buttons. Once the tables exist, the `as any` casts will work against real tables. No changes needed there.
+## Files Changed (same 9 files)
 
-## Files Changed
-1. New migration — `signal_likes` and `signal_saves` tables with RLS
-2. `src/pages/Dashboard.tsx` — add Safety Habits + Saved Signals quick action cards
-3. `src/pages/DashboardSavedSignals.tsx` — new page
-4. `src/App.tsx` — add route
-5. `src/components/dashboard/DashboardSidebar.tsx` — add Saved Signals menu item
+1. `src/components/landing/MethodSection.tsx` — "Before You Trust" heading, 4 SA steps
+2. `src/components/landing/IsolationStatement.tsx` — confrontational follow-up
+3. `src/components/landing/ProductGrid.tsx` — rewrite descriptions
+4. `src/components/landing/TrappedUserSection.tsx` — SA-contextual body
+5. `src/components/landing/ProtectionSection.tsx` — collective accountability + motto
+6. `src/pages/Dashboard.tsx` — daily prompt rotation + pattern alert
+7. `src/pages/HabitDashboard.tsx` — SA prompts, verdict, header rewrite
+8. `src/pages/About.tsx` — human hero, "How RedFlaq Works" section, commitment rewrite
+9. `src/components/landing/TodaysSignal.tsx` — rotating subline
+
+## Not Touched
+
+Logo, nav, footer, pricing, Yoco payment flow, verification logic, stats, GBV hotline, POPIA, admin, routes, SignalCard, SignalEngagement
 

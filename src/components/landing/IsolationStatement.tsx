@@ -37,8 +37,20 @@ const IsolationStatement = () => (
         color: '#8b8b91',
         lineHeight: 1.6,
         marginTop: '0.5em',
+        marginBottom: '0.4em',
       }}>
         Most of them knew their killers.
+      </p>
+      <p style={{
+        ...inter,
+        fontSize: 'clamp(14px, 1.6vw, 18px)',
+        fontWeight: 600,
+        color: '#C0392B',
+        lineHeight: 1.6,
+        marginTop: '0.8em',
+      }}>
+        And most of them had already told someone.<br />
+        The someone did nothing.
       </p>
     </div>
   </section>

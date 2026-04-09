@@ -43,10 +43,24 @@ const ProtectionSection = () => {
           color: 'rgba(255,255,255,0.6)',
           lineHeight: 1.75,
           maxWidth: 540,
-          margin: '0 auto 36px',
+          margin: '0 auto 20px',
         }}>
           Every check you run. Every pattern you name. Every journal entry you make.
           It builds a South Africa where the next woman has more to go on than her instincts alone.
+        </p>
+
+        <p style={{
+          ...inter,
+          fontSize: 15,
+          color: 'rgba(255,255,255,0.5)',
+          lineHeight: 1.75,
+          maxWidth: 540,
+          margin: '0 auto 36px',
+        }}>
+          Every woman who checked and stayed silent still changed the data.
+          Every pattern named makes the next woman's search faster.
+          This is not individual safety. This is infrastructure.{' '}
+          <span style={{ color: '#6C35DE', fontWeight: 700 }}>Before You Trust, RedFlaq First.</span>
         </p>
 
         <button

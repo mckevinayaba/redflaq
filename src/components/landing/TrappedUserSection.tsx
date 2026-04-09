@@ -34,9 +34,10 @@ const TrappedUserSection = () => {
           margin: '0 auto 36px',
           fontWeight: 400,
         }}>
-          You don't need to report to start documenting. You don't need to leave
-          to start protecting yourself. Safety Base helps you track patterns quietly,
-          build evidence safely, and prepare before you're ready to act.
+          That's not a question we judge. But here's what we know: you're not staying
+          because you love him. You're staying because leaving feels more dangerous
+          than the danger you already know. That's not weakness — that's South Africa.
+          Start documenting. Not for the court. For the version of you who will be ready.
         </p>
 
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, marginBottom: 32 }}>

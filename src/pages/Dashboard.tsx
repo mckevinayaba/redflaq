@@ -34,6 +34,19 @@ const card: React.CSSProperties = {
   padding: '24px',
 };
 
+const DAILY_PROMPTS = [
+  "You already know the answer. You just don't like it.",
+  "Awareness didn't save 9 women yesterday. Action might save 1 today.",
+  "Stop calling it fate. It's a pattern. And patterns can be checked.",
+  "The most dangerous thing you'll do today is trust someone you haven't verified.",
+  "In South Africa, knowing is not the problem. Doing nothing with what you know — that is.",
+  "Your instincts are not paranoia. They are data.",
+  "Before You Trust, RedFlaq First.",
+  "A protection order means nothing if you don't know one exists.",
+  "He told you who he was. You explained it away. Stop explaining.",
+  "Document today. Decide tomorrow. But start.",
+];
+
 export default function Dashboard() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
@@ -46,10 +59,14 @@ export default function Dashboard() {
   const [freeChecksEarned, setFreeChecksEarned] = useState(0);
   const [buyModalOpen, setBuyModalOpen] = useState(false);
   const [recentJournal, setRecentJournal] = useState<{ id: string; entry_date: string; incident_description: string }[]>([]);
+  const [patternAlert, setPatternAlert] = useState<{ text: string; count: number } | null>(null);
+
+  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
+  const dailyPrompt = DAILY_PROMPTS[dayOfYear % DAILY_PROMPTS.length];
 
   useEffect(() => {
     if (!authLoading && !user) { navigate("/signup"); return; }
-    if (user) { fetchData(); }
+    if (user) { fetchData(); detectPatterns(); }
   }, [user, authLoading]);
 
   const fetchData = async () => {
@@ -67,6 +84,43 @@ export default function Dashboard() {
     setReferralCount(converted.length);
     setFreeChecksEarned(Math.floor(converted.length / 3));
     setLoading(false);
+  };
+
+  const detectPatterns = async () => {
+    if (!user) return;
+    const weekAgo = new Date(Date.now() - 7 * 86400000).toISOString().split("T")[0];
+    const { data: checkins } = await supabase
+      .from("habit_checkins")
+      .select("responses")
+      .eq("user_id", user.id)
+      .gte("checkin_date", weekAgo);
+    if (!checkins || checkins.length < 3) return;
+
+    const promptCounts: Record<string, { text: string; count: number }> = {};
+    const PROMPT_LABELS: Record<string, string> = {
+      isolation: "Someone limiting who you see or talk to",
+      guilt: "Being made to feel guilty for normal actions",
+      tracking: "Location monitoring or phone surveillance",
+      belittling: "Being mocked, criticised, or made to feel small",
+      safe: "Not feeling physically safe",
+    };
+
+    for (const checkin of checkins) {
+      const responses = checkin.responses as any[];
+      if (!Array.isArray(responses)) continue;
+      for (const r of responses) {
+        const flagged = r.id === "safe" ? r.answer === false : r.answer === true;
+        if (flagged) {
+          if (!promptCounts[r.id]) promptCounts[r.id] = { text: PROMPT_LABELS[r.id] || r.text, count: 0 };
+          promptCounts[r.id].count++;
+        }
+      }
+    }
+
+    const worst = Object.values(promptCounts).sort((a, b) => b.count - a.count)[0];
+    if (worst && worst.count >= 3) {
+      setPatternAlert(worst);
+    }
   };
 
   if (authLoading || loading) {
@@ -103,8 +157,9 @@ export default function Dashboard() {
         <h1 style={{ ...inter, fontSize: 'clamp(22px, 3vw, 30px)', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.025em', marginBottom: 8 }}>
           Welcome back{firstName ? `, ${firstName}` : ''}.
         </h1>
-        <p style={{ ...inter, fontSize: 14, color: '#8b8b91', lineHeight: 1.6, marginBottom: 16 }}>
-          Document incidents, run safety checks, and find help — privately and securely.
+        {/* Daily confrontation prompt */}
+        <p style={{ ...inter, fontSize: 15, color: '#d1d1d6', lineHeight: 1.6, marginBottom: 16, fontStyle: 'italic' }}>
+          {dailyPrompt}
         </p>
         {/* Brand line */}
         <div style={{ borderLeft: '3px solid #6C35DE', paddingLeft: 12 }}>
@@ -113,6 +168,30 @@ export default function Dashboard() {
           </p>
         </div>
       </div>
+
+      {/* Pattern Alert */}
+      {patternAlert && (
+        <div style={{
+          ...card,
+          borderLeft: '4px solid #C0392B',
+          borderColor: 'rgba(192,57,43,0.4)',
+          marginBottom: 20,
+          background: 'rgba(192,57,43,0.06)',
+        }}>
+          <p style={{ ...mono, fontSize: 10, color: '#C0392B', letterSpacing: '0.1em', textTransform: 'uppercase' as const, marginBottom: 8 }}>
+            ⚠ Pattern Detected
+          </p>
+          <p style={{ ...inter, fontSize: 15, fontWeight: 700, color: '#ffffff', marginBottom: 8 }}>
+            {patternAlert.text} — flagged {patternAlert.count} of the last 7 days.
+          </p>
+          <p style={{ ...inter, fontSize: 14, color: '#d1d1d6', lineHeight: 1.7, marginBottom: 12 }}>
+            This is not a bad week. This is a pattern. Document it now.
+          </p>
+          <Link to="/dashboard/journal/new" style={{ ...inter, fontSize: 13, fontWeight: 700, color: '#C0392B', textDecoration: 'none' }}>
+            Document this pattern →
+          </Link>
+        </div>
+      )}
 
       {/* "Not Ready to Leave Yet?" box */}
       <div style={{
@@ -124,9 +203,9 @@ export default function Dashboard() {
           Not Ready to Leave Yet?
         </h3>
         <p style={{ ...inter, fontSize: 14, color: '#d1d1d6', lineHeight: 1.7 }}>
-          That's okay. You don't need to leave to start protecting yourself.
-          Document patterns. Build evidence. Prepare on your timeline.
-          Your Safety Base is private, encrypted, and only you can access it.
+          That's not a question we judge. You're not staying because you love him.
+          You're staying because leaving feels more dangerous than the danger you already know.
+          Start documenting. Not for the court. For the version of you who will be ready.
         </p>
       </div>
 

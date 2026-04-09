@@ -6,32 +6,26 @@ const playfair: React.CSSProperties = { fontFamily: "'Playfair Display', serif" 
 const steps = [
   {
     number: "01",
-    title: "See the Signal",
-    desc: "Recognize the behavioral pattern before it has a name. RedFlaq Signals trains your instincts daily with real pattern analysis.",
+    title: "See the Pattern",
+    desc: "Every 4 hours a woman is killed in South Africa. Most of them saw the signs. Seeing is not the problem. Doing nothing with what you see — that is the problem.",
     href: '/signals',
   },
   {
     number: "02",
-    title: "Name the Pattern",
-    desc: "Denial runs on unnamed behavior. Once you can name isolation, financial control, or intimidation — the hold weakens.",
-    href: '/signals',
+    title: "Name It",
+    desc: "In Khayelitsha they call it 'ukuhlukumeza.' In Soweto it's 'he's just like that.' In Sandton it's 'he has a temper.' Different words. Same pattern. Name it so it stops hiding behind culture, class, or love.",
+    href: '/dashboard/habit',
   },
   {
     number: "03",
-    title: "Document Quietly",
-    desc: "My Safety Journal creates timestamped, court-admissible records before you decide what to do with them. Start now. Decide later.",
-    href: '/dashboard/journal',
-  },
-  {
-    number: "04",
-    title: "Verify the Facts",
-    desc: "Public criminal records, SAPS wanted lists, court history. Checkable in 60 seconds. R99. Before trust is given.",
+    title: "Prove It",
+    desc: "Feelings don't hold up in court. Timestamps do. Journal entries do. Public criminal records do. R99. 60 seconds. Before trust is given.",
     href: '/search-form',
   },
   {
-    number: "05",
-    title: "Act Earlier",
-    desc: "You don't need certainty to take a step. The documentation, the verification, the pattern — all of it is yours to use when you're ready.",
+    number: "04",
+    title: "Act Before It Becomes Evidence",
+    desc: "You don't need certainty. You need documentation. The woman who acts on a pattern — not a crisis — is the woman who survives.",
     href: '/signup',
   },
 ];
@@ -50,11 +44,19 @@ const MethodSection = () => {
             fontWeight: 900, lineHeight: 1.1, letterSpacing: '-0.03em',
             marginBottom: 16,
           }}>
-            <span style={{ ...inter, color: '#ffffff' }}>The RedFlaq </span>
-            <span style={{ ...playfair, fontStyle: 'italic', color: '#6C35DE' }}>Method</span>
+            <span style={{ ...inter, color: '#ffffff' }}>Before You Trust</span>
           </h2>
+          <p style={{
+            ...playfair, fontStyle: 'italic',
+            fontSize: 'clamp(20px, 2.5vw, 32px)',
+            color: '#6C35DE',
+            fontWeight: 700,
+            marginBottom: 16,
+          }}>
+            RedFlaq First.
+          </p>
           <p style={{ ...inter, fontSize: 16, color: '#8b8b91', maxWidth: 600, margin: '0 auto', lineHeight: 1.75 }}>
-            See the pattern. Name it. Document it. Verify it. Act before it becomes evidence.
+            Awareness didn't save them. Action might save you.
           </p>
         </div>
 

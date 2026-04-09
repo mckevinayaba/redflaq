@@ -2,9 +2,9 @@
 // WhatsApp Configuration — Update the number here once ready
 // ═══════════════════════════════════════════════════════════
 
-export const WHATSAPP_NUMBER = "27663365296";
-
-export const WHATSAPP_CHAT_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
+// WhatsApp API bot number removed — re-enable when API is ready
+// export const WHATSAPP_NUMBER = "27663365296";
+// export const WHATSAPP_CHAT_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
 
 const EMOTIONAL_SHARE_MESSAGE = `She loved him.
 
@@ -40,8 +40,3 @@ export const WHATSAPP_MESSAGES = {
 
 export const getWhatsAppShareUrl = (message: string) =>
   `https://wa.me/?text=${encodeURIComponent(message)}`;
-
-export const getWhatsAppChatUrl = (prefilledMessage?: string) =>
-  prefilledMessage
-    ? `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(prefilledMessage)}`
-    : WHATSAPP_CHAT_URL;

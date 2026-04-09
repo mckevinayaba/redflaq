@@ -72,7 +72,7 @@ const JournalDetail = lazy(() => import("./pages/JournalDetail"));
 const JournalEdit = lazy(() => import("./pages/JournalEdit"));
 const JournalExport = lazy(() => import("./pages/JournalExport"));
 const AffidavitBuilder = lazy(() => import("./pages/AffidavitBuilder"));
-const WhatsAppPage = lazy(() => import("./pages/WhatsApp"));
+
 const Shop = lazy(() => import("./pages/Shop"));
 const HabitComingSoon = lazy(() => import("./pages/HabitComingSoon"));
 const BehavioralSignalComingSoon = lazy(() => import("./pages/BehavioralSignalComingSoon"));
@@ -155,8 +155,6 @@ const App = () => (
             {/* Partners */}
             <Route path="/partners" element={<Partners />} />
             <Route path="/partners/apply" element={<PartnersApply />} />
-            {/* WhatsApp */}
-            <Route path="/whatsapp" element={<WhatsAppPage />} />
             {/* Shop */}
             <Route path="/shop" element={<Shop />} />
             {/* Coming Soon */}

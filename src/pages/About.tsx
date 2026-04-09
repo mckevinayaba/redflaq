@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
-import { Shield, Scale, CheckCircle, Database, FileText, Gavel, Mail, MessageCircle, Users, Target, Linkedin } from "lucide-react";
+import { Shield, Scale, CheckCircle, Database, FileText, Gavel, Mail, Users, Target, Linkedin } from "lucide-react";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
-import { WHATSAPP_CHAT_URL } from "@/constants/whatsapp";
+
 import nthabiPhoto from "@/assets/nthabi-montsho.jpeg";
 import ayolaPhoto from "@/assets/ayola-masizana.jpeg";
 import mckevinPhoto from "@/assets/mckevin-ayaba.png";
@@ -263,9 +263,6 @@ export default function About() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <a href="mailto:hello@redflaq.com" className="inline-flex items-center gap-2 font-body font-bold text-sm px-6 py-3 rounded-full bg-primary text-primary-foreground shadow-lg">
                 <Mail className="w-4 h-4" /> hello@redflaq.com
-              </a>
-              <a href={WHATSAPP_CHAT_URL} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 font-body font-bold text-sm px-6 py-3 rounded-full border border-primary/30 text-white hover:bg-primary/10 transition-colors">
-                <MessageCircle className="w-4 h-4" /> WhatsApp Us
               </a>
               <Link to="/partners" className="inline-flex items-center gap-2 font-body font-bold text-sm px-6 py-3 rounded-full border border-primary/30 text-white hover:bg-primary/10 transition-colors">
                 <Users className="w-4 h-4" /> Become a Partner

@@ -5,7 +5,6 @@ import SignalStreakBar from "@/components/landing/SignalStreakBar";
 import { markSignalRead } from "@/hooks/useSignalStreak";
 
 const inter: React.CSSProperties = { fontFamily: "'Inter', sans-serif" };
-const playfair: React.CSSProperties = { fontFamily: "'Playfair Display', serif" };
 const mono: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };
 
 interface SignalArticle {
@@ -27,11 +26,22 @@ const CATEGORY_LABELS: Record<string, string> = {
   "gbv-resources": "GBV Resources",
 };
 
+const SUBLINES = [
+  "Not therapy. Just clarity.",
+  "Awareness is not action. This is action.",
+  "Before You Trust, RedFlaq First.",
+  "Your instincts are data. Read them.",
+  "Stop calling it fate. It's a pattern.",
+];
+
 const TodaysSignal = () => {
   const navigate = useNavigate();
   const [featured, setFeatured] = useState<SignalArticle | null>(null);
   const [previous, setPrevious] = useState<SignalArticle | null>(null);
   const [likes, setLikes] = useState(0);
+
+  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
+  const subline = SUBLINES[dayOfYear % SUBLINES.length];
 
   useEffect(() => {
     const fetchSignals = async () => {
@@ -78,6 +88,9 @@ const TodaysSignal = () => {
               <span style={{ display: 'inline-block', width: 8, height: 8, background: '#6C35DE', borderRadius: '50%' }} />
               TODAY'S REDFLAQ SIGNAL
             </p>
+            <p style={{ ...inter, fontSize: 13, color: '#8b8b91', fontStyle: 'italic' }}>
+              {subline}
+            </p>
           </div>
           <button
             onClick={() => navigate('/signals')}
@@ -119,7 +132,7 @@ const TodaysSignal = () => {
             </span>
           </div>
 
-          {/* Headline with red emphasis word */}
+          {/* Headline */}
           <h3 style={{
             ...inter,
             fontSize: 'clamp(22px, 3.5vw, 40px)',
@@ -138,7 +151,7 @@ const TodaysSignal = () => {
             ) : signal.title}
           </h3>
 
-          {/* Excerpt with red emphasis */}
+          {/* Excerpt */}
           <p style={{
             ...inter,
             fontSize: 'clamp(14px, 1.6vw, 17px)',

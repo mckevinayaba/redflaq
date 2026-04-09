@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
@@ -16,11 +16,11 @@ const card: React.CSSProperties = {
 };
 
 const dailyPrompts = [
-  { id: "isolation", text: "Did anyone try to limit who you see or talk to today?", weight: 3 },
-  { id: "guilt", text: "Were you made to feel guilty for doing something normal?", weight: 2 },
-  { id: "tracking", text: "Did someone demand to know your location or check your phone?", weight: 3 },
-  { id: "belittling", text: "Were you criticised, mocked, or made to feel small?", weight: 2 },
-  { id: "safe", text: "Did you feel physically safe in all your interactions today?", weight: 3, inverted: true },
+  { id: "isolation", text: "Did someone control who you spoke to today? Yes or no. Not 'sort of.'", weight: 3 },
+  { id: "guilt", text: "Were you punished for doing something normal? Guilt is a control tool.", weight: 2 },
+  { id: "tracking", text: "Did someone demand access to your phone or location? That is surveillance, not love.", weight: 3 },
+  { id: "belittling", text: "Were you mocked, corrected, or made to feel stupid? That is not feedback.", weight: 2 },
+  { id: "safe", text: "Did you feel physically safe in every interaction today? Be honest.", weight: 3, inverted: true },
 ];
 
 const educationCards = [
@@ -39,6 +39,7 @@ export default function HabitDashboard() {
   const [answers, setAnswers] = useState<Record<string, boolean | null>>({});
   const [streak, setStreak] = useState({ current: 0, longest: 0, total: 0 });
   const [todayDone, setTodayDone] = useState(false);
+  const [todayScore, setTodayScore] = useState<number | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [todayEducation, setTodayEducation] = useState(educationCards[0]);
 
@@ -56,10 +57,13 @@ export default function HabitDashboard() {
     const load = async () => {
       const today = new Date().toISOString().split("T")[0];
       const [{ data: checkin }, { data: streakData }] = await Promise.all([
-        supabase.from("habit_checkins").select("id").eq("user_id", user.id).eq("checkin_date", today).maybeSingle(),
+        supabase.from("habit_checkins").select("id, score").eq("user_id", user.id).eq("checkin_date", today).maybeSingle(),
         supabase.from("habit_streaks").select("*").eq("user_id", user.id).maybeSingle(),
       ]);
-      if (checkin) setTodayDone(true);
+      if (checkin) {
+        setTodayDone(true);
+        setTodayScore((checkin as any).score ?? null);
+      }
       if (streakData) setStreak({ current: streakData.current_streak, longest: streakData.longest_streak, total: streakData.total_checkins });
     };
     load();
@@ -97,11 +101,30 @@ export default function HabitDashboard() {
       setStreak({ current: 1, longest: 1, total: 1 });
     }
     setTodayDone(true);
+    setTodayScore(score);
     setSubmitting(false);
-    toast({ title: score === 0 ? "All clear today!" : "Check-in recorded. Stay aware." });
+    toast({ title: score === 0 ? "All clear today. Stay sharp." : "Check-in recorded. Name it. Don't explain it away." });
   };
 
   if (authLoading) return null;
+
+  const getVerdict = (score: number) => {
+    if (score === 0) return {
+      text: "All clear today. Stay sharp. Patterns don't announce themselves.",
+      color: "#27AE60",
+      showJournal: false,
+    };
+    if (score <= 4) return {
+      text: "Something showed up. Name it. Don't explain it away. Before You Trust, RedFlaq First.",
+      color: "#E67E22",
+      showJournal: true,
+    };
+    return {
+      text: "Multiple flags today. This is not a bad day. This is a pattern. Document it now.",
+      color: "#C0392B",
+      showJournal: true,
+    };
+  };
 
   return (
     <DashboardLayout>
@@ -109,13 +132,13 @@ export default function HabitDashboard() {
         {/* Header */}
         <div style={{ marginBottom: 28 }}>
           <p style={{ ...mono, fontSize: 10, color: '#6C35DE', letterSpacing: '0.15em', textTransform: 'uppercase' as const, marginBottom: 8 }}>
-            Behavioral Patterns
+            Daily Check-In
           </p>
           <h1 style={{ ...inter, fontSize: 'clamp(22px, 3vw, 30px)', fontWeight: 900, color: '#ffffff', letterSpacing: '-0.025em', marginBottom: 8 }}>
-            Track What You're Seeing
+            What Did You See Today?
           </h1>
           <p style={{ ...inter, fontSize: 14, color: '#8b8b91', lineHeight: 1.7 }}>
-            Patterns become evidence. Build daily safety awareness into your routine.
+            Patterns become evidence. Silence becomes complicity. Check in daily.
           </p>
         </div>
 
@@ -155,11 +178,37 @@ export default function HabitDashboard() {
 
           {todayDone ? (
             <div style={{ textAlign: 'center', padding: '32px 0' }}>
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#27AE60" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ margin: '0 auto 16px' }}>
-                <circle cx="12" cy="12" r="10" /><polyline points="9 12 11 14 15 10" />
-              </svg>
-              <p style={{ ...inter, fontSize: 18, fontWeight: 700, color: '#ffffff', marginBottom: 8 }}>You've checked in today.</p>
-              <p style={{ ...inter, fontSize: 14, color: '#8b8b91' }}>Come back tomorrow to keep your streak going.</p>
+              {todayScore !== null ? (() => {
+                const verdict = getVerdict(todayScore);
+                return (
+                  <>
+                    <div style={{ width: 48, height: 48, borderRadius: '50%', background: `${verdict.color}20`, border: `2px solid ${verdict.color}`, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>
+                      {todayScore === 0 ? (
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={verdict.color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="9 12 11 14 15 10" /></svg>
+                      ) : (
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={verdict.color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" /></svg>
+                      )}
+                    </div>
+                    <p style={{ ...inter, fontSize: 16, fontWeight: 700, color: verdict.color, marginBottom: 12, maxWidth: 480, margin: '0 auto 12px' }}>
+                      {verdict.text}
+                    </p>
+                    {verdict.showJournal && (
+                      <Link to="/dashboard/journal/new" style={{ ...inter, fontSize: 14, fontWeight: 700, color: '#ffffff', background: '#6C35DE', padding: '10px 20px', borderRadius: 4, textDecoration: 'none', display: 'inline-block', marginTop: 8 }}>
+                        Document it now →
+                      </Link>
+                    )}
+                    <p style={{ ...inter, fontSize: 13, color: '#8b8b91', marginTop: 16 }}>Come back tomorrow to keep your streak going.</p>
+                  </>
+                );
+              })() : (
+                <>
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#27AE60" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ margin: '0 auto 16px' }}>
+                    <circle cx="12" cy="12" r="10" /><polyline points="9 12 11 14 15 10" />
+                  </svg>
+                  <p style={{ ...inter, fontSize: 18, fontWeight: 700, color: '#ffffff', marginBottom: 8 }}>You've checked in today.</p>
+                  <p style={{ ...inter, fontSize: 14, color: '#8b8b91' }}>Come back tomorrow to keep your streak going.</p>
+                </>
+              )}
             </div>
           ) : (
             <div>

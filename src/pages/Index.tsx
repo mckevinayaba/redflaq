@@ -14,6 +14,7 @@ import TrappedUserSection from "@/components/landing/TrappedUserSection";
 import WhyRedflaqSection from "@/components/landing/WhyRedflaqSection";
 import AdvocacySection from "@/components/landing/AdvocacySection";
 import FinalCTAPlinq from "@/components/landing/FinalCTAPlinq";
+import NGOPartnerSection from "@/components/landing/NGOPartnerSection";
 import RedFlaqReality from "@/components/landing/RedFlaqReality";
 import FAQHormozi from "@/components/landing/FAQHormozi";
 import FooterPlinq from "@/components/landing/FooterPlinq";

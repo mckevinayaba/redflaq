@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { BookOpen, Scale, FileText, Sparkles, Heart, Shield, Search, MessageSquare } from "lucide-react";
+import { BookOpen, Scale, FileText, Sparkles, Heart, Shield, Search } from "lucide-react";
 
 const serif: React.CSSProperties = { fontFamily: "'DM Serif Display', serif" };
 const sans: React.CSSProperties = { fontFamily: "'Syne', sans-serif" };

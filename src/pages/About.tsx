@@ -1,8 +1,7 @@
 import { Link } from "react-router-dom";
-import { Shield, Eye, Scale, Heart, CheckCircle, Database, FileText, Gavel, Mail, MessageCircle, Users, Target, Linkedin } from "lucide-react";
+import { Shield, Scale, CheckCircle, Database, FileText, Gavel, Mail, MessageCircle, Users, Target, Linkedin } from "lucide-react";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
-import BackToHome from "@/components/landing/BackToHome";
 import { WHATSAPP_CHAT_URL } from "@/constants/whatsapp";
 import nthabiPhoto from "@/assets/nthabi-montsho.jpeg";
 import ayolaPhoto from "@/assets/ayola-masizana.jpeg";

@@ -141,6 +141,12 @@ async function importDataset(
         }
       }
 
+      // Preserve meaningful charges from previous imports
+      const normalizedKey = normalizeName(name);
+      const preservedCharges = existingChargesMap.get(normalizedKey);
+      const rawCharges = sanctions || `Listed in ${dataset.name}`;
+      const finalCharges = preservedCharges || rawCharges;
+
       records.push({
         full_name: name.toUpperCase(),
         first_name: first_name?.toUpperCase() || null,

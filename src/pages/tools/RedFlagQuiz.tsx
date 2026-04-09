@@ -39,7 +39,7 @@ const RedFlagQuiz = () => {
         {questions.map((item, idx) => (
           <div key={idx} style={{ background: "#111118", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8, padding: 20 }}>
             <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, color: "rgba(255,255,255,0.7)", lineHeight: 1.6, marginBottom: 12 }}>
-              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#9CA3AF", marginRight: 8 }}>{idx + 1}.</span>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "rgba(255,255,255,0.3)", marginRight: 8 }}>{idx + 1}.</span>
               {item.q}
             </p>
             <div style={{ display: "flex", gap: 12 }}>

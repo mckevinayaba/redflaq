@@ -28,8 +28,8 @@ const TenantSafety = () => {
     >
       <div style={{ marginBottom: 24 }}>
         <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
-          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#9CA3AF", letterSpacing: "0.1em" }}>PROGRESS</span>
-          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#7C3AED", fontWeight: 600 }}>{checked.filter(Boolean).length}/{items.length}</span>
+          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em" }}>PROGRESS</span>
+          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#6C35DE", fontWeight: 600 }}>{checked.filter(Boolean).length}/{items.length}</span>
         </div>
         <Progress value={progress} className="h-2" />
       </div>

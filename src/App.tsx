@@ -80,6 +80,7 @@ const HabitDashboard = lazy(() => import("./pages/HabitDashboard"));
 const BehavioralSignalDetection = lazy(() => import("./pages/BehavioralSignalDetection"));
 const ApiComingSoon = lazy(() => import("./pages/ApiComingSoon"));
 const RedflaqOrgComingSoon = lazy(() => import("./pages/RedflaqOrgComingSoon"));
+const DashboardSavedSignals = lazy(() => import("./pages/DashboardSavedSignals"));
 
 const queryClient = new QueryClient();
 
@@ -130,6 +131,7 @@ const App = () => (
             <Route path="/dashboard/affidavit" element={<AffidavitBuilder />} />
             <Route path="/dashboard/habit" element={<HabitDashboard />} />
             <Route path="/dashboard/behavioral-signals" element={<BehavioralSignalDetection />} />
+            <Route path="/dashboard/saved-signals" element={<DashboardSavedSignals />} />
             {/* Safety Tips */}
             <Route path="/safety-tips" element={<SafetyTips />} />
             <Route path="/conversation-guide" element={<ConversationGuide />} />

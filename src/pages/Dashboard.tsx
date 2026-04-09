@@ -131,7 +131,7 @@ export default function Dashboard() {
       </div>
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4" style={{ marginBottom: 28 }}>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4" style={{ marginBottom: 28 }}>
         <Link to="/dashboard/new-check" style={{
           ...card, display: 'flex', alignItems: 'center', gap: 14,
           textDecoration: 'none', transition: 'border-color 0.2s, transform 0.2s',
@@ -176,6 +176,36 @@ export default function Dashboard() {
           <div>
             <p style={{ ...inter, fontSize: 14, fontWeight: 700, color: '#ffffff', marginBottom: 2 }}>Get Help Now</p>
             <p style={{ ...inter, fontSize: 12, color: '#8b8b91' }}>Helplines and emergency resources</p>
+          </div>
+        </Link>
+        <Link to="/dashboard/habit" style={{
+          ...card, display: 'flex', alignItems: 'center', gap: 14,
+          textDecoration: 'none', transition: 'border-color 0.2s, transform 0.2s',
+        }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = '#6C35DE'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(108,53,222,0.25)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}
+        >
+          <div style={{ width: 44, height: 44, borderRadius: 8, background: 'rgba(108,53,222,0.12)', border: '1px solid rgba(108,53,222,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6C35DE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
+          </div>
+          <div>
+            <p style={{ ...inter, fontSize: 14, fontWeight: 700, color: '#ffffff', marginBottom: 2 }}>Safety Habits</p>
+            <p style={{ ...inter, fontSize: 12, color: '#8b8b91' }}>Build your daily safety ritual</p>
+          </div>
+        </Link>
+        <Link to="/dashboard/saved-signals" style={{
+          ...card, display: 'flex', alignItems: 'center', gap: 14,
+          textDecoration: 'none', transition: 'border-color 0.2s, transform 0.2s',
+        }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = '#6C35DE'; (e.currentTarget as HTMLElement).style.transform = 'translateY(-2px)'; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = 'rgba(108,53,222,0.25)'; (e.currentTarget as HTMLElement).style.transform = 'translateY(0)'; }}
+        >
+          <div style={{ width: 44, height: 44, borderRadius: 8, background: 'rgba(108,53,222,0.12)', border: '1px solid rgba(108,53,222,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6C35DE" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" /></svg>
+          </div>
+          <div>
+            <p style={{ ...inter, fontSize: 14, fontWeight: 700, color: '#ffffff', marginBottom: 2 }}>Saved Signals</p>
+            <p style={{ ...inter, fontSize: 12, color: '#8b8b91' }}>Articles you bookmarked</p>
           </div>
         </Link>
       </div>

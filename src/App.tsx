@@ -130,6 +130,7 @@ const App = () => (
             <Route path="/dashboard/affidavit" element={<AffidavitBuilder />} />
             <Route path="/dashboard/habit" element={<HabitDashboard />} />
             <Route path="/dashboard/behavioral-signals" element={<BehavioralSignalDetection />} />
+            <Route path="/dashboard/saved-signals" element={<DashboardSavedSignals />} />
             {/* Safety Tips */}
             <Route path="/safety-tips" element={<SafetyTips />} />
             <Route path="/conversation-guide" element={<ConversationGuide />} />

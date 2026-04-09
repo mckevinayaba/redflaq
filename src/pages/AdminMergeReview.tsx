@@ -212,7 +212,7 @@ const AdminMergeReview = () => {
     }
   };
 
-  if (!isAuthed) return null;
+  
 
   return (
     <div className="min-h-screen bg-background p-6">

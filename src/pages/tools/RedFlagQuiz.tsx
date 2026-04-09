@@ -37,8 +37,8 @@ const RedFlagQuiz = () => {
     >
       <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         {questions.map((item, idx) => (
-          <div key={idx} style={{ background: "white", border: "1.5px solid #D6D3CD", padding: 20 }}>
-            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: "#2D2235", lineHeight: 1.6, marginBottom: 12 }}>
+          <div key={idx} style={{ background: "#111118", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 8, padding: 20 }}>
+            <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, color: "rgba(255,255,255,0.7)", lineHeight: 1.6, marginBottom: 12 }}>
               <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#9CA3AF", marginRight: 8 }}>{idx + 1}.</span>
               {item.q}
             </p>
@@ -52,10 +52,11 @@ const RedFlagQuiz = () => {
                   onClick={() => { const n = [...answers]; n[idx] = opt.value; setAnswers(n); }}
                   style={{
                     padding: "8px 24px",
-                    background: answers[idx] === opt.value ? (opt.value ? "#FEF2F2" : "#F0FDF4") : "white",
-                    border: `1.5px solid ${answers[idx] === opt.value ? (opt.value ? "#DC2626" : "#22C55E") : "#D6D3CD"}`,
-                    fontFamily: "'Syne', sans-serif", fontSize: 13, fontWeight: 600,
-                    color: answers[idx] === opt.value ? (opt.value ? "#DC2626" : "#22C55E") : "#78716C",
+                    background: answers[idx] === opt.value ? (opt.value ? "rgba(220,38,38,0.1)" : "rgba(34,197,94,0.1)") : "rgba(255,255,255,0.03)",
+                    border: `1.5px solid ${answers[idx] === opt.value ? (opt.value ? "rgba(220,38,38,0.5)" : "rgba(34,197,94,0.5)") : "rgba(255,255,255,0.1)"}`,
+                    borderRadius: 4,
+                    fontFamily: "'Inter', sans-serif", fontSize: 13, fontWeight: 600,
+                    color: answers[idx] === opt.value ? (opt.value ? "#DC2626" : "#22C55E") : "rgba(255,255,255,0.5)",
                     cursor: "pointer",
                   }}
                 >
@@ -70,15 +71,15 @@ const RedFlagQuiz = () => {
       {done && (() => {
         const result = getResult();
         return (
-          <div style={{ background: "white", border: `2px solid ${result.color}`, padding: 32, textAlign: "center", marginTop: 24 }}>
+          <div style={{ background: "#111118", border: `1px solid ${result.color}40`, borderRadius: 8, padding: 32, textAlign: "center", marginTop: 24 }}>
             <span style={{ fontSize: 40 }}>{result.level.split(" ")[0]}</span>
-            <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 24, color: "#2D2235", margin: "12px 0" }}>
+            <h3 style={{ fontFamily: "'Inter', sans-serif", fontSize: 24, fontWeight: 800, color: "#ffffff", margin: "12px 0" }}>
               {result.level}
             </h3>
-            <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: "#78716C", lineHeight: 1.6, maxWidth: 480, margin: "0 auto" }}>
+            <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, color: "rgba(255,255,255,0.6)", lineHeight: 1.6, maxWidth: 480, margin: "0 auto" }}>
               {result.message}
             </p>
-            <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#9CA3AF", marginTop: 16 }}>
+            <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "rgba(255,255,255,0.3)", marginTop: 16 }}>
               Your answers are NOT stored and are completely private.
             </p>
           </div>

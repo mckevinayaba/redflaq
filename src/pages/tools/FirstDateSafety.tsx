@@ -44,8 +44,9 @@ const FirstDateSafety = () => {
             key={idx}
             style={{
               display: "flex", alignItems: "flex-start", gap: 12, padding: 16,
-              background: checked[idx] ? "#F0FDF4" : "white",
-              border: `1.5px solid ${checked[idx] ? "#22C55E" : "#D6D3CD"}`,
+              background: checked[idx] ? "rgba(34,197,94,0.08)" : "#111118",
+              border: `1.5px solid ${checked[idx] ? "rgba(34,197,94,0.4)" : "rgba(255,255,255,0.08)"}`,
+              borderRadius: 8,
               cursor: "pointer", transition: "all 0.2s",
             }}
           >
@@ -60,7 +61,7 @@ const FirstDateSafety = () => {
               style={{ marginTop: 3, accentColor: "#7C3AED", width: 18, height: 18 }}
             />
             <span style={{
-              fontFamily: "'Syne', sans-serif", fontSize: 14, color: "#2D2235", lineHeight: 1.6,
+              fontFamily: "'Inter', sans-serif", fontSize: 14, color: "rgba(255,255,255,0.7)", lineHeight: 1.6,
               textDecoration: checked[idx] ? "line-through" : "none",
               opacity: checked[idx] ? 0.6 : 1,
             }}>
@@ -71,12 +72,12 @@ const FirstDateSafety = () => {
       </div>
 
       {progress === 100 && (
-        <div style={{ background: "#F0FDF4", border: "2px solid #22C55E", padding: 24, textAlign: "center", marginTop: 24 }}>
+        <div style={{ background: "rgba(34,197,94,0.08)", border: "1px solid rgba(34,197,94,0.3)", borderRadius: 8, padding: 24, textAlign: "center", marginTop: 24 }}>
           <span style={{ fontSize: 32 }}>✅</span>
-          <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 22, color: "#2D2235", margin: "8px 0" }}>
+          <h3 style={{ fontFamily: "'Inter', sans-serif", fontSize: 22, fontWeight: 800, color: "#ffffff", margin: "8px 0" }}>
             You're prepared!
           </h3>
-          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: "#78716C" }}>
+          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, color: "rgba(255,255,255,0.6)" }}>
             You've completed every step. Stay safe and trust your instincts.
           </p>
         </div>

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import SignalStreakBar from "@/components/landing/SignalStreakBar";
+import { markSignalRead } from "@/hooks/useSignalStreak";
 
 const inter: React.CSSProperties = { fontFamily: "'Inter', sans-serif" };
 const playfair: React.CSSProperties = { fontFamily: "'Playfair Display', serif" };
@@ -59,11 +61,15 @@ const TodaysSignal = () => {
   const signal = featured || fallback;
   const categoryLabel = CATEGORY_LABELS[signal.category] || signal.category;
 
-  const handleCardClick = () => navigate(`/signals/${signal.slug}`);
+  const handleCardClick = () => {
+    markSignalRead(signal.slug);
+    navigate(`/signals/${signal.slug}`);
+  };
 
   return (
     <section style={{ background: '#08080f', padding: '0 24px 80px' }}>
       <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+        <SignalStreakBar />
 
         {/* Section header */}
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12, marginBottom: 28 }}>

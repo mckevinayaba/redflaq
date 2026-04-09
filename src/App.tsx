@@ -82,6 +82,7 @@ const ApiComingSoon = lazy(() => import("./pages/ApiComingSoon"));
 const RedflaqOrgComingSoon = lazy(() => import("./pages/RedflaqOrgComingSoon"));
 const DashboardSavedSignals = lazy(() => import("./pages/DashboardSavedSignals"));
 
+
 const queryClient = new QueryClient();
 
 // Minimal loading fallback

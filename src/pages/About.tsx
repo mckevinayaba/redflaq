@@ -51,7 +51,7 @@ const sources = [
 
 export default function About() {
   return (
-    <div className="min-h-screen flex flex-col bg-background">
+    <div className="min-h-screen flex flex-col" style={{ background: '#08080f' }}>
       <NavbarPlinq />
 
       {/* Hero */}
@@ -64,7 +64,7 @@ export default function About() {
           paddingBottom: 80,
         }}
       >
-        <BackToHome light />
+        {/* Removed BackToHome breadcrumb */}
         <div
           className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[70%] h-1/2 pointer-events-none"
           style={{ background: "radial-gradient(ellipse, rgba(124,58,237,0.12) 0%, transparent 70%)" }}
@@ -88,27 +88,27 @@ export default function About() {
 
         {/* The Problem + The Solution */}
         <div className="grid md:grid-cols-2 gap-5 mb-12 sm:mb-16">
-          <div className="p-6 sm:p-8 bg-card border border-border rounded-[20px] shadow-sm">
+          <div className="p-6 sm:p-8 rounded-lg" style={{ background: '#111118', border: '1px solid rgba(108,53,222,0.25)', borderRadius: 8 }}>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                 <Target className="w-5 h-5 text-primary" />
               </div>
-              <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: "clamp(20px, 2.5vw, 26px)", color: "hsl(var(--foreground))" }}>The Problem</h2>
+              <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: "clamp(20px, 2.5vw, 26px)", color: "#ffffff" }}>The Problem</h2>
             </div>
-            <p className="font-body text-sm sm:text-base text-muted-foreground leading-relaxed">
-              Criminal records, protection orders, and court judgments are <strong className="text-foreground">public information</strong> — but they're scattered across disconnected government databases. Checking someone's background means navigating bureaucracy most people don't know exists.
+            <p className="font-body text-sm sm:text-base leading-relaxed" style={{ color: 'rgba(255,255,255,0.7)' }}>
+              Criminal records, protection orders, and court judgments are <strong style={{ color: '#ffffff' }}>public information</strong> — but they're scattered across disconnected government databases. Checking someone's background means navigating bureaucracy most people don't know exists.
             </p>
           </div>
 
-          <div className="p-6 sm:p-8 bg-card border border-border rounded-[20px] shadow-sm">
+          <div className="p-6 sm:p-8 rounded-lg" style={{ background: '#111118', border: '1px solid rgba(108,53,222,0.25)', borderRadius: 8 }}>
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                 <Shield className="w-5 h-5 text-primary" />
               </div>
-              <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: "clamp(20px, 2.5vw, 26px)", color: "hsl(var(--foreground))" }}>The Solution</h2>
+              <h2 style={{ fontFamily: "'DM Serif Display', serif", fontSize: "clamp(20px, 2.5vw, 26px)", color: "#ffffff" }}>The Solution</h2>
             </div>
-            <p className="font-body text-sm sm:text-base text-muted-foreground leading-relaxed">
-              RedFlaq aggregates publicly available legal records into one searchable platform. We don't create data — we surface what already exists. <strong className="text-foreground">60 seconds. One search. Multiple databases.</strong>
+            <p className="font-body text-sm sm:text-base leading-relaxed" style={{ color: 'rgba(255,255,255,0.7)' }}>
+              RedFlaq aggregates publicly available legal records into one searchable platform. We don't create data — we surface what already exists. <strong style={{ color: '#ffffff' }}>60 seconds. One search. Multiple databases.</strong>
             </p>
           </div>
         </div>

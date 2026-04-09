@@ -203,14 +203,35 @@ export default function SearchForm() {
   // Invalid payment state
   if (!paymentValid) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-4 bg-background">
-        <div className="bg-card rounded-2xl p-12 max-w-md text-center shadow-xl border border-border">
-          <XCircle className="w-16 h-16 text-destructive mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-foreground mb-4">Invalid or Expired Purchase</h1>
-          <p className="text-muted-foreground mb-6">Please complete your payment first to access the verification form.</p>
-          <Button onClick={() => navigate("/")} className="w-full bg-primary hover:bg-primary/90">
-            Return to Homepage
-          </Button>
+      <div className="min-h-screen flex items-center justify-center p-4" style={{ background: '#08080f' }}>
+        <div style={{ maxWidth: 480, width: '100%', textAlign: 'center' }}>
+          <h1 style={{ fontFamily: "'Inter', sans-serif", fontSize: 32, fontWeight: 700, color: '#ffffff', marginBottom: 16 }}>
+            You need to complete a check first.
+          </h1>
+          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 16, color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, marginBottom: 32 }}>
+            A RedFlaq costs R99. It takes under 60 seconds. Your result is confidential — they are never notified.
+          </p>
+          <button
+            onClick={() => navigate('/signup')}
+            style={{
+              fontFamily: "'Inter', sans-serif", fontWeight: 700, fontSize: 16, color: '#ffffff',
+              background: '#C0392B', border: 'none', padding: '16px 32px',
+              borderRadius: 4, cursor: 'pointer', width: '100%', maxWidth: 380,
+              transition: 'background 0.2s', marginBottom: 20,
+            }}
+            onMouseEnter={e => e.currentTarget.style.background = '#a93226'}
+            onMouseLeave={e => e.currentTarget.style.background = '#C0392B'}
+          >
+            Run a Check — R99
+          </button>
+          <div style={{ marginBottom: 40 }}>
+            <a href="/signup" style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, color: '#6C35DE', textDecoration: 'none' }}>
+              Create a free Safety Base first →
+            </a>
+          </div>
+          <a href="/" style={{ fontFamily: "'Inter', sans-serif", fontSize: 13, color: 'rgba(255,255,255,0.4)', textDecoration: 'none' }}>
+            ← Back
+          </a>
         </div>
       </div>
     );

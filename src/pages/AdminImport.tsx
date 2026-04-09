@@ -61,12 +61,8 @@ const AdminImport = () => {
     id_number: "",
   });
 
-  // Check admin authentication
+  // Fetch stats on mount
   useState(() => {
-    const isAdmin = localStorage.getItem("admin_authenticated");
-    if (!isAdmin) {
-      navigate("/admin/login");
-    }
     fetchDbStats();
   });
 

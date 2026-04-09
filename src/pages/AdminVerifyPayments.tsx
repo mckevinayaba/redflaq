@@ -58,9 +58,8 @@ export default function AdminVerifyPayments() {
 
   const handleVerify = async (paymentId: string, email: string) => {
     try {
-      const adminPassword = localStorage.getItem('adminPassword');
       const { data, error } = await supabase.functions.invoke('admin-verify-payment', {
-        body: { payment_id: paymentId, action: 'verify', admin_password: adminPassword }
+        body: { payment_id: paymentId, action: 'verify' }
       });
 
       if (error) throw error;
@@ -87,9 +86,8 @@ export default function AdminVerifyPayments() {
 
   const handleReject = async (paymentId: string) => {
     try {
-      const adminPassword = localStorage.getItem('adminPassword');
       const { data, error } = await supabase.functions.invoke('admin-verify-payment', {
-        body: { payment_id: paymentId, action: 'reject', admin_password: adminPassword }
+        body: { payment_id: paymentId, action: 'reject' }
       });
 
       if (error) throw error;

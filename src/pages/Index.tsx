@@ -105,6 +105,9 @@ const Index = () => {
       {/* 9. Trapped user — Love / protect */}
       <TrappedUserSection />
 
+      {/* 10. NGO / NPO Partner CTA */}
+      <NGOPartnerSection />
+
       {/* Footer */}
       <FooterPlinq />
       <PWAInstallBanner />

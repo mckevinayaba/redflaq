@@ -57,8 +57,8 @@ const HeroHormozi = () => {
               marginBottom: 20,
               maxWidth: 540,
             }}>
-              RedFlaq helps you see the pattern, document the danger, verify the facts,
-              and act before it becomes evidence.
+              You already know something is off. You've been explaining it away for weeks.
+              This is the moment before the explanation. Before trust becomes regret.
             </p>
 
             {/* Brand signature */}
@@ -109,8 +109,8 @@ const HeroHormozi = () => {
               </button>
             </div>
 
-            <p style={{ ...inter, fontSize: 13, color: '#8b8b91', maxWidth: 380, lineHeight: 1.6 }}>
-              Free account. No credit card. Pay only when you run a check.
+            <p style={{ ...inter, fontSize: 14, fontStyle: 'italic', color: 'rgba(255,255,255,0.5)', maxWidth: 380, lineHeight: 1.6 }}>
+              She almost didn't check. She checked anyway. Something came up.
             </p>
           </div>
 

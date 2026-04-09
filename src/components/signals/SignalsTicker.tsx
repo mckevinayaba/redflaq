@@ -7,7 +7,6 @@ const ITEMS = [
   "You checked the restaurant, the Uber, the vibe. But not the person.",
 ];
 
-// Duplicate for seamless loop
 const TICKER_ITEMS = [...ITEMS, ...ITEMS];
 
 const SignalsTicker = () => {
@@ -28,8 +27,9 @@ const SignalsTicker = () => {
 
       <div
         style={{
-          background: "var(--rf-dark)",
-          borderBottom: "2px solid var(--rf-purple)",
+          background: "#0d0d1a",
+          borderTop: "1px solid rgba(108,53,222,0.2)",
+          borderBottom: "1px solid rgba(108,53,222,0.2)",
           padding: "0.55rem 0",
           overflow: "hidden",
         }}
@@ -49,14 +49,14 @@ const SignalsTicker = () => {
                 fontFamily: "var(--rf-sans)",
                 fontSize: "0.75rem",
                 fontWeight: 500,
-                color: "rgba(255,255,255,0.85)",
+                color: "#ffffff",
                 padding: "0 2.5rem",
                 flexShrink: 0,
                 whiteSpace: "nowrap",
               }}
             >
-              <span style={{ color: "var(--rf-purple)", marginRight: "0.6rem" }}>
-                ■
+              <span style={{ color: "#C0392B", marginRight: "0.6rem" }}>
+                ◆
               </span>
               {text}
             </span>

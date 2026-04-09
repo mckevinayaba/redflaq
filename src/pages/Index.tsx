@@ -18,6 +18,7 @@ import NGOPartnerSection from "@/components/landing/NGOPartnerSection";
 import RedFlaqReality from "@/components/landing/RedFlaqReality";
 import FAQHormozi from "@/components/landing/FAQHormozi";
 import FooterPlinq from "@/components/landing/FooterPlinq";
+import ProtectionSection from "@/components/landing/ProtectionSection";
 import { PWAInstallBanner } from "@/components/PWAInstallBanner";
 
 const Index = () => {
@@ -104,6 +105,9 @@ const Index = () => {
 
       {/* 9. Trapped user — Love / protect */}
       <TrappedUserSection />
+
+      {/* 9b. Emotional register — protection */}
+      <ProtectionSection />
 
       {/* 10. NGO / NPO Partner CTA */}
       <NGOPartnerSection />

@@ -132,8 +132,8 @@ const DarkStatsSection = () => (
             </p>
             <p style={{ ...inter, fontSize: 15, color: '#d1d1d6', lineHeight: 1.7, maxWidth: 680 }}>
               The system was not built to protect you.{' '}
-              <span style={{ color: '#6C35DE', fontWeight: 600 }}>RedFlaq was.</span>
-              {' '}On 21 November 2025, GBVF was classified as a national disaster under the Disaster Management Act. South Africa called it a "second pandemic."
+               <span style={{ color: '#ffffff', fontWeight: 700 }}>RedFlaq was.</span>
+               {' '}On 21 November 2025, GBVF was classified as a national disaster under the Disaster Management Act. South Africa called it a "second pandemic."
             </p>
           </div>
         </div>

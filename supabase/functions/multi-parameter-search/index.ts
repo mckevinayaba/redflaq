@@ -224,14 +224,55 @@ function calculateRiskScore(records: any[]): { score: number; factors: string[];
 
   score = Math.min(Math.round(score), 100);
 
-  // CRITICAL: If we have ANY records but score is still 0 (unrecognized charges),
-  // force minimum YELLOW so we NEVER show "NO PUBLIC RED FLAGS" alongside records.
-  if (records.length > 0 && score === 0) {
-    score = 10;
-    if (!factors.includes('Unclassified public record found')) {
-      factors.push('Unclassified public record found');
+  // ═══ WANTED-STATUS BASELINE SCORING ═══
+  // A person in the wanted_persons table is inherently high-risk,
+  // regardless of whether their charge text is detailed or generic.
+  if (records.length > 0) {
+    let statusBaseline = 0;
+
+    records.forEach((record: any) => {
+      const legalStatus = (record.legal_status || '').toLowerCase();
+      const sourceDataset = (record.source_dataset || '').toLowerCase();
+      const foundInSaps = record.found_in_saps === true;
+
+      // Anyone actively WANTED by SAPS → minimum RED (50)
+      if (legalStatus === 'wanted' || sourceDataset === 'za_wanted') {
+        statusBaseline = Math.max(statusBaseline, 50);
+        if (!factors.includes('Listed on SAPS Wanted Persons database')) {
+          factors.push('Listed on SAPS Wanted Persons database');
+        }
+      }
+      // FIC sanctions → minimum RED (50)
+      if (sourceDataset === 'za_fic_sanctions' || legalStatus === 'sanctioned') {
+        statusBaseline = Math.max(statusBaseline, 50);
+        if (!factors.includes('Listed on FIC Sanctions list')) {
+          factors.push('Listed on FIC Sanctions list');
+        }
+      }
+      // Found in SAPS but not necessarily "wanted" status → minimum ORANGE (40)
+      if (foundInSaps && statusBaseline < 40) {
+        statusBaseline = Math.max(statusBaseline, 40);
+        if (!factors.includes('Found in SAPS records')) {
+          factors.push('Found in SAPS records');
+        }
+      }
+    });
+
+    // Apply the baseline — score can only go UP, never down
+    if (score < statusBaseline) {
+      score = statusBaseline;
+    }
+
+    // Final safety net: any record in wanted_persons → minimum ORANGE (35)
+    if (score < 35) {
+      score = 35;
+      if (!factors.includes('Public record found in criminal database')) {
+        factors.push('Public record found in criminal database');
+      }
     }
   }
+
+  score = Math.min(score, 100);
 
   let badgeLevel: string;
   if (score >= 50) badgeLevel = 'RED';

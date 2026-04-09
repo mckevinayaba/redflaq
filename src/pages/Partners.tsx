@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
-import BackToHome from "@/components/landing/BackToHome";
 import { Users, Shield, BarChart3, Code, CheckCircle } from "lucide-react";
 import womenAriseBadge from "@/assets/women-arise-power.png";
+
+const inter: React.CSSProperties = { fontFamily: "'Inter', sans-serif" };
 
 const benefits = [
   { icon: Shield, title: "Protect your community", desc: "Give your members access to affordable, fast public-record safety checks." },
@@ -20,7 +21,7 @@ const orgTypes = [
 ];
 
 const Partners = () => (
-  <div style={{ background: "#F5F0EB", minHeight: "100vh" }}>
+  <div style={{ background: "#08080f", minHeight: "100vh" }}>
     <NavbarPlinq />
 
     {/* Hero — dark */}
@@ -29,7 +30,6 @@ const Partners = () => (
       paddingTop: 100, paddingBottom: 64,
       position: 'relative', overflow: 'hidden',
     }}>
-      <BackToHome light />
       <div style={{
         position: 'absolute', top: '30%', left: '50%', transform: 'translateX(-50%)',
         width: '60%', height: '50%',
@@ -37,15 +37,15 @@ const Partners = () => (
         pointerEvents: 'none',
       }} />
       <div className="max-w-[900px] mx-auto px-5 sm:px-6 relative z-10">
-        <p className="font-mono text-[11px] tracking-[0.15em] mb-4 flex items-center gap-3" style={{ color: '#A855F7' }}>
-          <span style={{ width: 24, height: 1, background: '#A855F7', display: 'inline-block' }} />
+        <p className="text-[11px] tracking-[0.15em] mb-4 flex items-center gap-3" style={{ ...inter, color: '#6C35DE' }}>
+          <span style={{ width: 24, height: 1, background: '#6C35DE', display: 'inline-block' }} />
           Partner Programme
         </p>
-        <h1 className="font-heading text-[28px] sm:text-[40px] lg:text-[48px] leading-[1.05] mb-4" style={{ color: '#FFFFFF', letterSpacing: '-0.02em' }}>
+        <h1 style={{ ...inter, fontSize: 'clamp(28px, 5vw, 48px)', fontWeight: 800, color: '#FFFFFF', lineHeight: 1.05, letterSpacing: '-0.02em', marginBottom: 16 }}>
           Partner with RedFlaq to<br />
-          <span style={{ color: '#A855F7' }}>protect your community.</span>
+          <span style={{ color: '#6C35DE' }}>protect your community.</span>
         </h1>
-        <p className="font-body text-[15px] sm:text-base leading-relaxed max-w-[560px]" style={{ color: 'rgba(255,255,255,0.6)' }}>
+        <p style={{ ...inter, fontSize: 'clamp(15px, 2vw, 17px)', color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, maxWidth: 560 }}>
           Join our partner programme and give your members access to fast, affordable public-record safety checks.
         </p>
       </div>
@@ -55,17 +55,17 @@ const Partners = () => (
 
       {/* Badge */}
       <div className="mx-auto mb-12 sm:mb-14 max-w-[240px] p-8 text-center" style={{
-        background: 'rgba(124,58,237,0.04)', border: '1px solid rgba(124,58,237,0.12)',
+        background: 'rgba(108,53,222,0.06)', border: '1px solid rgba(108,53,222,0.2)',
         borderRadius: 24, position: 'relative', overflow: 'hidden',
       }}>
         <div style={{
           position: 'absolute', top: -20, left: -20, width: 100, height: 100,
-          background: 'radial-gradient(circle, rgba(124,58,237,0.1), transparent 70%)',
+          background: 'radial-gradient(circle, rgba(108,53,222,0.1), transparent 70%)',
           filter: 'blur(20px)', pointerEvents: 'none',
         }} />
         <img src={womenAriseBadge} alt="Women Arise With Power — RedFlaq Partner Movement"
           style={{ display: 'block', width: '100%', maxWidth: 160, height: 'auto', margin: '0 auto', position: 'relative', zIndex: 1 }} />
-        <p className="font-mono text-[10px] tracking-[0.15em] mt-4" style={{ color: '#A855F7', textTransform: 'uppercase' }}>
+        <p style={{ ...inter, fontSize: 10, letterSpacing: '0.15em', marginTop: 16, color: '#6C35DE', textTransform: 'uppercase' }}>
           Empowering communities · One check at a time
         </p>
       </div>
@@ -76,18 +76,18 @@ const Partners = () => (
           const Icon = b.icon;
           return (
             <div key={b.title} className="p-5 sm:p-6" style={{
-              background: '#FFFFFF', border: '1px solid rgba(214,211,205,0.6)',
-              borderRadius: 18, boxShadow: '0 2px 12px rgba(0,0,0,0.04)',
+              background: '#111118', border: '1px solid rgba(108,53,222,0.25)',
+              borderRadius: 8,
             }}>
               <div className="mb-3" style={{
                 width: 44, height: 44, borderRadius: 12,
-                background: 'rgba(124,58,237,0.08)',
+                background: 'rgba(108,53,222,0.15)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
               }}>
-                <Icon className="w-5 h-5" style={{ color: '#7C3AED' }} />
+                <Icon className="w-5 h-5" style={{ color: '#6C35DE' }} />
               </div>
-              <h3 className="font-body text-base font-bold text-foreground mb-1.5">{b.title}</h3>
-              <p className="font-body text-[13px] text-muted-foreground leading-relaxed">{b.desc}</p>
+              <h3 style={{ ...inter, fontSize: 16, fontWeight: 700, color: '#ffffff', marginBottom: 6 }}>{b.title}</h3>
+              <p style={{ ...inter, fontSize: 13, color: 'rgba(255,255,255,0.7)', lineHeight: 1.6 }}>{b.desc}</p>
             </div>
           );
         })}
@@ -95,14 +95,14 @@ const Partners = () => (
 
       {/* Who can partner */}
       <section className="mb-12 sm:mb-14 p-6 sm:p-8" style={{
-        background: '#FFFFFF', border: '1px solid rgba(214,211,205,0.6)', borderRadius: 20,
+        background: '#111118', border: '1px solid rgba(108,53,222,0.25)', borderRadius: 8,
       }}>
-        <h2 className="font-heading text-xl sm:text-2xl text-foreground mb-5">Who can partner with us?</h2>
+        <h2 style={{ ...inter, fontSize: 'clamp(20px, 3vw, 26px)', fontWeight: 800, color: '#ffffff', marginBottom: 20 }}>Who can partner with us?</h2>
         <div className="grid sm:grid-cols-2 gap-3">
           {orgTypes.map((t) => (
             <div key={t} className="flex items-center gap-2.5">
               <CheckCircle className="w-4 h-4 flex-shrink-0" style={{ color: '#22C55E' }} />
-              <span className="font-body text-[13px] sm:text-sm text-foreground">{t}</span>
+              <span style={{ ...inter, fontSize: 14, color: 'rgba(255,255,255,0.7)' }}>{t}</span>
             </div>
           ))}
         </div>
@@ -111,22 +111,22 @@ const Partners = () => (
       {/* CTA — dark */}
       <section className="p-8 sm:p-12 text-center" style={{
         background: 'linear-gradient(135deg, #0F0A1A 0%, #1A1035 100%)',
-        borderRadius: 24, position: 'relative', overflow: 'hidden',
+        borderRadius: 8, position: 'relative', overflow: 'hidden',
+        border: '1px solid rgba(108,53,222,0.25)',
       }}>
         <div style={{
           position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
           width: '60%', height: '60%',
-          background: 'radial-gradient(circle, rgba(124,58,237,0.2), transparent 70%)',
+          background: 'radial-gradient(circle, rgba(108,53,222,0.2), transparent 70%)',
           filter: 'blur(40px)', pointerEvents: 'none',
         }} />
         <div className="relative z-10">
-          <h2 className="font-heading text-[22px] sm:text-[28px] mb-2" style={{ color: '#FFFFFF' }}>Ready to join?</h2>
-          <p className="font-body text-sm mb-6" style={{ color: 'rgba(255,255,255,0.6)' }}>
+          <h2 style={{ ...inter, fontSize: 'clamp(22px, 3vw, 28px)', fontWeight: 800, color: '#FFFFFF', marginBottom: 8 }}>Ready to join?</h2>
+          <p style={{ ...inter, fontSize: 14, color: 'rgba(255,255,255,0.6)', marginBottom: 24 }}>
             Apply to become a RedFlaq partner. We'll review your application within 48 hours.
           </p>
           <Link to="/partners/apply"
-            className="inline-flex items-center justify-center font-body font-bold text-[14px] sm:text-base"
-            style={{ background: '#7C3AED', color: '#FFFFFF', padding: '16px 36px', borderRadius: 50, textDecoration: 'none', boxShadow: '0 4px 20px rgba(124,58,237,0.35)' }}>
+            style={{ ...inter, fontWeight: 700, fontSize: 15, background: '#6C35DE', color: '#FFFFFF', padding: '14px 36px', borderRadius: 4, textDecoration: 'none', display: 'inline-block' }}>
             Apply Now →
           </Link>
         </div>

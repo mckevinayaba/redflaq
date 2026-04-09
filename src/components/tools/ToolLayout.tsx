@@ -7,6 +7,8 @@ import { toast } from "sonner";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import ShareInviteModal from "@/components/ShareInviteModal";
 
+const inter: React.CSSProperties = { fontFamily: "'Inter', sans-serif" };
+
 interface ToolLayoutProps {
   title: string;
   subtitle: string;
@@ -31,46 +33,44 @@ const ToolLayout = ({ title, subtitle, metaDescription, children, shareUrl }: To
   };
 
   return (
-    <div style={{ background: "#F5F0EB", minHeight: "100vh" }}>
+    <div style={{ background: "#08080f", minHeight: "100vh" }}>
       <NavbarPlinq />
       <div style={{ maxWidth: 720, margin: "0 auto", padding: "100px 24px 60px" }}>
-        <Link to="/safety-tips" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: "0.1em", color: "#7C3AED", textDecoration: "none", textTransform: "uppercase", marginBottom: 16, display: "block" }}>
+        <Link to="/safety-tips" style={{ ...inter, fontSize: 11, letterSpacing: "0.1em", color: "#6C35DE", textDecoration: "none", textTransform: "uppercase", marginBottom: 16, display: "block" }}>
           ← Back to Safety Tips
         </Link>
-        <h1 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 36, color: "#2D2235", marginBottom: 12, lineHeight: 1.2 }}>
+        <h1 style={{ ...inter, fontSize: 36, fontWeight: 800, color: "#ffffff", marginBottom: 12, lineHeight: 1.2 }}>
           {title}
         </h1>
-        <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 16, color: "#78716C", lineHeight: 1.6, marginBottom: 32 }}>
+        <p style={{ ...inter, fontSize: 16, color: "rgba(255,255,255,0.6)", lineHeight: 1.6, marginBottom: 32 }}>
           {subtitle}
         </p>
 
         {children}
 
-        {/* CTA — auth-guarded + share */}
-        <div style={{ background: "#FAF5FF", border: "2px solid #7C3AED", padding: 32, textAlign: "center", marginTop: 40, marginBottom: 32 }}>
-          <Shield size={32} style={{ color: "#7C3AED", margin: "0 auto 12px" }} />
-          <h3 style={{ fontFamily: "'DM Serif Display', serif", fontSize: 24, color: "#2D2235", marginBottom: 8 }}>
+        {/* CTA */}
+        <div style={{ background: "#111118", border: "1px solid rgba(108,53,222,0.25)", borderRadius: 8, padding: 32, textAlign: "center", marginTop: 40, marginBottom: 32 }}>
+          <Shield size={32} style={{ color: "#6C35DE", margin: "0 auto 12px" }} />
+          <h3 style={{ ...inter, fontSize: 24, fontWeight: 800, color: "#ffffff", marginBottom: 8 }}>
             If anything feels off, check before you decide
           </h3>
-          <p style={{ fontFamily: "'Syne', sans-serif", fontSize: 14, color: "#78716C", marginBottom: 16 }}>
+          <p style={{ ...inter, fontSize: 14, color: "rgba(255,255,255,0.6)", marginBottom: 16 }}>
             Run a RedFlaq public-record safety check in under 60 seconds for R99.
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <button
               onClick={() => guardedAction()}
               style={{
-                display: "inline-block", background: "#7C3AED", color: "white", padding: "14px 32px",
-                fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700, border: "none", cursor: "pointer",
-                letterSpacing: "0.05em",
+                ...inter, display: "inline-block", background: "#6C35DE", color: "white", padding: "14px 32px",
+                fontSize: 15, fontWeight: 700, border: "none", cursor: "pointer", borderRadius: 4,
               }}
-              className="hover:opacity-90 transition-all"
             >
               Run a Safety Check →
             </button>
             <button
               onClick={() => setShareOpen(true)}
-              className="inline-flex items-center gap-2 hover:opacity-90 transition-all"
-              style={{ background: "transparent", border: "2px solid #7C3AED", color: "#7C3AED", padding: "14px 32px", fontFamily: "'Syne', sans-serif", fontSize: 15, fontWeight: 700, cursor: "pointer" }}
+              className="inline-flex items-center gap-2"
+              style={{ ...inter, background: "transparent", border: "1px solid rgba(108,53,222,0.4)", color: "#6C35DE", padding: "14px 32px", fontSize: 15, fontWeight: 700, cursor: "pointer", borderRadius: 4 }}
             >
               <Heart className="h-4 w-4" /> Share RedFlaq
             </button>
@@ -79,14 +79,20 @@ const ToolLayout = ({ title, subtitle, metaDescription, children, shareUrl }: To
 
         {/* Share this tool */}
         <div style={{ textAlign: "center", marginBottom: 32 }}>
-          <p style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: "0.1em", color: "#9CA3AF", textTransform: "uppercase", marginBottom: 12 }}>
+          <p style={{ ...inter, fontSize: 11, letterSpacing: "0.1em", color: "rgba(255,255,255,0.4)", textTransform: "uppercase", marginBottom: 12 }}>
             Share this tool
           </p>
           <div style={{ display: "flex", justifyContent: "center", gap: 12 }}>
-            <button onClick={() => handleShare("whatsapp")} style={{ padding: "8px 16px", background: "white", border: "1.5px solid #D6D3CD", fontFamily: "'Syne', sans-serif", fontSize: 12, fontWeight: 600, cursor: "pointer", color: "#2D2235" }}>💬 WhatsApp</button>
-            <button onClick={() => handleShare("twitter")} style={{ padding: "8px 16px", background: "white", border: "1.5px solid #D6D3CD", fontFamily: "'Syne', sans-serif", fontSize: 12, fontWeight: 600, cursor: "pointer", color: "#2D2235" }}>𝕏 Twitter</button>
-            <button onClick={() => handleShare("facebook")} style={{ padding: "8px 16px", background: "white", border: "1.5px solid #D6D3CD", fontFamily: "'Syne', sans-serif", fontSize: 12, fontWeight: 600, cursor: "pointer", color: "#2D2235" }}>📘 Facebook</button>
-            <button onClick={() => { navigator.clipboard.writeText(fullUrl); toast.success("Link copied!"); }} style={{ padding: "8px 16px", background: "white", border: "1.5px solid #D6D3CD", fontFamily: "'Syne', sans-serif", fontSize: 12, fontWeight: 600, cursor: "pointer", color: "#2D2235" }}>
+            {[
+              { label: "💬 WhatsApp", platform: "whatsapp" },
+              { label: "𝕏 Twitter", platform: "twitter" },
+              { label: "📘 Facebook", platform: "facebook" },
+            ].map(s => (
+              <button key={s.platform} onClick={() => handleShare(s.platform)} style={{ ...inter, padding: "8px 16px", background: "#111118", border: "1px solid rgba(255,255,255,0.08)", fontSize: 12, fontWeight: 600, cursor: "pointer", color: "rgba(255,255,255,0.7)", borderRadius: 4 }}>
+                {s.label}
+              </button>
+            ))}
+            <button onClick={() => { navigator.clipboard.writeText(fullUrl); toast.success("Link copied!"); }} style={{ ...inter, padding: "8px 16px", background: "#111118", border: "1px solid rgba(255,255,255,0.08)", fontSize: 12, fontWeight: 600, cursor: "pointer", color: "rgba(255,255,255,0.7)", borderRadius: 4 }}>
               <Copy size={12} style={{ display: "inline", marginRight: 4 }} /> Copy
             </button>
           </div>

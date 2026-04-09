@@ -1171,6 +1171,48 @@ export type Database = {
         }
         Relationships: []
       }
+      signal_likes: {
+        Row: {
+          created_at: string | null
+          id: string
+          signal_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          signal_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          signal_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      signal_saves: {
+        Row: {
+          created_at: string | null
+          id: string
+          signal_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          signal_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          signal_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
           key: string

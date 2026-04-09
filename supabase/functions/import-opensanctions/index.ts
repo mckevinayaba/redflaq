@@ -158,7 +158,7 @@ async function importDataset(
         source_urls: [primaryUrl],
         source_url: primaryUrl,
         detail_page_url: detailPageUrl,
-        charges: sanctions || `Listed in ${dataset.name}`,
+        charges: finalCharges,
         offense_categories: mapOffenseCategory(sanctions, dataset.name),
         legal_status: dataset.name === 'za_fic_sanctions' ? 'sanctioned' : 'wanted',
         year_of_birth: yearOfBirth,

@@ -1,11 +1,37 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import heroImg from "@/assets/hero-sa-woman.jpg";
+import { incrementVisitCount } from "@/hooks/useSignalStreak";
 
 const inter: React.CSSProperties = { fontFamily: "'Inter', sans-serif" };
 const playfair: React.CSSProperties = { fontFamily: "'Playfair Display', serif" };
 
+const visitCopy = [
+  {
+    // Visit 1 (default)
+    subtitle: "You already know something is off. You've been explaining it away for weeks. This is the moment before the explanation. Before trust becomes regret.",
+    whisper: "She almost didn't check. She checked anyway. Something came up.",
+  },
+  {
+    // Visit 2
+    subtitle: "You came back. That tells us something. The feeling didn't go away — it got louder. Trust it.",
+    whisper: "Most women search three times before they act. You're already closer than you think.",
+  },
+  {
+    // Visit 3+
+    subtitle: "You've been here before. You're not paranoid — you're paying attention. This time, let the facts speak.",
+    whisper: "Every woman who acted said the same thing: I wish I'd done it sooner.",
+  },
+];
+
 const HeroHormozi = () => {
   const navigate = useNavigate();
+  const [visit, setVisit] = useState(0);
+
+  useEffect(() => {
+    const count = incrementVisitCount();
+    setVisit(Math.min(count - 1, 2)); // 0, 1, or 2
+  }, []);
 
   return (
     <section style={{ background: '#08080f', paddingTop: 68, minHeight: '100vh', display: 'flex', alignItems: 'center' }}>
@@ -57,8 +83,7 @@ const HeroHormozi = () => {
               marginBottom: 20,
               maxWidth: 540,
             }}>
-              You already know something is off. You've been explaining it away for weeks.
-              This is the moment before the explanation. Before trust becomes regret.
+              {visitCopy[visit].subtitle}
             </p>
 
             {/* Brand signature */}
@@ -110,7 +135,7 @@ const HeroHormozi = () => {
             </div>
 
             <p style={{ ...inter, fontSize: 14, fontStyle: 'italic', color: 'rgba(255,255,255,0.5)', maxWidth: 380, lineHeight: 1.6 }}>
-              She almost didn't check. She checked anyway. Something came up.
+              {visitCopy[visit].whisper}
             </p>
           </div>
 

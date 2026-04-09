@@ -6,6 +6,7 @@ import SignalEngagement from "@/components/signals/SignalEngagement";
 import SignalActionBlock from "@/components/signals/SignalActionBlock";
 import SignalCard from "@/components/signals/SignalCard";
 import { supabase } from "@/integrations/supabase/client";
+import { markSignalRead } from "@/hooks/useSignalStreak";
 
 const inter: React.CSSProperties = { fontFamily: "'Inter', sans-serif" };
 const playfair: React.CSSProperties = { fontFamily: "'Playfair Display', serif" };
@@ -62,6 +63,7 @@ const SignalArticle = () => {
 
       if (data) {
         setArticle(data);
+        markSignalRead(data.slug);
         const { data: rel } = await supabase
           .from("academy_articles")
           .select("id, title, slug, excerpt, category, created_at, content, author, meta_description")

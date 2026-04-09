@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useUserRole } from "@/hooks/useUserRole";
 import {
   Shield, Users, Search, CreditCard, BarChart3,
-  ArrowLeft, FileText, GitMerge, CheckCircle2, AlertTriangle
+  ArrowLeft, FileText, GitMerge, CheckCircle2
 } from "lucide-react";
 
 interface KPIs {
@@ -40,29 +41,19 @@ const riskPill: Record<string, { label: string; color: string; bg: string }> = {
 
 export default function AdminDashboard() {
   const { user, loading: authLoading } = useAuth();
+  const { isStaff, loading: roleLoading } = useUserRole();
   const navigate = useNavigate();
   const [kpis, setKpis] = useState<KPIs>({ totalUsers: 0, newSignups7d: 0, totalChecks: 0, checksToday: 0, revenueMonth: 0 });
   const [users, setUsers] = useState<UserRow[]>([]);
   const [checks, setChecks] = useState<CheckRow[]>([]);
   const [loading, setLoading] = useState(true);
-  const [hasAccess, setHasAccess] = useState(false);
 
   useEffect(() => {
-    if (!authLoading && !user) { navigate("/signup"); return; }
-    if (user) checkAdminAccess();
-  }, [user, authLoading]);
-
-  const checkAdminAccess = async () => {
-    // Check via has_role function
-    const { data } = await supabase.rpc("has_role", { _user_id: user!.id, _role: "admin" });
-    if (!data) {
-      // Fallback: check localStorage for legacy admin auth
-      const legacy = localStorage.getItem("admin_authenticated");
-      if (legacy !== "true") { navigate("/"); return; }
-    }
-    setHasAccess(true);
+    if (authLoading || roleLoading) return;
+    if (!user) { navigate("/signup"); return; }
+    if (!isStaff) { navigate("/dashboard"); return; }
     fetchAll();
-  };
+  }, [user, authLoading, isStaff, roleLoading]);
 
   const fetchAll = async () => {
     const now = new Date();
@@ -79,7 +70,6 @@ export default function AdminDashboard() {
       supabase.from("searches").select("*").order("searched_at", { ascending: false }).limit(50),
     ]);
 
-    // Count new signups in last 7 days
     const { count: newSignups } = await supabase.from("profiles").select("*", { count: "exact", head: true }).gte("created_at", sevenDaysAgo);
 
     const revenue = (paymentsRes.data || []).reduce((sum, p) => sum + Number(p.amount), 0);
@@ -96,7 +86,7 @@ export default function AdminDashboard() {
     setLoading(false);
   };
 
-  if (!hasAccess || loading) {
+  if (authLoading || roleLoading || !isStaff || loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin" />
@@ -114,7 +104,6 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <div className="border-b border-border bg-card px-6 py-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -139,7 +128,6 @@ export default function AdminDashboard() {
       </div>
 
       <div className="max-w-7xl mx-auto p-6 space-y-8">
-        {/* KPIs */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {kpiCards.map((kpi) => (
             <div key={kpi.label} className="bg-card rounded-xl border border-border p-5 shadow-sm">
@@ -152,7 +140,6 @@ export default function AdminDashboard() {
           ))}
         </div>
 
-        {/* Checks table */}
         <div className="bg-card rounded-xl border border-border shadow-sm">
           <div className="px-6 py-4 border-b border-border">
             <h2 className="font-heading text-lg text-foreground">Recent Safety Checks</h2>
@@ -192,7 +179,6 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        {/* Users table */}
         <div className="bg-card rounded-xl border border-border shadow-sm">
           <div className="px-6 py-4 border-b border-border">
             <h2 className="font-heading text-lg text-foreground">Recent Users</h2>

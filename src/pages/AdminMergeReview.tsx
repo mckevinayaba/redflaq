@@ -47,7 +47,6 @@ interface VerificationRequest {
 
 const AdminMergeReview = () => {
   const navigate = useNavigate();
-  const [isAuthed, setIsAuthed] = useState(false);
   const [records, setRecords] = useState<WantedPerson[]>([]);
   const [loading, setLoading] = useState(true);
   const [merging, setMerging] = useState<string | null>(null);
@@ -59,15 +58,9 @@ const AdminMergeReview = () => {
   const [adminNotes, setAdminNotes] = useState("");
 
   useEffect(() => {
-    const authed = localStorage.getItem("admin_authenticated");
-    if (authed !== "true") {
-      navigate("/admin/login");
-      return;
-    }
-    setIsAuthed(true);
     loadPendingRecords();
     loadVerificationRequests();
-  }, [navigate]);
+  }, []);
 
   const loadPendingRecords = async () => {
     setLoading(true);
@@ -219,7 +212,7 @@ const AdminMergeReview = () => {
     }
   };
 
-  if (!isAuthed) return null;
+  
 
   return (
     <div className="min-h-screen bg-background p-6">

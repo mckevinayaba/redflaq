@@ -80,6 +80,7 @@ const HabitDashboard = lazy(() => import("./pages/HabitDashboard"));
 const BehavioralSignalDetection = lazy(() => import("./pages/BehavioralSignalDetection"));
 const ApiComingSoon = lazy(() => import("./pages/ApiComingSoon"));
 const RedflaqOrgComingSoon = lazy(() => import("./pages/RedflaqOrgComingSoon"));
+const DashboardSavedSignals = lazy(() => import("./pages/DashboardSavedSignals"));
 
 const queryClient = new QueryClient();
 

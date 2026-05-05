@@ -1,6 +1,5 @@
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Shield, Lock, Eye, Linkedin } from "lucide-react";
-import nthabiPhoto from "@/assets/nthabi-montsho.jpeg";
 import ayolaPhoto from "@/assets/ayola-masizana.jpeg";
 import mckevinPhoto from "@/assets/mckevin-ayaba.png";
 
@@ -14,14 +13,6 @@ const WhyRedflaqSection = () => {
   ];
 
   const team = [
-    {
-      name: "Nthabi Montsho",
-      role: "Co‑Founder & CEO, RedFlaq\nGBV Survivor, Advocate & TV Host",
-      photo: nthabiPhoto,
-      bio: "Nthabi Montsho is a GBV survivor and advocate dedicated to helping women rebuild their lives after abuse. She is the founder of Women Arise with Power and the author of the book Women Arise with Power, which shares her journey of survival and healing. Through her work on Soweto TV and national platforms she continues to advocate for dignity, safety and justice for women across South Africa.",
-      quote: "I survived what many women do not. If one public‑record warning can stop another woman from living my story, then tools like RedFlaq are not a luxury. They are a necessity.",
-      linkedin: "https://www.linkedin.com/in/nthabiseng-montsho-kamakunene-a8a41841/",
-    },
     {
       name: "Ayola Masizana",
       role: "Witness of GBV · Student\nBrand Ambassador, RedFlaq",

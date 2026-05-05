@@ -100,7 +100,8 @@ const App = () => (
       <BrowserRouter>
         <Suspense fallback={<PageLoader />}>
           <Routes>
-            <Route path="/" element={<Index />} />
+            <Route path="/" element={<Signals />} />
+            <Route path="/home-old" element={<Index />} />
             <Route path="/search-form" element={<SearchForm />} />
             <Route path="/results" element={<Results />} />
             <Route path="/demo-result" element={<DemoResult />} />

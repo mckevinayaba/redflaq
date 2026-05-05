@@ -53,50 +53,7 @@ const Index = () => {
         </div>
       )}
 
-      <NavbarPlinq />
-
-      {/* 1. Hero — Fear / Recognition */}
-      <HeroHormozi />
-
-      {/* 2. Isolation statement — gut-punch */}
-      <IsolationStatement />
-
-      {/* 3. Today's Signal — editorial engagement */}
-      <TodaysSignal />
-
-      {/* 4. Stats — Anger / system failed */}
-      <DarkStatsSection />
-
-      {/* 4b. RedFlaq Reality — indictment stats block */}
-      <RedFlaqReality />
-
-      {/* 5. Trust ticker */}
-      <TickerBar />
-
-      {/* 6. Method — Hope / action */}
-      <div id="how-it-works">
-        <MethodSection />
-      </div>
-
-      {/* 7. Product grid */}
-      <ProductGrid />
-
-      {/* 8. Testimonials — Hope / survival */}
-      <div id="testimonials">
-        <TestimonialsSectionNew />
-      </div>
-
-      {/* 9. Trapped user — Love / protect */}
-      <TrappedUserSection />
-
-      {/* 9b. Emotional register — protection */}
-      <ProtectionSection />
-
-      {/* 10. NGO / NPO Partner CTA */}
-      <NGOPartnerSection />
-
-      {/* Footer */}
-      <FooterPlinq />
+      <Signals />
       <PWAInstallBanner />
     </div>
   );

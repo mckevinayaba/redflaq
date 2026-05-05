@@ -62,7 +62,7 @@ export default function About() {
             Why RedFlaq Exists
           </p>
           <p className="font-body text-[15px] sm:text-lg leading-relaxed max-w-[620px] text-white/80" style={{ fontSize: 'clamp(16px, 2vw, 20px)', lineHeight: 1.7 }}>
-            RedFlaq exists because Nthabi survived what most women do not. Because Ayola watched what no child should see. Because McKevin asked a question most technologists never ask: <strong style={{ color: '#ffffff' }}>what if the data that could save a woman's life already existed — and nobody was showing it to her?</strong>
+            RedFlaq exists because too many women in South Africa already know what danger looks like — and have been told to ignore it. Because Ayola watched what no child should see. Because McKevin asked a question most technologists never ask: <strong style={{ color: '#ffffff' }}>what if the data that could save a woman's life already existed — and nobody was showing it to her?</strong>
           </p>
         </div>
       </section>

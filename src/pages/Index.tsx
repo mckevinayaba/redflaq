@@ -1,24 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Check, X } from "lucide-react";
-import NavbarPlinq from "@/components/landing/NavbarPlinq";
-import HeroHormozi from "@/components/landing/HeroHormozi";
-import IsolationStatement from "@/components/landing/IsolationStatement";
-import TodaysSignal from "@/components/landing/TodaysSignal";
-import DarkStatsSection from "@/components/landing/DarkStatsSection";
-import TickerBar from "@/components/landing/TickerBar";
-import MethodSection from "@/components/landing/MethodSection";
-import ProductGrid from "@/components/landing/ProductGrid";
-import TestimonialsSectionNew from "@/components/landing/TestimonialsSectionNew";
-import TrappedUserSection from "@/components/landing/TrappedUserSection";
-import WhyRedflaqSection from "@/components/landing/WhyRedflaqSection";
-import AdvocacySection from "@/components/landing/AdvocacySection";
-import FinalCTAPlinq from "@/components/landing/FinalCTAPlinq";
-import NGOPartnerSection from "@/components/landing/NGOPartnerSection";
-import RedFlaqReality from "@/components/landing/RedFlaqReality";
-import FAQHormozi from "@/components/landing/FAQHormozi";
-import FooterPlinq from "@/components/landing/FooterPlinq";
-import ProtectionSection from "@/components/landing/ProtectionSection";
+import Signals from "./Signals";
 import { PWAInstallBanner } from "@/components/PWAInstallBanner";
 
 const Index = () => {
@@ -70,50 +53,7 @@ const Index = () => {
         </div>
       )}
 
-      <NavbarPlinq />
-
-      {/* 1. Hero — Fear / Recognition */}
-      <HeroHormozi />
-
-      {/* 2. Isolation statement — gut-punch */}
-      <IsolationStatement />
-
-      {/* 3. Today's Signal — editorial engagement */}
-      <TodaysSignal />
-
-      {/* 4. Stats — Anger / system failed */}
-      <DarkStatsSection />
-
-      {/* 4b. RedFlaq Reality — indictment stats block */}
-      <RedFlaqReality />
-
-      {/* 5. Trust ticker */}
-      <TickerBar />
-
-      {/* 6. Method — Hope / action */}
-      <div id="how-it-works">
-        <MethodSection />
-      </div>
-
-      {/* 7. Product grid */}
-      <ProductGrid />
-
-      {/* 8. Testimonials — Hope / survival */}
-      <div id="testimonials">
-        <TestimonialsSectionNew />
-      </div>
-
-      {/* 9. Trapped user — Love / protect */}
-      <TrappedUserSection />
-
-      {/* 9b. Emotional register — protection */}
-      <ProtectionSection />
-
-      {/* 10. NGO / NPO Partner CTA */}
-      <NGOPartnerSection />
-
-      {/* Footer */}
-      <FooterPlinq />
+      <Signals />
       <PWAInstallBanner />
     </div>
   );

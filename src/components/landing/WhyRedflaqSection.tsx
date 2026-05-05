@@ -1,6 +1,5 @@
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Shield, Lock, Eye, Linkedin } from "lucide-react";
-import nthabiPhoto from "@/assets/nthabi-montsho.jpeg";
 import ayolaPhoto from "@/assets/ayola-masizana.jpeg";
 import mckevinPhoto from "@/assets/mckevin-ayaba.png";
 

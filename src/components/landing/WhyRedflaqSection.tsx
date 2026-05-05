@@ -22,14 +22,6 @@ const WhyRedflaqSection = () => {
       linkedin: "https://www.linkedin.com/in/ayola-masizana-30404b320/",
     },
     {
-      name: "Ayola Masizana",
-      role: "Witness of GBV · Student\nBrand Ambassador, RedFlaq",
-      photo: ayolaPhoto,
-      bio: "Growing up, Ayola Masizana witnessed his father abuse his mother. Those memories shaped his view of safety, trust and the impact violence has on families. Today he is studying Public Management and Governance at the University of Johannesburg and is committed to helping build systems that protect families before violence escalates.",
-      quote: "As a child I saw things no child should ever see. I stand with RedFlaq because boys and girls deserve parents who are safe and systems that recognise warning signs early.",
-      linkedin: "https://www.linkedin.com/in/ayola-masizana-30404b320/",
-    },
-    {
       name: "McKevin Ayaba",
       role: "Technology Entrepreneur\nCo‑Founder & CPO, RedFlaq",
       photo: mckevinPhoto,

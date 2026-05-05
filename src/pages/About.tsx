@@ -3,18 +3,10 @@ import { Shield, Scale, Database, FileText, Gavel, Mail, Users, Linkedin } from 
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
 
-import nthabiPhoto from "@/assets/nthabi-montsho.jpeg";
 import ayolaPhoto from "@/assets/ayola-masizana.jpeg";
 import mckevinPhoto from "@/assets/mckevin-ayaba.png";
 
 const team = [
-  {
-    name: "Nthabi Montsho",
-    role: "Co‑Founder & CEO",
-    photo: nthabiPhoto,
-    quote: "I survived what many women do not. If one public‑record warning can stop another woman from living my story, then tools like RedFlaq are not a luxury. They are a necessity.",
-    linkedin: "https://www.linkedin.com/in/nthabiseng-montsho-kamakunene-a8a41841/",
-  },
   {
     name: "Ayola Masizana",
     role: "Brand Ambassador",

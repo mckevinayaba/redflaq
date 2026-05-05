@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
 import { Users, Shield, BarChart3, Code, CheckCircle } from "lucide-react";
-
+import womenAriseBadge from "@/assets/women-arise-power.png";
 
 const inter: React.CSSProperties = { fontFamily: "'Inter', sans-serif" };
 
@@ -53,6 +53,22 @@ const Partners = () => (
 
     <div className="max-w-[900px] mx-auto px-5 sm:px-6 py-10 sm:py-14">
 
+      {/* Badge */}
+      <div className="mx-auto mb-12 sm:mb-14 max-w-[240px] p-8 text-center" style={{
+        background: 'rgba(108,53,222,0.06)', border: '1px solid rgba(108,53,222,0.2)',
+        borderRadius: 24, position: 'relative', overflow: 'hidden',
+      }}>
+        <div style={{
+          position: 'absolute', top: -20, left: -20, width: 100, height: 100,
+          background: 'radial-gradient(circle, rgba(108,53,222,0.1), transparent 70%)',
+          filter: 'blur(20px)', pointerEvents: 'none',
+        }} />
+        <img src={womenAriseBadge} alt="Women Arise With Power — RedFlaq Partner Movement"
+          style={{ display: 'block', width: '100%', maxWidth: 160, height: 'auto', margin: '0 auto', position: 'relative', zIndex: 1 }} />
+        <p style={{ ...inter, fontSize: 10, letterSpacing: '0.15em', marginTop: 16, color: '#6C35DE', textTransform: 'uppercase' }}>
+          Empowering communities · One check at a time
+        </p>
+      </div>
 
       {/* Benefits */}
       <div className="grid sm:grid-cols-2 gap-4 sm:gap-5 mb-12 sm:mb-14">

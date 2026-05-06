@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import heroImg from "@/assets/hero-sa-woman.jpg";
+import { trackConversion } from "@/utils/conversionTracking";
 
 const SignalsHero = () => {
   const navigate = useNavigate();
@@ -14,8 +15,14 @@ const SignalsHero = () => {
   }, []);
 
   const handleReadSignal = () => {
+    trackConversion("hero_read_signal", "cta", "hero");
     const el = document.getElementById("signals-today");
     if (el) el.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const handleCreateBase = () => {
+    trackConversion("hero_create_safety_base", "cta", "hero");
+    navigate("/signup");
   };
 
   return (
@@ -129,7 +136,7 @@ const SignalsHero = () => {
             }}
           >
             <button
-              onClick={() => navigate("/signup")}
+              onClick={handleCreateBase}
               style={{
                 fontFamily: "var(--rf-sans)",
                 fontSize: "0.88rem",

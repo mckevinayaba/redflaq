@@ -29,7 +29,7 @@ export const trackConversion = async (
 ): Promise<void> => {
   try {
     const { data: { user } } = await supabase.auth.getUser();
-    await supabase.from("conversion_events").insert({
+    await (supabase as any).from("conversion_events").insert({
       event_name: eventName,
       event_category: category,
       source,

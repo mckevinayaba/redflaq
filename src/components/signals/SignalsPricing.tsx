@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { trackConversion } from "@/utils/conversionTracking";
 
 // ── Plan data ────────────────────────────────────────────────────
 interface Plan {
@@ -161,7 +162,10 @@ const PlanCard = ({ plan }: { plan: Plan }) => {
 
       {/* CTA */}
       <button
-        onClick={() => navigate(plan.href)}
+        onClick={() => {
+          trackConversion("pricing_plan_click", "pricing", plan.name, { href: plan.href, featured: !!plan.featured });
+          navigate(plan.href);
+        }}
         onMouseEnter={() => setBtnHovered(true)}
         onMouseLeave={() => setBtnHovered(false)}
         style={{

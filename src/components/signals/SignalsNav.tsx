@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { useAuthGuard } from "@/hooks/useAuthGuard";
 import redflaqLogo from "@/assets/redflaq-logo-official.png";
+import { trackConversion } from "@/utils/conversionTracking";
 
 const NAV_LINKS = [
   { label: "Run a Check", href: "/search-form" },
@@ -36,6 +37,7 @@ const SignalsNav = () => {
   };
 
   const handleRunCheck = () => {
+    trackConversion("nav_run_check", "cta", "navbar");
     guardedAction();
     setMenuOpen(false);
   };

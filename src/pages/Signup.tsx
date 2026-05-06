@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Mail, ArrowLeft, Shield, Sparkles, Check, X, Loader2, Eye, EyeOff } from "lucide-react";
 import redflaqLogo from "@/assets/redflaq-logo-official.png";
+import { trackConversion } from "@/utils/conversionTracking";
 
 function maskEmail(email: string) {
   const [local, domain] = email.split("@");

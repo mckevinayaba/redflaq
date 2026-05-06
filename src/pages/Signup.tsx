@@ -125,12 +125,14 @@ export default function Signup() {
       });
       if (error) {
         toast({ title: "Sign up failed", description: error.message, variant: "destructive" });
+        trackConversion("signup_form_error", "form", "signup_page", { message: error.message });
       } else {
         const referrerId = sessionStorage.getItem("referrer_id");
         if (referrerId) {
           await supabase.from("referrals").insert({ referrer_user_id: referrerId, referred_email: email.trim(), status: "signed_up" });
           sessionStorage.removeItem("referrer_id");
         }
+        trackConversion("signup_form_submit", "form", "signup_page", { has_referrer: !!referrerId });
         // Welcome content is now part of the confirmation email — no separate welcome email needed
         setSignupSuccess(true);
       }
@@ -139,7 +141,9 @@ export default function Signup() {
       if (error) {
         if (error.message.toLowerCase().includes("email not confirmed")) setEmailNotConfirmed(true);
         else toast({ title: "Sign in failed", description: error.message, variant: "destructive" });
+        trackConversion("signin_form_error", "form", "signup_page", { message: error.message });
       } else {
+        trackConversion("signin_form_submit", "form", "signup_page");
         const freshUser = signInData.user;
         if (!freshUser?.email_confirmed_at) { navigate("/verify-email"); }
         else {

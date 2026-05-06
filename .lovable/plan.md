@@ -1,61 +1,46 @@
+## Goal
 
+Make `/` (home) render exactly the design shown in the screenshots — the cream-paper hero, dark Reality stats block, dark full-quote band, category pills with featured "Today's Signal" card, dark pricing trio, and dark Signals footer.
 
-# RedFlaq Brain Integration — South African Realities, RedFlaq's Own Voice
+## What's actually happening
 
-## Core Clarification
+The components for that exact design already exist in `src/components/signals/` (`SignalsNav`, `SignalsTicker`, `SignalsHero`, `SignalsFullQuote`, `SignalsCategories`, `SignalsTodayFeatured`, `SignalsPricing`, `SignalsFooter`) plus `RedFlaqReality` in `src/components/landing/`. None of them are currently composed into a page — `/` is pointing at `src/pages/Signals.tsx`, which is the *blog-style* article grid (different design).
 
-Yes — we are still using Dr. Rhea's 4-step behavioral framework (See the Pattern → Name the Flaw → Cost of the Choice → Next Better Decision) as the internal operating logic. But externally:
+So the fix is to assemble those components into a single page and route `/` to it.
 
-- **No mention of Dr. Rhea anywhere**
-- **Not called "The RedFlaq Method"** — the section heading becomes **"Before You Trust"** (our motto IS the system name)
-- The 4 steps are presented as what RedFlaq simply *does*, not a branded methodology
+## Changes
 
-The section header becomes:
+### 1. New page: `src/pages/Home.tsx`
 
+Composes the screenshot design top-to-bottom:
+
+```text
+SignalsNav
+SignalsTicker
+SignalsHero            ← cream paper hero (image 169)
+RedFlaqReality         ← "denial problem" + stats grid + callout (images 166–168)
+SignalsFullQuote       ← dark "most dangerous thing you will do today" band (image 170 top)
+SignalsCategories      ← pill filters (image 170 middle)
+SignalsTodayFeatured   ← featured signal card (images 170–171)
+SignalsPricing         ← R0 / R99 / Free Safety Base (image 172)
+SignalsFooter          ← dark footer with GBV hotline (image 173)
+PWAInstallBanner
 ```
-Before You Trust
-```
 
-With the subline: "RedFlaq First."
+Also keeps the existing `?confirmed=true` and `?ref=...` query-param handling from `Index.tsx` so email-confirm and referral links still work on `/`.
 
-This makes the motto the system. The system IS the motto. No extra branding needed.
+### 2. `src/App.tsx`
 
-## The 4 Steps (Rhea's brain, SA language)
+- `/` → `<Home />` (lazy-loaded)
+- `/signals` keeps the current article-grid `Signals` page (untouched)
+- `/home-old` keeps pointing at `<Index />` for safety
 
-**01 — See the Pattern**
-"Every 4 hours a woman is killed in South Africa. Most of them saw the signs. Seeing is not the problem. Doing nothing with what you see — that is the problem."
+### 3. Remove remaining "Nthabi Montsho" reference
 
-**02 — Name It**
-"In Khayelitsha they call it 'ukuhlukumeza.' In Soweto it's 'he's just like that.' In Sandton it's 'he has a temper.' Different words. Same pattern. Name it so it stops hiding behind culture, class, or love."
+- `src/pages/AffidavitBuilder.tsx` line 225: change the deponent-name placeholder from `"e.g. Nthabiseng Kholofelo Montsho"` to a generic `"e.g. Full names and surname"`.
 
-**03 — Prove It**
-"Feelings don't hold up in court. Timestamps do. Journal entries do. Public criminal records do. R99. 60 seconds. Before trust is given."
+(All other Nthabi mentions on About / Why-We-Exist / Team and the Women Arise With Power logo were already removed in earlier turns. A full-codebase search confirms only this placeholder remains.)
 
-**04 — Act Before It Becomes Evidence**
-"You don't need certainty. You need documentation. The woman who acts on a pattern — not a crisis — is the woman who survives."
+## Not touched
 
-## Everything Else from the Approved Plan Stays
-
-All other changes (IsolationStatement, ProductGrid, TrappedUserSection, ProtectionSection, Dashboard daily prompts, pattern alerts, HabitDashboard SA-voice prompts/verdicts, About page rewrite, TodaysSignal sublines) remain exactly as approved — just confirming:
-
-- No "RedFlaq Method" label anywhere
-- Section is called **"Before You Trust"** with "RedFlaq First." as the subline
-- The operating system section on the About page is titled **"How RedFlaq Works"** (not "The Operating System" or "The Method")
-- Rhea's 4-step logic is the invisible engine — never named, never credited
-
-## Files Changed (same 9 files)
-
-1. `src/components/landing/MethodSection.tsx` — "Before You Trust" heading, 4 SA steps
-2. `src/components/landing/IsolationStatement.tsx` — confrontational follow-up
-3. `src/components/landing/ProductGrid.tsx` — rewrite descriptions
-4. `src/components/landing/TrappedUserSection.tsx` — SA-contextual body
-5. `src/components/landing/ProtectionSection.tsx` — collective accountability + motto
-6. `src/pages/Dashboard.tsx` — daily prompt rotation + pattern alert
-7. `src/pages/HabitDashboard.tsx` — SA prompts, verdict, header rewrite
-8. `src/pages/About.tsx` — human hero, "How RedFlaq Works" section, commitment rewrite
-9. `src/components/landing/TodaysSignal.tsx` — rotating subline
-
-## Not Touched
-
-Logo, nav, footer, pricing, Yoco payment flow, verification logic, stats, GBV hotline, POPIA, admin, routes, SignalCard, SignalEngagement
-
+`SignalsHero`, `SignalsFullQuote`, `SignalsTodayFeatured`, `SignalsPricing`, `SignalsFooter`, `SignalsNav`, `SignalsTicker`, `SignalsCategories`, `RedFlaqReality` — already match the screenshots, no edits needed. Old `Index.tsx`, navbar, footer, pricing/Yoco flow, verification, admin, DB — untouched.

@@ -14,6 +14,7 @@ const AcademyRedirect = () => {
 
 // Eagerly loaded (critical path)
 import Index from "./pages/Index";
+import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 
 // Lazy loaded routes
@@ -100,7 +101,7 @@ const App = () => (
       <BrowserRouter>
         <Suspense fallback={<PageLoader />}>
           <Routes>
-            <Route path="/" element={<Signals />} />
+            <Route path="/" element={<Home />} />
             <Route path="/home-old" element={<Index />} />
             <Route path="/search-form" element={<SearchForm />} />
             <Route path="/results" element={<Results />} />

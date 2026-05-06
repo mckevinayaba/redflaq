@@ -222,7 +222,7 @@ export default function AffidavitBuilder() {
                 <label className={labelCls} style={{ color: '#5B21B6' }}>Full Legal Name *</label>
                 <span className={helperCls} style={{ color: '#64748B' }}>Use your full name exactly as it appears on your SA ID document.</span>
                 <input type="text" value={fullName} onChange={e => setFullName(e.target.value)}
-                  placeholder="e.g. Nthabiseng Kholofelo Montsho" className={inputCls} style={{ borderRadius: 10 }} />
+                  placeholder="e.g. Full names and surname" className={inputCls} style={{ borderRadius: 10 }} />
               </div>
               <div>
                 <label className={labelCls} style={{ color: '#5B21B6' }}>SA ID Number (Optional)</label>

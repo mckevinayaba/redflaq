@@ -187,7 +187,7 @@ const SignalsNav = () => {
 
             {/* Create Free Safety Base */}
             <button
-              onClick={() => navigate("/signup")}
+              onClick={() => { trackConversion("nav_create_safety_base", "cta", "navbar"); navigate("/signup"); }}
               style={{
                 fontFamily: "var(--rf-sans)",
                 fontSize: "0.78rem",
@@ -332,7 +332,7 @@ const SignalsNav = () => {
               Log In
             </button>
             <button
-              onClick={() => { navigate("/signup"); setMenuOpen(false); }}
+              onClick={() => { trackConversion("nav_create_safety_base", "cta", "navbar_mobile"); navigate("/signup"); setMenuOpen(false); }}
               style={{
                 fontFamily: "var(--rf-sans)",
                 fontSize: "0.85rem",

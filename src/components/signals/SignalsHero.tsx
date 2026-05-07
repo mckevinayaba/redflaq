@@ -73,21 +73,21 @@ const SignalsHero = () => {
               fontSize: isMobile ? "2rem" : "3rem",
               fontWeight: 900,
               lineHeight: 1.15,
-              marginBottom: "0.85rem",
+              marginBottom: "1.25rem",
               letterSpacing: "-0.02em",
+              color: "var(--rf-ink)",
             }}
           >
-            <span style={{ color: "var(--rf-ink)", display: "block" }}>
-              South Africa knows about Gender Based Violence &amp; Femicide (GBVF).
+            <span style={{ display: "block" }}>You Checked the Restaurant Reviews.</span>
+            <span style={{ display: "block" }}>You Shared Your Location.</span>
+            <span style={{ display: "block" }}>You Told a Friend Where You'd Be.</span>
+            <span style={{ display: "block", height: "0.9em" }} aria-hidden="true" />
+            <span style={{ display: "block" }}>
+              You Think That Makes You{" "}
+              <span style={{ fontStyle: "italic" }}>Safe.</span>
             </span>
-            <span
-              style={{
-                color: "var(--rf-purple)",
-                fontStyle: "italic",
-                display: "block",
-              }}
-            >
-              The question is why you still aren't acting on what you know.
+            <span style={{ display: "block", color: "var(--rf-danger, #C0392B)" }}>
+              It Doesn't.
             </span>
           </h1>
 

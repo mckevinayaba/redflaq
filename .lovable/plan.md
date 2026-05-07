@@ -1,46 +1,55 @@
-## Goal
+## What's actually going on
 
-Make `/` (home) render exactly the design shown in the screenshots — the cream-paper hero, dark Reality stats block, dark full-quote band, category pills with featured "Today's Signal" card, dark pricing trio, and dark Signals footer.
+I checked both the Lovable preview and your live site (`https://redflaq.com`) side by side. **They are already identical** — both show the current hero:
 
-## What's actually happening
+> "South Africa knows about Gender Based Violence & Femicide (GBVF). The question is why you still aren't acting on what you know."
 
-The components for that exact design already exist in `src/components/signals/` (`SignalsNav`, `SignalsTicker`, `SignalsHero`, `SignalsFullQuote`, `SignalsCategories`, `SignalsTodayFeatured`, `SignalsPricing`, `SignalsFooter`) plus `RedFlaqReality` in `src/components/landing/`. None of them are currently composed into a page — `/` is pointing at `src/pages/Signals.tsx`, which is the *blog-style* article grid (different design).
+The screenshot you uploaded shows a **different** hero:
 
-So the fix is to assemble those components into a single page and route `/` to it.
+> "You Checked the Restaurant Reviews. You Shared Your Location. You Told a Friend Where You'd Be. You Think That Makes You *Safe*. **It Doesn't.**"
 
-## Changes
+That copy does not exist anywhere in the codebase (`rg` returns zero matches). So the preview is not "showing something else" — it's showing what was published. What you want is a **new hero design** that has never been built yet. That's what I'll build.
 
-### 1. New page: `src/pages/Home.tsx`
+## Why mobile still shows the old version
 
-Composes the screenshot design top-to-bottom:
+Mobile browsers (especially Chrome on Android and Safari on iPhone) aggressively cache published Lovable sites as PWAs. After clicking **Publish → Update**, mobile users may still see the old version for several hours unless they:
 
-```text
-SignalsNav
-SignalsTicker
-SignalsHero            ← cream paper hero (image 169)
-RedFlaqReality         ← "denial problem" + stats grid + callout (images 166–168)
-SignalsFullQuote       ← dark "most dangerous thing you will do today" band (image 170 top)
-SignalsCategories      ← pill filters (image 170 middle)
-SignalsTodayFeatured   ← featured signal card (images 170–171)
-SignalsPricing         ← R0 / R99 / Free Safety Base (image 172)
-SignalsFooter          ← dark footer with GBV hotline (image 173)
-PWAInstallBanner
-```
+1. Pull-to-refresh the page, OR
+2. Clear the site data for `redflaq.com`, OR
+3. (If they installed it as an app via the "Install RedFlaq" banner) close and reopen the installed app.
 
-Also keeps the existing `?confirmed=true` and `?ref=...` query-param handling from `Index.tsx` so email-confirm and referral links still work on `/`.
+This is a browser cache issue, not a publishing issue. I'll also add a small cache-busting tweak so future deploys take effect faster on mobile.
 
-### 2. `src/App.tsx`
+## Changes I'll make
 
-- `/` → `<Home />` (lazy-loaded)
-- `/signals` keeps the current article-grid `Signals` page (untouched)
-- `/home-old` keeps pointing at `<Index />` for safety
+### 1. Rewrite the hero in `src/components/signals/SignalsHero.tsx`
 
-### 3. Remove remaining "Nthabi Montsho" reference
+Replace the eyebrow + headline + sub copy with the screenshot's design:
 
-- `src/pages/AffidavitBuilder.tsx` line 225: change the deponent-name placeholder from `"e.g. Nthabiseng Kholofelo Montsho"` to a generic `"e.g. Full names and surname"`.
+- **Eyebrow pill** (unchanged): `SOUTH AFRICA'S SAFETY PLATFORM`
+- **Headline** (DM Serif Display, large, black ink):
+  - "You Checked the Restaurant Reviews."
+  - "You Shared Your Location."
+  - "You Told a Friend Where You'd Be."
+  - *(spacing break)*
+  - "You Think That Makes You *Safe*." (italic on "Safe")
+  - **"It Doesn't."** ← in red `var(--rf-danger)` / `#C0392B`
+- **Sub copy + CTAs + brand line** stay the same ("Behavioral safety…", "Create Free Safety Base", "Read Today's Signal", "Free account. No credit card…").
+- **Right column image + floating quote**: keep, but on mobile it'll move below as today.
 
-(All other Nthabi mentions on About / Why-We-Exist / Team and the Women Arise With Power logo were already removed in earlier turns. A full-codebase search confirms only this placeholder remains.)
+### 2. Tighten the navbar `Run a Check` button
 
-## Not touched
+In the screenshot, the dark `Run a Check` pill shows "From R99" subtext. I'll add that small subline so it matches.
 
-`SignalsHero`, `SignalsFullQuote`, `SignalsTodayFeatured`, `SignalsPricing`, `SignalsFooter`, `SignalsNav`, `SignalsTicker`, `SignalsCategories`, `RedFlaqReality` — already match the screenshots, no edits needed. Old `Index.tsx`, navbar, footer, pricing/Yoco flow, verification, admin, DB — untouched.
+### 3. Cache-busting for mobile (`index.html` + `vite.config.ts`)
+
+- Add `<meta http-equiv="Cache-Control" content="no-cache">` for the HTML shell so the published `index.html` is always re-fetched on mobile (assets stay long-cached via hashed filenames — this is safe).
+- Bump the `manifest` cache version so installed PWA users get the update on next launch.
+
+### 4. Nothing else changes
+
+Sections below the hero (Reality stats, dark quote band, category pills, today's featured, pricing, footer) are already correct and match earlier screenshots — leaving them as-is.
+
+## After I publish this
+
+You will need to click **Publish → Update** in Lovable for the change to go live on `redflaq.com`. On mobile, pull down to refresh once, or close + reopen the installed app.

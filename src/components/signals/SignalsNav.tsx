@@ -219,22 +219,28 @@ const SignalsNav = () => {
                 fontSize: "0.78rem",
                 fontWeight: 700,
                 color: "#FFFFFF",
-                background: "var(--rf-dark)",
+                background: "var(--rf-danger, #C0392B)",
                 border: "none",
                 borderRadius: "2rem",
-                padding: "7px 18px",
+                padding: "8px 18px",
                 cursor: "pointer",
                 transition: "background 0.18s",
                 whiteSpace: "nowrap",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                lineHeight: 1.1,
+                gap: 1,
               }}
               onMouseEnter={(e) =>
                 (e.currentTarget.style.background = "var(--rf-purple)")
               }
               onMouseLeave={(e) =>
-                (e.currentTarget.style.background = "var(--rf-dark)")
+                (e.currentTarget.style.background = "var(--rf-danger, #C0392B)")
               }
             >
-              Run a Check →
+              <span>Run a Check</span>
+              <span style={{ fontSize: "0.6rem", fontWeight: 500, opacity: 0.9 }}>From R99</span>
             </button>
           </div>
         )}

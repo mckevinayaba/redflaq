@@ -64,7 +64,10 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
             </button>
           </div>
 
-          <div className="p-4 sm:p-6 lg:p-10 max-w-7xl">
+          <div
+            className="p-4 sm:p-6 lg:p-10 max-w-7xl"
+            style={{ paddingBottom: 'calc(80px + env(safe-area-inset-bottom, 0px))' }}
+          >
             {children}
 
             <div style={{ marginTop: 40, paddingTop: 24, borderTop: '1px solid rgba(255,255,255,0.06)', textAlign: 'center' }}>

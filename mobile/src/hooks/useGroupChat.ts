@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { supabase } from '../lib/supabase';
 
 export interface ChatMessage {
   id: string;
@@ -8,7 +9,7 @@ export interface ChatMessage {
   authorInitial: string;
   authorColor: string;
   text: string;
-  timestamp: string; // ISO
+  timestamp: string;
   verified: boolean;
   isMe?: boolean;
   reported?: boolean;
@@ -26,8 +27,8 @@ const SEED_MESSAGES: Record<string, Omit<ChatMessage, 'groupId'>[]> = {
   ],
   'ubuntu-healing-durban': [
     { id: 'u1', authorId: 'm18', authorName: 'Nokukhanya B.', authorInitial: 'N', authorColor: '#27AE60', text: "Our next circle is Thursday at 18:00. This month's theme: Naming It.", timestamp: '2026-05-20T14:00:00Z', verified: true },
-    { id: 'u2', authorId: 'm19', authorName: 'Sindi P.',       authorInitial: 'S', authorColor: '#6C35DE', text: "I'll be bringing a poem. Prepare to cry — the good kind.", timestamp: '2026-05-20T14:22:00Z', verified: true },
-    { id: 'u3', authorId: 'm20', authorName: 'Thuli M.',       authorInitial: 'T', authorColor: '#C0392B', text: "I'm new. Is it okay to just listen the first time?", timestamp: '2026-05-20T15:11:00Z', verified: false },
+    { id: 'u2', authorId: 'm19', authorName: 'Sindi P.',      authorInitial: 'S', authorColor: '#6C35DE', text: "I'll be bringing a poem. Prepare to cry — the good kind.", timestamp: '2026-05-20T14:22:00Z', verified: true },
+    { id: 'u3', authorId: 'm20', authorName: 'Thuli M.',      authorInitial: 'T', authorColor: '#C0392B', text: "I'm new. Is it okay to just listen the first time?", timestamp: '2026-05-20T15:11:00Z', verified: false },
     { id: 'u4', authorId: 'm18', authorName: 'Nokukhanya B.', authorInitial: 'N', authorColor: '#27AE60', text: "Always. You contribute just by being present.", timestamp: '2026-05-20T15:18:00Z', verified: true },
   ],
   'know-your-rights-pta': [
@@ -42,48 +43,187 @@ const SEED_MESSAGES: Record<string, Omit<ChatMessage, 'groupId'>[]> = {
   ],
 };
 
-const storageKey = (groupId: string) => `redflaq_chat_${groupId}_v1`;
+const AUTHOR_COLORS = ['#6C35DE', '#C0392B', '#27AE60', '#E67E22', '#2980B9', '#8E44AD'];
+
+function colorForUser(userId: string): string {
+  let hash = 0;
+  for (let i = 0; i < userId.length; i++) hash = (hash * 31 + userId.charCodeAt(i)) >>> 0;
+  return AUTHOR_COLORS[hash % AUTHOR_COLORS.length];
+}
+
+const LOCAL_KEY = (groupId: string) => `redflaq_chat_${groupId}_v1`;
 
 export function useGroupChat(groupId: string) {
-  const [userMessages, setUserMessages] = useState<ChatMessage[]>(() => {
-    try { return JSON.parse(localStorage.getItem(storageKey(groupId)) || '[]'); } catch { return []; }
+  const [dbMessages, setDbMessages]     = useState<ChatMessage[]>([]);
+  const [localMessages, setLocalMessages] = useState<ChatMessage[]>(() => {
+    try { return JSON.parse(localStorage.getItem(LOCAL_KEY(groupId)) || '[]'); } catch { return []; }
   });
+  const hasRealMessagesRef = useRef(false);
+  const currentUserIdRef   = useRef<string | undefined>(undefined);
+  const currentUserNameRef = useRef<string>('You');
 
-  const seeds = (SEED_MESSAGES[groupId] || []).map(m => ({ ...m, groupId }));
-  const messages = [...seeds, ...userMessages].sort(
+  useEffect(() => {
+    async function init() {
+      const { data: { session } } = await supabase.auth.getSession();
+      const userId = session?.user?.id;
+      currentUserIdRef.current = userId;
+
+      if (!userId) return;
+
+      // Fetch user's display name from profile
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('display_name')
+        .eq('id', userId)
+        .maybeSingle();
+      if (profile?.display_name) currentUserNameRef.current = profile.display_name;
+
+      // Fetch existing messages with author profiles
+      const { data: rows } = await supabase
+        .from('messages')
+        .select('id, user_id, content, created_at, profiles(display_name)')
+        .eq('group_id', groupId)
+        .order('created_at', { ascending: true });
+
+      if (rows && rows.length > 0) {
+        hasRealMessagesRef.current = true;
+        setDbMessages(rows.map(r => {
+          const profileRow = r.profiles as unknown as { display_name: string } | null;
+          const name  = profileRow?.display_name ?? 'Member';
+          const isMe  = r.user_id === userId;
+          return {
+            id:            r.id,
+            groupId,
+            authorId:      r.user_id,
+            authorName:    isMe ? currentUserNameRef.current : name,
+            authorInitial: (isMe ? currentUserNameRef.current : name).charAt(0).toUpperCase(),
+            authorColor:   isMe ? '#6C35DE' : colorForUser(r.user_id),
+            text:          r.content,
+            timestamp:     r.created_at,
+            verified:      false,
+            isMe,
+          };
+        }));
+      }
+
+      // Subscribe to new messages via Realtime
+      const channel = supabase
+        .channel(`group-chat-${groupId}`)
+        .on(
+          'postgres_changes',
+          { event: 'INSERT', schema: 'public', table: 'messages', filter: `group_id=eq.${groupId}` },
+          async (payload) => {
+            const row = payload.new as { id: string; user_id: string; content: string; created_at: string };
+            if (row.user_id === currentUserIdRef.current) return; // skip own (already optimistic)
+
+            const { data: p } = await supabase
+              .from('profiles')
+              .select('display_name')
+              .eq('id', row.user_id)
+              .maybeSingle();
+            const name = p?.display_name ?? 'Member';
+
+            const msg: ChatMessage = {
+              id:            row.id,
+              groupId,
+              authorId:      row.user_id,
+              authorName:    name,
+              authorInitial: name.charAt(0).toUpperCase(),
+              authorColor:   colorForUser(row.user_id),
+              text:          row.content,
+              timestamp:     row.created_at,
+              verified:      false,
+              isMe:          false,
+            };
+            hasRealMessagesRef.current = true;
+            setDbMessages(prev => [...prev, msg]);
+          },
+        )
+        .subscribe();
+
+      return () => { supabase.removeChannel(channel); };
+    }
+    init();
+  }, [groupId]);
+
+  const seeds = hasRealMessagesRef.current
+    ? []
+    : (SEED_MESSAGES[groupId] || []).map(m => ({ ...m, groupId }));
+
+  const messages = [...seeds, ...dbMessages, ...localMessages].sort(
     (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime(),
   );
 
-  const send = useCallback((text: string) => {
-    const msg: ChatMessage = {
-      id: `me_${Date.now()}`,
-      groupId,
-      authorId: 'me',
-      authorName: 'You',
-      authorInitial: 'Y',
-      authorColor: '#6C35DE',
-      text: text.trim(),
-      timestamp: new Date().toISOString(),
-      verified: false,
-      isMe: true,
-    };
-    setUserMessages(prev => {
-      const updated = [...prev, msg];
-      localStorage.setItem(storageKey(groupId), JSON.stringify(updated));
-      return updated;
-    });
-    // TODO: supabase.channel(`group:${groupId}`).send({ type: 'broadcast', event: 'message', payload: msg })
+  const send = useCallback(async (text: string) => {
+    const userId   = currentUserIdRef.current;
+    const userName = currentUserNameRef.current;
+    const trimmed  = text.trim();
+
+    if (userId) {
+      // Optimistic add with temp ID
+      const tempId = `temp_${Date.now()}`;
+      const optimistic: ChatMessage = {
+        id:            tempId,
+        groupId,
+        authorId:      userId,
+        authorName:    userName,
+        authorInitial: userName.charAt(0).toUpperCase(),
+        authorColor:   '#6C35DE',
+        text:          trimmed,
+        timestamp:     new Date().toISOString(),
+        verified:      false,
+        isMe:          true,
+      };
+      hasRealMessagesRef.current = true;
+      setDbMessages(prev => [...prev, optimistic]);
+
+      const { data: inserted } = await supabase
+        .from('messages')
+        .insert({ group_id: groupId, user_id: userId, content: trimmed })
+        .select('id, created_at')
+        .single();
+
+      if (inserted) {
+        // Replace temp with real ID
+        setDbMessages(prev => prev.map(m =>
+          m.id === tempId ? { ...m, id: inserted.id, timestamp: inserted.created_at } : m,
+        ));
+      }
+    } else {
+      // localStorage fallback when not authenticated
+      const msg: ChatMessage = {
+        id: `me_${Date.now()}`,
+        groupId,
+        authorId: 'me',
+        authorName: 'You',
+        authorInitial: 'Y',
+        authorColor: '#6C35DE',
+        text: trimmed,
+        timestamp: new Date().toISOString(),
+        verified: false,
+        isMe: true,
+      };
+      setLocalMessages(prev => {
+        const updated = [...prev, msg];
+        localStorage.setItem(LOCAL_KEY(groupId), JSON.stringify(updated));
+        return updated;
+      });
+    }
   }, [groupId]);
 
-  const reportMessage = useCallback((messageId: string) => {
-    setUserMessages(prev =>
-      prev.map(m => m.id === messageId ? { ...m, reported: true } : m),
-    );
-    // TODO: supabase.from('message_reports').insert({ message_id: messageId })
-  }, []);
+  const reportMessage = useCallback(async (messageId: string) => {
+    setDbMessages(prev => prev.map(m => m.id === messageId ? { ...m, reported: true } : m));
+    setLocalMessages(prev => prev.map(m => m.id === messageId ? { ...m, reported: true } : m));
 
-  // TODO: replace with supabase.channel().on('broadcast', ...) subscription
-  // const subscribe = () => supabase.channel(`group:${groupId}`).on('broadcast', { event: 'message' }, handler).subscribe()
+    const userId = currentUserIdRef.current;
+    if (!userId) return;
+
+    await supabase.from('message_reports').insert({
+      message_id:  messageId,
+      reporter_id: userId,
+      reason:      'user_report',
+    });
+  }, []);
 
   return { messages, send, reportMessage };
 }

@@ -3,6 +3,7 @@ import { SECTIONS } from '../data/quiz';
 import { useQuiz } from '../hooks/useQuiz';
 import { useSavedChecks } from '../hooks/useSavedChecks';
 import { GROUPS, GROUP_CATEGORIES, CATEGORY_COLOR, Group, GroupMember } from '../data/groups';
+import { useGroupMemberships } from '../hooks/useGroupMemberships';
 import { useGroupChat } from '../hooks/useGroupChat';
 import { useGroupEvents, EventFeedback } from '../hooks/useGroupEvents';
 import { GroupEvent, EventAttendee } from '../data/events';
@@ -1044,9 +1045,7 @@ export default function ConnectScreen({ onGoCheck }: { onGoCheck?: () => void })
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
   const [groupsFrom, setGroupsFrom] = useState<'home' | 'results'>('home');
-  const [joinedGroups, setJoinedGroups] = useState<string[]>(() => {
-    try { return JSON.parse(localStorage.getItem('redflaq_groups_v1') || '[]'); } catch { return []; }
-  });
+  const { joinedGroupIds: joinedGroups, join: joinGroup } = useGroupMemberships();
   const [reportTarget, setReportTarget] = useState<ReportTarget | null>(null);
 
   const quizStarted = !!state.startedAt;
@@ -1067,9 +1066,7 @@ export default function ConnectScreen({ onGoCheck }: { onGoCheck?: () => void })
 
   const handleJoinConfirm = () => {
     if (!selectedGroup) return;
-    const updated = [...joinedGroups, selectedGroup.id];
-    setJoinedGroups(updated);
-    localStorage.setItem('redflaq_groups_v1', JSON.stringify(updated));
+    joinGroup(selectedGroup.id);
     setView('group-detail');
   };
 

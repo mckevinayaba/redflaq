@@ -1,58 +1,117 @@
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { EVENTS, GroupEvent } from '../data/events';
+import { supabase } from '../lib/supabase';
 
-const RSVP_KEY     = 'redflaq_rsvps_v1';
-const FEEDBACK_KEY = 'redflaq_feedback_v1';
+const LOCAL_RSVP_KEY     = 'redflaq_rsvps_v1';
+const LOCAL_FEEDBACK_KEY = 'redflaq_feedback_v1';
 
 type RsvpMap     = Record<string, string>;  // eventId → ISO timestamp
 type FeedbackMap = Record<string, boolean>; // eventId → submitted
 
 export interface EventFeedback {
   eventId: string;
-  rating: number;       // 1–5
+  rating: number;
   notes: string;
   wouldAttendAgain: 'yes' | 'maybe' | 'no';
 }
 
-function load<T>(key: string, fallback: T): T {
+function loadLocal<T>(key: string, fallback: T): T {
   try { return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback)); } catch { return fallback; }
 }
 
 export function useGroupEvents(groupId: string) {
   const events = EVENTS.filter(e => e.groupId === groupId);
-  const [rsvps, setRsvps]       = useState<RsvpMap>(() => load(RSVP_KEY, {}));
-  const [feedback, setFeedback] = useState<FeedbackMap>(() => load(FEEDBACK_KEY, {}));
+  const [rsvps, setRsvps]       = useState<RsvpMap>(() => loadLocal(LOCAL_RSVP_KEY, {}));
+  const [feedback, setFeedback] = useState<FeedbackMap>(() => loadLocal(LOCAL_FEEDBACK_KEY, {}));
 
-  const rsvp = useCallback((eventId: string) => {
-    setRsvps(prev => {
-      const updated = { ...prev, [eventId]: new Date().toISOString() };
-      localStorage.setItem(RSVP_KEY, JSON.stringify(updated));
-      return updated;
-    });
-    // TODO: supabase.from('event_rsvps').upsert({ event_id: eventId, user_id: currentUser.id })
+  useEffect(() => {
+    async function init() {
+      const { data: { session } } = await supabase.auth.getSession();
+      const userId = session?.user?.id;
+      if (!userId) return;
+
+      const eventIds = EVENTS.map(e => e.id);
+
+      const [{ data: rsvpRows }, { data: fbRows }] = await Promise.all([
+        supabase.from('event_rsvps').select('event_id, rsvped_at').eq('user_id', userId).in('event_id', eventIds),
+        supabase.from('event_feedback').select('event_id').eq('user_id', userId).in('event_id', eventIds),
+      ]);
+
+      if (rsvpRows) {
+        const map: RsvpMap = {};
+        rsvpRows.forEach(r => { map[r.event_id] = r.rsvped_at; });
+        setRsvps(map);
+      }
+      if (fbRows) {
+        const map: FeedbackMap = {};
+        fbRows.forEach(r => { map[r.event_id] = true; });
+        setFeedback(map);
+      }
+    }
+    init();
   }, []);
 
-  const unrsvp = useCallback((eventId: string) => {
-    setRsvps(prev => {
-      const { [eventId]: _, ...rest } = prev;
-      localStorage.setItem(RSVP_KEY, JSON.stringify(rest));
-      return rest;
-    });
+  const rsvp = useCallback(async (eventId: string) => {
+    const now = new Date().toISOString();
+    setRsvps(prev => ({ ...prev, [eventId]: now }));
+
+    const { data: { session } } = await supabase.auth.getSession();
+    const userId = session?.user?.id;
+    if (!userId) {
+      setRsvps(prev => {
+        const updated = { ...prev, [eventId]: now };
+        localStorage.setItem(LOCAL_RSVP_KEY, JSON.stringify(updated));
+        return updated;
+      });
+      return;
+    }
+    await supabase.from('event_rsvps').upsert(
+      { user_id: userId, event_id: eventId, rsvped_at: now },
+      { onConflict: 'user_id,event_id' },
+    );
   }, []);
 
-  const submitFeedback = useCallback((fb: EventFeedback) => {
-    setFeedback(prev => {
-      const updated = { ...prev, [fb.eventId]: true };
-      localStorage.setItem(FEEDBACK_KEY, JSON.stringify(updated));
-      return updated;
-    });
-    // TODO: supabase.from('event_feedback').insert(fb)
+  const unrsvp = useCallback(async (eventId: string) => {
+    setRsvps(prev => { const { [eventId]: _, ...rest } = prev; return rest; });
+
+    const { data: { session } } = await supabase.auth.getSession();
+    const userId = session?.user?.id;
+    if (!userId) {
+      setRsvps(prev => {
+        const { [eventId]: _, ...rest } = prev;
+        localStorage.setItem(LOCAL_RSVP_KEY, JSON.stringify(rest));
+        return rest;
+      });
+      return;
+    }
+    await supabase.from('event_rsvps').delete().eq('user_id', userId).eq('event_id', eventId);
   }, []);
 
-  const hasRsvpd     = (eventId: string) => !!rsvps[eventId];
-  const hasFeedback  = (eventId: string) => !!feedback[eventId];
+  const submitFeedback = useCallback(async (fb: EventFeedback) => {
+    setFeedback(prev => ({ ...prev, [fb.eventId]: true }));
 
-  // Events that are past, were RSVP'd, and haven't received feedback yet
+    const { data: { session } } = await supabase.auth.getSession();
+    const userId = session?.user?.id;
+    if (!userId) {
+      setFeedback(prev => {
+        const updated = { ...prev, [fb.eventId]: true };
+        localStorage.setItem(LOCAL_FEEDBACK_KEY, JSON.stringify(updated));
+        return updated;
+      });
+      return;
+    }
+    await supabase.from('event_feedback').upsert({
+      user_id: userId,
+      event_id: fb.eventId,
+      rating: fb.rating,
+      notes: fb.notes || null,
+      would_attend_again: fb.wouldAttendAgain !== 'no',
+    }, { onConflict: 'user_id,event_id' });
+  }, []);
+
+  const hasRsvpd    = (eventId: string) => !!rsvps[eventId];
+  const hasFeedback = (eventId: string) => !!feedback[eventId];
+
   const pendingFeedback: GroupEvent[] = events.filter(e => {
     const isPast = new Date(e.date + 'T' + e.time) < new Date();
     return isPast && hasRsvpd(e.id) && !hasFeedback(e.id);

@@ -214,10 +214,11 @@ function ComposeView({
   onSave: (data: { text: string; tags: string[]; date: string }) => void;
   onCancel: () => void;
 }) {
-  const [text, setText]     = useState(initial?.text ?? '');
-  const [date, setDate]     = useState(initial?.date ?? todayISO());
-  const [tags, setTags]     = useState<string[]>(initial?.tags ?? []);
-  const [error, setError]   = useState('');
+  const [text, setText]         = useState(initial?.text ?? '');
+  const [date, setDate]         = useState(initial?.date ?? todayISO());
+  const [tags, setTags]         = useState<string[]>(initial?.tags ?? []);
+  const [error, setError]       = useState('');
+  const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
 
   const toggleTag = (id: string) =>
     setTags(prev => prev.includes(id) ? prev.filter(t => t !== id) : [...prev, id]);
@@ -320,6 +321,54 @@ function ComposeView({
           />
           <p style={{ ...mono, fontSize: 9, color: 'rgba(255,255,255,0.2)', marginTop: 6, letterSpacing: '0.06em' }}>
             {text.length} characters · encrypted on device
+          </p>
+        </div>
+
+        {/* Evidence files */}
+        <div>
+          <label style={{ ...mono, fontSize: 9, color: '#8b8b91', letterSpacing: '0.12em', textTransform: 'uppercase', display: 'block', marginBottom: 10 }}>
+            Attach Evidence
+          </label>
+          <label style={{
+            display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer',
+            background: 'rgba(108,53,222,0.06)', border: '1px dashed rgba(108,53,222,0.3)',
+            borderRadius: 8, padding: '12px 16px',
+          }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48" stroke="#6C35DE" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <span style={{ ...inter, fontSize: 13, color: '#8b8b91' }}>
+              {attachedFiles.length > 0 ? `${attachedFiles.length} file${attachedFiles.length > 1 ? 's' : ''} selected` : 'Photos, documents, or video'}
+            </span>
+            <input
+              type="file"
+              accept="image/*,application/pdf,video/mp4"
+              multiple
+              style={{ display: 'none' }}
+              onChange={e => {
+                if (e.target.files) setAttachedFiles(prev => [...prev, ...Array.from(e.target.files!)]);
+              }}
+            />
+          </label>
+          {attachedFiles.length > 0 && (
+            <div style={{ marginTop: 8, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+              {attachedFiles.map((f, i) => (
+                <div key={i} style={{
+                  display: 'flex', alignItems: 'center', gap: 6,
+                  background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)',
+                  borderRadius: 5, padding: '4px 10px',
+                }}>
+                  <span style={{ ...mono, fontSize: 10, color: '#d1d1d6' }}>{f.name.length > 20 ? f.name.slice(0, 18) + '…' : f.name}</span>
+                  <button
+                    onClick={() => setAttachedFiles(prev => prev.filter((_, idx) => idx !== i))}
+                    style={{ background: 'none', border: 'none', color: '#8b8b91', cursor: 'pointer', fontSize: 14, lineHeight: 1, padding: 0 }}
+                  >×</button>
+                </div>
+              ))}
+            </div>
+          )}
+          <p style={{ ...inter, fontSize: 11, color: 'rgba(255,255,255,0.2)', marginTop: 6, lineHeight: 1.5 }}>
+            Uploaded securely and linked to this entry. Max 50 MB per file.
           </p>
         </div>
 

@@ -5,6 +5,8 @@ import { supabase } from "@/integrations/supabase/client";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import { useToast } from "@/hooks/use-toast";
 import { generateTimelinePDF } from "@/utils/pdfTimeline";
+import { useIsMobile } from "@/hooks/use-mobile";
+import MobileJournal from "@/components/mobile/screens/MobileJournal";
 
 const inter: React.CSSProperties = { fontFamily: "'Inter', sans-serif" };
 const mono: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };

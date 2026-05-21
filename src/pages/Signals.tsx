@@ -77,11 +77,14 @@ const SignalsTicker = () => {
 
 const Signals = () => {
   const isMobile = useIsMobile();
+  return isMobile ? <MobileSignals /> : <DesktopSignals />;
+};
+
+const DesktopSignals = () => {
   const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState("all");
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
-  if (isMobile) return <MobileSignals />;
 
   useEffect(() => {
     const fetchArticles = async () => {

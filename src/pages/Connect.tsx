@@ -4,7 +4,10 @@ import MobileConnect from "@/components/mobile/screens/MobileConnect";
 
 export default function Connect() {
   const isMobile = useIsMobile();
-  if (isMobile) return <MobileConnect />;
+  return isMobile ? <MobileConnect /> : <DesktopConnect />;
+}
+
+function DesktopConnect() {
   return (
     <div
       style={{

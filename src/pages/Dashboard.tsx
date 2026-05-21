@@ -51,8 +51,10 @@ const DAILY_PROMPTS = [
 
 export default function Dashboard() {
   const isMobile = useIsMobile();
-  if (isMobile) return <MobileHome />;
+  return isMobile ? <MobileHome /> : <DesktopDashboard />;
+}
 
+function DesktopDashboard() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { credits: creditsRemaining } = useCredits(user?.email, user?.id);

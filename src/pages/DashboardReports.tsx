@@ -49,7 +49,10 @@ const riskConfig: Record<string, { label: string; color: string; bg: string }> =
 
 export default function DashboardReports() {
   const isMobile = useIsMobile();
-  if (isMobile) return <MobileBase />;
+  return isMobile ? <MobileBase /> : <DesktopDashboardReports />;
+}
+
+function DesktopDashboardReports() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [searches, setSearches] = useState<SearchRecord[]>([]);

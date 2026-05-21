@@ -61,7 +61,10 @@ interface EvidenceCount {
 
 export default function JournalList() {
   const isMobile = useIsMobile();
-  if (isMobile) return <MobileJournal />;
+  return isMobile ? <MobileJournal /> : <DesktopJournalList />;
+}
+
+function DesktopJournalList() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();

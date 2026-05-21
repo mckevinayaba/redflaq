@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useHaptics } from "@/hooks/useHaptics";
 
-type TabId = "home" | "signals" | "verify" | "base";
+type TabId = "home" | "signals" | "verify" | "base" | "journal";
 
 interface Tab {
   id: TabId;
@@ -54,13 +54,25 @@ const TABS: Tab[] = [
     path: "/dashboard/reports",
     matches: (p) =>
       p.startsWith("/dashboard/reports") ||
-      p.startsWith("/dashboard/saved-signals") ||
-      p.startsWith("/dashboard/journal"),
+      p.startsWith("/dashboard/saved-signals"),
     icon: (active) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
         <ellipse cx="12" cy="6" rx="8" ry="3" stroke={stroke(active)} strokeWidth="1.8" fill={active ? "rgba(124,58,237,0.12)" : "none"} />
         <path d="M4 6V12C4 13.7 7.6 15 12 15C16.4 15 20 13.7 20 12V6" stroke={stroke(active)} strokeWidth="1.8" />
         <path d="M4 12V18C4 19.7 7.6 21 12 21C16.4 21 20 19.7 20 18V12" stroke={stroke(active)} strokeWidth="1.8" />
+      </svg>
+    ),
+  },
+  {
+    id: "journal",
+    label: "Journal",
+    path: "/dashboard/journal",
+    matches: (p) => p.startsWith("/dashboard/journal"),
+    icon: (active) => (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+        <path d="M6 3H17C18.1 3 19 3.9 19 5V21L12 17.5L5 21V5C5 3.9 5.9 3 6 3Z" stroke={stroke(active)} strokeWidth="1.8" strokeLinejoin="round" fill={active ? "rgba(124,58,237,0.12)" : "none"} />
+        <path d="M9 8H15" stroke={stroke(active)} strokeWidth="1.8" strokeLinecap="round" />
+        <path d="M9 12H13" stroke={stroke(active)} strokeWidth="1.8" strokeLinecap="round" />
       </svg>
     ),
   },

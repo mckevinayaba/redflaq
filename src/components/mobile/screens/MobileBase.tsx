@@ -122,9 +122,9 @@ export default function MobileBase() {
         ) : (
           <List>
             {savedSignals.map((s) => (
-              <Link key={s.id} to={`/signals/${s.signal_slug}`} style={rowStyle}>
+              <Link key={s.slug} to={`/signals/${s.slug}`} style={rowStyle}>
                 <div>
-                  <p style={{ ...syne, fontWeight: 700, color: TEXT, fontSize: 15, lineHeight: 1.35 }}>{s.signal_title}</p>
+                  <p style={{ ...syne, fontWeight: 700, color: TEXT, fontSize: 15, lineHeight: 1.35 }}>{s.title}</p>
                   <p style={{ ...mono, fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: MUTED, marginTop: 6 }}>
                     Saved {new Date(s.created_at).toLocaleDateString("en-ZA", { day: "numeric", month: "short" })}
                   </p>

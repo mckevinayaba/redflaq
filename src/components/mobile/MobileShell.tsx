@@ -4,6 +4,7 @@ import MobileTabBar, { MOBILE_TAB_BAR_HEIGHT } from "./MobileTabBar";
 
 // Routes where the bottom tab bar should appear on mobile.
 const SHELL_ROUTES = [
+  /^\/$/,
   /^\/dashboard(\/.*)?$/,
   /^\/signals(\/.*)?$/,
   /^\/connect(\/.*)?$/,

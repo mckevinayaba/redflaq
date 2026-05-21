@@ -11,8 +11,16 @@ import SignalsTodayFeatured from "@/components/signals/SignalsTodayFeatured";
 import SignalsPricing from "@/components/signals/SignalsPricing";
 import SignalsFooter from "@/components/signals/SignalsFooter";
 import { PWAInstallBanner } from "@/components/PWAInstallBanner";
+import { useIsMobile } from "@/hooks/use-mobile";
+import MobileHome from "@/components/mobile/screens/MobileHome";
 
 const Home = () => {
+  const isMobile = useIsMobile();
+  if (isMobile) return <MobileHome />;
+  return <DesktopHome />;
+};
+
+const DesktopHome = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [showConfirmedBanner, setShowConfirmedBanner] = useState(false);
   const [activeCategory, setActiveCategory] = useState<SignalCategory>(SIGNAL_CATEGORIES[0].value as SignalCategory);

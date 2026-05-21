@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate, useParams } from "react-router-dom";
 import AdminLayout from "@/components/admin/AdminLayout";
 import MobileShell from "@/components/mobile/MobileShell";
+import PhoneFrame from "@/components/PhoneFrame";
 
 
 
@@ -104,6 +105,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Suspense fallback={<PageLoader />}>
+          <PhoneFrame>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/home-old" element={<Index />} />
@@ -193,6 +195,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
           <MobileShell />
+          </PhoneFrame>
 
         </Suspense>
       </BrowserRouter>

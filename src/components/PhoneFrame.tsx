@@ -41,15 +41,18 @@ export const PhoneFrame = ({ children }: { children: ReactNode }) => {
         style={{
           width: "100%",
           maxWidth: 430,
-          minHeight: "calc(100vh - 48px)",
+          height: "calc(100vh - 48px)",
           background: "#F5F0EB",
           borderRadius: 36,
           border: "1px solid rgba(255,255,255,0.08)",
           boxShadow:
             "0 50px 120px rgba(0,0,0,0.55), 0 0 0 8px rgba(255,255,255,0.02)",
-          overflow: "hidden",
+          overflow: "hidden auto",
           position: "relative",
-          isolation: "isolate",
+          // Establish containing block so position:fixed children (tab bar, FABs)
+          // anchor inside the phone frame instead of the desktop viewport.
+          transform: "translateZ(0)",
+          WebkitOverflowScrolling: "touch",
         }}
       >
         {children}

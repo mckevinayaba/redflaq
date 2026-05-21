@@ -1,67 +1,84 @@
+# Mobile-first re-skin — Option A
 
-## What Claude actually built in `/mobile`
+Port the visual language of Claude's `/mobile` prototype (dark cards, big serif headings, JetBrains Mono labels, `#7C3AED` accent, generous spacing) onto the **existing** routes that the bottom tab bar already points at. No new data layer, no migration, no parallel UI tree.
 
-A small, standalone **UI prototype** — not a full app:
+## Scope — 6 mobile screens
 
-- Single `App.tsx` with `useState` tab switching (no React Router)
-- 6 screens: Home, Check, Signals, Journal, Connect, Base
-- 1 component: a fixed bottom `TabBar` with custom SVG icons, purple `#6C35DE` accent, safe-area aware
-- Hooks: `useAuth`, `useSavedChecks`, `useSavedSignals`, `useJournal` — mostly **localStorage**, not wired to your real tables
-- Auth screen exists; everything else is greenfield
-- Migration file defines a **fresh schema** that conflicts with your live DB (already analyzed — would wipe users, payments, scraped records, RBAC, etc.)
-- Only 2 prod deps (`react`, `react-dom`) — no router, no supabase-js, no Capacitor, no shadcn. It's a design shell.
+| Tab | Existing route | Prototype source | What changes |
+|---|---|---|---|
+| Home | `/dashboard` | `HomeScreen` | New mobile-only hero: greeting, verification badge, "Run a check" CTA, last-check card, daily Signal card. Desktop layout untouched. |
+| Check | `/dashboard/new-check` (and `/search-form`, `/results`) | `CheckScreen` | Mobile-tuned form: stacked inputs, 16px font, large province pill picker, sticky CTA. |
+| Signals | `/signals` | `SignalsScreen` | Mobile card stack with the prototype's dark cards + JetBrains Mono category chips. |
+| Journal | `/dashboard/journal` | `JournalScreen` | Mobile list view: large timestamp, body preview, lock icon, FAB for "New entry". |
+| Connect | `/connect` | `ConnectScreen` | Replace current "Coming soon" stub with the prototype's verify → quiz → groups visual (still teaser, no backend). |
+| Base | `/dashboard/reports` | `BaseScreen` | Mobile reports/saved tabs in prototype's segmented-control style. |
 
-**Translation:** the `/mobile` folder is a *visual + interaction prototype* of what RedFlaq should feel like on a phone — bottom-tab native-app aesthetic, dark theme, safe-area handled. It is not a shippable mobile app and not connected to your real data.
+## Fixes first (blockers I saw in the preview)
 
-## Recommendation: adopt the design, keep the engine
+1. **Tab bar invisible on `/dashboard`** — preview shows a blank white page. Two likely causes to verify before re-skinning:
+   - `Dashboard.tsx` redirects unauthenticated users away from `/dashboard`, so `MobileShell` never gets a chance to render its match.
+   - Even when authed, `DashboardLayout` renders its own full-height shell on top of `MobileShell`.
+   Fix: render `MobileShell` regardless of auth state on its allowed routes (it already gates by route + viewport), and add `paddingBottom: MOBILE_TAB_BAR_HEIGHT + safe-area` inside `DashboardLayout`'s `<main>` on mobile so the tab bar doesn't cover content.
+2. **Hide the desktop "hamburger + AppHeader"** on mobile when the new mobile shell is active (replace with a slim mobile top bar showing logo + credits only).
+3. **Background mismatch** — `DashboardLayout` already uses `#08080f`; mobile pages that currently render on `#F5F0EB` (e.g. `SearchFormHonest`) need a `useIsMobile()` dark override.
 
-Don't run two codebases, don't migrate the DB, don't lose paying users. Instead, **port the `/mobile` shell into the existing app** and ship it as an installable PWA. Later wrap in Capacitor if you want App Store / Play Store presence.
+## Visual system (locked across all 6 screens)
 
-### Why this beats the alternatives
+- Background `#08080f`, cards `#111118` with `1px solid rgba(255,255,255,0.06)`
+- Accent `#7C3AED` (already standardised — prototype's `#6C35DE` is dropped)
+- Display: `DM Serif Display` 32–40px for screen titles
+- Labels/meta: `JetBrains Mono` 9–11px uppercase, `letter-spacing: 0.08em`
+- Body: `Inter` / `Syne` as already configured
+- Card radius `16px`, padding `20px`, gap `12–16px`
+- 44px min touch targets, 16px inputs (iOS no-zoom), `100dvh` height, safe-area insets respected
+- Re-use existing tokens from `index.css` — no new colors added globally
 
-| Path | Pros | Cons |
-|---|---|---|
-| **A. Port design into live app (recommended)** | One codebase. Web + mobile from same source. Keeps all users, payments, RBAC, scraped records, journal, admin. Ships in days. | Some rework of existing pages for mobile breakpoint. |
-| B. Run `/mobile` as separate project + separate Supabase | Clean slate. | Two apps to maintain. Users on web can't see mobile data. Connect lives in isolation. Payments/admin duplicated. |
-| C. Full cutover to `/mobile` schema | Matches the prototype 1:1. | Destroys all live data and the web app. Already ruled out. |
+## Approach per page
 
-## Plan
+Add a `useIsMobile()` branch at the top of each of the 6 pages and render a new `Mobile<Name>` component (kept next to the page or in `src/components/mobile/screens/`). Desktop JSX stays exactly as is. All data hooks (`useAuth`, `useCredits`, `useSignalStreak`, journal queries, signal queries) are reused unchanged — only presentation changes.
 
-### Phase 1 — Mobile shell on existing codebase (1–2 days of work)
+## Out of scope (for this phase)
 
-1. Create `src/components/mobile/MobileTabBar.tsx` — port the SVG TabBar verbatim from `/mobile`.
-2. Create `src/layouts/MobileShell.tsx` — fixed bottom tab + `100dvh` scroll container + safe-area paddings (copy `index.css` mobile rules).
-3. Render `<MobileShell>` only on mobile breakpoint via `useIsMobile()`; desktop keeps the current Router/Dashboard layout.
-4. Map the 6 tabs to existing routes (no new pages):
-   - Home → `/dashboard`
-   - Check → `/dashboard/new-check`
-   - Signals → `/signals`
-   - Journal → `/dashboard/journal`
-   - Base → `/dashboard/reports` (Saved checks + Saved signals)
-   - Connect → `/connect` (new — coming-soon stub for now)
-5. Re-skin the top 3 mobile views (Home, Check, Signals) to match the prototype's typography, spacing and dark palette using existing semantic tokens (project is already dark `#08080f` / `#7C3AED`).
-6. Add manifest-only PWA install (no service worker, per project rules) so users can "Add to Home Screen".
-
-### Phase 2 — Connect (additive, optional, when you're ready)
-
-- Add **only** the new tables from the rebuild migration: `quiz_responses`, `group_memberships`, `messages`, `event_rsvps`, `event_feedback`. Leave `profiles`, `journal_entries`, `searches`, `user_roles`, `purchases` untouched.
-- Add 90-day "verification badge" derived from the latest paid search on `profiles`.
-- Build Connect screens (quiz → match → group → event RSVP) inside the existing app.
-
-### Phase 3 — Capacitor wrap (only if App Store presence is needed)
-
-- `npm i @capacitor/core @capacitor/cli @capacitor/ios @capacitor/android`
-- `npx cap init` with the project ID, sync, build, ship. Same codebase, native shell.
+- No DB migration, no Connect tables (the page remains a styled teaser)
+- No Capacitor / native wrap
+- No PWA manifest changes
+- No edits to marketing `/` or admin routes
+- No changes to edge functions, payments, or RLS
 
 ## Technical notes
 
-- Don't touch `supabase/migrations`, `src/integrations/supabase/{client,types}.ts`, or the live DB schema.
-- TabBar accent `#6C35DE` is slightly different from current `#7C3AED` — recommend standardising on the existing token, not the prototype's literal.
-- The `/mobile` `useJournal`/`useSavedChecks` hooks use localStorage; replace with the existing Supabase-backed equivalents (`journal_entries`, `signal_saves`) so data syncs across devices.
-- Keep React Router; mobile shell renders inside `<BrowserRouter>` and uses `useNavigate()` instead of `useState` for tabs so deep links and back-button still work.
+```text
+src/
+  components/mobile/
+    MobileShell.tsx          (exists — extend match list, keep)
+    MobileTabBar.tsx         (exists, keep)
+    MobileTopBar.tsx         (new — logo + credits + back, 56px)
+    screens/
+      MobileHome.tsx         (new)
+      MobileCheck.tsx        (new)
+      MobileSignals.tsx      (new)
+      MobileJournal.tsx      (new)
+      MobileConnect.tsx      (new — replaces current Connect.tsx body)
+      MobileBase.tsx         (new)
+  pages/
+    Dashboard.tsx            (branch on useIsMobile)
+    DashboardNewCheck.tsx    (branch)
+    Signals.tsx              (branch)
+    JournalList.tsx          (branch)
+    DashboardReports.tsx     (branch)
+    Connect.tsx              (branch)
+  components/dashboard/
+    DashboardLayout.tsx      (add mobile bottom padding, hide sidebar/hamburger row on mobile)
+```
 
-## What I need from you to proceed
+Routing, auth, RBAC, RLS, payments — all untouched. The re-skin is purely a presentation layer that activates below 768px.
 
-1. **Confirm Path A** (port design into the live app) vs. running `/mobile` as a separate project.
-2. **Connect timing** — build now in Phase 1, or stub as "coming soon" and ship the mobile shell first?
-3. **App Store** — needed soon (so plan Capacitor early), or PWA-only is fine for v1?
+## Order of work
+
+1. Tab-bar visibility fix + `DashboardLayout` mobile padding (so we can actually see progress)
+2. `MobileTopBar` + `MobileHome` (highest-value, sets the visual language)
+3. `MobileCheck` + `MobileSignals` (revenue + retention paths)
+4. `MobileJournal` + `MobileBase` (utility surfaces)
+5. `MobileConnect` styled teaser
+
+Each step is independently shippable and reviewable in the mobile preview.

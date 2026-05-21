@@ -4,6 +4,8 @@ import NavbarPlinq from "@/components/landing/NavbarPlinq";
 import FooterPlinq from "@/components/landing/FooterPlinq";
 import SignalCard from "@/components/signals/SignalCard";
 import { supabase } from "@/integrations/supabase/client";
+import { useIsMobile } from "@/hooks/use-mobile";
+import MobileSignals from "@/components/mobile/screens/MobileSignals";
 
 const inter: React.CSSProperties = { fontFamily: "'Inter', sans-serif" };
 const playfair: React.CSSProperties = { fontFamily: "'Playfair Display', serif" };
@@ -74,6 +76,11 @@ const SignalsTicker = () => {
 };
 
 const Signals = () => {
+  const isMobile = useIsMobile();
+  return isMobile ? <MobileSignals /> : <DesktopSignals />;
+};
+
+const DesktopSignals = () => {
   const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState("all");
   const [articles, setArticles] = useState<Article[]>([]);

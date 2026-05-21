@@ -1,6 +1,13 @@
 import { Link } from "react-router-dom";
+import { useIsMobile } from "@/hooks/use-mobile";
+import MobileConnect from "@/components/mobile/screens/MobileConnect";
 
 export default function Connect() {
+  const isMobile = useIsMobile();
+  return isMobile ? <MobileConnect /> : <DesktopConnect />;
+}
+
+function DesktopConnect() {
   return (
     <div
       style={{

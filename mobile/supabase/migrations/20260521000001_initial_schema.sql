@@ -14,7 +14,7 @@ CREATE POLICY profiles_own ON public.profiles FOR ALL USING (auth.uid() = id) WI
 
 -- ── Saved checks ───────────────────────────────────────────────
 CREATE TABLE public.checks (
-  id          UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  id          TEXT PRIMARY KEY,
   user_id     UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   name        TEXT NOT NULL,
   id_number   TEXT,
@@ -31,7 +31,7 @@ CREATE INDEX checks_user_id ON public.checks(user_id);
 
 -- ── Journal entries (text encrypted client-side with AES-256-GCM) ──
 CREATE TABLE public.journal_entries (
-  id              UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  id              TEXT PRIMARY KEY,
   user_id         UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   encrypted_text  TEXT NOT NULL,
   iv              TEXT NOT NULL,

@@ -23,7 +23,7 @@ function dbToCheck(row: Record<string, unknown>): SavedCheck {
     province: row.province as string | undefined,
     riskLevel: row.risk_level as SavedCheck['riskLevel'],
     riskScore: row.risk_score as number,
-    savedAt: row.saved_at as string,
+    savedAt: row.created_at as string,
     package: row.package as SavedCheck['package'],
     notes: row.notes as string | undefined,
   };
@@ -38,7 +38,6 @@ function checkToDb(check: SavedCheck, userId: string) {
     province: check.province ?? null,
     risk_level: check.riskLevel,
     risk_score: check.riskScore,
-    saved_at: check.savedAt,
     package: check.package,
     notes: check.notes ?? null,
   };
@@ -62,7 +61,7 @@ export function useSavedChecks() {
         .from('checks')
         .select('*')
         .eq('user_id', userId)
-        .order('saved_at', { ascending: false });
+        .order('created_at', { ascending: false });
 
       if (data) setChecks(data.map(dbToCheck));
     }

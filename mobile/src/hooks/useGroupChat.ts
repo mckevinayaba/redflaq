@@ -78,32 +78,27 @@ export function useGroupChat(groupId: string) {
         .maybeSingle();
       if (profile?.display_name) currentUserNameRef.current = profile.display_name;
 
-      // Fetch existing messages with author profiles
+      // Fetch existing messages (author info stored in table)
       const { data: rows } = await supabase
         .from('messages')
-        .select('id, user_id, content, created_at, profiles(display_name)')
+        .select('id, user_id, author_name, author_initial, author_color, text, verified, created_at')
         .eq('group_id', groupId)
         .order('created_at', { ascending: true });
 
       if (rows && rows.length > 0) {
         hasRealMessagesRef.current = true;
-        setDbMessages(rows.map(r => {
-          const profileRow = r.profiles as unknown as { display_name: string } | null;
-          const name  = profileRow?.display_name ?? 'Member';
-          const isMe  = r.user_id === userId;
-          return {
-            id:            r.id,
-            groupId,
-            authorId:      r.user_id,
-            authorName:    isMe ? currentUserNameRef.current : name,
-            authorInitial: (isMe ? currentUserNameRef.current : name).charAt(0).toUpperCase(),
-            authorColor:   isMe ? '#6C35DE' : colorForUser(r.user_id),
-            text:          r.content,
-            timestamp:     r.created_at,
-            verified:      false,
-            isMe,
-          };
-        }));
+        setDbMessages(rows.map(r => ({
+          id:            r.id,
+          groupId,
+          authorId:      r.user_id ?? 'unknown',
+          authorName:    r.author_name,
+          authorInitial: r.author_initial,
+          authorColor:   r.author_color,
+          text:          r.text,
+          timestamp:     r.created_at,
+          verified:      r.verified,
+          isMe:          r.user_id === userId,
+        })));
       }
 
       // Subscribe to new messages via Realtime
@@ -112,27 +107,23 @@ export function useGroupChat(groupId: string) {
         .on(
           'postgres_changes',
           { event: 'INSERT', schema: 'public', table: 'messages', filter: `group_id=eq.${groupId}` },
-          async (payload) => {
-            const row = payload.new as { id: string; user_id: string; content: string; created_at: string };
+          (payload) => {
+            const row = payload.new as {
+              id: string; user_id: string; author_name: string; author_initial: string;
+              author_color: string; text: string; verified: boolean; created_at: string;
+            };
             if (row.user_id === currentUserIdRef.current) return; // skip own (already optimistic)
-
-            const { data: p } = await supabase
-              .from('profiles')
-              .select('display_name')
-              .eq('id', row.user_id)
-              .maybeSingle();
-            const name = p?.display_name ?? 'Member';
 
             const msg: ChatMessage = {
               id:            row.id,
               groupId,
               authorId:      row.user_id,
-              authorName:    name,
-              authorInitial: name.charAt(0).toUpperCase(),
-              authorColor:   colorForUser(row.user_id),
-              text:          row.content,
+              authorName:    row.author_name,
+              authorInitial: row.author_initial,
+              authorColor:   row.author_color,
+              text:          row.text,
               timestamp:     row.created_at,
-              verified:      false,
+              verified:      row.verified,
               isMe:          false,
             };
             hasRealMessagesRef.current = true;
@@ -177,9 +168,18 @@ export function useGroupChat(groupId: string) {
       hasRealMessagesRef.current = true;
       setDbMessages(prev => [...prev, optimistic]);
 
+      const initial = userName.charAt(0).toUpperCase();
       const { data: inserted } = await supabase
         .from('messages')
-        .insert({ group_id: groupId, user_id: userId, content: trimmed })
+        .insert({
+          group_id:       groupId,
+          user_id:        userId,
+          author_name:    userName,
+          author_initial: initial,
+          author_color:   '#6C35DE',
+          text:           trimmed,
+          verified:       false,
+        })
         .select('id, created_at')
         .single();
 

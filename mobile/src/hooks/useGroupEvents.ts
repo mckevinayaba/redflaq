@@ -33,13 +33,13 @@ export function useGroupEvents(groupId: string) {
       const eventIds = EVENTS.map(e => e.id);
 
       const [{ data: rsvpRows }, { data: fbRows }] = await Promise.all([
-        supabase.from('event_rsvps').select('event_id, rsvped_at').eq('user_id', userId).in('event_id', eventIds),
+        supabase.from('event_rsvps').select('event_id, created_at').eq('user_id', userId).in('event_id', eventIds),
         supabase.from('event_feedback').select('event_id').eq('user_id', userId).in('event_id', eventIds),
       ]);
 
       if (rsvpRows) {
         const map: RsvpMap = {};
-        rsvpRows.forEach(r => { map[r.event_id] = r.rsvped_at; });
+        rsvpRows.forEach(r => { map[r.event_id] = r.created_at; });
         setRsvps(map);
       }
       if (fbRows) {
@@ -66,7 +66,7 @@ export function useGroupEvents(groupId: string) {
       return;
     }
     await supabase.from('event_rsvps').upsert(
-      { user_id: userId, event_id: eventId, rsvped_at: now },
+      { user_id: userId, event_id: eventId },
       { onConflict: 'user_id,event_id' },
     );
   }, []);
@@ -105,7 +105,7 @@ export function useGroupEvents(groupId: string) {
       event_id: fb.eventId,
       rating: fb.rating,
       notes: fb.notes || null,
-      would_attend_again: fb.wouldAttendAgain !== 'no',
+      would_attend_again: fb.wouldAttendAgain,
     }, { onConflict: 'user_id,event_id' });
   }, []);
 

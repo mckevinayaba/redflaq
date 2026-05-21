@@ -195,6 +195,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
           <MobileShell />
+          </PhoneFrame>
 
         </Suspense>
       </BrowserRouter>

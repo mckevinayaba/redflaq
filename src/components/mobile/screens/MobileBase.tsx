@@ -13,7 +13,7 @@ const RISK: Record<string, { label: string; color: string }> = {
   GREEN: { label: "Clear", color: "#27AE60" },
 };
 
-type Tab = "reports" | "journal" | "signals";
+type Tab = "reports" | "signals";
 
 export default function MobileBase() {
   const { user, loading: authLoading } = useAuth();
@@ -21,7 +21,7 @@ export default function MobileBase() {
     if (typeof window === "undefined") return "reports";
     const params = new URLSearchParams(window.location.search);
     const t = params.get("tab");
-    return t === "journal" || t === "signals" ? (t as Tab) : "reports";
+    return t === "signals" ? "signals" : "reports";
   });
   const [searches, setSearches] = useState<any[]>([]);
   const [journal, setJournal] = useState<any[]>([]);
@@ -61,7 +61,7 @@ export default function MobileBase() {
 
         {/* Segmented control */}
         <div style={{ display: "flex", background: "#0d0d1a", border: "1px solid rgba(255,255,255,0.06)", borderRadius: 12, padding: 4, gap: 4 }}>
-          {(["reports", "journal", "signals"] as const).map((t) => {
+          {(["reports", "signals"] as const).map((t) => {
             const on = tab === t;
             return (
               <button
@@ -82,7 +82,7 @@ export default function MobileBase() {
                   fontWeight: on ? 700 : 500,
                 }}
               >
-                {t === "reports" ? "Reports" : t === "journal" ? "Journal" : "Signals"}
+                {t === "reports" ? "Reports" : "Signals"}
               </button>
             );
           })}
@@ -119,59 +119,6 @@ export default function MobileBase() {
                 );
               })}
             </List>
-          )
-        ) : tab === "journal" ? (
-          journal.length === 0 ? (
-            <Empty body="Your safety journal is empty. Record what felt off before memory blurs." cta={{ to: "/dashboard/journal/new", label: "Record an incident" }} />
-          ) : (
-            <>
-              <Link
-                to="/dashboard/journal/new"
-                style={{
-                  ...mono,
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: 6,
-                  alignSelf: "flex-start",
-                  background: ACCENT,
-                  color: "#fff",
-                  padding: "10px 14px",
-                  borderRadius: 999,
-                  textDecoration: "none",
-                  fontSize: 11,
-                  letterSpacing: "0.08em",
-                  textTransform: "uppercase",
-                  fontWeight: 700,
-                  minHeight: 40,
-                }}
-              >
-                + New entry
-              </Link>
-              <List>
-                {journal.map((e) => (
-                  <Link key={e.id} to={`/dashboard/journal/${e.id}`} style={rowStyle}>
-                    <div style={{ minWidth: 0, flex: 1 }}>
-                      <p style={{ ...mono, fontSize: 10, letterSpacing: "0.1em", textTransform: "uppercase", color: ACCENT, fontWeight: 700 }}>
-                        {new Date(e.entry_date).toLocaleDateString("en-ZA", { day: "numeric", month: "short", year: "numeric" })}
-                        {e.entry_time ? ` · ${String(e.entry_time).slice(0, 5)}` : ""}
-                      </p>
-                      {e.about_person && (
-                        <p style={{ ...syne, fontWeight: 700, color: TEXT, fontSize: 14, marginTop: 4 }}>About: {e.about_person}</p>
-                      )}
-                      <p style={{ ...syne, color: MUTED, fontSize: 13, marginTop: 4, lineHeight: 1.45, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>
-                        {e.incident_description}
-                      </p>
-                    </div>
-                    {e.statement_hash && (
-                      <span style={{ ...mono, fontSize: 9, color: "#27AE60", background: "rgba(39,174,96,0.1)", border: "1px solid rgba(39,174,96,0.25)", padding: "2px 8px", borderRadius: 999, flexShrink: 0 }}>
-                        LOCKED
-                      </span>
-                    )}
-                  </Link>
-                ))}
-              </List>
-            </>
           )
         ) : savedSignals.length === 0 ? (
           <Empty body="Bookmark a Signal to find it again here." cta={{ to: "/signals", label: "Browse Signals" }} />

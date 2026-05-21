@@ -3,10 +3,12 @@ import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useCredits } from "@/hooks/useCredits";
+import { useIsMobile } from "@/hooks/use-mobile";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import ShareInviteModal from "@/components/ShareInviteModal";
 import BuyChecksModal from "@/components/BuyChecksModal";
 import MyPayments from "@/components/dashboard/MyPayments";
+import MobileHome from "@/components/mobile/screens/MobileHome";
 
 const inter: React.CSSProperties = { fontFamily: "'Inter', sans-serif" };
 const mono: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };
@@ -48,6 +50,9 @@ const DAILY_PROMPTS = [
 ];
 
 export default function Dashboard() {
+  const isMobile = useIsMobile();
+  if (isMobile) return <MobileHome />;
+
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { credits: creditsRemaining } = useCredits(user?.email, user?.id);

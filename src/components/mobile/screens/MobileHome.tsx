@@ -162,7 +162,7 @@ export default function MobileHome() {
               </p>
               <p style={{ ...syne, color: CREAM_MUTED, fontSize: 13, marginTop: 6, lineHeight: 1.5 }}>
                 {verified
-                  ? "Renew anytime to keep Connect eligibility."
+                  ? "Your verification stays active. Renew anytime."
                   : "Run your first check to unlock a 90-day verification window."}
               </p>
             </div>

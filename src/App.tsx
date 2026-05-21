@@ -5,6 +5,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate, useParams } from "react-router-dom";
 import AdminLayout from "@/components/admin/AdminLayout";
+import MobileShell from "@/components/mobile/MobileShell";
+
+
 
 // Dynamic redirect for /academy/:slug → /blog/:slug
 const AcademyRedirect = () => {
@@ -82,6 +85,7 @@ const BehavioralSignalDetection = lazy(() => import("./pages/BehavioralSignalDet
 const ApiComingSoon = lazy(() => import("./pages/ApiComingSoon"));
 const RedflaqOrgComingSoon = lazy(() => import("./pages/RedflaqOrgComingSoon"));
 const DashboardSavedSignals = lazy(() => import("./pages/DashboardSavedSignals"));
+const Connect = lazy(() => import("./pages/Connect"));
 
 
 const queryClient = new QueryClient();

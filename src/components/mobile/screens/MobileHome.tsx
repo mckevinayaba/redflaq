@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useDailyStreak } from "@/hooks/useDailyStreak";
 import MobileTopBar from "../MobileTopBar";
 import { ACCENT, CREAM, CREAM_INK, CREAM_MUTED, mono, serif, syne, primaryButton, ghostButton } from "./mobileTokens";
 
@@ -16,6 +17,7 @@ export default function MobileHome() {
   const { user, loading: authLoading } = useAuth();
   const [firstName, setFirstName] = useState("");
   const [latest, setLatest] = useState<any>(null);
+  const streak = useDailyStreak();
 
   useEffect(() => {
     if (authLoading || !user) return;

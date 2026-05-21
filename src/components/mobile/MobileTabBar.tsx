@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
+import { useHaptics } from "@/hooks/useHaptics";
 
-type TabId = "home" | "signals" | "verify" | "base" | "connect";
+type TabId = "home" | "signals" | "verify" | "base";
 
 interface Tab {
   id: TabId;
@@ -45,7 +46,7 @@ const TABS: Tab[] = [
     label: "Verify",
     path: "/dashboard/new-check",
     matches: (p) => p.startsWith("/dashboard/new-check") || p.startsWith("/search-form") || p.startsWith("/results"),
-    icon: () => <></>, // rendered specially (raised FAB)
+    icon: () => <></>,
   },
   {
     id: "base",
@@ -63,20 +64,6 @@ const TABS: Tab[] = [
       </svg>
     ),
   },
-  {
-    id: "connect",
-    label: "Connect",
-    path: "/connect",
-    matches: (p) => p.startsWith("/connect"),
-    icon: (active) => (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-        <circle cx="9" cy="8" r="3" stroke={stroke(active)} strokeWidth="1.8" fill={active ? "rgba(124,58,237,0.12)" : "none"} />
-        <circle cx="17" cy="10" r="2.5" stroke={stroke(active)} strokeWidth="1.8" />
-        <path d="M3 20C3 17.2 5.7 15 9 15C12.3 15 15 17.2 15 20" stroke={stroke(active)} strokeWidth="1.8" strokeLinecap="round" />
-        <path d="M17 15C19.2 15 21 16.6 21 18.5" stroke={stroke(active)} strokeWidth="1.8" strokeLinecap="round" />
-      </svg>
-    ),
-  },
 ];
 
 export const MOBILE_TAB_BAR_HEIGHT = 72;
@@ -84,6 +71,12 @@ export const MOBILE_TAB_BAR_HEIGHT = 72;
 export default function MobileTabBar() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const haptic = useHaptics();
+
+  const go = (path: string, intensity: "light" | "medium" = "light") => {
+    haptic(intensity);
+    navigate(path);
+  };
 
   return (
     <nav
@@ -108,7 +101,6 @@ export default function MobileTabBar() {
         const active = tab.matches(pathname);
 
         if (tab.id === "verify") {
-          // Raised center Verify FAB
           return (
             <div
               key={tab.id}
@@ -121,7 +113,7 @@ export default function MobileTabBar() {
               }}
             >
               <button
-                onClick={() => navigate(tab.path)}
+                onClick={() => go(tab.path, "medium")}
                 aria-label="Run a verification check"
                 aria-current={active ? "page" : undefined}
                 style={{
@@ -138,7 +130,10 @@ export default function MobileTabBar() {
                   cursor: "pointer",
                   boxShadow: "0 10px 24px -8px rgba(124,58,237,0.55)",
                   color: "#fff",
+                  transition: "transform 120ms ease",
                 }}
+                onTouchStart={(e) => (e.currentTarget.style.transform = "scale(0.94)")}
+                onTouchEnd={(e) => (e.currentTarget.style.transform = "scale(1)")}
               >
                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none">
                   <path
@@ -171,7 +166,7 @@ export default function MobileTabBar() {
         return (
           <button
             key={tab.id}
-            onClick={() => navigate(tab.path)}
+            onClick={() => go(tab.path)}
             aria-current={active ? "page" : undefined}
             style={{
               flex: 1,

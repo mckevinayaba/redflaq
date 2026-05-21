@@ -85,7 +85,7 @@ const BehavioralSignalDetection = lazy(() => import("./pages/BehavioralSignalDet
 const ApiComingSoon = lazy(() => import("./pages/ApiComingSoon"));
 const RedflaqOrgComingSoon = lazy(() => import("./pages/RedflaqOrgComingSoon"));
 const DashboardSavedSignals = lazy(() => import("./pages/DashboardSavedSignals"));
-const Connect = lazy(() => import("./pages/Connect"));
+
 
 
 const queryClient = new QueryClient();
@@ -187,8 +187,8 @@ const App = () => (
             <Route path="/admin/login" element={<AdminLogin />} />
             <Route path="/admin/verify-payments" element={<AdminLayout><AdminVerifyPayments /></AdminLayout>} />
             <Route path="/admin/merge-review" element={<AdminLayout><AdminMergeReview /></AdminLayout>} />
-            {/* Connect (Phase 2 — coming soon stub) */}
-            <Route path="/connect" element={<Connect />} />
+            {/* Connect removed — redirect any legacy links home */}
+            <Route path="/connect" element={<Navigate to="/" replace />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -1,13 +1,13 @@
 import { useLocation } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import MobileTabBar, { MOBILE_TAB_BAR_HEIGHT } from "./MobileTabBar";
+import MobileOnboarding from "./MobileOnboarding";
 
 // Routes where the bottom tab bar should appear on mobile.
 const SHELL_ROUTES = [
   /^\/$/,
   /^\/dashboard(\/.*)?$/,
   /^\/signals(\/.*)?$/,
-  /^\/connect(\/.*)?$/,
   /^\/search-form/,
   /^\/results/,
 ];
@@ -28,6 +28,7 @@ export default function MobileShell() {
         }}
       />
       <MobileTabBar />
+      <MobileOnboarding />
     </>
   );
 }

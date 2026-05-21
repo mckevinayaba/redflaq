@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useDailyStreak } from "@/hooks/useDailyStreak";
 import MobileTopBar from "../MobileTopBar";
 import { ACCENT, CREAM, CREAM_INK, CREAM_MUTED, mono, serif, syne, primaryButton, ghostButton } from "./mobileTokens";
 
@@ -16,6 +17,7 @@ export default function MobileHome() {
   const { user, loading: authLoading } = useAuth();
   const [firstName, setFirstName] = useState("");
   const [latest, setLatest] = useState<any>(null);
+  const streak = useDailyStreak();
 
   useEffect(() => {
     if (authLoading || !user) return;
@@ -131,9 +133,55 @@ export default function MobileHome() {
           Free account. No credit card. Pay only when you run a check (from R99).
         </p>
 
-        {/* Signed-in extras: verification + last check */}
+        {/* Signed-in extras: Daily Pulse + verification + last check */}
         {user && (
           <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 8 }}>
+            {/* Daily Pulse — the habit loop */}
+            <div
+              style={{
+                background: `linear-gradient(135deg, ${ACCENT} 0%, #5B21B6 100%)`,
+                borderRadius: 18,
+                padding: 20,
+                color: "#fff",
+                position: "relative",
+                overflow: "hidden",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <span style={{ ...mono, fontSize: 10, letterSpacing: "0.16em", textTransform: "uppercase", fontWeight: 700, opacity: 0.85 }}>
+                  Daily Pulse
+                </span>
+                <span style={{ ...mono, fontSize: 11, letterSpacing: "0.1em", fontWeight: 700, background: "rgba(255,255,255,0.18)", padding: "4px 10px", borderRadius: 999 }}>
+                  Day {streak.count} {streak.count >= 3 ? "🔥" : ""}
+                </span>
+              </div>
+              <p style={{ ...serif, fontSize: 24, lineHeight: 1.15, marginTop: 10, fontWeight: 400 }}>
+                {streak.count <= 1
+                  ? "Welcome back. One Signal, one minute."
+                  : streak.count < 7
+                  ? "You're building the habit. Keep going."
+                  : "A week of daily safety. You're the pattern."}
+              </p>
+              <Link
+                to="/signals"
+                style={{
+                  display: "inline-block",
+                  marginTop: 14,
+                  ...syne,
+                  fontWeight: 700,
+                  fontSize: 13,
+                  color: "#fff",
+                  background: "rgba(255,255,255,0.18)",
+                  padding: "10px 16px",
+                  borderRadius: 999,
+                  textDecoration: "none",
+                  border: "1px solid rgba(255,255,255,0.25)",
+                }}
+              >
+                Read today's Signal →
+              </Link>
+            </div>
+
             <div
               style={{
                 background: "#fff",
@@ -160,7 +208,7 @@ export default function MobileHome() {
               </p>
               <p style={{ ...syne, color: CREAM_MUTED, fontSize: 13, marginTop: 6, lineHeight: 1.5 }}>
                 {verified
-                  ? "Renew anytime to keep Connect eligibility."
+                  ? "Your verification stays active. Renew anytime."
                   : "Run your first check to unlock a 90-day verification window."}
               </p>
             </div>

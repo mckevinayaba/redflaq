@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useIsMobile } from "@/hooks/use-mobile";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
+import MobileBase from "@/components/mobile/screens/MobileBase";
 
 const inter: React.CSSProperties = { fontFamily: "'Inter', sans-serif" };
 const mono: React.CSSProperties = { fontFamily: "'JetBrains Mono', monospace" };

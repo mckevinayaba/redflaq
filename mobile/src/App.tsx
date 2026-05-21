@@ -57,7 +57,7 @@ export default function App() {
           />
         );
       case 'connect':
-        return <ConnectScreen />;
+        return <ConnectScreen onGoCheck={() => goTo('check')} />;
       case 'base':
         return (
           <BaseScreen

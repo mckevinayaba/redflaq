@@ -60,6 +60,8 @@ interface EvidenceCount {
 }
 
 export default function JournalList() {
+  const isMobile = useIsMobile();
+  if (isMobile) return <MobileJournal />;
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();

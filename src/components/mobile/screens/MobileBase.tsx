@@ -17,18 +17,23 @@ export default function MobileBase() {
   const { user, loading: authLoading } = useAuth();
   const [tab, setTab] = useState<"reports" | "signals">("reports");
   const [searches, setSearches] = useState<any[]>([]);
-  const [savedSignals, setSavedSignals] = useState<any[]>([]);
+  const [savedSignals, setSavedSignals] = useState<{ slug: string; title: string; created_at: string }[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (authLoading || !user) return;
     (async () => {
-      const [{ data: s }, { data: ss }] = await Promise.all([
+      const [{ data: s }, { data: saves }] = await Promise.all([
         supabase.from("searches").select("id,search_name,searched_at,risk_level,matches_found").eq("user_id", user.id).order("searched_at", { ascending: false }).limit(50),
-        supabase.from("signal_saves").select("id,signal_slug,signal_title,created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(50),
+        supabase.from("signal_saves").select("signal_id, created_at").eq("user_id", user.id).order("created_at", { ascending: false }).limit(50),
       ]);
       setSearches(s || []);
-      setSavedSignals(ss || []);
+      if (saves && saves.length) {
+        const slugs = saves.map((x: any) => x.signal_id);
+        const { data: arts } = await supabase.from("academy_articles").select("slug,title").in("slug", slugs);
+        const byslug = new Map((arts || []).map((a: any) => [a.slug, a.title]));
+        setSavedSignals(saves.map((x: any) => ({ slug: x.signal_id, title: byslug.get(x.signal_id) || x.signal_id, created_at: x.created_at })));
+      }
       setLoading(false);
     })();
   }, [user, authLoading]);

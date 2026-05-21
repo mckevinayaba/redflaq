@@ -1,84 +1,83 @@
-# Mobile App Shell — v2 (Final)
+# RedFlaq Mobile-First v3 — "Daily Safety Habit"
 
-Rebuild the mobile experience around your real hero (cream/serif, not dark) and the TikTok-style dock you picked. Resolve the duplicate "Verify" and put Connect + Base back into the dock.
+## The thinking (Godin · Hormozi · Jobs)
 
-## Final wireframe
+- **Godin (permission + tribe):** one promise — *"Before you trust, RedFlaq first."* Every screen earns the next tap. No dead ends, no noise.
+- **Hormozi (value + friction):** one job-to-be-done per screen. Verify in ≤2 taps from anywhere. Free Safety Base = the hook; R99 check = the offer; daily Signal = the retention loop.
+- **Jobs (subtraction):** kill anything that isn't Verify, Learn, or Protect. One primary action per screen. No second CTA competing with the first.
+- **Great app design:** thumb-zone first, 60fps motion, haptics on key actions, instant skeletons, zero modal stacking, offline-tolerant.
 
+## What changes
+
+### 1. Remove Connect entirely
+- Delete the Connect tab, `MobileConnect.tsx`, `/connect` route entry from mobile shell, and any nav references.
+- Archive (don't delete) any Connect-only DB tables behind a feature flag — out of scope for this plan; UI-only removal now.
+
+### 2. New 4-tab dock (thumb-perfect)
 ```text
-┌────────────────────────────────────────────┐
-│  RedFlaq                  [3]   ( avatar ) │  ← Top bar (56px, cream/blur)
-├────────────────────────────────────────────┤
-│  SOUTH AFRICA'S SAFETY PLATFORM            │
-│                                            │
-│  South Africa knows                        │
-│  about Gender Based                        │
-│  Violence & Femicide                       │
-│  (GBVF).                                   │
-│  The question is why                       │  ← purple italic
-│  you still aren't acting                   │
-│  on what you know.                         │
-│                                            │
-│  Behavioral safety for people who refuse   │
-│  to hand over their lives unverified.      │
-│  Read daily. See the pattern.              │
-│  Act before it becomes evidence.           │
-│                                            │
-│  │ Before you trust, RedFlaq first.        │  ← purple rule
-│                                            │
-│  ╭──────────────────────────────────────╮  │
-│  │      Create Free Safety Base         │  │  ← purple pill
-│  ╰──────────────────────────────────────╯  │
-│  ╭──────────────────────────────────────╮  │
-│  │      Read Today's Signal             │  │  ← outlined pill
-│  ╰──────────────────────────────────────╯  │
-│  Free account. No credit card. Pay only…   │
-│                                            │
-│                                  ╭─────╮   │
-│                                  │  ✉  │   │  ← chat FAB
-│                                  ╰─────╯   │
-├────────────────────────────────────────────┤
-│  🏠       📡      ╭───╮      📚      👥   │  ← Dock (72px)
-│  Home   Signals  │ ✓ │     Base    Connect│
-│                  ╰───╯                     │     ↑ raised purple Verify
-└────────────────────────────────────────────┘
+ Home  ·  Signals  ·  [ VERIFY ]  ·  Base
+                       raised FAB
 ```
+- **Home** — daily pulse, streak, one CTA.
+- **Signals** — daily learning feed (the habit).
+- **Verify** — raised purple FAB, the money action.
+- **Base** — your stuff: Saved Reports · Saved Signals · Journal · Profile entry.
 
-## Decisions locked in
+Profile avatar stays top-right (sheet), credits chip stays top-right. Logo top-left.
 
-- **Top bar**: Logo (left) · Credits chip "3" + circular profile avatar (right). **No Verify pill here** — single source of truth.
-- **Bottom dock (5 tabs)**: Home · Signals · **Verify** (raised purple FAB, center) · Base · Connect.
-- **Journal** moves inside Base as a sub-tab (alongside Saved Reports & Saved Signals). Frees up a dock slot for Connect.
-- **Profile** opens from the top-right avatar (sheet/drawer with Account, Help, Payments, Sign out).
-- **Hero theme**: cream `#F5F0EB` background, black DM Serif headline, `#7C3AED` italic continuation, two pill CTAs, purple-rule pull-quote, chat FAB above the dock. Matches your attached screenshot exactly.
+### 3. The daily habit loop (retention engine)
+Every open of the app lands on a **Daily Pulse** card:
+- Streak counter ("Day 7 · keep it going")
+- One Signal of the day (15-sec read)
+- One micro-action ("Check a number you saved last week?")
+- Subtle nudge to Verify if credits > 0
 
-## Files to change
+Push-style in-app prompt once/day (no real push yet — banner only).
 
-**Replace** `src/components/mobile/MobileTabBar.tsx` — 5 tabs in the order above, raised center Verify (-top-10, 56px, purple, 4px cream border), label "VERIFY" in JetBrains Mono.
+### 4. Frictionless Verify (≤2 taps from anywhere)
+- FAB always visible.
+- Verify screen: single input (name OR ID OR phone), province auto-detected, one button.
+- Pre-fill last search. Recent searches as chips.
+- Result in <3s skeleton → risk band → one clear next action.
 
-**Replace** `src/components/mobile/MobileTopBar.tsx` — cream/blur bg, logo left, credit chip + profile avatar right. Remove "Verify" pill. Avatar opens a profile sheet (new `MobileProfileSheet.tsx`).
+### 5. Onboarding (15 seconds, no signup wall)
+- 3 swipe cards: *What it is · Why it matters · Your first check is free to preview*
+- Land on Home with a sample Signal already loaded.
+- Signup only when saving or paying. (Godin: earn permission.)
 
-**Replace** `src/components/mobile/screens/MobileHome.tsx` — cream hero exactly matching the screenshot (eyebrow, serif headline, purple italic, body, pull-quote, two pill CTAs, microcopy, chat FAB). Auth-aware: signed-out shows full hero; signed-in shows compact greeting + Daily Signal card + last check status + quick Verify card.
+### 6. Visual & motion polish
+- Cream `#F5F0EB` + purple `#7C3AED` + ink black — locked.
+- DM Serif Display headlines, Syne mid, JetBrains Mono micro-labels.
+- Spring transitions between tabs (Framer Motion `layoutId` on FAB).
+- Haptic feedback on Verify tap, streak increment, result reveal (Capacitor-ready hook, no-op on web).
+- Skeleton screens everywhere — never a spinner.
+- 60fps scroll: virtualize Signals feed.
 
-**Update** `src/components/mobile/screens/MobileBase.tsx` — add 3rd segment "Journal" alongside Saved Reports & Saved Signals.
+### 7. Empty states that sell
+Every empty state = a soft CTA, not a sad face. "No saved reports yet — your first check stays here forever."
 
-**Keep** `MobileSignals.tsx`, `MobileConnect.tsx` as-is (already cream-friendly or themed to their surface).
-
-**New** `src/components/mobile/MobileProfileSheet.tsx` — bottom sheet (shadcn `Sheet`) triggered by avatar; links to Account, Payments, Help, Sign out.
-
-**Update** `src/App.tsx` — `MobileShell` routes already include /dashboard, /signals, /connect, /search-form, /results. Add `/dashboard/journal` and `/dashboard/reports` to keep dock visible.
-
-**Update** `src/pages/JournalList.tsx` — on mobile, redirect/render inside Base (segment = journal) instead of its own screen.
-
-## Out of scope
-
-- No DB or RLS changes.
-- No edits to desktop layouts (`useIsMobile()` branch only).
-- No new edge functions, payments, or Capacitor/PWA work.
+## Out of scope (call out explicitly)
+- No DB schema changes.
+- No payment changes.
+- No desktop redesign — desktop keeps current layout.
+- No real push notifications / Capacitor build yet (hooks only).
+- No AI chatbot changes.
 
 ## Build order
+1. Strip Connect from `MobileTabBar`, `MobileShell`, routes, and delete `MobileConnect.tsx`.
+2. Rebuild `MobileTabBar` as 4-tab with raised Verify FAB.
+3. Add `DailyPulse` component + streak hook (`useDailyStreak`, localStorage-backed for now).
+4. Rebuild `MobileHome` around Daily Pulse (auth-aware: guest hero stays, signed-in shows Pulse).
+5. Tighten `MobileVerify` screen to single-input flow with recent-search chips.
+6. Add 3-card onboarding (`MobileOnboarding.tsx`) shown once via localStorage flag.
+7. Add Framer Motion spring transitions + haptic hook stub.
+8. QA at 390×844 and 360×800.
 
-1. New `MobileTopBar` (no Verify pill) + `MobileProfileSheet`.
-2. New `MobileTabBar` (5 tabs, raised Verify, Connect restored).
-3. Rewrite `MobileHome` to match the cream hero screenshot.
-4. Add Journal segment to `MobileBase`; redirect mobile `/dashboard/journal` into it.
-5. Verify visually at 390×844 in the preview.
+## Technical notes
+- Streak: `localStorage` key `rf_streak` = `{ count, lastOpenISO }`. Increment if `lastOpen` is yesterday; reset if older; no-op if today.
+- Onboarding flag: `localStorage` key `rf_onboarded_v3`.
+- Haptics: `src/hooks/useHaptics.ts` — checks `window.navigator.vibrate` web fallback; Capacitor `Haptics` plugin if `window.Capacitor` exists.
+- Route cleanup: remove `/connect`, redirect to `/` if hit.
+- Keep all existing Supabase calls intact.
+
+Approve and I'll build it.

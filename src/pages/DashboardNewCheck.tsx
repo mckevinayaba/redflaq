@@ -91,11 +91,21 @@ const REASONS = [
 const ADMIN_EMAIL = "mckevin.ayaba@gmail.com";
 
 export default function DashboardNewCheck() {
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { credits: creditsRemaining, loading: creditsLoading, webhookDelayed } = useCredits(user?.email, user?.id);
   const [buyModalOpen, setBuyModalOpen] = useState(false);
+
+  // Guard: if not signed in, send to register first instead of showing
+  // an endless "Loading balance…" state.
+  useEffect(() => {
+    if (authLoading) return;
+    if (!user) {
+      sessionStorage.setItem("fromCTA", "true");
+      navigate("/signup", { replace: true });
+    }
+  }, [authLoading, user, navigate]);
 
   const [firstName, setFirstName] = useState("");
   const [surname, setSurname] = useState("");

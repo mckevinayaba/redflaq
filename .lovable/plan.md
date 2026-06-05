@@ -1,44 +1,30 @@
-## Problem
+## Goal
+Make every public/mobile Verify entrypoint send signed-out users to registration first, instead of landing on the paid check screen and seeing “Loading balance…”.
 
-On `/dashboard/new-check`, the page is stuck on "Loading balance…" and never shows the form OR the **Buy Checks** button — so the user has no way to pay.
+## Plan
+1. Route the mobile Verify CTA through the existing auth gate.
+   - Update the mobile bottom-tab Verify action so it behaves like the other guarded “Run a Check” buttons.
+   - Signed-out users should go to `/signup` first.
+   - Signed-in but unverified users should go to `/verify-email`.
+   - Signed-in verified users can continue to the payment/check flow.
 
-## Root cause
+2. Add a direct guard on the check page itself.
+   - Protect `/dashboard/new-check` so unauthenticated users are redirected away immediately instead of rendering the credits loader.
+   - This makes the page safe even if someone opens the route directly or from an old cached link.
 
-`src/hooks/useCredits.ts` initializes `loading: true` and only sets it to `false` inside `fetchCredits`. But `fetchCredits` early-returns when `userEmail` is falsy:
+3. Keep the paid flow only for eligible users.
+   - Preserve the existing behavior where verified signed-in users without credits can continue to pricing/payment.
+   - Preserve the existing behavior where users with credits can access the form.
 
-```ts
-const fetchCredits = useCallback(async () => {
-  if (!userEmail) return;   // ← loading stays true forever
-  ...
-  setLoading(false);
-}, [userEmail]);
-```
+4. Remove the confusing dead-end state for signed-out visitors.
+   - Ensure signed-out visitors never see “Loading balance…” on the Verify path.
+   - If needed, adjust the page copy/logic so the loading state is only used for authenticated balance fetches.
 
-It also never catches Supabase errors. If the `purchases` or `manual_payments` query throws (RLS denial, network blip, etc.), the promise rejects and `setLoading(false)` is never reached.
-
-In `DashboardNewCheck.tsx`, while `creditsLoading === true`:
-- The "Loading balance…" pill renders
-- The form is hidden (`!hasCredits && !creditsLoading` is false)
-- The "Buy Checks" CTA is hidden (same condition)
-
-Result: dead-end screen. This matches the screenshot exactly.
-
-## Fix
-
-Single-file change to `src/hooks/useCredits.ts`:
-
-1. When `userEmail` is falsy → `setCredits(0)` + `setLoading(false)` and return.
-2. Wrap the two Supabase queries in `try/catch`. On error: log, default credits to 0, and still `setLoading(false)` in a `finally` block.
-3. Keep realtime + polling behaviour unchanged.
-
-## Out of scope
-
-- No changes to payment edge functions, Yoco flow, or `PaymentModal` — the existing **Buy Checks → BuyChecksModal → Yoco** path works once the CTA is reachable.
-- No DB / RLS changes.
-- No UI redesign.
-
-## Verification
-
-- Load `/dashboard/new-check` while signed in with 0 credits → "No checks remaining" banner + **Buy Checks** button visible within ~1s.
-- Click **Buy Checks** → modal opens → Yoco redirect works.
-- Signed-in user with credits → form renders normally.
+## Technical details
+- Likely files:
+  - `src/components/mobile/MobileTabBar.tsx`
+  - `src/pages/DashboardNewCheck.tsx`
+  - possibly `src/hooks/useAuthGuard.ts` if the guarded flow needs a small refinement
+- No backend/database changes are needed.
+- No payment provider changes are needed.
+- Scope stays focused on Verify entry, auth gating, and the confusing loading state.

@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useHaptics } from "@/hooks/useHaptics";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
 
 type TabId = "home" | "signals" | "verify" | "base" | "journal";
 
@@ -84,10 +85,18 @@ export default function MobileTabBar() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const haptic = useHaptics();
+  const { guardedAction } = useAuthGuard();
 
   const go = (path: string, intensity: "light" | "medium" = "light") => {
     haptic(intensity);
     navigate(path);
+  };
+
+  const handleVerify = () => {
+    haptic("medium");
+    // Routes signed-out → /signup, unverified → /verify-email,
+    // signed-in w/o credits → /pricing, signed-in w/ credits → /dashboard/new-check.
+    guardedAction();
   };
 
   return (
@@ -125,7 +134,7 @@ export default function MobileTabBar() {
               }}
             >
               <button
-                onClick={() => go(tab.path, "medium")}
+                onClick={handleVerify}
                 aria-label="Run a verification check"
                 aria-current={active ? "page" : undefined}
                 style={{

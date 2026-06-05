@@ -17,16 +17,30 @@ export function useCredits(userEmail: string | undefined | null, userId: string 
   const [webhookDelayed, setWebhookDelayed] = useState(false);
 
   const fetchCredits = useCallback(async () => {
-    if (!userEmail) return;
-    const [{ data: p }, { data: m }] = await Promise.all([
-      supabase.from("purchases").select("credits_remaining").eq("email", userEmail).eq("status", "completed"),
-      supabase.from("manual_payments").select("search_credits, credits_used").eq("email", userEmail).eq("status", "verified"),
-    ]);
-    const pc = (p || []).reduce((s, r) => s + (r.credits_remaining || 0), 0);
-    const mc = (m || []).reduce((s, r) => s + ((r.search_credits || 0) - (r.credits_used || 0)), 0);
-    setCredits(pc + mc);
-    setLoading(false);
-    return pc + mc;
+    if (!userEmail) {
+      setCredits(0);
+      setLoading(false);
+      return 0;
+    }
+    try {
+      const [{ data: p, error: pErr }, { data: m, error: mErr }] = await Promise.all([
+        supabase.from("purchases").select("credits_remaining").eq("email", userEmail).eq("status", "completed"),
+        supabase.from("manual_payments").select("search_credits, credits_used").eq("email", userEmail).eq("status", "verified"),
+      ]);
+      if (pErr) console.error("useCredits purchases error:", pErr);
+      if (mErr) console.error("useCredits manual_payments error:", mErr);
+      const pc = (p || []).reduce((s, r) => s + (r.credits_remaining || 0), 0);
+      const mc = (m || []).reduce((s, r) => s + ((r.search_credits || 0) - (r.credits_used || 0)), 0);
+      const total = pc + mc;
+      setCredits(total);
+      return total;
+    } catch (err) {
+      console.error("useCredits fetch failed:", err);
+      setCredits(0);
+      return 0;
+    } finally {
+      setLoading(false);
+    }
   }, [userEmail]);
 
   useEffect(() => {

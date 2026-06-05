@@ -65,7 +65,8 @@ export function useCredits(userEmail: string | undefined | null, userId: string 
 
   // Polling fallback: if coming from payment success, poll every 5s for 60s
   useEffect(() => {
-    const fromPayment = new URLSearchParams(window.location.search).get("from_payment");
+    const params = new URLSearchParams(window.location.search);
+    const fromPayment = params.get("from_payment") || params.get("payment_id");
     if (!fromPayment || !userEmail) return;
 
     let elapsed = 0;

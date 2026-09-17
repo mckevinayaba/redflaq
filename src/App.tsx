@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate, useParams } from "react-router-dom";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 // Dynamic redirect for /academy/:slug → /blog/:slug
 const AcademyRedirect = () => {
@@ -60,7 +61,6 @@ const Signals = lazy(() => import("./pages/Signals"));
 const SignalArticle = lazy(() => import("./pages/SignalArticle"));
 const Partners = lazy(() => import("./pages/Partners"));
 const PartnersApply = lazy(() => import("./pages/PartnersApply"));
-const DemoResult = lazy(() => import("./pages/DemoResult"));
 const PaymentSuccess = lazy(() => import("./pages/PaymentSuccess"));
 const PaymentCancelled = lazy(() => import("./pages/PaymentCancelled"));
 const DiscreetConfirmation = lazy(() => import("./pages/DiscreetConfirmation"));
@@ -90,17 +90,18 @@ const PageLoader = () => (
 );
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Suspense fallback={<PageLoader />}>
-          <Routes>
+  <ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/search-form" element={<SearchForm />} />
             <Route path="/results" element={<Results />} />
-            <Route path="/demo-result" element={<DemoResult />} />
+            <Route path="/demo-result" element={<Navigate to="/pricing" replace />} />
             <Route path="/payment-success" element={<PaymentSuccess />} />
             <Route path="/discreet-sent" element={<DiscreetConfirmation />} />
             <Route path="/reports/view/:token" element={<SecureReportView />} />
@@ -182,10 +183,11 @@ const App = () => (
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </Suspense>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+          </Suspense>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;

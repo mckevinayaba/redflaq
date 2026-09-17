@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAdminGuard } from "@/hooks/useAdminGuard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -47,7 +48,7 @@ interface VerificationRequest {
 
 const AdminMergeReview = () => {
   const navigate = useNavigate();
-  const [isAuthed, setIsAuthed] = useState(false);
+  const { loading: authLoading, isAuthed } = useAdminGuard();
   const [records, setRecords] = useState<WantedPerson[]>([]);
   const [loading, setLoading] = useState(true);
   const [merging, setMerging] = useState<string | null>(null);
@@ -59,15 +60,11 @@ const AdminMergeReview = () => {
   const [adminNotes, setAdminNotes] = useState("");
 
   useEffect(() => {
-    const authed = localStorage.getItem("admin_authenticated");
-    if (authed !== "true") {
-      navigate("/admin/login");
-      return;
+    if (!authLoading && isAuthed) {
+      loadPendingRecords();
+      loadVerificationRequests();
     }
-    setIsAuthed(true);
-    loadPendingRecords();
-    loadVerificationRequests();
-  }, [navigate]);
+  }, [authLoading, isAuthed]);
 
   const loadPendingRecords = async () => {
     setLoading(true);

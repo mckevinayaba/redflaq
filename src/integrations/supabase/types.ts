@@ -1471,6 +1471,126 @@ export type Database = {
         }
         Relationships: []
       }
+      signal_comments: {
+        Row: {
+          content: string
+          created_at: string | null
+          display_name: string | null
+          id: string
+          moderated: boolean | null
+          signal_id: string
+          user_id: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          display_name?: string | null
+          id?: string
+          moderated?: boolean | null
+          signal_id: string
+          user_id?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          display_name?: string | null
+          id?: string
+          moderated?: boolean | null
+          signal_id?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      signal_likes: {
+        Row: {
+          created_at: string | null
+          id: string
+          signal_id: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          signal_id: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          signal_id?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      signal_saves: {
+        Row: {
+          created_at: string | null
+          id: string
+          signal_id: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          signal_id: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          signal_id?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      signals: {
+        Row: {
+          author: string | null
+          category: string
+          comment_count: number | null
+          content: string
+          created_at: string | null
+          excerpt: string | null
+          id: string
+          like_count: number | null
+          published: boolean | null
+          reading_time: string | null
+          slug: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          author?: string | null
+          category?: string
+          comment_count?: number | null
+          content: string
+          created_at?: string | null
+          excerpt?: string | null
+          id?: string
+          like_count?: number | null
+          published?: boolean | null
+          reading_time?: string | null
+          slug: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          author?: string | null
+          category?: string
+          comment_count?: number | null
+          content?: string
+          created_at?: string | null
+          excerpt?: string | null
+          id?: string
+          like_count?: number | null
+          published?: boolean | null
+          reading_time?: string | null
+          slug?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never

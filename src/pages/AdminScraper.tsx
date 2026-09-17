@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAdminGuard } from "@/hooks/useAdminGuard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -44,6 +45,7 @@ interface SapswantedResult {
 const AdminScraper = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  useAdminGuard();
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingDetails, setIsLoadingDetails] = useState(false);
   const [result, setResult] = useState<ScraperResult | null>(null);

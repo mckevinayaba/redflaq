@@ -24,6 +24,7 @@ import NotFound from "./pages/NotFound";
 // Lazy loaded routes
 const CheckPage = lazy(() => import("./pages/CheckPage"));
 const EvidenceCardPage = lazy(() => import("./pages/EvidenceCardPage"));
+const SignalsPage = lazy(() => import("./pages/SignalsPage"));
 const SearchForm = lazy(() => import("./pages/SearchFormHonest"));
 const Results = lazy(() => import("./pages/ResultsPageUpdated"));
 const AdminScraper = lazy(() => import("./pages/AdminScraper"));
@@ -158,8 +159,8 @@ const App = () => (
             <Route path="/tools/tenant-safety" element={<Navigate to="/safety-tips/tenant-safety" replace />} />
             <Route path="/tools/domestic-worker-safety" element={<Navigate to="/safety-tips/domestic-worker-safety" replace />} />
             <Route path="/tools/red-flag-quiz" element={<Navigate to="/safety-tips/red-flag-quiz" replace />} />
-            {/* Signals */}
-            <Route path="/signals" element={<Signals />} />
+            {/* Signals — RF2 full-screen snap scroll */}
+            <Route path="/signals" element={<SignalsPage />} />
             <Route path="/signals/:slug" element={<SignalArticle />} />
             {/* Blog */}
             <Route path="/blog" element={<Blog />} />

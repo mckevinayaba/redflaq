@@ -18,10 +18,10 @@ const AcademyRedirect = () => {
 
 // Eagerly loaded (critical path)
 import Index from "./pages/Index";
-import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 
 // Lazy loaded routes
+const HomePage = lazy(() => import("./pages/HomePage"));
 const CheckPage = lazy(() => import("./pages/CheckPage"));
 const EvidenceCardPage = lazy(() => import("./pages/EvidenceCardPage"));
 const SignalsPage = lazy(() => import("./pages/SignalsPage"));
@@ -97,8 +97,8 @@ const queryClient = new QueryClient();
 
 // Minimal loading fallback
 const PageLoader = () => (
-  <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#F5F0EB' }}>
-    <div style={{ width: 32, height: 32, border: '3px solid #E6E0DA', borderTopColor: '#7C3AED', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+  <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0B1318' }}>
+    <div style={{ width: 32, height: 32, border: '3px solid rgba(247,245,240,0.1)', borderTopColor: '#E0525B', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
   </div>
 );
 
@@ -111,7 +111,7 @@ const App = () => (
         <Suspense fallback={<PageLoader />}>
           <PhoneFrame>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" element={<HomePage />} />
             <Route path="/check" element={<CheckPage />} />
             <Route path="/check/analyzing" element={<EvidenceCardPage />} />
             <Route path="/home-old" element={<Index />} />

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import { Check, X, ArrowRight, Shield, Eye, FileText } from "lucide-react";
 import AppShell from "@/components/shell/AppShell";
+import redflaqLogo from "@/assets/redflaq-logo-official.png";
 
 const TICKER_ITEMS = [
   "Anger is not loss of control — it is a control mechanism.",
@@ -212,21 +213,9 @@ export default function HomePage() {
             }}
           />
 
-          <span
-            style={{
-              display: "inline-block",
-              fontFamily: "var(--rf2-body)",
-              fontSize: 10,
-              fontWeight: 700,
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              color: "var(--rf2-coral)",
-              marginBottom: 20,
-              position: "relative",
-            }}
-          >
-            ⚑ RedFlaq · South Africa
-          </span>
+          <Link to="/" aria-label="RedFlaq home" className="relative mb-5 inline-flex min-h-11 items-center">
+            <img src={redflaqLogo} alt="RedFlaq" className="block h-auto w-48 max-w-full sm:w-60" />
+          </Link>
 
           <h1
             style={{
@@ -681,19 +670,9 @@ export default function HomePage() {
             paddingBottom: "calc(2rem + env(safe-area-inset-bottom, 0px))",
           }}
         >
-          <span
-            style={{
-              fontFamily: "var(--rf2-display)",
-              fontSize: 15,
-              fontWeight: 700,
-              color: "var(--rf2-ivory)",
-              display: "flex",
-              alignItems: "center",
-              gap: 7,
-            }}
-          >
-            <span style={{ color: "var(--rf2-coral)" }}>⚑</span> RedFlaq
-          </span>
+          <Link to="/" aria-label="RedFlaq home" className="inline-flex min-h-11 items-center">
+            <img src={redflaqLogo} alt="RedFlaq" className="block h-9 w-auto" />
+          </Link>
           <div
             style={{
               display: "flex",

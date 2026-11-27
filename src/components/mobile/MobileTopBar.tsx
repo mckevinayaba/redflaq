@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useCredits } from "@/hooks/useCredits";
 import MobileProfileSheet from "./MobileProfileSheet";
+import redflaqLogo from "@/assets/redflaq-logo-official.png";
 
 interface Props {
   /** When true, use cream surface styling (Home). Otherwise dark glass. */
@@ -53,16 +54,13 @@ export default function MobileTopBar({ cream }: Props) {
         <Link
           to="/"
           aria-label="RedFlaq home"
-          style={{
-            fontFamily: "'DM Serif Display', serif",
-            fontSize: 22,
-            color: ink,
-            textDecoration: "none",
-            letterSpacing: "-0.01em",
-            fontWeight: 700,
-          }}
+          className="inline-flex min-h-11 shrink-0 items-center no-underline"
         >
-          Red<span style={{ color: "#7C3AED" }}>Flaq</span>
+          <img
+            src={redflaqLogo}
+            alt="RedFlaq"
+            className="block h-8 w-auto"
+          />
         </Link>
 
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>

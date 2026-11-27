@@ -1,6 +1,7 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import QuickExit from "./QuickExit";
+import redflaqLogo from "@/assets/redflaq-logo-official.png";
 
 const INK2 = "#111D25";
 const IVORY = "#F7F5F0";
@@ -137,21 +138,9 @@ export default function AppSidebar() {
           borderBottom: `1px solid ${LINE}`,
         }}
       >
-        <span
-          style={{
-            fontFamily: "'Zodiak', Georgia, serif",
-            fontSize: 20,
-            fontWeight: 700,
-            color: IVORY,
-            letterSpacing: "-0.02em",
-            display: "flex",
-            alignItems: "center",
-            gap: 7,
-          }}
-        >
-          <span style={{ color: CORAL, fontSize: 18 }}>⚑</span>
-          RedFlaq
-        </span>
+        <Link to="/" aria-label="RedFlaq home" className="inline-flex min-h-11 items-center">
+          <img src={redflaqLogo} alt="RedFlaq" className="block h-auto w-40 max-w-full" />
+        </Link>
         <p
           style={{
             fontSize: 10,

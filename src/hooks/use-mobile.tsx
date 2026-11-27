@@ -1,7 +1,27 @@
 import * as React from "react";
 
-// RedFlaq is a mobile-first app. Every screen renders its mobile version,
-// even on desktop (where it sits inside a centered phone frame via App.tsx).
+// Below 768px we render the mobile app shell; at 768px and above, desktop layouts.
+const MOBILE_BREAKPOINT = 768;
+
+function readIsMobile(): boolean {
+  if (typeof window === "undefined") return false;
+  return window.innerWidth < MOBILE_BREAKPOINT;
+}
+
 export function useIsMobile() {
-  return true;
+  const [isMobile, setIsMobile] = React.useState<boolean>(readIsMobile);
+
+  React.useEffect(() => {
+    const mql = window.matchMedia(`(max-width: ${MOBILE_BREAKPOINT - 1}px)`);
+    const onChange = () => setIsMobile(readIsMobile());
+    mql.addEventListener("change", onChange);
+    onChange();
+    return () => mql.removeEventListener("change", onChange);
+  }, []);
+
+  return isMobile;
+}
+
+export function useIsDesktop() {
+  return !useIsMobile();
 }

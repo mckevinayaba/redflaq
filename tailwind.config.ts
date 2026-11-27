@@ -89,6 +89,32 @@ export default {
       fontFamily: {
         heading: ["var(--font-heading)"],
         body: ["var(--font-body)"],
+        display: ["var(--rf2-display)"],
+        sans: ["var(--rf2-body)"],
+      },
+      colors: {
+        // existing shadcn colors are extended above
+        // RedFlaq 2.0 semantic tokens
+        ink: {
+          DEFAULT: "var(--rf2-ink)",
+          2: "var(--rf2-ink-2)",
+          3: "var(--rf2-ink-3)",
+        },
+        ivory: {
+          DEFAULT: "var(--rf2-ivory)",
+          2: "var(--rf2-ivory-2)",
+        },
+        coral: {
+          DEFAULT: "var(--rf2-coral)",
+          deep: "var(--rf2-coral-deep)",
+        },
+        teal: {
+          DEFAULT: "var(--rf2-teal)",
+          deep: "var(--rf2-teal-deep)",
+        },
+        amber: {
+          DEFAULT: "var(--rf2-amber)",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

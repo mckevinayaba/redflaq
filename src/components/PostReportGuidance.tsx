@@ -81,13 +81,27 @@ const cardsByRisk: Record<string, { icon: string; heading: string; body: string;
   },
   GREEN: {
     icon: "⚠️",
-    heading: "No records found — but this doesn't guarantee safety. Here's what to do next:",
-    body: "No public-record warnings matched this name in the sources RedFlaq checks. A clear result is NOT a guarantee of someone's character. In South Africa, only 8% of rape cases result in convictions. Always trust your instincts.",
+    heading: "No matching records found — this is not a clearance or safety guarantee.",
+    body: "No matching records were found in the sources RedFlaq searched. This is not a criminal record clearance or confirmation of personal safety. In South Africa, only 8% of rape cases result in convictions. Most people who cause harm have never been arrested. Always trust your instincts.",
     cards: [
       {
         icon: "🛡️",
-        title: "General safety principles for new relationships",
-        description: "A clear result is the beginning of building trust — not the end of being careful.",
+        title: "No result is a guarantee — read the safety principles",
+        description: "A search with no records found is the beginning of building trust — not confirmation that someone is safe.",
+        buttonText: "Read Safety Tips",
+        link: "/safety-tips",
+      },
+    ],
+  },
+  NEUTRAL: {
+    icon: "⚠️",
+    heading: "No matching records found — this is not a clearance or safety guarantee.",
+    body: "No matching records were found in the sources RedFlaq searched. This is not a criminal record clearance or confirmation of personal safety. In South Africa, only 8% of rape cases result in convictions. Most people who cause harm have never been arrested. Always trust your instincts.",
+    cards: [
+      {
+        icon: "🛡️",
+        title: "No result is a guarantee — read the safety principles",
+        description: "A search with no records found is the beginning of building trust — not confirmation that someone is safe.",
         buttonText: "Read Safety Tips",
         link: "/safety-tips",
       },

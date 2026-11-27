@@ -8,7 +8,7 @@ const RiskLevelsSection = () => {
     { level: "HIGH RISK", headline: "Stop. Look closer.", description: "Serious public‑record warnings found — violent or sexual offences with an active warning status.", color: "#DC2626" },
     { level: "MODERATE RISK", headline: "Proceed with caution.", description: "Older or less severe public‑record warnings — status may no longer be active.", color: "#F59E0B" },
     { level: "LOW RISK", headline: "Some concerns noted.", description: "Lower‑level issues or incomplete public information found.", color: "#A78BFA" },
-    { level: "CLEAR", headline: "No warnings found.", description: "No matching public‑record warnings found for this name in the sources we check.", color: "#10B981" },
+    { level: "NO RECORDS FOUND", headline: "No records found in indexed sources.", description: "No matching records in the sources we searched. This is not a clearance or confirmation of safety.", color: "#9AA6AD" },
   ];
 
   const checklistItems = [

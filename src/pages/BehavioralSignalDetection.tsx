@@ -292,7 +292,7 @@ export default function BehavioralSignalDetection() {
           <div className={`border-2 rounded-2xl p-6 text-center ${riskColors[result.risk_level] || riskColors.minimal}`}>
             <p className="text-4xl mb-2">{riskLabels[result.risk_level]?.split(" ")[0] || "🔵"}</p>
             <h2 className="font-heading text-2xl text-foreground mb-1">{riskLabels[result.risk_level] || "Assessment Complete"}</h2>
-            <p className="font-mono text-sm text-muted-foreground">Score: {result.risk_score}</p>
+            <p className="font-mono text-sm text-muted-foreground">{result.risk_level === 'minimal' ? 'No warning patterns found — this does not confirm safety' : 'Warning patterns identified'}</p>
           </div>
 
           {result.categories.length > 0 && (

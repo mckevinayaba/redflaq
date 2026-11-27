@@ -139,8 +139,10 @@ const getRiskBadge = (riskLevel: string) => {
       return { color: '#E67E22', bg: 'rgba(230,126,34,0.12)', label: 'MEDIUM RISK', icon: '🟠', borderClass: 'border-orange-500' };
     case 'YELLOW':
       return { color: '#F1C40F', bg: 'rgba(241,196,15,0.1)', label: 'ELEVATED', icon: '🟡', borderClass: 'border-yellow-500' };
+    case 'NEUTRAL':
+      return { color: '#9AA6AD', bg: 'rgba(154,166,173,0.1)', label: 'NO RECORDS FOUND', icon: '—', borderClass: 'border-slate-400' };
     default:
-      return { color: '#27AE60', bg: 'rgba(39,174,96,0.1)', label: 'NO PUBLIC RED FLAGS', icon: '—', borderClass: 'border-green-600' };
+      return { color: '#9AA6AD', bg: 'rgba(154,166,173,0.1)', label: 'NO RECORDS FOUND', icon: '—', borderClass: 'border-slate-400' };
   }
 };
 
@@ -307,17 +309,18 @@ const ResultsPageUpdated = () => {
 
   if (!results) return null;
 
-  // CRITICAL FIX: A result is only "clear" if ZERO records found AND risk level is GREEN
-  // Never show clear when ANY records exist, even with low confidence
   const hasRecords = results.wantedPersonsCount > 0 || results.wantedPersons.length > 0;
-  const isClear = !hasRecords && results.riskLevel === 'GREEN';
+  const isNoRecords = !hasRecords && (results.riskLevel === 'NEUTRAL' || results.riskLevel === 'GREEN');
+  // Keep isClear as alias for backward compatibility with any dependent UI code
+  const isClear = isNoRecords;
   const isUncertainMatch = hasRecords && results.wantedPersons.every(p => (p.confidence || 20) < 50);
   const isMultiple = results.wantedPersonsCount > 1;
   const searchDate = new Date(results.searchedAt).toLocaleDateString('en-ZA', { day: '2-digit', month: '2-digit', year: 'numeric' });
   const searchTime = new Date(results.searchedAt).toLocaleTimeString('en-ZA', { hour: '2-digit', minute: '2-digit' });
 
-  // Override risk badge: if records exist but riskLevel is GREEN, force to YELLOW
-  const effectiveRiskLevel = (hasRecords && results.riskLevel === 'GREEN') ? 'YELLOW' : results.riskLevel;
+  // If records exist but riskLevel is still neutral/green, force to YELLOW
+  const isNeutralLevel = results.riskLevel === 'NEUTRAL' || results.riskLevel === 'GREEN';
+  const effectiveRiskLevel = (hasRecords && isNeutralLevel) ? 'YELLOW' : results.riskLevel;
   
   // Detect partial name matches (e.g., "Mckevin Ayaba" vs "MCKEVIN AYABA DORMITHIENE")
   const searchName = results.fullName || results.searchIdentifier || '';
@@ -501,10 +504,10 @@ const ResultsPageUpdated = () => {
                   <div>
                     <p className="font-body text-[15px] font-bold text-foreground mb-3">This could mean:</p>
                     <div className="space-y-3">
-                      <div style={{ borderLeft: '4px solid #27AE60', background: 'rgba(39,174,96,0.08)', padding: 16 }}>
-                        <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, color: '#27AE60' }}>
-                          <strong>✓ Same person</strong> — Many South Africans use shortened versions of their full legal name.
-                          "{searchName}" might be how this person is known publicly, while "{match?.person.full_name}" is their full legal name on their ID.
+                      <div style={{ borderLeft: '4px solid #9AA6AD', background: 'rgba(154,166,173,0.08)', padding: 16 }}>
+                        <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, color: '#9AA6AD' }}>
+                          <strong>Possible same person</strong> — Many South Africans use shortened versions of their full legal name.
+                          "{searchName}" might be how this person is known publicly, while "{match?.person.full_name}" is their full legal name on their ID. Verify before drawing conclusions.
                         </p>
                       </div>
                       <div style={{ borderLeft: '4px solid #C0392B', background: 'rgba(192,57,43,0.08)', padding: 16 }}>
@@ -957,8 +960,8 @@ const ResultsPageUpdated = () => {
                   
                   {/* ID Match Status */}
                   {(person as any).id_match_status === 'exact_match' && (
-                    <div style={{ background: 'rgba(39,174,96,0.1)', border: '1px solid rgba(39,174,96,0.3)', padding: 12, marginBottom: 16 }}>
-                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 700, color: '#27AE60' }}>✓ ID number confirms: This is the same person</p>
+                    <div style={{ background: 'rgba(154,166,173,0.1)', border: '1px solid rgba(154,166,173,0.3)', padding: 12, marginBottom: 16 }}>
+                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 700, color: '#9AA6AD' }}>ID number matches this record. Verify all other details before drawing conclusions.</p>
                     </div>
                   )}
                   {(person as any).id_match_status === 'mismatch' && (
@@ -974,8 +977,8 @@ const ResultsPageUpdated = () => {
                   )}
 
                   <Progress value={confidence} className="h-3 mb-3" />
-                  <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 600, marginBottom: 12, color: confidence >= 71 ? '#27AE60' : confidence >= 41 ? '#E67E22' : '#C0392B' }}>
-                    {confidence >= 71 ? '✓ HIGH CONFIDENCE — Strong identity indicators present' :
+                  <p style={{ fontFamily: "'Inter', sans-serif", fontSize: 14, fontWeight: 600, marginBottom: 12, color: confidence >= 71 ? '#9AA6AD' : confidence >= 41 ? '#E67E22' : '#C0392B' }}>
+                    {confidence >= 71 ? 'HIGH CONFIDENCE — Strong identity indicators match, but verify independently' :
                      confidence >= 41 ? '⚠️ MEDIUM CONFIDENCE — Verify with additional data' :
                      '⚠️ LOW CONFIDENCE — Additional verification required'}
                   </p>

@@ -44,7 +44,8 @@ const riskConfig: Record<string, { label: string; color: string; bg: string }> =
   RED: { label: "High Risk", color: "#C0392B", bg: "rgba(192,57,43,0.12)" },
   ORANGE: { label: "Moderate", color: "#E67E22", bg: "rgba(230,126,34,0.12)" },
   YELLOW: { label: "Low Risk", color: "#F1C40F", bg: "rgba(241,196,15,0.12)" },
-  GREEN: { label: "Clear", color: "#27AE60", bg: "rgba(39,174,96,0.12)" },
+  GREEN: { label: "No records found", color: "#9AA6AD", bg: "rgba(154,166,173,0.12)" },
+  NEUTRAL: { label: "No records found", color: "#9AA6AD", bg: "rgba(154,166,173,0.12)" },
 };
 
 export default function DashboardReports() {
@@ -128,7 +129,7 @@ function DesktopDashboardReports() {
               <option value="RED">High Risk</option>
               <option value="ORANGE">Moderate</option>
               <option value="YELLOW">Low Risk</option>
-              <option value="GREEN">Clear</option>
+              <option value="GREEN">No records found</option>
             </select>
 
             {hiddenCount > 0 && (

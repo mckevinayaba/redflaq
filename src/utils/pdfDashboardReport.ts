@@ -240,9 +240,13 @@ export function generateDashboardReport(data: ReportData) {
   cols.forEach(col => doc.text(col.label, col.x + 2, y + 5));
   y += 8;
 
-  const riskLabels: Record<string, string> = { GREEN: "Clear", YELLOW: "Low", ORANGE: "Moderate", RED: "High" };
+  const riskLabels: Record<string, string> = {
+    GREEN: "No records found", NEUTRAL: "No records found",
+    YELLOW: "Low concern", ORANGE: "Moderate concern", RED: "High concern",
+  };
   const riskColors: Record<string, readonly [number, number, number]> = {
-    GREEN: [22, 163, 74], YELLOW: [202, 138, 4], ORANGE: [234, 88, 12], RED: [220, 38, 38],
+    GREEN: [120, 120, 120], NEUTRAL: [120, 120, 120],
+    YELLOW: [202, 138, 4], ORANGE: [234, 88, 12], RED: [220, 38, 38],
   };
 
   data.recentChecks.slice(0, 15).forEach((check) => {
@@ -255,10 +259,10 @@ export function generateDashboardReport(data: ReportData) {
     doc.text((check.search_name || "—").substring(0, 30), cols[1].x + 2, y + 4);
     doc.setTextColor(...MUTED);
     doc.text((check.search_province || "—").substring(0, 20), cols[2].x + 2, y + 4);
-    const rc = riskColors[check.risk_level] || riskColors.GREEN;
+    const rc = riskColors[check.risk_level] || riskColors.NEUTRAL;
     doc.setTextColor(...rc);
     doc.setFont("helvetica", "bold");
-    doc.text(riskLabels[check.risk_level] || "Clear", cols[3].x + 2, y + 4);
+    doc.text(riskLabels[check.risk_level] || "No records found", cols[3].x + 2, y + 4);
     doc.setTextColor(...MUTED);
     doc.setFont("helvetica", "normal");
     doc.text(String(check.matches_found), cols[4].x + 2, y + 4);

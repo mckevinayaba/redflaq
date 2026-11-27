@@ -20,14 +20,14 @@
  * ═══════════════════════════════════════════════════════════════════
  */
 
-export type RiskLevel = 'CLEAR' | 'LOW' | 'MODERATE' | 'HIGH' | 'CRITICAL';
+export type RiskLevel = 'NO_RECORDS_FOUND' | 'LOW' | 'MODERATE' | 'HIGH' | 'CRITICAL';
 
 export interface RiskAssessment {
   level: RiskLevel;
-  score: number; // 0-100
+  score: number; // internal only — not for display
   factors: string[];
   explanation: string;
-  badgeLevel: 'GREEN' | 'YELLOW' | 'ORANGE' | 'RED';
+  badgeLevel: 'NEUTRAL' | 'YELLOW' | 'ORANGE' | 'RED';
 }
 
 /**
@@ -37,11 +37,11 @@ export interface RiskAssessment {
 export function calculateRiskScore(records: any[]): RiskAssessment {
   if (!records || records.length === 0) {
     return {
-      level: 'CLEAR',
+      level: 'NO_RECORDS_FOUND',
       score: 0,
-      factors: ['No public records found'],
-      explanation: 'No criminal records, warrants, or court cases found in South African public records.',
-      badgeLevel: 'GREEN',
+      factors: ['No matching records found in the indexed sources searched'],
+      explanation: 'No matching records found in the indexed sources searched. This is not a criminal record clearance or confirmation of personal safety.',
+      badgeLevel: 'NEUTRAL',
     };
   }
 
@@ -221,10 +221,10 @@ export function calculateRiskScore(records: any[]): RiskAssessment {
 
   score = Math.min(score, 100);
 
-  // ── Map score to risk level and existing badge ──
+  // ── Map score to risk level and badge ──
   let level: RiskLevel;
   let explanation: string;
-  let badgeLevel: 'GREEN' | 'YELLOW' | 'ORANGE' | 'RED';
+  let badgeLevel: 'NEUTRAL' | 'YELLOW' | 'ORANGE' | 'RED';
 
   if (score >= 80) {
     level = 'CRITICAL';
@@ -243,20 +243,20 @@ export function calculateRiskScore(records: any[]): RiskAssessment {
     badgeLevel = 'YELLOW';
     explanation = 'LOW RISK: Minor or older offenses found. Use your judgment.';
   } else {
-    level = 'CLEAR';
-    badgeLevel = 'GREEN';
-    explanation = 'No public records found in South African criminal databases.';
+    level = 'NO_RECORDS_FOUND';
+    badgeLevel = 'NEUTRAL';
+    explanation = 'No matching records found in the indexed sources searched. This is not a criminal record clearance or confirmation of personal safety.';
   }
 
   return { level, score, factors, explanation, badgeLevel };
 }
 
 /**
- * Map a numeric score to the existing badge level string used by the UI.
+ * Map a numeric score to the badge level string used by the UI.
  */
-export function scoreToBadgeLevel(score: number): 'GREEN' | 'YELLOW' | 'ORANGE' | 'RED' {
+export function scoreToBadgeLevel(score: number): 'NEUTRAL' | 'YELLOW' | 'ORANGE' | 'RED' {
   if (score >= 50) return 'RED';
   if (score >= 25) return 'ORANGE';
   if (score > 0) return 'YELLOW';
-  return 'GREEN';
+  return 'NEUTRAL';
 }

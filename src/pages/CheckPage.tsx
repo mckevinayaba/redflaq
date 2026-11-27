@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Image, Mic } from "lucide-react";
+import { ArrowRight, Image, Mic, Settings2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { usePrivacyPrefs } from "@/hooks/usePrivacyPrefs";
 import AppShell from "@/components/shell/AppShell";
 
 const INTENTS = [
@@ -39,9 +40,11 @@ const SAMPLES = [
 export default function CheckPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { prefs, setPrefs } = usePrivacyPrefs();
   const [text, setText] = useState("");
   const [intent, setIntent] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPrivacyPanel, setShowPrivacyPanel] = useState(false);
 
   const canSubmit = text.trim().length > 10;
 
@@ -49,9 +52,13 @@ export default function CheckPage() {
     e.preventDefault();
     if (!canSubmit || isSubmitting) return;
     setIsSubmitting(true);
-    // Navigate to analysis with the submitted text and intent
     navigate("/check/analyzing", {
-      state: { text: text.trim(), intent, source: "composer" },
+      state: {
+        text: text.trim(),
+        intent,
+        source: "composer",
+        saveCheck: prefs.saveChecks && !!user,
+      },
     });
   }
 
@@ -261,18 +268,126 @@ export default function CheckPage() {
             </div>
           </div>
 
-          {/* Privacy line */}
-          <p
-            style={{
-              fontSize: 12,
-              color: "var(--rf2-muted-2)",
-              lineHeight: 1.5,
-              textAlign: "center",
-            }}
-          >
-            No account needed. Nothing is saved unless you choose to save it.
-            {user && " Your check history is saved to your account."}
-          </p>
+          {/* Privacy line + toggles */}
+          <div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 6,
+              }}
+            >
+              <p
+                style={{
+                  fontSize: 12,
+                  color: "var(--rf2-muted-2)",
+                  lineHeight: 1.5,
+                  textAlign: "center",
+                  margin: 0,
+                }}
+              >
+                {prefs.saveChecks && user
+                  ? "This check will be saved to your account history."
+                  : "No account needed. Nothing is saved unless you choose to."}
+              </p>
+              <button
+                type="button"
+                onClick={() => setShowPrivacyPanel((v) => !v)}
+                title="Privacy settings"
+                aria-expanded={showPrivacyPanel}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  color: "var(--rf2-muted-2)",
+                  display: "flex",
+                  alignItems: "center",
+                  flexShrink: 0,
+                  padding: 2,
+                }}
+              >
+                <Settings2 size={13} aria-hidden />
+              </button>
+            </div>
+
+            {showPrivacyPanel && (
+              <div
+                style={{
+                  marginTop: 10,
+                  background: "var(--rf2-ink-2)",
+                  border: "1px solid var(--rf2-line-2)",
+                  borderRadius: 8,
+                  padding: "12px 14px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 10,
+                }}
+              >
+                {[
+                  {
+                    key: "saveChecks" as const,
+                    label: "Save checks to history",
+                    note: user ? "Requires sign-in (you are signed in)" : "Requires sign-in",
+                    disabled: !user,
+                  },
+                  {
+                    key: "discreetMode" as const,
+                    label: "Discreet mode",
+                    note: "Hides check text from browser title bar",
+                    disabled: false,
+                  },
+                  {
+                    key: "lowDataMode" as const,
+                    label: "Low-data mode",
+                    note: "Skips non-essential network calls",
+                    disabled: false,
+                  },
+                ].map((item) => (
+                  <label
+                    key={item.key}
+                    style={{
+                      display: "flex",
+                      alignItems: "flex-start",
+                      gap: 10,
+                      cursor: item.disabled ? "not-allowed" : "pointer",
+                      opacity: item.disabled ? 0.5 : 1,
+                    }}
+                  >
+                    <input
+                      type="checkbox"
+                      checked={prefs[item.key]}
+                      disabled={item.disabled}
+                      onChange={(e) => setPrefs({ [item.key]: e.target.checked })}
+                      style={{ marginTop: 2, accentColor: "var(--rf2-coral)", flexShrink: 0 }}
+                    />
+                    <div>
+                      <span
+                        style={{
+                          fontSize: 12,
+                          fontWeight: 600,
+                          color: "var(--rf2-ivory)",
+                          fontFamily: "var(--rf2-body)",
+                        }}
+                      >
+                        {item.label}
+                      </span>
+                      <span
+                        style={{
+                          fontSize: 11,
+                          color: "var(--rf2-muted-2)",
+                          fontFamily: "var(--rf2-body)",
+                          display: "block",
+                        }}
+                      >
+                        {item.note}
+                      </span>
+                    </div>
+                  </label>
+                ))}
+              </div>
+            )}
+          </div>
 
           {/* Submit */}
           <button

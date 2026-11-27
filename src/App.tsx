@@ -25,6 +25,7 @@ import NotFound from "./pages/NotFound";
 const CheckPage = lazy(() => import("./pages/CheckPage"));
 const EvidenceCardPage = lazy(() => import("./pages/EvidenceCardPage"));
 const SignalsPage = lazy(() => import("./pages/SignalsPage"));
+const SafePage = lazy(() => import("./pages/SafePage"));
 const SearchForm = lazy(() => import("./pages/SearchFormHonest"));
 const Results = lazy(() => import("./pages/ResultsPageUpdated"));
 const AdminScraper = lazy(() => import("./pages/AdminScraper"));
@@ -146,8 +147,8 @@ const App = () => (
             <Route path="/dashboard/habit" element={<HabitDashboard />} />
             <Route path="/dashboard/behavioral-signals" element={<BehavioralSignalDetection />} />
             <Route path="/dashboard/saved-signals" element={<DashboardSavedSignals />} />
-            {/* Safety Tips */}
-            <Route path="/safety-tips" element={<SafetyTips />} />
+            {/* Safe hub (RF2) + sub-routes */}
+            <Route path="/safety-tips" element={<SafePage />} />
             <Route path="/conversation-guide" element={<ConversationGuide />} />
             <Route path="/safety-tips/first-date-safety" element={<FirstDateSafety />} />
             <Route path="/safety-tips/tenant-safety" element={<TenantSafety />} />

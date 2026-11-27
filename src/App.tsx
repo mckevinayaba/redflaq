@@ -22,6 +22,7 @@ import NotFound from "./pages/NotFound";
 
 // Lazy loaded routes
 const HomePage = lazy(() => import("./pages/HomePage"));
+const PrototypeApp = lazy(() => import("./prototype/PrototypeApp"));
 const CheckPage = lazy(() => import("./pages/CheckPage"));
 const EvidenceCardPage = lazy(() => import("./pages/EvidenceCardPage"));
 const SignalsPage = lazy(() => import("./pages/SignalsPage"));
@@ -111,9 +112,18 @@ const App = () => (
         <Suspense fallback={<PageLoader />}>
           <PhoneFrame>
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/check" element={<CheckPage />} />
-            <Route path="/check/analyzing" element={<EvidenceCardPage />} />
+            <Route element={<PrototypeApp />}>
+              <Route path="/" />
+              <Route path="/check" />
+              <Route path="/check/analyzing" />
+              <Route path="/check/result" />
+              <Route path="/signals" />
+              <Route path="/deals" />
+              <Route path="/safe" />
+              <Route path="/you" />
+              <Route path="/business" />
+              <Route path="/safety-tips" />
+            </Route>
             <Route path="/home-old" element={<Index />} />
             <Route path="/search-form" element={<SearchForm />} />
             <Route path="/results" element={<Results />} />
@@ -148,7 +158,6 @@ const App = () => (
             <Route path="/dashboard/behavioral-signals" element={<BehavioralSignalDetection />} />
             <Route path="/dashboard/saved-signals" element={<DashboardSavedSignals />} />
             {/* Safe hub (RF2) + sub-routes */}
-            <Route path="/safety-tips" element={<SafePage />} />
             <Route path="/conversation-guide" element={<ConversationGuide />} />
             <Route path="/safety-tips/first-date-safety" element={<FirstDateSafety />} />
             <Route path="/safety-tips/tenant-safety" element={<TenantSafety />} />
@@ -161,7 +170,6 @@ const App = () => (
             <Route path="/tools/domestic-worker-safety" element={<Navigate to="/safety-tips/domestic-worker-safety" replace />} />
             <Route path="/tools/red-flag-quiz" element={<Navigate to="/safety-tips/red-flag-quiz" replace />} />
             {/* Signals — RF2 full-screen snap scroll */}
-            <Route path="/signals" element={<SignalsPage />} />
             <Route path="/signals/:slug" element={<SignalArticle />} />
             {/* Blog */}
             <Route path="/blog" element={<Blog />} />

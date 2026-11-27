@@ -15,6 +15,8 @@ const SHELL_ROUTES = [
 export default function MobileShell() {
   const isMobile = useIsMobile();
   const { pathname } = useLocation();
+  // The prototype shell owns its navigation; never overlay a second dock or onboarding.
+  if (['/', '/check', '/check/analyzing', '/check/result', '/signals', '/deals', '/safe', '/you', '/business', '/safety-tips'].includes(pathname)) return null;
   if (!isMobile) return null;
   if (!SHELL_ROUTES.some((r) => r.test(pathname))) return null;
 

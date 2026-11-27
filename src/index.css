@@ -735,3 +735,54 @@ nav, header {
   from { opacity: 0; transform: translateX(-50%) translateY(12px); }
   to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
+
+/* Scoped prototype tokens preserve the legacy application theme. */
+.prototype-app {
+
+  --ink:#0B1318; --ink-2:#111D25; --ink-3:#18262F; --line:rgba(247,245,240,.09); --line-2:rgba(247,245,240,.16);
+  --ivory:#F7F5F0; --ivory-2:#EDE9E1; --paper-ink:#141B20; --muted:#9AA6AD; --muted-2:#6E7B83;
+  --coral:#E0525B; --coral-deep:#B8343D; --coral-soft:rgba(224,82,91,.14);
+  --teal:#3FA394; --teal-deep:#236D65; --teal-soft:rgba(63,163,148,.14);
+  --amber:#E2A84B; --amber-soft:rgba(226,168,75,.14);
+  --display:'Zodiak', Georgia, serif; --body:'General Sans', 'Helvetica Neue', Arial, sans-serif;
+  --r-sm:10px; --r:16px; --r-lg:24px; --r-xl:32px;
+  --sb:248px; --rail:320px; --bottom:72px;
+  --ease:cubic-bezier(.2,.8,.2,1);
+--pt-color-0:rgba(11,19,24,.82);
+--pt-color-1:rgba(11,19,24,.92);
+--pt-color-2:rgba(224,82,91,.45);
+--pt-color-3:rgba(255,255,255,.25);
+--pt-color-4:#fff;
+--pt-color-5:rgba(0,0,0,.35);
+--pt-color-6:rgba(11,19,24,0);
+--pt-color-7:rgba(11,19,24,.6);
+--pt-color-8:#F08A90;
+--pt-color-9:#6CC7B8;
+--pt-color-10:rgba(224,82,91,.5);
+--pt-color-11:rgba(224,82,91,0);
+--pt-color-12:rgba(0,0,0,.45);
+--pt-color-13:#8E1F28;
+--pt-color-14:rgba(255,255,255,.8);
+--pt-color-15:rgba(255,255,255,.92);
+--pt-color-16:rgba(255,255,255,.16);
+--pt-color-17:rgba(20,27,32,.08);
+--pt-color-18:#5B666D;
+--pt-color-19:rgba(20,27,32,.1);
+--pt-color-20:#A3ACB1;
+--pt-color-21:#6A747A;
+--pt-color-22:rgba(224,82,91,.12);
+--pt-color-23:#9C2731;
+--pt-color-24:#8A9399;
+--pt-color-25:#1E8E5A;
+--pt-color-26:rgba(20,27,32,.2);
+--pt-color-27:rgba(11,19,24,.25);
+--pt-color-28:rgba(11,19,24,.4);
+--pt-color-29:rgba(11,19,24,.96);
+--pt-color-30:rgba(11,19,24,.55);
+--pt-color-31:#1F3A3A;
+--pt-color-32:rgba(224,82,91,.1);
+--pt-color-33:rgba(0,0,0,.55);
+--pt-color-34:#0F2A22;
+--pt-color-35:#1B4D3A;
+--pt-color-36:#9FE3C8;
+}

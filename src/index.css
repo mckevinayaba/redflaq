@@ -4,36 +4,36 @@
 
 @layer base {
   :root {
-    /* RedFlaq Warm Design System */
-    --ink: 0 0% 12%;
-    --paper: 30 18% 95%;
-    --cream: 30 14% 94%;
+    /* RedFlaq 2.0 — Prototype Design System */
+    --ink: 211 28% 7%;
+    --paper: 211 28% 7%;
+    --cream: 211 20% 10%;
     --purple: 246 100% 65%;
     --purple-mid: 246 100% 65%;
     --purple-light: 246 100% 92%;
-    --red: 0 69% 42%;
-    --gold: 32 91% 37%;
-    --green: 142 67% 28%;
-    --mid: 0 0% 33%;
-    --muted-color: 0 0% 53%;
+    --red: 356 70% 60%;
+    --gold: 37 74% 59%;
+    --green: 170 44% 43%;
+    --mid: 205 8% 55%;
+    --muted-color: 205 8% 55%;
 
     --background: var(--paper);
-    --foreground: var(--ink);
+    --foreground: 36 13% 95%;
 
-    --card: 0 0% 100%;
-    --card-foreground: var(--ink);
+    --card: 211 24% 11%;
+    --card-foreground: 36 13% 95%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: var(--ink);
+    --popover: 211 24% 11%;
+    --popover-foreground: 36 13% 95%;
 
-    --primary: var(--purple-mid);
+    --primary: 356 70% 60%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: var(--cream);
-    --secondary-foreground: var(--ink);
+    --secondary: 211 20% 14%;
+    --secondary-foreground: 36 13% 95%;
 
-    --muted: var(--cream);
-    --muted-foreground: var(--mid);
+    --muted: 211 20% 14%;
+    --muted-foreground: 205 8% 55%;
 
     --accent: var(--cream);
     --accent-foreground: var(--purple-mid);
@@ -41,9 +41,9 @@
     --destructive: var(--red);
     --destructive-foreground: 0 0% 100%;
 
-    --border: 30 10% 85%;
-    --input: 30 10% 85%;
-    --ring: var(--purple-mid);
+    --border: 205 15% 18%;
+    --input: 205 15% 18%;
+    --ring: 356 70% 60%;
 
     --radius: 0rem;
 
@@ -76,8 +76,8 @@
     --chart-4: 230 100% 27%;
     --chart-5: 4 73% 54%;
 
-    --font-heading: 'DM Serif Display', serif;
-    --font-body: 'Syne', sans-serif;
+    --font-heading: 'Zodiak', 'DM Serif Display', Georgia, serif;
+    --font-body: 'General Sans', 'Syne', system-ui, sans-serif;
 
     /* Dark Premium Design System — Phase 1 */
     --dark: #08080f;
@@ -95,14 +95,14 @@
     --font-inter: 'Inter', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
 
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: var(--ink);
-    --sidebar-primary: var(--purple-mid);
+    --sidebar-background: 211 24% 11%;
+    --sidebar-foreground: 36 13% 95%;
+    --sidebar-primary: 356 70% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 246 100% 95%;
-    --sidebar-accent-foreground: 246 100% 45%;
-    --sidebar-border: 30 10% 85%;
-    --sidebar-ring: var(--purple-mid);
+    --sidebar-accent: 211 20% 14%;
+    --sidebar-accent-foreground: 36 13% 95%;
+    --sidebar-border: 205 15% 18%;
+    --sidebar-ring: 356 70% 60%;
 
     /* Signals Design System Tokens */
     --rf-purple: #7C3AED;
@@ -119,12 +119,30 @@
     --rf-white: #FFFFFF;
     --rf-serif: 'Playfair Display', Georgia, serif;
     --rf-sans: 'Inter', system-ui, sans-serif;
+
+    /* ── RedFlaq 2.0 Prototype Design Tokens ── */
+    --rf2-ink: #0B1318;
+    --rf2-ink-2: #111D25;
+    --rf2-ink-3: #18262F;
+    --rf2-ivory: #F7F5F0;
+    --rf2-ivory-2: #EDE9E1;
+    --rf2-coral: #E0525B;
+    --rf2-coral-deep: #B8343D;
+    --rf2-teal: #3FA394;
+    --rf2-teal-deep: #236D65;
+    --rf2-amber: #E2A84B;
+    --rf2-muted: #9AA6AD;
+    --rf2-muted-2: #6E7B83;
+    --rf2-line: rgba(247, 245, 240, 0.09);
+    --rf2-line-2: rgba(247, 245, 240, 0.16);
+    --rf2-display: 'Zodiak', Georgia, serif;
+    --rf2-body: 'General Sans', system-ui, sans-serif;
   }
 }
 
 @layer base {
   :root {
-    color-scheme: light only;
+    color-scheme: dark;
   }
 
   * {
@@ -132,8 +150,8 @@
   }
 
   html {
-    background-color: #F5F0EB;
-    color-scheme: light only;
+    background-color: #0B1318;
+    color-scheme: dark;
     -webkit-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
     overflow-x: hidden;
@@ -149,9 +167,9 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'Syne', sans-serif;
-    background-color: #F5F0EB !important;
-    color: #1F1F1F;
+    font-family: 'General Sans', 'Syne', system-ui, sans-serif;
+    background-color: #0B1318 !important;
+    color: #F7F5F0;
     overflow-x: hidden;
     width: 100%;
     -webkit-font-smoothing: antialiased;

@@ -22,6 +22,7 @@ import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 
 // Lazy loaded routes
+const CheckPage = lazy(() => import("./pages/CheckPage"));
 const SearchForm = lazy(() => import("./pages/SearchFormHonest"));
 const Results = lazy(() => import("./pages/ResultsPageUpdated"));
 const AdminScraper = lazy(() => import("./pages/AdminScraper"));
@@ -108,6 +109,7 @@ const App = () => (
           <PhoneFrame>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/check" element={<CheckPage />} />
             <Route path="/home-old" element={<Index />} />
             <Route path="/search-form" element={<SearchForm />} />
             <Route path="/results" element={<Results />} />

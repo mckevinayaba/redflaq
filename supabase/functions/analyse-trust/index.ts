@@ -67,14 +67,39 @@ Important rules:
 
 type AiProvider = "lovable_gateway" | "anthropic_direct";
 
+type ImageInput = {
+  base64: string;      // raw base64, no data URL prefix
+  mimeType: string;    // e.g. "image/jpeg"
+};
+
 async function callAI(
   userText: string,
   intentLabel: string,
   provider: AiProvider,
+  image?: ImageInput,
 ): Promise<EvidenceCard> {
-  const userMessage = intentLabel
-    ? `Context: I am about to ${intentLabel}.\n\nHere is the situation:\n\n${userText}`
-    : `Here is the situation I want to check:\n\n${userText}`;
+  const contextPrefix = intentLabel ? `Context: I am about to ${intentLabel}.\n\n` : "";
+  const textPart = image
+    ? `${contextPrefix}I am sending you a screenshot. Please analyse it for scam patterns, red flags, and warning signals, then give your assessment.\n\nAdditional context from the user: ${userText || "(none)"}`
+    : `${contextPrefix}Here is the situation I want to check:\n\n${userText}`;
+
+  // Build the user message — vision content when image is provided
+  type ContentPart =
+    | { type: "text"; text: string }
+    | { type: "image_url"; image_url: { url: string; detail: string } };
+
+  const userContent: ContentPart[] | string = image
+    ? [
+        {
+          type: "image_url",
+          image_url: {
+            url: `data:${image.mimeType};base64,${image.base64}`,
+            detail: "high",
+          },
+        },
+        { type: "text", text: textPart },
+      ]
+    : textPart;
 
   const toolSchema = {
     type: "function",
@@ -199,7 +224,7 @@ async function callAI(
         model: "google/gemini-3-flash-preview",
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
-          { role: "user", content: userMessage },
+          { role: "user", content: userContent },
         ],
         tools: [toolSchema],
         tool_choice: { type: "function", function: { name: "return_evidence_card" } },
@@ -224,6 +249,21 @@ async function callAI(
   const ANTHROPIC_KEY = Deno.env.get("ANTHROPIC_API_KEY");
   if (!ANTHROPIC_KEY) throw new Error("ANTHROPIC_API_KEY is not configured");
 
+  // Anthropic vision format differs from OpenAI format
+  type AnthropicContent =
+    | { type: "text"; text: string }
+    | { type: "image"; source: { type: "base64"; media_type: string; data: string } };
+
+  const anthropicContent: AnthropicContent[] = image
+    ? [
+        {
+          type: "image",
+          source: { type: "base64", media_type: image.mimeType, data: image.base64 },
+        },
+        { type: "text", text: typeof userContent === "string" ? userContent : textPart },
+      ]
+    : [{ type: "text", text: textPart }];
+
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
     headers: {
@@ -235,7 +275,7 @@ async function callAI(
       model: "claude-haiku-4-5",
       max_tokens: 1200,
       system: SYSTEM_PROMPT,
-      messages: [{ role: "user", content: userMessage }],
+      messages: [{ role: "user", content: anthropicContent }],
       tools: [
         {
           name: "return_evidence_card",
@@ -272,33 +312,61 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const { text, intent } = await req.json();
+    const { text, intent, image_base64, image_mime_type } = await req.json();
 
-    if (!text || typeof text !== "string" || text.trim().length < 20) {
+    const hasImage = typeof image_base64 === "string" && image_base64.length > 0;
+    const hasText = typeof text === "string" && text.trim().length > 0;
+
+    // Require at least text OR image
+    if (!hasText && !hasImage) {
+      return new Response(
+        JSON.stringify({ error: "Provide text, an image, or both." }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+
+    // Text-only minimum length applies when no image is provided
+    if (!hasImage && hasText && text.trim().length < 20) {
       return new Response(
         JSON.stringify({ error: "Text must be at least 20 characters." }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
 
-    if (text.trim().length > 4000) {
+    if (hasText && text.trim().length > 4000) {
       return new Response(
         JSON.stringify({ error: "Text exceeds 4000 character limit." }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
       );
     }
 
+    // Validate image: max ~800KB base64 (~600KB binary) to stay within edge function limits
+    if (hasImage && image_base64.length > 1_100_000) {
+      return new Response(
+        JSON.stringify({ error: "Image too large. Please reduce the file size and try again." }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+      );
+    }
+
+    const allowedMimes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
+    const mimeType: string = allowedMimes.includes(image_mime_type) ? image_mime_type : "image/jpeg";
+
+    const image: ImageInput | undefined = hasImage
+      ? { base64: image_base64, mimeType }
+      : undefined;
+
     const intentLabel = intent && INTENT_LABELS[intent] ? INTENT_LABELS[intent] : "";
+    const cleanText = hasText ? text.trim() : "(No text — see image)";
 
     // Try primary provider, fall back to Anthropic direct if unavailable
     let card: EvidenceCard;
     try {
-      card = await callAI(text.trim(), intentLabel, "lovable_gateway");
+      card = await callAI(cleanText, intentLabel, "lovable_gateway", image);
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       if (msg === "RATE_LIMITED" || msg === "QUOTA_EXCEEDED" || msg.startsWith("AI_GATEWAY_ERROR")) {
         console.warn("Primary AI provider failed, trying Anthropic direct:", msg);
-        card = await callAI(text.trim(), intentLabel, "anthropic_direct");
+        card = await callAI(cleanText, intentLabel, "anthropic_direct", image);
       } else {
         throw err;
       }

@@ -40,11 +40,19 @@ type AnalysisState =
 export function useAnalyseTrust() {
   const [state, setState] = useState<AnalysisState>({ status: "idle" });
 
-  const analyse = useCallback(async (text: string, intent?: string | null) => {
+  const analyse = useCallback(async (
+    text: string,
+    intent?: string | null,
+    image?: { base64: string; mimeType: string } | null,
+  ) => {
     setState({ status: "loading" });
     try {
       const { data, error } = await supabase.functions.invoke("analyse-trust", {
-        body: { text, intent: intent ?? null },
+        body: {
+          text,
+          intent: intent ?? null,
+          ...(image ? { image_base64: image.base64, image_mime_type: image.mimeType } : {}),
+        },
       });
 
       if (error) {

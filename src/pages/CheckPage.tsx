@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, Image, Mic, Settings2 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
@@ -37,6 +37,33 @@ const SAMPLES = [
   },
 ];
 
+async function resizeImageToBase64(file: File, maxDim = 1200): Promise<{ base64: string; mimeType: string }> {
+  return new Promise((resolve, reject) => {
+    const img = new window.Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let w = img.width;
+      let h = img.height;
+      if (w > maxDim || h > maxDim) {
+        if (w > h) { h = Math.round((h / w) * maxDim); w = maxDim; }
+        else { w = Math.round((w / h) * maxDim); h = maxDim; }
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) { reject(new Error("Canvas unavailable")); return; }
+      ctx.drawImage(img, 0, 0, w, h);
+      const dataUrl = canvas.toDataURL("image/jpeg", 0.82);
+      const base64 = dataUrl.split(",")[1];
+      resolve({ base64, mimeType: "image/jpeg" });
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("Image load failed")); };
+    img.src = url;
+  });
+}
+
 export default function CheckPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -45,8 +72,30 @@ export default function CheckPage() {
   const [intent, setIntent] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPrivacyPanel, setShowPrivacyPanel] = useState(false);
+  const [image, setImage] = useState<{ base64: string; mimeType: string; previewUrl: string } | null>(null);
+  const [imageError, setImageError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const canSubmit = text.trim().length > 10;
+  const canSubmit = text.trim().length > 10 || !!image;
+
+  async function handleImageFile(file: File) {
+    setImageError(null);
+    if (!file.type.startsWith("image/")) {
+      setImageError("Please select an image file.");
+      return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      setImageError("Image must be under 10 MB.");
+      return;
+    }
+    try {
+      const { base64, mimeType } = await resizeImageToBase64(file);
+      const previewUrl = `data:${mimeType};base64,${base64}`;
+      setImage({ base64, mimeType, previewUrl });
+    } catch {
+      setImageError("Could not load image. Try another file.");
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -58,6 +107,7 @@ export default function CheckPage() {
         intent,
         source: "composer",
         saveCheck: prefs.saveChecks && !!user,
+        image: image ? { base64: image.base64, mimeType: image.mimeType } : null,
       },
     });
   }
@@ -170,6 +220,49 @@ export default function CheckPage() {
           </div>
         </div>
 
+        {/* Image preview */}
+        {image && (
+          <div style={{ position: "relative", display: "inline-flex", alignSelf: "flex-start" }}>
+            <img
+              src={image.previewUrl}
+              alt="Screenshot to analyse"
+              style={{
+                maxWidth: "min(100%, 320px)",
+                maxHeight: 200,
+                borderRadius: 8,
+                border: "1px solid var(--rf2-teal)",
+                objectFit: "cover",
+              }}
+            />
+            <button
+              type="button"
+              onClick={() => setImage(null)}
+              aria-label="Remove screenshot"
+              style={{
+                position: "absolute",
+                top: 6,
+                right: 6,
+                width: 22,
+                height: 22,
+                borderRadius: "50%",
+                background: "rgba(11,19,24,0.85)",
+                border: "1px solid rgba(247,245,240,0.2)",
+                color: "var(--rf2-muted)",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 12,
+              }}
+            >
+              ×
+            </button>
+          </div>
+        )}
+        {imageError && (
+          <p style={{ fontSize: 12, color: "var(--rf2-coral)", margin: 0 }}>{imageError}</p>
+        )}
+
         {/* Composer */}
         <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
           <div
@@ -210,28 +303,40 @@ export default function CheckPage() {
                 borderTop: "1px solid var(--rf2-line)",
               }}
             >
+              {/* Hidden file input */}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }}
+                aria-hidden
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) handleImageFile(file);
+                  e.target.value = "";
+                }}
+              />
               <button
                 type="button"
-                title="Screenshot analysis — coming soon"
+                title={image ? "Replace screenshot" : "Attach a screenshot to analyse"}
+                onClick={() => fileInputRef.current?.click()}
                 style={{
                   display: "flex",
                   alignItems: "center",
                   gap: 5,
                   padding: "5px 10px",
                   borderRadius: 6,
-                  border: "1px solid var(--rf2-line-2)",
-                  background: "none",
-                  color: "var(--rf2-muted)",
-                  cursor: "not-allowed",
-                  opacity: 0.5,
+                  border: `1px solid ${image ? "var(--rf2-teal)" : "var(--rf2-line-2)"}`,
+                  background: image ? "rgba(63,163,148,0.1)" : "none",
+                  color: image ? "var(--rf2-teal)" : "var(--rf2-muted)",
+                  cursor: "pointer",
                   fontSize: 12,
                   fontFamily: "var(--rf2-body)",
                 }}
-                aria-label="Screenshot analysis — not yet available"
-                disabled
+                aria-label="Attach screenshot for analysis"
               >
                 <Image size={13} />
-                Screenshot
+                {image ? "Screenshot added" : "Screenshot"}
               </button>
               <button
                 type="button"

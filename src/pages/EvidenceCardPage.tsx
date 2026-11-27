@@ -360,20 +360,23 @@ type LocationState = {
   text?: string;
   intent?: string | null;
   source?: string;
+  saveCheck?: boolean;
+  image?: { base64: string; mimeType: string } | null;
 };
 
 export default function EvidenceCardPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { text, intent } = (location.state as LocationState) ?? {};
+  const { text, intent, image } = (location.state as LocationState) ?? {};
   const { state, analyse } = useAnalyseTrust();
 
   useEffect(() => {
-    if (!text) {
+    // Allow image-only analysis
+    if (!text && !image) {
       navigate("/check", { replace: true });
       return;
     }
-    analyse(text, intent);
+    analyse(text ?? "", intent, image);
   }, []); // run once on mount
 
   const handleBack = () => {
